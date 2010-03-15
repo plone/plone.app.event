@@ -1,12 +1,14 @@
-from plone.memoize import ram
-from zope.publisher.browser import BrowserView
+from cStringIO import StringIO
 
+from zope.publisher.browser import BrowserView
+from Acquisition import aq_inner
+
+from plone.memoize import ram
+from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.CMFCore.utils import getToolByName
 
-from Products.ATContentTypes.interfaces import ICalendarSupport
-
-from plone.app.event.constants import (
-        PRODID, ICS_HEADER, ICS_FOOTER)
+from plone.app.event.constants import (PRODID, ICS_HEADER, ICS_FOOTER)
+from plone.app.event.utils import n2rn, rfc2445dt, vformat
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -23,7 +25,7 @@ def cachekey(fun, self):
     return ''.join((url, title, fingerprint))
 
 
-class EventICal(BrowserView):
+class AllEventsICal(BrowserView):
     """ view for aggregating event data into an `.ics` feed """
 
     def update(self):
@@ -56,7 +58,7 @@ class EventICal(BrowserView):
     __call__ = render
 
 
-class TopicEventICal(EventICal):
+class EventsICal(AllEventsICal):
     """ view (on "topic" content) for aggregating event data into
         an `.ics` feed """
 
@@ -68,3 +70,75 @@ class TopicEventICal(EventICal):
         else:
             query = {'portal_type': 'Event'}
         self.events = context.queryCatalog(**query)
+
+class EventICal(BrowserView):
+    """ iCal view of an event """
+    
+    def getICal(self):
+        """get iCal data
+        """
+        out = StringIO()
+        map = {
+            'dtstamp'   : rfc2445dt(DateTime()),
+            'created'   : rfc2445dt(DateTime(self.context.CreationDate())),
+            'uid'       : self.UID(),
+            'modified'  : rfc2445dt(DateTime(self.context.ModificationDate())),
+            'summary'   : vformat(self.context.Title()),
+            'startdate' : rfc2445dt(self.context.start()),
+            'enddate'   : rfc2445dt(self.context.end()),
+            }
+        out.write(ICS_EVENT_START % map)
+        
+        description = self.context.Description()
+        if description:
+            out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
+
+        location = self.getLocation()
+        if location:
+            out.write('LOCATION:%s\n' % vformat(location))
+
+        subject = self.Subject()
+        if subject:
+            out.write('CATEGORIES:%s\n' % ','.join(subject))
+
+        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
+        #ORGANIZER;CN=%(name):MAILTO=%(email)
+        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
+
+        cn = []
+        contact = self.contact_name()
+        if contact:
+            cn.append(contact)
+        phone = self.contact_phone()
+        if phone:
+            cn.append(phone)
+        email = self.contact_email()
+        if email:
+            cn.append(email)
+        if cn:
+            out.write('CONTACT:%s\n' % vformat(', '.join(cn)))
+
+        url = self.event_url()
+        if url:
+            out.write('URL:%s\n' % url)
+
+        out.write(ICS_EVENT_END)
+        return out.getvalue()
+
+
+    def __call__(self):
+        """iCalendar output
+        """
+        response = self.request.response
+        response.setHeader('Content-Type', 'text/calendar')
+        response.setHeader('Content-Disposition', 'attachment; filename="%s.ics"'
+                           % self.context.getId())
+        out = StringIO()
+        out.write(ICS_HEADER % { 'prodid' : PRODID, })
+        out.write(self.getICal())
+        out.write(ICS_FOOTER)
+        return n2rn(out.getvalue())
+        
+    
+                
+                

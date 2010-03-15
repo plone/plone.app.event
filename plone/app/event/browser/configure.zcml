@@ -3,28 +3,35 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
     <browser:page
-        for=".interfaces.IATFolder"
+        for="Products.ATContentTypes.interfaces.IATFolder"
         name="ics_view"
-        class=".ical.EventICal"
+        class=".ical.EventsICal"
         permission="zope2.View"
         />
 
     <browser:page
-        for=".interfaces.IATBTreeFolder"
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
         name="ics_view"
-        class=".ical.EventICal"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        for=".interfaces.IATTopic"
-        name="ics_view"
-        class=".ical.EventICal"
+        class=".ical.EventsICal"
         permission="zope2.View"
         />
 
     <browser:page
         for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class=".ical.AllEventsICal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+                
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATEvent"
         name="ics_view"
         class=".ical.EventICal"
         permission="zope2.View"
