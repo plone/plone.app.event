@@ -37,6 +37,16 @@ class EventUtilsTests(unittest.TestCase):
         event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00')
         self.assertEqual(event_util.isSameDay(event), False)
 
+    def testIsSameDayWithoutEndDate(self):
+
+        # events with useEndDate==False are always same-day events
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
+                          useEndDate=False)
+        self.assertEqual(event_util.isSameDay(event), True)
+
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+                          useEndDate=False)
+        self.assertEqual(event_util.isSameDay(event), True)
 
 def test_suite():
     suite = unittest.TestSuite()
