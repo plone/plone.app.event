@@ -4,8 +4,9 @@ from zope.publisher.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.interfaces import ICalendarSupport
-from Products.ATContentTypes.lib import calendarsupport as cs
 
+from plone.app.event.constants import (
+        PRODID, ICS_HEADER, ICS_FOOTER)
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -44,12 +45,12 @@ class EventICal(BrowserView):
     @ram.cache(cachekey)
     def feeddata(self):
         context = self.context
-        data = cs.ICS_HEADER % dict(prodid=cs.PRODID)
+        data = ICS_HEADER % dict(prodid=PRODID)
         data += 'X-WR-CALNAME:%s\n' % context.Title()
         data += 'X-WR-CALDESC:%s\n' % context.Description()
         for brain in self.events:
             data += brain.getObject().getICal()
-        data += cs.ICS_FOOTER
+        data += ICS_FOOTER
         return data
 
     __call__ = render

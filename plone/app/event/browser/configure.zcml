@@ -5,7 +5,7 @@
     <browser:page
         for="Products.CMFCore.interfaces.ISiteRoot"
         name="ics_view"
-        class=".event_ical.EventICal"
+        class=".ical.EventICal"
         permission="zope2.View"
         />
 
