@@ -1,9 +1,10 @@
 from zope.i18nmessageid import MessageFactory
+
 from plone.app.event import config
 
-if HAS_LINGUA_PLONE:
+try:
     from Products.LinguaPlone import public as atapi
-else:
+except ImportError:
     from Products.Archetypes import atapi
 
 from Products.CMFCore import utils
