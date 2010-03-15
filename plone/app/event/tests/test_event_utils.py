@@ -25,7 +25,6 @@ class MockEvent(object):
         return self._useEndDate
 
 
-
 class EventUtilsTests(unittest.TestCase):
 
 
@@ -47,6 +46,34 @@ class EventUtilsTests(unittest.TestCase):
         event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
                           useEndDate=False)
         self.assertEqual(event_util.isSameDay(event), True)
+
+    def testToDisplayWithTime(self):
+
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00')
+        self.assertEqual(event_util.toDisplay(event), 
+                {'start': '2000/10/12 06:00:00',
+                 'end' : '2000/10/12 18:00:00',
+                 'same_day' : True,
+                })
+
+    def testToDisplayWholeDaySameDay(self):
+
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', wholeDay=True)
+        self.assertEqual(event_util.toDisplay(event), 
+                {'start': '2000/10/12',
+                 'end' : None,
+                 'same_day' : True,
+                })
+                          
+    def testToDisplayWholeDayDifferentDays(self):
+
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', wholeDay=True)
+        self.assertEqual(event_util.toDisplay(event), 
+                {'start': '2000/10/12',
+                 'end' : '2000/10/13',
+                 'same_day' : False,
+                })
+
 
 def test_suite():
     suite = unittest.TestSuite()
