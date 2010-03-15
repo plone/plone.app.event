@@ -1,19 +1,12 @@
 <configure
-    xmlns="http://namespaces.zope.org/browser"
-    i18n_domain="plone.app.event">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
 
-  <page
-     name="vcs_view"
-     for="Products.ATContentTypes.interfaces.IATEvent"
-     class=".icalendar.vCalendarView"
-     permission="zope2.View"
-     />
-
-  <page
-     name="ics_view"
-     for="Products.ATContentTypes.interfaces.IATEvent"
-     class=".icalendar.iCalendarView"
-     permission="zope2.View"
-     />
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class=".event_ical.EventICal"
+        permission="zope2.View"
+        />
 
 </configure>
