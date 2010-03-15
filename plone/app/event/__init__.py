@@ -14,7 +14,7 @@ MsgFact = MessageFactory(config.PROJECTNAME)
 def initialize(context):
     """Register content types through Archetypes with Zope and the CMF.
     """
-    from content import event
+    import plone.app.event.event
 
     content_types, constructors, ftis = atapi.process_types(
         atapi.listTypes(config.PROJECTNAME),

@@ -1,10 +1,8 @@
 PROJECTNAME = "plone.app.event"
 
-ADD_PERMISSIONS = {
-    'Event': 'plone.app.event: Add Folderish Event',
-}
+ADD_PERMISSIONS = {'Event': 'plone.app.event: Add portal events'}
+CHANGE_PERMISSION = {'Event': 'plone.app.event: Change portal events'}
 
-# from Products.CMFCore.permissions import setDefaultRoles
-# DEFAULT_ADD_CONTENT_PERMISSION = "Add portal content"
-# setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION,
-#                 ('Manager', 'Owner', 'Contributor'))
+from Products.CMFCore.permissions import setDefaultRoles
+setDefaultRoles(ADD_PERMISSIONS['Event'], ('Manager', 'Owner',))
+setDefaultRoles(CHANGE_PERMISSION['Event'], ('Manager', 'Owner',))
