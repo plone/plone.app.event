@@ -1,7 +1,8 @@
+import datetime
 import unittest
-from plone.app.event.tests.base import TestCase
 from plone.app.event.utils import n2rn, vformat, rfc2445dt
 
+from DateTime import DateTime
 
 class UtilsTestCase(unittest.TestCase):
 
@@ -17,11 +18,16 @@ class UtilsTestCase(unittest.TestCase):
         self.assertEqual(vformat('foo:bar'), 'foo\:bar')
         self.assertEqual(vformat('foo:bar,more'), 'foo\:bar\,more')
         
-class MoreUtilsTestCase(TestCase):
-
     def test_rfc2445dt(self):
-        pass
+        dt = DateTime('2005/07/20 18:00:00 Brazil/East')
+        self.assertEqual(rfc2445dt(dt), '20050720T210000Z')
         
-
+        dt = DateTime('2010/08/31 20:15:00 GMT+1')
+        self.assertEqual(rfc2445dt(dt), '20100831T191500Z')
+        
+        # we need a DateTime-object as input
+        dt = datetime.datetime.now()
+        self.assertRaises(AttributeError, rfc2445dt, dt) 
+        
 def test_suite():
-     return unittest.defaultTestLoader.loadTestsFromName(__name__)
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

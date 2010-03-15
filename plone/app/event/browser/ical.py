@@ -63,13 +63,10 @@ class EventsICal(AllEventsICal):
         an `.ics` feed """
 
     def update(self):
-        context = self.context
+        context = aq_inner(self.context)
         catalog = getToolByName(context, 'portal_catalog')
-        if 'object_provides' in catalog.indexes():
-            query = {'object_provides': ICalendarSupport.__identifier__}
-        else:
-            query = {'portal_type': 'Event'}
-        self.events = context.queryCatalog(**query)
+        self.events = context.queryCatalog(
+            object_provides=ICalendarSupport.__identifier__)
 
 class EventICal(BrowserView):
     """ iCal view of an event """
@@ -93,11 +90,11 @@ class EventICal(BrowserView):
         if description:
             out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
 
-        location = self.getLocation()
+        location = self.context.getLocation()
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
 
-        subject = self.Subject()
+        subject = self.context.Subject()
         if subject:
             out.write('CATEGORIES:%s\n' % ','.join(subject))
 
