@@ -1,6 +1,6 @@
 import datetime
 import unittest
-from plone.app.event.utils import n2rn, vformat, rfc2445dt
+from plone.app.event.utils import n2rn, vformat, rfc2445dt, foldline
 
 from DateTime import DateTime
 
@@ -28,6 +28,15 @@ class UtilsTestCase(unittest.TestCase):
         # we need a DateTime-object as input
         dt = datetime.datetime.now()
         self.assertRaises(AttributeError, rfc2445dt, dt) 
+ 
+    def test_foldline(self):
+        self.assertEqual(foldline('foo'), 'foo\n')
+        longtext = ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                    "Vestibulum convallis imperdiet dui posuere.")
+        self.assertEqual(foldline(longtext),
+            ('Lorem ipsum dolor sit amet, consectetur adipiscing '
+             'elit. Vestibulum co\n nvallis imperdiet dui posuere.\n'))
+        
         
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
