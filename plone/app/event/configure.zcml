@@ -3,5 +3,6 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="plone.app.event">
 
+ <include package=".browser" />
 
 </configure>
