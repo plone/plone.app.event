@@ -31,7 +31,7 @@
         />
                 
     <browser:page
-        for="Products.ATContentTypes.interfaces.IATEvent"
+        for="plone.app.event.interfaces.ICalendarSupport"
         name="ics_view"
         class=".ical.EventICal"
         permission="zope2.View"

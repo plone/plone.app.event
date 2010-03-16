@@ -2,12 +2,14 @@ from cStringIO import StringIO
 
 from zope.publisher.browser import BrowserView
 from Acquisition import aq_inner
+from DateTime import DateTime
 
 from plone.memoize import ram
-from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.CMFCore.utils import getToolByName
 
-from plone.app.event.constants import (PRODID, ICS_HEADER, ICS_FOOTER)
+from plone.app.event.constants import (
+    PRODID, ICS_HEADER, ICS_FOOTER, ICS_EVENT_START, ICS_EVENT_END)
+from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
 
 def cachekey(fun, self):
@@ -79,7 +81,7 @@ class EventICal(BrowserView):
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
             'created'   : rfc2445dt(DateTime(self.context.CreationDate())),
-            'uid'       : self.UID(),
+            'uid'       : self.context.UID(),
             'modified'  : rfc2445dt(DateTime(self.context.ModificationDate())),
             'summary'   : vformat(self.context.Title()),
             'startdate' : rfc2445dt(self.context.start()),
@@ -104,19 +106,19 @@ class EventICal(BrowserView):
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
 
         cn = []
-        contact = self.contact_name()
+        contact = self.context.contact_name()
         if contact:
             cn.append(contact)
-        phone = self.contact_phone()
+        phone = self.context.contact_phone()
         if phone:
             cn.append(phone)
-        email = self.contact_email()
+        email = self.context.contact_email()
         if email:
             cn.append(email)
         if cn:
             out.write('CONTACT:%s\n' % vformat(', '.join(cn)))
 
-        url = self.event_url()
+        url = self.context.event_url()
         if url:
             out.write('URL:%s\n' % url)
 

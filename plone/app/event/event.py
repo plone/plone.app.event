@@ -31,6 +31,7 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 from plone.app.event.config import PROJECTNAME
+from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.dtutils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
@@ -164,7 +165,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    implements(IATEvent)
+    implements(IATEvent, ICalendarSupport)
 
     security       = ClassSecurityInfo()
 
