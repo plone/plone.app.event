@@ -38,3 +38,33 @@ ICS_EVENT_END = """\
 CLASS:PUBLIC
 END:VEVENT
 """
+
+# vCal header and footer
+VCS_HEADER = """\
+BEGIN:VCALENDAR
+PRODID:%(prodid)s
+VERSION:1.0
+"""
+
+VCS_FOOTER = """\
+END:VCALENDAR
+"""
+
+# vCal event
+VCS_EVENT_START = """\
+BEGIN:VEVENT
+DTSTART:%(startdate)s
+DTEND:%(enddate)s
+DCREATED:%(created)s
+UID:ATEvent-%(uid)s
+SEQUENCE:0
+LAST-MODIFIED:%(modified)s
+SUMMARY:%(summary)s
+"""
+
+VCS_EVENT_END = """\
+PRIORITY:3
+TRANSP:0
+END:VEVENT
+"""
+

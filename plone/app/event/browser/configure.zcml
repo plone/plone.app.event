@@ -19,7 +19,7 @@
     <browser:page
         for="Products.CMFCore.interfaces.ISiteRoot"
         name="ics_view"
-        class=".ical.AllEventsICal"
+        class=".ical.EventsICal"
         permission="zope2.View"
         />
 
@@ -29,11 +29,11 @@
         class=".ical.EventsICal"
         permission="zope2.View"
         />
-                
+
     <browser:page
         for="plone.app.event.interfaces.ICalendarSupport"
         name="ics_view"
-        class=".ical.EventICal"
+        class=".ical.EventsICal"
         permission="zope2.View"
         />
 
@@ -42,6 +42,41 @@
         name="event_view"
         class=".event_view.EventView"
         template="event_view.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="plone.app.event.interfaces.ICalendarSupport"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
         permission="zope2.View"
         />
 

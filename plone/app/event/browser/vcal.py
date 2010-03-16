@@ -9,7 +9,7 @@ from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
 
 from plone.app.event.constants import (
-    PRODID, ICS_HEADER, ICS_FOOTER, ICS_EVENT_START, ICS_EVENT_END)
+    PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
 
@@ -27,8 +27,9 @@ def cachekey(fun, self):
     fingerprint = ''.join(map(add, self.events))
     return ''.join((url, title, fingerprint))
 
-class EventsICal(BrowserView):
-    """ view for event data into an `.ics` feed """
+
+class EventsVCal(BrowserView):
+    """ view for event data into an `.vcs` feed """
 
     def update(self):
         context = aq_inner(self.context)
@@ -40,7 +41,7 @@ class EventsICal(BrowserView):
         self.update()       # collect events
         context = self.context
         request = self.request
-        name = '%s.ics' % context.getId()
+        name = '%s.vcs' % context.getId()
         request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         request.RESPONSE.setHeader('Content-Disposition',
                                    'attachment; filename="%s"' % name)
@@ -49,17 +50,19 @@ class EventsICal(BrowserView):
     @ram.cache(cachekey)
     def feeddata(self):
         context = self.context
-        data = ICS_HEADER % dict(prodid=PRODID)
+        data = VCS_HEADER % dict(prodid=PRODID)
         data += 'X-WR-CALNAME:%s\n' % context.Title()
         data += 'X-WR-CALDESC:%s\n' % context.Description()
         for brain in self.events:
             data += getMultiAdapter((brain.getObject(), self.request),
-                                     name=u'ics_view').getICal()
-        data += ICS_FOOTER
+                             name=u'vcs_view').getVCal()
+        data += VCS_FOOTER
         return data
 
-    def getICal(self):
-        """get iCal data
+    __call__ = render
+
+    def getVCal(self):
+        """get VCal data
         """
         out = StringIO()
         map = {
@@ -71,7 +74,7 @@ class EventsICal(BrowserView):
             'startdate' : rfc2445dt(self.context.start()),
             'enddate'   : rfc2445dt(self.context.end()),
             }
-        out.write(ICS_EVENT_START % map)
+        out.write(VCS_EVENT_START % map)
 
         description = self.context.Description()
         if description:
@@ -81,32 +84,7 @@ class EventsICal(BrowserView):
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
 
-        subject = self.context.Subject()
-        if subject:
-            out.write('CATEGORIES:%s\n' % ','.join(subject))
-
-        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
-        #ORGANIZER;CN=%(name):MAILTO=%(email)
-        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
-
-        cn = []
-        contact = self.context.contact_name()
-        if contact:
-            cn.append(contact)
-        phone = self.context.contact_phone()
-        if phone:
-            cn.append(phone)
-        email = self.context.contact_email()
-        if email:
-            cn.append(email)
-        if cn:
-            out.write('CONTACT:%s\n' % vformat(', '.join(cn)))
-
-        url = self.context.event_url()
-        if url:
-            out.write('URL:%s\n' % url)
-
-        out.write(ICS_EVENT_END)
+        out.write(VCS_EVENT_END)
         return out.getvalue()
 
     __call__ = render
