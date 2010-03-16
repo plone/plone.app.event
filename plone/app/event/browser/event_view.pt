@@ -31,16 +31,16 @@
                     <tr>
                         <th i18n:translate="event_when">When</th>
                         <td tal:define="date_dict view/date_for_display">
-                
+                            <pre tal:content="date_dict" />                
                             <div class="dtstart"
                                   id="parent-fieldname-startDate">
-                                  <span tal:content="date_dict/start" />                                
+                                  <span tal:content="date_dict/start_date" />                                
                             </div>
                             <tal:if condition="date_dict/end | nothing">
                                 <span i18n:translate="event_to">to</span> <br />
                                 <div class="dtend"
                                       id="parent-fieldname-endDate">
-                                      <span tal:content="date_dict/end" />                                
+                                      <span tal:content="date_dict/end_date" />                                
                                 </div>
                             </tal:if>
                         </td>

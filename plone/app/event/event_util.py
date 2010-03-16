@@ -18,23 +18,39 @@ def isSameDay(event):
 def toDisplay(event):
     """ Return dict containing pre-calculated information for 
         building a <start>-<end> date string. Keys are
-       'start' - date string for start date
-       'end' - date string for end date (None if not being displayed)
+       'start_date' - date string of the start date
+       'start_time' - time string of the start date
+       'end_date' - date string of the end date
+       'end_time' - time string of the end date
        'same_day' - event ends on the same day
     """
 
-    start = ulocalized_time(event.start(), False, context=event)
-    end = ulocalized_time(event.end(), False, context=event)
+    # The behavior os ulocalized_time() with time_only is odd. Setting time_only=False
+    # should return the date part only and *not* the time
+    #
+    # ulocalized_time(event.start(), False,  time_only=True, context=event)
+    # u'14:40'
+    # ulocalized_time(event.start(), False,  time_only=False, context=event)
+    # u'14:40'
+    # ulocalized_time(event.start(), False,  time_only=None, context=event)
+    # u'16.03.2010'
 
+    start_date = ulocalized_time(event.start(), False, time_only=None, context=event)
+    end_date = ulocalized_time(event.end(), False, time_only=None, context=event)
+    start_time = ulocalized_time(event.start(), False, time_only=True, context=event)
+    end_time = ulocalized_time(event.end(), False, time_only=True, context=event)
     same_day = isSameDay(event)
 
-    if not event.getWholeDay():
-        start = ulocalized_time(event.start(), True, context=event)
-        end = ulocalized_time(event.end(), True, context=event)
+    # set time fields to None for whole day events
+    if event.getWholeDay():
+        start_time = end_time = None
 
-    if not event.getUseEndDate():
+    # set end date to None for same-day events
+    if start_date == end_date:
         end = None
-    
-    if start == end:
-        return dict(start=start, end=None, same_day=same_day)
-    return  dict(start=start, end=end, same_day=same_day)
+
+    return  dict(start_date=start_date, 
+                 start_time=start_time,
+                 end_date=end_date, 
+                 end_time=end_time,
+                 same_day=same_day)
