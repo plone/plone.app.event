@@ -6,7 +6,7 @@ Display helper methods for showing whole-day or same-day events
 def isSameDay(event):
 
     # Events without end date always cound as same-day event        
-    if not event.useEndDate():
+    if not event.getUseEndDate():
         return True
 
     return event.start().year() == event.end().year() and \
@@ -29,7 +29,7 @@ def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
         start = event.start().strftime(long_fmt)
         end = event.end().strftime(long_fmt)
 
-    if not event.useEndDate():
+    if not event.getUseEndDate():
         end = None
     
     if start == end:
