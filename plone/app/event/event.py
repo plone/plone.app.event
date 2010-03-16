@@ -21,7 +21,6 @@ from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -31,6 +30,7 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
+from plone.app.event.config import PROJECTNAME
 from plone.app.event.dtutils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
