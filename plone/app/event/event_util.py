@@ -1,4 +1,7 @@
 
+"""
+Display helper methods for showing whole-day or same-day events
+"""
 
 def isSameDay(event):
 
@@ -14,7 +17,7 @@ def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
     """ Return dict containing pre-calculated information for 
         building a <start>-<end> date string. Keys are
        'start' - date string for start date
-       'end' - date string for end date
+       'end' - date string for end date (None if not being displayed)
        'same_day' - event ends on the same day
     """
 
@@ -25,6 +28,9 @@ def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
     if not event.getWholeDay():
         start = event.start().strftime(long_fmt)
         end = event.end().strftime(long_fmt)
+
+    if not event.useEndDate():
+        end = None
     
     if start == end:
         result = dict(start=start, end=None, same_day=same_day)
