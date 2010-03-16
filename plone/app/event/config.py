@@ -1,7 +1,7 @@
 PROJECTNAME = "plone.app.event"
 
-ADD_PERMISSIONS = {'Event': 'plone.app.event: Add portal events'}
-CHANGE_PERMISSION = {'Event': 'plone.app.event: Change portal events'}
+ADD_PERMISSIONS = {'Event': 'ATContentTypes: Add Event'}
+CHANGE_PERMISSION = {'Event': 'Change portal events'}
 
 from Products.CMFCore.permissions import setDefaultRoles
 setDefaultRoles(ADD_PERMISSIONS['Event'], ('Manager', 'Owner',))
