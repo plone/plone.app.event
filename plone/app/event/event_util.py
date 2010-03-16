@@ -33,8 +33,5 @@ def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
         end = None
     
     if start == end:
-        result = dict(start=start, end=None, same_day=same_day)
-    else:
-        result = dict(start=start, end=end, same_day=same_day)
-    return result
-
+        return dict(start=start, end=None, same_day=same_day)
+    return  dict(start=start, end=end, same_day=same_day)
