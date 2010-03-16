@@ -1,7 +1,8 @@
-
 """
 Display helper methods for showing whole-day or same-day events
 """
+
+from Products.CMFPlone.i18nl10n import ulocalized_time
 
 def isSameDay(event):
 
@@ -13,7 +14,8 @@ def isSameDay(event):
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
 
-def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
+
+def toDisplay(event):
     """ Return dict containing pre-calculated information for 
         building a <start>-<end> date string. Keys are
        'start' - date string for start date
@@ -21,13 +23,14 @@ def toDisplay(event, long_fmt='%Y/%m/%d %H:%M:%S', short_fmt='%Y/%m/%d'):
        'same_day' - event ends on the same day
     """
 
-    start = event.start().strftime(short_fmt)
-    end = event.end().strftime(short_fmt)
+    start = ulocalized_time(event.start(), False, context=event)
+    end = ulocalized_time(event.end(), False, context=event)
+
     same_day = isSameDay(event)
 
     if not event.getWholeDay():
-        start = event.start().strftime(long_fmt)
-        end = event.end().strftime(long_fmt)
+        start = ulocalized_time(event.start(), True, context=event)
+        end = ulocalized_time(event.end(), True, context=event)
 
     if not event.getUseEndDate():
         end = None
