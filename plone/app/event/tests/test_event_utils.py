@@ -73,8 +73,18 @@ class EventUtilsTests(unittest.TestCase):
                  'same_day' : False,
                 })
 
-    def testToDisplayWithoutEndDate(self):
+    def testToDisplayWithoutEndDateDifferentDates(self):
         event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+                          useEndDate=False,
+                          wholeDay=True)
+        self.assertEqual(event_util.toDisplay(event), 
+                {'start': '2000/10/12',
+                 'end' : None,
+                 'same_day' : True,
+                })
+
+    def testToDisplayWithoutEndDateStartAndEndDateEqual(self):
+        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
                           useEndDate=False,
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
