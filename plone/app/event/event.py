@@ -19,6 +19,9 @@ from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
+
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
@@ -35,6 +38,21 @@ from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.dtutils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
+
+   BooleanField('wholeDay',
+                default=False,
+                widget=BooleanWidget(
+                    description = '',
+                    label=_(u'wholeDay','Whole day event'),
+
+                )),
+   BooleanField('useEndDate',
+                default=True,
+                write_permission = ModifyPortalContent,
+                widget=BooleanWidget(
+                    description = '',
+                    label=_(u'useEndDate','Use end date'),
+                    )),
     StringField('location',
                 searchable=True,
                 write_permission = ModifyPortalContent,
@@ -216,6 +234,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
         End date must be after start date
         """
+
         if 'startDate' in errors or 'endDate' in errors:
             # No point in validating bad input
             return
