@@ -12,5 +12,10 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: plone\n"
+"Domain: plone.app.event\n"
 
+msgid "label_whole_day_event"
+msgstr "Ganztagstermin (ohne Uhrzeit)"
+
+msgid "label_use_end_date"
+msgstr "Enddatum verwenden" 
