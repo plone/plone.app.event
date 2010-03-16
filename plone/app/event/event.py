@@ -27,11 +27,11 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
-from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.utils import DT2dt
 
 from Products.ATContentTypes import ATCTMessageFactory as _
+
+from plone.app.event.dtutils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     StringField('location',
@@ -148,7 +148,7 @@ finalizeATCTSchema(ATEventSchema)
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='startDate')
 
-class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
+class ATEvent(ATCTContent, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
 
     schema         =  ATEventSchema

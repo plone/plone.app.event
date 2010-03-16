@@ -8,7 +8,7 @@ from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.CMFCore.utils import getToolByName
 
 from plone.app.event.constants import (PRODID, ICS_HEADER, ICS_FOOTER)
-from plone.app.event.utils import n2rn, rfc2445dt, vformat
+from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -29,7 +29,7 @@ class AllEventsICal(BrowserView):
     """ view for aggregating event data into an `.ics` feed """
 
     def update(self):
-        context = self.context
+        context = aq_inner(self.context)
         catalog = getToolByName(context, 'portal_catalog')
         path = '/'.join(context.getPhysicalPath())
         provides = ICalendarSupport.__identifier__
@@ -41,7 +41,8 @@ class AllEventsICal(BrowserView):
         request = self.request
         name = '%s.ics' % context.getId()
         request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        request.RESPONSE.setHeader('Content-Disposition', 'attachment; filename="%s"' % name)
+        request.RESPONSE.setHeader('Content-Disposition',
+                                   'attachment; filename="%s"' % name)
         request.RESPONSE.write(self.feeddata())
 
     @ram.cache(cachekey)
@@ -88,7 +89,7 @@ class EventICal(BrowserView):
         
         description = self.context.Description()
         if description:
-            out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
+            out.write(foldline('DESCRIPTION:%s\n' % vformat(description)))
 
         location = self.context.getLocation()
         if location:
