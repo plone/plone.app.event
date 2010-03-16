@@ -41,8 +41,10 @@ class EventUtilsTests(EventTestCase):
     def testToDisplayWithTime(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00')
         self.assertEqual(event_util.toDisplay(event), 
-                {'start_date': '2000/10/12 06:00:00',
-                 'end_date' : '2000/10/12 18:00:00',
+                {'start_date': 'Oct 12, 2000',
+                 'start_time' : '07:00 AM',
+                 'end_date' : 'Oct 12, 2000',
+                 'end_time' : '18:00:00',
                  'same_day' : True,
                 })
 
@@ -73,7 +75,7 @@ class EventUtilsTests(EventTestCase):
                           useEndDate=False,
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
-                {'start_date': '2000/10/12',
+                {'start_date': 'Oct 12, 2000',
                  'start_time': None, 
                  'end_date' : None,
                  'end_time': None, 
@@ -86,7 +88,7 @@ class EventUtilsTests(EventTestCase):
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
                 {'start_date': 'Oct 12, 2000',
-                 'start_time' : None,  
+                 'start_time' : None,
                  'end_date' : None,
                  'end_time' : None,
                  'same_day' : True,
