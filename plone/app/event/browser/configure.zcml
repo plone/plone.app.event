@@ -37,4 +37,12 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        for="plone.app.event.interfaces.ICalendarSupport"
+        name="event_view"
+        class=".event_view.EventView"
+        template="event_view.pt"
+        permission="zope2.View"
+        />
+
 </configure>
