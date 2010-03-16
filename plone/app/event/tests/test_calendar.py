@@ -6,10 +6,9 @@ from zope.component import getMultiAdapter
 from zope.publisher.browser import TestRequest
 from zope.annotation.interfaces import IAttributeAnnotatable
 
-from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
-from Products.ATContentTypes.interfaces import ICalendarSupport
-from Products.ATContentTypes.browser.calendar import cachekey
-
+from plone.app.event.interfaces import ICalendarSupport
+from plone.app.event.browser.ical import cachekey
+from plone.app.event.tests.base import EventTestCase
 
 def makeResponse(request):
     """ create a fake request and set up logging of output """
@@ -24,7 +23,7 @@ def makeResponse(request):
     return headers, output, request
 
 
-class EventCalendarTests(ATCTSiteTestCase):
+class EventCalendarTests(EventTestCase):
 
     def afterSetUp(self):
         folder = self.folder

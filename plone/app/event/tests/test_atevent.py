@@ -1,5 +1,4 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
 import transaction
 from Products.CMFCore.permissions import View
@@ -13,12 +12,15 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.utils import DT2dt
+from plone.app.event.dtutils import DT2dt
 from DateTime import DateTime
-from Products.ATContentTypes.interfaces import ICalendarSupport
+from plone.app.event.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from zope.interface.verify import verifyObject
 
+import plone.app.event.tests.base
+from plone.app.event.tests.base import (
+        EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -49,7 +51,7 @@ def editATCT(obj):
 
 tests = []
 
-class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
+class TestSiteATEvent(EventTypeTestCase):
 
     klass = ATEvent
     portal_type = 'Event'
@@ -133,10 +135,10 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
 tests.append(TestSiteATEvent)
 
-class TestATEventFields(atcttestcase.ATCTFieldTestCase):
+class TestATEventFields(EventFieldTestCase):
 
     def afterSetUp(self):
-        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        EventFieldTestCase.afterSetUp(self)
         self._dummy = self.createDummy(klass=ATEvent)
 
     def test_locationField(self):
@@ -558,13 +560,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_output_type)
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
 
-    def beforeTearDown(self):
-        # more
-        atcttestcase.ATCTFieldTestCase.beforeTearDown(self)
-
 tests.append(TestATEventFields)
 
-class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
+class TestATEventFunctional(EventIntegrationTestCase):
 
     portal_type = 'Event'
     views = ('event_view', 'vcs_view', 'ics_view', )

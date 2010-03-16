@@ -1,0 +1,36 @@
+-*- coding: utf-8 -*-
+
+============
+WebDAV tests
+============
+
+See the description in Products.ATContentTypes.tests.webdav.txt
+
+Event
+-----
+
+  >>> input = open(os.path.join(input_dir, 'test-event.txt'), 'rb')
+
+  Create an object by extension
+
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test-event.event HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ...
+  ... %s""" % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  XXX: .event should be removed?
+
+  >>> event = self.folder['test-event.event']
+
+  >>> print event.getPortalTypeName()
+  Event
+
+  >>> print event.Title()
+  test event
+
+  >>> del event
+  >>> input.close()
