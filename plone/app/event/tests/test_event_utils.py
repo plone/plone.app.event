@@ -2,53 +2,33 @@ import unittest
 from DateTime import DateTime
 
 from plone.app.event import event_util
+from plone.app.event.event import ATEvent as Event
 from Products.CMFPlone.tests import PloneTestCase
 
-class MockEvent(object):
 
-    def __init__(self, start, end, wholeDay=False, useEndDate=True):
-
-        self._start = DateTime(start)
-        self._end = DateTime(end)
-        self._wholeDay = wholeDay
-        self._useEndDate = useEndDate
-
-    def start(self):
-        return self._start
-
-    def end(self):
-        return self._end
-
-    def getWholeDay(self):
-        return self._wholeDay
-
-    def useEndDate(self):
-        return self._useEndDate
-
-
-class EventUtilsTests(unittest.TestCase):
+class EventUtilsTests(PloneTestCase):
 
     def testIsSameDay(self):
 
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00')
+        event = Event('2000/10/12 06:00:00', '2000/10/12 18:00:00')
         self.assertEqual(event_util.isSameDay(event), True)
 
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00')
+        event = Event('2000/10/12 06:00:00', '2000/10/13 18:00:00')
         self.assertEqual(event_util.isSameDay(event), False)
 
     def testIsSameDayWithoutEndDate(self):
 
         # events with useEndDate==False are always same-day events
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
                           useEndDate=False)
         self.assertEqual(event_util.isSameDay(event), True)
 
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
                           useEndDate=False)
         self.assertEqual(event_util.isSameDay(event), True)
 
     def testToDisplayWithTime(self):
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00')
+        event = Event('2000/10/12 06:00:00', '2000/10/12 18:00:00')
         self.assertEqual(event_util.toDisplay(event), 
                 {'start': '2000/10/12 06:00:00',
                  'end' : '2000/10/12 18:00:00',
@@ -56,7 +36,7 @@ class EventUtilsTests(unittest.TestCase):
                 })
 
     def testToDisplayWholeDaySameDay(self):
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
                 {'start': '2000/10/12',
@@ -65,7 +45,7 @@ class EventUtilsTests(unittest.TestCase):
                 })
                           
     def testToDisplayWholeDayDifferentDays(self):
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
                 {'start': '2000/10/12',
@@ -74,7 +54,7 @@ class EventUtilsTests(unittest.TestCase):
                 })
 
     def testToDisplayWithoutEndDateDifferentDates(self):
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
                           useEndDate=False,
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
@@ -84,7 +64,7 @@ class EventUtilsTests(unittest.TestCase):
                 })
 
     def testToDisplayWithoutEndDateStartAndEndDateEqual(self):
-        event = MockEvent('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
+        event = Event('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
                           useEndDate=False,
                           wholeDay=True)
         self.assertEqual(event_util.toDisplay(event), 
