@@ -43,7 +43,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 widget=BooleanWidget(
                     description = '',
-                    label=_(u'wholeDay','Whole day event'),
+                    label=_(u'label_whole_day_event','Whole day event'),
 
                 )),
    BooleanField('useEndDate',
@@ -51,7 +51,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ModifyPortalContent,
                 widget=BooleanWidget(
                     description = '',
-                    label=_(u'useEndDate','Use end date'),
+                    label=_(u'label_use_end_date','Use end date'),
                     )),
     StringField('location',
                 searchable=True,
