@@ -1,10 +1,7 @@
 var $j = jQuery.noConflict();
 
 function wholeDayHandler(e) {
-    if (e.target.checked) 
-        $j('.vs-calendarwidget-time').fadeOut();
-    else 
-        $j('.vs-calendarwidget-time').fadeIn();
+    /* add code for new date picker widget */
 }
 
 function useEndDateHandler(e) {
@@ -23,3 +20,4 @@ $j(document).ready(function() {
         $j('#archetypes-fieldname-endDate').fadeOut();
     }
 }
+
