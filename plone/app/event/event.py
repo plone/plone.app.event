@@ -40,120 +40,123 @@ from plone.app.event.dtutils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
+   StringField('location',
+               searchable=True,
+               write_permission=ModifyPortalContent,
+               widget=StringWidget(
+                   description='',
+                   label=_(u'label_event_location', default=u'Event Location')
+                   )),
+
    BooleanField('wholeDay',
                 default=False,
+                write_permission=ModifyPortalContent,
                 widget=BooleanWidget(
-                    description = '',
-                    label=_(u'label_whole_day_event','Whole day event'),
+                    description='',
+                    label=_(u'label_whole_day_event', u'Whole day event'),
+                    )),
 
-                )),
    BooleanField('useEndDate',
                 default=True,
-                write_permission = ModifyPortalContent,
+                write_permission=ModifyPortalContent,
                 widget=BooleanWidget(
-                    description = '',
-                    label=_(u'label_use_end_date','Use end date'),
-                    )),
-    StringField('location',
-                searchable=True,
-                write_permission = ModifyPortalContent,
-                widget = StringWidget(
-                    description = '',
-                    label = _(u'label_event_location', default=u'Event Location')
+                    description='',
+                    label=_(u'label_use_end_date', u'Use end date'),
                     )),
 
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
                   accessor='start',
-                  write_permission = ModifyPortalContent,
+                  write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget = CalendarWidget(
-                        description= '',
-                        label=_(u'label_event_start', default=u'Event Starts'),
-                        with_time=1,
-                        )),
+                  widget=CalendarWidget(
+                      description='',
+                      label=_(u'label_event_start', default=u'Event Starts'),
+                      with_time=1,
+                      )),
 
     DateTimeField('endDate',
                   required=True,
                   searchable=False,
                   accessor='end',
-                  write_permission = ModifyPortalContent,
+                  write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget = CalendarWidget(
-                        description = '',
-                        label = _(u'label_event_end', default=u'Event Ends'),
-                        with_time=1,
-                        )),
+                  widget=CalendarWidget(
+                      description='',
+                      label=_(u'label_event_end', default=u'Event Ends'),
+                      with_time=1,
+                      )),
 
     TextField('text',
               required=False,
               searchable=True,
               primary=True,
-              storage = AnnotationStorage(migrate=True),
-              validators = ('isTidyHtmlWithCleanup',),
-              default_output_type = 'text/x-html-safe',
-              widget = RichWidget(
-                        description = '',
-                        label = _(u'label_event_announcement', default=u'Event body text'),
-                        rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
+              storage=AnnotationStorage(migrate=True),
+              validators=('isTidyHtmlWithCleanup',),
+              default_output_type='text/x-html-safe',
+              widget=RichWidget(
+                  description='',
+                  label=_(u'label_event_announcement', default=u'Event body text'),
+                  rows=25,
+                  allow_file_upload=zconf.ATDocument.allow_document_upload
+                  )),
 
     LinesField('attendees',
                languageIndependent=True,
                searchable=True,
                write_permission=ModifyPortalContent,
                widget=LinesWidget(
-                      description='',
-                      label=_(u'label_event_attendees', default=u'Attendees')
-                      )),
+                   description='',
+                   label=_(u'label_event_attendees', default=u'Attendees')
+                   )),
 
     StringField('eventUrl',
                 required=False,
                 searchable=True,
                 accessor='event_url',
-                write_permission = ModifyPortalContent,
+                write_permission=ModifyPortalContent,
                 validators=('isURL',),
-                widget = StringWidget(
-                        description = _(u'help_event_url',
-                                        default=u"Web address with more info about the event. "
-                                                 "Add http:// for external links."),
-                        label = _(u'label_event_url', default=u'Event URL')
-                        )),
+                widget=StringWidget(
+                    description=_(u'help_event_url',
+                                  default=u"Web address with more info about the event. "
+                                           "Add http:// for external links."),
+                    label=_(u'label_event_url', default=u'Event URL')
+                    )),
 
     StringField('contactName',
                 required=False,
                 searchable=True,
                 accessor='contact_name',
-                write_permission = ModifyPortalContent,
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_name', default=u'Contact Name')
-                        )),
+                write_permission=ModifyPortalContent,
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_contact_name', default=u'Contact Name')
+                    )),
 
     StringField('contactEmail',
                 required=False,
                 searchable=True,
                 accessor='contact_email',
-                write_permission = ModifyPortalContent,
-                validators = ('isEmail',),
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_email', default=u'Contact E-mail')
-                        )),
+                write_permission=ModifyPortalContent,
+                validators=('isEmail',),
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_contact_email', default=u'Contact E-mail')
+                    )),
 
     StringField('contactPhone',
                 required=False,
                 searchable=True,
                 accessor='contact_phone',
-                write_permission = ModifyPortalContent,
-                validators= (),
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_phone', default=u'Contact Phone')
-                        )),
+                write_permission=ModifyPortalContent,
+                validators=(),
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_contact_phone', default=u'Contact Phone')
+                    )),
     ), marshall = RFC822Marshaller()
     )
 
@@ -168,7 +171,7 @@ ATEventSchema.changeSchemataForField('subject', 'default')
 finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')
-ATEventSchema.moveField('location', before='startDate')
+ATEventSchema.moveField('location', before='wholeDay')
 
 class ATEvent(ATCTContent, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
