@@ -12,6 +12,7 @@ from plone.app.event.constants import (
     PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
+from plone.app.event import event_util 
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -64,6 +65,7 @@ class EventsVCal(BrowserView):
     def getVCal(self):
         """get VCal data
         """
+        start_str, end_str = event_util.dateStringsForEvent(self.context)
         out = StringIO()
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
@@ -71,8 +73,8 @@ class EventsVCal(BrowserView):
             'uid'       : self.context.UID(),
             'modified'  : rfc2445dt(DateTime(self.context.ModificationDate())),
             'summary'   : vformat(self.context.Title()),
-            'startdate' : rfc2445dt(self.context.start()),
-            'enddate'   : rfc2445dt(self.context.end()),
+            'startdate' : start_str,
+            'enddate'   : end_str,
             }
         out.write(VCS_EVENT_START % map)
 
