@@ -11,8 +11,6 @@
 
     <include package=".browser" />
 
-    <i18n:registerTranslations directory="locales" />
-
     <genericsetup:registerProfile
         name="default"
         title="plone.app.event"
