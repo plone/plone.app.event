@@ -12,7 +12,8 @@ from Products.Archetypes.atapi import DateTimeField
 from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import TextField
-from Products.Archetypes.atapi import CalendarWidget
+#from Products.Archetypes.atapi import CalendarWidget
+from collective.calendarwidget.widget import CalendarWidget
 from Products.Archetypes.atapi import LinesWidget
 from Products.Archetypes.atapi import KeywordWidget
 from Products.Archetypes.atapi import RichWidget
@@ -70,7 +71,8 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   languageIndependent=True,
                   widget = CalendarWidget(
                         description= '',
-                        label=_(u'label_event_start', default=u'Event Starts')
+                        label=_(u'label_event_start', default=u'Event Starts'),
+                        with_time=1,
                         )),
 
     DateTimeField('endDate',
@@ -82,7 +84,8 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   languageIndependent=True,
                   widget = CalendarWidget(
                         description = '',
-                        label = _(u'label_event_end', default=u'Event Ends')
+                        label = _(u'label_event_end', default=u'Event Ends'),
+                        with_time=1,
                         )),
 
     TextField('text',
