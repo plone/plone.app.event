@@ -6,6 +6,7 @@ from Acquisition import aq_inner
 from DateTime import DateTime
 
 from plone.memoize import ram
+from Products.ATContentTypes.interfaces import IATTopic
 from Products.CMFCore.utils import getToolByName
 
 from plone.app.event.constants import (
@@ -34,9 +35,10 @@ class EventsVCal(BrowserView):
 
     def update(self):
         context = aq_inner(self.context)
-        path = '/'.join(context.getPhysicalPath())
-        provides = ICalendarSupport.__identifier__
-        self.events = context.queryCatalog(REQUEST={'path':path, 'object_provides':provides})
+        query = {'object_provides':ICalendarSupport.__identifier__}
+        if not IATTopic.providedBy(context):
+            query['path'] = '/'.join(context.getPhysicalPath())
+        self.events = context.queryCatalog(REQUEST=query)
 
     def render(self):
         self.update()       # collect events

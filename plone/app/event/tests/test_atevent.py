@@ -17,7 +17,10 @@ from DateTime import DateTime
 from plone.app.event.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from zope.interface.verify import verifyObject
+from zope.publisher.browser import TestRequest
 
+from plone.app.event.browser.vcal import EventsVCal
+from plone.app.event.browser.ical import EventsICal
 import plone.app.event.tests.base
 from plone.app.event.tests.base import (
         EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
@@ -107,7 +110,8 @@ class TestSiteATEvent(EventTypeTestCase):
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTitle('cool event')
-        ical = event.getICal()
+        view = EventsICal(event, TestRequest())
+        ical = view.getICal()
         lines = ical.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
         self.assertEqual(lines[5], "SUMMARY:%s"%event.Title())
@@ -120,7 +124,8 @@ class TestSiteATEvent(EventTypeTestCase):
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTitle('cool event')
-        vcal = event.getVCal()
+        view = EventsVCal(event, TestRequest())
+        vcal = view.getVCal()
         lines = vcal.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
         self.assertEqual(lines[7], "SUMMARY:%s"%event.Title())
