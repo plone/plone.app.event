@@ -45,10 +45,6 @@ def toDisplay(event):
     if event.getWholeDay():
         start_time = end_time = None
 
-    # set end date to None for same-day events
-    if start_date == end_date or not event.getUseEndDate():
-        end_date = end_time = None
-
     return  dict(start_date=start_date, 
                  start_time=start_time,
                  end_date=end_date, 

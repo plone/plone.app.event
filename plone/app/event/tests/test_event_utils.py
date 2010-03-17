@@ -44,7 +44,7 @@ class EventUtilsTests(EventTestCase):
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : '07:00 AM',
                  'end_date' : 'Oct 12, 2000',
-                 'end_time' : '18:00:00',
+                 'end_time' : '07:00 PM',
                  'same_day' : True,
                 })
 
@@ -54,7 +54,7 @@ class EventUtilsTests(EventTestCase):
         self.assertEqual(event_util.toDisplay(event), 
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
-                 'end_date' : None,
+                 'end_date' : 'Oct 12, 2000',
                  'end_time' : None,  
                  'same_day' : True,
                 })
@@ -77,7 +77,7 @@ class EventUtilsTests(EventTestCase):
         self.assertEqual(event_util.toDisplay(event), 
                 {'start_date': 'Oct 12, 2000',
                  'start_time': None, 
-                 'end_date' : None,
+                 'end_date' : 'Oct 13, 2000',
                  'end_time': None, 
                  'same_day' : True,
                 })
@@ -89,7 +89,7 @@ class EventUtilsTests(EventTestCase):
         self.assertEqual(event_util.toDisplay(event), 
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
-                 'end_date' : None,
+                 'end_date' : 'Oct 12, 2000',
                  'end_time' : None,
                  'same_day' : True,
                 })
