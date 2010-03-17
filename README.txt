@@ -10,6 +10,5 @@ TODO
 ====
 
 - internationalization of event_view.pt
-- integration of the new calendar widget
-- fixing tests related to iCal
-- make iCal/vCal aware of whole-day events
+- add a hook to getICal(), getVCal() for retrieving additional data 
+  from derived event types
