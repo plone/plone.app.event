@@ -31,18 +31,34 @@
                     <tr>
                         <th i18n:translate="event_when">When</th>
                         <td tal:define="date_dict view/date_for_display">
-                            <div tal:content="date_dict" />                
-                            <div class="dtstart"
-                                  id="parent-fieldname-startDate">
-                                  <span tal:content="date_dict/start_date" />                                
+
+                            <!-- the code below needs a champion for dealing with i18n -->
+
+                            <div tal:condition="nothing" 
+                                 tal:content="date_dict" />     
+
+                            <div tal:condition="date_dict/same_day">
+                                <span tal:content="date_dict/start_date" />
+                                <tal:if condition="not: context/getWholeDay">
+                                    <span tal:content="date_dict/start_time" />
+                                    <tal:if condition="context/useEndDate">
+                                        - <span tal:content="date_dict/end_time" />
+                                    </tal:if>
+                                </tal:if>
                             </div>
-                            <tal:if condition="date_dict/end | nothing">
-                                <span i18n:translate="event_to">to</span> <br />
-                                <div class="dtend"
-                                      id="parent-fieldname-endDate">
-                                      <span tal:content="date_dict/end_date" />                                
-                                </div>
-                            </tal:if>
+
+                            <div tal:condition="not: date_dict/same_day">
+                                <span tal:content="date_dict/start_date" />
+                                <span tal:condition="not: context/getWholeDay"
+                                    tal:content="date_dict/start_time" 
+                                />
+                                until    
+                                <span tal:content="date_dict/end_date" />
+                                <span tal:condition="not: context/getWholeDay"
+                                    tal:content="date_dict/end_time" 
+                                />
+                            </div>
+
                         </td>
                     </tr>
                     <tr tal:condition="context/location">
