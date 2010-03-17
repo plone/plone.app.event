@@ -2,9 +2,9 @@ var $j = jQuery.noConflict();
 
 function wholeDayHandler(e) {
     if (e.target.checked) 
-        $j('.calendarwidget-time').fadeIn();
-    else 
         $j('.calendarwidget-time').fadeOut();
+    else 
+        $j('.calendarwidget-time').fadeIn();
 }
 
 function useEndDateHandler(e) {
