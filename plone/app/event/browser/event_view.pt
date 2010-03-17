@@ -31,7 +31,7 @@
                     <tr>
                         <th i18n:translate="event_when">When</th>
                         <td tal:define="date_dict view/date_for_display">
-                            <pre tal:content="date_dict" />                
+                            <div tal:content="date_dict" />                
                             <div class="dtstart"
                                   id="parent-fieldname-startDate">
                                   <span tal:content="date_dict/start_date" />                                
