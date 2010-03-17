@@ -80,4 +80,10 @@
         permission="zope2.View"
         />
 
+    <browser:resource
+        name="event.js"
+        file="event.js"
+        permission="zope.Public"
+    />
+
 </configure>
