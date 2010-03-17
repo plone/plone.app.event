@@ -1,7 +1,10 @@
 var $j = jQuery.noConflict();
 
 function wholeDayHandler(e) {
-    /* add code for new date picker widget */
+    if (e.target.checked) 
+        $j('.calendarwidget-time').fadeIn();
+    else 
+        $j('.calendarwidget-time').fadeOut();
 }
 
 function useEndDateHandler(e) {
@@ -19,5 +22,5 @@ $j(document).ready(function() {
     if (! $j('#useEndDate').attr('checked')) {
         $j('#archetypes-fieldname-endDate').fadeOut();
     }
-}
+})
 
