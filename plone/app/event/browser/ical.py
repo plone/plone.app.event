@@ -64,7 +64,7 @@ class EventsICal(BrowserView):
         """get iCal data
         """
 
-        start_str, end_str = event_util.dateStringsForvnvent(self.context)
+        start_str, end_str = event_util.dateStringsForEvent(self.context)
         out = StringIO()
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
