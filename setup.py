@@ -24,6 +24,7 @@ setup(name='plone.app.event',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'collective.calendarwidget',
           # -*- Extra requirements: -*-
       ],
       )
