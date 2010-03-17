@@ -12,6 +12,7 @@ from plone.app.event.constants import (
     PRODID, ICS_HEADER, ICS_FOOTER, ICS_EVENT_START, ICS_EVENT_END)
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
+from plone.app.event import event_util 
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -26,6 +27,7 @@ def cachekey(fun, self):
     title = context.Title()
     fingerprint = ''.join(map(add, self.events))
     return ''.join((url, title, fingerprint))
+
 
 class EventsICal(BrowserView):
     """ view for event data into an `.ics` feed """
@@ -61,6 +63,8 @@ class EventsICal(BrowserView):
     def getICal(self):
         """get iCal data
         """
+
+        start_str, end_str = event_util.dateStringsForEvent(self.context)
         out = StringIO()
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
@@ -68,8 +72,8 @@ class EventsICal(BrowserView):
             'uid'       : self.context.UID(),
             'modified'  : rfc2445dt(DateTime(self.context.ModificationDate())),
             'summary'   : vformat(self.context.Title()),
-            'startdate' : rfc2445dt(self.context.start()),
-            'enddate'   : rfc2445dt(self.context.end()),
+            'startdate' : start_str,
+            'enddate'   : end_str,
             }
         out.write(ICS_EVENT_START % map)
 

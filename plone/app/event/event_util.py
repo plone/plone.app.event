@@ -50,3 +50,36 @@ def toDisplay(event):
                  end_date=end_date, 
                  end_time=end_time,
                  same_day=same_day)
+
+
+def _dateForWholeDay(dt):
+    """ Replacement for rfc2445dt() for events lasting whole day in 
+        order to get the date string according to the current time zone.
+        rfc2445dt() returns the date string according to UTC which is
+        *not* what we want!
+    """
+    return dt.strftime('%Y%m%d')
+
+
+def dateStringsForEvent(event):
+    # Smarter handling for whole-day events
+    data_dict = toDisplay(event)
+    if event.getWholeDay():
+        # For all-day events we must not include the time within
+        # the date-time string
+        start_str = _dateForWholeDay(event.start())[:8]
+        if data_dict['same_day']:
+            # one-day events end with the timestamp of the next day
+            # (which is the start data plus 1 day)
+            end_str = _dateForWholeDay(event.start() + 1)[:8]
+        else:
+            # all-day events lasting several days end at the next
+            # day after the end date
+            end_str = _dateForWholeDay(event.end() + 1)[:8]
+    else:
+        # default (as used in Plone)
+        start_str = rfc2445dt(event.start())
+        end_str = rfc2445dt(event.end())
+
+    return start_str, end_str
+
