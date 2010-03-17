@@ -64,7 +64,7 @@ class EventsICal(BrowserView):
         """get iCal data
         """
 
-        start_str, end_str = event_util.dateStringsForEvent(self.context)
+        start_str, end_str = event_util.dateStringsForvnvent(self.context)
         out = StringIO()
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
@@ -109,6 +109,12 @@ class EventsICal(BrowserView):
         url = self.context.event_url()
         if url:
             out.write('URL:%s\n' % url)
+
+        # allow derived event types to inject additional data for iCal
+        try:
+            self.context.getICalSupplementary(out)
+        except AttributeError:
+            pass
 
         out.write(ICS_EVENT_END)
         return out.getvalue()

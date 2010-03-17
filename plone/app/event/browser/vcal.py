@@ -86,6 +86,12 @@ class EventsVCal(BrowserView):
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
 
+        # allow derived event types to inject additional data for iCal
+        try:
+            self.context.getVCalSupplementary(out)
+        except AttributeError:
+            pass
+
         out.write(VCS_EVENT_END)
         return out.getvalue()
 
