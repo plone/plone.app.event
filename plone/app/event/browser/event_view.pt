@@ -41,9 +41,7 @@
                                 <span tal:content="date_dict/start_date" />
                                 <tal:if condition="not: context/getWholeDay">
                                     <span tal:content="date_dict/start_time" />
-                                    <tal:if condition="context/useEndDate">
-                                        - <span tal:content="date_dict/end_time" />
-                                    </tal:if>
+                                    - <span tal:content="date_dict/end_time" />
                                 </tal:if>
                             </div>
 
