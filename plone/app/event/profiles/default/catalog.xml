@@ -3,14 +3,14 @@
  <index name="start" remove="True" />
  <index name="start" meta_type="DateRecurringIndex">
   <extra name="start" value="start" />
-  <extra name="delta" value="" />
+  <extra name="delta" value="recurrence" />
   <extra name="until" value="" />
   <extra name="dst"   value="auto" />
  </index>
  <index name="end" remove="True" />
  <index name="end" meta_type="DateRecurringIndex">
   <extra name="start" value="end" />
-  <extra name="delta" value="" />
+  <extra name="delta" value="recurrence" />
   <extra name="until" value="" />
   <extra name="dst"   value="adjust" />
  </index>
