@@ -7,6 +7,8 @@ from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
 from ComputedAttribute import ComputedAttribute
 
+from Products.Archetypes import atapi
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import DateTimeField
 from Products.Archetypes.atapi import LinesField
@@ -149,6 +151,17 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     description='',
                     label=_(u'label_contact_phone', default=u'Contact Phone')
                     )),
+
+    LinesField('recurrence',
+                 schemata='recurrence',
+                 storage=AnnotationStorage(),
+                 languageIndependent=True,
+                 write_permission=ModifyPortalContent,
+                 widget=LinesWidget(
+                     description='Enter recurrence rules, one per line',
+                     label=_(u'label_event_recurrence', default=u'Event Recurrence')
+                     )),
+
     ), marshall = RFC822Marshaller()
     )
 
@@ -183,7 +196,9 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     implements(IATEvent, ICalendarSupport)
 
-    security       = ClassSecurityInfo()
+    recurrence = atapi.ATFieldProperty('recurrence')
+
+    security = ClassSecurityInfo()
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(
