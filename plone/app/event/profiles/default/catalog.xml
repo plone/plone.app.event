@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+ <index name="end" meta_type="DateRecurringIndex">
+  <property name="index_naive_time_as_local">True</property>
+ </index>
+ <index name="start" meta_type="DateRecurringIndex">
+  <property name="index_naive_time_as_local">True</property>
+ </index>
+ <column value="end"/>
+ <column value="start"/>
+</object>
