@@ -56,14 +56,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     label=_(u'label_whole_day_event', u'Whole day event'),
                     )),
 
-   BooleanField('useEndDate',
-                default=True,
-                write_permission=ModifyPortalContent,
-                widget=BooleanWidget(
-                    description='',
-                    label=_(u'label_use_end_date', u'Use end date'),
-                    )),
-
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
