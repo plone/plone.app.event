@@ -10,9 +10,12 @@ def isSameDay(event):
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
 
+def isSameTime(event):
+    return event.start().time == event.end().time
+
 
 def toDisplay(event):
-    """ Return dict containing pre-calculated information for 
+    """ Return dict containing pre-calculated information for
         building a <start>-<end> date string. Keys are
        'start_date' - date string of the start date
        'start_time' - time string of the start date
@@ -36,20 +39,22 @@ def toDisplay(event):
     start_time = ulocalized_time(event.start(), False, time_only=True, context=event)
     end_time = ulocalized_time(event.end(), False, time_only=True, context=event)
     same_day = isSameDay(event)
+    same_time = isSameTime(event)
 
     # set time fields to None for whole day events
     if event.getWholeDay():
         start_time = end_time = None
 
-    return  dict(start_date=start_date, 
+    return  dict(start_date=start_date,
                  start_time=start_time,
-                 end_date=end_date, 
+                 end_date=end_date,
                  end_time=end_time,
-                 same_day=same_day)
+                 same_day=same_day,
+                 same_time=same_time)
 
 
 def _dateForWholeDay(dt):
-    """ Replacement for rfc2445dt() for events lasting whole day in 
+    """ Replacement for rfc2445dt() for events lasting whole day in
         order to get the date string according to the current time zone.
         rfc2445dt() returns the date string according to UTC which is
         *not* what we want!
