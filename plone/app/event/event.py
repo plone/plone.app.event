@@ -40,6 +40,12 @@ from plone.app.event.config import PROJECTNAME
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.dtutils import DT2dt
 
+
+def default_end_date():
+    d = DateTime()
+    return DateTime(d.year(), d.month(), d.day(), d.hour() + 1, d.minute())
+
+
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
    StringField('location',
@@ -76,7 +82,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   searchable=False,
                   accessor='end',
                   write_permission=ModifyPortalContent,
-                  default_method=DateTime,
+                  default_method=default_end_date,
                   languageIndependent=True,
                   widget=CalendarWidget(
                       description='',
