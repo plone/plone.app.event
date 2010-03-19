@@ -25,6 +25,7 @@ setup(name='plone.app.event',
       install_requires=[
           'setuptools',
           'collective.calendarwidget',
+          'Products.DateRecurringIndex',
           # -*- Extra requirements: -*-
       ],
       )
