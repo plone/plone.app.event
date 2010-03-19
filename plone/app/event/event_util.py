@@ -13,7 +13,6 @@ def isSameDay(event):
 def isSameTime(event):
     return event.start().time == event.end().time
 
-
 def toDisplay(event):
     """ Return dict containing pre-calculated information for
         building a <start>-<end> date string. Keys are
