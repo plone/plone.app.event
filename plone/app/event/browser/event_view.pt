@@ -40,7 +40,7 @@
                                       id="parent-fieldname-startDate"
                                       tal:attributes="class string:$kss_class dtstart;
                                                       title python:context.start().ISO8601()">
-                                      <span metal:define-slot="inside" 
+                                      <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/start_date">Start Date</span>
                                         <tal:notwholeday condition="not:context/getWholeDay">
@@ -48,7 +48,7 @@
                                           <span tal:replace="date_dict/start_time">Start Time</span>
                                         </tal:notwholeday>
                                       </span>
-                                </abbr> 
+                                </abbr>
                                 to
                                 <br i18n:name="linebreak" />
                                 <abbr i18n:name="enddate"
@@ -58,7 +58,7 @@
                                       id="parent-fieldname-endDate"
                                       tal:attributes="class string:$kss_class dtend;
                                                       title python:context.end().ISO8601()">
-                                      <span metal:define-slot="inside" 
+                                      <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/end_date">End Date</span>
                                         <tal:notwholeday condition="not:context/getWholeDay">
@@ -89,7 +89,7 @@
                                       tal:attributes="class string:$kss_class dtstart;
                                                       title python:context.start().ISO8601()"
                                       i18n:name="starttime">
-                                      <span metal:define-slot="inside" 
+                                      <span metal:define-slot="inside"
                                             class="explain"
                                             tal:content="date_dict/start_time">Start Time</span>
                                 </abbr> to
@@ -100,12 +100,42 @@
                                       tal:attributes="class string:$kss_class dtend;
                                                       title python:context.end().ISO8601()"
                                       i18n:name="endtime">
-                                      <span metal:define-slot="inside" 
+                                      <span metal:define-slot="inside"
                                             class="explain"
                                             tal:content="date_dict/end_time">End Time</span>
                                 </abbr>
                               </tal:notwholeday>
                             </tal:sameday>
+
+                            <div tal:define="events view/get_occurences"
+                                tal:condition="events">
+                                More occurences of this event:
+                                <tal:rep repeat="event events">
+
+                                    <div tal:condition="event/same_day">
+                                        <span tal:content="event/start_date"
+                                        /><tal:if condition="not: context/getWholeDay">,
+                                            <span tal:content="event/start_time" />
+                                            <span tal:condition="not: event/same_time"
+                                                tal:content="string:- ${event/end_time}" />
+                                        </tal:if>
+                                    </div>
+
+                                    <div tal:condition="not: event/same_day">
+                                        <span tal:content="event/start_date" />
+                                        <span tal:condition="not: context/getWholeDay"
+                                            tal:content="event/start_time"
+                                        />
+                                        until
+                                        <span tal:content="event/end_date" />
+                                        <span tal:condition="not: context/getWholeDay"
+                                            tal:content="event/end_time"
+                                        />
+                                    </div>
+
+                                </tal:rep>
+                            </div>
+
                         </td>
                     </tr>
                     <tr tal:condition="context/location">
