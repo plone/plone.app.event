@@ -11,8 +11,9 @@ class EventView(BrowserView):
         return event_util.toDisplay(self.context)
 
     def get_occurences(self):
-        starts = IRecurringSequence(RRuleICal(self.context.start(), delta))
-        ends = IRecurringSequence(RRuleICal(self.context.end(), delta))
+        rrules = self.context.recurrence
+        starts = IRecurringSequence(RRuleICal(self.context.start(), rrules))
+        ends = IRecurringSequence(RRuleICal(self.context.end(), rrules))
         events = map(
             lambda start,end:dict(
                 start_date = ulocalized_time(start, False, time_only=None, context=self.context),
