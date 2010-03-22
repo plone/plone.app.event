@@ -4,18 +4,18 @@ from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-ptc.installPackage('plone.app.event')
-
 @onsetup
 def setupPackage():
     fiveconfigure.debug_mode = True
+    import Products.DateRecurringIndex
+    load_config('configure.zcml', Products.DateRecurringIndex)
+    ptc.installPackage('Products.DateRecurringIndex')
     import plone.app.event
     load_config('configure.zcml', plone.app.event)
     ptc.installPackage('plone.app.event')
     fiveconfigure.debug_mode = False
 
 setupPackage()
-
 ptc.setupPloneSite(extension_profiles=['plone.app.event:default'])
 
 class EventTestCase(ptc.PloneTestCase):

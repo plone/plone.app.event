@@ -51,7 +51,6 @@ def editATCT(obj):
     obj.setAttendees(EV_ATTENDEES)
     obj.setText(TEXT)
 
-
 tests = []
 
 class TestSiteATEvent(EventTypeTestCase):
