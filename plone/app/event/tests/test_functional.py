@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
+import plone.app.event.tests.base
 
 from Testing import ZopeTestCase
-from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
+from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase
 
 FILES = ['webdav.txt']
 
@@ -17,7 +18,7 @@ def test_suite():
     for testfile in FILES:
         suite.addTest(FileSuite(testfile,
                                 optionflags=OPTIONFLAGS,
-                                package="Products.ATContentTypes.tests",
+                                package="plone.app.event.tests",
                                 test_class=ATCTFunctionalSiteTestCase)
                      )
     return suite
