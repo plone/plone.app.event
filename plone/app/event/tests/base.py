@@ -1,38 +1,44 @@
 from Products.Five import zcml
 from Products.Five import fiveconfigure
+from Testing import ZopeTestCase as ztc
 from Products.PloneTestCase import PloneTestCase as ptc
-#from Testing import ZopeTestCase as ztc
+from Products.ATContentTypes.tests.atcttestcase import ATCTTypeTestCase
+from Products.ATContentTypes.tests.atcttestcase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.atctftestcase import ATCTIntegrationTestCase
 from Products.PloneTestCase.layer import onsetup
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.PloneTestCase.setup import SiteSetup
+
+# index has to be installed first and not deferred via @onsetup
+def setupIndex():
+    fiveconfigure.debug_mode = True
+    import Products.Five
+    zcml.load_config('meta.zcml', Products.Five)
+    zcml.load_config('configure.zcml', Products.Five)
+    import Products.DateRecurringIndex
+    zcml.load_config('configure.zcml', Products.DateRecurringIndex)
+    fiveconfigure.debug_mode = False
+    ztc.installProduct('DateRecurringIndex')
+setupIndex()
 
 @onsetup
 def setupPackage():
     fiveconfigure.debug_mode = True
     import plone.app.event
     zcml.load_config('configure.zcml', plone.app.event)
-    import Products.Five
-    zcml.load_config('meta.zcml', Products.Five)
-    zcml.load_config('configure.zcml', Products.Five)
-    import Products.DateRecurringIndex
-    zcml.load_config('configure.zcml', Products.DateRecurringIndex)
-    ptc.installProduct('Products.DateRecurringIndex')
-    ptc.installProduct('plone.app.event')
     fiveconfigure.debug_mode = False
-
 setupPackage()
 
-ptc.setupPloneSite()
-# ptc.PloneTestCase.addProfile
-#ptc.setupPloneSite(extension_profiles=['plone.app.event:default'])
+ptc.setupPloneSite(extension_profiles=['plone.app.event:default'])
+
 
 class EventTestCase(ptc.PloneTestCase):
     """ Base class for plone.app.event tests """
 
-class EventTypeTestCase(atcttestcase.ATCTTypeTestCase):
+class EventTypeTestCase(ATCTTypeTestCase):
     """ """
 
-class EventFieldTestCase(atcttestcase.ATCTFieldTestCase):
+class EventFieldTestCase(ATCTFieldTestCase):
     """ """
 
-class EventIntegrationTestCase(atctftestcase.ATCTIntegrationTestCase):
+class EventIntegrationTestCase(ATCTIntegrationTestCase):
     """ """
