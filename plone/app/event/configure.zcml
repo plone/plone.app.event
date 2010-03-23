@@ -10,6 +10,7 @@
     <five:registerPackage package="." initialize=".initialize" />
 
     <include package=".browser" />
+    <include package="Products.DateRecurringIndex" />
 
     <genericsetup:registerProfile
         name="default"
