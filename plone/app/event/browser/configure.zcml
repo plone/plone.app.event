@@ -80,6 +80,13 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        for="*"
+        name="recurrencewidget"
+        class=".widget.RecurrenceWidget"
+        permission="zope2.View"
+        />
+
     <browser:resource
         name="event.js"
         file="event.js"

@@ -20,4 +20,10 @@
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION" />
 
+  <utility
+      component=".vocabulary.reccurencevocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="plone.app.event.recurrence"
+      />
+
 </configure>

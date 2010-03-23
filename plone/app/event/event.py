@@ -25,7 +25,6 @@ from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 
-
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -45,6 +44,39 @@ def default_end_date():
     d = DateTime()
     return DateTime(d.year(), d.month(), d.day(), d.hour() + 1, d.minute())
 
+
+import zope.component
+from zope.schema.interfaces import IVocabularyFactory
+
+
+class RecurrenceWidget(LinesWidget):
+    _properties = LinesWidget._properties.copy()
+    _properties.update({
+        'macro' : "recurrencewidget",
+        })
+
+    security = ClassSecurityInfo()
+
+    security.declarePublic('process_form')
+    def process_form(self, instance, field, form, empty_marker=None,
+                     emptyReturnsMarker=False, validating=True):
+        """Basic impl for form processing in a widget"""
+        value = form.get(field.getName(), empty_marker)
+
+        if value is empty_marker:
+            return empty_marker
+
+        if emptyReturnsMarker and value == '':
+            return empty_marker
+
+        if value is -1:
+            value = None
+
+        return value, {}
+
+    def recurrencevoc(self):
+        return zope.component.getUtility(IVocabularyFactory,
+                                         name="plone.app.event.recurrence")(self)
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
@@ -163,7 +195,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                  storage=AnnotationStorage(),
                  languageIndependent=True,
                  write_permission=ModifyPortalContent,
-                 widget=LinesWidget(
+                 widget=RecurrenceWidget(
                      description='Enter recurrence rules, one per line',
                      label=_(u'label_event_recurrence', default=u'Event Recurrence')
                      )),
