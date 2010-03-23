@@ -1,3 +1,5 @@
+from plone.app.event.event import ATEvent
+
 from zope.i18nmessageid import MessageFactory
 
 from plone.app.event import config
