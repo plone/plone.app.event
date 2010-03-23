@@ -1,3 +1,5 @@
+import plone.app.event.tests.base
+
 from Testing import ZopeTestCase # side effect import. leave it here.
 
 import transaction
@@ -5,25 +7,26 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
-from Products.ATContentTypes.tests.utils import dcEdit
 
-from Products.ATContentTypes.content.event import ATEvent
+from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from plone.app.event.dtutils import DT2dt
+
 from DateTime import DateTime
-from plone.app.event.interfaces import ICalendarSupport
-from Products.ATContentTypes.interfaces import IATEvent
+
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
+from Products.ATContentTypes.interfaces import IATEvent
+from plone.app.event import ATEvent
+from plone.app.event.dtutils import DT2dt
+from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
-import plone.app.event.tests.base
 from plone.app.event.tests.base import (
-        EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
+    EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -567,7 +570,6 @@ class TestATEventFields(EventFieldTestCase):
 tests.append(TestATEventFields)
 
 class TestATEventFunctional(EventIntegrationTestCase):
-
     portal_type = 'Event'
     views = ('event_view', 'vcs_view', 'ics_view', )
 
