@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import plone.app.event.tests.base
 
 from unittest import defaultTestLoader
 from zope.interface import classImplements
