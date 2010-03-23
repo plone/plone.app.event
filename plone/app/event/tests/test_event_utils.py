@@ -1,3 +1,5 @@
+import plone.app.event.tests.base
+
 import unittest
 from DateTime import DateTime
 
@@ -28,7 +30,7 @@ class EventUtilsTests(EventTestCase):
 
     def testToDisplayWithTime(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00')
-        self.assertEqual(event_util.toDisplay(event), 
+        self.assertEqual(event_util.toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : '06:00 AM',
                  'end_date' : 'Oct 12, 2000',
@@ -37,20 +39,20 @@ class EventUtilsTests(EventTestCase):
                 })
 
     def testToDisplayWholeDaySameDay(self):
-        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00', 
+        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
                           wholeDay=True)
-        self.assertEqual(event_util.toDisplay(event), 
+        self.assertEqual(event_util.toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
                  'end_date' : 'Oct 12, 2000',
-                 'end_time' : None,  
+                 'end_time' : None,
                  'same_day' : True,
                 })
-                          
+
     def testToDisplayWholeDayDifferentDays(self):
-        event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00', 
+        event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00',
                           wholeDay=True)
-        self.assertEqual(event_util.toDisplay(event), 
+        self.assertEqual(event_util.toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
                  'end_date' : 'Oct 13, 2000',
