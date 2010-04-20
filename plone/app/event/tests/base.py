@@ -25,6 +25,7 @@ def setupPackage():
     fiveconfigure.debug_mode = True
     import plone.app.event
     zcml.load_config('configure.zcml', plone.app.event)
+    ztc.installPackage('plone.app.event')
     fiveconfigure.debug_mode = False
 setupPackage()
 
@@ -42,3 +43,4 @@ class EventFieldTestCase(ATCTFieldTestCase):
 
 class EventIntegrationTestCase(ATCTIntegrationTestCase):
     """ """
+

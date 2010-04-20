@@ -6,7 +6,7 @@ from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCas
 
 FILES = ['webdav.txt']
 
-from zope.testing import doctest
+import doctest
 OPTIONFLAGS = (doctest.ELLIPSIS |
                doctest.NORMALIZE_WHITESPACE |
                doctest.REPORT_NDIFF)
