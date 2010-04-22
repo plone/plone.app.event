@@ -319,9 +319,9 @@ class TestATEventFields(EventFieldTestCase):
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default.year() == default_end_date().year(),
-                'Value is %s' % str(field.default))
-        self.failUnless(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.failUnless(field.default == None, 'Value is %s' % str(field.default))
+        self.failUnless(field.default_method == default_end_date,
+                        'Value is %s' % str(field.default_method))
         self.failUnless(field.searchable == False, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
