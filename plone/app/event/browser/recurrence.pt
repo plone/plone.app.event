@@ -37,8 +37,8 @@
 
 
                     <!-- Pulldown when longer -->
-                    <select tal:attributes="name fieldName;
-                                            id fieldName;">
+                    <select tal:attributes="name string:${fieldName}-freq;
+                                            id string:${fieldName}-freq;">
 
                         <option tal:repeat="item vocab"
                                 tal:attributes="value item/token;
@@ -48,6 +48,12 @@
                                 />
 
                     </select>
+
+
+                     <input class="calendarInput" type="text" value="" 
+                            tal:attributes="name  string:${fieldName}-until; 
+                                            id    string:${fieldName}-until;
+                                            value string:" /> 
 
             </metal:fill>
 

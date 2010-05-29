@@ -1,56 +1,74 @@
-from types import StringType
+import datetime
 
+import zope.component
 from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
+
+from AccessControl import ClassSecurityInfo
+from ComputedAttribute import ComputedAttribute
+from DateTime import DateTime
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
-from AccessControl import ClassSecurityInfo
-from DateTime import DateTime
-from ComputedAttribute import ComputedAttribute
 
-from Products.Archetypes import atapi
-from Products.Archetypes.atapi import AnnotationStorage
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import DateTimeField
-from Products.Archetypes.atapi import LinesField
-from Products.Archetypes.atapi import StringField
-from Products.Archetypes.atapi import TextField
-#from Products.Archetypes.atapi import CalendarWidget
-from collective.calendarwidget.widget import CalendarWidget
-from Products.Archetypes.atapi import LinesWidget
-from Products.Archetypes.atapi import KeywordWidget
-from Products.Archetypes.atapi import RichWidget
-from Products.Archetypes.atapi import StringWidget
-from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import ATFieldProperty
 from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
+from Products.Archetypes.atapi import DateTimeField
+from Products.Archetypes.atapi import KeywordWidget
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import LinesWidget
+from Products.Archetypes.atapi import ObjectField
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
+from Products.Archetypes.atapi import TextField
 
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from plone.app.event.config import PROJECTNAME
-from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.dtutils import DT2dt
+from collective.calendarwidget.widget import CalendarWidget
+import pytz
 
+from plone.app.event.config import PROJECTNAME
+from plone.app.event.dtutils import DT2dt
+from plone.app.event.interfaces import ICalendarSupport
 
 def default_end_date():
-    d = DateTime()
-    return DateTime(d.year(), d.month(), d.day(), d.hour() + 1, d.minute())
+    d = datetime.datetime.now() + datetime.timedelta(hours=1)
+    return DateTime(d)
 
+class RecurrenceField(LinesField):
 
-import zope.component
-from zope.schema.interfaces import IVocabularyFactory
+    security  = ClassSecurityInfo()
 
+    security.declarePrivate('set')
+    def set(self, instance, value, **kwargs):
+        """
+        If passed-in value is a string, split at line breaks and
+        remove leading and trailing white space before storing in object
+        with rest of properties.
+        """
+        __traceback_info__ = value, type(value)
+        if isinstance(value, basestring):
+            value =  value.split('\n')
+        value = [v for v in value if v]
+        ObjectField.set(self, instance, value, **kwargs)
 
-class RecurrenceWidget(LinesWidget):
+class RecurrenceWidget(LinesWidget, CalendarWidget):
+    """ A widget for date recurrence
+    """
+
     _properties = LinesWidget._properties.copy()
+    _properties.update(CalendarWidget._properties.copy())
     _properties.update({
         'macro' : "recurrencewidget",
         })
@@ -61,19 +79,24 @@ class RecurrenceWidget(LinesWidget):
     def process_form(self, instance, field, form, empty_marker=None,
                      emptyReturnsMarker=False, validating=True):
         """Basic impl for form processing in a widget"""
-        value = form.get(field.getName(), empty_marker)
+        value = {}
 
-        if value is empty_marker:
-            return empty_marker
+        # XXX safe int ???
+        freq = int(form.get("%s-freq" % field.getName(), empty_marker))
+        if freq is -1:
+            freq = None
+        elif freq:
+            value['freq'] = freq
 
-        if emptyReturnsMarker and value == '':
-            return empty_marker
+        until = form.get("%s-until" % field.getName(), empty_marker)
+        if until:
+            # XXX localization of datestring and timezone ???
+            until = datetime.datetime.strptime(until, '%m/%d/%Y')
+            value['until'] = until.replace(tzinfo=pytz.utc)
 
-        if value is -1:
-            value = None
+        return [value], {}
 
-        return value, {}
-
+    security.declarePublic('recurrencevoc')
     def recurrencevoc(self):
         return zope.component.getUtility(IVocabularyFactory,
                                          name="plone.app.event.recurrence")(self)
@@ -190,7 +213,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     label=_(u'label_contact_phone', default=u'Contact Phone')
                     )),
 
-    LinesField('recurrence',
+    RecurrenceField('recurrence',
                  schemata='recurrence',
                  storage=AnnotationStorage(),
                  languageIndependent=True,
@@ -234,7 +257,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     implements(IATEvent, ICalendarSupport)
 
-    recurrence = atapi.ATFieldProperty('recurrence')
+    recurrence = ATFieldProperty('recurrence')
 
     security = ClassSecurityInfo()
 
