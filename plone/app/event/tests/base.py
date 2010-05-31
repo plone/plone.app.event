@@ -6,7 +6,6 @@ from Products.ATContentTypes.tests.atcttestcase import ATCTTypeTestCase
 from Products.ATContentTypes.tests.atcttestcase import ATCTFieldTestCase
 from Products.ATContentTypes.tests.atctftestcase import ATCTIntegrationTestCase
 from Products.PloneTestCase.layer import onsetup
-from Products.PloneTestCase.setup import SiteSetup
 
 # index has to be installed first and not deferred via @onsetup
 def setupIndex():

@@ -9,13 +9,13 @@ from ComputedAttribute import ComputedAttribute
 from DateTime import DateTime
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
+from Products.CMFPlone.utils import safeToInt
 
 from Products.Archetypes.atapi import ATFieldProperty
 from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import DateTimeField
-from Products.Archetypes.atapi import KeywordWidget
 from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import LinesWidget
 from Products.Archetypes.atapi import ObjectField
@@ -81,8 +81,7 @@ class RecurrenceWidget(LinesWidget, CalendarWidget):
         """Basic impl for form processing in a widget"""
         value = {}
 
-        # XXX safe int ???
-        freq = int(form.get("%s-freq" % field.getName(), empty_marker))
+        freq = safeToInt(form.get("%s-freq" % field.getName(), empty_marker))
         if freq is -1:
             freq = None
         elif freq:

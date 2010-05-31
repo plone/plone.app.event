@@ -1,4 +1,3 @@
-import zope.interface
 from Products.CMFDefault.formlib.vocabulary import SimpleVocabulary
 from dateutil.rrule import YEARLY, MONTHLY, WEEKLY, DAILY
 from Products.ATContentTypes import ATCTMessageFactory as _

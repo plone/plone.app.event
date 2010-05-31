@@ -25,6 +25,7 @@ setup(name='plone.app.event',
       install_requires=[
           'setuptools',
           'collective.calendarwidget',
+          'Plone',
           'Products.DateRecurringIndex',
       ],
       extras_require={'test': ['interlude',]},

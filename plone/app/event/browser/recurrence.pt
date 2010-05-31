@@ -29,35 +29,33 @@
     </metal:view_macro>
 
     <metal:define define-macro="edit">
-        <metal:use use-macro="field_macro|context/widgets/field/macros/edit">
+      <metal:use use-macro="field_macro|context/widgets/field/macros/edit">
 
-            <metal:fill fill-slot="widget_body"
-                        tal:define="vocab widget/recurrencevoc;
-                                    selection string:">
+        <metal:fill fill-slot="widget_body"
+            tal:define="vocab widget/recurrencevoc;
+                        selection string:">
 
+          <select 
+              tal:attributes="name string:${fieldName}-freq;
+                              id string:${fieldName}-freq;
+                              value python:value and value[0].get('freq', '');">
 
-                    <!-- Pulldown when longer -->
-                    <select tal:attributes="name string:${fieldName}-freq;
-                                            id string:${fieldName}-freq;">
+            <option tal:repeat="item vocab"
+                tal:attributes="value item/token;
+                                selected python:item.token in selection and 'selected' or None"
+                tal:content="item/title"
+                />
 
-                        <option tal:repeat="item vocab"
-                                tal:attributes="value item/token;
-                                                selected python:item.token in selection and 'selected' or None"
-                                tal:content="item/title"
-                                i18n:translate=""
-                                />
+          </select>
 
-                    </select>
+          <input class="calendarInput" type="text" value="" 
+              tal:attributes="name string:${fieldName}-until; 
+                              id string:${fieldName}-until;
+                              value python:value and value[0].get('until', '')" /> 
 
+        </metal:fill>
 
-                     <input class="calendarInput" type="text" value="" 
-                            tal:attributes="name  string:${fieldName}-until; 
-                                            id    string:${fieldName}-until;
-                                            value string:" /> 
-
-            </metal:fill>
-
-        </metal:use>
+      </metal:use>
 
     </metal:define>
 
