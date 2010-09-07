@@ -1,10 +1,6 @@
-import plone.app.event.tests.base
-
 import unittest
-from DateTime import DateTime
 
 from plone.app.event import event_util
-from plone.app.event.event import ATEvent as Event
 from plone.app.event.tests.base import EventTestCase
 
 class EventUtilsTests(EventTestCase):

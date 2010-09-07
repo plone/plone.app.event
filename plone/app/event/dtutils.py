@@ -27,7 +27,7 @@ def gettz(name=None):
         return tz.gettz(name)
 
 def dt2DT(dt, tzname=None):
-    """Convert a python datetime to DateTime. 
+    """Convert a python datetime to DateTime.
 
     >>> import time, os
     >>> oldtz = os.environ.get('TZ')
@@ -59,13 +59,13 @@ def dt2DT(dt, tzname=None):
 
     >>> dt2DT(datetime.datetime(2005, 07, 07, 18, 0, 0, tzinfo=brt))
     DateTime('2005/07/07 18:00:00 GMT-3')
-    
+
     Change back:
     >>> if oldtz is None:
     ...     del os.environ['TZ']
     ... else:
     ...     os.environ['TZ'] = oldtz
-    >>> time.tzset()    
+    >>> time.tzset()
 
     """
     if tzname is None and dt.tzinfo is None:
@@ -116,7 +116,7 @@ def DT2dt(dt):
     timezone = gettz(dt.timezone())
     value = datetime.datetime(dt.year(), dt.month(), dt.day(),
                               dt.hour(), dt.minute(), int(dt.second()),
-                              int(dt.second()*1000000) % 1000000, tzinfo=timezone)
+                              int(dt.second() * 1000000) % 1000000, tzinfo=timezone)
     return value
 
 _extra_times = {}

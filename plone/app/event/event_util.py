@@ -5,13 +5,16 @@ Display helper methods for showing whole-day or same-day events
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.app.event.utils import rfc2445dt
 
+
 def isSameDay(event):
     return event.start().year() == event.end().year() and \
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
 
+
 def isSameTime(event):
     return event.start().time == event.end().time
+
 
 def toDisplay(event):
     """ Return dict containing pre-calculated information for
@@ -23,8 +26,9 @@ def toDisplay(event):
        'same_day' - event ends on the same day
     """
 
-    # The behavior os ulocalized_time() with time_only is odd. Setting time_only=False
-    # should return the date part only and *not* the time
+    # The behavior os ulocalized_time() with time_only is odd.
+    # Setting time_only=False should return the date part only and *not*
+    # the time
     #
     # ulocalized_time(event.start(), False,  time_only=True, context=event)
     # u'14:40'

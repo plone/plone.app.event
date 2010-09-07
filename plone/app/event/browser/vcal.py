@@ -7,13 +7,12 @@ from DateTime import DateTime
 
 from plone.memoize import ram
 from Products.ATContentTypes.interfaces import IATTopic
-from Products.CMFCore.utils import getToolByName
 
 from plone.app.event.constants import (
     PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
 from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.utils import n2rn, rfc2445dt, vformat, foldline
-from plone.app.event import event_util 
+from plone.app.event.utils import rfc2445dt, vformat, foldline
+from plone.app.event import event_util
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:

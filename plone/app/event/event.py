@@ -1,15 +1,12 @@
 import datetime
 
-import zope.component
 from zope.interface import implements
-from zope.schema.interfaces import IVocabularyFactory
 
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from DateTime import DateTime
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
-from Products.CMFPlone.utils import safeToInt
 
 from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import ATFieldProperty
@@ -18,15 +15,12 @@ from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import DateTimeField
 from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import LinesWidget
-from Products.Archetypes.atapi import ObjectField
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import TextField
-from Products.Archetypes.Widget import TypesWidget
-from Products.Archetypes.Registry import registerWidget
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
@@ -38,7 +32,6 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 from collective.calendarwidget.widget import CalendarWidget
-import pytz
 
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.dtutils import DT2dt
@@ -196,7 +189,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     portal_type    = 'Event'
     archetype_name = 'Event'
-    _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
+    _atct_newTypeFor = {'portal_type': 'CMF Event', 'meta_type': 'CMF Event'}
     assocMimetypes = ()
     assocFileExt   = ('event', )
     cmf_edit_kws   = ('effectiveDay', 'effectiveMo', 'effectiveYear',

@@ -13,6 +13,7 @@ from Products.CMFCore.utils import ContentInit
 
 MsgFact = MessageFactory(config.PROJECTNAME)
 
+
 def initialize(context):
     """Register content types through Archetypes with Zope and the CMF.
     """
@@ -28,3 +29,4 @@ def initialize(context):
             permission         = config.ADD_PERMISSIONS[atype.portal_type],
             extra_constructors = (constructor,),
             ).initialize(context)
+

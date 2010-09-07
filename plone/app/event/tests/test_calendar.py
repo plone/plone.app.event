@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import plone.app.event.tests.base
-
 from unittest import defaultTestLoader
 from zope.interface import classImplements
 from zope.component import getMultiAdapter
@@ -28,11 +26,11 @@ class EventCalendarTests(EventTestCase):
 
     def afterSetUp(self):
         folder = self.folder
-        event1 = folder[folder.invokeFactory('Event',
+        self.event1 = folder[folder.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
             startDate='2007/10/10', endDate='2007/10/12', location='Naples',
             eventUrl='http://plone.org/events/conferences/2007-naples')]
-        event2 = folder[folder.invokeFactory('Event',
+        self.event2 = folder[folder.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')]
@@ -42,7 +40,7 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def testCalendarViewForTopic(self):
@@ -54,19 +52,18 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 1)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2008'])
         folder[folder.invokeFactory('Event',
             id='inaug09', title='Inauguration Day 2009',
             startDate='2009/01/20', endDate='2009/01/20', location='DC')]
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
 
     def testDuplicateQueryParameters(self):
         self.setRoles(('Manager',))
-        folder = self.folder
         topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Event')
@@ -79,7 +76,7 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def checkOrder(self, text, *order):
@@ -147,7 +144,6 @@ class EventCalendarTests(EventTestCase):
 
     def testRenderingForTopic(self):
         self.setRoles(('Manager',))
-        folder = self.folder
         topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
@@ -165,7 +161,7 @@ class EventCalendarTests(EventTestCase):
             'END:VEVENT',
             'END:VCALENDAR')
         lines = ''.join(output).splitlines()
-        self.assertEqual(len([ l for l in lines if l == 'BEGIN:VEVENT']), 1)
+        self.assertEqual(len([l for l in lines if l == 'BEGIN:VEVENT']), 1)
 
     def testCacheKey(self):
         headers, output, request = makeResponse(TestRequest())

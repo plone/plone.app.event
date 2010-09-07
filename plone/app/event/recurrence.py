@@ -6,9 +6,10 @@ from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.Widget import TypesWidget
 from Products.Archetypes.Registry import registerWidget
 
+
 class RecurrenceField(LinesField):
 
-    security  = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declarePrivate('set')
     def set(self, instance, value, **kwargs):
@@ -19,15 +20,15 @@ class RecurrenceField(LinesField):
         """
         __traceback_info__ = value, type(value)
         if isinstance(value, basestring):
-            value =  value.split('\n')
+            value = value.splitlines()
         value = [v for v in value if v]
-        ObjectField.set(self, instance, value, **kwargs)
+        LinesField.set(self, instance, value, **kwargs)
 
 
 class RecurrenceWidget(TypesWidget):
     _properties = TypesWidget._properties.copy()
     _properties.update({
-        'macro' : "recurring_date",
+        'macro': "recurring_date",
         'helper_js': ('++resource++recurrence.js',),
         'helper_css': ('++resource++recurrence.css',),
         })
@@ -79,6 +80,5 @@ registerWidget(RecurrenceWidget,
                title='Recurring Date',
                description=('Renders a HTML form to enter all the info '
                             'for recurring dates.'),
-               used_for=('plone.app.event.event.RecurrenceField',)
-               )
+               used_for=('plone.app.event.event.RecurrenceField',))
 
