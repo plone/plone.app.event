@@ -48,7 +48,7 @@ class EventCalendarTests(EventTestCase):
     def testCalendarViewForTopic(self):
         self.setRoles(('Manager',))
         folder = self.folder
-        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
@@ -148,7 +148,7 @@ class EventCalendarTests(EventTestCase):
     def testRenderingForTopic(self):
         self.setRoles(('Manager',))
         folder = self.folder
-        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         headers, output, request = makeResponse(TestRequest())

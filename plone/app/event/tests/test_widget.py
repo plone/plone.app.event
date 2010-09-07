@@ -14,6 +14,7 @@ class WidgetTestCase(EventTestCase):
         widget = field.widget
         form = { 'recurrence': DAILY}
         result = widget.process_form(doc, field, form)
+        print result
         assert result == (DAILY, {})
 tests.append(WidgetTestCase)
 
