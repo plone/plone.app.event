@@ -63,14 +63,18 @@ class RecurrenceField(LinesField):
         value = [v for v in value if v]
         ObjectField.set(self, instance, value, **kwargs)
 
-class RecurrenceWidget(LinesWidget, CalendarWidget):
-    """ A widget for date recurrence
-    """
+from App.class_init import InitializeClass
+from AccessControl import ClassSecurityInfo
+from Products.Archetypes.Widget import TypesWidget
+from Products.Archetypes.Registry import registerWidget
 
-    _properties = LinesWidget._properties.copy()
-    _properties.update(CalendarWidget._properties.copy())
+
+class RecurrenceWidget(TypesWidget):
+    _properties = TypesWidget._properties.copy()
     _properties.update({
-        'macro' : "recurrencewidget",
+        'macro' : "recurring_date",
+        'helper_js': ('++resource++recurrence.js',),
+        'helper_css': ('++resource++recurrence.css',),
         })
 
     security = ClassSecurityInfo()
@@ -78,27 +82,50 @@ class RecurrenceWidget(LinesWidget, CalendarWidget):
     security.declarePublic('process_form')
     def process_form(self, instance, field, form, empty_marker=None,
                      emptyReturnsMarker=False, validating=True):
-        """Basic impl for form processing in a widget"""
-        value = {}
+        """A custom implementation for the recurring widget form processing.
+        """
+        fname = field.getName()
 
-        freq = safeToInt(form.get("%s-freq" % field.getName(), empty_marker))
-        if freq is -1:
-            freq = None
-        elif freq:
-            value['freq'] = freq
+        # Assemble the recurring date from the input components
+        kwargs = dict()
+        kwargs['enabled'] = form.get('%s_enabled' % fname, False)
+        kwargs['duration'] = form.get('%s_duration' % fname, None)
+        kwargs['frequency'] = int(form.get('%s_frequency' % fname, 3))
+        kwargs['daily_interval'] = form.get('%s_daily_interval' % fname, 'day')
+        kwargs['daily_interval_number'] = int(form.get('%s_daily_interval_number' % fname, 1))
+        kwargs['weekly_interval'] = tuple(map(int, form.get('%s_weekly_interval' % fname, ())))
+        kwargs['weekly_interval_number'] = int(form.get('%s_weekly_interval_number' % fname, 1))
+        kwargs['monthly_interval'] = form.get('%s_monthly_interval' % fname, 'dayofmonth')
+        kwargs['monthly_interval_day'] = int(form.get('%s_monthly_interval_day' % fname, 1))
+        kwargs['monthly_interval_number1'] = int(form.get('%s_monthly_interval_number1' % fname, 1))
+        kwargs['monthly_interval_number2'] = int(form.get('%s_monthly_interval_number2' % fname, 1))
+        kwargs['monthly_ordinal_week'] = int(form.get('%s_monthly_ordinal_week' % fname, 1))
+        kwargs['monthly_weekday'] = int(form.get('%s_monthly_weekday' % fname, 0))
+        kwargs['yearly_interval'] = form.get('%s_yearly_interval' % fname, 'dayofmonth')
+        kwargs['yearly_month1'] = int(form.get('%s_yearly_month1' % fname, 1))
+        kwargs['yearly_month2'] = int(form.get('%s_yearly_month2' % fname, 1))
+        kwargs['yearly_interval_day'] = int(form.get('%s_yearly_interval_day' % fname, 1))
+        kwargs['yearly_ordinal_week'] = int(form.get('%s_yearly_ordinal_week' % fname, 1))
+        kwargs['yearly_weekday'] = int(form.get('%s_yearly_weekday' % fname, 0))
+        kwargs['range_name'] = form.get('%s_range' % fname, 'ever')
+        kwargs['range_count'] = int(form.get('%s_range_count' % fname, 10))
+        kwargs['start_date'] = form.get('%s_range_start' % fname, None)
+        kwargs['end_date'] = form.get('%s_range_end' % fname, None)
 
-        until = form.get("%s-until" % field.getName(), empty_marker)
-        if until:
-            # XXX localization of datestring and timezone ???
-            until = datetime.datetime.strptime(until, '%m/%d/%Y')
-            value['until'] = until.replace(tzinfo=pytz.utc)
+        #value = RecurringData(**kwargs)
 
-        return [value], {}
+        # Stick it back in request.form
+        #form[fname] = value
+        return value, {}
 
-    security.declarePublic('recurrencevoc')
-    def recurrencevoc(self):
-        return zope.component.getUtility(IVocabularyFactory,
-                                         name="plone.app.event.recurrence")(self)
+InitializeClass(RecurrenceWidget)
+
+registerWidget(RecurrenceWidget,
+               title='Recurring Date',
+               description=('Renders a HTML form to enter all the info '
+                            'for recurring dates.'),
+               used_for=('plone.app.event.event.RecurrenceField',)
+               )
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
 

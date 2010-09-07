@@ -82,7 +82,7 @@
 
     <browser:page
         for="*"
-        name="recurrencewidget"
+        name="recurring_date"
         class=".widget.RecurrenceWidget"
         permission="zope2.View"
         />
@@ -93,4 +93,15 @@
         permission="zope.Public"
     />
 
+    <browser:resource
+        name="recurrence.js"
+        file="recurrence.js"
+        permission="zope.Public"
+    />
+
+    <browser:resource
+        name="recurrence.css"
+        file="recurrence.css"
+        permission="zope.Public"
+    />
 </configure>

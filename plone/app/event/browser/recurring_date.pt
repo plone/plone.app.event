@@ -1,0 +1,455 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="recurringdate">
+
+<head><title></title></head>
+
+<body>
+
+  <metal:base_edit_macro define-macro="base_edit"
+        tal:define="visState python:widget.isVisible(here, mode);
+                    edit_accessor python:field.getEditAccessor(here);
+                    getMethod python:(widget.populate and (edit_accessor or accessor)) or None;
+                    value python:getMethod and getMethod();
+                    value python:widget.postback and request.get(fieldName, here.session_restore_value(fieldName, value)) or value;
+                    visCondition python:field.widget.testCondition(context.aq_inner.getParentNode(), portal, context);
+                    error_id python:errors.get(fieldName)">
+      <tal:condition
+          condition="python:visState == 'visible' and visCondition">
+        <div class="field"
+             tal:define="kssClassesView context/@@kss_field_decorator_view;
+                         getKssClasses nocall:kssClassesView/getKssClasses;
+                         kss_class python:getKssClasses(fieldName);
+                         css_class string:field Archetypes ${widget/getName} ${kss_class}"
+             tal:condition="python:('edit' in widget.modes and 'w' in field.mode and field.checkPermission('w',here))
+                                    or (mode=='search' and field.checkPermission('r',here))"
+             tal:attributes="class python:error_id and css_class + ' error' or css_class;
+                             id string:archetypes-fieldname-${fieldName}">
+
+          <div class="fieldErrorBox"
+               tal:content="error_id" i18n:translate="">Validation Error</div>
+          <div metal:define-slot="widget_body"></div>
+        </div>
+      </tal:condition>
+  </metal:base_edit_macro>
+
+  <metal:view_macro define-macro="view">
+    <p tal:content="value">Value</p>
+  </metal:view_macro>
+
+  <metal:edit_macro define-macro="edit">
+    <metal:use use-macro="field_macro | here/recurring_date/macros/base_edit">
+
+      <div metal:fill-slot="widget_body">
+
+        <input type="hidden"
+               value=""
+               tal:attributes="name string:${fieldName}_enabled:boolean:default"
+               />
+
+        <input class="noborder"
+               type="checkbox"
+               value="1"
+               tal:define="enabled_name string:${fieldName}_enabled"
+               tal:attributes="id enabled_name;
+                               name string:${enabled_name}:boolean;
+                               checked request/?enabled_name | value/enabled | nothing"
+               />
+
+        <label tal:attributes="for string:${fieldName}_enabled">
+            Enable event recurrence
+        </label>
+
+        <div class="recurrence_box">
+
+            <fieldset class="recurrence_pattern">
+                <legend>Recurrence Pattern</legend>
+                <div class="field">
+                    <div class="frequency_options"
+                         tal:define="frequency_name string:${fieldName}_frequency;
+                                     frequency_value request/?frequency_name | value/frequency | python:3;
+                                     frequency_value python:int(frequency_value)">
+                        <input class="noborder blurrable frequency_daily"
+                               type="radio"
+                               value="3"
+                               tal:attributes="name frequency_name;
+                                               checked python:frequency_value == 3;
+                                               id string:${fieldName}_frequency_daily"
+                               />
+                        <label tal:attributes="for string:${fieldName}_frequency_daily">
+                            Daily
+                        </label>
+                        <br/>
+                        <input class="noborder blurrable frequency_weekly"
+                               type="radio"
+                               value="2"
+                               tal:attributes="name frequency_name;
+                                               checked python:frequency_value == 2;
+                                               id string:${fieldName}_frequency_weekly"
+                               />
+                        <label tal:attributes="for string:${fieldName}_frequency_weekly">
+                            Weekly
+                        </label>
+                        <br/>
+                        <input class="noborder blurrable frequency_monthly"
+                               type="radio"
+                               value="1"
+                               tal:attributes="name frequency_name;
+                                               checked python:frequency_value == 1;
+                                               id string:${fieldName}_frequency_monthly"
+                               />
+                        <label tal:attributes="for string:${fieldName}_frequency_monthly">
+                            Monthly
+                        </label>
+                        <br/>
+                        <input class="noborder blurrable frequency_yearly"
+                               type="radio"
+                               value="0"
+                               tal:attributes="name frequency_name;
+                                               checked python:frequency_value == 0;
+                                               id string:${fieldName}_frequency_yearly"
+                               />
+                        <label tal:attributes="for string:${fieldName}_frequency_yearly">
+                            Yearly
+                        </label>
+                        <br/>
+                    </div>
+                    <div class="frequency_content">
+
+                        <!-- DAILY -->
+                        <div class="daily_box"
+                             tal:define="interval_name string:${fieldName}_daily_interval;
+                                         interval_value request/?interval_name | value/daily_interval | string:day">
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="day"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'day';
+                                                   id string:${fieldName}_daily_interval_day"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_daily_interval_day">
+                                Every
+                                <input class="blurrable centered"
+                                       type="text"
+                                       size="2"
+                                       tal:define="number_name string:${fieldName}_daily_interval_number;
+                                                   number_value request/?number_name | value/daily_interval_number | python:1"
+                                       tal:attributes="id number_name;
+                                                       name number_name;
+                                                       value number_value"
+                                       />
+                                 day(s)
+                            </label>
+                            <br/>
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="weekday"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'weekday';
+                                                   id string:${fieldName}_daily_interval_weekday"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_daily_interval_weekday">
+                                Every weekday
+                            </label>
+                            <br/>
+                        </div>
+
+                        <!-- WEEKLY -->
+                        <div class="weekly_box"
+                             tal:define="interval_name string:${fieldName}_weekly_interval:list;
+                                         interval_value request/?interval_name | value/weekly_interval | python:[];
+                                         interval_value python:map(int, interval_value)">
+                            <label tal:attributes="for string:${fieldName}_weekly_interval_number">
+                                Every
+                                <input class="blurrable centered"
+                                       type="text"
+                                       size="2"
+                                       tal:define="number_name string:${fieldName}_weekly_interval_number;
+                                                   number_value request/?number_name | value/weekly_interval_number | python:1"
+                                       tal:attributes="id number_name;
+                                                       name number_name;
+                                                       value number_value"
+                                       />
+                                 week(s) on:
+                                <br/>
+                                <tal:weekday repeat="day_info python:[(6, 'Sunday'), (0, 'Monday'), (1, 'Tuesday'),
+                                                     (2, 'Wednesday'), (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday')]">
+                                    <input class="blurrable"
+                                           type="checkbox"
+                                           tal:define="day_value python:day_info[0];
+                                                       day_name python:day_info[1]"
+                                           tal:attributes="id string:${interval_name}_${day_value};
+                                                           checked python:day_value in interval_value;
+                                                           value day_value;
+                                                           name interval_name"
+                                           />
+                                    <label tal:define="day_value python:day_info[0]"
+                                           tal:attributes="for string:${interval_name}_${day_value}"
+                                           tal:content="python:day_info[1]">
+                                        Su/Mo/Tu/We/Th/Fr/Sa
+                                    </label>
+                                    <br tal:define="index repeat/day_info/index"
+                                        tal:condition="python:index == 3" />
+                                </tal:weekday>
+                            </label>
+                        </div>
+
+                        <!-- MONTHLY -->
+                        <div class="monthly_box"
+                             tal:define="interval_name string:${fieldName}_monthly_interval;
+                                         interval_value request/?interval_name | value/monthly_interval | string:dayofmonth">
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="dayofmonth"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'dayofmonth';
+                                                   id string:${fieldName}_monthly_interval_dayofmonth"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_monthly_interval_dayofmonth">
+                                Day
+                                <select tal:define="interval_day_name string:${fieldName}_monthly_interval_day;
+                                                    interval_day_value request/?interval_day_name | value/monthly_interval_day | python:1"
+                                       tal:attributes="name interval_day_name">
+                                    <tal:loop repeat="day python:range(1, 32)">
+                                        <option tal:attributes="value day;
+                                                                selected python:day == int(interval_day_value)"
+                                                tal:content="day">1...31</option>
+                                    </tal:loop>
+                                </select>
+                                of every
+                                <select tal:define="number_name string:${fieldName}_monthly_interval_number1;
+                                                    number_value request/?number_name | value/monthly_interval_number1 | python:1"
+                                       tal:attributes="name number_name">
+                                    <tal:loop repeat="number python:range(1, 100)">
+                                        <option tal:attributes="value number;
+                                                                selected python:number == int(number_value)"
+                                                tal:content="number">1...99</option>
+                                    </tal:loop>
+                                </select>
+                                month(s)
+                            </label>
+                            <br/>
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="dayofweek"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'dayofweek';
+                                                   id string:${fieldName}_monthly_interval_dayofweek"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_monthly_interval_dayofweek">
+                                The
+                                <select tal:define="ordinal_name string:${fieldName}_monthly_ordinal_week;
+                                                    ordinal_value request/?ordinal_name | value/monthly_ordinal_week | python:1"
+                                        tal:attributes="name ordinal_name">
+                                    <tal:loop repeat="item python:[(1, 'First'),(2, 'Second'), (3, 'Third'),
+                                                                   (4, 'Fourth'),(-1, 'Last')]">
+                                        <option tal:define="item_name python:item[1];
+                                                            item_value python:item[0]"
+                                                tal:attributes="value item_value;
+                                                                selected python:item_value == int(ordinal_value)"
+                                                tal:content="item_name">First/Second/Third/Fourth/Last</option>
+                                    </tal:loop>
+                                </select>
+                                <select tal:define="weekday_name string:${fieldName}_monthly_weekday;
+                                                    weekday_value request/?weekday_name | value/monthly_weekday | python:0"
+                                        tal:attributes="name weekday_name">
+                                    <tal:loop repeat="day_name python:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                                                                       'Saturday', 'Sunday', 'Day', 'Weekday', 'Weekend Day']">
+                                        <option tal:define="day_value repeat/day_name/index"
+                                                tal:attributes="value day_value;
+                                                                selected python:day_value == int(weekday_value)"
+                                                tal:content="day_name">Mo/Tu/We/Th/Fr/Sa/Su/...</option>
+                                    </tal:loop>
+                                </select>
+                                of every
+                                <select tal:define="number_name string:${fieldName}_monthly_interval_number2;
+                                                    number_value request/?number_name | value/monthly_interval_number2 | python:1"
+                                       tal:attributes="name number_name">
+                                    <tal:loop repeat="number python:range(1, 100)">
+                                        <option tal:attributes="value number;
+                                                                selected python:number == int(number_value)"
+                                                tal:content="number">1...99</option>
+                                    </tal:loop>
+                                </select>
+                                month(s)
+                            </label>
+                            <br/>
+                        </div>
+
+                        <!-- YEARLY -->
+                        <div class="yearly_box"
+                             tal:define="interval_name string:${fieldName}_yearly_interval;
+                                         interval_value request/?interval_name | value/yearly_interval | string:dayofmonth">
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="dayofmonth"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'dayofmonth';
+                                                   id string:${fieldName}_yearly_interval_dayofmonth"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_yearly_interval_dayofmonth">
+                                Every
+                                <select tal:define="month_name string:${fieldName}_yearly_month1;
+                                                    month_value request/?month_name | value/yearly_month1 | python:1"
+                                        tal:attributes="name month_name">
+                                    <tal:loop repeat="month python:['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                                                                    'August', 'September', 'October', 'November', 'December']">
+                                        <option tal:define="item_value repeat/month/number"
+                                                tal:attributes="value item_value;
+                                                                selected python:item_value == int(month_value)"
+                                                tal:content="month">J/F/M/A/M/J/J/A/S/O/N/D</option>
+                                    </tal:loop>
+                                </select>
+                                <select tal:define="interval_day_name string:${fieldName}_yearly_interval_day;
+                                                    interval_day_value request/?interval_day_name | value/yearly_interval_day | python:1"
+                                       tal:attributes="name interval_day_name">
+                                    <tal:loop repeat="day python:range(1, 32)">
+                                        <option tal:attributes="value day;
+                                                                selected python:day == int(interval_day_value)"
+                                                tal:content="day">1...31</option>
+                                    </tal:loop>
+                                </select>
+                            </label>
+                            <br/>
+                            <input class="noborder blurrable"
+                                   type="radio"
+                                   value="dayofweek"
+                                   tal:attributes="name interval_name;
+                                                   checked python:interval_value == 'dayofweek';
+                                                   id string:${fieldName}_yearly_interval_dayofweek"
+                                   />
+                            <label tal:attributes="for string:${fieldName}_yearly_interval_dayofweek">
+                                The
+                                <select tal:define="ordinal_name string:${fieldName}_yearly_ordinal_week;
+                                                    ordinal_value request/?ordinal_name | value/yearly_ordinal_week | python:1"
+                                        tal:attributes="name ordinal_name">
+                                    <tal:loop repeat="item python:[(1, 'First'),(2, 'Second'), (3, 'Third'),
+                                                                   (4, 'Fourth'),(-1, 'Last')]">
+                                        <option tal:define="item_name python:item[1];
+                                                            item_value python:item[0]"
+                                                tal:attributes="value item_value;
+                                                                selected python:item_value == int(ordinal_value)"
+                                                tal:content="item_name">First/Second/Third/Fourth/Last</option>
+                                    </tal:loop>
+                                </select>
+                                <select tal:define="weekday_name string:${fieldName}_yearly_weekday;
+                                                    weekday_value request/?weekday_name | value/yearly_weekday | python:0"
+                                        tal:attributes="name weekday_name">
+                                    <tal:loop repeat="day_name python:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                                                                       'Saturday', 'Sunday', 'Day', 'Weekday', 'Weekend Day']">
+                                        <option tal:define="day_value repeat/day_name/index"
+                                                tal:attributes="value day_value;
+                                                                selected python:day_value == int(weekday_value)"
+                                                tal:content="day_name">Mo/Tu/We/Th/Fr/Sa/Su/...</option>
+                                    </tal:loop>
+                                </select>
+                                of
+                                <select tal:define="month_name string:${fieldName}_yearly_month2;
+                                                    month_value request/?month_name | value/yearly_month2 | python:1"
+                                        tal:attributes="name month_name">
+                                    <tal:loop repeat="month python:['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                                                                    'August', 'September', 'October', 'November', 'December']">
+                                        <option tal:define="item_value repeat/month/number"
+                                                tal:attributes="value item_value;
+                                                                selected python:item_value == int(month_value)"
+                                                tal:content="month">J/F/M/A/M/J/J/A/S/O/N/D</option>
+                                    </tal:loop>
+                                </select>
+                            </label>
+                            <br/>
+                        </div>
+
+                    </div>
+                    <div class="visualClear"><!-- --></div>
+                </div>
+            </fieldset>
+
+            <fieldset class="recurrence_range">
+                <legend>Range of Recurrence</legend>
+                <div class="field">
+                    <div class="range_left">
+                        <label class="fixed">Start:</label>
+                        <input type="text"
+                               class="blurrable"
+                               size="18"
+                               tal:define="start_name string:${fieldName}_range_start;
+                                           start_value request/?start_name | value/start_date | nothing"
+                               tal:attributes="id start_name;
+                                               name start_name;
+                                               value start_value"
+                               />
+                    </div>
+                    <div class="range_right"
+                         tal:define="range_name string:${fieldName}_range;
+                                     range_value request/?range_name | value/range_name | string:ever">
+                        <input class="noborder blurrable"
+                               type="radio"
+                               value="ever"
+                               tal:attributes="name range_name;
+                                               id string:${fieldName}_range_0;
+                                               checked python:range_value == 'ever'"
+                               />
+                        <label tal:attributes="for string:${fieldName}_range_0">
+                            No end date
+                        </label>
+                        <br/>
+                        <input class="noborder blurrable"
+                               type="radio"
+                               value="count"
+                               tal:attributes="name range_name;
+                                               id string:${fieldName}_range_1;
+                                               checked python:range_value == 'count'"
+                               />
+                        <label tal:attributes="for string:${fieldName}_range_1">
+                            End after
+                            <input class="blurrable centered"
+                                   type="text"
+                                   size="2"
+                                   tal:define="count_name string:${fieldName}_range_count;
+                                               count_value request/?count_name | value/range_count | python:10"
+                                   tal:attributes="id count_name;
+                                                   name count_name;
+                                                   value count_value"
+                                   />
+                             occurence(s)
+                        </label>
+                        <br/>
+                        <input class="noborder blurrable"
+                               type="radio"
+                               value="until"
+                               tal:attributes="name range_name;
+                                               id string:${fieldName}_range_2;
+                                               checked python:range_value == 'until'"
+                               />
+                        <label tal:attributes="for string:${fieldName}_range_2">
+                            End by:
+                        </label>
+                        <input class="blurrable"
+                               type="text"
+                               size="18"
+                               tal:define="end_name string:${fieldName}_range_end;
+                                           end_value request/?end_name | value/end_date | nothing"
+                               tal:attributes="id end_name;
+                                               name end_name;
+                                               value end_value"
+                               />
+                        <br/>
+                    </div>
+                    <div class="visualClear"><!-- --></div>
+                </div>
+            </fieldset>
+         </div>
+
+      </div>
+
+    </metal:use>
+  </metal:edit_macro>
+
+  <metal:search_macro define-macro="search">
+    <div metal:use-macro="here/recurringdate/macros/edit"></div>
+  </metal:search_macro>
+
+</body>
+</html>
