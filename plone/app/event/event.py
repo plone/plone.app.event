@@ -4,6 +4,7 @@ import zope.component
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 
+from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from DateTime import DateTime
@@ -11,8 +12,8 @@ from DateTime import DateTime
 from Products.CMFCore.permissions import ModifyPortalContent, View
 from Products.CMFPlone.utils import safeToInt
 
-from Products.Archetypes.atapi import ATFieldProperty
 from Products.Archetypes.atapi import AnnotationStorage
+from Products.Archetypes.atapi import ATFieldProperty
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import DateTimeField
@@ -25,6 +26,8 @@ from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import TextField
+from Products.Archetypes.Widget import TypesWidget
+from Products.Archetypes.Registry import registerWidget
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
@@ -63,10 +66,6 @@ class RecurrenceField(LinesField):
         value = [v for v in value if v]
         ObjectField.set(self, instance, value, **kwargs)
 
-from App.class_init import InitializeClass
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.Widget import TypesWidget
-from Products.Archetypes.Registry import registerWidget
 
 
 class RecurrenceWidget(TypesWidget):
@@ -116,7 +115,7 @@ class RecurrenceWidget(TypesWidget):
 
         # Stick it back in request.form
         #form[fname] = value
-        return value, {}
+        return [], {}
 
 InitializeClass(RecurrenceWidget)
 
