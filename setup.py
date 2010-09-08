@@ -29,4 +29,7 @@ setup(name='plone.app.event',
           'Products.DateRecurringIndex',
       ],
       extras_require={'test': ['interlude',]},
-      )
+      entry_points="""
+      [z3c.autoinclude.plugin]
+      target = plone
+      """)

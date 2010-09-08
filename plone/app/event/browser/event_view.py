@@ -2,7 +2,7 @@ from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.app.event import event_util
 
-from Products.DateRecurringIndex.recurring import RRuleICal
+from Products.DateRecurringIndex.recurring import RecurConfICal
 from Products.DateRecurringIndex.interfaces import IRecurringSequence
 
 class EventView(BrowserView):
@@ -11,9 +11,12 @@ class EventView(BrowserView):
         return event_util.toDisplay(self.context)
 
     def get_occurences(self):
-        rrules = self.context.recurrence
-        starts = IRecurringSequence(RRuleICal(self.context.start(), rrules))
-        ends = IRecurringSequence(RRuleICal(self.context.end(), rrules))
+        rrules = self.context.getRecurrence()
+        if rrules is None:
+            return []
+
+        starts = IRecurringSequence(RecurConfICal(self.context.start(), rrules))
+        ends = IRecurringSequence(RecurConfICal(self.context.end(), rrules))
         events = map(
             lambda start,end:dict(
                 start_date = ulocalized_time(start, False, time_only=None, context=self.context),
