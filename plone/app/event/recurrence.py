@@ -10,9 +10,6 @@ from dateutil import rrule
 from DateTime import DateTime
 from plone.app.event.dtutils import DT2dt
 
-from Products.DateRecurringIndex.recurring import RRuleSet
-from Products.DateRecurringIndex.recurring import RRule
-
 
 class RecurringData(object):
     """Stores all the fields from the recurring widget.i
@@ -142,7 +139,7 @@ class RecurringData(object):
             params['until'] = until
 
         params['freq'] = self.frequency
-        return params.copy()
+        return rrule.rrule(**params)
 
 
 class RecurrenceWidget(TypesWidget):
@@ -221,16 +218,22 @@ class RecurrenceField(ObjectField):
 
         Check if value is an actual RecurringData object. If not,
         attempt to convert it to one; otherwise set to None. Assign
-        all properties passed as kwargs to the object Set recurrence data..
+        all properties passed as kwargs to the object.
+        Create then a rrule.rruleset and stor it
         """
         if not value:
             value = None
-        elif not isinstance(value, RRuleSet):
-            data = RecurringData(**kwargs)
-            value = RRuleSet(rrules=RRule(data.getRecurrenceRule()))
+        elif not isinstance(value, RecurringData):
+            value = RecurringData(**kwargs)
+        if isinstance(value, RecurringData):
+            # TODO: check again
+            ruleset = rrule.rruleset()
+            ruleset.rrule(value.getRecurrenceRule())
+            value = ruleset
 
         ObjectField.set(self, instance, value)
 
+    # TODO: GET! maybe storing a datastructure is better than rrule?
     #def get(self, instance, **kwargs):
         #recdata = ObjectField.get(self, instance, **kwargs)
         #if recdata:
