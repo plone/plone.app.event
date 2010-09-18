@@ -1,14 +1,5 @@
 // recurrence (mostly taken from archetypes.recurringdate)
 jq(function() {
-    function formatDuration(value) {
-      value /= 1000;
-      var seconds = Math.floor(value % 60);
-      value /= 60;
-      var minutes = Math.abs(Math.floor(value % 60));
-      var hours = Math.floor(value / 60);
-      return hours + ':' + (minutes < 10 ? '0' : '') + minutes;
-    }
-
     function timeComponents(value) {
       var hour = value.getHours();
       var minute = value.getMinutes();
@@ -57,17 +48,6 @@ jq(function() {
             jq("#recurrence_range_end").val(formated);
             jq("#recurrence_range_end").DatePickerHide();
         }
-    });
-
-    // Update time end after change duration
-    jq("#recurrence_duration").change(function() {
-      if (jq("#recurrence_time_start").val()) {
-        var time = jq.timePicker("#recurrence_time_start").getTime();
-        var parsed = jq("#recurrence_duration").val().split(':');
-        var duration = parsed[0] * 60 * 60 * 1000 + parsed[1] * 60 * 1000;
-        jq.timePicker("#recurrence_time_end").setTime(new Date(new Date(time.getTime() + duration)));
-        updateEventEndTime();
-      }
     });
 
     // Update the date recurrence field when change the event date start fields
