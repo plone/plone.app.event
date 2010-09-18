@@ -18,7 +18,6 @@ class RecurringData(object):
     enabled = False
     start_time = ''
     end_time = ''
-    duration = ''
     frequency = 3 # 2, 1, 0
     daily_interval = 'day' # 'weekday'
     daily_interval_number = 1
@@ -141,6 +140,12 @@ class RecurringData(object):
         params['freq'] = self.frequency
         return rrule.rrule(**params)
 
+    def dict2rfc(data):
+        pass
+
+    def rfc2dict(data):
+        pass
+
 
 class RecurrenceWidget(TypesWidget):
     _properties = TypesWidget._properties.copy()
@@ -162,7 +167,6 @@ class RecurrenceWidget(TypesWidget):
         # Assemble the recurring date from the input components
         kwargs = dict()
         kwargs['enabled'] = form.get('%s_enabled' % fname, False)
-        kwargs['duration'] = form.get('%s_duration' % fname, None)
         kwargs['frequency'] = int(form.get('%s_frequency' % fname, 3))
         kwargs['daily_interval'] = form.get('%s_daily_interval' % fname, 'day')
         kwargs['daily_interval_number'] = int(form.get('%s_daily_interval_number' % fname, 1))
@@ -234,11 +238,17 @@ class RecurrenceField(ObjectField):
         ObjectField.set(self, instance, value)
 
     # TODO: GET! maybe storing a datastructure is better than rrule?
-    #def get(self, instance, **kwargs):
-        #recdata = ObjectField.get(self, instance, **kwargs)
-        #if recdata:
-            #return recdata.getRecurrenceRule()
-        #return recdata
+    def get(self, instance, **kwargs):
+        ruleset = ObjectField.get(self, instance, **kwargs)
+        recdata = None
+        if ruleset:
+            # return ruleset.getRecurrenceRule()
+            recdata = {}
+            rrule = ruleset._rrule[0]
+            recdata['enabled'] = True
+            recdata['freq'] = rrule._freq
+            recdata['dtstart'] = rrule._dtstart
+        return recdata
 
 InitializeClass(RecurrenceField)
 
