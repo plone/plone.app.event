@@ -1,16 +1,5 @@
 // recurrence (mostly taken from archetypes.recurringdate)
 jq(function() {
-    function timeComponents(value) {
-      var hour = value.getHours();
-      var minute = value.getMinutes();
-      var ampm = "AM";
-      if (hour > 11) ampm = "PM";
-      if (hour > 12) hour = hour - 12;
-      if (hour < 10) hour = "0" + hour;
-      if (minute < 10) minute = "0" + minute;
-      return new Array(hour, minute, ampm);
-    }
-
     // Functions to keep date/time synchronized
     function updateRecurrenceStartDate() {
       var start = plone.jscalendar._fields("#edit_form_startDate_0");
