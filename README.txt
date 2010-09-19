@@ -16,3 +16,5 @@ TODO
 - check purpose of recurrence index.
 - create get for field
 - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
+
+- make calendar widget display (hidden) the timezone
