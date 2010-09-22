@@ -1,0 +1,13 @@
+TODO
+====
+
+- clean up recurrence code and only use new rrulestring implementation
+
+- test for disabled recurrence and None values to store in recurrence field. see how index is behaving
+
+- add a hook to getICal(), getVCal() for retrieving additional data
+  from derived event types
+
+- upgrade step to recatalog the start and end indexes
+
+- make calendar widget display (hidden) the timezone
