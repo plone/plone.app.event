@@ -44,13 +44,13 @@
 
       <div metal:fill-slot="widget_body">
 
-
       <textarea name="recurrence_rfc"
           tal:define="recurrence_rfc_name string:${fieldName}_recurrence_rfc"
           tal:attributes="id recurrence_rfc_name;
                           name string:${recurrence_rfc_name}"
           tal:content="request/?recurrence_rfc_name | value"></textarea>
 
+        <!-- LEGACY CODE, MOCKUP -->
         <input type="hidden"
                value=""
                tal:attributes="name string:${fieldName}_enabled:boolean:default"
@@ -449,6 +449,7 @@
             </fieldset>
          </div>
 
+         <!-- END LEGACY CODE, MOCKUP -->
       </div>
 
     </metal:use>
