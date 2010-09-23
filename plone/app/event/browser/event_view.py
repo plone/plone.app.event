@@ -4,7 +4,7 @@ from plone.app.event import event_util
 
 #from Products.DateRecurringIndex.recurring import RecurConfICal
 #from Products.DateRecurringIndex.interfaces import IRecurringSequence
-from plone.app.event.interfaces import IRecurrence
+from plone.app.event.interfaces import IRecurrenceSupport
 
 class EventView(BrowserView):
 
@@ -13,8 +13,8 @@ class EventView(BrowserView):
 
 
     def occurrences(self):
-        recurrence = IRecurrence(self.context)
-        return recurrence.occurences()
+        recur = IRecurrenceSupport(self.context)
+        return recur.occurences()
 
     #def get_occurences(self):
         #rrules = self.context.getRecurrence()

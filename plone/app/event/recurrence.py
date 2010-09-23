@@ -12,15 +12,19 @@ from Products.Archetypes.Registry import registerField
 
 import datetime
 import dateutil
-from plone.app.event.interfaces import IRecurringEvent, IRecurrence
+from plone.app.event.interfaces import IRecurringEvent, IRecurrenceSupport
 # from dateable.kalends import IRecurrence, IOccurrence, IEventProvider
 from zope.component import adapts
 from zope.interface import implements
 from plone.app.event import event_util
 from Products.CMFPlone.i18nl10n import ulocalized_time
 
-class RecurringEvent(object):
-    implements(IRecurrence)
+class RecurrenceSupport(object):
+    """Recurrence support for IRecurringEvent objects.
+       Tested with Archetypes based ATEvent. This one or another one may also
+       be used for Dexterity based content types.
+    """
+    implements(IRecurrenceSupport)
     adapts(IRecurringEvent)
 
     def __init__(self, context):

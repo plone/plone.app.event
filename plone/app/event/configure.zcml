@@ -26,6 +26,6 @@
       name="plone.app.event.recurrence"
       />
 
-  <adapter factory=".recurrence.RecurringEvent" />
+  <adapter factory=".recurrence.RecurrenceSupport" />
 
 </configure>

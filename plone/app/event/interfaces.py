@@ -13,7 +13,7 @@ class IRecurringEvent(zope.interface.Interface):
     """Generic recurring calendar event for Plone
     """
 
-class IRecurrence(zope.interface.Interface):
+class IRecurrenceSupport(zope.interface.Interface):
     """Interface for adapter providing recurrence support
     """
 
