@@ -1,25 +1,20 @@
-import zope.interface
+from zope.interface import Interface
 
-
-class ICalendarSupport(zope.interface.Interface):
+class ICalendarSupport(Interface):
     """Calendar import/export
     """
 
-class IEvent(zope.interface.Interface):
+class IEvent(Interface):
     """Generic calendar event for Plone
     """
 
-class IRecurringEvent(zope.interface.Interface):
+class IRecurringEvent(Interface):
     """Generic recurring calendar event for Plone
     """
 
-class IRecurrenceSupport(zope.interface.Interface):
+class IRecurrenceSupport(Interface):
     """Interface for adapter providing recurrence support
     """
-
-    def recurrence_ruleset():
-        """Returns the recurrence ruleset as dateutil.rrule.rruleset instance.
-        """
 
     def occurences_start():
         """Returns all the event's start occurences which indicates the
