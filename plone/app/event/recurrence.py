@@ -10,43 +10,52 @@ from Products.Archetypes.Registry import registerField
 #from DateTime import DateTime
 #from plone.app.event.dtutils import DT2dt
 
-
-from plone.app.event.interfaces import IRecurringEvent
-from dateable.kalends import IRecurrence, IOccurrence, IEventProvider
+import datetime
+import dateutil
+from plone.app.event.interfaces import IRecurringEvent, IRecurrence
+# from dateable.kalends import IRecurrence, IOccurrence, IEventProvider
 from zope.component import adapter
 from zope.interface import implements
+from plone.app.event import event_util
+from Products.CMFPlone.i18nl10n import ulocalized_time
+
 class RecurringEvent(object):
     implements(IRecurrence)
     adapter(IRecurringEvent)
 
-    def getRecurrenceRuleset():
-        """return a dateutil.rrule.rruleset
-        """
-        pass
+    def __init__(self, context):
+        self.context = context
 
-    def getOccurrenceStarts():
-        """return a list of start datetimes
-        """
-        pass
+    def _recurrence_ruleset(self, dtstart=None):
+        if not isinstance(dtstart, datetime.datetime):
+            raise AttributeError, u"""No dtstart parameter given.s"""
+        else:
+            return dateutil.rrule.rrulestr(self.context.recurrence,
+                                       forceset=True,
+                                       dtstart=dtstart)
 
-    def getOccurrenceEnds():
-        """return a list of end datetimes
-        """
-        pass
+    def occurences_start(self):
+        rset = self._recurrence_ruleset(self.start_date)
+        return list(rset)
 
-    def getOccurrences():
-        """return a list of duples of start and end datetimes
-        """
-        pass
+    def occurences_end(self):
+        rset = self._recurrence_ruleset(self.end_date)
+        return list(rset)
 
-    """
-    def getOccurrenceDays():
-        pass
+    def occurences(self):
+        starts = self.occurences_start()
+        ends = self.occurences_end()
 
-    def getOccurrences():
-        pass
-
-    """
+        events = map(
+            lambda start,end:dict(
+                start_date = ulocalized_time(start, False, time_only=None, context=self.context),
+                end_date = ulocalized_time(end, False, time_only=None, context=self.context),
+                start_time = ulocalized_time(start, False, time_only=True, context=self.context),
+                end_time = ulocalized_time(end, False, time_only=True, context=self.context),
+                same_day = event_util.isSameDay(self.context),
+                same_time = event_util.isSameTime(self.context),
+            ), starts, ends )
+        return events
 
 
 
