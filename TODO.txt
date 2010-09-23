@@ -1,6 +1,11 @@
 TODO
 ====
 
+- implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
+- create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
+
+- rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
+
 - clean up recurrence code and only use new rrulestring implementation
 
 - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
