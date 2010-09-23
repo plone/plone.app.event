@@ -107,7 +107,7 @@
                               </tal:notwholeday>
                             </tal:sameday>
 
-                            <div tal:define="events view/get_occurences"
+                            <div tal:define="events view/occurrences"
                                 tal:condition="events">
                                 More occurences of this event:
                                 <tal:rep repeat="event events">

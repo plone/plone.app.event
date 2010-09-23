@@ -14,14 +14,14 @@ import datetime
 import dateutil
 from plone.app.event.interfaces import IRecurringEvent, IRecurrence
 # from dateable.kalends import IRecurrence, IOccurrence, IEventProvider
-from zope.component import adapter
+from zope.component import adapts
 from zope.interface import implements
 from plone.app.event import event_util
 from Products.CMFPlone.i18nl10n import ulocalized_time
 
 class RecurringEvent(object):
     implements(IRecurrence)
-    adapter(IRecurringEvent)
+    adapts(IRecurringEvent)
 
     def __init__(self, context):
         self.context = context
@@ -35,11 +35,11 @@ class RecurringEvent(object):
                                        dtstart=dtstart)
 
     def occurences_start(self):
-        rset = self._recurrence_ruleset(self.start_date)
+        rset = self._recurrence_ruleset(self.context.start_date)
         return list(rset)
 
     def occurences_end(self):
-        rset = self._recurrence_ruleset(self.end_date)
+        rset = self._recurrence_ruleset(self.context.end_date)
         return list(rset)
 
     def occurences(self):
