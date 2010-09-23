@@ -6,6 +6,8 @@ TODO
 
 - rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
 
+- use plone.testing and plone.app.testing
+
 - clean up recurrence code and only use new rrulestring implementation
 
 - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
