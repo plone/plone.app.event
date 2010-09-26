@@ -45,6 +45,8 @@ class RecurrenceSupport(object):
         starts = self.occurences_start()
         ends = self.occurences_end()
 
+        # TODO: ulocalized_time makes this adapter dependent on REQUEST.
+        #       should be decoupled.
         events = map(
             lambda start,end:dict(
                 start_date = ulocalized_time(start, False, time_only=None, context=self.context),
