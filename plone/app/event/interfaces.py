@@ -1,4 +1,5 @@
 from zope.interface import Interface
+from zope.interface import Attribute
 
 class ICalendarSupport(Interface):
     """Calendar import/export
@@ -11,6 +12,11 @@ class IEvent(Interface):
 class IRecurringEvent(Interface):
     """Generic recurring calendar event for Plone
     """
+    recurrence = Attribute(u'Recurrence definition according to RFC2445')
+    start_date = Attribute(u"""Date when the first occurence of the event
+                               begins as datetime object""")
+    end_date = Attribute(u"""Date when the first occurence of the event ends as
+                             datetime object""")
 
 class IRecurrenceSupport(Interface):
     """Interface for adapter providing recurrence support
