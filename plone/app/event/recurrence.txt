@@ -39,4 +39,4 @@ the translation functions in it - should go somewhere else.
     ...
     AttributeError: 'RecurrenceStub' object has no attribute 'REQUEST'
 
-    >>> interact( locals() )
+#    >>> interact( locals() )
