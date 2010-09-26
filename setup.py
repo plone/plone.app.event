@@ -27,6 +27,7 @@ setup(name='plone.app.event',
           'collective.calendarwidget',
           'Plone',
           'Products.DateRecurringIndex',
+          'python-dateutil',
       ],
       extras_require={'test': ['interlude',]},
       entry_points="""
