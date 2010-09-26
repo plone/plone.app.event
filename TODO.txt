@@ -8,7 +8,9 @@ TODO
 
 - use plone.testing and plone.app.testing
 
-- clean up recurrence code and only use new rrulestring implementation
+- update calendar-viewlet and move it into plone.app.event
+
+OK - clean up recurrence code and only use new rrulestring implementation
 
 - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
 
