@@ -32,11 +32,17 @@ Register the RecurrenceSupport adapter for IRecurringEvent objects
         datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
         datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
 
-TODO: FAILS cause stub object does not have a REQUEST var. maybe occurences - or
-the translation functions in it - should go somewhere else.
     >>> recurrence.occurences()
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'RecurrenceStub' object has no attribute 'REQUEST'
+    [{'start_date': datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+        'end_date': datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
+        {'start_date': datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+        'end_date': datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
+        {'start_date': datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+        'end_date': datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
+        {'start_date': datetime.datetime(2010, 11, 9, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+        'end_date': datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
+        {'start_date': datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+        'end_date': datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)}]
 
-#    >>> interact( locals() )
+    >>> interact( locals() )
+

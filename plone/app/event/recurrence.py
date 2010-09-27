@@ -42,23 +42,15 @@ class RecurrenceSupport(object):
         return list(rset)
 
     def occurences(self):
+        # TODO: is this method neccessary?
         starts = self.occurences_start()
         ends = self.occurences_end()
-
-        # TODO: ulocalized_time makes this adapter dependent on REQUEST.
-        #       should be decoupled.
-        #       Maybe use an adapter and provide an default one?
         events = map(
             lambda start,end:dict(
-                start_date = ulocalized_time(start, False, time_only=None, context=self.context),
-                end_date = ulocalized_time(end, False, time_only=None, context=self.context),
-                start_time = ulocalized_time(start, False, time_only=True, context=self.context),
-                end_time = ulocalized_time(end, False, time_only=True, context=self.context),
-                same_day = event_util.isSameDay(self.context),
-                same_time = event_util.isSameTime(self.context),
-            ), starts, ends )
+                start_date = start,
+                end_date = end),
+            starts, ends)
         return events
-
 
 class RecurrenceWidget(TypesWidget):
     _properties = TypesWidget._properties.copy()
