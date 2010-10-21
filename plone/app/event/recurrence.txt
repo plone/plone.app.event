@@ -2,47 +2,5 @@
 plone.app.event recurrence unit tests
 =====================================
 
-Register the RecurrenceSupport adapter for IRecurringEvent objects
-    >>> import zope.component
-    >>> from plone.app.event.recurrence import RecurrenceSupport
-    >>> zope.component.provideAdapter(RecurrenceSupport)
-
-    >>> from plone.app.event.tests.test_doctests import RecurrenceStub
-    >>> from datetime import datetime
-    >>> import pytz
-
-#... DTSTART:20101010T090000-0300
-    >>> start = datetime(2010,10,10,9,0,0,0,pytz.timezone('CET'))
-    >>> end = datetime(2010,10,10,10,0,0,0,pytz.timezone('CET'))
-    >>> rulestr = 'RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5'
-    >>> event = RecurrenceStub(recurrence=rulestr, start_date=start, end_date=end)
-
-    >>> from plone.app.event.interfaces import IRecurrenceSupport
-    >>> recurrence = IRecurrenceSupport(event)
-    >>> recurrence.occurences_start()
-    [datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 11, 9, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
-    >>> recurrence.occurences_end()
-    [datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
-
-    >>> recurrence.occurences()
-    [{'start_date': datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 11, 9, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)}]
-
     >>> interact( locals() )
 
