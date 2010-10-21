@@ -6,51 +6,6 @@ from Products.Archetypes.Widget import TypesWidget
 from Products.Archetypes.Registry import registerWidget
 from Products.Archetypes.Registry import registerField
 
-import datetime
-import dateutil
-from plone.app.event.interfaces import IRecurringEvent, IRecurrenceSupport
-from zope.component import adapts
-from zope.interface import implements
-from plone.app.event import event_util
-from Products.CMFPlone.i18nl10n import ulocalized_time
-
-class RecurrenceSupport(object):
-    """Recurrence support for IRecurringEvent objects.
-       Tested with Archetypes based ATEvent. This one or another one may also
-       be used for Dexterity based content types.
-    """
-    implements(IRecurrenceSupport)
-    adapts(IRecurringEvent)
-
-    def __init__(self, context):
-        self.context = context
-
-    def _recurrence_ruleset(self, dtstart=None):
-        if not isinstance(dtstart, datetime.datetime):
-            raise AttributeError, u"""No dtstart parameter given.s"""
-        else:
-            return dateutil.rrule.rrulestr(self.context.recurrence,
-                                           forceset=True,
-                                           dtstart=dtstart)
-
-    def occurences_start(self):
-        rset = self._recurrence_ruleset(self.context.start_date)
-        return list(rset)
-
-    def occurences_end(self):
-        rset = self._recurrence_ruleset(self.context.end_date)
-        return list(rset)
-
-    def occurences(self):
-        # TODO: is this method neccessary?
-        starts = self.occurences_start()
-        ends = self.occurences_end()
-        events = map(
-            lambda start,end:dict(
-                start_date = start,
-                end_date = end),
-            starts, ends)
-        return events
 
 class RecurrenceWidget(TypesWidget):
     _properties = TypesWidget._properties.copy()
