@@ -27,6 +27,7 @@ setup(name='plone.app.event',
           'collective.calendarwidget',
           'Plone',
           'Products.DateRecurringIndex',
+          'plone.event',
           'python-dateutil',
       ],
       extras_require={
