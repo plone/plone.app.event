@@ -35,9 +35,10 @@ from collective.calendarwidget.widget import CalendarWidget
 
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.dtutils import DT2dt
-from plone.app.event.interfaces import ICalendarSupport, IEvent, IRecurringEvent
+from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.recurrence import RecurrenceField
 from plone.app.event.recurrence import RecurrenceWidget
+from plone.event.interfaces import IEvent, IRecurringEventICal
 
 def default_end_date():
     d = datetime.datetime.now() + datetime.timedelta(hours=1)
@@ -198,7 +199,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    implements(IEvent, IRecurringEvent, IATEvent, ICalendarSupport)
+    implements(IEvent, IRecurringEventICal, IATEvent, ICalendarSupport)
 
     recurrence = ATFieldProperty('recurrence')
 

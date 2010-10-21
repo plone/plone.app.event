@@ -1,7 +1,7 @@
 from Products.Five.browser import BrowserView
 from plone.app.event import event_util
 
-from plone.app.event.interfaces import IRecurrenceSupport
+from plone.event.interfaces import IRecurrenceSupport
 
 class EventView(BrowserView):
 
