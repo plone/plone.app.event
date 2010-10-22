@@ -38,7 +38,7 @@ registerWidget(RecurrenceWidget,
                title='Recurring Date',
                description=('Renders a HTML form to enter all the info '
                             'for recurring dates.'),
-               used_for=('plone.app.event.event.RecurrenceField',))
+               used_for=('plone.app.event.recurrence.RecurrenceField',))
 
 
 class RecurrenceField(ObjectField):
