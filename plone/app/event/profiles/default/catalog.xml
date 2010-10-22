@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="Plone Catalog Tool">
  <index name="recurrence" meta_type="DateRecurringIndex">
+  <extra name="recurrence_type" value="ical" />
   <extra name="start" value="start" />
   <extra name="recurdef" value="getRecurrence" />
   <extra name="until" value="end" />
