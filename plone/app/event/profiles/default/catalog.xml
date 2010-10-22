@@ -3,7 +3,7 @@
  <index name="recurrence" meta_type="DateRecurringIndex">
   <extra name="recurrence_type" value="ical" />
   <extra name="start" value="start" />
-  <extra name="recurdef" value="getRecurrence" />
+  <extra name="recurdef" value="recurrence" />
   <extra name="until" value="end" />
   <extra name="dst" value="auto" />
  </index>
