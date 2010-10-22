@@ -1,6 +1,9 @@
 TODO
 ====
 
+- check how much sense start&end metadata columns in catalog.xml make sense.
+  they return start&end of first occurence but nothing else.
+
 - implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
 - create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
 
