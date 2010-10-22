@@ -25,7 +25,7 @@
   <utility
       component=".vocabulary.reccurencevocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
-      name="plone.app.event.recurrence"
+      name="plone.app.event.reccurencevocabulary"
       />
 
 </configure>
