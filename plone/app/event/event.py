@@ -34,11 +34,11 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 from collective.calendarwidget.widget import CalendarWidget
 
 from plone.app.event.config import PROJECTNAME
-from plone.app.event.dtutils import DT2dt
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.recurrence import RecurrenceField
 from plone.app.event.recurrence import RecurrenceWidget
 from plone.event.interfaces import IEvent, IRecurringEventICal
+from plone.event.utils import pydt
 
 def default_end_date():
     d = datetime.datetime.now() + datetime.timedelta(hours=1)
@@ -289,7 +289,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         value = self['startDate']
         if value is None:
             value = self['creation_date']
-        return DT2dt(value)
+        return pydt(value)
 
     security.declareProtected(View, 'start_date')
     start_date = ComputedAttribute(_start_date)
@@ -298,7 +298,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         value = self['endDate']
         if value is None:
             return self.start_date
-        return DT2dt(value)
+        return pydt(value)
 
     security.declareProtected(View, 'end_date')
     end_date = ComputedAttribute(_end_date)
