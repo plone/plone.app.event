@@ -1,6 +1,6 @@
 from Products.Five.browser import BrowserView
+from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.app.event import event_util
-
 from plone.event.interfaces import IRecurrenceSupport
 
 class EventView(BrowserView):
