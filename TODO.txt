@@ -1,25 +1,23 @@
 TODO
 ====
 
-- check how much sense start&end metadata columns in catalog.xml make sense.
-  they return start&end of first occurence but nothing else.
-
-- implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
-- create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
-
-- rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
-
-- use plone.testing and plone.app.testing
+- synchronize package with newest ATContentTypes
 
 - update calendar-viewlet and move it into plone.app.event
-
-OK - clean up recurrence code and only use new rrulestring implementation
-
-- test for disabled recurrence and None values to store in recurrence field. see how index is behaving
-
-- add a hook to getICal(), getVCal() for retrieving additional data
-  from derived event types
 
 - upgrade step to recatalog the start and end indexes
 
 - make calendar widget display (hidden) the timezone
+
+- add a hook to getICal(), getVCal() for retrieving additional data
+  from derived event types
+
+- check how much sense start&end metadata columns in catalog.xml make sense.
+  they return start&end of first occurence but nothing else.
+  --> guess its used by folder_listing displaying start and end time from brain info.
+
+- use plone.testing and plone.app.testing
+
+OK - clean up recurrence code and only use new rrulestring implementation
+OBSOLETE - rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
+OK - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
