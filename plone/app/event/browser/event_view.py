@@ -21,4 +21,4 @@ class EventView(BrowserView):
                 same_time = event['start_date'].time() == event['end_date'].time(),
             ), recur.occurences())
 
-        return
+        return events
