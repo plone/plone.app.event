@@ -20,6 +20,21 @@ TODO
 
 - use plone.testing and plone.app.testing
 
+- think about storing all dates in utc and converting them on display to
+  localized time.
+  usecase where this won't work: dates going over DST borders. like meeting from
+  oktober-november shouldn't change the relative time
+
+
 OK - clean up recurrence code and only use new rrulestring implementation
 OBSOLETE - rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
 OK - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
+
+
+TODO for Plone
+==============
+- depend on plone.app.event
+- include plone.app.event package in configure.zcml
+- include plone.app.event in metadata.xml GS profile
+- remove catalog index and metadata column and use those in plone.app.event
+
