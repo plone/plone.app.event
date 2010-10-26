@@ -3,6 +3,8 @@ TODO
 
 - synchronize package with newest ATContentTypes
 
+- add deprecation warnings for imports from ATContentTypes
+
 - update calendar-viewlet and move it into plone.app.event
 
 - upgrade step to recatalog the start and end indexes
