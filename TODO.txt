@@ -1,9 +1,11 @@
 TODO
 ====
 
-- synchronize package with newest ATContentTypes
+- synchronize package with newest ATContentTypes (diff modified with trunk)
 
 - add deprecation warnings for imports from ATContentTypes
+
+- make BBB back-imports of CT, utilities, interfaces, etc in ATContentTypes
 
 - update calendar-viewlet and move it into plone.app.event
 
