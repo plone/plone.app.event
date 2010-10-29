@@ -29,6 +29,7 @@ setup(name='plone.app.event',
           'Products.DateRecurringIndex',
           'plone.event',
           'python-dateutil',
+          'plone.app.portlets',
       ],
       extras_require={
           'test': ['interlude', 'plone.app.testing']
