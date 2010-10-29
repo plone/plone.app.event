@@ -11,10 +11,10 @@ from plone.portlets.interfaces import IPortletRenderer
 
 from DateTime import DateTime
 from plone.app.event.portlets import calendar
-from plone.app.portlets.tests.base import PortletsTestCase
+from plone.app.event.tests.base import EventTestCase
 
 
-class TestPortlet(PortletsTestCase):
+class TestPortlet(EventTestCase):
 
     def afterSetUp(self):
         setHooks()
@@ -62,7 +62,7 @@ class TestPortlet(PortletsTestCase):
         self.failUnless(isinstance(renderer, calendar.Renderer))
 
 
-class TestRenderer(PortletsTestCase):
+class TestRenderer(EventTestCase):
 
     def afterSetUp(self):
         setHooks()
