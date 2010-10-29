@@ -63,6 +63,10 @@ ical/vcal, drop vcal?
 TODO
 ====
 
+OK - update calendar-portlet and move it into plone.app.event
+OK - update events-portlet and move it into plone.app.event
+- actually test, if calendar and events portlets work with recurrence
+
 - check use of MessageFactory. should message factory be in plone namespace?
 
 - synchronize package with newest ATContentTypes (diff modified with trunk)
@@ -70,8 +74,6 @@ TODO
 - add deprecation warnings for imports from ATContentTypes
 
 - make BBB back-imports of CT, utilities, interfaces, etc in ATContentTypes
-
-- update calendar-viewlet and move it into plone.app.event
 
 - upgrade step to recatalog the start and end indexes
 
