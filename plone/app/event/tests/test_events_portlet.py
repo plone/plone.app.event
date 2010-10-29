@@ -13,11 +13,11 @@ from plone.portlets.interfaces import IPortletRenderer
 from plone.app.event.portlets import events
 from plone.app.portlets.storage import PortletAssignmentMapping
 
-from plone.app.portlets.tests.base import PortletsTestCase
+from plone.app.event.tests.base import EventTestCase
 
 from plone.app.layout.navigation.interfaces import INavigationRoot
 
-class TestPortlet(PortletsTestCase):
+class TestPortlet(EventTestCase):
 
     def afterSetUp(self):
         setHooks()
@@ -71,7 +71,7 @@ class TestPortlet(PortletsTestCase):
         renderer = getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
         self.failUnless(isinstance(renderer, events.Renderer))
 
-class TestRenderer(PortletsTestCase):
+class TestRenderer(EventTestCase):
 
     def afterSetUp(self):
         setHooks()
