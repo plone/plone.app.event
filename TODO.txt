@@ -1,5 +1,69 @@
+for TODO list see more far below.
+also look into TODO list of plone.event and Products.DateRecurringIndex
+
+NOTES from ploneconf2010 open space
+===================================
+
+focus on finishing
+------------------
+* widget
+* calendar & events portlets
+* export ical (maybe also vcal. thet is suggesting to drop support for vcal since it's an really old standard)
+* whole day events
+* recurrence tests
+* daterecurringindex tests
+
+* migration work can be done after plip
+
+more
+----
+
+* rss support
+
+* calendar views
+    monthly view, weekly view, daily view
+
+* hcal microformat
+
+IDEA:
+    when deleting an occurence of an recurring event from calendar view,
+    deleting should be faked by adding an exclusion date
+    google calendar does that thing
+
+
+timezone issues
+---------------
+    don't use timezone information at all?
+        NO. better not.
+    save and display dates in users local timezone
+         timezone from request, set by user's browser
+    confusing usecase:
+        german guy editing events in bristol.
+        adapting timezone when editing and displaying
+    google calendar: asks if event should be displayed in users local timezone
+    or timezone of event location
+
+
+discussion
+----------
+
+* archetype datetime
+    see c.z3cform.datetimewidget
+
+* archetype recurrence event widget
+    see z3cform recurrence event widget
+
+* subclassing ATEvent possible? yes, should be.
+
+hcal microformat
+ical/vcal, drop vcal?
+
+
+
 TODO
 ====
+
+- check use of MessageFactory. should message factory be in plone namespace?
 
 - synchronize package with newest ATContentTypes (diff modified with trunk)
 
@@ -39,4 +103,3 @@ TODO for Plone
 - include plone.app.event package in configure.zcml
 - include plone.app.event in metadata.xml GS profile
 - remove catalog index and metadata column and use those in plone.app.event
-
