@@ -9,8 +9,10 @@
   <include package="Products.DateRecurringIndex" />
   <include package="plone.event" />
   <include package="collective.calendarwidget" />
+  <include package="plone.app.portlets" />
 
   <five:registerPackage package="." initialize=".initialize" />
+
   <include package=".browser" />
   <include package=".portlets" />
 
