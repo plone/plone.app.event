@@ -8,13 +8,12 @@ from DateTime import DateTime
 from plone.memoize import ram
 from Products.ATContentTypes.interfaces import IATTopic
 
+from plone.event.interfaces import IEvent
+from plone.event.utils import rfc2445dt, vformat, foldline
+from plone.app.event import event_util
 from plone.app.event.constants import (
     PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
-from plone.app.event.interfaces import ICalendarSupport
 
-from plone.event.utils import rfc2445dt, vformat, foldline
-
-from plone.app.event import event_util
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -36,7 +35,7 @@ class EventsVCal(BrowserView):
 
     def update(self):
         context = aq_inner(self.context)
-        query = {'object_provides':ICalendarSupport.__identifier__}
+        query = {'object_provides':IEvent.__identifier__}
         if not IATTopic.providedBy(context):
             query['path'] = '/'.join(context.getPhysicalPath())
         self.events = context.queryCatalog(REQUEST=query)

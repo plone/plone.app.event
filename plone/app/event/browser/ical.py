@@ -39,4 +39,4 @@ class EventsICal(BrowserView):
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         self.request.RESPONSE.setHeader('Content-Disposition',
             'attachment; filename="%s"' % name)
-        self.request.RESPONSE.write(data)
+        self.request.RESPONSE.write(data.encode('utf-8'))

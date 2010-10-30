@@ -31,14 +31,14 @@
         />
 
     <browser:page
-        for="plone.app.event.interfaces.ICalendarSupport"
+        for="plone.event.interfaces.IEvent"
         name="ics_view"
         class=".ical.EventsICal"
         permission="zope2.View"
         />
 
     <browser:page
-        for="plone.app.event.interfaces.ICalendarSupport"
+        for="plone.event.interfaces.IEvent"
         name="event_view"
         class=".event_view.EventView"
         template="event_view.pt"
@@ -74,7 +74,7 @@
         />
 
     <browser:page
-        for="plone.app.event.interfaces.ICalendarSupport"
+        for="plone.event.interfaces.IEvent"
         name="vcs_view"
         class=".vcal.EventsVCal"
         permission="zope2.View"
