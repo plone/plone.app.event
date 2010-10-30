@@ -63,6 +63,9 @@ ical/vcal, drop vcal?
 TODO
 ====
 
+- add <property name="index_naive_time_as_local">True</property> property for
+  start and end indexes in catalog.xml as soon as P.DRI has that extra property
+
 OK - update calendar-portlet and move it into plone.app.event
 OK - update events-portlet and move it into plone.app.event
 - actually test, if calendar and events portlets work with recurrence
