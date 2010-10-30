@@ -6,12 +6,11 @@ NOTES from ploneconf2010 open space
 
 focus on finishing
 ------------------
-* widget
+* widget (datepicker & recurrencewidget)
 * calendar & events portlets
 * export ical (maybe also vcal. thet is suggesting to drop support for vcal since it's an really old standard)
 * whole day events
-* recurrence tests
-* daterecurringindex tests
+* more daterecurringindex tests
 
 * migration work can be done after plip
 
