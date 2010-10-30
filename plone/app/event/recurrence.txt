@@ -2,5 +2,5 @@
 plone.app.event recurrence unit tests
 =====================================
 
-    >>> interact( locals() )
+    >>> #interact( locals() )
 
