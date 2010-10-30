@@ -41,7 +41,9 @@ timezone issues
         adapting timezone when editing and displaying
     google calendar: asks if event should be displayed in users local timezone
     or timezone of event location
-
+    when using timezones, tz information must be updated regulary and often
+    (several times in the year). admins won't be very happy beeing in such a
+    situation.
 
 discussion
 ----------
