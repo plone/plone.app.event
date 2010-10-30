@@ -110,8 +110,10 @@ class EventCalendarTests(EventTestCase):
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
-            'X-WR-CALNAME:Foo',
-            'X-WR-CALDESC:Bar',
+            # TODO: for now comment this out as it's not decided yet if we
+            #       really need these custom headers there
+#            'X-WR-CALNAME:Foo',
+#            'X-WR-CALDESC:Bar',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
@@ -122,8 +124,8 @@ class EventCalendarTests(EventTestCase):
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
-            'X-WR-CALNAME:Plone site',
-            'X-WR-CALDESC:',
+#            'X-WR-CALNAME:Plone site',
+#            'X-WR-CALDESC:',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
@@ -134,8 +136,8 @@ class EventCalendarTests(EventTestCase):
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
-            'X-WR-CALNAME:Föö!!',
-            'X-WR-CALDESC:Bar',
+#            'X-WR-CALNAME:Föö!!',
+#            'X-WR-CALDESC:Bar',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
