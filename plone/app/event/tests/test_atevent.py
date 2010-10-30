@@ -5,6 +5,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFPlone.utils import safe_unicode
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 
@@ -118,11 +119,11 @@ class TestSiteATEvent(EventTypeTestCase):
         view = EventsICal(event, TestRequest())
         ical = view.getICal()
         lines = ical.split('\n')
-        self.assertEqual(lines[0], "BEGIN:VEVENT")
-        self.assertEqual(lines[5], "SUMMARY:%s"%event.Title())
+        self.assertEqual(lines[0], u"BEGIN:VEVENT")
+        self.assertEqual(lines[5], u"SUMMARY:%s"%event.Title())
         # times should be converted to UTC
-        self.assertEqual(lines[6], "DTSTART:20010101T110000Z")
-        self.assertEqual(lines[7], "DTEND:20010101T130000Z")
+        self.assertEqual(lines[6], u"DTSTART:20010101T110000Z")
+        self.assertEqual(lines[7], u"DTEND:20010101T130000Z")
 
     def test_vcal(self):
         event = self._ATCT
@@ -131,12 +132,12 @@ class TestSiteATEvent(EventTypeTestCase):
         event.setTitle('cool event')
         view = EventsVCal(event, TestRequest())
         vcal = view.getVCal()
-        lines = vcal.split('\n')
-        self.assertEqual(lines[0], "BEGIN:VEVENT")
-        self.assertEqual(lines[7], "SUMMARY:%s"%event.Title())
+        lines = vcal.split(u'\n')
+        self.assertEqual(lines[0], u"BEGIN:VEVENT")
+        self.assertEqual(lines[7], u"SUMMARY:%s" % safe_unicode(event.Title()))
         # times should be converted to UTC
-        self.assertEqual(lines[1], "DTSTART:20010101T110000Z")
-        self.assertEqual(lines[2], "DTEND:20010101T130000Z")
+        self.assertEqual(lines[1], u"DTSTART:20010101T110000Z")
+        self.assertEqual(lines[2], u"DTEND:20010101T130000Z")
 
     def test_get_size(self):
         atct = self._ATCT

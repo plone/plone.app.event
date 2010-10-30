@@ -6,13 +6,13 @@ from Acquisition import aq_inner
 from DateTime import DateTime
 
 from plone.memoize import ram
+from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.interfaces import IATTopic
 
 from plone.event.interfaces import IEvent
-from plone.event.utils import rfc2445dt, vformat, foldline
-from plone.app.event import event_util
-from plone.app.event.constants import (
-    PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
+from plone.event.utils import rfc2445dt, vformat, foldline, dateStringsForEvent
+from plone.event.constants import PRODID, VCS_HEADER, VCS_FOOTER, \
+    VCS_EVENT_START, VCS_EVENT_END
 
 
 def cachekey(fun, self):
@@ -48,14 +48,14 @@ class EventsVCal(BrowserView):
         request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         request.RESPONSE.setHeader('Content-Disposition',
                                    'attachment; filename="%s"' % name)
-        request.RESPONSE.write(self.feeddata())
+        request.RESPONSE.write(self.feeddata().encode('utf-8'))
 
     @ram.cache(cachekey)
     def feeddata(self):
         context = self.context
         data = VCS_HEADER % dict(prodid=PRODID)
-        data += 'X-WR-CALNAME:%s\n' % context.Title()
-        data += 'X-WR-CALDESC:%s\n' % context.Description()
+        data += u'X-WR-CALNAME:%s\n' % safe_unicode(context.Title())
+        data += u'X-WR-CALDESC:%s\n' % safe_unicode(context.Description())
         for brain in self.events:
             data += getMultiAdapter((brain.getObject(), self.request),
                              name=u'vcs_view').getVCal()
@@ -67,34 +67,33 @@ class EventsVCal(BrowserView):
     def getVCal(self):
         """get VCal data
         """
-        start_str, end_str = event_util.dateStringsForEvent(self.context)
-        out = StringIO()
+        start_str, end_str = dateStringsForEvent(self.context)
+        out = []
         map = {
             'dtstamp'   : rfc2445dt(DateTime()),
             'created'   : rfc2445dt(DateTime(self.context.CreationDate())),
             'uid'       : self.context.UID(),
             'modified'  : rfc2445dt(DateTime(self.context.ModificationDate())),
-            'summary'   : vformat(self.context.Title()),
+            'summary'   : vformat(safe_unicode(self.context.Title())),
             'startdate' : start_str,
             'enddate'   : end_str,
             }
-        out.write(VCS_EVENT_START % map)
+        out.append(VCS_EVENT_START % map)
 
         description = self.context.Description()
         if description:
-            out.write(foldline('DESCRIPTION:%s\n' % vformat(description)))
+            out.append(foldline(u'DESCRIPTION:%s\n' %
+                vformat(safe_unicode(description))))
 
         location = self.context.getLocation()
         if location:
-            out.write('LOCATION:%s\n' % vformat(location))
+            out.append(u'LOCATION:%s\n' % vformat(safe_unicode(location)))
 
-        # allow derived event types to inject additional data for iCal
-        try:
+        # allow derived event types to inject additional data for vCal
+        if hasattr(self.context, 'getVCalSupplementary'):
             self.context.getVCalSupplementary(out)
-        except AttributeError:
-            pass
 
-        out.write(VCS_EVENT_END)
-        return out.getvalue()
+        out.append(VCS_EVENT_END)
+        return u''.join(out)
 
     __call__ = render
