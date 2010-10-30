@@ -37,9 +37,9 @@ class EventCalendarTests(EventTestCase):
 
     def testCalendarView(self):
         view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
-        view.update()
-        self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([e.Title for e in view.events]),
+        events = view.getEvents()
+        self.assertEqual(len(events), 2)
+        self.assertEqual(sorted([e.Title for e in events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def testCalendarViewForTopic(self):
@@ -49,15 +49,14 @@ class EventCalendarTests(EventTestCase):
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
-        view.update()
-        self.assertEqual(len(view.events), 1)
-        self.assertEqual(sorted([e.Title for e in view.events]),
+        events = view.getEvents()
+        self.assertEqual(len(events), 1)
+        self.assertEqual(sorted([e.Title for e in events]),
             ['Plone Conf 2008'])
         folder[folder.invokeFactory('Event',
             id='inaug09', title='Inauguration Day 2009',
             startDate='2009/01/20', endDate='2009/01/20', location='DC')]
-        view.update()
-        self.assertEqual(len(view.events), 2)
+        self.assertEqual(len(view.getEvents()), 2)
         self.assertEqual(sorted([e.Title for e in view.events]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
 
@@ -73,9 +72,9 @@ class EventCalendarTests(EventTestCase):
         self.assertEqual(query['portal_type'], 'Event')
         self.assertEqual(query['object_provides'], ICalendarSupport.__identifier__)
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
-        view.update()
-        self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([e.Title for e in view.events]),
+        events = view.getEvents()
+        self.assertEqual(len(events), 2)
+        self.assertEqual(sorted([e.Title for e in view.getEvents()]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def checkOrder(self, text, *order):
@@ -88,7 +87,7 @@ class EventCalendarTests(EventTestCase):
     def testRendering(self):
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((self.folder, request), name='ics_view')
-        view.render()
+        view()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.checkOrder(''.join(output),
@@ -108,7 +107,7 @@ class EventCalendarTests(EventTestCase):
         self.folder.processForm(values={'title': 'Foo', 'description': 'Bar'})
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((self.folder, request), name='ics_view')
-        view.render()
+        view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:Foo',
@@ -120,7 +119,7 @@ class EventCalendarTests(EventTestCase):
         # of events might be the same...
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((self.portal, request), name='ics_view')
-        view.render()
+        view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:Plone site',
@@ -132,7 +131,7 @@ class EventCalendarTests(EventTestCase):
         self.folder.processForm(values={'title': 'Föö!!'})
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((self.folder, request), name='ics_view')
-        view.render()
+        view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:Föö!!',
@@ -148,7 +147,7 @@ class EventCalendarTests(EventTestCase):
         crit.setValue('DC')
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((topic, request), name='ics_view')
-        view.render()
+        view()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.checkOrder(''.join(output),
