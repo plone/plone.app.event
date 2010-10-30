@@ -36,7 +36,7 @@ from collective.calendarwidget.widget import CalendarWidget
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.recurrence import RecurrenceField
-from plone.app.event.recurrence import RecurrenceWidget
+from plone.formwidget.recurrence.atwidget import RecurrenceWidget
 from plone.event.interfaces import IEvent, IRecurringEventICal
 from plone.event.utils import pydt
 

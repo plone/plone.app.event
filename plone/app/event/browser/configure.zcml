@@ -80,28 +80,11 @@
         permission="zope2.View"
         />
 
-    <browser:page
-        for="*"
-        name="recurring_date"
-        class=".widget.RecurrenceWidget"
-        permission="zope2.View"
-        />
-
     <browser:resource
         name="event.js"
         file="event.js"
         permission="zope.Public"
     />
 
-    <browser:resource
-        name="recurrence.js"
-        file="recurrence.js"
-        permission="zope.Public"
-    />
 
-    <browser:resource
-        name="recurrence.css"
-        file="recurrence.css"
-        permission="zope.Public"
-    />
 </configure>

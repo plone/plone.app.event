@@ -23,13 +23,14 @@ setup(name='plone.app.event',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'setuptools',
-          'collective.calendarwidget',
           'Plone',
           'Products.DateRecurringIndex',
-          'plone.event',
-          'python-dateutil',
+          'collective.calendarwidget',
           'plone.app.portlets',
+          'plone.event',
+          'plone.formwidget.recurrence',
+          'python-dateutil',
+          'setuptools',
       ],
       extras_require={
           'test': ['interlude', 'plone.app.testing']
