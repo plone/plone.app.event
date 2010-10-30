@@ -13,7 +13,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
     def test_dt2DT2dtTZbug(self):
         # Tests problems with conversion between datetime and DateTime becoming naive of timezones
         import DateTime
-        from plone.app.event.dtutils import DT2dt, dt2DT
+        from plone.app.event.utils import DT2dt, dt2DT
         PartyBST = DateTime.DateTime("2007-07-19 20:00 GMT+0100")
         PartyUTC = DateTime.DateTime("2007-07-19 19:00 GMT+0000")
         PartyEDT = DateTime.DateTime("2007-07-19 15:00 GMT-0400")

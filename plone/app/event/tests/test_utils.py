@@ -2,17 +2,11 @@ import plone.app.event.tests.base
 
 import datetime
 import unittest
-from plone.app.event.utils import n2rn 
 from plone.event.utils import vformat, rfc2445dt, foldline
 
 from DateTime import DateTime
 
 class UtilsTestCase(unittest.TestCase):
-
-    def test_n2rn(self):
-        self.assertEqual(n2rn('hello\nworld'),
-                         'hello\r\nworld')
-        self.assertEqual(n2rn('foo'), 'foo')
 
     def test_vformat(self):
         self.assertEqual(vformat('foo'), 'foo')

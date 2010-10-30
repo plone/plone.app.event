@@ -21,7 +21,7 @@ from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event import ATEvent
-from plone.app.event.dtutils import DT2dt
+from plone.app.event.utils import DT2dt
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
