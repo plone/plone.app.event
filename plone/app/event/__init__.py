@@ -11,7 +11,7 @@ except ImportError:
 
 from Products.CMFCore.utils import ContentInit
 
-MsgFact = MessageFactory(config.PROJECTNAME)
+messageFactory = MessageFactory(config.PROJECTNAME)
 
 
 def initialize(context):

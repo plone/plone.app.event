@@ -1,14 +1,14 @@
 PRODID = "-//Plone.org//NONSGML plone.event//EN"
 
 # iCal header and footer
-ICS_HEADER = """\
+ICS_HEADER = u"""\
 BEGIN:VCALENDAR
 PRODID:%(prodid)s
 VERSION:2.0
 METHOD:PUBLISH
 """
 
-ICS_FOOTER = """\
+ICS_FOOTER = u"""\
 END:VCALENDAR
 """
 
@@ -16,7 +16,7 @@ END:VCALENDAR
 # That's not necessary unless we're supporting recurrence.
 
 # iCal event
-ICS_EVENT_START = """\
+ICS_EVENT_START = u"""\
 BEGIN:VEVENT
 DTSTAMP:%(dtstamp)s
 CREATED:%(created)s
@@ -34,24 +34,24 @@ DTEND:%(enddate)s
 # priority. In absence of a priority field in the event, there's no justification
 # for that.
 
-ICS_EVENT_END = """\
+ICS_EVENT_END = u"""\
 CLASS:PUBLIC
 END:VEVENT
 """
 
 # vCal header and footer
-VCS_HEADER = """\
+VCS_HEADER = u"""\
 BEGIN:VCALENDAR
 PRODID:%(prodid)s
 VERSION:1.0
 """
 
-VCS_FOOTER = """\
+VCS_FOOTER = u"""\
 END:VCALENDAR
 """
 
 # vCal event
-VCS_EVENT_START = """\
+VCS_EVENT_START = u"""\
 BEGIN:VEVENT
 DTSTART:%(startdate)s
 DTEND:%(enddate)s
@@ -62,7 +62,7 @@ LAST-MODIFIED:%(modified)s
 SUMMARY:%(summary)s
 """
 
-VCS_EVENT_END = """\
+VCS_EVENT_END = u"""\
 PRIORITY:3
 TRANSP:0
 END:VEVENT
