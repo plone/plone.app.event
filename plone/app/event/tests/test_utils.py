@@ -2,7 +2,8 @@ import plone.app.event.tests.base
 
 import datetime
 import unittest
-from plone.app.event.utils import n2rn, vformat, rfc2445dt, foldline
+from plone.app.event.utils import n2rn 
+from plone.event.utils import vformat, rfc2445dt, foldline
 
 from DateTime import DateTime
 
