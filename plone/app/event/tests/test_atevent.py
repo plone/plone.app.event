@@ -76,6 +76,30 @@ class TestSiteATEvent(EventTypeTestCase):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_props(self):
+        self.assertEquals(self._ATCT.cmf_edit_kws,
+                ('effectiveDay', 'effectiveMo', 'effectiveYear',
+                 'expirationDay', 'expirationMo', 'expirationYear',
+                 'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
+                 'start_date', 'end_date', 'contact_name', 'contact_email',
+                 'contact_phone', 'event_url'))
+
+    def test_cmfedit(self):
+        self.assertNotEqual(self._ATCT.end().Date(), '2010/10/31')
+        self._ATCT.cmf_edit(start_date='2010-10-30', end_date='2010-10-31')
+        self.assertEqual(self._ATCT.end().Date(), '2010/10/31')
+
+    def test_validation(self):
+        req = {'startDate':'2010-10-30'}
+        err = {'endDate':None}
+        errors = err.copy()
+        self._ATCT.post_validate(req, errors)
+        self.assertEqual(errors, err)
+        req = {'startDate':'2x10-10-30'}
+        errors = {}
+        self._ATCT.post_validate(req, errors)
+        self.assertTrue('startDate' in errors)
+
     def test_edit(self):
         new = self._ATCT
         editATCT(new)

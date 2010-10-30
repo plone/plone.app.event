@@ -1,6 +1,6 @@
 import unittest
 import doctest
-from interlude import interact
+#from interlude import interact
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
@@ -13,7 +13,8 @@ def test_suite():
         doctest.DocFileSuite(
             docfile,
             optionflags=OPTIONFLAGS,
-            globs={'interact': interact,},
+            globs={#'interact': interact,
+                },
         ) for docfile in DOCFILES
     ])
     return suite
