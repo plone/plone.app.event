@@ -1,4 +1,4 @@
-PRODID = "-//AT Content Types//AT Event//EN"
+PRODID = "-//Plone.org//NONSGML plone.event//EN"
 
 # iCal header and footer
 ICS_HEADER = """\

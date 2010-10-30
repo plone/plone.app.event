@@ -11,7 +11,9 @@ from Products.ATContentTypes.interfaces import IATTopic
 from plone.app.event.constants import (
     PRODID, VCS_HEADER, VCS_FOOTER, VCS_EVENT_START, VCS_EVENT_END)
 from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.utils import rfc2445dt, vformat, foldline
+
+from plone.event.utils import rfc2445dt, vformat, foldline
+
 from plone.app.event import event_util
 
 def cachekey(fun, self):

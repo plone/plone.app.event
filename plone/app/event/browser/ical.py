@@ -10,9 +10,13 @@ from Products.ATContentTypes.interfaces import IATTopic
 
 from plone.app.event.constants import (
     PRODID, ICS_HEADER, ICS_FOOTER, ICS_EVENT_START, ICS_EVENT_END)
+
 from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.utils import rfc2445dt, vformat, foldline
-from plone.app.event import event_util 
+
+
+from plone.event.interfaces import ICalExporter
+from plone.event.utils import rfc2445dt, vformat, foldline
+
 
 def cachekey(fun, self):
     """ generate a cache key based on the following data:
@@ -37,17 +41,15 @@ class EventsICal(BrowserView):
         query = {'object_provides':ICalendarSupport.__identifier__}
         if not IATTopic.providedBy(context):
             query['path'] = '/'.join(context.getPhysicalPath())
-        self.events = context.queryCatalog(REQUEST=query)
+        self.events = [b.getObject() for b in context.queryCatalog(REQUEST=query)]
 
     def render(self):
         self.update()       # collect events
-        context = self.context
-        request = self.request
-        name = '%s.ics' % context.getId()
-        request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        request.RESPONSE.setHeader('Content-Disposition',
+        name = '%s.ics' % self.context.getId()
+        self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
+        self.request.RESPONSE.setHeader('Content-Disposition',
                                    'attachment; filename="%s"' % name)
-        request.RESPONSE.write(self.feeddata())
+        self.request.RESPONSE.write(ICalExporter(self.events)())
 
     @ram.cache(cachekey)
     def feeddata(self):
@@ -90,9 +92,10 @@ class EventsICal(BrowserView):
         if subject:
             out.write('CATEGORIES:%s\n' % ','.join(subject))
 
+            
         # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
         #ORGANIZER;CN=%(name):MAILTO=%(email)
-        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
+        #:mailto:%(email)' 
 
         cn = []
         contact = self.context.contact_name()

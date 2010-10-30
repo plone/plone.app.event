@@ -3,10 +3,12 @@ from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.app.event import event_util
 from plone.event.interfaces import IRecurrenceSupport
 
+from plone.event.utils import toDisplay
+
 class EventView(BrowserView):
 
     def date_for_display(self):
-        return event_util.toDisplay(self.context)
+        return toDisplay(self.context)
 
     def occurrences(self):
         recur = IRecurrenceSupport(self.context)
