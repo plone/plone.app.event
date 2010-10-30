@@ -39,7 +39,7 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
-        self.assertEqual(sorted([e.Title for e in events]),
+        self.assertEqual(sorted([e.Title() for e in events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def testCalendarViewForTopic(self):
@@ -51,13 +51,14 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 1)
-        self.assertEqual(sorted([e.Title for e in events]),
+        self.assertEqual(sorted([e.Title() for e in events]),
             ['Plone Conf 2008'])
         folder[folder.invokeFactory('Event',
             id='inaug09', title='Inauguration Day 2009',
             startDate='2009/01/20', endDate='2009/01/20', location='DC')]
-        self.assertEqual(len(view.getEvents()), 2)
-        self.assertEqual(sorted([e.Title for e in view.events]),
+        events = view.getEvents()
+        self.assertEqual(len(events), 2)
+        self.assertEqual(sorted([e.Title() for e in events]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
 
     def testDuplicateQueryParameters(self):
@@ -74,7 +75,7 @@ class EventCalendarTests(EventTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
-        self.assertEqual(sorted([e.Title for e in view.getEvents()]),
+        self.assertEqual(sorted([e.Title() for e in view.getEvents()]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def checkOrder(self, text, *order):
