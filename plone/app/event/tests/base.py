@@ -7,6 +7,7 @@ from Products.ATContentTypes.tests.atcttestcase import ATCTFieldTestCase
 from Products.ATContentTypes.tests.atctftestcase import ATCTIntegrationTestCase
 from Products.PloneTestCase.layer import onsetup
 
+# XXX move this to PloneTestCase
 # index has to be installed first and not deferred via @onsetup
 def setupIndex():
     fiveconfigure.debug_mode = True
