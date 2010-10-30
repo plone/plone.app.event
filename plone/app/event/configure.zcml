@@ -14,7 +14,12 @@
   <five:registerPackage package="." initialize=".initialize" />
 
   <include package=".browser" />
-  <include package=".portlets" />
+
+  <!-- one more pro for having portlets in this module:
+       events will then be completely seperate from plone and can easily be
+       uninstalled. whereas leaving them in plone.app.portlets will depend then
+       on plone.app.event -->
+  <!-- include package=".portlets" /-->
 
   <genericsetup:registerProfile
       name="default"
