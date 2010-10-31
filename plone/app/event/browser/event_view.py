@@ -1,6 +1,5 @@
 from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
-from plone.app.event import event_util
 from plone.event.interfaces import IRecurrenceSupport
 
 from plone.event.utils import toDisplay
@@ -12,7 +11,6 @@ class EventView(BrowserView):
 
     def occurrences(self):
         recur = IRecurrenceSupport(self.context)
-        # TODO: check again. also check need of event_util module
         events = map(
             lambda event:dict(
                 start_date = ulocalized_time(event['start_date'], False, time_only=None, context=self.context),
