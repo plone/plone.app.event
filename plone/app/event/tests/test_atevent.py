@@ -144,7 +144,7 @@ class TestSiteATEvent(EventTypeTestCase):
         ical = view.getICal()
         lines = ical.split('\n')
         self.assertEqual(lines[0], u"BEGIN:VEVENT")
-        self.assertEqual(lines[5], u"SUMMARY:%s"%event.Title())
+        self.assertEqual(lines[5], u"SUMMARY:%s" % safe_unicode(event.Title()))
         # times should be converted to UTC
         self.assertEqual(lines[6], u"DTSTART:20010101T110000Z")
         self.assertEqual(lines[7], u"DTEND:20010101T130000Z")
