@@ -21,11 +21,12 @@ class RecurrenceField(ObjectField):
         """ Set recurrence data.
 
         Recurrence rules are in RFC2445 iCal format and stored as string in the
-        field.
+        field. i.e. RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5
+
         See http://www.ietf.org/rfc/rfc2445.txt and
             http://labix.org/python-dateutil
         If the string does not conform to RFC2445 or dateutil.rrule.rrulestring
-        format, dateutil will throw an error throughProducts.DateRecurringIndex.
+        format, dateutil will throw an error through Products.DateRecurringIndex.
         """
         if not value:
             value = None

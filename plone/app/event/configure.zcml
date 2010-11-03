@@ -6,7 +6,6 @@
     i18n_domain="plone.app.event"
     >
 
-  <include package="Products.DateRecurringIndex" />
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
   <include package="collective.calendarwidget" />

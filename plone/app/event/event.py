@@ -186,10 +186,9 @@ ATEventSchema.moveField('location', before='wholeDay')
 class ATEvent(ATCTContent, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
 
-    schema         =  ATEventSchema
+    schema = ATEventSchema
 
-    portal_type    = 'Event'
-    archetype_name = 'Event'
+    portal_type = archetype_name = 'Event'
     _atct_newTypeFor = {'portal_type': 'CMF Event', 'meta_type': 'CMF Event'}
     assocMimetypes = ()
     assocFileExt   = ('event', )
