@@ -7,18 +7,9 @@ from Products.ATContentTypes.tests.atcttestcase import ATCTFieldTestCase
 from Products.ATContentTypes.tests.atctftestcase import ATCTIntegrationTestCase
 from Products.PloneTestCase.layer import onsetup
 
-# XXX move this to PloneTestCase
+# TODO: ??? move this to PloneTestCase
 # index has to be installed first and not deferred via @onsetup
-def setupIndex():
-    fiveconfigure.debug_mode = True
-    import Products.Five
-    zcml.load_config('meta.zcml', Products.Five)
-    zcml.load_config('configure.zcml', Products.Five)
-    import Products.DateRecurringIndex
-    zcml.load_config('configure.zcml', Products.DateRecurringIndex)
-    fiveconfigure.debug_mode = False
-    ztc.installProduct('DateRecurringIndex')
-setupIndex()
+ztc.installProduct('DateRecurringIndex')
 
 @onsetup
 def setupPackage():
