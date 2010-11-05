@@ -68,8 +68,8 @@ OK - use plone.event.utils.pydt instead of DT2dt - it uses real timezones and
      converts the date to UTC if the timezone cant be retrieved (like: GMT+1
      is a GMT/UTC offset, but not a "real" timezone where daylight saving
      changes can be derived).
-- leave utils.txt and it's date conversion functions back in P.ATCT, but
-  deprecate them.
+- leave utils.txt with it's date conversion functions and test_bugs.py back in
+  P.ATCT, but deprecate them.
 
 - add <property name="index_naive_time_as_local">True</property> property for
   start and end indexes in catalog.xml as soon as P.DRI has that extra property
