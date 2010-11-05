@@ -21,8 +21,8 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
+from plone.event.utils import pydt
 from plone.app.event import ATEvent
-from plone.app.event.utils import DT2dt
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
@@ -103,10 +103,10 @@ class TestSiteATEvent(EventTypeTestCase):
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-        self.assertEquals(new.start_date, DT2dt(new.start()))
-        self.assertEquals(new.end_date, DT2dt(new.end()))
-        self.assertEquals(new.start_date, DT2dt(S_DATE))
-        self.assertEquals(new.end_date, DT2dt(E_DATE))
+        self.assertEquals(new.start_date, pydt(new.start()))
+        self.assertEquals(new.end_date, pydt(new.end()))
+        self.assertEquals(new.start_date, pydt(S_DATE))
+        self.assertEquals(new.end_date, pydt(E_DATE))
         self.assertEquals(new.duration, new.end_date - new.start_date)
 
     def test_cmp(self):
