@@ -1,10 +1,10 @@
 var $j = jQuery.noConflict();
 
 function wholeDayHandler(e) {
-    if (e.target.checked) 
-        $j('.calendarwidget-time').fadeOut();
-    else 
-        $j('.calendarwidget-time').fadeIn();
+    if (e.target.checked)
+        $j('.datetimewidget-time').fadeOut();
+    else
+        $j('.datetimewidget-time').fadeIn();
 }
 
 function updateEndDate(dateText, inst) {
