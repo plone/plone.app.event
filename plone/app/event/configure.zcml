@@ -8,7 +8,7 @@
 
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
-  <include package="collective.calendarwidget" />
+  <include package="archetypes.datetimewidget" />
   <include package="plone.app.portlets" />
 
   <five:registerPackage package="." initialize=".initialize" />

@@ -31,7 +31,7 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from collective.calendarwidget.widget import CalendarWidget
+from archetypes.datetimewidget import DatetimeWidget
 
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.interfaces import ICalendarSupport
@@ -70,7 +70,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget=CalendarWidget(
+                  widget=DatetimeWidget(
                       description='',
                       label=_(u'label_event_start', default=u'Event Starts'),
                       with_time=1,
@@ -83,7 +83,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   write_permission=ModifyPortalContent,
                   default_method=default_end_date,
                   languageIndependent=True,
-                  widget=CalendarWidget(
+                  widget=DatetimeWidget(
                       description='',
                       label=_(u'label_event_end', default=u'Event Ends'),
                       with_time=1,

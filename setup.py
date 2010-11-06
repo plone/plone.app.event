@@ -25,7 +25,7 @@ setup(name='plone.app.event',
       install_requires=[
           'Plone',
           'Products.DateRecurringIndex',
-          'collective.calendarwidget',
+          'archetypes.datetimewidget',
           'plone.app.portlets',
           'plone.event',
           'plone.formwidget.recurrence',
