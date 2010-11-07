@@ -30,7 +30,7 @@ from plone.app.event.tests.base import (
     EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
 from plone.app.event.event import default_end_date
 
-from collective.calendarwidget.widget import CalendarWidget
+from archetypes.datetimewidget import DatetimeWidget
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -330,7 +330,7 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, CalendarWidget),
+        self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
@@ -375,7 +375,7 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, CalendarWidget),
+        self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
