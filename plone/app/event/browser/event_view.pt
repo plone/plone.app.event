@@ -31,6 +31,7 @@
                     <tr>
                         <th i18n:translate="event_when">When</th>
                         <td tal:define="date_dict view/date_for_display">
+                          <metal:macro define-macro="event_occurrence">
                             <tal:differentday tal:condition="not:date_dict/same_day"
                                               i18n:translate="event_when_differentday">
                                 <abbr i18n:name="startdate"
@@ -106,35 +107,15 @@
                                 </abbr>
                               </tal:notwholeday>
                             </tal:sameday>
+                          </metal:macro>
 
-                            <div tal:define="events view/occurrences"
-                                tal:condition="events">
-                                More occurences of this event:
-                                <tal:rep repeat="event events">
-
-                                    <div tal:condition="event/same_day">
-                                        <span tal:content="event/start_date"
-                                        /><tal:if condition="not: context/getWholeDay">,
-                                            <span tal:content="event/start_time" />
-                                            <span tal:condition="not: event/same_time"
-                                                tal:content="string:- ${event/end_time}" />
-                                        </tal:if>
-                                    </div>
-
-                                    <div tal:condition="not: event/same_day">
-                                        <span tal:content="event/start_date" />
-                                        <span tal:condition="not: context/getWholeDay"
-                                            tal:content="event/start_time"
-                                        />
-                                        until
-                                        <span tal:content="event/end_date" />
-                                        <span tal:condition="not: context/getWholeDay"
-                                            tal:content="event/end_time"
-                                        />
-                                    </div>
-
-                                </tal:rep>
-                            </div>
+                          <div tal:define="events view/occurrences"
+                               tal:condition="events">
+                              <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences><br />
+                              <tal:rep repeat="event events">
+                                <tal:event metal:use-macro="view/macros/event_occurrence" />
+                              </tal:rep>
+                          </div>
 
                         </td>
                     </tr>
