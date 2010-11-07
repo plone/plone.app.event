@@ -21,6 +21,7 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
+from plone.event.tests.test_utils import FakeEvent
 from plone.event.utils import pydt
 from plone.app.event import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
@@ -28,6 +29,7 @@ from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
 from plone.app.event.tests.base import (
     EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
+from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.event import default_end_date
 
 from archetypes.datetimewidget import DatetimeWidget
@@ -595,6 +597,48 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
+    
+    def _makeOne(self, start, end, wholeDay=False):
+        event = FakeEvent(start, end, wholeDay)
+        # ulocalized_time need the REQUEST attribute
+        event.REQUEST = self.portal.REQUEST
+        return event
+
+    def testToDisplayWithTime(self):
+        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00')
+        self.assertEqual(toDisplay(event),
+                {'start_date': 'Oct 12, 2000',
+                 'start_time' : '06:00 AM',
+                 'end_date' : 'Oct 12, 2000',
+                 'end_time' : '06:00 PM',
+                 'same_day' : True,
+                 'same_time' : False,
+                })
+
+    def testToDisplayWholeDaySameDay(self):
+        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
+                          wholeDay=True)
+        self.assertEqual(toDisplay(event),
+                {'start_date': 'Oct 12, 2000',
+                 'start_time' : None,
+                 'end_date' : 'Oct 12, 2000',
+                 'end_time' : None,
+                 'same_day' : True,
+                 'same_time' : False,
+                })
+
+    def testToDisplayWholeDayDifferentDays(self):
+        event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00',
+                          wholeDay=True)
+        self.assertEqual(toDisplay(event),
+                {'start_date': 'Oct 12, 2000',
+                 'start_time' : None,
+                 'end_date' : 'Oct 13, 2000',
+                 'end_time' : None,
+                 'same_day' : False,
+                 'same_time' : False,
+                })
+
 
 tests.append(TestATEventFields)
 
