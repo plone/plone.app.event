@@ -71,10 +71,9 @@
                             </tal:differentday>
 
                             <tal:sameday tal:condition="date_dict/same_day">
-                              <tal:wholeday condition="context/getWholeDay"
-                                  i18n:translate="event_when_sameday_wholeday">
+                              <tal:wholeday condition="context/getWholeDay">
                                 <span tal:replace="date_dict/start_date"
-                                      i18n:name="date" />
+                                      i18n:translate="" />
                               </tal:wholeday>
                               <tal:notwholeday condition="not:context/getWholeDay"
                                   i18n:translate="event_when_sameday">
