@@ -163,7 +163,8 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                  languageIndependent=True,
                  write_permission=ModifyPortalContent,
                  widget=RecurrenceWidget(
-                     description='Enter recurrence rules, one per line',
+                     description=_(u'help_event_recurrence',
+                                   default='Enter recurrence rules, one per line.'),
                      label=_(u'label_event_recurrence', default=u'Event Recurrence')
                      )),
 
