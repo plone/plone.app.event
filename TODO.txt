@@ -1,126 +1,60 @@
-for TODO list see more far below.
-also look into TODO list of plone.event and Products.DateRecurringIndex
-
-NOTES from ploneconf2010 open space
-===================================
-
-focus on finishing
-------------------
-* widget (datepicker & recurrencewidget)
-* calendar & events portlets
-* export ical (maybe also vcal. thet is suggesting to drop support for vcal since it's an really old standard)
-* whole day events
-* more daterecurringindex tests
-
-* migration work can be done after plip
-
-more
-----
-
-* rss support
-
-* calendar views
-    monthly view, weekly view, daily view
-
-* hcal microformat
-
-IDEA:
-    when deleting an occurence of an recurring event from calendar view,
-    deleting should be faked by adding an exclusion date
-    google calendar does that thing
-
-
-timezone issues
----------------
-    don't use timezone information at all?
-        NO. better not.
-    save and display dates in users local timezone
-         timezone from request, set by user's browser
-    confusing usecase:
-        german guy editing events in bristol.
-        adapting timezone when editing and displaying
-    google calendar: asks if event should be displayed in users local timezone
-    or timezone of event location
-    when using timezones, tz information must be updated regulary and often
-    (several times in the year). admins won't be very happy beeing in such a
-    situation.
-
-discussion
-----------
-
-* archetype datetime
-    see c.z3cform.datetimewidget
-
-* archetype recurrence event widget
-    see z3cform recurrence event widget
-
-* subclassing ATEvent possible? yes, should be.
-
-hcal microformat
-ical/vcal, drop vcal?
-
-
-
 TODO
 ====
 
-OK - use plone.event.utils.pydt instead of DT2dt - it uses real timezones and
-     converts the date to UTC if the timezone cant be retrieved (like: GMT+1
-     is a GMT/UTC offset, but not a "real" timezone where daylight saving
-     changes can be derived).
+- Check all packages for correct Licenses
+- upgrade step for portlets move into plone.app.event. see traceback http://pastebin.com/YFyCytXg
 - leave utils.txt with it's date conversion functions and test_bugs.py back in
   P.ATCT, but deprecate them.
-
-- let P.Archetypes set the timezone regarding the timezone set in the request/
-  user's browser.
-
 - add <property name="index_naive_time_as_local">True</property> property for
   start and end indexes in catalog.xml as soon as P.DRI has that extra property
-
-REVERTED - OK - update calendar-portlet and move it into plone.app.event
-REVERTED - OK - update events-portlet and move it into plone.app.event
-REVERTED as discussed. BUT consider:
-  <!-- one more pro for having portlets in this module:
-       events will then be completely seperate from plone and can easily be
-       uninstalled. whereas leaving them in plone.app.portlets will depend then
-       on plone.app.event -->
-- actually test, if calendar and events portlets work with recurrence
-
-- check use of MessageFactory. should message factory be in plone namespace?
-
-- synchronize package with newest ATContentTypes (diff modified with trunk)
-
+- write tests to check if events and calendar portlets work with recurrence. manual test was ok.
 - add deprecation warnings for imports from ATContentTypes
-
 - make BBB back-imports of CT, utilities, interfaces, etc in ATContentTypes
-
 - upgrade step to recatalog the start and end indexes
-
 - make calendar widget display (hidden) the timezone
-
 - add a hook to getICal(), getVCal() for retrieving additional data
   from derived event types
-
 - check how much sense start&end metadata columns in catalog.xml make sense.
   they return start&end of first occurence but nothing else.
   --> guess its used by folder_listing displaying start and end time from brain info.
-
-- use plone.testing and plone.app.testing
-
 - think about storing all dates in utc and converting them on display to
   localized time.
   usecase where this won't work: dates going over DST borders. like meeting from
   oktober-november shouldn't change the relative time
 
+OUT OF SCOPE FOR NOW - let P.Archetypes set the timezone regarding the timezone
+set in the request/user's browser.
 
+OK - set start and end for wholedayevents to 0:00, resp, 23:59:59
+         - test whole day event handler
+OK - check display of recurring events
+  OK - start date included twice
+  OK - line breaks btw dates
+  OK - recurrence dates wrongly displayed
+OK - use plone.event.utils.pydt instead of DT2dt - it uses real timezones and
+     converts the date to UTC if the timezone cant be retrieved (like: GMT+1
+     is a GMT/UTC offset, but not a "real" timezone where daylight saving
+     changes can be derived).
+OK - update calendar-portlet and move it into plone.app.event
+OK - update events-portlet and move it into plone.app.event
+OK - actually test, if calendar and events portlets work with recurrence
+OK - check use of MessageFactory. should message factory be in plone namespace?
+  yes
+OK - synchronize package with newest ATContentTypes (diff modified with trunk)
 OK - clean up recurrence code and only use new rrulestring implementation
-OBSOLETE - rename package to plone.app.calendar and create one for plone.calendar (e.g. for RFC2445 definitions)
-OK - test for disabled recurrence and None values to store in recurrence field. see how index is behaving
+OBSOLETE - rename package to plone.app.calendar and create one for
+    plone.calendar (e.g. for RFC2445 definitions)
+OK - test for disabled recurrence and None values to store in recurrence field.
+    see how index is behaving
 
+Future
+======
+- integrate hcal microformat
+- use plone.testing and plone.app.testing
 
 TODO for Plone
 ==============
-- depend on plone.app.event
-- include plone.app.event package in configure.zcml
-- include plone.app.event in metadata.xml GS profile
-- remove catalog index and metadata column and use those in plone.app.event
+OK - depend on plone.app.event
+Ok - include plone.app.event package in configure.zcml
+OK - include plone.app.event in metadata.xml GS profile
+OK - remove catalog index and metadata column and use those in plone.app.event
