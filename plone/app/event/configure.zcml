@@ -16,6 +16,13 @@
   <include package=".browser" />
   <include package=".portlets" />
 
+  <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+                   Products.Archetypes.interfaces.IObjectInitializedEvent"
+              handler=".event.whole_day_handler" />
+  <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+                   Products.Archetypes.interfaces.IObjectEditedEvent"
+              handler=".event.whole_day_handler" />
+
   <genericsetup:registerProfile
       name="default"
       title="plone.app.event"
