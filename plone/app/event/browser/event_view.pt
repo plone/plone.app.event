@@ -112,7 +112,7 @@
                                            events python:events and events[1:] or None"
                                tal:condition="events">
                               <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences><br />
-                              <tal:rep repeat="event events">
+                              <tal:rep repeat="date_dict events">
                                 <tal:event metal:use-macro="view/macros/event_occurrence" />
                                 <hr />
                               </tal:rep>
