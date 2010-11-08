@@ -54,6 +54,7 @@ class EventView(BrowserView):
     def date_for_display(self):
         return toDisplay(self.context)
 
+    @property
     def occurrences(self):
         recur = IRecurrenceSupport(self.context)
         events = map(
