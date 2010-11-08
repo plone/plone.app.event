@@ -202,6 +202,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     implements(IEvent, IRecurringEventICal, IATEvent, ICalendarSupport)
 
     recurrence = ATFieldProperty('recurrence')
+    whole_day = ATFieldProperty('wholeDay')
 
     security = ClassSecurityInfo()
 
@@ -346,3 +347,17 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         ATCTContent.update(self, **info)
 
 registerATCT(ATEvent, PROJECTNAME)
+
+
+# TODO: test me
+def whole_day_handler(obj, event):
+    """ For whole day events only, set start time to 0:00:00 and end time to
+    23:59:59
+
+    """
+    if not obj.whole_day: return
+    startDate = obj.startDate.Date() + ' 0:00:00 ' + obj.startDate.timezone()
+    endDate = obj.endDate.Date() + ' 23:59:59 ' + obj.endDate.timezone()
+    obj.startDate = DateTime(startDate)
+    obj.endDate = DateTime(endDate)
+    obj.reindexObject() # reindex obj to store upd values in catalog
