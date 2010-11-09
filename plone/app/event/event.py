@@ -57,6 +57,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
    BooleanField('wholeDay',
                 default=False,
+                accessor='whole_day',
                 write_permission=ModifyPortalContent,
                 widget=BooleanWidget(
                     description='',
@@ -202,7 +203,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     implements(IEvent, IRecurringEventICal, IATEvent, ICalendarSupport)
 
     recurrence = ATFieldProperty('recurrence')
-    whole_day = ATFieldProperty('wholeDay')
 
     security = ClassSecurityInfo()
 

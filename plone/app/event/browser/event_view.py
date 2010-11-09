@@ -38,7 +38,7 @@ def toDisplay(event):
     same_time = isSameTime(event)
 
     # set time fields to None for whole day events
-    if event.getWholeDay():
+    if event.whole_day():
         start_time = end_time = None
 
     return  dict(start_date=start_date,

@@ -597,9 +597,9 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
-    
-    def _makeOne(self, start, end, wholeDay=False):
-        event = FakeEvent(start, end, wholeDay)
+
+    def _makeOne(self, start, end, whole_day=False):
+        event = FakeEvent(start, end, whole_day)
         # ulocalized_time need the REQUEST attribute
         event.REQUEST = self.portal.REQUEST
         return event
@@ -617,7 +617,7 @@ class TestATEventFields(EventFieldTestCase):
 
     def testToDisplayWholeDaySameDay(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
-                          wholeDay=True)
+                          whole_day=True)
         self.assertEqual(toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
@@ -629,7 +629,7 @@ class TestATEventFields(EventFieldTestCase):
 
     def testToDisplayWholeDayDifferentDays(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00',
-                          wholeDay=True)
+                          whole_day=True)
         self.assertEqual(toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,

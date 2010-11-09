@@ -44,7 +44,7 @@
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/start_date">Start Date</span>
-                                        <tal:notwholeday condition="not:context/getWholeDay">
+                                        <tal:notwholeday condition="not:context/whole_day">
                                           <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
                                           <span tal:replace="date_dict/start_time">Start Time</span>
                                         </tal:notwholeday>
@@ -62,7 +62,7 @@
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/end_date">End Date</span>
-                                        <tal:notwholeday condition="not:context/getWholeDay">
+                                        <tal:notwholeday condition="not:context/whole_day">
                                           <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
                                           <span tal:replace="date_dict/end_time">End Time</span>
                                         </tal:notwholeday>
@@ -71,11 +71,11 @@
                             </tal:differentday>
 
                             <tal:sameday tal:condition="date_dict/same_day">
-                              <tal:wholeday condition="context/getWholeDay">
+                              <tal:wholeday condition="context/whole_day">
                                 <span tal:replace="date_dict/start_date"
                                       i18n:translate="" />
                               </tal:wholeday>
-                              <tal:notwholeday condition="not:context/getWholeDay"
+                              <tal:notwholeday condition="not:context/whole_day"
                                   i18n:translate="event_when_sameday">
                                 <span tal:replace="date_dict/start_date"
                                       i18n:name="date">
