@@ -51,7 +51,7 @@ setup(name='plone.app.event',
       extras_require={
           'test': [
               #'interlude',
-              #'plone.app.testing'
+              #'plone.app.testing',
               'zope.annotation',
               'transaction',
               'zope.site',
