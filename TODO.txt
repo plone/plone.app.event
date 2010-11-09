@@ -3,6 +3,7 @@ TODO
 
 - Check all packages for correct Licenses
 - Add tests to ensure, DateRecurringIndex is actually installed.
+- Make event.recurrence not an ATFieldProperty, since that is deprecated
 - For recurring events, which have occurences in the future, show future
 occurences first and hide past occurences with javascript or so. Needs new
 methods (next_occurences, past_occurences, next_occurence, previous_occurence)
@@ -30,6 +31,7 @@ in RecurrenceSupport event adapter.
 OUT OF SCOPE FOR NOW - let P.Archetypes set the timezone regarding the timezone
 set in the request/user's browser.
 
+OK - Make event.whole_day not an ATFieldProperty, since that is deprecated
 OK - Check dependencies in setup.py for every package
 OK - set start and end for wholedayevents to 0:00, resp, 23:59:59
          - test whole day event handler
