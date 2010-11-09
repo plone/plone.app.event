@@ -1,6 +1,13 @@
 TODO
 ====
 
+* There seems to be a problem with exclusion rulesets and timezones. There is
+a possibility that different results for start and end dates are produced. This has
+to be fixed (documented above in howto).
+
+* Andreas Jung reported a problem where the enddate is incorrectly validated. This
+has to be fixed.
+
 - Check all packages for correct Licenses
 - Add tests to ensure, DateRecurringIndex is actually installed.
 - Make event.recurrence not an ATFieldProperty, since that is deprecated
