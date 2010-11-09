@@ -32,7 +32,10 @@ setup(name='plone.app.event',
           'setuptools',
       ],
       extras_require={
-          'test': ['interlude', 'plone.app.testing']
+          'test': [
+              #'interlude',
+              #'plone.app.testing'
+          ]
       },
       entry_points="""
       [z3c.autoinclude.plugin]
