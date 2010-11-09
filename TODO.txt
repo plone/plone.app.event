@@ -2,7 +2,6 @@ TODO
 ====
 
 - Check all packages for correct Licenses
-- Control dependencies in setup.py for every package
 - Add tests to ensure, DateRecurringIndex is actually installed.
 - For recurring events, which have occurences in the future, show future
 occurences first and hide past occurences with javascript or so. Needs new
@@ -31,6 +30,7 @@ in RecurrenceSupport event adapter.
 OUT OF SCOPE FOR NOW - let P.Archetypes set the timezone regarding the timezone
 set in the request/user's browser.
 
+OK - Check dependencies in setup.py for every package
 OK - set start and end for wholedayevents to 0:00, resp, 23:59:59
          - test whole day event handler
 OK - check display of recurring events
