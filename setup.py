@@ -26,7 +26,6 @@ setup(name='plone.app.event',
           'setuptools',
           # -*- Extra requirements: -*-
           'Acquisition',
-          'ComputedAttribute',
           'DateTime',
           'Plone',
           'Products.Archetypes',
