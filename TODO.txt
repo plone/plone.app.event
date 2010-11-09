@@ -2,6 +2,7 @@ TODO
 ====
 
 - Check all packages for correct Licenses
+- Control dependencies in setup.py for every package
 - Add tests to ensure, DateRecurringIndex is actually installed.
 - upgrade step for portlets move into plone.app.event. see traceback http://pastebin.com/YFyCytXg
 - leave utils.txt with it's date conversion functions and test_bugs.py back in
