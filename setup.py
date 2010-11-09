@@ -29,7 +29,6 @@ setup(name='plone.app.event',
           'plone.app.portlets',
           'plone.event',
           'plone.formwidget.recurrence',
-          'python-dateutil',
           'setuptools',
       ],
       extras_require={
