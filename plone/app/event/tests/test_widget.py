@@ -3,7 +3,8 @@ tests = []
 
 from Products.Archetypes.tests.utils import makeContent
 from Products.Archetypes.tests.test_fields import FakeRequest
-from dateutil.rrule import YEARLY, MONTHLY, WEEKLY, DAILY
+
+TESTVALUE = "a testvalue"
 
 class WidgetTestCase(EventTestCase):
 
@@ -12,10 +13,10 @@ class WidgetTestCase(EventTestCase):
         doc = makeContent(self.folder, portal_type='Event', id='demoevent')
         field = doc.Schema()['recurrence']
         widget = field.widget
-        form = { 'recurrence': DAILY}
+        form = { 'recurrence': TESTVALUE}
         result = widget.process_form(doc, field, form)
         print result
-        assert result == (DAILY, {})
+        assert result == (TESTVALUE, {})
 tests.append(WidgetTestCase)
 
 import unittest
