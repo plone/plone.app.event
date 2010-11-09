@@ -355,7 +355,7 @@ def whole_day_handler(obj, event):
     23:59:59
 
     """
-    if not obj.whole_day: return
+    if not obj.whole_day(): return
     startDate = obj.startDate.Date() + ' 0:00:00 ' + obj.startDate.timezone()
     endDate = obj.endDate.Date() + ' 23:59:59 ' + obj.endDate.timezone()
     obj.startDate = DateTime(startDate)
