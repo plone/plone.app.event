@@ -21,7 +21,7 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
-from plone.event.tests.test_utils import FakeEvent
+from plone.event.tests.test_doctest import FakeEvent
 from plone.event.utils import pydt
 from plone.app.event import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
@@ -599,7 +599,7 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
 
     def _makeOne(self, start, end, whole_day=False):
-        event = FakeEvent(start, end, whole_day)
+        event = FakeEvent(start=start, end=end, whole_day=whole_day)
         # ulocalized_time need the REQUEST attribute
         event.REQUEST = self.portal.REQUEST
         return event
