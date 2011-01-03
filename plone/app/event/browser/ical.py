@@ -1,5 +1,4 @@
 from zope.publisher.browser import BrowserView
-from zope.component import getMultiAdapter
 from Acquisition import aq_inner
 
 from Products.ATContentTypes.interfaces import IATTopic
@@ -15,12 +14,12 @@ class EventsICal(BrowserView):
         data = self.getICal()
         if not data:
             return _(u"No events found.")
-        
+
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         self.request.RESPONSE.setHeader('Content-Disposition',
             'attachment; filename="%s"' % name)
-        
+
         # get iCal
         ical = IICalendar(self.context)
         data = u''.join([ical.header(), data, ical.footer()])
