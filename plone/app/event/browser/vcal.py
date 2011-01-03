@@ -1,5 +1,3 @@
-from cStringIO import StringIO
-
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
 from Acquisition import aq_inner
