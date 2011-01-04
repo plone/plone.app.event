@@ -27,7 +27,7 @@
       name="default"
       title="plone.app.event"
       directory="profiles/default"
-      description="Event implementation as proposed by PLIP 9302"
+      description="Plone event content type."
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
