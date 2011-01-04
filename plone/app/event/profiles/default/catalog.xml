@@ -5,14 +5,12 @@
   <extra name="start" value="start" />
   <extra name="recurdef" value="recurrence" />
   <extra name="until" value="" />
-  <extra name="dst" value="auto" />
  </index>
  <index name="end" meta_type="DateRecurringIndex">
   <extra name="recurrence_type" value="ical" />
   <extra name="start" value="start" />
   <extra name="recurdef" value="recurrence" />
   <extra name="until" value="" />
-  <extra name="dst" value="auto" />
  </index>
 
  <column value="start"/>
