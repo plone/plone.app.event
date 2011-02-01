@@ -9,7 +9,7 @@ function wholeDayHandler(e) {
 function updateEndDate() {
     var start_date = jQuery('#startDate').data('dateinput').getValue();
 //    var start_date = getDateTime('#archetypes-fieldname-startDate');
-    var new_end_date = new Date();
+    var new_end_date = new Date(start_date);
     new_end_date.setDate(start_date.getDate() + end_start_delta);
     jQuery('#endDate').data('dateinput').setValue(new_end_date);
 //    var end = jQuery('#archetypes-fieldname-endDate');
