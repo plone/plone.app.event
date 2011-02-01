@@ -1,0 +1,1077 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      dir="ltr" id="html">
+  <head>
+    <title>plone.app.event Test Suite</title>
+    
+    <!-- qUnit -->
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" 
+          media="screen" />
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+	
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js"></script>
+
+	    <!-- Tests -->
+    <script type="text/javascript" src="test_event.js"></script>
+
+  </head>
+
+  <body>
+    <h1 id="qunit-header">plone.app.event Test Suite</h1>
+
+    <h2 id="qunit-banner"></h2>
+
+    <div id="qunit-testrunner-toolbar">
+    </div>
+
+    <h2 id="qunit-userAgent"></h2>
+
+    <ol id="qunit-tests">
+    </ol>
+
+
+<div id="event">
+<div id="archetypes-fieldname-wholeDay" class="field ArchetypesBooleanWidget  kssattr-atfieldname-wholeDay">
+          
+        <input type="checkbox" id="wholeDay" name="wholeDay:boolean" value="on" class="noborder">
+        <input type="hidden" name="wholeDay:boolean:default" value="" originalvalue="">
+      
+          <label for="wholeDay" class="formQuestion">Whole day event</label>
+          
+          <div id="wholeDay_help" class="formHelp"></div>
+          
+          <div class="fieldErrorBox"></div>
+          <div></div>
+        </div>
+<div id="archetypes-fieldname-startDate" class="field Archetypes DatetimeWidget  kssattr-atfieldname-startDate">
+
+                <div class="fieldErrorBox"></div>
+                <div>
+    
+        <!-- day -->
+        <select name="startDate-day" id="startDate-day" class="day">
+            
+                <option value="1" selected="selected">01</option>
+            
+            
+                <option value="2">02</option>
+            
+            
+                <option value="3">03</option>
+            
+            
+                <option value="4">04</option>
+            
+            
+                <option value="5">05</option>
+            
+            
+                <option value="6">06</option>
+            
+            
+                <option value="7">07</option>
+            
+            
+                <option value="8">08</option>
+            
+            
+                <option value="9">09</option>
+            
+            
+                <option value="10">10</option>
+            
+            
+                <option value="11">11</option>
+            
+            
+                <option value="12">12</option>
+            
+            
+                <option value="13">13</option>
+            
+            
+                <option value="14">14</option>
+            
+            
+                <option value="15">15</option>
+            
+            
+                <option value="16">16</option>
+            
+            
+                <option value="17">17</option>
+            
+            
+                <option value="18">18</option>
+            
+            
+                <option value="19">19</option>
+            
+            
+                <option value="20">20</option>
+            
+            
+                <option value="21">21</option>
+            
+            
+                <option value="22">22</option>
+            
+            
+                <option value="23">23</option>
+            
+            
+                <option value="24">24</option>
+            
+            
+                <option value="25">25</option>
+            
+            
+                <option value="26">26</option>
+            
+            
+                <option value="27">27</option>
+            
+            
+                <option value="28">28</option>
+            
+            
+                <option value="29">29</option>
+            
+            
+                <option value="30">30</option>
+            
+            
+                <option value="31">31</option>
+            
+        </select>
+
+        <span class="separator">/</span>
+
+        <!-- month -->
+        <select class="month" name="startDate-month" id="startDate-month">
+        
+            <option value="1">January</option>
+        
+        
+            <option value="2" selected="selected">February</option>
+        
+        
+            <option value="3">March</option>
+        
+        
+            <option value="4">April</option>
+        
+        
+            <option value="5">May</option>
+        
+        
+            <option value="6">June</option>
+        
+        
+            <option value="7">July</option>
+        
+        
+            <option value="8">August</option>
+        
+        
+            <option value="9">September</option>
+        
+        
+            <option value="10">October</option>
+        
+        
+            <option value="11">November</option>
+        
+        
+            <option value="12">December</option>
+        
+        </select>
+
+        <span class="separator">/</span>
+
+        <!-- year -->
+        <select name="startDate-year" id="startDate-year" class="year">
+            
+                <option value="2000">2000</option>
+            
+            
+                <option value="2001">2001</option>
+            
+            
+                <option value="2002">2002</option>
+            
+            
+                <option value="2003">2003</option>
+            
+            
+                <option value="2004">2004</option>
+            
+            
+                <option value="2005">2005</option>
+            
+            
+                <option value="2006">2006</option>
+            
+            
+                <option value="2007">2007</option>
+            
+            
+                <option value="2008">2008</option>
+            
+            
+                <option value="2009">2009</option>
+            
+            
+                <option value="2010">2010</option>
+            
+            
+                <option value="2011" selected="selected">2011</option>
+            
+            
+                <option value="2012">2012</option>
+            
+            
+                <option value="2013">2013</option>
+            
+            
+                <option value="2014">2014</option>
+            
+            
+                <option value="2015">2015</option>
+            
+            
+                <option value="2016">2016</option>
+            
+            
+                <option value="2017">2017</option>
+            
+            
+                <option value="2018">2018</option>
+            
+            
+                <option value="2019">2019</option>
+            
+        </select>
+        &nbsp;
+        
+            <input type="hidden" class="startDate-calendar date" name="startDate-calendar" id="startDate" originalvalue=""><a href="#" class="caltrigger" style="width: 16px; vertical-align: middle; display: inline-block; background: url(&quot;popup_calendar.gif&quot;) repeat scroll 0% 0% transparent; height: 16px;"></a>
+            <script type="text/javascript">
+                jQuery.tools.dateinput.localize("en", {months: "January,February,March,April,May,June,July,August,September,October,November,December",shortMonths: "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",days: "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",shortDays: "Mon,Tue,Wed,Thu,Fri,Sat,Sun",});
+                jQuery(".startDate-calendar").dateinput({lang: "en", value: new Date(2011, 1, 1, 16, 41), change: function() {
+  var value = this.getValue();
+  var parent = jQuery(this.getInput()).closest("div.DatetimeWidget");
+  jQuery(parent).find(".year").val(value.getFullYear());
+  jQuery(parent).find(".month").val(value.getMonth()+1);
+  jQuery(parent).find(".day").val(value.getDate());
+}, selectors: true, trigger: true, yearRange: [-10, 10]}).unbind('change')
+                    .bind('onShow', function (event) {
+                        var trigger_offset = jQuery(this).next().offset();
+                        jQuery(this).data('dateinput').getCalendar().offset(
+                            {top: trigger_offset.top+20, left: trigger_offset.left}
+                        );
+                    });
+                jQuery(".startDate-calendar").next().css({'width': '16px', 'vertical-align': 'middle', 'display': 'inline-block', 'background': 'url(popup_calendar.gif)', 'height': '16px'});
+
+            </script>
+
+        
+            &nbsp;
+            <span style="" class="datetimewidget-time">
+
+                <!-- hour -->
+                <select name="startDate-hour" id="startDate-hour" class="hour">
+                    
+                        <option value="0">00</option>
+                    
+                    
+                        <option value="1">01</option>
+                    
+                    
+                        <option value="2">02</option>
+                    
+                    
+                        <option value="3">03</option>
+                    
+                    
+                        <option value="4">04</option>
+                    
+                    
+                        <option value="5">05</option>
+                    
+                    
+                        <option value="6">06</option>
+                    
+                    
+                        <option value="7">07</option>
+                    
+                    
+                        <option value="8">08</option>
+                    
+                    
+                        <option value="9">09</option>
+                    
+                    
+                        <option value="10">10</option>
+                    
+                    
+                        <option value="11">11</option>
+                    
+                    
+                        <option value="12">12</option>
+                    
+                    
+                        <option value="13">13</option>
+                    
+                    
+                        <option value="14">14</option>
+                    
+                    
+                        <option value="15">15</option>
+                    
+                    
+                        <option value="16" selected="selected">16</option>
+                    
+                    
+                        <option value="17">17</option>
+                    
+                    
+                        <option value="18">18</option>
+                    
+                    
+                        <option value="19">19</option>
+                    
+                    
+                        <option value="20">20</option>
+                    
+                    
+                        <option value="21">21</option>
+                    
+                    
+                        <option value="22">22</option>
+                    
+                    
+                        <option value="23">23</option>
+                    
+                </select>
+                
+                <!-- minute -->
+                <select name="startDate-min" id="startDate-min" class="min">
+                    
+                        <option value="0">00</option>
+                    
+                    
+                        <option value="1">01</option>
+                    
+                    
+                        <option value="2">02</option>
+                    
+                    
+                        <option value="3">03</option>
+                    
+                    
+                        <option value="4">04</option>
+                    
+                    
+                        <option value="5">05</option>
+                    
+                    
+                        <option value="6">06</option>
+                    
+                    
+                        <option value="7">07</option>
+                    
+                    
+                        <option value="8">08</option>
+                    
+                    
+                        <option value="9">09</option>
+                    
+                    
+                        <option value="10">10</option>
+                    
+                    
+                        <option value="11">11</option>
+                    
+                    
+                        <option value="12">12</option>
+                    
+                    
+                        <option value="13">13</option>
+                    
+                    
+                        <option value="14">14</option>
+                    
+                    
+                        <option value="15">15</option>
+                    
+                    
+                        <option value="16">16</option>
+                    
+                    
+                        <option value="17">17</option>
+                    
+                    
+                        <option value="18">18</option>
+                    
+                    
+                        <option value="19">19</option>
+                    
+                    
+                        <option value="20">20</option>
+                    
+                    
+                        <option value="21">21</option>
+                    
+                    
+                        <option value="22">22</option>
+                    
+                    
+                        <option value="23">23</option>
+                    
+                    
+                        <option value="24">24</option>
+                    
+                    
+                        <option value="25">25</option>
+                    
+                    
+                        <option value="26">26</option>
+                    
+                    
+                        <option value="27">27</option>
+                    
+                    
+                        <option value="28">28</option>
+                    
+                    
+                        <option value="29">29</option>
+                    
+                    
+                        <option value="30">30</option>
+                    
+                    
+                        <option value="31">31</option>
+                    
+                    
+                        <option value="32">32</option>
+                    
+                    
+                        <option value="33">33</option>
+                    
+                    
+                        <option value="34">34</option>
+                    
+                    
+                        <option value="35">35</option>
+                    
+                    
+                        <option value="36">36</option>
+                    
+                    
+                        <option value="37">37</option>
+                    
+                    
+                        <option value="38">38</option>
+                    
+                    
+                        <option value="39">39</option>
+                    
+                    
+                        <option value="40">40</option>
+                    
+                    
+                        <option value="41" selected="selected">41</option>
+                    
+                    
+                        <option value="42">42</option>
+                    
+                    
+                        <option value="43">43</option>
+                    
+                    
+                        <option value="44">44</option>
+                    
+                    
+                        <option value="45">45</option>
+                    
+                    
+                        <option value="46">46</option>
+                    
+                    
+                        <option value="47">47</option>
+                    
+                    
+                        <option value="48">48</option>
+                    
+                    
+                        <option value="49">49</option>
+                    
+                    
+                        <option value="50">50</option>
+                    
+                    
+                        <option value="51">51</option>
+                    
+                    
+                        <option value="52">52</option>
+                    
+                    
+                        <option value="53">53</option>
+                    
+                    
+                        <option value="54">54</option>
+                    
+                    
+                        <option value="55">55</option>
+                    
+                    
+                        <option value="56">56</option>
+                    
+                    
+                        <option value="57">57</option>
+                    
+                    
+                        <option value="58">58</option>
+                    
+                    
+                        <option value="59">59</option>
+                    
+                </select>
+
+                <!-- am/pm -->
+                
+
+            </span>
+
+        
+
+        <input type="hidden" value="1" name="startDate-empty-marker" originalvalue="1">
+
+        
+
+    </div>
+  </div>
+
+
+<div id="archetypes-fieldname-endDate" class="field Archetypes DatetimeWidget  kssattr-atfieldname-endDate">
+
+                <div class="fieldErrorBox"></div>
+                <div>
+    
+        <!-- day -->
+        <select name="endDate-day" id="endDate-day" class="day">
+            
+                <option value="1" selected="selected">01</option>
+            
+            
+                <option value="2">02</option>
+            
+            
+                <option value="3">03</option>
+            
+            
+                <option value="4">04</option>
+            
+            
+                <option value="5">05</option>
+            
+            
+                <option value="6">06</option>
+            
+            
+                <option value="7">07</option>
+            
+            
+                <option value="8">08</option>
+            
+            
+                <option value="9">09</option>
+            
+            
+                <option value="10">10</option>
+            
+            
+                <option value="11">11</option>
+            
+            
+                <option value="12">12</option>
+            
+            
+                <option value="13">13</option>
+            
+            
+                <option value="14">14</option>
+            
+            
+                <option value="15">15</option>
+            
+            
+                <option value="16">16</option>
+            
+            
+                <option value="17">17</option>
+            
+            
+                <option value="18">18</option>
+            
+            
+                <option value="19">19</option>
+            
+            
+                <option value="20">20</option>
+            
+            
+                <option value="21">21</option>
+            
+            
+                <option value="22">22</option>
+            
+            
+                <option value="23">23</option>
+            
+            
+                <option value="24">24</option>
+            
+            
+                <option value="25">25</option>
+            
+            
+                <option value="26">26</option>
+            
+            
+                <option value="27">27</option>
+            
+            
+                <option value="28">28</option>
+            
+            
+                <option value="29">29</option>
+            
+            
+                <option value="30">30</option>
+            
+            
+                <option value="31">31</option>
+            
+        </select>
+
+        <span class="separator">/</span>
+
+        <!-- month -->
+        <select class="month" name="endDate-month" id="endDate-month">
+        
+            <option value="1">January</option>
+        
+        
+            <option value="2" selected="selected">February</option>
+        
+        
+            <option value="3">March</option>
+        
+        
+            <option value="4">April</option>
+        
+        
+            <option value="5">May</option>
+        
+        
+            <option value="6">June</option>
+        
+        
+            <option value="7">July</option>
+        
+        
+            <option value="8">August</option>
+        
+        
+            <option value="9">September</option>
+        
+        
+            <option value="10">October</option>
+        
+        
+            <option value="11">November</option>
+        
+        
+            <option value="12">December</option>
+        
+        </select>
+
+        <span class="separator">/</span>
+
+        <!-- year -->
+        <select name="endDate-year" id="endDate-year" class="year">
+            
+                <option value="2000">2000</option>
+            
+            
+                <option value="2001">2001</option>
+            
+            
+                <option value="2002">2002</option>
+            
+            
+                <option value="2003">2003</option>
+            
+            
+                <option value="2004">2004</option>
+            
+            
+                <option value="2005">2005</option>
+            
+            
+                <option value="2006">2006</option>
+            
+            
+                <option value="2007">2007</option>
+            
+            
+                <option value="2008">2008</option>
+            
+            
+                <option value="2009">2009</option>
+            
+            
+                <option value="2010">2010</option>
+            
+            
+                <option value="2011" selected="selected">2011</option>
+            
+            
+                <option value="2012">2012</option>
+            
+            
+                <option value="2013">2013</option>
+            
+            
+                <option value="2014">2014</option>
+            
+            
+                <option value="2015">2015</option>
+            
+            
+                <option value="2016">2016</option>
+            
+            
+                <option value="2017">2017</option>
+            
+            
+                <option value="2018">2018</option>
+            
+            
+                <option value="2019">2019</option>
+            
+        </select>
+        &nbsp;
+        
+            <input type="hidden" class="endDate-calendar date" name="endDate-calendar" id="endDate" originalvalue=""><a href="#" class="caltrigger" style="width: 16px; vertical-align: middle; display: inline-block; background: url(&quot;popup_calendar.gif&quot;) repeat scroll 0% 0% transparent; height: 16px;"></a>
+            <script type="text/javascript">
+                jQuery.tools.dateinput.localize("en", {months: "January,February,March,April,May,June,July,August,September,October,November,December",shortMonths: "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",days: "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",shortDays: "Mon,Tue,Wed,Thu,Fri,Sat,Sun",});
+                jQuery(".endDate-calendar").dateinput({lang: "en", value: new Date(2011, 1, 1, 17, 41), change: function() {
+  var value = this.getValue();
+  var parent = jQuery(this.getInput()).closest("div.DatetimeWidget");
+  jQuery(parent).find(".year").val(value.getFullYear());
+  jQuery(parent).find(".month").val(value.getMonth()+1);
+  jQuery(parent).find(".day").val(value.getDate());
+}, selectors: true, trigger: true, yearRange: [-10, 10]}).unbind('change')
+                    .bind('onShow', function (event) {
+                        var trigger_offset = jQuery(this).next().offset();
+                        jQuery(this).data('dateinput').getCalendar().offset(
+                            {top: trigger_offset.top+20, left: trigger_offset.left}
+                        );
+                    });
+                jQuery(".endDate-calendar").next().css({'width': '16px', 'vertical-align': 'middle', 'display': 'inline-block', 'background': 'url(popup_calendar.gif)', 'height': '16px'});
+
+            </script>
+
+        
+            &nbsp;
+            <span style="" class="datetimewidget-time">
+
+                <!-- hour -->
+                <select name="endDate-hour" id="endDate-hour" class="hour">
+                    
+                        <option value="0">00</option>
+                    
+                    
+                        <option value="1">01</option>
+                    
+                    
+                        <option value="2">02</option>
+                    
+                    
+                        <option value="3">03</option>
+                    
+                    
+                        <option value="4">04</option>
+                    
+                    
+                        <option value="5">05</option>
+                    
+                    
+                        <option value="6">06</option>
+                    
+                    
+                        <option value="7">07</option>
+                    
+                    
+                        <option value="8">08</option>
+                    
+                    
+                        <option value="9">09</option>
+                    
+                    
+                        <option value="10">10</option>
+                    
+                    
+                        <option value="11">11</option>
+                    
+                    
+                        <option value="12">12</option>
+                    
+                    
+                        <option value="13">13</option>
+                    
+                    
+                        <option value="14">14</option>
+                    
+                    
+                        <option value="15">15</option>
+                    
+                    
+                        <option value="16">16</option>
+                    
+                    
+                        <option value="17" selected="selected">17</option>
+                    
+                    
+                        <option value="18">18</option>
+                    
+                    
+                        <option value="19">19</option>
+                    
+                    
+                        <option value="20">20</option>
+                    
+                    
+                        <option value="21">21</option>
+                    
+                    
+                        <option value="22">22</option>
+                    
+                    
+                        <option value="23">23</option>
+                    
+                </select>
+                
+                <!-- minute -->
+                <select name="endDate-min" id="endDate-min" class="min">
+                    
+                        <option value="0">00</option>
+                    
+                    
+                        <option value="1">01</option>
+                    
+                    
+                        <option value="2">02</option>
+                    
+                    
+                        <option value="3">03</option>
+                    
+                    
+                        <option value="4">04</option>
+                    
+                    
+                        <option value="5">05</option>
+                    
+                    
+                        <option value="6">06</option>
+                    
+                    
+                        <option value="7">07</option>
+                    
+                    
+                        <option value="8">08</option>
+                    
+                    
+                        <option value="9">09</option>
+                    
+                    
+                        <option value="10">10</option>
+                    
+                    
+                        <option value="11">11</option>
+                    
+                    
+                        <option value="12">12</option>
+                    
+                    
+                        <option value="13">13</option>
+                    
+                    
+                        <option value="14">14</option>
+                    
+                    
+                        <option value="15">15</option>
+                    
+                    
+                        <option value="16">16</option>
+                    
+                    
+                        <option value="17">17</option>
+                    
+                    
+                        <option value="18">18</option>
+                    
+                    
+                        <option value="19">19</option>
+                    
+                    
+                        <option value="20">20</option>
+                    
+                    
+                        <option value="21">21</option>
+                    
+                    
+                        <option value="22">22</option>
+                    
+                    
+                        <option value="23">23</option>
+                    
+                    
+                        <option value="24">24</option>
+                    
+                    
+                        <option value="25">25</option>
+                    
+                    
+                        <option value="26">26</option>
+                    
+                    
+                        <option value="27">27</option>
+                    
+                    
+                        <option value="28">28</option>
+                    
+                    
+                        <option value="29">29</option>
+                    
+                    
+                        <option value="30">30</option>
+                    
+                    
+                        <option value="31">31</option>
+                    
+                    
+                        <option value="32">32</option>
+                    
+                    
+                        <option value="33">33</option>
+                    
+                    
+                        <option value="34">34</option>
+                    
+                    
+                        <option value="35">35</option>
+                    
+                    
+                        <option value="36">36</option>
+                    
+                    
+                        <option value="37">37</option>
+                    
+                    
+                        <option value="38">38</option>
+                    
+                    
+                        <option value="39">39</option>
+                    
+                    
+                        <option value="40">40</option>
+                    
+                    
+                        <option value="41" selected="selected">41</option>
+                    
+                    
+                        <option value="42">42</option>
+                    
+                    
+                        <option value="43">43</option>
+                    
+                    
+                        <option value="44">44</option>
+                    
+                    
+                        <option value="45">45</option>
+                    
+                    
+                        <option value="46">46</option>
+                    
+                    
+                        <option value="47">47</option>
+                    
+                    
+                        <option value="48">48</option>
+                    
+                    
+                        <option value="49">49</option>
+                    
+                    
+                        <option value="50">50</option>
+                    
+                    
+                        <option value="51">51</option>
+                    
+                    
+                        <option value="52">52</option>
+                    
+                    
+                        <option value="53">53</option>
+                    
+                    
+                        <option value="54">54</option>
+                    
+                    
+                        <option value="55">55</option>
+                    
+                    
+                        <option value="56">56</option>
+                    
+                    
+                        <option value="57">57</option>
+                    
+                    
+                        <option value="58">58</option>
+                    
+                    
+                        <option value="59">59</option>
+                    
+                </select>
+
+                <!-- am/pm -->
+                
+
+            </span>
+
+        
+
+        <input type="hidden" value="1" name="endDate-empty-marker" originalvalue="1">
+
+        
+
+    </div>
+  </div>
+
+
+</div>
+    <!-- plone.app.event -->
+    <script type="text/javascript" src="../../browser/event.js">
+    </script>
+  </body>
+
+</html>
+
