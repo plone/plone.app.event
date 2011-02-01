@@ -1,58 +1,62 @@
-var $j = jQuery.noConflict();
-
 function wholeDayHandler(e) {
-    if (e.target.checked)
-        $j('.datetimewidget-time').fadeOut();
-    else
-        $j('.datetimewidget-time').fadeIn();
+    if (e.target.checked) {
+        jQuery('.datetimewidget-time').fadeOut();
+    } else {
+        jQuery('.datetimewidget-time').fadeIn();
+    }
 }
 
 function updateEndDate() {
-    var start = $j('#archetypes-fieldname-startDate');
-    var end = $j('#archetypes-fieldname-endDate');
-    var fields = ['month','day','year','hour','min'];
-    jq.each(fields,function(){
-        var val = jq(start).find("."+this).val();
-        jq(end).find("."+this).val(val);
+    var start_date = jQuery('#startDate').data('dateinput').getValue();
+//    var start_date = getDateTime('#archetypes-fieldname-startDate');
+    var new_end_date = new Date();
+    new_end_date.setDate(start_date.getDate() + end_start_delta);
+    jQuery('#endDate').data('dateinput').setValue(new_end_date);
+//    var end = jQuery('#archetypes-fieldname-endDate');
+//    jQuery(end).find(".hour").val(new_end_date.getHours());
+//    jQuery(end).find(".min").val(new_end_date.getMinutes());
+}
+
+function getDateTime(datetimewidget_id) {
+    var datetimewidget = jQuery(datetimewidget_id);
+    var fields = ['year', 'month', 'day', 'hour', 'min'];
+    var parts = {};
+    jQuery.each(fields, function(){
+        parts[this] = parseInt(jQuery(datetimewidget).find("."+this).val());
     });
+    var date = new Date(parts.year, parts.month - 1, parts.day,
+                        parts.hour, parts.min);
+    return date;
 }
 
 function validateEndDate() {
-    var start = $j('#archetypes-fieldname-startDate');
-    var end = $j('#archetypes-fieldname-endDate');
-    var fields = ['year','month','day','hour','min'];
-    var sdate = {};
-    var edate = {};
-    jq.each(fields,function(){
-        sdate[this] = parseInt( jq(start).find("."+this).val());
-    });
-    jq.each(fields,function(){
-        edate[this] = parseInt(jq(end).find("."+this).val());
-    });
+    var start_datetime = getDateTime('#archetypes-fieldname-startDate');
+    var end_datetime = getDateTime('#archetypes-fieldname-endDate');
 
-    var startdate = new Date(sdate.year,sdate.month,sdate.day,sdate.hour,sdate.min);
-    var enddate = new Date(edate.year,edate.month,edate.day,edate.hour,edate.min);
-
-    if(enddate < startdate){
-        $j('#archetypes-fieldname-endDate').addClass("error");
-    }else{
-        $j('#archetypes-fieldname-endDate').removeClass("error");
+    if(end_datetime < start_datetime) {
+        jQuery('#archetypes-fieldname-endDate').addClass("error");
+    } else {
+        jQuery('#archetypes-fieldname-endDate').removeClass("error");
     }
 }
 
 function initDelta(e) {
-    var start_date = $j('#startDate').datepicker('getDate');
-    var end_date = $j('#endDate').datepicker('getDate');
+    var start_datetime = getDateTime('#archetypes-fieldname-startDate');
+    var end_datetime = getDateTime('#archetypes-fieldname-endDate');
     // delta in days
-    end_start_delta = (end_date - start_date) / 1000 / (3600 * 24);
+    end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
 }
 
 var end_start_delta;
 
-$j(document).ready(function() {
+jQuery(document).ready(function() {
 
-    $j('#wholeDay').bind('change', wholeDayHandler);
-    $j('[id^=startDate]').change(updateEndDate);
-    $j('[id^=endDate]').change(validateEndDate);
+    jQuery('#wholeDay').bind('change', wholeDayHandler);
+    jQuery('[id^=startDate]').bind('focus', initDelta);
+    jQuery('[id^=endDate]').bind('focus', initDelta);
+    jQuery('#startDate').data('dateinput').onShow(initDelta);
+    jQuery('#endDate').data('dateinput').onShow(initDelta);
+    jQuery('[id^=startDate]').change(updateEndDate);
+    jQuery('[id^=endDate]').change(validateEndDate);
 
-})
+});
