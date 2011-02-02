@@ -11,7 +11,7 @@ TODO artsprint 2011
   remove schemata recurrence
   provide checkbox "this date recurrs ..." and toggle textarea then
 
-- datetimewidget calendar images missing...
+OK - datetimewidget calendar images missing...
 
 - calendar starting year, calendar future years options in datetimewidget
 
