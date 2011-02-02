@@ -6,10 +6,10 @@ TODO artsprint 2011
 
 - "no end date" option -> change boolean field "all_day" to list field "date_options" containing all_day and no_end_date
 
-- recurrence field goes after end date.
-  hide text area with css display:none
-  remove schemata recurrence
-  provide checkbox "this date recurrs ..." and toggle textarea then
+- [X] recurrence field goes after end date.
+  [ ] hide text area with css display:none
+  [X] remove schemata recurrence
+  [ ] provide checkbox "this date recurrs ..." and toggle textarea then
 
 OK - datetimewidget calendar images missing...
 
