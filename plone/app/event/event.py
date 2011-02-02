@@ -40,6 +40,7 @@ from plone.formwidget.recurrence.atwidget import RecurrenceWidget
 from plone.event.interfaces import IEvent, IRecurringEventICal
 from plone.event.utils import pydt
 
+
 def default_end_date():
     d = datetime.datetime.now() + datetime.timedelta(hours=1)
     return DateTime(d)
@@ -169,7 +170,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                      label=_(u'label_event_recurrence', default=u'Event Recurrence')
                      )),
 
-    ), marshall = RFC822Marshaller()
+    ), marshall=RFC822Marshaller()
     )
 
 # Repurpose the subject field for the event type
@@ -185,6 +186,7 @@ finalizeATCTSchema(ATEventSchema)
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='wholeDay')
 
+
 class ATEvent(ATCTContent, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
 
@@ -193,12 +195,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     portal_type = archetype_name = 'Event'
     _atct_newTypeFor = {'portal_type': 'CMF Event', 'meta_type': 'CMF Event'}
     assocMimetypes = ()
-    assocFileExt   = ('event', )
-    cmf_edit_kws   = ('effectiveDay', 'effectiveMo', 'effectiveYear',
-                      'expirationDay', 'expirationMo', 'expirationYear',
-                      'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
-                      'start_date', 'end_date', 'contact_name', 'contact_email',
-                      'contact_phone', 'event_url')
+    assocFileExt = ('event', )
+    cmf_edit_kws = ('effectiveDay', 'effectiveMo', 'effectiveYear',
+                    'expirationDay', 'expirationMo', 'expirationYear',
+                    'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
+                    'start_date', 'end_date', 'contact_name', 'contact_email',
+                    'contact_phone', 'event_url')
 
     implements(IEvent, IRecurringEventICal, IATEvent, ICalendarSupport)
 
@@ -355,9 +357,10 @@ def whole_day_handler(obj, event):
     23:59:59
 
     """
-    if not obj.whole_day(): return
+    if not obj.whole_day():
+        return
     startDate = obj.startDate.Date() + ' 0:00:00 ' + obj.startDate.timezone()
     endDate = obj.endDate.Date() + ' 23:59:59 ' + obj.endDate.timezone()
     obj.startDate = DateTime(startDate)
     obj.endDate = DateTime(endDate)
-    obj.reindexObject() # reindex obj to store upd values in catalog
+    obj.reindexObject()  # reindex obj to store upd values in catalog
