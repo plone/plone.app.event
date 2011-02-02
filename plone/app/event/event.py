@@ -160,7 +160,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     )),
 
     RecurrenceField('recurrence',
-                 schemata='recurrence',
                  storage=AnnotationStorage(),
                  languageIndependent=True,
                  write_permission=ModifyPortalContent,
@@ -185,6 +184,7 @@ finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='wholeDay')
+ATEventSchema.moveField('recurrence', after='endDate')
 
 
 class ATEvent(ATCTContent, HistoryAwareMixin):
