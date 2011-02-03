@@ -16,8 +16,9 @@ class IEventSettings(Interface):
                 default=u"The timezone setting of the portal. Users can set "
                          "their own timezone, if available timezones are defined."),
             required=True,
-            default=getUtility(ITimezoneGetter,
-                'FallbackTimezoneGetter')().timezone,
+            default=u'',
+            #default=getUtility(ITimezoneGetter,
+            #    'FallbackTimezoneGetter')().timezone,
             vocabulary="TimezoneVocabulary"
             )
 
