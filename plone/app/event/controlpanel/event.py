@@ -2,6 +2,8 @@ from zope import schema
 from zope.interface import Interface
 from plone.app.registry.browser import controlpanel
 from plone.app.event import messageFactory as _
+from zope.component import getUtility
+from plone.event.interfaces import ITimezoneGetter
 
 
 class IEventSettings(Interface):
@@ -14,7 +16,8 @@ class IEventSettings(Interface):
                 default=u"The timezone setting of the portal. Users can set "
                          "their own timezone, if available timezones are defined."),
             required=True,
-            default=u"",
+            default=getUtility(ITimezoneGetter,
+                'DefaultTimezoneGetter')().timezone,
             vocabulary="TimezoneVocabulary"
             )
 
