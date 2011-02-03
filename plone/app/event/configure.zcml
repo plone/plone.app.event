@@ -10,10 +10,12 @@
   <include package="plone.formwidget.recurrence" />
   <include package="archetypes.datetimewidget" />
   <include package="plone.app.portlets" />
+  <include package="plone.app.registry" />
 
   <five:registerPackage package="." initialize=".initialize" />
 
   <include package=".browser" />
+  <include package=".controlpanel" />
   <include package=".portlets" />
 
   <subscriber for="Products.ATContentTypes.interfaces.IATEvent

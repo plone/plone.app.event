@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<object
+    name="portal_controlpanel"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="plone"
+    purge="False">
+
+    <configlet
+        title="Event Settings"
+        action_id="plone.app.event"
+        appId="plone.app.event"
+        category="Plone"
+        condition_expr=""
+        url_expr="string:${portal_url}/@@event-settings"
+        visible="True"
+        i18n:attributes="title">
+            <permission>Manage portal</permission>
+    </configlet>
+
+</object>
