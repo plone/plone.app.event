@@ -25,6 +25,11 @@
                    Products.Archetypes.interfaces.IObjectEditedEvent"
               handler=".event.whole_day_handler" />
 
+  <utility
+      component=".timezone.AvailableTimezonesVocabulary"
+      name="AvailableTimezonesVocabulary"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="plone.app.event"
