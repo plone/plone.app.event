@@ -17,7 +17,7 @@ class IEventSettings(Interface):
                          "their own timezone, if available timezones are defined."),
             required=True,
             default=getUtility(ITimezoneGetter,
-                'DefaultTimezoneGetter')().timezone,
+                'FallbackTimezoneGetter')().timezone,
             vocabulary="TimezoneVocabulary"
             )
 
