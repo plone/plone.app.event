@@ -16,7 +16,9 @@ import plone.app.event
 def load_zcml(doctest_context):
     context = xmlconfig.file('meta.zcml', zope.component)
     xmlconfig.file('configure.zcml', zope.component, context=context)
-    xmlconfig.file('configure.zcml', plone.app.event, context=context)
+    xmlconfig.file('configure.zcml', plone.event, context=context)
+    xmlconfig.file('controlpanel/configure.zcml', plone.app.event, context=context)
+    xmlconfig.file('timezone.zcml', plone.app.event, context=context)
 
 def test_suite():
     suite = unittest.TestSuite()
