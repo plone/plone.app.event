@@ -28,7 +28,7 @@ class IEventSettings(Interface):
                 default=u"The timezones, which should be available for the portal. "
                          "Can be set for users and events"),
             required=False,
-            default=None,
+            default=[],
             value_type=schema.Choice(
                 vocabulary="TimezoneVocabulary"
                 )
