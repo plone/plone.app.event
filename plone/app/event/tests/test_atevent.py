@@ -17,6 +17,8 @@ from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 
 from DateTime import DateTime
 
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
@@ -638,6 +640,31 @@ class TestATEventFields(EventFieldTestCase):
                  'same_day' : False,
                  'same_time' : False,
                 })
+
+    def testWholeDayEventSubscriber(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event", startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00',
+                wholeDay=True)
+        event = self.portal[event_id]
+        self.assertEqual(event.startDate.Time(), '06:00:00')
+        self.assertEqual(event.endDate.Time(), '18:00:00')
+        self.assertTrue(event.whole_day())
+        notify(ObjectModifiedEvent(event))
+        self.assertEqual(event.startDate.Time(), '00:00:00')
+        self.assertEqual(event.endDate.Time(), '23:59:59')
+
+    def testWholeDayEventSubscriberNotWholeDayEvent(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event", startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00')
+        event = self.portal[event_id]
+        self.assertEqual(event.startDate.Time(), '06:00:00')
+        self.assertEqual(event.endDate.Time(), '18:00:00')
+        self.assertFalse(event.whole_day())
+        notify(ObjectModifiedEvent(event))
+        self.assertEqual(event.startDate.Time(), '06:00:00')
+        self.assertEqual(event.endDate.Time(), '18:00:00')
 
 
 tests.append(TestATEventFields)
