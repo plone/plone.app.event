@@ -91,6 +91,16 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                       with_time=1,
                       )),
 
+    RecurrenceField('recurrence',
+                 storage=AnnotationStorage(),
+                 languageIndependent=True,
+                 write_permission=ModifyPortalContent,
+                 widget=RecurrenceWidget(
+                     description=_(u'help_event_recurrence',
+                                   default='Enter recurrence rules, one per line.'),
+                     label=_(u'label_event_recurrence', default=u'Event Recurrence')
+                     )),
+
     TextField('text',
               required=False,
               searchable=True,
@@ -159,16 +169,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     label=_(u'label_contact_phone', default=u'Contact Phone')
                     )),
 
-    RecurrenceField('recurrence',
-                 storage=AnnotationStorage(),
-                 languageIndependent=True,
-                 write_permission=ModifyPortalContent,
-                 widget=RecurrenceWidget(
-                     description=_(u'help_event_recurrence',
-                                   default='Enter recurrence rules, one per line.'),
-                     label=_(u'label_event_recurrence', default=u'Event Recurrence')
-                     )),
-
     ), marshall=RFC822Marshaller()
     )
 
@@ -184,7 +184,6 @@ finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='wholeDay')
-ATEventSchema.moveField('recurrence', after='endDate')
 
 
 class ATEvent(ATCTContent, HistoryAwareMixin):
