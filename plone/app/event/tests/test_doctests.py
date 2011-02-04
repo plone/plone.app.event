@@ -1,43 +1,24 @@
-import unittest
+import unittest2 as unittest
 import doctest
-from interlude import interact
 
-OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+from plone.testing import layered
+from plone.app.event.testing import TIMEZONE_LAYER
+
 DOCFILES = [
     '../recurrence.txt',
 ]
-DOCMODS = [
-    'plone.app.event.timezone',
-]
-
-from zope.configuration import xmlconfig
-import zope.component
-import plone.app.event
-def load_zcml(doctest_context):
-    context = xmlconfig.file('meta.zcml', zope.component)
-    xmlconfig.file('configure.zcml', zope.component, context=context)
-    xmlconfig.file('configure.zcml', plone.event, context=context)
-    xmlconfig.file('controlpanel/configure.zcml', plone.app.event, context=context)
-    xmlconfig.file('timezone.zcml', plone.app.event, context=context)
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([
         doctest.DocFileSuite(
             docfile,
-            optionflags=OPTIONFLAGS,
-            globs={#'interact': interact,
-                },
+            optionflags=doctest.ELLIPSIS,
         ) for docfile in DOCFILES
     ])
     suite.addTests([
-        doctest.DocTestSuite(docmod,
-                             setUp=load_zcml,
-                             optionflags=OPTIONFLAGS,
-                             globs={'interact': interact, }
-                             ) for docmod in DOCMODS
+        layered(doctest.DocTestSuite(
+                    'plone.app.event.timezone',
+                    optionflags=doctest.ELLIPSIS),
+                layer = TIMEZONE_LAYER),
     ])
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
