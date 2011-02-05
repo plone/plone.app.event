@@ -18,6 +18,7 @@ from Products.Archetypes.atapi import LinesWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import SelectionWidget
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import TextField
@@ -37,14 +38,20 @@ from plone.app.event.config import PROJECTNAME
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.recurrence import RecurrenceField
 from plone.formwidget.recurrence.atwidget import RecurrenceWidget
-from plone.event.interfaces import IEvent, IRecurringEventICal
+from plone.event.interfaces import (
+    IEvent,
+    IRecurringEventICal,
+    ITimezoneGetter)
 from plone.event.utils import pydt
+from zope.component import getUtility
 
 
 def default_end_date():
     d = datetime.datetime.now() + datetime.timedelta(hours=1)
     return DateTime(d)
 
+def default_timezone():
+    return getUtility(ITimezoneGetter)().timezone
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
@@ -90,6 +97,20 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                       label=_(u'label_event_end', default=u'Event Ends'),
                       with_time=1,
                       )),
+
+    StringField('timezone',
+                required=True,
+                searchable=False,
+                languageIndependent=True,
+                vocabulary_factory=u"AvailableTimezonesVocabulary",
+                enforceVocabulary=True,
+                default_method=default_timezone,
+                widget=SelectionWidget(
+                    label = _(u"Timezone"),
+                    description = _(
+                        u'label_timezone',
+                        default=u"Select the Timezone, where this event happens."),
+                    )),
 
     RecurrenceField('recurrence',
                  storage=AnnotationStorage(),
