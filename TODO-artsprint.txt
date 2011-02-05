@@ -24,17 +24,18 @@ OK - datetimewidget calendar images missing...
 
 - provide plone.formwidget.timezone widget for TZ field described above
 
-- provide configlet to configure portal's TZ. use dropdown for default_timezone and in-out-widget for allowed_timezones (which then are used to filter tz's with elephantvocabulary)
+OK- provide configlet to configure portal's TZ. use dropdown for default_timezone and in-out-widget for allowed_timezones (which then are used to filter tz's with elephantvocabulary)
 
 - eventually provide configlet to configure TZ per user
 
-- plone.event -> TZ vocabulary
-- plone.app.event -> TZ vocabulary based on elephantvocabulary filter
+OK- plone.event -> TZ vocabulary
+OK- plone.app.event -> TZ vocabulary based on elephantvocabulary filter
     get filtered items or display items from plone.registry
 
-- TZ fetcher utility
+OK- TZ fetcher utility
   OK - plone.event: OS TZ
-  - plone.app.event: context, user, portal TZ
+  OK- plone.app.event portal TZ
+  - context, user, portal TZ
 
 - recurrence widget
 
