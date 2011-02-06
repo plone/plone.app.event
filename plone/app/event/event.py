@@ -308,6 +308,49 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             errors['endDate'] = _(u'error_end_must_be_after_start_date',
                                   default=u'End date must be after start date.')
 
+
+    def _dt_getter(self, field):
+        # always get the date in event's timezone
+        timezone = self.getField('timezone').get(self)
+        dt = self.getField(field).get(self)
+        # TODO: remove that print statement
+        print("get %s: %s" % (field, dt.toZone(timezone)))
+        return dt.toZone(timezone)
+
+    def _dt_setter(self, field, value):
+        # always set the date in UTC
+        timezone = self.getField('timezone').get(self)
+        if not isinstance(value, DateTime): value = DateTime(value)
+        value = DateTime(
+                value.year(),
+                value.month(),
+                value.day(),
+                value.hour(),
+                value.minute(),
+                value.second(),
+                timezone)
+        value = value.toZone('UTC')
+        self.getField(field).set(self, value)
+        # TODO: remove that print statement
+        print("set %s: %s" % (field, value))
+        #self.reindexObject()
+
+    security.declareProtected('View', 'start')
+    def start(self):
+        return self._dt_getter('startDate')
+
+    security.declareProtected('View', 'end')
+    def end(self):
+        return self._dt_getter('endDate')
+
+    security.declareProtected(ModifyPortalContent, 'setStartDate')
+    def setStartDate(self, value):
+        self._dt_setter('startDate', value)
+
+    security.declareProtected(ModifyPortalContent, 'setEndDate')
+    def setEndDate(self, value):
+        self._dt_setter('endDate', value)
+
     def _start_date(self):
         value = self['startDate']
         if value is None:
