@@ -19,8 +19,8 @@ OK - datetimewidget calendar images missing...
 
 - document TZ behavior with examples
 
-- new TZ field on ATEvent. store all dates in UTC timezone. store TZ extra. display dates in user's timezone (via TZ fetcher utility). use getter and setter to calculate timezones 
-(get: UTC-userTZ set: userTZ->UTC). allow no TZ setting on content context at all - this solves "world plone day" problem (event in different timezones, whole day in every timezone)
+OK - new TZ field on ATEvent. store all dates in UTC timezone. store TZ extra. display dates in user's timezone (via TZ fetcher utility). use getter and setter to calculate timezones (get: UTC-userTZ set: userTZ->UTC).
+- allow no TZ setting on content context at all - this solves "world plone day" problem (event in different timezones, whole day in every timezone)
 
 - provide plone.formwidget.timezone widget for TZ field described above
 
