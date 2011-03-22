@@ -314,7 +314,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
         # TODO: remove that print statement
-        print("get %s: %s" % (field, dt.toZone(timezone)))
+#        print("get %s: %s" % (field, dt.toZone(timezone)))
         return dt.toZone(timezone)
 
     def _dt_setter(self, field, value):
@@ -332,7 +332,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         value = value.toZone('UTC')
         self.getField(field).set(self, value)
         # TODO: remove that print statement
-        print("set %s: %s" % (field, value))
+#        print("set %s: %s" % (field, value))
         #self.reindexObject()
 
     security.declareProtected('View', 'start')
