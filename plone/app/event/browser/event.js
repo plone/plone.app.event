@@ -54,8 +54,12 @@ jQuery(document).ready(function() {
     jQuery('#wholeDay').bind('change', wholeDayHandler);
     jQuery('[id^=startDate]').bind('focus', initDelta);
     jQuery('[id^=endDate]').bind('focus', initDelta);
-    jQuery('#startDate').data('dateinput').onShow(initDelta);
-    jQuery('#endDate').data('dateinput').onShow(initDelta);
+    jQuery('#startDate').each(function(){
+        jQuery(this).data('dateinput').onShow(initDelta);
+    });
+    jQuery('#endDate').each(function(){
+        jQuery(this).data('dateinput').onShow(initDelta);
+    });
     jQuery('[id^=startDate]').change(updateEndDate);
     jQuery('[id^=endDate]').change(validateEndDate);
 
