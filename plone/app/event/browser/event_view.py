@@ -45,6 +45,8 @@ def toDisplay(event):
                  start_time=start_time,
                  end_date=end_date,
                  end_time=end_time,
+                 start_iso=event.start().ISO8601(),
+                 end_iso=event.end().ISO8601(),
                  same_day=same_day,
                  same_time=same_time)
 
@@ -63,6 +65,8 @@ class EventView(BrowserView):
                 end_date = ulocalized_time(event['end_date'], False, time_only=None, context=self.context),
                 start_time = ulocalized_time(event['start_date'], False, time_only=True, context=self.context),
                 end_time = ulocalized_time(event['end_date'], False, time_only=True, context=self.context),
+                start_iso = event['start_date'].isoformat(),
+                end_iso = event['end_date'].isoformat(),
                 same_day = event['start_date'].date() == event['end_date'].date(),
                 same_time = event['start_date'].time() == event['end_date'].time(),
             ), recur.occurences())

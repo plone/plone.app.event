@@ -40,7 +40,7 @@
                                                   templateId=templateId, macro='startdate-field-view');"
                                       id="parent-fieldname-startDate"
                                       tal:attributes="class string:$kss_class dtstart;
-                                                      title python:context.start().ISO8601()">
+                                                      title date_dict/start_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/start_date">Start Date</span>
@@ -58,7 +58,7 @@
                                                   templateId=templateId, macro='enddate-field-view');"
                                       id="parent-fieldname-endDate"
                                       tal:attributes="class string:$kss_class dtend;
-                                                      title python:context.end().ISO8601()">
+                                                      title date_dict/end_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/end_date">End Date</span>
@@ -87,7 +87,7 @@
                                                   templateId=templateId, macro='startdatesame-field-view');"
                                       id="parent-fieldname-startDate"
                                       tal:attributes="class string:$kss_class dtstart;
-                                                      title python:context.start().ISO8601()"
+                                                      title date_dict/start_iso"
                                       i18n:name="starttime">
                                       <span metal:define-slot="inside"
                                             class="explain"
@@ -98,7 +98,7 @@
                                                   templateId=templateId, macro='enddatesame-field-view');"
                                       id="parent-fieldname-endDate"
                                       tal:attributes="class string:$kss_class dtend;
-                                                      title python:context.end().ISO8601()"
+                                                      title date_dict/end_iso"
                                       i18n:name="endtime">
                                       <span metal:define-slot="inside"
                                             class="explain"
