@@ -319,6 +319,10 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     def _dt_setter(self, field, value):
         # always set the date in UTC
+        # TODO timezone field is not already handled by the add form,
+        # so we get the default timezone :(
+        # TODO the endDate and startDate should be updated if the timezone
+        # of the event change.
         timezone = self.getField('timezone').get(self)
         if not isinstance(value, DateTime): value = DateTime(value)
         value = DateTime(
@@ -352,7 +356,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         self._dt_setter('endDate', value)
 
     def _start_date(self):
-        value = self['startDate']
+        value = self['startDate']  # This call the accessor.
         if value is None:
             value = self['creation_date']
         return pydt(value)
