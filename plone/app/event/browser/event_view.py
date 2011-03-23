@@ -41,6 +41,9 @@ def toDisplay(event):
     if event.whole_day():
         start_time = end_time = None
 
+    # TODO convert start_date, start_time, end_date, end_time
+    # to user or portal timezone. Don't convert iso.
+
     return  dict(start_date=start_date,
                  start_time=start_time,
                  end_date=end_date,
@@ -58,6 +61,8 @@ class EventView(BrowserView):
 
     @property
     def occurrences(self):
+        # TODO convert start_date, start_time, end_date, end_time
+        # to user or portal timezone. Don't convert iso.
         recur = IRecurrenceSupport(self.context)
         events = map(
             lambda event:dict(
