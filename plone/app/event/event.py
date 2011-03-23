@@ -421,8 +421,10 @@ def whole_day_handler(obj, event):
     """
     if not obj.whole_day():
         return
-    startDate = obj.startDate.Date() + ' 0:00:00 ' + obj.startDate.timezone()
-    endDate = obj.endDate.Date() + ' 23:59:59 ' + obj.endDate.timezone()
-    obj.startDate = DateTime(startDate)
-    obj.endDate = DateTime(endDate)
+    startDate = obj.startDate.toZone(obj.timezone)
+    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
+    endDate = obj.endDate.toZone(obj.timezone)
+    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
+    obj.setStartDate(DateTime(startDate))
+    obj.setEndDate(DateTime(endDate))
     obj.reindexObject()  # reindex obj to store upd values in catalog

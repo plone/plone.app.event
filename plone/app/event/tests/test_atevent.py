@@ -1,8 +1,7 @@
-import plone.app.event.tests.base
+import os
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 
-import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFPlone.utils import safe_unicode
@@ -17,6 +16,7 @@ from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 
 from DateTime import DateTime
 
+from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.verify import verifyObject
@@ -25,6 +25,7 @@ from zope.publisher.browser import TestRequest
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.event.tests.test_doctest import FakeEvent
 from plone.event.utils import pydt
+from plone.event.interfaces import ITimezoneGetter
 from plone.app.event import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
@@ -611,8 +612,10 @@ class TestATEventFields(EventFieldTestCase):
         self.assertEqual(toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : '06:00 AM',
+                 'start_iso': '2000-10-12T06:00:00',
                  'end_date' : 'Oct 12, 2000',
                  'end_time' : '06:00 PM',
+                 'end_iso': '2000-10-12T18:00:00',
                  'same_day' : True,
                  'same_time' : False,
                 })
@@ -623,8 +626,10 @@ class TestATEventFields(EventFieldTestCase):
         self.assertEqual(toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
+                 'start_iso': '2000-10-12T06:00:00',
                  'end_date' : 'Oct 12, 2000',
                  'end_time' : None,
+                 'end_iso': '2000-10-12T18:00:00',
                  'same_day' : True,
                  'same_time' : False,
                 })
@@ -635,36 +640,44 @@ class TestATEventFields(EventFieldTestCase):
         self.assertEqual(toDisplay(event),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
+                 'start_iso': '2000-10-12T06:00:00',
                  'end_date' : 'Oct 13, 2000',
                  'end_time' : None,
+                 'end_iso': '2000-10-13T18:00:00',
                  'same_day' : False,
                  'same_time' : False,
                 })
 
     def testWholeDayEventSubscriber(self):
+        os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
-                id="event", startDate='2000/10/12 06:00:00',
+                id="event",
+                startDate='2000/10/12 06:00:00',
                 endDate='2000/10/13 18:00:00',
+                timezone="Europe/Vienna",
                 wholeDay=True)
         event = self.portal[event_id]
-        self.assertEqual(event.startDate.Time(), '06:00:00')
-        self.assertEqual(event.endDate.Time(), '18:00:00')
+        self.assertEqual(event.start().Time(), '06:00:00')
+        self.assertEqual(event.end().Time(), '18:00:00')
         self.assertTrue(event.whole_day())
         notify(ObjectModifiedEvent(event))
-        self.assertEqual(event.startDate.Time(), '00:00:00')
-        self.assertEqual(event.endDate.Time(), '23:59:59')
+        self.assertEqual(event.start().Time(), '00:00:00')
+        self.assertEqual(event.end().Time(), '23:59:59')
 
     def testWholeDayEventSubscriberNotWholeDayEvent(self):
+        os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
-                id="event", startDate='2000/10/12 06:00:00',
-                endDate='2000/10/13 18:00:00')
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00',
+                timezone="Europe/Vienna")
         event = self.portal[event_id]
-        self.assertEqual(event.startDate.Time(), '06:00:00')
-        self.assertEqual(event.endDate.Time(), '18:00:00')
+        self.assertEqual(event.start().Time(), '06:00:00')
+        self.assertEqual(event.end().Time(), '18:00:00')
         self.assertFalse(event.whole_day())
         notify(ObjectModifiedEvent(event))
-        self.assertEqual(event.startDate.Time(), '06:00:00')
-        self.assertEqual(event.endDate.Time(), '18:00:00')
+        self.assertEqual(event.start().Time(), '06:00:00')
+        self.assertEqual(event.end().Time(), '18:00:00')
 
 
 tests.append(TestATEventFields)
