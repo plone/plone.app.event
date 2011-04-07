@@ -2,6 +2,7 @@
 <metadata>
   <version>7</version>
   <dependencies>
+    <dependency>profile-plone.app.registry:default</dependency>
     <dependency>profile-archetypes.datetimewidget:default</dependency>
   </dependencies>
 </metadata>
