@@ -1,6 +1,10 @@
 TODO artsprint 2011
 ===================
 
+- on fresh install, creating an event - timezones can not be selected but are
+  mandatory. at least a default timezone has to be selected in the
+  event-settings configlet. that should be set at install time.
+
 - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
   plone.formwidget.datetime
 
@@ -44,4 +48,10 @@ OK- TZ fetcher utility
 - complete the benchmark products.daterecurringindex
   sync with hanno's changes to dateindex
 
+
+migration steps
+---------------
+- default timezone - set via event-settings configlet
 - migration from old ATEvent
+
+
