@@ -6,7 +6,6 @@ from DateTime import DateTime
 from plone.memoize import ram
 from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.interfaces import IATTopic
-from Products.CMFCore.utils import getToolByName
 
 from plone.event.interfaces import IEvent
 from plone.event.utils import rfc2445dt, vformat, foldline, dateStringsForEvent
@@ -34,7 +33,6 @@ class EventsVCal(BrowserView):
 
     def update(self):
         context = aq_inner(self.context)
-        catalog = getToolByName(context, 'portal_catalog')
         query = {'object_provides':IEvent.__identifier__}
         if not IATTopic.providedBy(context):
             query['path'] = '/'.join(context.getPhysicalPath())
