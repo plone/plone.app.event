@@ -63,17 +63,18 @@ class EventView(BrowserView):
     def occurrences(self):
         # TODO convert start_date, start_time, end_date, end_time
         # to user or portal timezone. Don't convert iso.
-        recur = IRecurrenceSupport(self.context)
+        context = self.context
+        recur = IRecurrenceSupport(context)
         events = map(
-            lambda event:dict(
-                start_date = ulocalized_time(event['start_date'], False, time_only=None, context=self.context),
-                end_date = ulocalized_time(event['end_date'], False, time_only=None, context=self.context),
-                start_time = ulocalized_time(event['start_date'], False, time_only=True, context=self.context),
-                end_time = ulocalized_time(event['end_date'], False, time_only=True, context=self.context),
-                start_iso = event['start_date'].isoformat(),
-                end_iso = event['end_date'].isoformat(),
-                same_day = event['start_date'].date() == event['end_date'].date(),
-                same_time = event['start_date'].time() == event['end_date'].time(),
-            ), recur.occurences())
+            lambda start, end:dict(
+                start_date = ulocalized_time(start, False, time_only=None, context=context),
+                end_date = ulocalized_time(end, False, time_only=None, context=context),
+                start_time = ulocalized_time(start, False, time_only=True, context=context),
+                end_time = ulocalized_time(end, False, time_only=True, context=context),
+                start_iso = start.isoformat(),
+                end_iso = end.isoformat(),
+                same_day = start.date() == end.date(),
+                same_time = start.time() == end.time(),
+            ), recur.occurences_start(), recur.occurences_end())
 
         return events
