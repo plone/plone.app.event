@@ -1,6 +1,13 @@
 TODO artsprint 2011
 ===================
 
+- isSameDay, isSameTime -... taking event as parameter. change to date1, date2
+- toDisplay, doing nearly the same as function below. factor out a to_display
+function which can used in both
+- fix portal_calendar or filtered occurences. calendar portlet is showing event
+  from previous month every day.
+- avoid dependency on portal_calendar or bring that tool in here.
+
 bugs
 ----
 - on fresh install, creating an event - timezones can not be selected but are
