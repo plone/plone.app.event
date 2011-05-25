@@ -67,6 +67,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 accessor='whole_day',
                 write_permission=ModifyPortalContent,
+                languageIndependent=True,
                 widget=BooleanWidget(
                     description='',
                     label=_(u'label_whole_day_event', u'Whole day event'),
@@ -317,7 +318,10 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 #        print("get %s: %s" % (field, dt.toZone(timezone)))
         return dt.toZone(timezone)
 
-    def _dt_setter(self, field, value):
+    def _dt_setter(self, fieldtoset, value, **kwargs):
+        # The name of the first parameter shouldn't be field, because
+        # it's already in kwargs in some case.
+        #
         # always set the date in UTC
         # TODO timezone field is not already handled by the add form,
         # so we get the default timezone :(
@@ -334,7 +338,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                 value.second(),
                 timezone)
         value = value.toZone('UTC')
-        self.getField(field).set(self, value)
+        self.getField(fieldtoset).set(self, value, **kwargs)
         # TODO: remove that print statement
 #        print("set %s: %s" % (field, value))
         #self.reindexObject()
@@ -348,12 +352,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         return self._dt_getter('endDate')
 
     security.declareProtected(ModifyPortalContent, 'setStartDate')
-    def setStartDate(self, value):
-        self._dt_setter('startDate', value)
+    def setStartDate(self, value, **kwargs):
+        self._dt_setter('startDate', value, **kwargs)
 
     security.declareProtected(ModifyPortalContent, 'setEndDate')
-    def setEndDate(self, value):
-        self._dt_setter('endDate', value)
+    def setEndDate(self, value, **kwargs):
+        self._dt_setter('endDate', value, **kwargs)
 
     def _start_date(self):
         value = self['startDate']  # This call the accessor.
