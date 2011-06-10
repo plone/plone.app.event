@@ -1,42 +1,32 @@
 TODO artsprint 2011
 ===================
 
-- isSameDay, isSameTime -... taking event as parameter. change to date1, date2
-- toDisplay, doing nearly the same as function below. factor out a to_display
-function which can used in both
-- fix portal_calendar or filtered occurences. calendar portlet is showing event
-  from previous month every day.
-- avoid dependency on portal_calendar or bring that tool in here.
+always
+------
+- merge branches with trunk
 
 bugs
 ----
-- on fresh install, creating an event - timezones can not be selected but are
-  mandatory. at least a default timezone has to be selected in the
-  event-settings configlet. that should be set at install time.
+- on fresh install, when creating an event - no timezones are configured and
+  cannot be selected - but are mandatory. at least a default timezone has to
+  be selected in the event-settings configlet. that should be set at install
+  time.
+
+
+datetimewidget
+--------------
+- calendar starting year, calendar future years options in datetimewidget.
+
+recurrence widget
+-----------------
+- recurrence widget.
 
 portlet stuff
 -------------
 - calendar portlet should use jquery tools calendar. maybe construct portlet,
   so that a viewlet can also use calendar via metal:macros.
-
-datetimewidget
---------------
-- calendar starting year, calendar future years options in datetimewidget
-
-recurrence widget
------------------
-- recurrence widget
-
-ATEvent
--------
-- error when submitting random data to recurrence field. catch dateutil's
-  error and raise validation error. display error as error message.
-- "no end date" option -> change boolean field "all_day" to list field
-  "date_options" containing all_day and no_end_date
-- [X] recurrence field goes after end date.
-  [ ] hide text area with css display:none
-  [X] remove schemata recurrence
-  [ ] provide checkbox "this date recurrs ..." and toggle textarea then
+  NOTE: calendar portlet works now with recurring events. that work was done
+  at bssp2011.
 
 cleanup stuff
 -------------
@@ -61,6 +51,32 @@ migration steps
 - default timezone - set via event-settings configlet
 - migration from old ATEvent
 
+ATEvent
+-------
+- error when submitting random data to recurrence field. catch dateutil's
+  error and raise validation error. display error as error message.
+  NOTE: that work was done at bssp2011. integration still to be done (comes
+  soon)
+
+- "no end date" option -> change boolean field "all_day" to list field
+  "date_options" containing all_day and no_end_date
+- [X] recurrence field goes after end date.
+  [ ] hide text area with css display:none
+  [X] remove schemata recurrence
+  [ ] provide checkbox "this date recurrs ..." and toggle textarea then
+
+- when dexterity becomes one day the default content type framework, we won't
+  depend on AT anymore... maybe the package layout should be respect that *now*
+
+plip buildout
+-------------
+- there is a git checkout which isn't handled by mr.developer because it's no
+  python package and thus could break. mr.developer supports co option
+  egg=false ... use that.
+- there are git:// and git@ checkouts for ppl without/with rw permissions.
+  maybe https handles both?
+
+
 done
 ----
 OK - datetimewidget calendar images missing...
@@ -78,5 +94,14 @@ OK - TZ fetcher utility
   OK - plone.event: OS TZ
   OK - plone.app.event portal TZ
   - context, user, portal TZ
+
+internal notes for thet, forget this..
+--------------------------------------
+- isSameDay, isSameTime -... taking event as parameter. change to date1, date2
+- toDisplay, doing nearly the same as function below. factor out a to_display
+function which can used in both
+- fix portal_calendar or filtered occurences. calendar portlet is showing event
+  from previous month every day.
+- avoid dependency on portal_calendar or bring that tool in here.
 
 
