@@ -68,15 +68,15 @@ Testing
 - move tests to plone.app.testing
 - improve jenkins integration
 
+
+low priority
+============
+
 more cleanup
 ------------
 - ditch Products.CMFCalendar, if possible.
 - move portal_calendar from Products.CMFPlone into plone.app.event
 
-
-
-low priority
-============
 timezone
 --------
 - eventually provide configlet to configure TZ per user
