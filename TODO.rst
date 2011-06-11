@@ -14,7 +14,7 @@ always
 daterecurringindex
 ------------------
 - complete the benchmark products.daterecurringindex
-  sync with hanno's changes to dateindex
+- sync with hanno's changes to dateindex
 
 timezone support
 ----------------
