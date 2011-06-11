@@ -1,15 +1,21 @@
 TODO artsprint 2011
 ===================
 
-- moving p.a.event out of plip
-
+legend:
+OK ... that item is done
+IP ... that item is in progress
 
 HIGH PRIORITY
 =============
 
+buildout
+--------
+OK - move buildout configs out of coredev/plip into p.a.event to be used
+  independently
+
 always
 ------
-- merge branches with trunk
+OK - merge branches with trunk
 
 documentation
 -------------
@@ -18,8 +24,8 @@ documentation
 
 daterecurringindex
 ------------------
-- complete the benchmark products.daterecurringindex
-- sync with hanno's changes to dateindex
+IP - complete the benchmark products.daterecurringindex
+IP - sync with hanno's changes to dateindex
 
 timezone support
 ----------------
@@ -60,6 +66,12 @@ Testing
 -------
 - move tests to plone.app.testing
 - improve jenkins integration
+
+more cleanup
+------------
+- ditch Products.CMFCalendar, if possible.
+- move portal_calendar from Products.CMFPlone into plone.app.event
+
 
 
 low priority
