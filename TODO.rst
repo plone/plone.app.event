@@ -1,55 +1,48 @@
 TODO artsprint 2011
 ===================
 
+- moving p.a.event out of plip
+
+
+HIGH PRIORITY
+=============
+
 always
 ------
 - merge branches with trunk
-
-bugs
-----
-- on fresh install, when creating an event - no timezones are configured and
-  cannot be selected - but are mandatory. at least a default timezone has to
-  be selected in the event-settings configlet. that should be set at install
-  time.
-
-
-datetimewidget
---------------
-- calendar starting year, calendar future years options in datetimewidget.
-
-recurrence widget
------------------
-- recurrence widget.
-
-portlet stuff
--------------
-- calendar portlet should use jquery tools calendar. maybe construct portlet,
-  so that a viewlet can also use calendar via metal:macros.
-  NOTE: calendar portlet works now with recurring events. that work was done
-  at bssp2011.
-
-cleanup stuff
--------------
-- archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
-  plone.formwidget.datetime
-
-timezone support
-----------------
-- document TZ behavior with examples
-- allow no TZ setting on content context at all - this solves "world plone
-  day" problem (event in different timezones, whole day in every timezone)
-- provide plone.formwidget.timezone widget for TZ field described above
-- eventually provide configlet to configure TZ per user
 
 daterecurringindex
 ------------------
 - complete the benchmark products.daterecurringindex
   sync with hanno's changes to dateindex
 
-migration steps
----------------
-- default timezone - set via event-settings configlet
-- migration from old ATEvent
+timezone support
+----------------
+- document TZ behavior with examples
+- provide plone.formwidget.timezone widget for TZ field described above
+
+- if no timezone is selected: same as mail settings: note in nonfig area - at least
+  display in edit form to link in control panel.
+FIXES:
+- on fresh install, when creating an event - no timezones are configured and
+  cannot be selected - but are mandatory. at least a default timezone has to
+  be selected in the event-settings configlet. that should be set at install
+  time.
+
+datetimewidget
+--------------
+- calendar starting year, calendar future years options in datetimewidget.
+- archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
+  plone.formwidget.datetime
+
+portlet stuff (plone.app.event.portlets.calendar)
+-------------
+
+- calendar portlet should use jquery tools calendar. maybe construct portlet,
+  so that a viewlet can also use calendar via metal:macros.
+  NOTE: calendar portlet works now with recurring events. that work was done
+  at bssp2011.
+- review and cleanup
 
 ATEvent
 -------
@@ -58,15 +51,38 @@ ATEvent
   NOTE: that work was done at bssp2011. integration still to be done (comes
   soon)
 
-- "no end date" option -> change boolean field "all_day" to list field
-  "date_options" containing all_day and no_end_date
-- [X] recurrence field goes after end date.
-  [ ] hide text area with css display:none
-  [X] remove schemata recurrence
-  [ ] provide checkbox "this date recurrs ..." and toggle textarea then
+Testing
+-------
+- move tests to plone.app.testing
+- improve jenkins integration
 
-- when dexterity becomes one day the default content type framework, we won't
-  depend on AT anymore... maybe the package layout should be respect that *now*
+
+low priority
+============
+timezone
+--------
+- eventually provide configlet to configure TZ per user
+  user should be able to select his timezone in user properties
+
+- allow no TZ setting on content context at all - this solves "world plone
+  day" problem (event in different timezones, whole day in every timezone)
+
+controlpanel
+-------------
+low priority
+- merge calendar and plone.app.event portlet.
+  uninstall calendar configlet, install p.a.event -> upgrade step
+
+recurrence widget
+-----------------
+- recurrence widget.
+- disable recurrence for now: hide the recurring field .. add it later, per
+  profile or so.
+
+migration steps
+---------------
+* if default timezone is not set, migration cannot run
+- migration from old ATEvent
 
 plip buildout
 -------------
@@ -75,6 +91,22 @@ plip buildout
   egg=false ... use that.
 - there are git:// and git@ checkouts for ppl without/with rw permissions.
   maybe https handles both?
+
+ATEvent
+-------
+- "no end date" boolean option
+- [X] recurrence field goes after end date.
+  [ ] hide text area with css display:none
+  [X] remove schemata recurrence
+  [ ] provide checkbox "this date recurrs ..." and toggle textarea then
+
+DXEvent
+-------
+- provide it.
+
+- when dexterity becomes one day the default content type framework, we won't
+  depend on AT anymore... maybe the package layout should be respect that *now*
+    - done with setuptools and zcml extras
 
 
 done
