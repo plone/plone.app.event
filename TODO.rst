@@ -11,6 +11,11 @@ always
 ------
 - merge branches with trunk
 
+documentation
+-------------
+- document daterecurringindex benchmark results
+
+
 daterecurringindex
 ------------------
 - complete the benchmark products.daterecurringindex
