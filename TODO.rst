@@ -20,17 +20,17 @@ OK - merge branches with trunk
 documentation
 -------------
 - document daterecurringindex benchmark results
+- document TZ behavior with examples
 
 
 daterecurringindex
 ------------------
-IP - complete the benchmark products.daterecurringindex
+OK - complete the benchmark products.daterecurringindex
 IP - sync with hanno's changes to dateindex
 
 timezone support
 ----------------
-- document TZ behavior with examples
-- provide plone.formwidget.timezone widget for TZ field described above
+OK - provide widget for TZ field described above
 
 - if no timezone is selected: same as mail settings: note in nonfig area - at least
   display in edit form to link in control panel.
@@ -45,6 +45,7 @@ datetimewidget
 - calendar starting year, calendar future years options in datetimewidget.
 - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
   plone.formwidget.datetime
+  at least rename to plone.f.datetimeinput..
 
 portlet stuff (plone.app.event.portlets.calendar)
 -------------
