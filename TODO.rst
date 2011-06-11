@@ -8,14 +8,13 @@ IP ... that item is in progress
 HIGH PRIORITY
 =============
 
-buildout
---------
+general
+-------
 OK - move buildout configs out of coredev/plip into p.a.event to be used
   independently
-
-always
-------
 OK - merge branches with trunk
+- remove recurrence dependency in plone.app.event. makes shipping of first
+  release easier.
 
 documentation
 -------------
