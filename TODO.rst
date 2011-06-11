@@ -31,6 +31,8 @@ timezone support
 ----------------
 OK - provide widget for TZ field described above
 
+- GenericSetup import profile for setting the default timezone on install time
+  (and upgrade time as well).
 - if no timezone is selected: same as mail settings: note in nonfig area - at least
   display in edit form to link in control panel.
 FIXES:
