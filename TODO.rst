@@ -25,7 +25,7 @@ documentation
 daterecurringindex
 ------------------
 OK - complete the benchmark products.daterecurringindex
-IP - sync with hanno's changes to dateindex
+OK - sync with hanno's changes to dateindex
 
 timezone support
 ----------------
