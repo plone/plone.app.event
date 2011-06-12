@@ -1,14 +1,10 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="Plone Catalog Tool">
  <index name="start" meta_type="DateRecurringIndex">
-  <extra name="recurrence_type" value="ical" />
-  <extra name="start" value="start" />
   <extra name="recurdef" value="recurrence" />
   <extra name="until" value="" />
  </index>
  <index name="end" meta_type="DateRecurringIndex">
-  <extra name="recurrence_type" value="ical" />
-  <extra name="start" value="start" />
   <extra name="recurdef" value="recurrence" />
   <extra name="until" value="" />
  </index>
@@ -16,4 +12,3 @@
  <column value="start"/>
  <column value="end"/>
 </object>
-
