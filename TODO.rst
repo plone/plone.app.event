@@ -18,12 +18,18 @@ OK - merge branches with trunk
 
 documentation
 -------------
+- plip documentation
 - document daterecurringindex benchmark results
 - document TZ behavior with examples
 
 
 daterecurringindex
 ------------------
+test if IIBTrees or set are faster
+>>> ts = time.time(); b=difference(IISet(a), IISet(b)); time.time() - ts
+0.014604091644287109
+>>> ts = time.time(); b=set(a) - set(b); time.time() - ts
+
 OK - complete the benchmark products.daterecurringindex
 OK - sync with hanno's changes to dateindex
 
@@ -88,7 +94,6 @@ timezone
 
 controlpanel
 -------------
-low priority
 - merge calendar and plone.app.event portlet.
   uninstall calendar configlet, install p.a.event -> upgrade step
 
@@ -105,7 +110,7 @@ migration steps
 
 plip buildout
 -------------
-- there is a git checkout which isn't handled by mr.developer because it's no
+OK - there is a git checkout which isn't handled by mr.developer because it's no
   python package and thus could break. mr.developer supports co option
   egg=false ... use that.
 - there are git:// and git@ checkouts for ppl without/with rw permissions.
