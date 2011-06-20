@@ -1,3 +1,4 @@
+from plone.app.event.at import atapi
 
 from zope.interface import implements
 
@@ -7,7 +8,6 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Products.CMFPlone.utils import safe_unicode
-from Products.Archetypes import atapi
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -21,8 +21,8 @@ from plone.formwidget.recurrenceinput.at import RecurrenceWidget
 from plone.formwidget.datetimeinput.at import DatetimeWidget
 
 from plone.app.event.config import PROJECTNAME
-from plone.app.event.content.base import default_end_date
-from plone.app.event.content.base import default_timezone
+from plone.app.event.base import default_end_date
+from plone.app.event.base import default_timezone
 
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((

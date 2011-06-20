@@ -26,7 +26,7 @@ from Products.ATContentTypes.interfaces import IATEvent
 from plone.event.tests.test_doctest import FakeEvent
 from plone.event.utils import pydt
 from plone.event.interfaces import ITimezoneGetter
-from plone.app.event import ATEvent
+from plone.app.event.at.content import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal

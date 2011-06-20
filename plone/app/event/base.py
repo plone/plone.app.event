@@ -1,4 +1,3 @@
-
 import pytz
 from datetime import datetime
 from datetime import timedelta
@@ -8,7 +7,7 @@ from zope.component import getUtility
 from DateTime import DateTime
 from Products.CMFCore import getToolByName
 from plone.registry.interfaces import IRegistry
-from plone.event.utils import default_timezone as fallback_default_timezone
+from plone.rfc5545.utils import default_timezone as fallback_default_timezone
 
 from plone.app.event.interfaces import IEventSettings
 
@@ -33,7 +32,7 @@ def default_timezone(context=None):
     controlpanel = getUtility(IRegistry).forInterface(IEventSettings)
     portal_timezone = controlpanel.portal_timezone
 
-    # fallback to what plone.event is doing
+    # fallback to what plone.rfc5545 is doing
     if not portal_timezone:
         return fallback_default_timezone()
 
