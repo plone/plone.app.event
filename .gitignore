@@ -1,3 +1,6 @@
+devsrc
+docs/Makefile
+docs/make.bat
 bin
 dev
 develop-eggs
