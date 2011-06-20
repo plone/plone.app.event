@@ -32,7 +32,7 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from archetypes.datetimewidget import DatetimeWidget
+from plone.formwidget.dateinput.at import DatetimeWidget
 
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.interfaces import ICalendarSupport

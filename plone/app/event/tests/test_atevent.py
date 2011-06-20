@@ -35,7 +35,7 @@ from plone.app.event.tests.base import (
 from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.event import default_end_date
 
-from archetypes.datetimewidget import DatetimeWidget
+from plone.formwidget.dateinput.at import DatetimeWidget
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
