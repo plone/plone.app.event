@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = '1.0a1'
 
 setup(name='plone.app.event',
       version=version,
@@ -24,6 +24,9 @@ setup(name='plone.app.event',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.rfc5545',
+
+          # TODO: re-list dependencies
           # -*- Extra requirements: -*-
           'Acquisition',
           'DateTime',
@@ -38,7 +41,6 @@ setup(name='plone.app.event',
           'plone.app.layout',
           'plone.app.portlets',
           'plone.app.registry',
-          'plone.event',
           'plone.formwidget.dateinput',
           'plone.formwidget.recurrence',
           'plone.memoize',

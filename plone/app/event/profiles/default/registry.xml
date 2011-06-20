@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
 <registry>
-  <records interface="plone.app.event.controlpanel.event.IEventSettings" />
+
+    <records
+        interface="plone.app.event.interfaces.IEventSettings"
+        prefix="plone.app.event"
+        />
+
 </registry>

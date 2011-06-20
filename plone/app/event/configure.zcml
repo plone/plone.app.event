@@ -6,32 +6,39 @@
     i18n_domain="plone"
     >
 
-  <include package="plone.event" />
-  <include package="plone.formwidget.recurrence" />
-  <include package="plone.formwidget.dateinput" />
-  <include package="plone.formwidget.dateinput.at" />
-  <include package="plone.app.portlets" />
-  <include package="plone.app.registry" />
+    <include package="plone.rfc5545" />
+    <include package="plone.formwidget.recurrence" />
+    <include package="plone.formwidget.dateinput" />
+    <include package="plone.formwidget.dateinput.at" />
+    <include package="plone.app.portlets" />
+    <include package="plone.app.registry" />
 
-  <five:registerPackage package="." initialize=".initialize" />
+    <five:registerPackage package="." initialize=".initialize" />
 
-  <include package=".browser" />
-  <include package=".controlpanel" />
-  <include package=".portlets" />
-  <include file="timezone.zcml" />
+    <include package=".browser" />
+    <include package=".portlets" />
 
-  <subscriber for="Products.ATContentTypes.interfaces.IATEvent
-                   zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-              handler=".event.whole_day_handler" />
+    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+                handler=".content.base.whole_day_handler" />
 
+    <utility
+        component=".vocabulary.AvailableTimezones"
+        name="plone.app.event.AvailableTimezones"
+        />
+        
+    <utility
+        component=".vocabulary.Timezones"
+        name="plone.app.event.Timezones"
+        />
 
-  <genericsetup:registerProfile
-      name="default"
-      title="plone.app.event"
-      directory="profiles/default"
-      description="Plone event content type."
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    <genericsetup:registerProfile
+        name="default"
+        title="plone.app.event"
+        directory="profiles/default"
+        description="Plone event content type."
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>

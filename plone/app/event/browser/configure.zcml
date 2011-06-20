@@ -2,41 +2,20 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
+    <browser:resourceDirectory
+        name="plone.app.event"
+        directory="static"
         />
 
+    <!-- Control panel -->
     <browser:page
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
+        name="event-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".controlpanel.EventSettingsControlPanel"
+        permission="cmf.ManagePortal"
         />
 
-    <browser:page
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        for="plone.event.interfaces.IEvent"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
+    <!-- Event view -->
     <browser:page
         for="plone.event.interfaces.IEvent"
         name="event_view"
@@ -45,34 +24,15 @@
         permission="zope2.View"
         />
 
+    <!-- ICal for event content type -->
     <browser:page
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
+        for="plone.event.interfaces.IEvent"
+        name="ics_view"
+        class=".ical.EventsICal"
         permission="zope2.View"
         />
 
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-
+    <!-- VCal for event content type -->
     <browser:page
         for="plone.event.interfaces.IEvent"
         name="vcs_view"
@@ -80,11 +40,56 @@
         permission="zope2.View"
         />
 
-    <browser:resource
-        name="event.js"
-        file="event.js"
-        permission="zope.Public"
-    />
+    <!-- ICal -->
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
 
+    <!-- VCal for folderish content types -->
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="vcs_view"
+        class=".vcal.EventsVCal"
+        permission="zope2.View"
+        />
 
 </configure>

@@ -1,6 +1,0 @@
-=====================================
-plone.app.event recurrence unit tests
-=====================================
-
-    >>> #interact( locals() )
-
