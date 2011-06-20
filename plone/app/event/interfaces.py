@@ -1,7 +1,7 @@
 from zope import schema
 from zope.interface import Interface
 
-from plone.event.interfaces import IEvent as IBaseEvent
+from plone.rfc5545.interfaces import IEvent as IBaseEvent
 from plone.app.event.base import default_timezone
 from plone.app.event import messageFactory as _
 
@@ -23,7 +23,7 @@ class IEventSettings(Interface):
                          "their own timezone, if available timezones are defined."),
             required=True,
             default=default_timezone,
-            vocabulary="plone.event.TimezonesVocabulary"
+            vocabulary="plone.app.event.Timezones"
             )
 
     available_timezones = schema.List(
@@ -34,6 +34,6 @@ class IEventSettings(Interface):
             required=False,
             default=[],
             value_type=schema.Choice(
-                vocabulary="TimezoneVocabulary"
+                vocabulary="plone.app.event.AvailableTimezones"
                 )
             )

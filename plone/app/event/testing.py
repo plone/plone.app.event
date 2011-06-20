@@ -40,10 +40,8 @@ class TimezoneLayer(Layer):
     def setUp(self):
         context = self['configurationContext']
         import plone.registry
-        import plone.event
         import plone.app.event
         xmlconfig.file('configure.zcml', plone.registry, context=context)
-        xmlconfig.file('configure.zcml', plone.event, context=context)
         xmlconfig.file('timezone.zcml', plone.app.event, context=context)
 
         self['plone_registry'] = Registry()

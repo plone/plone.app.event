@@ -11,7 +11,7 @@ def Timezones(context):
     """
     >>> import zope.component
     >>> from zope.schema.interfaces import IVocabularyFactory
-    >>> tzvocab = zope.component.getUtility(IVocabularyFactory, 'TimezoneVocabulary')
+    >>> tzvocab = zope.component.getUtility(IVocabularyFactory, 'plone.app.event.Timezones')
 
     TODO: find something more breakage proof than following test
     >>> assert('Africa/Abidjan' == list(tzvocab(None))[0].value)

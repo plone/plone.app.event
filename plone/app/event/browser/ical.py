@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 
 from Products.ATContentTypes.interfaces import IATTopic
 
+# TODO: fix this.
 from plone.event.interfaces import IICalEventExporter, IICalendar, IEvent
 from plone.app.event import messageFactory as _
 

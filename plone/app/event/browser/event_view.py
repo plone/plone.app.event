@@ -1,7 +1,7 @@
 from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.event.interfaces import IRecurrenceSupport
-from plone.event.utils import isSameDay, isSameTime
+from plone.rfc5545.utils import isSameDay, isSameTime
 
 
 def toDisplay(event):
