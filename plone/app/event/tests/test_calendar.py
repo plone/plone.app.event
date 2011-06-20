@@ -32,44 +32,46 @@ class CalendarTest(unittest.TestCase):
         portal.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
             startDate='2007/10/10', endDate='2007/10/12', location='Naples',
-            eventUrl='http://plone.org/events/conferences/2007-naples')]
+            eventUrl='http://plone.org/events/conferences/2007-naples')
         self.event1 = portal['ploneconf2007']
 
         portal.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
-            eventUrl='http://plone.org/events/conferences/2008-washington-dc')]
+            eventUrl='http://plone.org/events/conferences/2008-washington-dc')
         self.event2 = portal['ploneconf2008']
 
     def testCalendarView(self):
-        view = getMultiAdapter((self.folder, self.request), name='ics_view')
+        view = getMultiAdapter((self.portal, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
         self.assertEqual(sorted([e.Title() for e in events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def testCalendarViewForTopic(self):
-        self.setRoles(('Manager',))
-        folder = self.folder
-        topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
+        portal = self.portal
+        portal.invokeFactory('Topic', id='calendar')
+        topic = portal['calendar']
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         view = getMultiAdapter((topic, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 1)
-        self.assertEqual(sorted([e.Title() for e in events]),
-            ['Plone Conf 2008'])
-        folder[folder.invokeFactory('Event',
+        self.assertEqual(
+                sorted([e.Title() for e in events]),
+                ['Plone Conf 2008'])
+        portal.invokeFactory('Event',
             id='inaug09', title='Inauguration Day 2009',
-            startDate='2009/01/20', endDate='2009/01/20', location='DC')]
+            startDate='2009/01/20', endDate='2009/01/20', location='DC')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
         self.assertEqual(sorted([e.Title() for e in events]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
 
     def testDuplicateQueryParameters(self):
-        self.setRoles(('Manager',))
-        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        portal = self.portal
+        portal.invokeFactory('Topic', id='dc')
+        topic = portal['dc']
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Event')
         crit = topic.addCriterion('object_provides', 'ATSimpleStringCriterion')
@@ -93,7 +95,7 @@ class CalendarTest(unittest.TestCase):
 
     def testRendering(self):
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((self.folder, request), name='ics_view')
+        view = getMultiAdapter((self.portal, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
@@ -111,9 +113,10 @@ class CalendarTest(unittest.TestCase):
             'END:VCALENDAR')
 
     def testCalendarInfo(self):
-        self.folder.processForm(values={'title': 'Foo', 'description': 'Bar'})
+        portal = self.portal
+        portal.processForm(values={'title': 'Foo', 'description': 'Bar'})
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((self.folder, request), name='ics_view')
+        view = getMultiAdapter((portal, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
@@ -135,9 +138,9 @@ class CalendarTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'END:VCALENDAR')
         # changing the title should be immediately reflected...
-        self.folder.processForm(values={'title': 'Föö!!'})
+        portal.processForm(values={'title': 'Föö!!'})
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((self.folder, request), name='ics_view')
+        view = getMultiAdapter((portal, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
@@ -148,8 +151,9 @@ class CalendarTest(unittest.TestCase):
             'END:VCALENDAR')
 
     def testRenderingForTopic(self):
-        self.setRoles(('Manager',))
-        topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
+        portal = self.portal
+        portal.invokeFactory('Topic', id='calendar')
+        topic = portal['calendar']
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         headers, output, request = makeResponse(self.request)

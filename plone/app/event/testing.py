@@ -12,7 +12,7 @@ class PAEventLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         # Load ZCML
         import plone.app.event
-        self.loadZCML(package=plone.app.event,configurationContext)
+        self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event:default')

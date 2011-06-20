@@ -5,7 +5,7 @@ from datetime import timedelta
 from zope.component import getUtility
 
 from DateTime import DateTime
-from Products.CMFCore import getToolByName
+from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry
 from plone.rfc5545.utils import default_timezone as fallback_default_timezone
 

@@ -16,7 +16,9 @@ class PAEventATLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         # Load ZCML
         import plone.formwidget.dateinput
-        self.loadZCML(package=plone.formwidget.dateinput)
+        self.loadZCML(
+                package=plone.formwidget.dateinput,
+                context=configurationContext)
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.formwidget.dateinput:default')
