@@ -7,7 +7,7 @@
       i18n:translate="">Events can be shown in calendars.</property>
  <property name="icon_expr"></property>
  <property name="content_meta_type">ATEvent</property>
- <property name="product">plone.app.event</property>
+ <property name="product">plone.app.event.at</property>
  <property name="factory">addATEvent</property>
  <property name="immediate_view">@@event_view</property>
  <property name="global_allow">True</property>

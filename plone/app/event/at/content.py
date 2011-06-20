@@ -16,10 +16,10 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from plone.app.event.interfaces import IEvent
 from plone.formwidget.recurrenceinput.at import RecurrenceWidget
 from plone.formwidget.datetimeinput.at import DatetimeWidget
 
+from plone.app.event.interfaces import IEvent
 from plone.app.event.config import PROJECTNAME
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone

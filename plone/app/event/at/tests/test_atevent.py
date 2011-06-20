@@ -1,7 +1,5 @@
 import os
 
-from Testing import ZopeTestCase # side effect import. leave it here.
-
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFPlone.utils import safe_unicode
@@ -16,7 +14,6 @@ from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 
 from DateTime import DateTime
 
-from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.verify import verifyObject
@@ -25,64 +22,72 @@ from zope.publisher.browser import TestRequest
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.event.tests.test_doctest import FakeEvent
 from plone.event.utils import pydt
-from plone.event.interfaces import ITimezoneGetter
 from plone.app.event.at.content import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
-from plone.app.event.tests.base import (
-    EventTypeTestCase, EventFieldTestCase, EventIntegrationTestCase)
 from plone.app.event.browser.event_view import toDisplay
-from plone.app.event.event import default_end_date
+from plone.app.event.base import default_end_date
 
 from plone.formwidget.dateinput.at import DatetimeWidget
 
-LOCATION = 'my location'
-EV_TYPE  = 'Meeting'
-EV_URL   = 'http://example.org/'
-S_DATE   = DateTime()
-E_DATE   = DateTime()+1
-C_NAME   = 'John Doe'
-C_PHONE  = '+1212356789'
-C_EMAIL  = 'john@example.org'
-EV_ATTENDEES = ('john@doe.com',
-                'john@doe.org',
-                'john@example.org')
-TEXT = "lorem ipsum"
 
-def editATCT(obj):
-    dcEdit(obj)
-    obj.setLocation(LOCATION)
-    obj.setSubject(EV_TYPE)
-    obj.setEventUrl(EV_URL)
-    obj.setStartDate(S_DATE)
-    obj.setEndDate(E_DATE)
-    obj.setContactName(C_NAME)
-    obj.setContactPhone(C_PHONE)
-    obj.setContactEmail(C_EMAIL)
-    obj.setAttendees(EV_ATTENDEES)
-    obj.setText(TEXT)
+import unittest2 as unittest
+from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 
-tests = []
 
-class TestSiteATEvent(EventTypeTestCase):
+OBJ_DATA = {
+    'location': 'my location',
+    'subject': 'Meeting',
+    'eventUrl': 'http://example.org/'
+    'startDate': DateTime(),
+    'endDate': DateTime()+1,
+    'contactName': 'John Doe',
+    'contactPhone': '+1212356789',
+    'contactEmail': 'john@example.org',
+    'attendees': (
+        'john@doe.com',
+        'john@doe.org',
+        'john@example.org')
+    'text': "lorem ipsum"}
 
-    klass = ATEvent
-    portal_type = 'Event'
-    title = 'Event'
-    meta_type = 'ATEvent'
+
+class PAEventATTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        portal.invokeFactory(type_name='Event', id='event1', title='Event1')
+        self.obj = portal['event1']
+
+
+    def _edit_atevent(self, obj):
+        dcEdit(obj)
+        obj.setLocation(OBJ_DATA['location'])
+        obj.setSubject(OBJ_DATA['subject'])
+        obj.setEventUrl(OBJ_DATA['eventUrl'])
+        obj.setStartDate(OBJ_DATA['startDate'])
+        obj.setEndDate(OBJ_DATA['endDate'])
+        obj.setContactName(OBJ_DATA['contactName'])
+        obj.setContactPhone(OBJ_DATA['contactPhone'])
+        obj.setContactEmail(OBJ_DATA['contactEmail'])
+        obj.setAttendees(OBJ_DATA['attendees'])
+        obj.setText(OBJ_DATA['text'])
 
     def test_doesImplementCalendarSupport(self):
-        self.failUnless(ICalendarSupport.providedBy(self._ATCT))
-        self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
+        self.failUnless(ICalendarSupport.providedBy(self.obj))
+        self.failUnless(verifyObject(ICalendarSupport, self.obj))
 
     def test_implementsATEvent(self):
-        iface = IATEvent
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.failUnless(iface.providedBy(self.obj))
+        self.failUnless(verifyObject(IATEvent, self.obj))
 
     def test_props(self):
-        self.assertEquals(self._ATCT.cmf_edit_kws,
+        self.assertEquals(self.obj.cmf_edit_kws,
                 ('effectiveDay', 'effectiveMo', 'effectiveYear',
                  'expirationDay', 'expirationMo', 'expirationYear',
                  'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
@@ -90,33 +95,36 @@ class TestSiteATEvent(EventTypeTestCase):
                  'contact_phone', 'event_url'))
 
     def test_cmfedit(self):
-        self.assertNotEqual(self._ATCT.end().Date(), '2010/10/31')
-        self._ATCT.cmf_edit(start_date='2010-10-30', end_date='2010-10-31')
-        self.assertEqual(self._ATCT.end().Date(), '2010/10/31')
+        self.assertNotEqual(self.obj.end().Date(), '2010/10/31')
+        self.obj.cmf_edit(start_date='2010-10-30', end_date='2010-10-31')
+        self.assertEqual(self.obj.end().Date(), '2010/10/31')
 
     def test_validation(self):
         req = {'startDate':'2010-10-30'}
         err = {'endDate':None}
         errors = err.copy()
-        self._ATCT.post_validate(req, errors)
+        self.obj.post_validate(req, errors)
         self.assertEqual(errors, err)
         req = {'startDate':'2x10-10-30'}
         errors = {}
-        self._ATCT.post_validate(req, errors)
+        self.obj.post_validate(req, errors)
         self.assertTrue('startDate' in errors)
 
     def test_edit(self):
-        new = self._ATCT
-        editATCT(new)
+        new = self.obj
+        self._edit_atevent(new)
         self.assertEquals(new.start_date, pydt(new.start()))
         self.assertEquals(new.end_date, pydt(new.end()))
-        self.assertEquals(new.start_date, pydt(S_DATE))
-        self.assertEquals(new.end_date, pydt(E_DATE))
+        self.assertEquals(new.start_date, pydt(OBJ_DATA['startDate']))
+        self.assertEquals(new.end_date, pydt(OBJ_DATA['endDate']))
         self.assertEquals(new.duration, new.end_date - new.start_date)
 
     def test_cmp(self):
-        e1 = self._ATCT
-        e2 = self._createType(self.folder, self.portal_type, 'e2')
+        portal = self.portal
+        e1 = self.obj
+        portal.invokeFactory(type_name='Event', id='event2', title='Event 2')
+        e2 = portal['event2']
+
         day29 = DateTime('2004-12-29 0:00:00')
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')
@@ -141,7 +149,7 @@ class TestSiteATEvent(EventTypeTestCase):
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
 
     def test_ical(self):
-        event = self._ATCT
+        event = self.obj
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTitle('cool event')
@@ -155,7 +163,7 @@ class TestSiteATEvent(EventTypeTestCase):
         self.assertEqual(lines[7], u"DTEND:20010101T130000Z")
 
     def test_vcal(self):
-        event = self._ATCT
+        event = self.obj
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTitle('cool event')
@@ -169,21 +177,23 @@ class TestSiteATEvent(EventTypeTestCase):
         self.assertEqual(lines[2], u"DTEND:20010101T130000Z")
 
     def test_get_size(self):
-        atct = self._ATCT
-        editATCT(atct)
-        self.failUnlessEqual(atct.get_size(), len(TEXT))
+        event = self.obj
+        self._edit_atevent(event)
+        self.failUnlessEqual(event.get_size(), len(OBJ_DATA['text']))
 
-tests.append(TestSiteATEvent)
 
-class TestATEventFields(EventFieldTestCase):
+class PAEventATFieldTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        EventFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATEvent)
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        portal.invokeFactory(type_name='Event', id='event1', title='Event1')
+        self.obj = portal['event1']
 
     def test_locationField(self):
-        dummy = self._dummy
-        field = dummy.getField('location')
+        field = self.obj.getField('location')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -217,14 +227,13 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_subjectField(self):
-        dummy = self._dummy
-        field = dummy.getField('subject')
+        field = self.obj.getField('subject')
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
@@ -259,8 +268,7 @@ class TestATEventFields(EventFieldTestCase):
 
 
     def test_eventUrlField(self):
-        dummy = self._dummy
-        field = dummy.getField('eventUrl')
+        field = self.obj.getField('eventUrl')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -294,14 +302,13 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnlessEqual(field.validators, URLValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_startDateField(self):
-        dummy = self._dummy
-        field = dummy.getField('startDate')
+        field = self.obj.getField('startDate')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
@@ -337,15 +344,14 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
 
     def test_endDateField(self):
-        dummy = self._dummy
-        field = dummy.getField('endDate')
+        field = self.obj.getField('endDate')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
@@ -382,14 +388,13 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactNameField(self):
-        dummy = self._dummy
-        field = dummy.getField('contactName')
+        field = self.obj.getField('contactName')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -424,14 +429,13 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactEmailField(self):
-        dummy = self._dummy
-        field = dummy.getField('contactEmail')
+        field = self.obj.getField('contactEmail')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -466,14 +470,13 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactPhoneField(self):
-        dummy = self._dummy
-        field = dummy.getField('contactPhone')
+        field = self.obj.getField('contactPhone')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -507,14 +510,13 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnlessEqual(field.validators, EmptyValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_attendeesField(self):
-        dummy = self._dummy
-        field = dummy.getField('attendees')
+        field = self.obj.getField('attendees')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -547,14 +549,13 @@ class TestATEventFields(EventFieldTestCase):
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(isinstance(field.widget, LinesWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_textField(self):
-        dummy = self._dummy
-        field = dummy.getField('text')
+        field = self.obj.getField('text')
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
@@ -589,7 +590,7 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, RichWidget),
                         'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
+        vocab = field.Vocabulary(self.obj)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
@@ -599,7 +600,7 @@ class TestATEventFields(EventFieldTestCase):
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
+        self.failUnless('text/html' in field.getAllowedContentTypes(self.obj))
 
     def _makeOne(self, start, end, whole_day=False):
         event = FakeEvent(start=start, end=end, whole_day=whole_day)
@@ -678,19 +679,3 @@ class TestATEventFields(EventFieldTestCase):
         notify(ObjectModifiedEvent(event))
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
-
-
-tests.append(TestATEventFields)
-
-class TestATEventFunctional(EventIntegrationTestCase):
-    portal_type = 'Event'
-    views = ('event_view', 'vcs_view', 'ics_view', )
-
-tests.append(TestATEventFunctional)
-
-import unittest
-def test_suite():
-    suite = unittest.TestSuite()
-    for test in tests:
-        suite.addTest(unittest.makeSuite(test))
-    return suite
