@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-from unittest import defaultTestLoader
-from zope.interface import classImplements
 from zope.component import getMultiAdapter
-from zope.publisher.browser import TestRequest
-from zope.annotation.interfaces import IAttributeAnnotatable
-
 from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.tests.base import EventTestCase
 
 def makeResponse(request):
-    """ create a fake request and set up logging of output """
+    """ create a fake response and set up logging of output """
     headers = {}
     output = []
     class Response:
@@ -21,22 +15,34 @@ def makeResponse(request):
     return headers, output, request
 
 
-class EventCalendarTests(EventTestCase):
+import unittest2 as unittest
+from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 
-    def afterSetUp(self):
-        folder = self.folder
-        self.event1 = folder[folder.invokeFactory('Event',
+class CalendarTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.request = self.layer['request']
+        portal = self.layer['portal']
+        self.portal = portal
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+
+        portal.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
             startDate='2007/10/10', endDate='2007/10/12', location='Naples',
             eventUrl='http://plone.org/events/conferences/2007-naples')]
-        self.event2 = folder[folder.invokeFactory('Event',
+        self.event1 = portal['ploneconf2007']
+
+        portal.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')]
-        classImplements(TestRequest, IAttributeAnnotatable)
+        self.event2 = portal['ploneconf2008']
 
     def testCalendarView(self):
-        view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
+        view = getMultiAdapter((self.folder, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
         self.assertEqual(sorted([e.Title() for e in events]),
@@ -48,7 +54,7 @@ class EventCalendarTests(EventTestCase):
         topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
-        view = getMultiAdapter((topic, TestRequest()), name='ics_view')
+        view = getMultiAdapter((topic, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 1)
         self.assertEqual(sorted([e.Title() for e in events]),
@@ -72,7 +78,7 @@ class EventCalendarTests(EventTestCase):
         self.assertEqual(len(query), 2)
         self.assertEqual(query['portal_type'], 'Event')
         self.assertEqual(query['object_provides'], ICalendarSupport.__identifier__)
-        view = getMultiAdapter((topic, TestRequest()), name='ics_view')
+        view = getMultiAdapter((topic, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
         self.assertEqual(sorted([e.Title() for e in view.getEvents()]),
@@ -86,7 +92,7 @@ class EventCalendarTests(EventTestCase):
             text = text[position:]
 
     def testRendering(self):
-        headers, output, request = makeResponse(TestRequest())
+        headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.folder, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
@@ -106,7 +112,7 @@ class EventCalendarTests(EventTestCase):
 
     def testCalendarInfo(self):
         self.folder.processForm(values={'title': 'Foo', 'description': 'Bar'})
-        headers, output, request = makeResponse(TestRequest())
+        headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.folder, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
@@ -118,7 +124,7 @@ class EventCalendarTests(EventTestCase):
             'END:VCALENDAR')
         # another folder should have another name, even though the set
         # of events might be the same...
-        headers, output, request = makeResponse(TestRequest())
+        headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.portal, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
@@ -130,7 +136,7 @@ class EventCalendarTests(EventTestCase):
             'END:VCALENDAR')
         # changing the title should be immediately reflected...
         self.folder.processForm(values={'title': 'Föö!!'})
-        headers, output, request = makeResponse(TestRequest())
+        headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.folder, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
@@ -146,7 +152,7 @@ class EventCalendarTests(EventTestCase):
         topic = self.folder[self.folder.invokeFactory('Topic', id='calendar')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
-        headers, output, request = makeResponse(TestRequest())
+        headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((topic, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
@@ -161,7 +167,3 @@ class EventCalendarTests(EventTestCase):
             'END:VCALENDAR')
         lines = ''.join(output).splitlines()
         self.assertEqual(len([l for l in lines if l == 'BEGIN:VEVENT']), 1)
-
-
-def test_suite():
-    return defaultTestLoader.loadTestsFromName(__name__)

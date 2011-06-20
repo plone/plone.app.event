@@ -11,14 +11,24 @@ from plone.portlets.interfaces import IPortletRenderer
 
 from DateTime import DateTime
 from plone.app.event.portlets import calendar
-from plone.app.event.tests.base import EventTestCase
 
-class TestPortlet(EventTestCase):
+import unittest2 as unittest
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 
-    def afterSetUp(self):
+
+class PortletTest(unittest.TestCase):
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        self.request = self.layer['request']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
-        setSite(self.portal)
-        self.setRoles(('Manager',))
+        setSite(portal)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='portlets.Calendar')
@@ -51,26 +61,31 @@ class TestPortlet(EventTestCase):
         self.failUnless(isinstance(mapping.values()[0], calendar.Assignment))
 
     def testRenderer(self):
-        context = self.folder
-        request = self.folder.REQUEST
-        view = self.folder.restrictedTraverse('@@plone')
+        context = self.portal
+        view = context.restrictedTraverse('@@plone')
         manager = getUtility(IPortletManager, name='plone.rightcolumn', context=self.portal)
         assignment = calendar.Assignment()
 
-        renderer = getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
+        renderer = getMultiAdapter((context, self.request, view, manager, assignment), IPortletRenderer)
         self.failUnless(isinstance(renderer, calendar.Renderer))
 
 
-class TestRenderer(EventTestCase):
+class PortletTest(unittest.TestCase):
+    layer = PAEvent_INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
         setHooks()
         setSite(self.portal)
 
+        self.request = self.layer['request']
+        portal = self.layer['portal']
+        self.portal = portal
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+
     def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
-        context = context or self.folder
-        request = request or self.folder.REQUEST
-        view = view or self.folder.restrictedTraverse('@@plone')
+        context = context or self.portal
+        request = request or self.request
+        view = view or context.restrictedTraverse('@@plone')
         manager = manager or getUtility(IPortletManager, name='plone.rightcolumn', context=self.portal)
         assignment = assignment or calendar.Assignment()
 
@@ -86,7 +101,6 @@ class TestRenderer(EventTestCase):
         year, month = r.getNextMonth(year, month)
         last_day_month = DateTime('%s/%s/1' % (year, month)) - 1
         hour = 1 / 24.0
-        self.setRoles(('Manager',))
         # Event starts at 23:00 and ends at 23:30
         self.portal.invokeFactory('Event', 'e1',
                                   startDate=last_day_month + 23*hour,
@@ -98,11 +112,3 @@ class TestRenderer(EventTestCase):
         # Try to render the calendar portlet again, it must be different now
         r = self.renderer(assignment=calendar.Assignment())
         self.assertNotEqual(html, r.render(), "Cache key wasn't invalidated")
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestPortlet))
-    suite.addTest(makeSuite(TestRenderer))
-    return suite

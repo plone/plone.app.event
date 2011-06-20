@@ -64,7 +64,6 @@ class PAEventATTest(unittest.TestCase):
         portal.invokeFactory(type_name='Event', id='event1', title='Event1')
         self.obj = portal['event1']
 
-
     def _edit_atevent(self, obj):
         dcEdit(obj)
         obj.setLocation(OBJ_DATA['location'])
@@ -265,7 +264,6 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, KeywordWidget),
                         'Value is %s' % id(field.widget))
-
 
     def test_eventUrlField(self):
         field = self.obj.getField('eventUrl')

@@ -14,14 +14,24 @@ from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from plone.app.event.portlets import events
-from plone.app.event.tests.base import EventTestCase
 
-class TestPortlet(EventTestCase):
+import unittest2 as unittest
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 
-    def afterSetUp(self):
+
+class PortletTest(unittest.TestCase):
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        self.request = self.layer['request']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
-        setSite(self.portal)
-        self.setRoles(('Manager',))
+        setSite(portal)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
@@ -54,34 +64,40 @@ class TestPortlet(EventTestCase):
 
     def testInvokeEditView(self):
         mapping = PortletAssignmentMapping()
-        request = self.folder.REQUEST
 
         mapping['foo'] = events.Assignment(count=5)
-        editview = getMultiAdapter((mapping['foo'], request), name='edit')
+        editview = getMultiAdapter((mapping['foo'], self.request), name='edit')
         self.failUnless(isinstance(editview, events.EditForm))
 
     def testRenderer(self):
-        context = self.folder
-        request = self.folder.REQUEST
-        view = self.folder.restrictedTraverse('@@plone')
+        context = self.portal
+        view = context.restrictedTraverse('@@plone')
         manager = getUtility(IPortletManager, name='plone.leftcolumn', context=self.portal)
         assignment = events.Assignment(count=5)
 
-        renderer = getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
+        renderer = getMultiAdapter((context, self.request, view, manager, assignment), IPortletRenderer)
         self.failUnless(isinstance(renderer, events.Renderer))
 
-class TestRenderer(EventTestCase):
 
-    def afterSetUp(self):
+
+class RendererTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        self.request = self.layer['request']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
-        setSite(self.portal)
+        setSite(portal)
+
         # Make sure Events use simple_publication_workflow
         self.portal.portal_workflow.setChainForPortalTypes(['Event'], ['simple_publication_workflow'])
 
     def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
-        context = context or self.folder
-        request = request or self.folder.REQUEST
-        view = view or self.folder.restrictedTraverse('@@plone')
+        context = context or self.portal
+        request = request or self.request
+        view = view or context.restrictedTraverse('@@plone')
         manager = manager or getUtility(IPortletManager, name='plone.leftcolumn', context=self.portal)
         assignment = assignment or events.Assignment(template='portlet_recent', macro='portlet')
 
@@ -192,11 +208,3 @@ class TestRenderer(EventTestCase):
         self.portal.mynewsite._delObject('events')
         r = self.renderer(context=self.portal.mynewsite, assignment=events.Assignment(count=5))
         self.assertEquals(None, r.prev_events_link())
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    # suite.addTest(makeSuite(TestPortlet))
-    suite.addTest(makeSuite(TestRenderer))
-    return suite
