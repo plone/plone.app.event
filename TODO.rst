@@ -5,6 +5,11 @@ legend:
 OK ... that item is done
 IP ... that item is in progress
 
+* remove vcal in favor or ical
+* remove portal_skins/plone_content/event_view.pt
+* remove portal/icon_export_vcal.png
+* label_add_to_vcal
+
 HIGH PRIORITY
 =============
 

@@ -20,11 +20,10 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
-from plone.event.tests.test_doctest import FakeEvent
-from plone.event.utils import pydt
+from plone.app.event.at.testing import FakeEvent
+from plone.rfc5545.utils import pydt
 from plone.app.event.at.content import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
-from plone.app.event.browser.vcal import EventsVCal
 from plone.app.event.browser.ical import EventsICal
 from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.base import default_end_date
@@ -160,20 +159,6 @@ class PAEventATTest(unittest.TestCase):
         # times should be converted to UTC
         self.assertEqual(lines[6], u"DTSTART:20010101T110000Z")
         self.assertEqual(lines[7], u"DTEND:20010101T130000Z")
-
-    def test_vcal(self):
-        event = self.obj
-        event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
-        event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
-        event.setTitle('cool event')
-        view = EventsVCal(event, TestRequest())
-        vcal = view.getVCal()
-        lines = vcal.split(u'\n')
-        self.assertEqual(lines[0], u"BEGIN:VEVENT")
-        self.assertEqual(lines[7], u"SUMMARY:%s" % safe_unicode(event.Title()))
-        # times should be converted to UTC
-        self.assertEqual(lines[1], u"DTSTART:20010101T110000Z")
-        self.assertEqual(lines[2], u"DTEND:20010101T130000Z")
 
     def test_get_size(self):
         event = self.obj

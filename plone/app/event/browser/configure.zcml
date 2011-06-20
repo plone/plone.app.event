@@ -17,7 +17,7 @@
 
     <!-- Event view -->
     <browser:page
-        for="plone.event.interfaces.IEvent"
+        for="plone.app.event.interfaces.IEvent"
         name="event_view"
         class=".event_view.EventView"
         template="event_view.pt"
@@ -26,17 +26,9 @@
 
     <!-- ICal for event content type -->
     <browser:page
-        for="plone.event.interfaces.IEvent"
+        for="plone.app.event.interfaces.IEvent"
         name="ics_view"
         class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
-    <!-- VCal for event content type -->
-    <browser:page
-        for="plone.event.interfaces.IEvent"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
         permission="zope2.View"
         />
 
@@ -63,32 +55,6 @@
         for="Products.ATContentTypes.interfaces.IATTopic"
         name="ics_view"
         class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
-    <!-- VCal for folderish content types -->
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        name="vcs_view"
-        class=".vcal.EventsVCal"
         permission="zope2.View"
         />
 
