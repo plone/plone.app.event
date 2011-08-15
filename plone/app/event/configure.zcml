@@ -5,7 +5,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="plone">
 
-    <include package="plone.rfc5546" />
+    <include package="plone.rfc5545" />
     <include package="plone.formwidget.recurrence" />
     <include package="plone.formwidget.dateinput" />
     <include package="plone.app.portlets" />
