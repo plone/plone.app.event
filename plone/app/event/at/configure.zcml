@@ -6,6 +6,8 @@
 
     <five:registerPackage package="." initialize=".initialize" />
 
+    <include package="plone.formwidget.dateinput.at" />
+
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler="..base.whole_day_handler" />
