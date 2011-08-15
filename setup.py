@@ -24,7 +24,7 @@ setup(name='plone.app.event',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'plone.rfc5545',
+          'plone.rfc5546',
 
           # TODO: re-list dependencies
           # -*- Extra requirements: -*-
