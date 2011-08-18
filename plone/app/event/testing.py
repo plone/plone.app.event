@@ -32,7 +32,7 @@ from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing.zca import ZCML_DIRECTIVES
 from plone.testing.z2 import STARTUP
-from plone.app.event.controlpanel.event import IEventSettings
+from plone.app.event.interfaces import IEventSettings
 
 class TimezoneLayer(Layer):
     defaultBases = (ZCML_DIRECTIVES, STARTUP,)
