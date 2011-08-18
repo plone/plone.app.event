@@ -16,7 +16,7 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from plone.formwidget.recurrenceinput.at import RecurrenceWidget
+from plone.formwidget.recurrence.atwidget import RecurrenceWidget
 from plone.formwidget.datetimeinput.at import DatetimeWidget
 
 from plone.app.event.interfaces import IEvent
