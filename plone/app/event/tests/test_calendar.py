@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope.component import getMultiAdapter
-from plone.app.event.interfaces import ICalendarSupport
+from plone.app.event.interfaces import IEvent
 
 def makeResponse(request):
     """ create a fake response and set up logging of output """
@@ -75,11 +75,11 @@ class CalendarTest(unittest.TestCase):
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Event')
         crit = topic.addCriterion('object_provides', 'ATSimpleStringCriterion')
-        crit.setValue(ICalendarSupport.__identifier__)
+        crit.setValue(IEvent.__identifier__)
         query = topic.buildQuery()
         self.assertEqual(len(query), 2)
         self.assertEqual(query['portal_type'], 'Event')
-        self.assertEqual(query['object_provides'], ICalendarSupport.__identifier__)
+        self.assertEqual(query['object_provides'], IEvent.__identifier__)
         view = getMultiAdapter((topic, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)

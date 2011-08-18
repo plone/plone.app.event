@@ -6,6 +6,7 @@ OK ... that item is done
 IP ... that item is in progress
 
 
+
 HIGH PRIORITY
 =============
 
@@ -22,6 +23,7 @@ documentation
 - plip documentation
 - document daterecurringindex benchmark results
 - document TZ behavior with examples
+* document removal of ICalendarSupport in plone.app.event.interfaces
 
 daterecurringindex
 ------------------
