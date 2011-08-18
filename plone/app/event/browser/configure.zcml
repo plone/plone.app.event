@@ -2,11 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <browser:resourceDirectory
-        name="plone.app.event"
-        directory="static"
-        />
-
     <!-- Control panel -->
     <browser:page
         name="event-settings"
