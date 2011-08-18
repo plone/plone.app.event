@@ -30,7 +30,7 @@
  <action title="Edit" action_id="edit" category="object" condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
     url_expr="string:${object_url}/edit" visible="True"
     i18n:attributes="title">
-  <permission value="Modify portal content"/>
+  <permission value="Change portal Events"/>
  </action>
  <action title="History" action_id="history" category="object"
     condition_expr="" url_expr="string:${object_url}/atct_history"
@@ -41,6 +41,6 @@
     condition_expr="object/externalEditorEnabled"
     url_expr="string:${object_url}/external_edit" visible="False"
     i18n:attributes="title">
-  <permission value="Modify portal content"/>
+  <permission value="Change portal Events"/>
  </action>
 </object>
