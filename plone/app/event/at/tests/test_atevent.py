@@ -21,7 +21,7 @@ from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event.at.testing import FakeEvent
-from plone.rfc5545.utils import pydt
+from plone.event.utils import pydt
 from plone.app.event.at.content import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.ical import EventsICal

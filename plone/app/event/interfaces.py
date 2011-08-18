@@ -1,7 +1,7 @@
 from zope import schema
 from zope.interface import Interface
 
-from plone.rfc5545.interfaces import IEvent as IBaseEvent
+from plone.event.interfaces import IEvent as IBaseEvent
 from plone.app.event.base import default_timezone
 from plone.app.event import messageFactory as _
 

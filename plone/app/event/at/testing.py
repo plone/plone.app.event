@@ -4,7 +4,7 @@ from plone.testing import z2
 
 from zope.interface import implements
 from DateTime import DateTime
-from plone.rfc5545.utils import pydt
+from plone.event.utils import pydt
 
 from plone.app.event.interfaces import IEvent
 from plone.app.event.testing import PAEvent_FIXTURE
