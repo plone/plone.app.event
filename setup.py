@@ -25,7 +25,6 @@ setup(name='plone.app.event',
       install_requires=[
           'setuptools',
           'icalendar',
-          #'plone.rfc5545', # that one is replaced by icalendar
 
           # TODO: re-list dependencies
           # -*- Extra requirements: -*-
