@@ -1,7 +1,7 @@
 
 from plone.app.registry.browser import controlpanel
 
-from plone.app.event import MessageFactory as _
+from plone.app.event import messageFactory as _
 from plone.app.event.interfaces import IEventSettings
 
 
