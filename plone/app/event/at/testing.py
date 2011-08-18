@@ -32,7 +32,7 @@ PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
 class FakeEvent(object):
     """ Fake Event for testing.
     """
-    implements(IRecurringEventICal)
+    implements(IEvent)
     def __init__(self, uid=None, title=None, description=None, start=None,
                  end=None, whole_day=None, created=None, modified=None,
                  location=None, subject=[], attendees=[], contact_name=None,
