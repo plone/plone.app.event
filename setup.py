@@ -25,6 +25,7 @@ setup(name='plone.app.event',
       install_requires=[
           'setuptools',
           'icalendar',
+          'plone.event', # evaluate if that will still be needed
 
           # TODO: re-list dependencies
           # -*- Extra requirements: -*-
