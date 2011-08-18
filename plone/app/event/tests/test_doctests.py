@@ -5,7 +5,6 @@ from plone.testing import layered
 from plone.app.event.testing import TIMEZONE_LAYER
 
 DOCFILES = [
-    '../recurrence.txt',
     'webdav.txt'
 ]
 def test_suite():
