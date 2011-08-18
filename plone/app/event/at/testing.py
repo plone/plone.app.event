@@ -23,7 +23,7 @@ class PAEventATLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.formwidget.dateinput:default')
 
-PAEventAT_FIXTURE = PAEventLayer()
+PAEventAT_FIXTURE = PAEventATLayer()
 PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventAT_FIXTURE,),
     name="PAEventAT:Integration")
