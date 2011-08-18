@@ -23,7 +23,8 @@ documentation
 - plip documentation
 - document daterecurringindex benchmark results
 - document TZ behavior with examples
-* document removal of ICalendarSupport in plone.app.event.interfaces
+- document removal of ICalendarSupport (interface for ical export ability) in
+  plone.app.event.interfaces
 
 daterecurringindex
 ------------------
