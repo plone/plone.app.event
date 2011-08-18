@@ -9,7 +9,7 @@
 
     <!-- Control panel -->
     <browser:page
-        name="event-controlpanel"
+        name="event-settings"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         class=".controlpanel.EventSettingsControlPanel"
         permission="cmf.ManagePortal"
