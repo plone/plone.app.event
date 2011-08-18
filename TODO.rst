@@ -6,6 +6,20 @@ OK ... that item is done
 IP ... that item is in progress
 
 
+POSSIBLE TASKS FOR Zidanca Sprint 2011
+======================================
+
+- Bring pone.formwidget.dateinput forward. Fix tests, finish the merge of
+archetypes.datetimewidget and collective.z3form.datetimewidget.
+
+- Fix tests for refactored plone.app.event.
+
+INFO: plone.app.event and plone.formwidget.dateinput were refactored to have
+seperated at and dx/z3cform submodules. All functionality dependend on AT or DX
+respectively z3cforms, should reside in those subpackages, so that they can
+easily be switched off.
+
+
 
 HIGH PRIORITY
 =============
