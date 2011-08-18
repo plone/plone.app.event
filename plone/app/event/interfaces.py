@@ -2,7 +2,7 @@ from zope import schema
 from zope.interface import Interface
 
 from plone.event.interfaces import IEvent as IBaseEvent
-from plone.app.event.base import default_timezone
+from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
@@ -22,7 +22,7 @@ class IEventSettings(Interface):
                 default=u"The timezone setting of the portal. Users can set "
                          "their own timezone, if available timezones are defined."),
             required=True,
-            default=default_timezone,
+            default=fallback_default_timezone,
             vocabulary="plone.app.event.Timezones"
             )
 
