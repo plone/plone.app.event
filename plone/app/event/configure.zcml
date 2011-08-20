@@ -6,7 +6,7 @@
     i18n_domain="plone">
 
     <include package="plone.formwidget.recurrence" />
-    <include package="plone.formwidget.dateinput" />
+    <include package="plone.formwidget.datetime" />
     <include package="plone.app.portlets" />
     <include package="plone.app.registry" />
 

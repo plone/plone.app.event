@@ -28,7 +28,7 @@ from plone.app.event.browser.ical import EventsICal
 from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.base import default_end_date
 
-from plone.formwidget.dateinput.at import DatetimeWidget
+from plone.formwidget.datetime.at import DatetimeWidget
 
 
 import unittest2 as unittest

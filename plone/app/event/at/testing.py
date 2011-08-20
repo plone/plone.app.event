@@ -15,13 +15,13 @@ class PAEventATLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # Load ZCML
-        import plone.formwidget.dateinput
+        import plone.formwidget.datetime
         self.loadZCML(
-                package=plone.formwidget.dateinput,
+                package=plone.formwidget.datetime,
                 context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        self.applyProfile(portal, 'plone.formwidget.dateinput:default')
+        self.applyProfile(portal, 'plone.formwidget.datetime:default')
 
 PAEventAT_FIXTURE = PAEventATLayer()
 PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
