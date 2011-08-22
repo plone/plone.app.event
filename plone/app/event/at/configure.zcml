@@ -14,7 +14,7 @@
 
     <genericsetup:registerProfile
         name="default"
-        title="plone.app.event.at ATEvent"
+        title="plone.app.event.at"
         directory="profiles/default"
         description="Installs the Archetypes based ATEvent content type."
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
