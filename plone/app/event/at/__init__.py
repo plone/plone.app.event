@@ -4,7 +4,7 @@ except ImportError:
     from Products.Archetypes import atapi
 
 from Products.CMFCore.utils import ContentInit
-from plone.app.event import config
+from plone.app.event import PROJECTNAME, ADD_PERMISSION
 
 
 def initialize(context):
@@ -14,12 +14,11 @@ def initialize(context):
     from plone.app.event.at import content
 
     content_types, constructors, ftis = atapi.process_types(
-        atapi.listTypes(config.PROJECTNAME),
-        config.PROJECTNAME)
+        atapi.listTypes(PROJECTNAME), PROJECTNAME)
 
     for atype, constructor in zip(content_types, constructors):
-        ContentInit("%s: %s" % (config.PROJECTNAME, atype.portal_type),
+        ContentInit("%s: %s" % (PROJECTNAME, atype.portal_type),
             content_types      = (atype,),
-            permission         = config.ADD_PERMISSION,
+            permission         = ADD_PERMISSION,
             extra_constructors = (constructor,),
             ).initialize(context)
