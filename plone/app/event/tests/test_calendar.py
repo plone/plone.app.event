@@ -20,14 +20,17 @@ from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
+
 class CalendarTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
     def setUp(self):
+        import pdb;pdb.set_trace()
+
         self.request = self.layer['request']
         portal = self.layer['portal']
-        self.portal = portal
         setRoles(portal, TEST_USER_ID, ['Manager'])
+
 
         portal.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
@@ -40,6 +43,8 @@ class CalendarTest(unittest.TestCase):
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')
         self.event2 = portal['ploneconf2008']
+
+        self.portal = portal
 
     def testCalendarView(self):
         view = getMultiAdapter((self.portal, self.request), name='ics_view')
