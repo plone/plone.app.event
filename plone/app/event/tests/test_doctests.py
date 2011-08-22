@@ -17,7 +17,7 @@ def test_suite():
     ])
     suite.addTests([
         layered(doctest.DocTestSuite(
-                    'plone.app.event.timezone',
+                    'plone.app.event.vocabulary',
                     optionflags=doctest.ELLIPSIS),
                 layer = TIMEZONE_LAYER),
     ])
