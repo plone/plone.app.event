@@ -25,12 +25,9 @@ class CalendarTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
     def setUp(self):
-        import pdb;pdb.set_trace()
-
         self.request = self.layer['request']
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
-
 
         portal.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
