@@ -20,6 +20,6 @@ def initialize(context):
     for atype, constructor in zip(content_types, constructors):
         ContentInit("%s: %s" % (config.PROJECTNAME, atype.portal_type),
             content_types      = (atype,),
-            permission         = config.ADD_PERMISSIONS[atype.portal_type],
+            permission         = config.ADD_PERMISSION,
             extra_constructors = (constructor,),
             ).initialize(context)
