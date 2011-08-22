@@ -6,6 +6,8 @@ OK ... that item is done
 IP ... that item is in progress
 
 
+* ATEvent cannot be created - the factory method is not created... investigate.
+
 POSSIBLE TASKS FOR Zidanca Sprint 2011
 ======================================
 
