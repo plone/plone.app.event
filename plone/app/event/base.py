@@ -19,6 +19,24 @@ def default_end_date():
 
 def default_timezone(context=None):
     """ Retrieve the timezone from the portal or user.
+
+    >>> from zope.component import getUtility
+    >>> from plone.registry.interfaces import IRegistry
+    >>> from plone.app.event.controlpanel.event import IEventSettings
+    >>> reg = getUtility(IRegistry)
+    >>> settings = reg.forInterface(IEventSettings)
+
+    >>> from plone.event.interfaces import ITimezoneGetter
+    >>> tzutil = getUtility(ITimezoneGetter)
+    >>> tzutil().timezone
+    'CET'
+
+    >>> settings.portal_timezone = "Europe/Vienna"
+    >>> tzutil().timezone
+    'Europe/Vienna'
+
+    TODO: test member timezone
+
     """
 
     if context:

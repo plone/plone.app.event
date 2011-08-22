@@ -10,6 +10,7 @@ from Products.CMFCore.permissions import View
 from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
@@ -318,4 +319,4 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         ATCTContent.update(self, **info)
 
 
-atapi.registerATCT(ATEvent, PROJECTNAME)
+registerATCT(ATEvent, PROJECTNAME)
