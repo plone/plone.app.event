@@ -71,7 +71,7 @@ class PortletTest(unittest.TestCase):
 
 
 class PortletTest(unittest.TestCase):
-    layer = PAEvent_INTEGRATION_TESTING
+    layer = PAEventAT_INTEGRATION_TESTING
 
     def setUp(self):
         setHooks()
