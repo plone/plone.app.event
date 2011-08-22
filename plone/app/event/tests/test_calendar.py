@@ -29,7 +29,6 @@ class CalendarTest(unittest.TestCase):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
 
-        import pdb;pdb.set_trace()
         portal.invokeFactory('Event', id='ploneconf2007', title='Plone Conf 2007', startDate='2007/10/10', endDate='2007/10/12', location='Naples', eventUrl='http://plone.org/events/conferences/2007-naples')
         self.event1 = portal['ploneconf2007']
 
