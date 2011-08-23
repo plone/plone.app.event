@@ -7,7 +7,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
-from Products.CMFPlone.utils import safe_unicode
+#from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
@@ -23,7 +23,7 @@ from plone.formwidget.datetime.at import DatetimeWidget
 from plone.app.event.at import packageName
 from plone.app.event.interfaces import IEvent
 from plone.app.event.base import default_end_date
-from plone.app.event.base import default_timezone
+from plone.app.event.base import default_timezone as default_tz
 
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
@@ -202,14 +202,14 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
-    title = safe_unicode(atapi.ATFieldProperty('title'))
-    description = safe_unicode(atapi.ATFieldProperty('description'))
+    #title = safe_unicode(atapi.ATFieldProperty('title'))
+    #description = safe_unicode(atapi.ATFieldProperty('description'))
 
     # TODO: do this for all event fields of IEvent interface
-    recurrence = atapi.ATFieldProperty('recurrence')
+    #recurrence = atapi.ATFieldProperty('recurrence')
 
     def default_timezone(self):
-        return default_timezone(self)
+        return default_tz()
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
