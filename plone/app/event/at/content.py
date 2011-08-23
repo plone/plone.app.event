@@ -20,7 +20,7 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 from plone.formwidget.recurrence.atwidget import RecurrenceWidget
 from plone.formwidget.datetime.at import DatetimeWidget
 
-from plone.app.event import PROJECTNAME
+from plone.app.event.at import packageName
 from plone.app.event.interfaces import IEvent
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone
@@ -318,5 +318,4 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             info = kwargs
         ATCTContent.update(self, **info)
 
-
-registerATCT(ATEvent, PROJECTNAME)
+registerATCT(ATEvent, packageName)
