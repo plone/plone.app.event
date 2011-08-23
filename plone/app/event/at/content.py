@@ -84,8 +84,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         enforceVocabulary=True,
         default_method='default_timezone',
         widget=atapi.SelectionWidget(
-            label = _(u'label_event_timezone', default=u"Timezone"),
-            description = _(u'help_event_timezone',
+            label=_(u'label_event_timezone', default=u"Timezone"),
+            description=_(u'help_event_timezone',
                 default=u"Select the Timezone, where this event happens."),
             ),
         ),
@@ -181,7 +181,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 # Repurpose the subject field for the event type
 ATEventSchema.moveField('subject', before='eventUrl')
 ATEventSchema['subject'].write_permission = ModifyPortalContent
-ATEventSchema['subject'].widget.label = _(u'label_event_type', default=u'Event Type(s)')
+ATEventSchema['subject'].widget.label = _(u'label_event_type',
+                                          default=u'Event Type(s)')
 ATEventSchema['subject'].widget.size = 6
 ATEventSchema.changeSchemataForField('subject', 'default')
 
@@ -206,7 +207,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     # TODO: do this for all event fields of IEvent interface
     recurrence = atapi.ATFieldProperty('recurrence')
-
 
     def default_timezone(self):
         return default_timezone(self)
@@ -248,8 +248,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
         if start > end:
             errors['endDate'] = _(u'error_end_must_be_after_start_date',
-                                  default=u'End date must be after start date.')
-
+                              default=u'End date must be after start date.')
 
     def _dt_getter(self, field):
         # always get the date in event's timezone
@@ -279,9 +278,8 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         value = value.toZone('UTC')
         self.getField(fieldtoset).set(self, value, **kwargs)
         # TODO: remove that print statement
-#        print("set %s: %s" % (field, value))
+        #print("set %s: %s" % (field, value))
         #self.reindexObject()
-
 
     #
     # We MUST make sure we are storing datetime fields in UTC
@@ -302,7 +300,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security.declareProtected(ModifyPortalContent, 'setEndDate')
     def setEndDate(self, value, **kwargs):
         self._dt_setter('endDate', value, **kwargs)
-
 
     # TODO: Why is this needed!!!
     #
