@@ -47,7 +47,8 @@ def default_timezone(context=None):
             if member_timezone:
                 return pytz.timezone(member_timezone).zone
 
-    controlpanel = getUtility(IRegistry).forInterface(IEventSettings)
+    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
+                                                    prefix="plone.app.event")
     portal_timezone = controlpanel.portal_timezone
 
     # fallback to what plone.event is doing

@@ -7,6 +7,14 @@ RFC2445.
 
 It replaces the ATContentType event impementation.
 
+To use the Archetypes based ATEvent type, include the at package in your zcml::
+
+    <include package="plone.app.event.at" />
+
+and import the plone.app.event.at Generic Setup import step.
+
+
+
 Contributions
 =============
 Philip Bauer, <bauer@starzel.de>
