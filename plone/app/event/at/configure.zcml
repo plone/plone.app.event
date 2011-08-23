@@ -4,6 +4,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="plone">
 
+    <include package="plone.app.event" />
+
     <five:registerPackage package="." initialize=".initialize" />
 
     <include package="plone.formwidget.datetime.at" />
