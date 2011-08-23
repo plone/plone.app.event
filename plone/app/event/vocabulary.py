@@ -33,11 +33,11 @@ def AvailableTimezones(context):
 
     >>> from zope.schema.interfaces import IVocabularyFactory
     >>> tzvocab = getUtility(IVocabularyFactory,
-    ...     'AvailableTimezonesVocabulary')
+    ...     'AvailableTimezones')
     >>> list(tzvocab(None))
     []
 
-    >>> allzones = getUtility(IVocabularyFactory, 'TimezoneVocabulary')(None)
+    >>> allzones = getUtility(IVocabularyFactory, 'Timezones')(None)
     >>> zones = [zone.value for zone in list(allzones)[:4]]
 
     >>> settings.portal_timezone = zones[0]
