@@ -2,11 +2,17 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
+    <browser:resourceDirectory
+        name="plone.app.event"
+        directory="resources"
+        permission="zope.Public"
+        />
+
     <!-- Control panel -->
     <browser:page
         name="event-settings"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        class=".controlpanel.EventSettingsControlPanel"
+        class=".controlpanel.EventControlPanel"
         permission="cmf.ManagePortal"
         />
 

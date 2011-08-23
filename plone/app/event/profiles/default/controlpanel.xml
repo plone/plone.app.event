@@ -7,11 +7,12 @@
 
     <configlet
         title="Event Settings"
-        action_id="plone.app.event"
+        action_id="plone.app.event.eventsettings"
         appId="plone.app.event"
         category="Plone"
         condition_expr=""
         url_expr="string:${portal_url}/@@event-settings"
+        icon_expr="string:${portal_url}/++resource++plone.app.event/event_icon.png"
         visible="True"
         i18n:attributes="title">
             <permission>Manage portal</permission>

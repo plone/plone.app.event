@@ -34,6 +34,6 @@ class IEventSettings(Interface):
             required=False,
             default=[],
             value_type=schema.Choice(
-                vocabulary="plone.app.event.AvailableTimezones"
+                vocabulary="plone.app.event.Timezones"
                 )
             )
