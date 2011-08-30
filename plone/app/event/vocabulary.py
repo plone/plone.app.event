@@ -27,7 +27,7 @@ def AvailableTimezones(context):
 
     >>> from zope.component import getUtility
     >>> from plone.registry.interfaces import IRegistry
-    >>> from plone.app.event.controlpanel.event import IEventSettings
+    >>> from plone.app.event.interfaces import IEventSettings
     >>> reg = getUtility(IRegistry)
     >>> settings = reg.forInterface(IEventSettings)
 

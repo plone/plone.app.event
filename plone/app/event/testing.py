@@ -1,7 +1,6 @@
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
-from plone.testing import z2
 from Products.DateRecurringIndex.testing import DRI_FIXTURE
 
 class PAEventLayer(PloneSandboxLayer):
@@ -25,7 +24,7 @@ PAEvent_INTEGRATION_TESTING = IntegrationTesting(
 
 import os
 from zope.configuration import xmlconfig
-from zope.component import provideUtility, getUtility
+from zope.component import provideUtility
 from plone.registry import Registry
 from plone.registry.interfaces import IRegistry
 
@@ -56,18 +55,5 @@ class TimezoneLayer(Layer):
             os.environ['TZ'] = self['ostz']
         else:
             del os.environ['TZ']
-
-    def testSetUp(self):
-        reg = getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings)
-        settings.portal_timezone = None
-        settings.available_timezones = None
-
-    def testTeasDown(self):
-        reg = getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings)
-        settings.portal_timezone = None
-        settings.available_timezones = None
-
 
 TIMEZONE_LAYER = TimezoneLayer()

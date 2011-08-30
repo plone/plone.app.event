@@ -104,7 +104,6 @@ class RendererTest(unittest.TestCase):
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
 
     def test_published_events(self):
-        self.setRoles(('Manager',))
         self.portal.invokeFactory('Event', 'e1')
         self.portal.invokeFactory('Event', 'e2')
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
@@ -124,7 +123,6 @@ class RendererTest(unittest.TestCase):
         r = self.renderer(assignment=events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/events_listing'))
 
-        self.setRoles(['Manager'])
         self.portal.invokeFactory('Folder', 'events')
         r = self.renderer(assignment=events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/events'))
@@ -132,7 +130,6 @@ class RendererTest(unittest.TestCase):
 
     def test_all_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
-        self.setRoles(['Manager'])
         self.portal.invokeFactory('Folder', 'mynewsite')
         directlyProvides(self.portal.mynewsite, INavigationRoot)
         self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))

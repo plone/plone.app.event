@@ -70,17 +70,16 @@ class PortletTest(unittest.TestCase):
         self.failUnless(isinstance(renderer, calendar.Renderer))
 
 
-class PortletTest(unittest.TestCase):
+class RendererTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
     def setUp(self):
-        setHooks()
-        setSite(self.portal)
-
-        self.request = self.layer['request']
         portal = self.layer['portal']
         self.portal = portal
+        self.request = self.layer['request']
         setRoles(portal, TEST_USER_ID, ['Manager'])
+        setHooks()
+        setSite(portal)
 
     def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
         context = context or self.portal
