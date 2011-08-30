@@ -22,29 +22,18 @@ PAEvent_INTEGRATION_TESTING = IntegrationTesting(
     name="PAEvent:Integration")
 
 
+# TODO: drop me:::
 import os
-from zope.configuration import xmlconfig
-from zope.component import provideUtility
-from plone.registry import Registry
-from plone.registry.interfaces import IRegistry
-
 from plone.testing import Layer
 from plone.testing.zca import ZCML_DIRECTIVES
 from plone.testing.z2 import STARTUP
-from plone.app.event.interfaces import IEventSettings
 
 class TimezoneLayer(Layer):
     defaultBases = (ZCML_DIRECTIVES, STARTUP,)
 
     def setUp(self):
-        context = self['configurationContext']
-        import plone.registry
         import plone.app.event
-        xmlconfig.file('configure.zcml', plone.registry, context=context)
-
-        self['plone_registry'] = Registry()
-        self['plone_registry'].registerInterface(IEventSettings)
-        provideUtility(self['plone_registry'], IRegistry)
+        self.loadZCML(package=plone.app.event)
 
         self['ostz'] = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
         os.environ['TZ'] = "CET"

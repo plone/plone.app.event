@@ -91,6 +91,9 @@ class RendererTest(unittest.TestCase):
         setHooks()
         setSite(portal)
 
+        # TODO: don't use admin privileges for test methods except
+        # test_prev_events_link and test_prev_events_link_and_navigation_root
+
         # Make sure Events use simple_publication_workflow
         self.portal.portal_workflow.setChainForPortalTypes(['Event'], ['simple_publication_workflow'])
 
@@ -148,9 +151,6 @@ class RendererTest(unittest.TestCase):
             self.failUnless(r.prev_events_link().endswith(
                 '/events/aggregator/previous'))
 
-        # before we continue, we need administrator privileges
-        self.loginAsPortalOwner()
-
         if r.have_events_folder():
             self.portal._delObject('events')
 
@@ -167,9 +167,6 @@ class RendererTest(unittest.TestCase):
 
     def test_prev_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
-
-        # before we continue, we need administrator privileges
-        self.loginAsPortalOwner()
 
         # remove default plone content(s)
         if 'events' in self.portal:
