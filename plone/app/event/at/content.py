@@ -29,6 +29,7 @@ from plone.app.event.base import default_timezone as default_tz
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.StringField('location',
+        storage=atapi.AnnotationStorage(),
         searchable=True,
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
@@ -77,6 +78,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.StringField('timezone',
+        storage=atapi.AnnotationStorage(),
         required=True,
         searchable=False,
         languageIndependent=True,
@@ -117,6 +119,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.LinesField('attendees',
+        storage=atapi.AnnotationStorage(migrate=True),
         languageIndependent=True,
         searchable=True,
         write_permission=ModifyPortalContent,
