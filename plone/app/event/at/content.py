@@ -210,13 +210,13 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     timezone = atapi.ATFieldProperty('timezone')
     location = atapi.ATFieldProperty('location')
 
-    def occurences(self, limit_start=None, limit_end=None):
+    def occurrences(self, limit_start=None, limit_end=None):
         starts = recurrence_sequence_ical(
-                self.start_date,
+                self.start(),
                 recrule=self.recurrence,
                 from_=limit_start, until=limit_end)
         ends = recurrence_sequence_ical(
-                self.end_date,
+                self.end(),
                 recrule=self.recurrence,
                 from_=limit_start, until=limit_end)
         events = map(lambda start,end:(start, end), starts, ends)
