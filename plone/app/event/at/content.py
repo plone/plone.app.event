@@ -120,7 +120,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.LinesField('attendees',
-        storage=atapi.AnnotationStorage(migrate=True),
         languageIndependent=True,
         searchable=True,
         write_permission=ModifyPortalContent,
@@ -210,7 +209,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     recurrence = atapi.ATFieldProperty('recurrence')
     timezone = atapi.ATFieldProperty('timezone')
     location = atapi.ATFieldProperty('location')
-    attendees = atapi.ATFieldProperty('attendees')
 
     def occurences(self, limit_start=None, limit_end=None):
         starts = recurrence_sequence_ical(
