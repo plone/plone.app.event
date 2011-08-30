@@ -1,6 +1,5 @@
 from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
-from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import isSameDay, isSameTime
 
 
@@ -64,17 +63,16 @@ class EventView(BrowserView):
         # TODO convert start_date, start_time, end_date, end_time
         # to user or portal timezone. Don't convert iso.
         context = self.context
-        recur = IRecurrenceSupport(context)
         events = map(
-            lambda start, end:dict(
-                start_date = ulocalized_time(start, False, time_only=None, context=context),
-                end_date = ulocalized_time(end, False, time_only=None, context=context),
-                start_time = ulocalized_time(start, False, time_only=True, context=context),
-                end_time = ulocalized_time(end, False, time_only=True, context=context),
-                start_iso = start.isoformat(),
-                end_iso = end.isoformat(),
-                same_day = start.date() == end.date(),
-                same_time = start.time() == end.time(),
-            ), recur.occurences_start(), recur.occurences_end())
+            lambda occ: dict(
+                start_date = ulocalized_time(occ[0], False, time_only=None, context=context),
+                end_date = ulocalized_time(occ[1], False, time_only=None, context=context),
+                start_time = ulocalized_time(occ[0], False, time_only=True, context=context),
+                end_time = ulocalized_time(occ[1], False, time_only=True, context=context),
+                start_iso = occ[0].isoformat(),
+                end_iso = occ[1].isoformat(),
+                same_day = occ[0].date() == occ[1].date(),
+                same_time = occ[0].time() == occ[1].time(),
+            ), context.occurrences)
 
         return events
