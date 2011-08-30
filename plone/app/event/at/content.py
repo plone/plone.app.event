@@ -24,6 +24,7 @@ from plone.app.event.at import packageName
 from plone.app.event.interfaces import IEvent
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone as default_tz
+from plone.event.recurrence import recurrence_sequence_ical
 
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
@@ -210,6 +211,19 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     timezone = atapi.ATFieldProperty('timezone')
     location = atapi.ATFieldProperty('location')
     attendees = atapi.ATFieldProperty('attendees')
+
+    def occurences(self, limit_start=None, limit_end=None):
+        starts = recurrence_sequence_ical(
+                self.start_date,
+                recrule=self.recurrence,
+                from_=limit_start, until=limit_end)
+        ends = recurrence_sequence_ical(
+                self.end_date,
+                recrule=self.recurrence,
+                from_=limit_start, until=limit_end)
+        events = map(lambda start,end:(start, end), starts, ends)
+        return events
+
 
     def default_timezone(self):
         return default_tz()
