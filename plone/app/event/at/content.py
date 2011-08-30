@@ -205,11 +205,11 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
-    #title = safe_unicode(atapi.ATFieldProperty('title'))
-    #description = safe_unicode(atapi.ATFieldProperty('description'))
-
     # TODO: do this for all event fields of IEvent interface
-    #recurrence = atapi.ATFieldProperty('recurrence')
+    recurrence = atapi.ATFieldProperty('recurrence')
+    timezone = atapi.ATFieldProperty('timezone')
+    location = atapi.ATFieldProperty('location')
+    attendees = atapi.ATFieldProperty('attendees')
 
     def default_timezone(self):
         return default_tz()
