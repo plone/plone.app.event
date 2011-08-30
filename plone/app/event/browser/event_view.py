@@ -73,6 +73,6 @@ class EventView(BrowserView):
                 end_iso = occ[1].isoformat(),
                 same_day = occ[0].date() == occ[1].date(),
                 same_time = occ[0].time() == occ[1].time(),
-            ), context.occurrences)
+            ), context.occurrences())
 
         return events
