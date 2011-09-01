@@ -1,6 +1,5 @@
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import IntegrationTesting
-from plone.testing import z2
 
 from zope.interface import implements
 from DateTime import DateTime

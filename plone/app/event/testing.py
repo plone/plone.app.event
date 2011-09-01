@@ -20,29 +20,3 @@ PAEvent_FIXTURE = PAEventLayer()
 PAEvent_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEvent_FIXTURE,),
     name="PAEvent:Integration")
-
-
-# TODO: drop me:::
-import os
-from plone.testing import Layer
-from plone.testing.zca import ZCML_DIRECTIVES
-from plone.testing.z2 import STARTUP
-
-class TimezoneLayer(Layer):
-    defaultBases = (ZCML_DIRECTIVES, STARTUP,)
-
-    def setUp(self):
-        import plone.app.event
-        self.loadZCML(package=plone.app.event)
-
-        self['ostz'] = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
-        os.environ['TZ'] = "CET"
-
-    def tearDown(self):
-        # delete resources from setUp
-        if self['ostz']:
-            os.environ['TZ'] = self['ostz']
-        else:
-            del os.environ['TZ']
-
-TIMEZONE_LAYER = TimezoneLayer()

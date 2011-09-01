@@ -9,12 +9,6 @@ from collective.elephantvocabulary import wrap_vocabulary
 
 def Timezones(context):
     """ Vocabulary for all timezones.
-    >>> import zope.component
-    >>> from zope.schema.interfaces import IVocabularyFactory
-    >>> tzvocab = zope.component.getUtility(IVocabularyFactory, 'plone.app.event.Timezones')
-
-    TODO: find something more breakage proof than following test
-    >>> assert('Africa/Abidjan' == list(tzvocab(None))[0].value)
 
     TODO: make timezone source adaptable to provide vocab with commont_timezones
           or all_timezones
@@ -25,36 +19,22 @@ def Timezones(context):
 def AvailableTimezones(context):
     """ Vocabulary for available timezones, as set by in the controlpanel.
 
-    >>> from zope.component import getUtility
-    >>> from plone.registry.interfaces import IRegistry
-    >>> from plone.app.event.interfaces import IEventSettings
-    >>> reg = getUtility(IRegistry)
-    >>> settings = reg.forInterface(IEventSettings)
+    This vocabulary is based on collective.elephantvocabulary. The reason is,
+    that if timezones are used in events or in user's settings and later
+    retracted by the portal manager, they should still be usable for those
+    objects but not selectable in forms.
 
-    >>> from zope.schema.interfaces import IVocabularyFactory
-    >>> tzvocab = getUtility(IVocabularyFactory,
-    ...     'AvailableTimezones')
-    >>> list(tzvocab(None))
-    []
+    Note: after setting available_timezones, this vocabulary must be
+    reinstantiated to reflect the changes.
 
-    >>> allzones = getUtility(IVocabularyFactory, 'Timezones')(None)
-    >>> zones = [zone.value for zone in list(allzones)[:4]]
-
-    >>> settings.portal_timezone = zones[0]
-    >>> assert([term.value for term in list(tzvocab(None))] == zones[0:1])
-
-    >>> settings.available_timezones = zones[1:]
-    >>> assert([term.value for term in list(tzvocab(None))] == zones)
-
-    >>> settings.available_timezones = zones
-    >>> assert([term.value for term in list(tzvocab(None))] == zones)
+    # TODO: if the portal_timezone is not in available_timezones, also put it
+    # in AvailableTimezone vocab.
 
     """
     tzvocab = getUtility(IVocabularyFactory, 'plone.app.event.Timezones')(context)
     return wrap_vocabulary(
-        tzvocab,
-        visible_terms_from_registry=\
-            'plone.app.event.available_timezones'
+            tzvocab,
+            visible_terms_from_registry='plone.app.event.available_timezones'
         )(context)
 
 
