@@ -1,19 +1,21 @@
-from zope.publisher.browser import BrowserView
-from Acquisition import aq_inner
+from datetime import datetime
+import icalendar
 
+from Acquisition import aq_inner
 from Products.ATContentTypes.interfaces import IATTopic
 
-# TODO: fix this.
-from plone.event.interfaces import IICalEventExporter, IICalendar, IEvent
-from plone.app.event import messageFactory as _
+from zope.publisher.browser import BrowserView
+from plone.event.interfaces import IEvent
+from plone.event.utils import pydt
 
+from plone.app.event import messageFactory as _
 
 class EventsICal(BrowserView):
     """Returns events in iCal format"""
 
     def __call__(self):
-        data = self.getICal()
-        if not data:
+        cal = self.getICal()
+        if not cal:
             return _(u"No events found.")
 
         name = '%s.ics' % self.context.getId()
@@ -22,20 +24,80 @@ class EventsICal(BrowserView):
             'attachment; filename="%s"' % name)
 
         # get iCal
-        ical = IICalendar(self.context)
-        data = u''.join([ical.header(), data, ical.footer()])
-        self.request.RESPONSE.write(data.encode('utf-8'))
+        self.request.RESPONSE.write(cal.as_string().encode('utf-8'))
 
     def getICal(self):
         # collect iCal entries for found events
-        data = u""
+        events = self.getEvents()
+        if not events: return None
+
+        cal = icalendar.Calendar()
+        # TODO: add proper properties (proid, etc.)
+        cal.add('proid', 'plone')
+
         for event in self.getEvents():
-            data += IICalEventExporter(event).feed()
-        return data
+            ical_event = icalendar.Event()
+            ical_event.add('dtstamp', datetime())
+            ical_event.add('created', pydt(event.CreationDate()))
+            ical_event.add('uid', event.UID())
+            ical_event.add('modified', pydt(event.ModificationDate()))
+            ical_event.add('summary', event.Title())
+            ical_event.add('startdate', pydt(event.start()))
+            ical_event.add('enddate', pydt(event.end()))
+
+            recurrence = event.recurrence
+            if recurrence:
+                ical_event.add('rrule', icalendar.prop.vRecur.from_ical(recurrence))
+
+            description = event.Description()
+            if description:
+                ical_event.add('description', description)
+
+            location = event.getLocation()
+            if location:
+                ical_event.add('location', location)
+
+            subject = event.Subject()
+            if subject:
+                ical_event.add('categories', u','.join(subject))
+
+            # TODO: revisit and implement attendee export according to RFC
+            attendees = event.getAttendees()
+            for attendee in attendees:
+                ical_event.add('attendee', attendee)
+
+            cn = []
+            contact = event.contact_name()
+            if contact:
+                cn.append(contact) # TODO safe_unicode conversion needed?
+            phone = event.contact_phone()
+            if phone:
+                cn.append(phone)
+            email = event.contact_email()
+            if email:
+                cn.append(email)
+            if cn:
+                ical_event.add('contact', u', '.join(cn))
+
+            url = event.event_url()
+            if url:
+                ical_event.add('url', url)
+
+            # TODO: IIRC this function was added in bristol. rethink it's api
+            # and keep it, since it's definetly useful
+            ## allow derived event types to inject additional data for iCal
+            #if hasattr(event, 'getICalSupplementary'):
+            #    event.getICalSupplementary(event)
+
+            cal.add_component(ical_event)
+
+        return cal
+
 
     def getEvents(self):
         context = aq_inner(self.context)
         query = {'object_provides':IEvent.__identifier__}
         if not IATTopic.providedBy(context):
             query['path'] = '/'.join(context.getPhysicalPath())
-        return [b.getObject() for b in context.queryCatalog(REQUEST=query)]
+        return [item.getObject()
+                for item in context.queryCatalog(REQUEST=query)]
