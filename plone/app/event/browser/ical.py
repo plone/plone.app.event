@@ -14,6 +14,11 @@ from plone.app.event import messageFactory as _
 PRODID = "-//Plone.org//NONSGML plone.event//EN"
 VERSION = "2.0"
 
+# TODO: factor out ical generation stuff into own ical module. this should be
+# able to operate on a generic context which follows IEvent attributes. IEvent
+# should define attributes to comply with RFC5545. dexterity then should
+# implement them as in RFC
+
 class EventsICal(BrowserView):
     """Returns events in iCal format"""
 
