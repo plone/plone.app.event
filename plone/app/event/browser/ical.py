@@ -7,8 +7,12 @@ from Products.ATContentTypes.interfaces import IATTopic
 from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEvent
 from plone.event.utils import pydt
+from plone.app.event.base import default_timezone
 
 from plone.app.event import messageFactory as _
+
+PRODID = "-//Plone.org//NONSGML plone.event//EN"
+VERSION = "2.0"
 
 class EventsICal(BrowserView):
     """Returns events in iCal format"""
@@ -33,14 +37,29 @@ class EventsICal(BrowserView):
 
         cal = icalendar.Calendar()
         # TODO: add proper properties (proid, etc.)
-        cal.add('proid', 'plone')
+        cal.add('prodid', PRODID)
+        cal.add('version', VERSION)
+
+        # TODO: is there a UUID to use instead of UID?
+        # Non-Standard calendar extensions. also see:
+        # http://en.wikipedia.org/wiki/ICalendar#cite_note-11
+        cal_context = self.context
+        cal_title = cal_context.Title()
+        if cal_title: cal.add('x-wr-calname', cal_title)
+        cal_desc = cal_context.Description()
+        if cal_desc: cal.add('x-wr-caldesc', cal_desc)
+        if getattr(cal_context, 'UID', False): # portal object does not have UID
+            cal_uid = cal_context.UID()
+            cal.add('x-wr-relcalid', cal_uid)
+        cal_tz = default_timezone(cal_context)
+        if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
         for event in self.getEvents():
             ical_event = icalendar.Event()
             ical_event.add('dtstamp', datetime.now())
             ical_event.add('created', pydt(event.creation_date))
             ical_event.add('uid', event.UID())
-            ical_event.add('modified', pydt(event.modification_date))
+            ical_event.add('last-modified', pydt(event.modification_date))
             ical_event.add('summary', event.Title())
             ical_event.add('startdate', pydt(event.start()))
             ical_event.add('enddate', pydt(event.end()))
