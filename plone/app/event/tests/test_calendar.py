@@ -105,13 +105,13 @@ class CalendarTest(unittest.TestCase):
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
-            'SUMMARY:Plone Conf 2007',
             'LOCATION:Naples',
+            'SUMMARY:Plone Conf 2007',
             'URL:http://plone.org/events/conferences/2007-naples',
             'END:VEVENT',
             'BEGIN:VEVENT',
-            'SUMMARY:Plone Conf 2008',
             'LOCATION:DC',
+            'SUMMARY:Plone Conf 2008',
             'END:VEVENT',
             'END:VCALENDAR')
 
@@ -167,8 +167,8 @@ class CalendarTest(unittest.TestCase):
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
-            'SUMMARY:Plone Conf 2008',
             'LOCATION:DC',
+            'SUMMARY:Plone Conf 2008',
             'URL:http://plone.org/events/conferences/2008-washington-dc',
             'END:VEVENT',
             'END:VCALENDAR')
