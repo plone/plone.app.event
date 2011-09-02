@@ -22,7 +22,6 @@ from zope.publisher.browser import TestRequest
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event.at.testing import FakeEvent
 from plone.event.utils import pydt
-from plone.app.event.at.content import ATEvent
 from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.ical import EventsICal
 from plone.app.event.browser.event_view import toDisplay
@@ -40,7 +39,7 @@ from plone.app.testing import TEST_USER_ID
 OBJ_DATA = {
     'location': 'my location',
     'subject': 'Meeting',
-    'eventUrl': 'http://example.org/'
+    'eventUrl': 'http://example.org/',
     'startDate': DateTime(),
     'endDate': DateTime()+1,
     'contactName': 'John Doe',
@@ -49,7 +48,7 @@ OBJ_DATA = {
     'attendees': (
         'john@doe.com',
         'john@doe.org',
-        'john@example.org')
+        'john@example.org'),
     'text': "lorem ipsum"}
 
 
