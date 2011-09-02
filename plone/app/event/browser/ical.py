@@ -37,10 +37,10 @@ class EventsICal(BrowserView):
 
         for event in self.getEvents():
             ical_event = icalendar.Event()
-            ical_event.add('dtstamp', datetime())
-            ical_event.add('created', pydt(event.CreationDate()))
+            ical_event.add('dtstamp', datetime.now())
+            ical_event.add('created', pydt(event.creation_date))
             ical_event.add('uid', event.UID())
-            ical_event.add('modified', pydt(event.ModificationDate()))
+            ical_event.add('modified', pydt(event.modification_date))
             ical_event.add('summary', event.Title())
             ical_event.add('startdate', pydt(event.start()))
             ical_event.add('enddate', pydt(event.end()))
