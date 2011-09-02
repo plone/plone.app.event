@@ -1,5 +1,6 @@
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import IntegrationTesting
+from plone.testing import z2
 
 from zope.interface import implements
 from DateTime import DateTime
@@ -16,6 +17,8 @@ class PAEventATLayer(PloneSandboxLayer):
         # Load ZCML
         import plone.app.event.at
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
+
+        z2.installProduct(app, 'plone.app.event.at')
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.at:default')
