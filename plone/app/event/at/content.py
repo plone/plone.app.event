@@ -269,32 +269,32 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
+        print("DTGETTER")
         return dt.toZone(timezone)
 
     def _dt_setter(self, fieldtoset, value, **kwargs):
-        # The name of the first parameter shouldn't be field, because
+        # Always set the date in UTC, saving the timezone in another field.
+        # But since the timezone value isn't known at the time of saving the
+        # form, we have to save it timezone-naive first and let
+        # timezone_handler convert it to the target zone afterwards.
+
+        # Note: The name of the first parameter shouldn't be field, because
         # it's already in kwargs in some case.
-        #
-        # always set the date in UTC
-        # TODO timezone field is not already handled by the add form,
-        # so we get the default timezone :(
+
         # TODO the endDate and startDate should be updated if the timezone
         # of the event change.
-        timezone = self.getField('timezone').get(self)
         if not isinstance(value, DateTime): value = DateTime(value)
-        value = DateTime(
-                value.year(),
-                value.month(),
-                value.day(),
-                value.hour(),
-                value.minute(),
-                value.second(),
-                timezone)
-        value = value.toZone('UTC')
+        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02dZ' % (
+                    value.year(),
+                    value.month(),
+                    value.day(),
+                    value.hour(),
+                    value.minute(),
+                    value.second())
+                )
         self.getField(fieldtoset).set(self, value, **kwargs)
-        # TODO: remove that print statement
-        #print("set %s: %s" % (field, value))
-        #self.reindexObject()
+        print("  DTSETTER")
+
 
     #
     # We MUST make sure we are storing datetime fields in UTC
@@ -331,3 +331,32 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         ATCTContent.update(self, **info)
 
 registerATCT(ATEvent, packageName)
+
+def timezone_handler(obj, event):
+    """ When setting the startDate and endDate, the value of the timezone field
+    isn't known, so we have to convert those timezone-naive dates into
+    timezone-aware ones afterwards.
+
+    """
+    print(">>>>> TIMEZONE HANDLER")
+    timezone = obj.getField('timezone').get(obj)
+    start_field = obj.getField('startDate')
+    end_field = obj.getField('endDate')
+    start = start_field.get(obj)
+    end = end_field.get(obj)
+
+    def make_DT(value, timezone):
+        return DateTime(
+            value.year(),
+            value.month(),
+            value.day(),
+            value.hour(),
+            value.minute(),
+            value.second(),
+            timezone)
+
+    start = make_DT(start, timezone).toZone('UTC')
+    end = make_DT(end, timezone).toZone('UTC')
+    start_field.set(obj, start)
+    end_field.set(obj, end)
+    obj.reindexObject()

@@ -13,6 +13,9 @@
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler="..base.whole_day_handler" />
+    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+                handler=".content.timezone_handler" />
 
     <genericsetup:registerProfile
         name="default"
