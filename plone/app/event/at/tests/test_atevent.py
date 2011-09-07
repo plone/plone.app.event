@@ -4,7 +4,8 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFPlone.utils import safe_unicode
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+
+from Products.Archetypes import atapi
 
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
@@ -22,7 +23,6 @@ from zope.publisher.browser import TestRequest
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event.at.testing import FakeEvent
 from plone.event.utils import pydt
-from plone.app.event.interfaces import ICalendarSupport
 from plone.app.event.browser.ical import EventsICal
 from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.base import default_end_date
@@ -75,12 +75,8 @@ class PAEventATTest(unittest.TestCase):
         obj.setAttendees(OBJ_DATA['attendees'])
         obj.setText(OBJ_DATA['text'])
 
-    def test_doesImplementCalendarSupport(self):
-        self.failUnless(ICalendarSupport.providedBy(self.obj))
-        self.failUnless(verifyObject(ICalendarSupport, self.obj))
-
     def test_implementsATEvent(self):
-        self.failUnless(iface.providedBy(self.obj))
+        self.failUnless(IATEvent.providedBy(self.obj))
         self.failUnless(verifyObject(IATEvent, self.obj))
 
     def test_props(self):
@@ -201,17 +197,17 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, StringWidget),
+        self.failUnless(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -239,14 +235,14 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, MetadataStorage),
+        self.failUnless(isinstance(field.storage, atapi.MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == MetadataStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.MetadataStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, KeywordWidget),
+        self.failUnless(isinstance(field.widget, atapi.KeywordWidget),
                         'Value is %s' % id(field.widget))
 
     def test_eventUrlField(self):
@@ -276,16 +272,16 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.validators, URLValidator)
-        self.failUnless(isinstance(field.widget, StringWidget),
+        self.failUnless(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -317,9 +313,9 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'datetime', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
@@ -327,7 +323,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -361,9 +357,9 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'datetime', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
@@ -371,7 +367,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.failUnless(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -402,17 +398,17 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, StringWidget),
+        self.failUnless(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -443,17 +439,17 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, StringWidget),
+        self.failUnless(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -484,16 +480,16 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.validators, EmptyValidator)
-        self.failUnless(isinstance(field.widget, StringWidget),
+        self.failUnless(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -524,15 +520,15 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(isinstance(field.widget, LinesWidget),
+        self.failUnless(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -563,17 +559,17 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AnnotationStorage),
+        self.failUnless(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.failUnless(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, RichWidget),
+        self.failUnless(isinstance(field.widget, atapi.RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.failUnless(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
