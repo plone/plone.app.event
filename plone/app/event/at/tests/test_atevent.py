@@ -627,7 +627,7 @@ class PAEventATFieldTest(unittest.TestCase):
                  'same_time' : False,
                 })
 
-    def testWholeDayEventSubscriber(self):
+    def test_wholeday_handler(self):
         os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
                 id="event",
@@ -636,14 +636,12 @@ class PAEventATFieldTest(unittest.TestCase):
                 timezone="Europe/Vienna",
                 wholeDay=True)
         event = self.portal[event_id]
-        self.assertEqual(event.start().Time(), '06:00:00')
-        self.assertEqual(event.end().Time(), '18:00:00')
-        self.assertTrue(event.whole_day())
         notify(ObjectModifiedEvent(event))
+        self.assertTrue(event.whole_day())
         self.assertEqual(event.start().Time(), '00:00:00')
         self.assertEqual(event.end().Time(), '23:59:59')
 
-    def testWholeDayEventSubscriberNotWholeDayEvent(self):
+    def test_wholeday_handler_notwholeday(self):
         os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
                 id="event",
@@ -651,9 +649,18 @@ class PAEventATFieldTest(unittest.TestCase):
                 endDate='2000/10/13 18:00:00',
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
+        notify(ObjectModifiedEvent(event))
+        self.assertFalse(event.whole_day())
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
-        self.assertFalse(event.whole_day())
+
+    def test_timezone_handler(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00',
+                timezone="Europe/Vienna")
+        event = self.portal[event_id]
         notify(ObjectModifiedEvent(event))
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
