@@ -40,7 +40,8 @@ documentation
 - document daterecurringindex benchmark results
 - document TZ behavior with examples
 - document removal of ICalendarSupport (interface for ical export ability) in
-  plone.app.event.interfaces
+  plone.app.event.interfaces. MAYBE provide that interface in ATContentTypes
+  for backwards compatibility
 
 daterecurringindex
 ------------------
