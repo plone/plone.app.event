@@ -269,7 +269,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
-        print("DTGETTER")
         return dt.toZone(timezone)
 
     def _dt_setter(self, fieldtoset, value, **kwargs):
@@ -293,7 +292,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                     value.second())
                 )
         self.getField(fieldtoset).set(self, value, **kwargs)
-        print("  DTSETTER")
 
 
     #
@@ -338,7 +336,6 @@ def timezone_handler(obj, event):
     timezone-aware ones afterwards.
 
     """
-    print(">>>>> TIMEZONE HANDLER")
     timezone = obj.getField('timezone').get(obj)
     start_field = obj.getField('startDate')
     end_field = obj.getField('endDate')
