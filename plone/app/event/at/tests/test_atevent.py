@@ -581,6 +581,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.failUnless('text/html' in field.getAllowedContentTypes(self.obj))
 
     def _makeOne(self, start, end, whole_day=False):
+        # TODO: get rid of fake event
         event = FakeEvent(start=start, end=end, whole_day=whole_day)
         # ulocalized_time need the REQUEST attribute
         event.REQUEST = self.portal.REQUEST
@@ -600,6 +601,7 @@ class PAEventATFieldTest(unittest.TestCase):
                 })
 
     def testToDisplayWholeDaySameDay(self):
+        # TODO: fake event doesn't set end time to 23:59
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
                           whole_day=True)
         self.assertEqual(toDisplay(event),
