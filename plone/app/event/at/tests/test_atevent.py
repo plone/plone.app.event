@@ -76,11 +76,11 @@ class PAEventATTest(unittest.TestCase):
         obj.setText(OBJ_DATA['text'])
 
     def test_implementsATEvent(self):
-        self.failUnless(IATEvent.providedBy(self.obj))
-        self.failUnless(verifyObject(IATEvent, self.obj))
+        self.assertTrue(IATEvent.providedBy(self.obj))
+        self.assertTrue(verifyObject(IATEvent, self.obj))
 
     def test_props(self):
-        self.assertEquals(self.obj.cmf_edit_kws,
+        self.assertEqual(self.obj.cmf_edit_kws,
                 ('effectiveDay', 'effectiveMo', 'effectiveYear',
                  'expirationDay', 'expirationMo', 'expirationYear',
                  'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
@@ -106,11 +106,11 @@ class PAEventATTest(unittest.TestCase):
     def test_edit(self):
         new = self.obj
         self._edit_atevent(new)
-        self.assertEquals(new.start_date, pydt(new.start()))
-        self.assertEquals(new.end_date, pydt(new.end()))
-        self.assertEquals(new.start_date, pydt(OBJ_DATA['startDate']))
-        self.assertEquals(new.end_date, pydt(OBJ_DATA['endDate']))
-        self.assertEquals(new.duration, new.end_date - new.start_date)
+        self.assertEqual(new.start_date, pydt(new.start()))
+        self.assertEqual(new.end_date, pydt(new.end()))
+        self.assertEqual(new.start_date, pydt(OBJ_DATA['startDate']))
+        self.assertEqual(new.end_date, pydt(OBJ_DATA['endDate']))
+        self.assertEqual(new.duration, new.end_date - new.start_date)
 
     def test_cmp(self):
         portal = self.portal
@@ -124,22 +124,22 @@ class PAEventATTest(unittest.TestCase):
 
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='event')
-        self.failUnlessEqual(cmp(e1, e2), 0)
+        self.assertEqual(cmp(e1, e2), 0)
 
         # start date
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day30, endDate=day31, title='event')
-        self.failUnlessEqual(cmp(e1, e2), -1) # e1 < e2
+        self.assertEqual(cmp(e1, e2), -1) # e1 < e2
 
         # duration
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day31, title='event')
-        self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
+        self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         # title
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='evenz')
-        self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
+        self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
     def test_ical(self):
         event = self.obj
@@ -158,7 +158,7 @@ class PAEventATTest(unittest.TestCase):
     def test_get_size(self):
         event = self.obj
         self._edit_atevent(event)
-        self.failUnlessEqual(event.get_size(), len(OBJ_DATA['text']))
+        self.assertEqual(event.get_size(), len(OBJ_DATA['text']))
 
 
 class PAEventATFieldTest(unittest.TestCase):
@@ -174,411 +174,411 @@ class PAEventATFieldTest(unittest.TestCase):
     def test_locationField(self):
         field = self.obj.getField('location')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getLocation',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getLocation',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setLocation',
+        self.assertTrue(field.mutator == 'setLocation',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ModifyPortalContent,
+        self.assertTrue(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AnnotationStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == EmptyValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_subjectField(self):
         field = self.obj.getField('subject')
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == (), 'Value is %s' % str(str(field.default)))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 1,
+        self.assertTrue(field.multiValued == 1,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'Subject',
+        self.assertTrue(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'Subject',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setSubject',
+        self.assertTrue(field.mutator == 'setSubject',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'mVc',
+        self.assertTrue(field.generateMode == 'mVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.MetadataStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.MetadataStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == EmptyValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, atapi.KeywordWidget),
+        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
                         'Value is %s' % id(field.widget))
 
     def test_eventUrlField(self):
         field = self.obj.getField('eventUrl')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'event_url',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'event_url',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setEventUrl',
+        self.assertTrue(field.mutator == 'setEventUrl',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnlessEqual(field.validators, URLValidator)
-        self.failUnless(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertEqual(field.validators, URLValidator)
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_startDateField(self):
         field = self.obj.getField('startDate')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == None , 'Value is %s' % str(field.default))
-        self.failUnless(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
-        self.failUnless(field.searchable == False, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'start',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'start',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setStartDate',
+        self.assertTrue(field.mutator == 'setStartDate',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'datetime', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, DatetimeWidget),
+        self.assertTrue(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
 
     def test_endDateField(self):
         field = self.obj.getField('endDate')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == None, 'Value is %s' % str(field.default))
-        self.failUnless(field.default_method == default_end_date,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == default_end_date,
                         'Value is %s' % str(field.default_method))
-        self.failUnless(field.searchable == False, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'end',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'end',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setEndDate',
+        self.assertTrue(field.mutator == 'setEndDate',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'datetime', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, DatetimeWidget),
+        self.assertTrue(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactNameField(self):
         field = self.obj.getField('contactName')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'contact_name',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'contact_name',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setContactName',
+        self.assertTrue(field.mutator == 'setContactName',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == EmptyValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactEmailField(self):
         field = self.obj.getField('contactEmail')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'contact_email',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'contact_email',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setContactEmail',
+        self.assertTrue(field.mutator == 'setContactEmail',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == EmailValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_contactPhoneField(self):
         field = self.obj.getField('contactPhone')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'contact_phone',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'contact_phone',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setContactPhone',
+        self.assertTrue(field.mutator == 'setContactPhone',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnlessEqual(field.validators, EmptyValidator)
-        self.failUnless(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertEqual(field.validators, EmptyValidator)
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_attendeesField(self):
         field = self.obj.getField('attendees')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == (), 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == (), 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getAttendees',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getAttendees',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setAttendees',
+        self.assertTrue(field.mutator == 'setAttendees',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(isinstance(field.widget, atapi.LinesWidget),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_textField(self):
         field = self.obj.getField('text')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getText',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setText',
+        self.assertTrue(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
+        self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AnnotationStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, atapi.RichWidget),
+        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
-        self.failUnless(isinstance(vocab, atapi.DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
-        self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type is None,
+        self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
+        self.assertTrue(field.default_content_type is None,
                         'Value is %s' % field.default_content_type)
-        self.failUnless(field.default_output_type == 'text/x-html-safe',
+        self.assertTrue(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnless('text/html' in field.getAllowedContentTypes(self.obj))
+        self.assertTrue('text/html' in field.getAllowedContentTypes(self.obj))
 
     def _makeOne(self, start, end, whole_day=False):
         # TODO: get rid of fake event
