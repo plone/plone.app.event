@@ -11,6 +11,18 @@ isn't modified by a form. is that failure proof?
 
 * ATEvent cannot be created - the factory method is not created... investigate.
 
+#########
+$ grept start_date parts/omelette/*
+$ grept cmfalendar parts/omelette/*
+* remove start_date, add dtstart
+* more ICalendar fields
+
+* move parts/omelette/Products/CMFPlone/skins/plone_form_scripts/validate_start_end_date.vpy
+  to plone.formwidget.dateinput
+
+* permissions of cmfcalendar in plone.app.event
+* remove cmfcalendar
+
 POSSIBLE TASKS FOR Zidanca Sprint 2011
 ======================================
 
