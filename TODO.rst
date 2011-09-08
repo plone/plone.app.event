@@ -9,7 +9,6 @@ IP ... that item is in progress
 * notify(ObjectModifiedEvent(event)) has always to be called manually if object
 isn't modified by a form. is that failure proof?
 
-* ATEvent cannot be created - the factory method is not created... investigate.
 
 #########
 $ grept start_date parts/omelette/*
@@ -22,6 +21,13 @@ $ grept cmfalendar parts/omelette/*
 
 * permissions of cmfcalendar in plone.app.event
 * remove cmfcalendar
+
+* make generic ical adapter.
+* to_ical method into event content type. method may use more generic one.
+
+IP * rrule freq must be present. make/update validator with that.
+
+* atevent tests with recurrence
 
 POSSIBLE TASKS FOR Zidanca Sprint 2011
 ======================================
@@ -173,6 +179,9 @@ DXEvent
 
 done
 ====
+
+OK * p.a.event tests: ATEvent cannot be created - the factory method is not created... investigate.
+
 OK - datetimewidget calendar images missing...
 OK - new TZ field on ATEvent. store all dates in UTC timezone. store TZ extra.
    display dates in user's timezone (via TZ fetcher utility). use getter and
