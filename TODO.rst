@@ -6,6 +6,9 @@ OK ... that item is done
 IP ... that item is in progress
 
 
+* notify(ObjectModifiedEvent(event)) has always to be called manually if object
+isn't modified by a form. is that failure proof?
+
 * ATEvent cannot be created - the factory method is not created... investigate.
 
 POSSIBLE TASKS FOR Zidanca Sprint 2011
