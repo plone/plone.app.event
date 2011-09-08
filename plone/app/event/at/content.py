@@ -25,7 +25,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone as default_tz
 from plone.event.recurrence import recurrence_sequence_ical
-
+from plone.event.utils import pydt
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -327,6 +327,57 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         elif kwargs:
             info = kwargs
         ATCTContent.update(self, **info)
+
+
+    security.declareProtected(View, 'start_date')
+    @property
+    def start_date(self):
+        value = self['startDate']  # This call the accessor.
+        if value is None:
+            value = self['creation_date']
+        return pydt(value)
+
+    security.declareProtected(View, 'end_date')
+    @property
+    def end_date(self):
+        value = self['endDate']
+        if value is None:
+            return self.start_date
+        return pydt(value)
+
+    security.declareProtected(View, 'duration')
+    @property
+    def duration(self):
+        return self.end_date - self.start_date
+
+    def __cmp__(self, other):
+        """Compare method
+
+        If other is based on ATEvent, compare start, duration and title.
+        #If other is a number, compare duration and number
+        If other is a DateTime instance, compare start date with date
+        In all other cases there is no specific order
+        """
+        # TODO: needed?
+        # TODO: maybe also include location to compate two events.
+
+        # Please note that we can not use self.Title() here: the generated
+        # edit accessor uses getToolByName, which ends up in
+        # five.localsitemanager looking for a parent using a comparison
+        # on this object -> infinite recursion.
+        if IATEvent.providedBy(other):
+            return cmp((self.start_date, self.duration, self.title),
+                       (other.start_date, other.duration, other.title))
+        elif isinstance(other, DateTime):
+            return cmp(self.start(), other)
+        else:
+            # TODO come up with a nice cmp for types
+            return cmp(self.title, other)
+
+    def __hash__(self):
+        # TODO: for what's that?
+        return hash((self.start_date, self.duration, self.title))
+
 
 registerATCT(ATEvent, packageName)
 
