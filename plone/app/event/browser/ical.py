@@ -66,8 +66,8 @@ class EventsICal(BrowserView):
             ical_event.add('uid', event.UID())
             ical_event.add('last-modified', pydt(event.modification_date))
             ical_event.add('summary', event.Title())
-            ical_event.add('startdate', pydt(event.start()))
-            ical_event.add('enddate', pydt(event.end()))
+            ical_event.add('dtstart', pydt(event.start()))
+            ical_event.add('dtend', pydt(event.end()))
 
             recurrence = event.recurrence
             if recurrence:
