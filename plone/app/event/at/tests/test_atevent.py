@@ -79,19 +79,6 @@ class PAEventATTest(unittest.TestCase):
         self.assertTrue(IATEvent.providedBy(self.obj))
         self.assertTrue(verifyObject(IATEvent, self.obj))
 
-    def test_props(self):
-        self.assertEqual(self.obj.cmf_edit_kws,
-                ('effectiveDay', 'effectiveMo', 'effectiveYear',
-                 'expirationDay', 'expirationMo', 'expirationYear',
-                 'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
-                 'start_date', 'end_date', 'contact_name', 'contact_email',
-                 'contact_phone', 'event_url'))
-
-    def test_cmfedit(self):
-        self.assertNotEqual(self.obj.end().Date(), '2010/10/31')
-        self.obj.cmf_edit(start_date='2010-10-30', end_date='2010-10-31')
-        self.assertEqual(self.obj.end().Date(), '2010/10/31')
-
     def test_validation(self):
         req = {'startDate':'2010-10-30'}
         err = {'endDate':None}
