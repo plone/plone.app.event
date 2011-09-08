@@ -40,8 +40,10 @@ OBJ_DATA = {
     'location': 'my location',
     'subject': 'Meeting',
     'eventUrl': 'http://example.org/',
-    'startDate': DateTime(),
-    'endDate': DateTime()+1,
+    'startDate': DateTime('Europe/Vienna'), # Initialize with timezone, even if
+    'endDate': DateTime('Europe/Vienna')+1, # it wouldn't be needed here.
+                                            # It's needed for test comparsion.
+    'timezone': 'Europe/Vienna',
     'contactName': 'John Doe',
     'contactPhone': '+1212356789',
     'contactEmail': 'john@example.org',
@@ -74,6 +76,8 @@ class PAEventATTest(unittest.TestCase):
         obj.setContactEmail(OBJ_DATA['contactEmail'])
         obj.setAttendees(OBJ_DATA['attendees'])
         obj.setText(OBJ_DATA['text'])
+        obj.setTimezone(OBJ_DATA['timezone'])
+        notify(ObjectModifiedEvent(obj))
 
     def test_implementsATEvent(self):
         self.assertTrue(IATEvent.providedBy(self.obj))
