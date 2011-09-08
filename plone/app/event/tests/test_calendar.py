@@ -29,23 +29,27 @@ class CalendarTest(unittest.TestCase):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
 
-        portal.invokeFactory('Event',
+        portal.invokeFactory('Folder',
+                id='events', title=u"Events",
+                Description=u"The portal's Events")
+
+        portal.events.invokeFactory('Event',
                 id='ploneconf2007', title='Plone Conf 2007',
                 startDate='2007/10/10', endDate='2007/10/12',
                 location='Naples',
                 eventUrl='http://plone.org/events/conferences/2007-naples')
-        self.event1 = portal['ploneconf2007']
+        self.event1 = portal.events['ploneconf2007']
 
-        portal.invokeFactory('Event',
+        portal.events.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')
-        self.event2 = portal['ploneconf2008']
+        self.event2 = portal.events['ploneconf2008']
 
         self.portal = portal
 
     def testCalendarView(self):
-        view = getMultiAdapter((self.portal, self.request), name='ics_view')
+        view = getMultiAdapter((self.portal.events, self.request), name='ics_view')
         events = view.getEvents()
         self.assertEqual(len(events), 2)
         self.assertEqual(sorted([e.Title() for e in events]),
@@ -98,7 +102,7 @@ class CalendarTest(unittest.TestCase):
 
     def testRendering(self):
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((self.portal, request), name='ics_view')
+        view = getMultiAdapter((self.portal.events, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
@@ -116,15 +120,15 @@ class CalendarTest(unittest.TestCase):
             'END:VCALENDAR')
 
     def testCalendarInfo(self):
-        portal = self.portal
-        portal.processForm(values={'title': 'Foo', 'description': 'Bar'})
+        events = self.portal.events
+        events.processForm(values={'title': 'Foo', 'description': 'Bar'})
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((portal, request), name='ics_view')
+        view = getMultiAdapter((events, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
-            'X-WR-CALNAME:Foo',
             'X-WR-CALDESC:Bar',
+            'X-WR-CALNAME:Foo',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
@@ -136,19 +140,19 @@ class CalendarTest(unittest.TestCase):
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:Plone site',
-            'X-WR-CALDESC:',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
+        self.assertTrue('X-WR-CALDESC' not in ''.join(output))
         # changing the title should be immediately reflected...
-        portal.processForm(values={'title': 'Föö!!'})
+        events.processForm(values={'title': u'Föö!!'})
         headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((portal, request), name='ics_view')
+        view = getMultiAdapter((events, request), name='ics_view')
         view()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
-            'X-WR-CALNAME:Föö!!',
             'X-WR-CALDESC:Bar',
+            'X-WR-CALNAME:Föö!!',
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
