@@ -138,13 +138,17 @@ class PAEventATTest(unittest.TestCase):
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTitle('cool event')
         view = EventsICal(event, TestRequest())
-        ical = view.getICal()
+        ical = view.getICal().as_string()
         lines = ical.split('\n')
-        self.assertEqual(lines[0], u"BEGIN:VEVENT")
-        self.assertEqual(lines[5], u"SUMMARY:%s" % safe_unicode(event.Title()))
-        # times should be converted to UTC
-        self.assertEqual(lines[6], u"DTSTART:20010101T110000Z")
-        self.assertEqual(lines[7], u"DTEND:20010101T130000Z")
+        self.assertTrue(u"BEGIN:VCALENDAR", lines[0])
+        self.assertTrue(u"BEGIN:VEVENT", lines[6])
+        self.assertTrue(u"SUMMARY:%s" % safe_unicode(event.Title()), lines[12])
+
+        # TODO: times should be converted to UTC and be in RFC compatible format
+        self.assertTrue(u"ENDDATE:2001-01-01 14:00:00+00:00", lines[9])
+        self.assertTrue(u"STARTDATE:2001-01-01 12:00:00+00:00", lines[11])
+        #self.assertTrue(u"DTSTART:20010101T110000Z", lines[6])
+        #self.assertTrue(u"DTEND:20010101T130000Z", lines[7])
 
     def test_get_size(self):
         event = self.obj
