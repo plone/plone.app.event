@@ -197,7 +197,7 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'string', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, atapi.AttributeStorage),
+        self.failUnless(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
