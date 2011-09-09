@@ -27,6 +27,7 @@ from plone.app.event.base import default_timezone as default_tz
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
 
+
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.StringField('location',
@@ -97,6 +98,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         storage=atapi.AnnotationStorage(),
         languageIndependent=True,
         write_permission=ModifyPortalContent,
+        validators=('isRecurrence',),
         widget=RecurrenceWidget(
             label=_(u'label_event_recurrence', default=u'Event Recurrence'),
             description=_(u'help_event_recurrence',
