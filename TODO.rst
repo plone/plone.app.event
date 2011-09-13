@@ -6,9 +6,9 @@ OK ... that item is done
 IP ... that item is in progress
 
 
-* notify(ObjectModifiedEvent(event)) has always to be called manually if object
-isn't modified by a form. is that failure proof?
 
+* quick fix plone.formwidget.datetime
+* integrate sean upton's uu.smartdate / http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
 
 #########
 $ grept start_date parts/omelette/*
@@ -28,6 +28,9 @@ $ grept cmfalendar parts/omelette/*
 IP * rrule freq must be present. make/update validator with that.
 
 * atevent tests with recurrence
+
+* notify(ObjectModifiedEvent(event)) has always to be called manually if object
+isn't modified by a form. is that failure proof?
 
 POSSIBLE TASKS FOR Zidanca Sprint 2011
 ======================================
