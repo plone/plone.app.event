@@ -1,4 +1,3 @@
-from datetime import datetime
 import icalendar
 
 from Acquisition import aq_inner
@@ -6,7 +5,6 @@ from Products.ATContentTypes.interfaces import IATTopic
 
 from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEvent
-from plone.event.utils import pydt
 from plone.app.event.base import default_timezone
 
 from plone.app.event import messageFactory as _
@@ -41,7 +39,6 @@ class EventsICal(BrowserView):
         if not events: return None
 
         cal = icalendar.Calendar()
-        # TODO: add proper properties (proid, etc.)
         cal.add('prodid', PRODID)
         cal.add('version', VERSION)
 
@@ -59,64 +56,10 @@ class EventsICal(BrowserView):
         cal_tz = default_timezone(cal_context)
         if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
-        for event in self.getEvents():
-            ical_event = icalendar.Event()
-            ical_event.add('dtstamp', datetime.now())
-            ical_event.add('created', pydt(event.creation_date))
-            ical_event.add('uid', event.UID())
-            ical_event.add('last-modified', pydt(event.modification_date))
-            ical_event.add('summary', event.Title())
-            ical_event.add('dtstart', pydt(event.start()))
-            ical_event.add('dtend', pydt(event.end()))
-
-            recurrence = event.recurrence
-            if recurrence:
-                ical_event.add('rrule', icalendar.prop.vRecur.from_ical(recurrence))
-
-            description = event.Description()
-            if description:
-                ical_event.add('description', description)
-
-            location = event.getLocation()
-            if location:
-                ical_event.add('location', location)
-
-            subject = event.Subject()
-            if subject:
-                ical_event.add('categories', u','.join(subject))
-
-            # TODO: revisit and implement attendee export according to RFC
-            attendees = event.getAttendees()
-            for attendee in attendees:
-                ical_event.add('attendee', attendee)
-
-            cn = []
-            contact = event.contact_name()
-            if contact:
-                cn.append(contact) # TODO safe_unicode conversion needed?
-            phone = event.contact_phone()
-            if phone:
-                cn.append(phone)
-            email = event.contact_email()
-            if email:
-                cn.append(email)
-            if cn:
-                ical_event.add('contact', u', '.join(cn))
-
-            url = event.event_url()
-            if url:
-                ical_event.add('url', url)
-
-            # TODO: IIRC this function was added in bristol. rethink it's api
-            # and keep it, since it's definetly useful
-            ## allow derived event types to inject additional data for iCal
-            #if hasattr(event, 'getICalSupplementary'):
-            #    event.getICalSupplementary(event)
-
-            cal.add_component(ical_event)
+        for event in events:
+            cal.add_component(event.to_icalendar())
 
         return cal
-
 
     def getEvents(self):
         context = aq_inner(self.context)
