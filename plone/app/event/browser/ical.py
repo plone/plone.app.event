@@ -4,8 +4,8 @@ from Acquisition import aq_inner
 from Products.ATContentTypes.interfaces import IATTopic
 
 from zope.publisher.browser import BrowserView
-from plone.event.interfaces import IEvent
 from plone.app.event.base import default_timezone
+from plone.app.event.interfaces import IEvent
 
 from plone.app.event import messageFactory as _
 
@@ -62,6 +62,7 @@ class EventsICal(BrowserView):
         return cal
 
     def getEvents(self):
+        if IEvent.providedBy(self.context): return [self.context,]
         context = aq_inner(self.context)
         query = {'object_provides':IEvent.__identifier__}
         if not IATTopic.providedBy(context):
