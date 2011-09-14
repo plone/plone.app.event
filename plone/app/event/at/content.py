@@ -31,7 +31,6 @@ from plone.event.utils import pydt
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.StringField('location',
-        storage=atapi.AnnotationStorage(),
         searchable=True,
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
@@ -42,7 +41,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.BooleanField('wholeDay',
         default=False,
-        accessor='whole_day',
         write_permission=ModifyPortalContent,
         languageIndependent=True,
         widget=atapi.BooleanWidget(
@@ -207,10 +205,9 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
-    # TODO: do this for all event fields of IEvent interface
     recurrence = atapi.ATFieldProperty('recurrence')
     timezone = atapi.ATFieldProperty('timezone')
-    location = atapi.ATFieldProperty('location')
+    whole_day = atapi.ATFieldProperty('wholeDay')
 
     def occurrences(self, limit_start=None, limit_end=None):
         starts = recurrence_sequence_ical(
