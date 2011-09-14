@@ -130,7 +130,7 @@
                         </td>
                     </tr>
                     <tr tal:define="contact_email context/contact_email;
-                                    contact_name python:context.contact_name() or None;"
+                                    contact_name context/contact_name;"
                         tal:condition="python:contact_name or contact_email">
                         <th i18n:translate="contact_name">Contact Name</th>
                         <td>
