@@ -43,7 +43,6 @@ def default_timezone(context=None):
     return pytz.timezone(portal_timezone).zone
 
 
-
 def whole_day_handler(obj, event):
     """ For whole day events only, set start time to 0:00:00 and end time to
         23:59:59
