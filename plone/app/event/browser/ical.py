@@ -62,7 +62,7 @@ class EventsICal(BrowserView):
         return cal
 
     def getEvents(self):
-        if IEvent.providedBy(self.context): return [self.context,]
+        if IEvent.providedBy(self.context): return [self.context]
         context = aq_inner(self.context)
         query = {'object_provides':IEvent.__identifier__}
         if not IATTopic.providedBy(context):
