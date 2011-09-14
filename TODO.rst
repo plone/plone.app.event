@@ -10,6 +10,9 @@ IP ... that item is in progress
 * quick fix plone.formwidget.datetime
 * integrate sean upton's uu.smartdate / http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
 
+* plone.app.event.browser.event_view.pt -> eventually make view more generic
+  and usable for dx also... by replacing widget-calls
+
 #########
 $ grept start_date parts/omelette/*
 $ grept cmfalendar parts/omelette/*
