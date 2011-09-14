@@ -249,9 +249,9 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         if location:
             ical_event.add('location', location)
 
-        subject = event.Subject()
-        if subject:
-            ical_event.add('categories', u','.join(subject))
+        subjects= event.Subject()
+        for subject in subjects:
+            ical_event.add('categories', subject)
 
         # TODO: revisit and implement attendee export according to RFC
         attendees = event.getAttendees()
