@@ -49,7 +49,7 @@ def whole_day_handler(obj, event):
         23:59:59
     """
 
-    if not obj.whole_day():
+    if not obj.whole_day:
         return
     startDate = obj.startDate.toZone(obj.timezone)
     startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
