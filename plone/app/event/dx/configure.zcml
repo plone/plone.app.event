@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="plone">
+
+    <include package="plone.behavior" file="meta.zcml" />
+
+    <plone:behavior
+        title="Related items"
+        description="Event/Calendar extension to dexterity content types."
+        description="Adds the ability to assign related items"
+        provides=".related.IEvent"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <!--plone:behavior
+        title="Event"
+        description="Event/Calendar extension to dexterity content types."
+        provides=".behaviors.IEvent"
+        factory=".behaviors.Event"
+        /-->
+
+</configure>

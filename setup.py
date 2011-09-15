@@ -30,9 +30,6 @@ setup(name='plone.app.event',
           # TODO: re-list dependencies
           # -*- Extra requirements: -*-
           'Acquisition',
-          'DateTime',
-          'Products.Archetypes',
-          'Products.ATContentTypes',
           'Products.CMFCore',
           'Products.CMFPlone',
           'Products.DateRecurringIndex',
@@ -56,6 +53,19 @@ setup(name='plone.app.event',
           'zope.schema',
       ],
       extras_require={
+          'archetypes': [
+              'DateTime',
+              'Products.Archetypes',
+              'Products.ATContentTypes',
+          ],
+          'dexterity': [
+              'plone.behavior',
+              'plone.directives.form',
+              'plone.dexterity',
+              'zope.schema',
+              'zope.interface',
+              'zope.component',
+          ],
           'test': [
               #'interlude',
               'plone.testing',
