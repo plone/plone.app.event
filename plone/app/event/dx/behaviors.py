@@ -36,13 +36,13 @@ class IEvent(form.Schema):
                 ),
         )
 
-    start = schema.DateTime(
+    start = schema.Datetime(
         title = _(u'label_start', default=u'Event start date'),
         description = _(u'help_start', default=u'Date and Time, when the event begins.'),
         required = True
         )
 
-    end = schema.DateTime(
+    end = schema.Datetime(
         title = _(u'label_end', default=u'Event end date'),
         description = _(u'help_end', default=u'Date and Time, when the event ends.'),
         required = True
