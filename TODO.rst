@@ -185,6 +185,10 @@ DXEvent
 done
 ====
 
+OK * dependency on plone.folder as well as plone.app.collection are only for
+  registering ical adapters and might make backporting harder than neccassary.
+  optional via zcml:condition
+
 OK * p.a.event tests: ATEvent cannot be created - the factory method is not created... investigate.
 
 OK - datetimewidget calendar images missing...
