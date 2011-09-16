@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter factory=".ical.event_component" />
+
+    <adapter factory="..ical.calendar_component"
+        provides="..interfaces.IICalendar"
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        />
+    <adapter factory="..ical.calendar_component"
+        provides="..interfaces.IICalendar"
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        />
+    <adapter factory="..ical.calendar_component"
+        provides="..interfaces.IICalendar"
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        />
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="ics_view"
+        class="..ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        name="ics_view"
+        class="..ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        name="ics_view"
+        class="..ical.EventsICal"
+        permission="zope2.View"
+        />
+
+
+</configure>

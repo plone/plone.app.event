@@ -25,38 +25,4 @@
         permission="zope2.View"
         />
 
-    <!-- ICal for event content type -->
-    <browser:page
-        for="plone.app.event.interfaces.IEvent"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
-    <!-- ICal -->
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        name="ics_view"
-        class=".ical.EventsICal"
-        permission="zope2.View"
-        />
-
 </configure>

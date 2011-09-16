@@ -223,60 +223,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         events = map(lambda start,end:(start, end), starts, ends)
         return events
 
-    def to_icalendar(self):
-        """ Returns an icalendar object of the event.
-
-        """
-        event = self
-        ical_event = icalendar.Event()
-        ical_event.add('dtstamp', datetime.now())
-        ical_event.add('created', pydt(event.creation_date))
-        ical_event.add('uid', event.UID())
-        ical_event.add('last-modified', pydt(event.modification_date))
-        ical_event.add('summary', event.Title())
-        ical_event.add('dtstart', pydt(event.start()))
-        ical_event.add('dtend', pydt(event.end()))
-
-        recurrence = event.recurrence
-        if recurrence:
-            ical_event.add('rrule', icalendar.prop.vRecur.from_ical(recurrence))
-
-        description = event.Description()
-        if description:
-            ical_event.add('description', description)
-
-        location = event.getLocation()
-        if location:
-            ical_event.add('location', location)
-
-        subjects= event.Subject()
-        for subject in subjects:
-            ical_event.add('categories', subject)
-
-        # TODO: revisit and implement attendee export according to RFC
-        attendees = event.getAttendees()
-        for attendee in attendees:
-            ical_event.add('attendee', attendee)
-
-        cn = []
-        contact = event.contact_name()
-        if contact:
-            cn.append(contact) # TODO safe_unicode conversion needed?
-        phone = event.contact_phone()
-        if phone:
-            cn.append(phone)
-        email = event.contact_email()
-        if email:
-            cn.append(email)
-        if cn:
-            ical_event.add('contact', u', '.join(cn))
-
-        url = event.event_url()
-        if url:
-            ical_event.add('url', url)
-
-        return ical_event
-
     def default_timezone(self):
         return default_tz()
 

@@ -4,11 +4,11 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="plone">
 
-    <include package="plone.app.event" />
-
     <five:registerPackage package="." initialize=".initialize" />
-
+    <include package="plone.app.event" />
     <include package="plone.formwidget.datetime.at" />
+
+    <include file="ical.zcml" />
 
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
@@ -27,4 +27,3 @@
         />
 
 </configure>
-

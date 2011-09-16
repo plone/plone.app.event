@@ -5,6 +5,15 @@ from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
+class IICalendar(Interface):
+    """ Adapter, which is used to construct an icalendar object.
+    """
+
+class IICalendarComponent(Interface):
+    """ Adapter, which is used to construct an event component object for
+    icalendar.
+    """
+
 class IEvent(Interface):
     """ Event schema
 

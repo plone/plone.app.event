@@ -1,0 +1,48 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter factory=".ical.calendar_component"
+        provides=".interfaces.IICalendar"
+        for=".interfaces.IEvent"
+        />
+    <adapter factory=".ical.calendar_component"
+        provides=".interfaces.IICalendar"
+        for="plone.app.collection.interfaces.ICollection"
+        />
+     <adapter factory=".ical.calendar_component"
+        provides=".interfaces.IICalendar"
+        for="plone.folder.interfaces.IFolder"
+        />
+     <adapter factory=".ical.calendar_component"
+        provides=".interfaces.IICalendar"
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        />
+
+    <!-- ICal Browser Views -->
+    <browser:page
+        for=".interfaces.IEvent"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="plone.app.collection.interfaces.ICollection"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="plone.folder.interfaces.IFolder"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+
+</configure>
