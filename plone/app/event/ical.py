@@ -1,7 +1,6 @@
 import icalendar
 
 from Acquisition import aq_inner
-from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 
@@ -14,8 +13,6 @@ from plone.app.event.interfaces import IICalendarComponent
 # ical adapter adapting interfaces
 from plone.app.collection.interfaces import ICollection
 from plone.app.event.interfaces import IEvent
-from plone.folder.interfaces import IFolder
-from Products.CMFCore.interfaces import ISiteRoot
 
 from plone.app.event import messageFactory as _
 
@@ -23,19 +20,16 @@ from plone.app.event import messageFactory as _
 PRODID = "-//Plone.org//NONSGML plone.event//EN"
 VERSION = "2.0"
 
-@implementer(IICalendar)
-def calendar_component(context):
-    context = aq_inner(context)
-    if IEvent.providedBy(context):
-        events = [context]
-    else:
-        query = {'object_provides':IEvent.__identifier__}
-        if not ICollection.providedBy(context):
-            query['path'] = '/'.join(context.getPhysicalPath())
-        events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
+def construct_calendar(context, events):
+    """ Returns an icalendar.Calendar object.
 
-    if not events: return None
+    context: A content object, which is used for calendar details like Title
+             and Description. Usually a container, collection or the event
+             itself.
 
+    events: The list of event objects, which are included in this calendar.
+
+    """
     cal = icalendar.Calendar()
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
@@ -57,6 +51,24 @@ def calendar_component(context):
         cal.add_component(IICalendarComponent(event))
 
     return cal
+
+
+@implementer(IICalendar)
+def calendar_component(context):
+    """ Container/Event adapter. Returns an icalendar.Calendar object from a
+    context like Event, Container or Collection.
+
+    """
+    context = aq_inner(context)
+    if IEvent.providedBy(context):
+        events = [context]
+    else:
+        query = {'object_provides':IEvent.__identifier__}
+        if not ICollection.providedBy(context):
+            query['path'] = '/'.join(context.getPhysicalPath())
+        events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
+
+    return construct_calendar(context, events)
 
 
 class EventsICal(BrowserView):
