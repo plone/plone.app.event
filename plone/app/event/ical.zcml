@@ -6,17 +6,21 @@
         provides=".interfaces.IICalendar"
         for=".interfaces.IEvent"
         />
-    <adapter factory=".ical.calendar_component"
-        provides=".interfaces.IICalendar"
-        for="plone.app.collection.interfaces.ICollection"
-        />
-     <adapter factory=".ical.calendar_component"
-        provides=".interfaces.IICalendar"
-        for="plone.folder.interfaces.IFolder"
-        />
      <adapter factory=".ical.calendar_component"
         provides=".interfaces.IICalendar"
         for="Products.CMFCore.interfaces.ISiteRoot"
+        />
+     
+     <!-- optional -->
+     <adapter factory=".ical.calendar_component"
+        provides=".interfaces.IICalendar"
+        for="plone.folder.interfaces.IFolder"
+        zcml:condition="installed plone.folder"
+        />
+     <adapter factory=".ical.calendar_component_collection"
+        provides=".interfaces.IICalendar"
+        for="plone.app.collection.interfaces.ICollection"
+        zcml:condition="installed plone.app.collection"
         />
 
     <!-- ICal Browser Views -->

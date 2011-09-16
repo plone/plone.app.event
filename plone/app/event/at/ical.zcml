@@ -4,7 +4,7 @@
 
     <adapter factory=".ical.event_component" />
 
-    <adapter factory="..ical.calendar_component"
+    <adapter factory="..ical.calendar_component_collection"
         provides="..interfaces.IICalendar"
         for="Products.ATContentTypes.interfaces.IATTopic"
         />

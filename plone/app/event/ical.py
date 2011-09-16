@@ -11,7 +11,6 @@ from plone.app.event.interfaces import IICalendar
 from plone.app.event.interfaces import IICalendarComponent
 
 # ical adapter adapting interfaces
-from plone.app.collection.interfaces import ICollection
 from plone.app.event.interfaces import IEvent
 
 from plone.app.event import messageFactory as _
@@ -54,9 +53,21 @@ def construct_calendar(context, events):
 
 
 @implementer(IICalendar)
+def calendar_component_collection(context):
+    """ Container/Event adapter. Returns an icalendar.Calendar object from a
+    Collection.
+
+    """
+    context = aq_inner(context)
+    query = {'object_provides':IEvent.__identifier__}
+    events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
+    return construct_calendar(context, events)
+
+
+@implementer(IICalendar)
 def calendar_component(context):
     """ Container/Event adapter. Returns an icalendar.Calendar object from a
-    context like Event, Container or Collection.
+    context like Event or Container.
 
     """
     context = aq_inner(context)
@@ -64,8 +75,7 @@ def calendar_component(context):
         events = [context]
     else:
         query = {'object_provides':IEvent.__identifier__}
-        if not ICollection.providedBy(context):
-            query['path'] = '/'.join(context.getPhysicalPath())
+        query['path'] = '/'.join(context.getPhysicalPath())
         events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
 
     return construct_calendar(context, events)
