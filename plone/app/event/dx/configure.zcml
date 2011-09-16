@@ -8,8 +8,7 @@
     <plone:behavior
         title="Related items"
         description="Event/Calendar extension to dexterity content types."
-        description="Adds the ability to assign related items"
-        provides=".related.IEvent"
+        provides=".behaviors.IEvent"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
