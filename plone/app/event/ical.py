@@ -1,6 +1,7 @@
 import icalendar
 
 from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
 from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 
@@ -60,7 +61,9 @@ def calendar_component_collection(context):
     """
     context = aq_inner(context)
     query = {'object_provides':IEvent.__identifier__}
-    events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
+    cat = getToolByName(context, 'portal_catalog')
+    result = cat(**query)
+    events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
 
@@ -76,8 +79,12 @@ def calendar_component(context):
     else:
         query = {'object_provides':IEvent.__identifier__}
         query['path'] = '/'.join(context.getPhysicalPath())
-        events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
-
+        cat = getToolByName(context, 'portal_catalog')
+        result = cat(**query)
+        events = [item.getObject() for item in result]
+        # TODO: should i become a generator?
+        # TODO: let construct_calendar expand brains to objects - so a
+        # generator would make some sense...
     return construct_calendar(context, events)
 
 
