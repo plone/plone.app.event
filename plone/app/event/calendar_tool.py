@@ -19,6 +19,12 @@ from zope.component import getUtility
 #       requests is nice, but....
 # TODO: make the CalendarTool obsolete via moving those methods into base.py
 
+# it seems that only the calendar portlet is a consumer of the CalendarTool in
+# plone-core.
+
+# TODO: use python's calendar for calendar calculations like list of days in
+# week, etc
+
 class CalendarTool(PloneBaseTool):
     """ A tool for encapsulating how calendars work and are displayed.
     """
