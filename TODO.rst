@@ -7,6 +7,14 @@ IP ... that item is in progress
 
 
 
+IP * merge CalendarTool into p.a.event - see merge-CalendarTool branch. make
+CalendarTool obsolete and move functionality into functions in base.py. that
+way, CMFPlone can still provide - but deprecate - the CalendarTool for
+backwards compatibility.
+
+* create dexterity/plone.behavior based event behaviors (dates (start,end)-,
+  location-, attendees-, contact-behaviors, etc.).
+
 * integrate sean upton's uu.smartdate / http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
 
 * plone.app.event.browser.event_view.pt -> eventually make view more generic
