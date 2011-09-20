@@ -6,6 +6,7 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from collective.elephantvocabulary import wrap_vocabulary
 
+from plone.app.event import messageFactory as _
 
 def Timezones(context):
     """ Vocabulary for all timezones.
@@ -37,6 +38,19 @@ def AvailableTimezones(context):
             visible_terms_from_registry='plone.app.event.available_timezones'
         )(context)
 
+def Weekdays(context):
+    """ Vocabulary for Weekdays.
+    """
+    items =[(_(u"weekday_monday", default=u"Monday"),'0'),
+           (_(u"weelday_tuesday", default=u"Tuesday"),'1'),
+           (_(u"weekday_wednesday", default=u"Wednesday"),'2'),
+           (_(u"weekday_thursday", default=u"Thursday"),'3'),
+           (_(u"weekday_friday", default=u"Friday"),'4'),
+           (_(u"weekday_saturday", default=u"Saturday"),'5'),
+           (_(u"weekday_sunday", default=u"Sunday"),'6'),
+           ]
+    return SimpleVocabulary.fromItems(items)
 
 directlyProvides(Timezones, IVocabularyFactory)
 directlyProvides(AvailableTimezones, IVocabularyFactory)
+directlyProvides(Weekdays, IVocabularyFactory)
