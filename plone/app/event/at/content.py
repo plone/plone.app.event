@@ -1,6 +1,3 @@
-from datetime import datetime
-import icalendar
-
 from zope.interface import implements
 
 from DateTime import DateTime
