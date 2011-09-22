@@ -34,7 +34,7 @@ def construct_calendar(context, events):
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
 
-    # TODO: is there a UUID to use instead of UID?
+    # TODO: use plone's new uuid adapter instead of uid
     # Non-Standard calendar extensions. also see:
     # http://en.wikipedia.org/wiki/ICalendar#cite_note-11
     cal_title = context.Title()
