@@ -15,7 +15,7 @@ from zope.component import getUtility
 #       IEvent
 #   show_states shouldn't be neccassary, since user should see, what he/she is
 #       allowed to see. portal_catalog query should handle this allone.
-#   use_session to allow persistance of selected month in calendar over some 
+#   use_session to allow persistance of selected month in calendar over some
 #       requests is nice, but....
 # TODO: make the CalendarTool obsolete via moving those methods into base.py
 
@@ -80,23 +80,6 @@ class CalendarTool(PloneBaseTool):
         ## example catalog entry: 2011/09/16 16:35:00 Brazil/West
         events_by_date = {}
         for event in events:
-
-            """
-            ## THIS CODE BLOCK was intented to avoid calling getObject...
-            ## BUT SINCE we have to get all occurrences of the object, we have
-            ## to wake it by getObject....
-            # convert event date to target timezone
-            # strptime doesn't accept pytz names... so, we have to fix this.
-            from plone.app.event.base import default_timezone
-            from pytz import timezone
-            target_timezone = default_timezone(self)
-            start_parts = event.start.split(' ')
-            start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
-            tz = timezone(start_parts[2])
-            start = tz.localize(start) # convert naive date to event's zone
-            start = start.astimezone(timezone(target_timezone)) # not to target_zone
-            """
-
             obj = event.getObject()
             occurrences = obj.occurrences(range_start, range_end)
             for occ in occurrences:
@@ -108,6 +91,31 @@ class CalendarTool(PloneBaseTool):
                 else:
                     events_by_date[start_str].append(event)
             return events_by_date
+
+    def dt_from_brain(datestr):
+        """ Return python datetime instance from a catalog brain's date string.
+
+        %Y/%m/%d %H:%M:%S TZINFO
+        Since strptime doesn't handle pytz zones very well, we need to bypass
+        this limitation.
+
+        """
+        # TODO: file a bug for strptime pytz names handling.
+
+        from pytz import timezone
+        start_parts = datestr.split(' ')
+        start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
+        tz = timezone(start_parts[2])
+        start = tz.localize(start) # convert naive date to event's zone
+
+    def dt_to_zone(dt, tzstring):
+        """ Return a datetime instance converted to the timezone given by the
+        string.
+
+        """
+        from pytz import timezone
+        return dt.astimezone(timezone(tzstring))
+
 
 
     ### LEGACY
