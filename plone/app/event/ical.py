@@ -60,7 +60,7 @@ def calendar_component_collection(context):
 
     """
     context = aq_inner(context)
-    result = get_portal_events()
+    result = get_portal_events(context)
     events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
@@ -76,7 +76,7 @@ def calendar_component(context):
         events = [context]
     else:
         path = '/'.join(context.getPhysicalPath())
-        result = get_portal_events(path)
+        result = get_portal_events(context, path)
         events = [item.getObject() for item in result]
         # TODO: should i become a generator?
         # TODO: let construct_calendar expand brains to objects - so a

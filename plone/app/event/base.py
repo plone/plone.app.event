@@ -76,7 +76,7 @@ def first_weekday(self):
         return first_wd
 
 
-def get_portal_events(self, range_start=None, range_end=None, **kw):
+def get_portal_events(context, range_start=None, range_end=None, **kw):
     """ Return all events as catalog brains, possibly within a given
     timeframe.
 
@@ -90,17 +90,17 @@ def get_portal_events(self, range_start=None, range_end=None, **kw):
     query['sort_on'] = 'start'
     query.update(kw)
 
-    cat = getToolByName(self, 'portal_catalog')
+    cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
     return result
 
 
-def get_events_by_date(self, range_start=None, range_end=None, **kw):
+def get_events_by_date(context, range_start=None, range_end=None, **kw):
     """ Return a dictionary with dates in a given timeframe as keys and
     the actual events for that date.
 
     """
-    events = self.get_portal_events(range_start, range_end, **kw)
+    events = get_portal_events(context, range_start, range_end, **kw)
     # TODO: catalog brains are timezone'd. shouldn't they be in UTC?
     ## example catalog entry: 2011/09/16 16:35:00 Brazil/West
     events_by_date = {}
