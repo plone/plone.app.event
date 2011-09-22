@@ -104,6 +104,6 @@ class IEventSettings(Interface):
             title=_(u'label_first_weekday', default=u'First Weekday'),
             description=_(u'help_first_weekday', default=u'First day in the Week.'),
             required=True,
-            default=0,
+            default='0',
             vocabulary="plone.app.event.Weekdays"
             )
