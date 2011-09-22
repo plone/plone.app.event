@@ -9,6 +9,7 @@ from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry
 from plone.event.utils import default_timezone as fallback_default_timezone
 
+from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 
 
@@ -57,3 +58,61 @@ def whole_day_handler(obj, event):
     obj.setStartDate(DateTime(startDate))
     obj.setEndDate(DateTime(endDate))
     obj.reindexObject()  # reindex obj to store upd values in catalog
+
+
+@property
+def first_weekday(self):
+    """ Returns the number of the first Weekday in a Week, as defined in
+    the registry.
+    0 is Monday, 6 is Sunday, as expected by python's datetime.
+
+    """
+    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
+                                                      prefix="plone.app.event")
+    first_wd = controlpanel.first_weekday
+    if not first_wd:
+        return 0
+    else:
+        return first_wd
+
+
+def get_portal_events(self, range_start=None, range_end=None, **kw):
+    """ Return all events as catalog brains, possibly within a given
+    timeframe.
+
+    """
+    query = {}
+    query.update(kw)
+    query['object_provides'] = IEvent.__identifier__
+    if range_start:
+        query['start'] = {'query': range_start, 'range': 'max'}
+    if range_end:
+        query['end'] = {'query': range_end, 'range': 'min'}
+    query['sort_on'] = 'start'
+
+    cat = getToolByName(self, 'portal_catalog')
+    result = cat(**query)
+    return result
+
+
+def get_events_by_date(self, range_start=None, range_end=None, **kw):
+    """ Return a dictionary with dates in a given timeframe as keys and
+    the actual events for that date.
+
+    """
+    events = self.get_portal_events(range_start, range_end, **kw)
+    # TODO: catalog brains are timezone'd. shouldn't they be in UTC?
+    ## example catalog entry: 2011/09/16 16:35:00 Brazil/West
+    events_by_date = {}
+    for event in events:
+        obj = event.getObject()
+        occurrences = obj.occurrences(range_start, range_end)
+        for occ in occurrences:
+            start_str = datetime.strftime(occ.start_date, '%Y-%m-%d')
+            # TODO: add span_events parameter to include dates btw. start
+            # and end also. for events lasting longer than a day...
+            if start_str not in events_by_date:
+                events_by_date[start_str] = [event]
+            else:
+                events_by_date[start_str].append(event)
+        return events_by_date
