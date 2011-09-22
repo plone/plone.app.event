@@ -6,6 +6,7 @@ from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 
 from plone.app.event.base import default_timezone
+from plone.app.event.base import get_portal_events
 
 # ical adapter implementation interfaces
 from plone.app.event.interfaces import IICalendar
@@ -60,9 +61,7 @@ def calendar_component_collection(context):
 
     """
     context = aq_inner(context)
-    query = {'object_provides':IEvent.__identifier__}
-    cat = getToolByName(context, 'portal_catalog')
-    result = cat(**query)
+    result = get_portal_events()
     events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
@@ -77,10 +76,8 @@ def calendar_component(context):
     if IEvent.providedBy(context):
         events = [context]
     else:
-        query = {'object_provides':IEvent.__identifier__}
-        query['path'] = '/'.join(context.getPhysicalPath())
-        cat = getToolByName(context, 'portal_catalog')
-        result = cat(**query)
+        path = '/'.join(context.getPhysicalPath())
+        result = get_portal_events(path)
         events = [item.getObject() for item in result]
         # TODO: should i become a generator?
         # TODO: let construct_calendar expand brains to objects - so a
