@@ -100,6 +100,9 @@ class IEventSettings(Interface):
                 )
             )
 
+    # TODO: weekday vocab isn't displayed correctly. the default of messageid
+    # isn't displayed but the id itself. the value isn't displayed but also the
+    # messageid.
     first_weekday = schema.Choice(
             title=_(u'label_first_weekday', default=u'First Weekday'),
             description=_(u'help_first_weekday', default=u'First day in the Week.'),
