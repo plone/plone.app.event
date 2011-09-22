@@ -1,7 +1,6 @@
 import icalendar
 
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
 from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 
