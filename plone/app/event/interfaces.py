@@ -100,12 +100,10 @@ class IEventSettings(Interface):
                 )
             )
 
-    first_weekday = schema.Int(
+    first_weekday = schema.Choice(
             title=_(u'label_first_weekday', default=u'First Weekday'),
             description=_(u'help_first_weekday', default=u'First day in the Week.'),
             required=True,
             default=0,
-            value_type=schema.Choice(
-                vocabulary="plone.app.event.Weekdays"
-                )
+            vocabulary="plone.app.event.Weekdays"
             )
