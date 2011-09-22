@@ -82,13 +82,13 @@ def get_portal_events(self, range_start=None, range_end=None, **kw):
 
     """
     query = {}
-    query.update(kw)
     query['object_provides'] = IEvent.__identifier__
     if range_start:
         query['start'] = {'query': range_start, 'range': 'max'}
     if range_end:
         query['end'] = {'query': range_end, 'range': 'min'}
     query['sort_on'] = 'start'
+    query.update(kw)
 
     cat = getToolByName(self, 'portal_catalog')
     result = cat(**query)
