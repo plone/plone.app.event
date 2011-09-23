@@ -116,3 +116,32 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
             else:
                 events_by_date[start_str].append(event)
         return events_by_date
+
+
+### ARE THESE NEEDED?
+
+def dt_from_brain(datestr):
+    """ Return python datetime instance from a catalog brain's date string.
+
+    %Y/%m/%d %H:%M:%S TZINFO
+    Since strptime doesn't handle pytz zones very well, we need to bypass
+    this limitation.
+
+    """
+    # TODO: file a bug for strptime pytz names handling.
+
+    from pytz import timezone
+    start_parts = datestr.split(' ')
+    start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
+    tz = timezone(start_parts[2])
+    start = tz.localize(start) # convert naive date to event's zone
+
+def dt_to_zone(dt, tzstring):
+    """ Return a datetime instance converted to the timezone given by the
+    string.
+
+    """
+    from pytz import timezone
+    return dt.astimezone(timezone(tzstring))
+
+

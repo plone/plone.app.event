@@ -29,38 +29,6 @@ class CalendarTool(PloneBaseTool):
     meta_type = 'Plone Calendar Tool'
     toolicon = 'skins/plone_images/event_icon.png'
 
-    # NEW METHODS..
-    # TODO: get them into base.py, eventually.... getting rid of
-    # portal_calendar tool completely
-
-    def dt_from_brain(datestr):
-        """ Return python datetime instance from a catalog brain's date string.
-
-        %Y/%m/%d %H:%M:%S TZINFO
-        Since strptime doesn't handle pytz zones very well, we need to bypass
-        this limitation.
-
-        """
-        # TODO: file a bug for strptime pytz names handling.
-
-        from pytz import timezone
-        start_parts = datestr.split(' ')
-        start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
-        tz = timezone(start_parts[2])
-        start = tz.localize(start) # convert naive date to event's zone
-
-    def dt_to_zone(dt, tzstring):
-        """ Return a datetime instance converted to the timezone given by the
-        string.
-
-        """
-        from pytz import timezone
-        return dt.astimezone(timezone(tzstring))
-
-
-
-    ### LEGACY
-
     def getDayNumbers(self):
         """ Returns a list of daynumbers with the correct start day first.
 
