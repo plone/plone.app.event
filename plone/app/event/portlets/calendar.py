@@ -1,8 +1,5 @@
-from StringIO import StringIO
 from time import localtime
 
-from plone.memoize import ram
-from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 
 from zope.i18nmessageid import MessageFactory
@@ -17,8 +14,12 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.PythonScripts.standard import url_quote_plus
 
 from plone.app.portlets import PloneMessageFactory as _
-from plone.app.portlets import cache
 from plone.app.portlets.portlets import base
+
+import calendar
+from plone.app.event.base import first_weekday
+from plone.app.event.base import localized_today
+from plone.app.event.base import get_events_by_date
 
 PLMF = MessageFactory('plonelocales')
 
@@ -34,58 +35,49 @@ class Assignment(base.Assignment):
     title = _(u'Calendar')
 
 
-def _render_cachekey(fun, self):
-    context = aq_inner(self.context)
-    if not self.updated:
-        self.update()
-
-    if self.calendar.getUseSession():
-        raise ram.DontCache()
-    else:
-        portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
-        key = StringIO()
-        print >> key, portal_state.navigation_root_url()
-        print >> key, cache.get_language(context, self.request)
-        print >> key, self.calendar.getFirstWeekDay()
-
-        year, month = self.getYearAndMonthToDisplay()
-        print >> key, year
-        print >> key, month
-
-        navigation_root_path = portal_state.navigation_root_path()
-        start = DateTime('%s/%s/1' % (year, month))
-        end = DateTime('%s/%s/1 23:59:59' % self.getNextMonth(year, month)) - 1
-
-        def add(brain):
-            key.write(brain.getPath())
-            key.write('\n')
-            key.write(brain.modified)
-            key.write('\n\n')
-
-        catalog = getToolByName(context, 'portal_catalog')
-        path = navigation_root_path
-        brains = catalog(
-            portal_type=self.calendar.getCalendarTypes(),
-            review_state=self.calendar.getCalendarStates(),
-            start={'query': end, 'range': 'max'},
-            end={'query': start, 'range': 'min'},
-            path=path)
-
-        for brain in brains:
-            add(brain)
-
-        return key.getvalue()
-
-
 class Renderer(base.Renderer):
+    render = ViewPageTemplateFile('calendar.pt')
 
-    _template = ViewPageTemplateFile('calendar.pt')
-    updated = False
+    def year_month_display(self):
+        """ Return the year and month to display in the calendar.
+        """
+        context = self.context
+        request = self.request
 
-    def __init__(self, context, request, view, manager, data):
-        base.Renderer.__init__(self, context, request, view, manager, data)
-        self.updated = False
+        # Try to get year and month from requst
+        year = request.get('year', None)
+        month = request.get('month', None)
 
+        # Or use current date
+        if not year or month:
+            today = localized_today(context)
+            if not year:
+                year = today.year
+            if not month:
+                month = today.month
+
+        return int(year), int(month)
+
+
+    @property
+    def itercal(self):
+        """ Calendar iterator over weeks and days of the month to display.
+        """
+        context = self.context
+        year, month = self.year_month_display()
+        cal = calendar.Calendar(first_weekday)
+        monthdates = [dat for dat in cal.itermonthdates(year, month)]
+        # TODO: get_events_by_date probably needs a DateTime instance
+        events = get_events_by_date(context, monthdates[0], monthdates[-1])
+        for dat in monthdates:
+            date_events = None
+            isodat = dat.isoformat()
+            if isodat in events:
+                date_events = events[isodat]
+            yield {'date':dat, 'events':date_events}
+
+
+    ####
     def update(self):
         if self.updated:
             return
@@ -109,10 +101,6 @@ class Renderer(base.Renderer):
 
         self.monthName = PLMF(self._ts.month_msgid(month),
                               default=self._ts.month_english(month))
-
-    @ram.cache(_render_cachekey)
-    def render(self):
-        return xhtml_compress(self._template())
 
     def getEventsForCalendar(self):
         context = aq_inner(self.context)
