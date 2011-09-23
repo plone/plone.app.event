@@ -44,6 +44,12 @@ def default_timezone(context=None):
     return pytz.timezone(portal_timezone).zone
 
 
+def default_tzinfo(context=None):
+    """ Return the default timezone as tzinfo instance.
+    """
+    return pytz.timezone(default_timezone(context))
+
+
 def whole_day_handler(obj, event):
     """ For whole day events only, set start time to 0:00:00 and end time to
         23:59:59
@@ -119,6 +125,13 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
 
 
 ### ARE THESE NEEDED?
+
+def localized_now(context):
+    return datetime.now(default_tzinfo(context))
+
+def localized_today(context):
+    return datetime.today(default_tzinfo(context))
+
 
 def dt_from_brain(datestr):
     """ Return python datetime instance from a catalog brain's date string.
