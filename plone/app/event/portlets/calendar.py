@@ -118,7 +118,8 @@ class Renderer(base.Renderer):
 
 
     ####
-
+    # OLD METHODS
+    # WILL BE REMOVED
 
     def getEventsForCalendar(self):
         context = aq_inner(self.context)
