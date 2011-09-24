@@ -1,5 +1,3 @@
-from time import localtime
-
 from plone.portlets.interfaces import IPortletDataProvider
 
 from zope.i18nmessageid import MessageFactory
@@ -8,10 +6,8 @@ from zope.component import getMultiAdapter
 
 from Acquisition import aq_inner
 from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.PythonScripts.standard import url_quote_plus
 
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
@@ -38,10 +34,22 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
     render = ViewPageTemplateFile('calendar.pt')
 
+    # TODO: find a way how to insert dynamic translation strings in templates.
+    # does this work? i18n:translate="day-${daynumber}"?
+    # use python's urlquote instead of Products.PythonScripts.standard.url_quote_plus
+
+    def update(self):
+        self.year, self.month = year, month = self.year_month_display()
+        self.prev_year, self.prev_month = prev_year, prev_month = self.previous_month(year, month)
+        self.next_year, self.next_month = next_year, next_month = self.next_month(year, month)
+        # TODO: respect current query string
+        self.prev_query = '?month=%s&year=%s' % (prev_year, prev_month)
+        self.next_query = '?month=%s&year=%s' % (next_year, next_month)
+
     def year_month_display(self):
         """ Return the year and month to display in the calendar.
         """
-        context = self.context
+        context = aq_inner(self.context)
         request = self.request
 
         # Try to get year and month from requst
@@ -58,49 +66,59 @@ class Renderer(base.Renderer):
 
         return int(year), int(month)
 
+    def previous_month(self, year, month):
+        if month==0 or month==1:
+            month, year = 12, year - 1
+        else:
+            month-=1
+        return (year, month)
+
+    def next_month(self, year, month):
+        if month==12:
+            month, year = 1, year + 1
+        else:
+            month+=1
+        return (year, month)
 
     @property
-    def itercal(self):
+    def cal(self):
         """ Calendar iterator over weeks and days of the month to display.
         """
-        context = self.context
+        context = aq_inner(self.context)
+        today = localized_today(context)
         year, month = self.year_month_display()
         cal = calendar.Calendar(first_weekday)
         monthdates = [dat for dat in cal.itermonthdates(year, month)]
         # TODO: get_events_by_date probably needs a DateTime instance
         events = get_events_by_date(context, monthdates[0], monthdates[-1])
+        # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
+        cal = []
         for dat in monthdates:
-            date_events = None
-            isodat = dat.isoformat()
-            if isodat in events:
-                date_events = events[isodat]
-            yield {'date':dat, 'events':date_events}
+            for cnt in range(7):
+                if cnt == 0:
+                    cal.append([])
+                date_events = None
+                isodat = dat.isoformat()
+                if isodat in events:
+                    date_events = events[isodat]
+                cal[-1].append(
+                    {'date':dat,
+                     'prev': dat.month < month,
+                     'next': dat.month > month,
+                     'today': dat.year == today.year and\
+                              dat.month == today.month and\
+                              dat.day == today.day,
+                     'events':date_events})
+        return cal
+
+    @property
+    def weekdays(self):
+        cal = calendar.Calendar(first_weekday)
+        return cal.iterweekdays()
 
 
     ####
-    def update(self):
-        if self.updated:
-            return
-        self.updated = True
 
-        context = aq_inner(self.context)
-        self.calendar = getToolByName(context, 'portal_calendar')
-        self._ts = getToolByName(context, 'translation_service')
-        self.url_quote_plus = url_quote_plus
-
-        self.now = localtime()
-        self.yearmonth = yearmonth = self.getYearAndMonthToDisplay()
-        self.year = year = yearmonth[0]
-        self.month = month = yearmonth[1]
-
-        self.showPrevMonth = yearmonth > (self.now[0]-1, self.now[1])
-        self.showNextMonth = yearmonth < (self.now[0]+1, self.now[1])
-
-        self.prevMonthYear, self.prevMonthMonth = self.getPreviousMonth(year, month)
-        self.nextMonthYear, self.nextMonthMonth = self.getNextMonth(year, month)
-
-        self.monthName = PLMF(self._ts.month_msgid(month),
-                              default=self._ts.month_english(month))
 
     def getEventsForCalendar(self):
         context = aq_inner(self.context)
@@ -172,19 +190,6 @@ class Renderer(base.Renderer):
         # Finally return the results
         return year, month
 
-    def getPreviousMonth(self, year, month):
-        if month==0 or month==1:
-            month, year = 12, year - 1
-        else:
-            month-=1
-        return (year, month)
-
-    def getNextMonth(self, year, month):
-        if month==12:
-            month, year = 1, year + 1
-        else:
-            month+=1
-        return (year, month)
 
     def getWeekdays(self):
         """Returns a list of Messages for the weekday names."""
