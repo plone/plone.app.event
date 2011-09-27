@@ -73,6 +73,8 @@ IP - supton * merge sean upton's uu.smartdate with plone.formwidget.datetime
 
 IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
 
+- integrate a localized, nice formated duration function
+
 
 Notes, don't forget
 ===================
