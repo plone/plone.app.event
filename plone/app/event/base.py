@@ -1,5 +1,6 @@
 import pytz
 from datetime import datetime
+from datetime import date
 from datetime import timedelta
 
 from zope.component import getUtility
@@ -130,7 +131,8 @@ def localized_now(context):
     return datetime.now(default_tzinfo(context))
 
 def localized_today(context):
-    return datetime.today(default_tzinfo(context))
+    now = localized_now(context)
+    return date(now.year, now.month, now.day)
 
 
 def dt_from_brain(datestr):
