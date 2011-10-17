@@ -90,9 +90,9 @@ def get_portal_events(context, range_start=None, range_end=None, **kw):
     query = {}
     query['object_provides'] = IEvent.__identifier__
     if range_start:
-        query['start'] = {'query': range_start, 'range': 'max'}
+        query['start'] = {'query': DT(range_start), 'range': 'max'}
     if range_end:
-        query['end'] = {'query': range_end, 'range': 'min'}
+        query['end'] = {'query': DT(range_end), 'range': 'min'}
     query['sort_on'] = 'start'
     query.update(kw)
 
@@ -122,6 +122,25 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
             else:
                 events_by_date[start_str].append(event)
         return events_by_date
+
+
+def DT(dt):
+    """ Return a DateTime instance from a python datetime instance.
+
+    >>>
+
+    TODO: respect datetime timezones. add timezone info if it's missing.
+    DT always adds a offset
+
+    """
+    if isinstance(dt, datetime):
+        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+    elif isinstance(dt, date):
+        return DateTime(dt.year, dt.month, dt.day)
+    elif isinstance(dt, DateTime):
+        return dt
+    else:
+        return None
 
 
 ### ARE THESE NEEDED?
