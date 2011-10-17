@@ -19,12 +19,10 @@
                            class string:kssCalendarChange kssattr-year-${prev-year} kssattr-month-${prev_month} calendarPrevious;"
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
-         <span i18n:name="monthname"
-            i18n:translate="month-${month}"
+        <!-- TODO: tal:name again to be able to do: 2011, November for example -->
+        <span i18n:translate="month-${month}"
             tal:omit-tag="">monthname</span>
-        <span i18n:name="year" i18n:translate=""
-            tal:content="year"
-            tal:omit-tag="">year</span>
+        <span tal:replace="year">year</span>
 
         <a href="#" rel="nofollow"
            id='calendar-next'
@@ -40,11 +38,11 @@
     <dd class="portletItem">
         <table class="ploneCalendar" summary="Calendar"
             i18n:domain="plone"
-            i18n:attributes="summary summary_calendar;">
+            i18n:attributes="summary summary_calendar">
             <caption class="hiddenStructure"
                 i18n:translate="month-${month}">Month name</caption>
             <thead>
-              <tr class="weekdays"<tal:data repeat="weekday view/weekdays">
+              <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
                 <th scope="col" i18n:translate="weekday-${weekday}">Su</th>
               </tal:data></tr>
             </thead>
@@ -55,21 +53,22 @@
                   tal:define="today day/today;
                               next day/next;
                               prev day/prev;
-                              events day/events;"
-                  tal:attributes="class python:(today and 'todayevent' or 'event')
-                                  + (next and ' cal_next_month' or '')
-                                  + (prev and ' cal_prev_month' or '')
-                                  + (events and ' cal_has_events' or '')">
+                              events day/events"
+                  tal:attributes="class python:u'%s%s%s%s' % 
+                              ((today and 'todayevent' or 'event'),
+                              (next and ' cal_next_month' or ''),
+                              (prev and ' cal_prev_month' or ''),
+                              (events and ' cal_has_events' or ''))">
                     <a href=""
-                      tal:omit-tag="not events"
+                      tal:omit-tag="not:events"
                       tal:attributes="href string:${navigation_root_url}/search?${view/getReviewStateString}start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min;
                                       title day/eventstring;"
                       tal:content="daynumber">31</a>
                 </td>
-            </tal:block>
-          </tr>
-      </tbody>
-    </table>
+                </tal:block>
+              </tr>
+            </tbody>
+        </table>
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>
     </dd>
