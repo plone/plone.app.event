@@ -3,19 +3,19 @@
 
     <plone:portlet
         name="portlets.Calendar"
-        interface=".calendar_portlet.ICalendarPortlet"
-        assignment=".calendar_portlet.Assignment"
-        renderer=".calendar_portlet.Renderer"
-        addview=".calendar_portlet.AddForm"
+        interface=".portlet_calendar.ICalendarPortlet"
+        assignment=".portlet_calendar.Assignment"
+        renderer=".portlet_calendar.Renderer"
+        addview=".portlet_calendar.AddForm"
         />
 
     <plone:portlet
         name="portlets.Events"
-        interface=".events_portlet.IEventsPortlet"
-        assignment=".events_portlet.Assignment"
-        renderer=".events_portlet.Renderer"
-        addview=".events_portlet.AddForm"
-        editview=".events_portlet.EditForm"
+        interface=".portlet_events.IEventsPortlet"
+        assignment=".portlet_events.Assignment"
+        renderer=".portlet_events.Renderer"
+        addview=".portlet_events.AddForm"
+        editview=".portlet_events.EditForm"
         />
 
 </configure>
