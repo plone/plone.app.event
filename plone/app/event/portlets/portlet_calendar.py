@@ -87,7 +87,7 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         today = localized_today(context)
         year, month = self.year_month_display()
-        cal = calendar.Calendar(first_weekday)
+        cal = calendar.Calendar(first_weekday())
         monthdates = [dat for dat in cal.itermonthdates(year, month)]
         # TODO: get_events_by_date probably needs a DateTime instance
         events = get_events_by_date(context, monthdates[0], monthdates[-1])
