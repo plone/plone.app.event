@@ -79,6 +79,8 @@ upgrade / migration steps
 -------------------------
 * portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
 portlet_calendar (calendar is a python module.)
+maybe not needed, since legacy calendar and event modules left in
+plone.app.portlets.
 
 * if default timezone is not set, migration cannot run
 - migration from old ATEvent
