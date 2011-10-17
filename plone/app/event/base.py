@@ -67,8 +67,7 @@ def whole_day_handler(obj, event):
     obj.reindexObject()  # reindex obj to store upd values in catalog
 
 
-@property
-def first_weekday(self):
+def first_weekday():
     """ Returns the number of the first Weekday in a Week, as defined in
     the registry.
     0 is Monday, 6 is Sunday, as expected by python's datetime.
@@ -80,7 +79,7 @@ def first_weekday(self):
     if not first_wd:
         return 0
     else:
-        return first_wd
+        return int(first_wd)
 
 
 def get_portal_events(context, range_start=None, range_end=None, **kw):

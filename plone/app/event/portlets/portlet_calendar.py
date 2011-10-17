@@ -113,7 +113,7 @@ class Renderer(base.Renderer):
 
     @property
     def weekdays(self):
-        cal = calendar.Calendar(first_weekday)
+        cal = calendar.Calendar(first_weekday())
         return cal.iterweekdays()
 
 
