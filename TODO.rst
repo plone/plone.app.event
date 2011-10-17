@@ -75,6 +75,16 @@ IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
 
 - integrate a localized, nice formated duration function
 
+upgrade / migration steps
+-------------------------
+* portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
+portlet_calendar (calendar is a python module.)
+
+* if default timezone is not set, migration cannot run
+- migration from old ATEvent
+* Check if any upgrade steps are neccassary for changed permission names (see
+  config.py)
+
 
 Notes, don't forget
 ===================
@@ -168,13 +178,6 @@ OK/IP (check again) - thet - move tests to plone.app.testing
 cleanup
 -------
 OK/IP (check again) * remove all vcal references in favor or ical
-
-migration steps
----------------
-* if default timezone is not set, migration cannot run
-- migration from old ATEvent
-* Check if any upgrade steps are neccassary for changed permission names (see
-  config.py)
 
 plip buildout
 -------------
