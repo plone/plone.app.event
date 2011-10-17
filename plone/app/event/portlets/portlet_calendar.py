@@ -32,7 +32,7 @@ class Assignment(base.Assignment):
 
 
 class Renderer(base.Renderer):
-    render = ViewPageTemplateFile('calendar.pt')
+    render = ViewPageTemplateFile('portlet_calendar.pt')
 
     # TODO: find a way how to insert dynamic translation strings in templates.
     # does this work? i18n:translate="day-${daynumber}"?

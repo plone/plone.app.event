@@ -46,7 +46,7 @@ class Assignment(base.Assignment):
 
 class Renderer(base.Renderer):
 
-    _template = ViewPageTemplateFile('events.pt')
+    _template = ViewPageTemplateFile('portlet_events.pt')
 
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
