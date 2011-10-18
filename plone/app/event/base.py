@@ -9,6 +9,7 @@ from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry
 from plone.event.utils import default_timezone as fallback_default_timezone
+from plone.event.utils import pydt
 
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
@@ -90,12 +91,11 @@ def get_portal_events(context, range_start=None, range_end=None, **kw):
     query = {}
     query['object_provides'] = IEvent.__identifier__
     if range_start:
-        query['start'] = {'query': DT(range_start), 'range': 'max'}
+        query['start'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
-        query['end'] = {'query': DT(range_end), 'range': 'min'}
+        query['end'] = {'query': DT(range_end), 'range': 'max'}
     query['sort_on'] = 'start'
     query.update(kw)
-
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
     return result
