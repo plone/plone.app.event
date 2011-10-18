@@ -47,9 +47,14 @@ function initDelta(e) {
     end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
 }
 
+function portletCalendarTooltips() {
+    jQuery('.portletCalendar dd a[title]').tooltip();
+}
+
 var end_start_delta;
 
 jQuery(document).ready(function() {
+    portletCalendarTooltips();
 
     jQuery('#wholeDay').bind('change', wholeDayHandler);
     jQuery('[id^=startDate]').bind('focus', initDelta);
