@@ -89,7 +89,6 @@ class Renderer(base.Renderer):
         year, month = self.year_month_display()
         cal = calendar.Calendar(first_weekday())
         monthdates = [dat for dat in cal.itermonthdates(year, month)]
-        # TODO: get_events_by_date probably needs a DateTime instance
         events = get_events_by_date(context, monthdates[0], monthdates[-1])
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
         cal = [[]]
@@ -100,6 +99,12 @@ class Renderer(base.Renderer):
             isodat = dat.isoformat()
             if isodat in events:
                 date_events = events[isodat]
+
+            events_string = u""
+            if date_events:
+                for event in date_events:
+                    events_string += u"%s%s\n" % (event.Title,
+                            event.location and u", %s" % event.location or u"")
             cal[-1].append(
                 {'date':dat,
                  'prev_month': dat.month < month,
@@ -107,6 +112,7 @@ class Renderer(base.Renderer):
                  'today': dat.year == today.year and\
                           dat.month == today.month and\
                           dat.day == today.day,
+                 'events_string': events_string,
                  'events':date_events})
         return cal
 

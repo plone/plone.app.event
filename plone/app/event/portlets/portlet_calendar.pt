@@ -51,18 +51,18 @@
                 <tal:block repeat="day week">
                 <td class="event"
                   tal:define="today day/today;
-                              next day/next;
-                              prev day/prev;
+                              next_month day/next_month;
+                              prev_month day/prev_month;
                               events day/events"
                   tal:attributes="class python:u'%s%s%s%s' % 
                               ((today and 'todayevent' or 'event'),
-                              (next and ' cal_next_month' or ''),
-                              (prev and ' cal_prev_month' or ''),
+                              (next_month and ' cal_next_month' or ''),
+                              (prev_month and ' cal_prev_month' or ''),
                               (events and ' cal_has_events' or ''))">
                     <a href=""
                       tal:omit-tag="not:events"
                       tal:attributes="href string:${navigation_root_url}/search?start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min;
-                                      title day/eventstring;"
+                                      title day/events_string;"
                       tal:content="daynumber">31</a>
                 </td>
                 </tal:block>
