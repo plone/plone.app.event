@@ -34,8 +34,7 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
 
-    # TODO: find a way how to insert dynamic translation strings in templates.
-    # does this work? i18n:translate="day-${daynumber}"?
+    # TODO: 
     # use python's urlquote instead of Products.PythonScripts.standard.url_quote_plus
 
     def update(self):
