@@ -106,7 +106,9 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     the actual events for that date.
 
     """
+
     events = get_portal_events(context, range_start, range_end, **kw)
+    if not events: return []
     # TODO: catalog brains are timezone'd. shouldn't they be in UTC?
     ## example catalog entry: 2011/09/16 16:35:00 Brazil/West
     events_by_date = {}
