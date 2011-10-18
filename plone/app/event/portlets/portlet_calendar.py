@@ -92,23 +92,22 @@ class Renderer(base.Renderer):
         # TODO: get_events_by_date probably needs a DateTime instance
         events = get_events_by_date(context, monthdates[0], monthdates[-1])
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
-        cal = []
+        cal = [[]]
         for dat in monthdates:
-            for cnt in range(7):
-                if cnt == 0:
-                    cal.append([])
-                date_events = None
-                isodat = dat.isoformat()
-                if isodat in events:
-                    date_events = events[isodat]
-                cal[-1].append(
-                    {'date':dat,
-                     'prev': dat.month < month,
-                     'next': dat.month > month,
-                     'today': dat.year == today.year and\
-                              dat.month == today.month and\
-                              dat.day == today.day,
-                     'events':date_events})
+            if len(cal[-1]) == 7:
+                cal.append([])
+            date_events = None
+            isodat = dat.isoformat()
+            if isodat in events:
+                date_events = events[isodat]
+            cal[-1].append(
+                {'date':dat,
+                 'prev_month': dat.month < month,
+                 'next_month': dat.month > month,
+                 'today': dat.year == today.year and\
+                          dat.month == today.month and\
+                          dat.day == today.day,
+                 'events':date_events})
         return cal
 
     @property
