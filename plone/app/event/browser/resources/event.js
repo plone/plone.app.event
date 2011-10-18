@@ -48,7 +48,9 @@ function initDelta(e) {
 }
 
 function portletCalendarTooltips() {
-    jQuery('.portletCalendar dd a[title]').tooltip();
+    jQuery('.portletCalendar dd a[title]').tooltip({
+        offset: [-10,0]
+    });
 }
 
 var end_start_delta;
