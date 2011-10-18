@@ -34,7 +34,7 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
 
-    # TODO: 
+    # TODO:
     # use python's urlquote instead of Products.PythonScripts.standard.url_quote_plus
 
     def update(self):
@@ -102,8 +102,11 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for event in date_events:
-                    events_string += u"%s%s\r\n" % (event.Title,
+                    events_string += u"%s%s%s" % (
+                            events_string and u"</br>" or u"",
+                            event.Title,
                             event.location and u": %s" % event.location or u"")
+
             cal[-1].append(
                 {'date':dat,
                  'day':dat.day,
