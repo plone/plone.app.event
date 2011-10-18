@@ -16,7 +16,7 @@
            tal:define="prev_month view/prev_month;
                        prev_year view/prev_year"
            tal:attributes="prev view/prev_query;
-                           class string:kssCalendarChange kssattr-year-${prev-year} kssattr-month-${prev_month} calendarPrevious;"
+                           class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;"
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
         <!-- TODO: tal:name again to be able to do: 2011, November for example -->
