@@ -5,6 +5,7 @@ from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 
 from plone.app.event.base import default_timezone
+from plone.app.event.base import get_portal_events
 
 # ical adapter implementation interfaces
 from plone.app.event.interfaces import IICalendar
@@ -33,7 +34,7 @@ def construct_calendar(context, events):
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
 
-    # TODO: is there a UUID to use instead of UID?
+    # TODO: use plone's new uuid adapter instead of uid
     # Non-Standard calendar extensions. also see:
     # http://en.wikipedia.org/wiki/ICalendar#cite_note-11
     cal_title = context.Title()
@@ -59,8 +60,8 @@ def calendar_component_collection(context):
 
     """
     context = aq_inner(context)
-    query = {'object_provides':IEvent.__identifier__}
-    events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
+    result = get_portal_events(context)
+    events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
 
@@ -74,10 +75,12 @@ def calendar_component(context):
     if IEvent.providedBy(context):
         events = [context]
     else:
-        query = {'object_provides':IEvent.__identifier__}
-        query['path'] = '/'.join(context.getPhysicalPath())
-        events = [item.getObject() for item in context.queryCatalog(REQUEST=query)]
-
+        path = '/'.join(context.getPhysicalPath())
+        result = get_portal_events(context, path=path)
+        events = [item.getObject() for item in result]
+        # TODO: should i become a generator?
+        # TODO: let construct_calendar expand brains to objects - so a
+        # generator would make some sense...
     return construct_calendar(context, events)
 
 

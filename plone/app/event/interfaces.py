@@ -99,3 +99,14 @@ class IEventSettings(Interface):
                 vocabulary="plone.app.event.Timezones"
                 )
             )
+
+    # TODO: weekday vocab isn't displayed correctly. the default of messageid
+    # isn't displayed but the id itself. the value isn't displayed but also the
+    # messageid.
+    first_weekday = schema.Choice(
+            title=_(u'label_first_weekday', default=u'First Weekday'),
+            description=_(u'help_first_weekday', default=u'First day in the Week.'),
+            required=True,
+            default='0',
+            vocabulary="plone.app.event.Weekdays"
+            )

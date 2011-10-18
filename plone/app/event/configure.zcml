@@ -3,8 +3,12 @@
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
-    i18n_domain="plone">
+    i18n_domain="plone.app.event">
 
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- five:registerPackage package="." initialize=".initialize" /-->
+    
     <!-- temporary -->
     <!--include package="plone.app.page" file="meta.zcml" /-->
     <!--include package=".dx" /-->
@@ -26,6 +30,11 @@
     <utility
         component=".vocabulary.Timezones"
         name="plone.app.event.Timezones"
+        />
+
+    <utility
+        component=".vocabulary.Weekdays"
+        name="plone.app.event.Weekdays"
         />
 
     <genericsetup:registerProfile

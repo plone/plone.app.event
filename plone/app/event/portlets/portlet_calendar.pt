@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      tal:omit-tag="">
+<dl class="portlet portletCalendar"
+    i18n:domain="plone.app.event"
+    tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
+                month view/month;
+                year view/year;">
+
+    <dt class="portletHeader">
+      <span class="portletTopLeft"></span>
+      <a href="#" rel="nofollow"
+           id='calendar-previous'
+           title="Previous month"
+           tal:define="prev_month view/prev_month;
+                       prev_year view/prev_year"
+           tal:attributes="prev view/prev_query;
+                           class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;"
+           i18n:attributes="title title_previous_month;">&laquo;</a>
+
+        <!-- TODO: tal:name again to be able to do: 2011, November for example -->
+        <span i18n:translate="" tal:content="string:month-${month}">monthname</span>
+        <span tal:replace="year">year</span>
+
+        <a href="#" rel="nofollow"
+           id='calendar-next'
+           title="Next month"
+           tal:define="next_month view/next_month;
+                       next_year view/next_year"
+           tal:attributes="href view/next_query;
+                           class string:kssCalendarChange kssattr-year-${next_year} kssattr-month-${next_month} calendarNext;"
+           i18n:attributes="title title_next_month;">&raquo;</a>
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+        <table class="ploneCalendar" summary="Calendar"
+            i18n:attributes="summary summary_calendar">
+            <caption class="hiddenStructure"
+                i18n:translate="month-${month}">monthname</caption>
+            <thead>
+              <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
+                <th scope="col" i18n:translate="" tal:content="string:weekday-abbrev-${weekday}">Su</th>
+              </tal:data></tr>
+            </thead>
+            <tbody>
+              <tr tal:repeat="week view/cal">
+                <tal:block repeat="day week">
+                <td class="event"
+                  tal:define="today day/today;
+                              next_month day/next_month;
+                              prev_month day/prev_month;
+                              events day/events"
+                  tal:attributes="class python:u'%s%s%s%s' % 
+                              ((today and 'todayevent' or 'event'),
+                              (next_month and ' cal_next_month' or ''),
+                              (prev_month and ' cal_prev_month' or ''),
+                              (events and ' cal_has_events' or ''))">
+                    <a href=""
+                      tal:omit-tag="not:events"
+                      tal:attributes="href string:${navigation_root_url}/search?start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min;
+                                      title day/events_string;"
+                      tal:content="day/day">31</a>
+                </td>
+                </tal:block>
+              </tr>
+            </tbody>
+        </table>
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+</dl>
+</html>

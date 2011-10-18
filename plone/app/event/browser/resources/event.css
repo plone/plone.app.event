@@ -1,0 +1,11 @@
+/* tooltip styling. by default the element to be styled is .tooltip  */
+.tooltip {
+    display:none;
+    background:grey;
+    border:2px solid black;
+    border-radius:5px;
+    font-size:80%;
+    padding:10px;
+    margin:10px;
+    color:#fff; 
+}

@@ -73,6 +73,21 @@ IP - supton * merge sean upton's uu.smartdate with plone.formwidget.datetime
 
 IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
 
+- integrate a localized, nice formated duration function
+
+
+upgrade / migration steps
+-------------------------
+* portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
+portlet_calendar (calendar is a python module.)
+maybe not needed, since legacy calendar and event modules left in
+plone.app.portlets.
+
+* if default timezone is not set, migration cannot run
+- migration from old ATEvent
+* Check if any upgrade steps are neccassary for changed permission names (see
+  config.py)
+
 
 Notes, don't forget
 ===================
@@ -94,6 +109,7 @@ isn't modified by a form. is that failure proof?
 * remove portal/icon_export_vcal.png
 
 * label_add_to_vcal
+
 
 More
 ====
@@ -157,7 +173,6 @@ datetimewidget
 OK - thet - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
   plone.formwidget.dateinput
 
-
 Testing
 -------
 OK/IP (check again) - thet - move tests to plone.app.testing
@@ -166,13 +181,6 @@ OK/IP (check again) - thet - move tests to plone.app.testing
 cleanup
 -------
 OK/IP (check again) * remove all vcal references in favor or ical
-
-migration steps
----------------
-* if default timezone is not set, migration cannot run
-- migration from old ATEvent
-* Check if any upgrade steps are neccassary for changed permission names (see
-  config.py)
 
 plip buildout
 -------------
