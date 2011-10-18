@@ -14,7 +14,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: plone\n"
+"Domain: plone.app.event\n"
 
 msgid "month-1"
 msgstr "January"

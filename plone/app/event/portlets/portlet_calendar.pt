@@ -3,7 +3,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       tal:omit-tag="">
 <dl class="portlet portletCalendar"
-    i18n:domain="plone"
+    i18n:domain="plone.app.event"
     tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
                 month view/month;
                 year view/year;">
@@ -20,8 +20,7 @@
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
         <!-- TODO: tal:name again to be able to do: 2011, November for example -->
-        <span i18n:translate="month-${month}"
-            tal:omit-tag="">monthname</span>
+        <span i18n:translate="" tal:content="string:month-${month}">monthname</span>
         <span tal:replace="year">year</span>
 
         <a href="#" rel="nofollow"
@@ -37,13 +36,12 @@
 
     <dd class="portletItem">
         <table class="ploneCalendar" summary="Calendar"
-            i18n:domain="plone"
             i18n:attributes="summary summary_calendar">
             <caption class="hiddenStructure"
                 i18n:translate="month-${month}">monthname</caption>
             <thead>
               <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
-                <th scope="col" i18n:translate="weekday-abbrev-${weekday}">Su</th>
+                <th scope="col" i18n:translate="" tal:content="string:weekday-abbrev-${weekday}">Su</th>
               </tal:data></tr>
             </thead>
             <tbody>
