@@ -125,7 +125,7 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
         occurrences = obj.occurrences(range_start, range_end)
         for occ in occurrences:
             # occ: (start, end)
-            start_str = datetime.strftime(occ[0].start_date, '%Y-%m-%d')
+            start_str = datetime.strftime(occ[0], '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
             if start_str not in events_by_date:
