@@ -103,8 +103,8 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for event in date_events:
-                    events_string += u"%s%s\n" % (event.Title,
-                            event.location and u", %s" % event.location or u"")
+                    events_string += u"%s%s\r\n" % (event.Title,
+                            event.location and u": %s" % event.location or u"")
             cal[-1].append(
                 {'date':dat,
                  'day':dat.day,
