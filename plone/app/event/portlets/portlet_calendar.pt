@@ -63,7 +63,7 @@
                       tal:omit-tag="not:events"
                       tal:attributes="href string:${navigation_root_url}/search?start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min;
                                       title day/events_string;"
-                      tal:content="daynumber">31</a>
+                      tal:content="day/day">31</a>
                 </td>
                 </tal:block>
               </tr>

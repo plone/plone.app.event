@@ -107,11 +107,13 @@ class Renderer(base.Renderer):
                             event.location and u", %s" % event.location or u"")
             cal[-1].append(
                 {'date':dat,
+                 'day':dat.day,
                  'prev_month': dat.month < month,
                  'next_month': dat.month > month,
                  'today': dat.year == today.year and\
                           dat.month == today.month and\
                           dat.day == today.day,
+                 'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
                  'events_string': events_string,
                  'events':date_events})
         return cal
