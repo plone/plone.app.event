@@ -109,14 +109,11 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     # TODO: factor out, use for get_portal_events and whole_day_handler too.
     tz = default_tzinfo(context)
     range_start = pydt(range_start, missing_zone=tz)
-    delta = None
     if isinstance(range_end, date):
         # set range_end to the next day, time will be 0:00
         # so the whole previous day is also used for search
-        delta = timedelta(days=1)
+        range_end = range_end + timedelta(days=1)
     range_end = pydt(range_end, missing_zone=tz)
-    if delta:
-        range_end = range_end + delta
 
     events = get_portal_events(context, range_start, range_end, **kw)
     if not events: return []
@@ -127,7 +124,8 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
         obj = event.getObject()
         occurrences = obj.occurrences(range_start, range_end)
         for occ in occurrences:
-            start_str = datetime.strftime(occ.start_date, '%Y-%m-%d')
+            # occ: (start, end)
+            start_str = datetime.strftime(occ[0].start_date, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
             if start_str not in events_by_date:
