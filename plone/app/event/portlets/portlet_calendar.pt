@@ -40,10 +40,10 @@
             i18n:domain="plone"
             i18n:attributes="summary summary_calendar">
             <caption class="hiddenStructure"
-                i18n:translate="month-${month}">Month name</caption>
+                i18n:translate="month-${month}">monthname</caption>
             <thead>
               <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
-                <th scope="col" i18n:translate="weekday-${weekday}">Su</th>
+                <th scope="col" i18n:translate="weekday-abbrev-${weekday}">Su</th>
               </tal:data></tr>
             </thead>
             <tbody>

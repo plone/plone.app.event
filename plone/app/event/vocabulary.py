@@ -41,13 +41,13 @@ def AvailableTimezones(context):
 def Weekdays(context):
     """ Vocabulary for Weekdays.
     """
-    items =[(_(u"weekday_monday", default=u"Monday"),'0'),
-           (_(u"weelday_tuesday", default=u"Tuesday"),'1'),
-           (_(u"weekday_wednesday", default=u"Wednesday"),'2'),
-           (_(u"weekday_thursday", default=u"Thursday"),'3'),
-           (_(u"weekday_friday", default=u"Friday"),'4'),
-           (_(u"weekday_saturday", default=u"Saturday"),'5'),
-           (_(u"weekday_sunday", default=u"Sunday"),'6'),
+    items =[(_(u"weekday-0", default=u"Monday"),'0'),
+           (_(u"weekday-1", default=u"Tuesday"),'1'),
+           (_(u"weekday-2", default=u"Wednesday"),'2'),
+           (_(u"weekday-3", default=u"Thursday"),'3'),
+           (_(u"weekday-4", default=u"Friday"),'4'),
+           (_(u"weekday-5", default=u"Saturday"),'5'),
+           (_(u"weekday-6", default=u"Sunday"),'6'),
            ]
     return SimpleVocabulary.fromItems(items)
 
