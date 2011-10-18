@@ -1,0 +1,96 @@
+# plone.app.event locales
+# Johannes Raggam <raggam-nl@adm.at>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-10-18 13:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+
+msgid "month-1"
+msgstr "January"
+
+msgid "month-2"
+msgstr "February"
+
+msgid "month-3"
+msgstr "March"
+
+msgid "month-4"
+msgstr "April"
+
+msgid "month-5"
+msgstr "May"
+
+msgid "month-6"
+msgstr "June"
+
+msgid "month-7"
+msgstr "July"
+
+msgid "month-8"
+msgstr "August"
+
+msgid "month-9"
+msgstr "September"
+
+msgid "month-10"
+msgstr "October"
+
+msgid "month-11"
+msgstr "November"
+
+msgid "month-12"
+msgstr "December"
+
+msgid "weekday-0"
+msgstr "Monday"
+
+msgid "weekday-1"
+msgstr "Tuesday"
+
+msgid "weekday-2"
+msgstr "Wednesday"
+
+msgid "weekday-3"
+msgstr "Thursday"
+
+msgid "weekday-4"
+msgstr "Friday"
+
+msgid "weekday-5"
+msgstr "Saturday"
+
+msgid "weekday-6"
+msgstr "Sunday"
+
+msgid "weekday-abbrev-0"
+msgstr "Mon"
+
+msgid "weekday-abbrev-1"
+msgstr "Tue"
+
+msgid "weekday-abbrev-2"
+msgstr "Wed"
+
+msgid "weekday-abbrev-3"
+msgstr "Thu"
+
+msgid "weekday-abbrev-4"
+msgstr "Fri"
+
+msgid "weekday-abbrev-5"
+msgstr "Sat"
+
+msgid "weekday-abbrev-6"
+msgstr "Sun"
+
