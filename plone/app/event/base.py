@@ -106,6 +106,8 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     the actual events for that date.
 
     """
+    range_start = pydt(range_start, missing_zone=default_tzinfo(context))
+    range_end = pydt(range_end, missing_zone=default_tzinfo(context))
 
     events = get_portal_events(context, range_start, range_end, **kw)
     if not events: return []
