@@ -14,6 +14,26 @@ To use the Archetypes based ATEvent type, include the at package in your zcml::
 and import the plone.app.event.at Generic Setup import step.
 
 
+Tryout / Installation
+=====================
+
+Build with buildout.cfg:
+
+$ python bootstrap.cfg -d
+$ ./bin/buildout -c buildout.cfg
+
+Start:
+
+$ ./bin/instance fg
+
+Or add plone.app.event sources-ro.cfg or sources-rw.cfg to your plone 4.2
+buildout.
+
+Or use 
+Sometime:
+Add plone.app.event egg to your instance. (eventually include a zcml file).
+
+
 
 Contributions
 =============
