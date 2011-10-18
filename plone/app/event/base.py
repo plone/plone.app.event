@@ -107,7 +107,14 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
 
     """
     range_start = pydt(range_start, missing_zone=default_tzinfo(context))
+    delta = None
+    if isinstance(range_end, date):
+        # set range_end to the next day, time will be 0:00
+        # so the whole previous day is also used for search
+        delta = timedelta(days=1)
     range_end = pydt(range_end, missing_zone=default_tzinfo(context))
+    if delta:
+        range_end = range_end + delta
 
     events = get_portal_events(context, range_start, range_end, **kw)
     if not events: return []
