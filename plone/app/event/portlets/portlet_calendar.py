@@ -102,7 +102,7 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for event in date_events:
-                    events_string += u'%s<a href="%s">%s%s</a>' % (
+                    events_string += u'%s<a href="%s">%s</a>%s' % (
                             events_string and u"</br>" or u"",
                             event.getURL(),
                             event.Title,
