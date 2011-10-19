@@ -106,7 +106,7 @@ class Renderer(base.Renderer):
                             events_string and u"</br>" or u"",
                             event.getURL(),
                             event.Title,
-                            event.location and u": %s" % event.location or u"")
+                            event.location and u" %s" % event.location or u"")
 
             cal[-1].append(
                 {'date':dat,
