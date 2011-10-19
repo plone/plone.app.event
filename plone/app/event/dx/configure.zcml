@@ -14,7 +14,7 @@
     <plone:behavior
         title="Event"
         description="Event/Calendar extension to dexterity content types."
-        provides=".behaviors.IEvent"
+        provides=".behaviors.IEventBehavior"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 

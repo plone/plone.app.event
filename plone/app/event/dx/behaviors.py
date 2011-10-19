@@ -8,13 +8,14 @@ from zope.component import adapts
 from zope.interface import implements, alsoProvides
 from plone.directives import form
 from plone.app.event import messageFactory as _
+from plone.app.event.interfaces import IEvent
 from plone.dexterity.interfaces import IDexterityContent
 
 
 # TODO: create different, minimalist behaviors for every aspect of an event.
 # ILocationAware, IAttendee, IContact, IRecurrence
 
-class IEvent(form.Schema):
+class IEventBehavior(form.Schema, IEvent):
     """Add tags to content
     """
 
@@ -57,44 +58,52 @@ class IEvent(form.Schema):
     recurrence = schema.TextLine(
         title = _(u'label_recurrence', default=u'Recurrence'),
         description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
+        required = False
     )
 
     whole_day = schema.Bool(
         title = _(u'label_whole_day', default=u'Whole Day'),
         description = _(u'help_whole_day', default=u'Event lasts whole day'),
+        required = False
         )
 
     location = schema.TextLine(
         title = _(u'label_location', default=u'Location'),
         description = _(u'help_location', default=u'Location of the event'),
+        required = False
         )
 
     attendees = schema.Text(
         title = _(u'label_attendees', default=u'Attendees'),
         description = _(u'help_attendees', default=u'List of attendees'),
+        required = False
         )
 
     event_url = schema.TextLine(
         title = _(u'label_event_url', default=u'Event Url'),
         description = _(u'help_event_url', default=u'Website of the event'),
+        required = False
         )
 
     contact_name = schema.TextLine(
         title = _(u'label_contact_name', default=u'Contact Name'),
         description = _(u'help_contact_name', default=u'Name of a person to contact about this event.'),
+        required = False
         )
 
     contact_email = schema.TextLine(
         title = _(u'label_contact_email', default=u'Contact Email'),
         description = _(u'help_contact_email', default=u'Email address to contact about this event.'),
+        required = False
         )
 
     contact_phone = schema.TextLine(
         title = _(u'label_contact_phone', default=u'Contact Phone'),
         description = _(u'help_contact_phone', default=u'Phone number to contact about this event.'),
+        required = False
         )
 
-alsoProvides(IEvent, form.IFormFieldProvider)
+alsoProvides(IEventBehavior, form.IFormFieldProvider)
 
 
 class EventBase(object):
