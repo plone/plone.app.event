@@ -9,7 +9,7 @@
 
     <!-- five:registerPackage package="." initialize=".initialize" /-->
     
-    <include package=".dx" />
+    <!-- include package=".dx" /-->
 
     <include package="plone.formwidget.recurrence" />
     <include package="plone.formwidget.datetime" />
