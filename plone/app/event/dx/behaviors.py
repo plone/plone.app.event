@@ -5,7 +5,7 @@ types.
 
 from zope import schema
 from zope.component import adapts
-from zope.interface import implements, alsoProvides
+from zope.interface import implements, alsoProvides, invariant
 from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.interfaces import IEvent
@@ -55,6 +55,15 @@ class IEventBasic(form.Schema):
         description = _(u'help_event_url', default=u'Website of the event'),
         required = False
         )
+
+    @invariant
+    def whole_day_invariant(data):
+        import pdb;pdb.set_trace()
+
+    @invariant
+    def timezone_invariant(data):
+        pass
+
 
 class IEventRecurrence(form.Schema):
     """ Recurring Event Schema.
@@ -163,6 +172,7 @@ class EventContact(EventBase):
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
     pass
+
 
 def whole_day_handler(obj, event):
     print "DX: executing whole day handler"
