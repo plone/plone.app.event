@@ -22,22 +22,23 @@ TODO, future
 TODO, bigger
 ============
 
-IP - thet - ditch Products.CMFCalendar, if possible.
+OK - thet - ditch Products.CMFCalendar, if possible.
     in branch - merge-CMFCalendar
 
     cmfcalendar seems to be only used by calendarportlet.
     $ grept cmfalendar parts/omelette/*
 
-    IP - thet - calendarportlet: refactoring for removed portal_calendar dependency and 
+    OK - thet - calendarportlet: refactoring for removed portal_calendar dependency and 
       new plone.app.event.base based approach.
-        - calendar portlet using jquery tools calendar?
+        NO - calendar portlet using jquery tools calendar?
         - template change, so that a viewlet can also use calendar via
           metal:macros.
 
     - deprecate/remove portal_calendar from Products.CMFPlone
 
     OK - thet - merge calendar and plone.app.event portlet.
-    - uninstall calendar configlet, install p.a.event -> upgrade step
+    OK - uninstall calendar configlet, install p.a.event
+        -> upgrade step
 
 * add more ICalendar fields to create an generic interface to event content
   types
@@ -56,7 +57,7 @@ IP - thet - ditch Products.CMFCalendar, if possible.
 IP - thet (regebro) * finish icalendar 3.0 branch, where __str__ isn't used
   - to_ical method into event content type. method may use more generic one.
 
-IP - thet (regebro) * rrule freq must be present. make/update validator with that.
+OK - thet (regebro) * rrule freq must be present. make/update validator with that.
 
 OK - thet * make generic ical adapter.
 
