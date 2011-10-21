@@ -5,13 +5,9 @@ Event content type, browser views, utilities and portlets for Plone.
 The event content type supports whole day events and recurrences based on
 RFC2445.
 
-It replaces the ATContentType event impementation.
-
-To use the Archetypes based ATEvent type, include the at package in your zcml::
-
-    <include package="plone.app.event.at" />
-
-and import the plone.app.event.at Generic Setup import step.
+It replaces the ATContentType event impementation and provides dexterity
+behaviors. The ATContentType and dexterity features are automatically enabled
+depending on installed packages.
 
 
 Tryout / Installation
@@ -32,6 +28,10 @@ buildout.
 Or use 
 Sometime:
 Add plone.app.event egg to your instance. (eventually include a zcml file).
+
+
+Install plone.app.event and import ATContentType respectively the dexterity
+profiles.
 
 
 
