@@ -15,6 +15,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 
 
+
 def default_end_date():
     """
     """
@@ -50,22 +51,6 @@ def default_tzinfo(context=None):
     """ Return the default timezone as tzinfo instance.
     """
     return pytz.timezone(default_timezone(context))
-
-
-def whole_day_handler(obj, event):
-    """ For whole day events only, set start time to 0:00:00 and end time to
-        23:59:59
-    """
-
-    if not obj.whole_day:
-        return
-    startDate = obj.startDate.toZone(obj.timezone)
-    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
-    endDate = obj.endDate.toZone(obj.timezone)
-    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
-    obj.setStartDate(DateTime(startDate))
-    obj.setEndDate(DateTime(endDate))
-    obj.reindexObject()  # reindex obj to store upd values in catalog
 
 
 def first_weekday():
@@ -137,6 +122,8 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
 def DT(dt):
     """ Return a DateTime instance from a python datetime instance.
 
+    @param dt: python datetime instance
+
     >>>
 
     TODO: respect datetime timezones. add timezone info if it's missing.
@@ -151,6 +138,7 @@ def DT(dt):
         return dt
     else:
         return None
+
 
 
 ### ARE THESE NEEDED?
