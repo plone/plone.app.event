@@ -17,7 +17,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event import messageFactory as _
 
 
-PRODID = "-//Plone.org//NONSGML plone.event//EN"
+PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
 
 def construct_calendar(context, events):
