@@ -1,6 +1,3 @@
-TODO artsprint 2011
-===================
-
 legend:
 OK ... that item is done
 IP ... that item is in progress
@@ -37,8 +34,10 @@ OK - thet - ditch Products.CMFCalendar, if possible.
     - deprecate/remove portal_calendar from Products.CMFPlone
 
     OK - thet - merge calendar and plone.app.event portlet.
-    OK - uninstall calendar configlet, install p.a.event
+    OK - reimplement important functionality from calendar configlet
         -> upgrade step
+    - Remove calendar configlet from plone.app.controlpanel
+
 
 * add more ICalendar fields to create an generic interface to event content
   types
