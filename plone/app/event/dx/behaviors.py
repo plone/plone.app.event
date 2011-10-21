@@ -58,7 +58,7 @@ class IEventBasic(form.Schema):
 
     @invariant
     def whole_day_invariant(data):
-        import pdb;pdb.set_trace()
+        pass
 
     @invariant
     def timezone_invariant(data):
