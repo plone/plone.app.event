@@ -17,6 +17,7 @@
                      Conatains the behaviors Event Basic, Event Recurrence,
                      Event Location, Event Attendees and Event Contact."
         provides=".behaviors.IEventBehavior"
+        factory=".behaviors.EventBehavior"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
@@ -24,6 +25,7 @@
         title="Event Basic"
         description="Basic Event schema."
         provides=".behaviors.IEventBasic"
+        factory=".behaviors.EventBasic"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
@@ -31,6 +33,7 @@
         title="Event Recurrence"
         description="Recurrence extension for Events."
         provides=".behaviors.IEventRecurrence"
+        factory=".behaviors.EventRecurrence"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
@@ -38,6 +41,7 @@
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
+        factory=".behaviors.EventLocation"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
@@ -45,6 +49,7 @@
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
+        factory=".behaviors.EventAttendees"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
@@ -52,16 +57,10 @@
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"
+        factory=".behaviors.EventContact"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
-
-    <!--plone:behavior
-        title="Event"
-        description="Event/Calendar extension to dexterity content types."
-        provides=".behaviors.IEvent"
-        factory=".behaviors.Event"
-        /-->
 
     <genericsetup:registerProfile
         name="default"

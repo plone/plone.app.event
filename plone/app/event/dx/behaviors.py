@@ -145,3 +145,21 @@ class EventBase(object):
 
     def __init__(self, context):
         self.context = context
+
+class EventBasic(EventBase):
+    pass
+
+class EventRecurrence(EventBase):
+    pass
+
+class EventLocation(EventBase):
+    pass
+
+class EventAttendees(EventBase):
+    pass
+
+class EventContact(EventBase):
+    pass
+
+class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
+    pass
