@@ -163,3 +163,9 @@ class EventContact(EventBase):
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
     pass
+
+def whole_day_handler(obj, event):
+    print "DX: executing whole day handler"
+
+def timezone_handler(obj, event):
+    print "DX: executing timezone handler"

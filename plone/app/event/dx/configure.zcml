@@ -11,6 +11,13 @@
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
     <exclude package="zope.contentprovider" />
 
+    <subscriber for=".behaviors.IEventBasic
+                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+                handler=".behaviors.whole_day_handler" />
+    <subscriber for=".behaviors.IEventBasic
+                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+                handler=".behaviors.timezone_handler" />
+
     <plone:behavior
         title="Event"
         description="Event/Calendar extension to dexterity content types.
