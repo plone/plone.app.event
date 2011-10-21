@@ -378,6 +378,23 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
 registerATCT(ATEvent, packageName)
 
+
+def whole_day_handler(obj, event):
+    """ For whole day events only, set start time to 0:00:00 and end time to
+        23:59:59
+    """
+
+    if not obj.whole_day:
+        return
+    startDate = obj.startDate.toZone(obj.timezone)
+    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
+    endDate = obj.endDate.toZone(obj.timezone)
+    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
+    obj.setStartDate(DateTime(startDate)) # TODO: setting needed? aren't above operations operating on the instances itself?
+    obj.setEndDate(DateTime(endDate))
+    obj.reindexObject()  # reindex obj to store upd values in catalog
+
+
 def timezone_handler(obj, event):
     """ When setting the startDate and endDate, the value of the timezone field
     isn't known, so we have to convert those timezone-naive dates into
