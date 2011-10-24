@@ -56,17 +56,6 @@ class IEventBasic(form.Schema):
         required = False
         )
 
-    @invariant
-    def data_preprocessing(data):
-        print "DX: executing invariant"
-        tz = pytz.timezone(data.timezone)
-        start = tz.localize(data.start)
-        end = data.end.replace(tzinfo=tz)
-
-        if data.whole_day:
-            start = start.replace(hour=0,minute=0,second=0)
-            end = end.replace(hour=23,minute=59,second=59)
-
 
 class IEventRecurrence(form.Schema):
     """ Recurring Event Schema.
@@ -152,7 +141,7 @@ alsoProvides(IEventBehavior, form.IFormFieldProvider)
 class EventBase(object):
     """ This adapter acts as a Base Adapter for more specific Event Behaviors.
     """
-    implements(IEvent)
+    implements(IEvent) # TODO: better alsoProvides?
     adapts(IDexterityContent)
 
     def __init__(self, context):
@@ -177,11 +166,14 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
     pass
 
 
+
 def data_postprocessing(obj, event):
-    pass
+    print "DX: executing invariant"
+    tz = pytz.timezone(obj.timezone)
+    start = tz.localize(obj.start)
+    end = obj.end.replace(tzinfo=tz)
 
-def whole_day_handler(obj, event):
-    print "DX: executing whole day handler"
-
-def timezone_handler(obj, event):
-    print "DX: executing timezone handler"
+    if obj.whole_day:
+        start = start.replace(hour=0,minute=0,second=0)
+        end = end.replace(hour=23,minute=59,second=59)
+    # TODO: reindex

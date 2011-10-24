@@ -13,10 +13,7 @@
 
     <subscriber for=".behaviors.IEventBasic
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-                handler=".behaviors.whole_day_handler" />
-    <subscriber for=".behaviors.IEventBasic
-                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-                handler=".behaviors.timezone_handler" />
+                handler=".behaviors.data_postprocessing" />
 
     <plone:behavior
         title="Event"
