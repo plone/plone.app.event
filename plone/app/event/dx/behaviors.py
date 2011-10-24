@@ -2,7 +2,7 @@
 types.
 
 """
-
+import pytz
 from zope import schema
 from zope.component import adapts
 from zope.interface import implements, alsoProvides, invariant
@@ -57,12 +57,15 @@ class IEventBasic(form.Schema):
         )
 
     @invariant
-    def whole_day_invariant(data):
-        pass
+    def data_preprocessing(data):
+        print "DX: executing invariant"
+        tz = pytz.timezone(data.timezone)
+        start = tz.localize(data.start)
+        end = data.end.replace(tzinfo=tz)
 
-    @invariant
-    def timezone_invariant(data):
-        pass
+        if data.whole_day:
+            start = start.replace(hour=0,minute=0,second=0)
+            end = end.replace(hour=23,minute=59,second=59)
 
 
 class IEventRecurrence(form.Schema):
@@ -173,6 +176,9 @@ class EventContact(EventBase):
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
     pass
 
+
+def data_postprocessing(obj, event):
+    pass
 
 def whole_day_handler(obj, event):
     print "DX: executing whole day handler"
