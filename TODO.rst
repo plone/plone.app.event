@@ -15,6 +15,7 @@ TODO, future
 - provide caldav support, using webdav. make Zope2.webdav obsolete and use
   z3c.dav or wsgidav or whatever.
 
+- Integrate RSVP - Resource reSerVation Protocol (IP, RFC 2205)
 
 TODO, bigger
 ============
