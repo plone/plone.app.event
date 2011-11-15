@@ -16,16 +16,6 @@ class IEventBasic(form.Schema):
     """ Basic event schema.
 
     """
-    form.fieldset(
-            'event',
-            label=_(u'label_fieldset_event', default=u'Event'),
-            fields=(
-                'start',
-                'end',
-                'whole_day',
-                'timezone',
-                'event_url'))
-
     start = schema.Datetime(
         title = _(u'label_start', default=u'Event start date'),
         description = _(u'help_start', default=u'Date and Time, when the event begins.'),
@@ -110,7 +100,6 @@ class IEventBehavior(IEventBasic, IEventRecurrence, IEventLocation, IEventAttend
     """ Full Event Behavior.
 
     """
-
     form.fieldset(
             'event',
             label=_(u'label_fieldset_event', default=u'Event'),
@@ -148,23 +137,94 @@ class EventBase(object):
         self.context = context
 
 class EventBasic(EventBase):
-    pass
+    implements(IEventBasic)
+
+    def _get_start(self):
+        return self.context.start
+    def _set_start(self, value):
+        self.context.start = value
+    start = property(_get_start, _set_start)
+
+    def _get_end(self):
+        return self.context.end
+    def _set_end(self, value):
+        self.context.end = value
+    end = property(_get_end, _set_end)
+
+    def _get_timezone(self):
+        return self.context.timezone
+    def _set_timezone(self, value):
+        self.context.timezone = value
+    timezone = property(_get_timezone, _set_timezone)
+
+    def _get_whole_day(self):
+        return self.context.whole_day
+    def _set_whole_day(self, value):
+        self.context.whole_day = value
+    whole_day = property(_get_whole_day, _set_whole_day)
+
+    def _get_event_url(self):
+        return self.context.event_url
+    def _set_event_url(self, value):
+        self.context.event_url = value
+    event_url = property(_get_event_url, _set_event_url)
+
 
 class EventRecurrence(EventBase):
-    pass
+    implements(IEventRecurrence)
+
+    def _get_recurrence(self):
+        return self.context.recurrence
+    def _set_recurrence(self, value):
+        self.context.recurrence = value
+    recurrence = property(_get_recurrence, _set_recurrence)
+
 
 class EventLocation(EventBase):
-    pass
+    implements(IEventLocation)
+
+    def _get_location(self):
+        return self.context.location
+    def _set_location(self, value):
+        self.context.location = value
+    location = property(_get_location, _set_location)
+
 
 class EventAttendees(EventBase):
-    pass
+    implements(IEventAttendees)
+
+    def _get_attendees(self):
+        return self.context.attendees
+    def _set_attendees(self, value):
+        self.context.attendees = value
+    attendees = property(_get_attendees, _set_attendees)
+
 
 class EventContact(EventBase):
-    pass
+    implements(IEventContact)
+
+    def _get_contact_name(self):
+        return self.context.contact_name
+    def _set_contact_name(self, value):
+        self.context.contact_name = value
+    contact_name = property(_get_contact_name, _set_contact_name)
+
+    def _get_contact_email(self):
+        return self.context.contact_email
+    def _set_contact_email(self, value):
+        self.context.contact_email = value
+    contact_email = property(_get_contact_email, _set_contact_email)
+
+    def _get_contact_phone(self):
+        return self.context.contact_phone
+    def _set_contact_phone(self, value):
+        self.context.contact_phone = value
+    contact_phone = property(_get_contact_phone, _set_contact_phone)
+
+
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
-    pass
-
+    implements(IEventBehavior)
 
 
 def data_postprocessing(obj, event):
