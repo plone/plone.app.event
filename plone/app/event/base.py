@@ -25,14 +25,14 @@ def default_timezone(context=None):
 
     TODO: test member timezone
     """
+    if not context: context = getSite()
 
-    if context:
-        membership = getToolByName(context, 'portal_membership')
-        if not membership.isAnonymousUser(): # the user has not logged in
-            member = membership.getAuthenticatedMember()
-            member_timezone = member.getProperty('timezone', None)
-            if member_timezone:
-                return pytz.timezone(member_timezone).zone
+    membership = getToolByName(context, 'portal_membership')
+    if not membership.isAnonymousUser(): # the user has not logged in
+        member = membership.getAuthenticatedMember()
+        member_timezone = member.getProperty('timezone', None)
+        if member_timezone:
+            return pytz.timezone(member_timezone).zone
 
     controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
                                                     prefix="plone.app.event")
