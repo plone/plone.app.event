@@ -3,13 +3,15 @@ types.
 
 """
 import pytz
+from datetime import timedelta
 from zope import schema
 from zope.component import adapts
 from zope.interface import implements, alsoProvides, invariant
+from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.event import messageFactory as _
+from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEvent
-from plone.dexterity.interfaces import IDexterityContent
 
 
 class IEventBasic(form.Schema):
@@ -31,7 +33,7 @@ class IEventBasic(form.Schema):
     timezone = schema.TextLine(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
-        required = True,
+        required = True
         )
 
     whole_day = schema.Bool(
@@ -39,6 +41,14 @@ class IEventBasic(form.Schema):
         description = _(u'help_whole_day', default=u'Event lasts whole day'),
         required = False
         )
+
+@form.default_value(field=IEventBasic['start'])
+def default_start(data):
+    return localized_now()
+
+@form.default_value(field=IEventBasic['end'])
+def default_end(data):
+    return localized_now() + timedelta(hours=1)
 
 
 class IEventRecurrence(form.Schema):
