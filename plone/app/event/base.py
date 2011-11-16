@@ -4,7 +4,7 @@ from datetime import date
 from datetime import timedelta
 
 from zope.component import getUtility
-from zope.site.hooks import getSite
+from zope.component.hooks import getSite
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry

@@ -51,7 +51,6 @@ setup(name='plone.app.event',
           'zope.interface',
           'zope.publisher',
           'zope.schema',
-          'zope.site',
       ],
       extras_require={
           'archetypes': [
