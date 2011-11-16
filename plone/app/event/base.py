@@ -4,16 +4,14 @@ from datetime import date
 from datetime import timedelta
 
 from zope.component import getUtility
-
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry
+
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
-
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
-
 
 
 def default_end_date():
@@ -46,12 +44,10 @@ def default_timezone(context=None):
     # following statement ensures, that timezone is a valid pytz zone
     return pytz.timezone(portal_timezone).zone
 
-
 def default_tzinfo(context=None):
     """ Return the default timezone as tzinfo instance.
     """
     return pytz.timezone(default_timezone(context))
-
 
 def first_weekday():
     """ Returns the number of the first Weekday in a Week, as defined in
@@ -66,7 +62,6 @@ def first_weekday():
         return 0
     else:
         return int(first_wd)
-
 
 def get_portal_events(context, range_start=None, range_end=None, **kw):
     """ Return all events as catalog brains, possibly within a given
@@ -84,7 +79,6 @@ def get_portal_events(context, range_start=None, range_end=None, **kw):
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
     return result
-
 
 def get_events_by_date(context, range_start=None, range_end=None, **kw):
     """ Return a dictionary with dates in a given timeframe as keys and
@@ -118,7 +112,6 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
                 events_by_date[start_str].append(event)
     return events_by_date
 
-
 def DT(dt):
     """ Return a DateTime instance from a python datetime instance.
 
@@ -140,7 +133,6 @@ def DT(dt):
         return None
 
 
-
 ### ARE THESE NEEDED?
 
 def localized_now(context):
@@ -149,7 +141,6 @@ def localized_now(context):
 def localized_today(context):
     now = localized_now(context)
     return date(now.year, now.month, now.day)
-
 
 def dt_from_brain(datestr):
     """ Return python datetime instance from a catalog brain's date string.
@@ -161,10 +152,9 @@ def dt_from_brain(datestr):
     """
     # TODO: file a bug for strptime pytz names handling.
 
-    from pytz import timezone
     start_parts = datestr.split(' ')
     start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
-    tz = timezone(start_parts[2])
+    tz = pytz.timezone(start_parts[2])
     start = tz.localize(start) # convert naive date to event's zone
 
 def dt_to_zone(dt, tzstring):
@@ -172,7 +162,4 @@ def dt_to_zone(dt, tzstring):
     string.
 
     """
-    from pytz import timezone
-    return dt.astimezone(timezone(tzstring))
-
-
+    return dt.astimezone(pytz.timezone(tzstring))
