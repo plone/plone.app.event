@@ -29,25 +29,6 @@ from plone.event.utils import pydt
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
-    atapi.StringField('location',
-        searchable=True,
-        write_permission=ModifyPortalContent,
-        widget=atapi.StringWidget(
-            label=_(u'label_event_location', default=u'Event Location'),
-            description=_(u'help_event_location', default=u""),
-            ),
-        ),
-
-    atapi.BooleanField('wholeDay',
-        default=False,
-        write_permission=ModifyPortalContent,
-        languageIndependent=True,
-        widget=atapi.BooleanWidget(
-            label=_(u'label_whole_day_event', u'Whole day event'),
-            description=_(u'help_whole_day_location', default=u""),
-            ),
-        ),
-
     atapi.DateTimeField('startDate',
         required=True,
         searchable=False,
@@ -91,6 +72,16 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             ),
         ),
 
+    atapi.BooleanField('wholeDay',
+        default=False,
+        write_permission=ModifyPortalContent,
+        languageIndependent=True,
+        widget=atapi.BooleanWidget(
+            label=_(u'label_whole_day_event', u'Whole day event'),
+            description=_(u'help_whole_day_location', default=u""),
+            ),
+        ),
+
     atapi.StringField('recurrence',
         storage=atapi.AnnotationStorage(),
         languageIndependent=True,
@@ -103,18 +94,12 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             ),
         ),
 
-    atapi.TextField('text',
-        required=False,
+    atapi.StringField('location',
         searchable=True,
-        primary=True,
-        storage=atapi.AnnotationStorage(migrate=True),
-        validators=('isTidyHtmlWithCleanup',),
-        default_output_type='text/x-html-safe',
-        widget=atapi.RichWidget(
-            label=_(u'label_event_announcement', default=u'Event body text'),
-            description=_(u'help_event_announcement', default=u''),
-            rows=25,
-            allow_file_upload=zconf.ATDocument.allow_document_upload
+        write_permission=ModifyPortalContent,
+        widget=atapi.StringWidget(
+            label=_(u'label_event_location', default=u'Event Location'),
+            description=_(u'help_event_location', default=u""),
             ),
         ),
 
@@ -125,20 +110,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.LinesWidget(
             label=_(u'label_event_attendees', default=u'Attendees'),
             description=_(u'help_event_attendees', default=u''),
-            ),
-        ),
-
-    atapi.StringField('eventUrl',
-        required=False,
-        searchable=True,
-        accessor='event_url',
-        write_permission=ModifyPortalContent,
-        validators=('isURL',),
-        widget=atapi.StringWidget(
-            label=_(u'label_event_url', default=u'Event URL'),
-            description=_(u'help_event_url',
-                default=u"Web address with more info about the event. "
-                        u"Add http:// for external links."),
             ),
         ),
 
@@ -174,6 +145,35 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.StringWidget(
             label=_(u'label_event_contact_phone', default=u'Contact Phone'),
             description=_(u'help_event_contact_phone', default=u'')
+            ),
+        ),
+
+    atapi.StringField('eventUrl',
+        required=False,
+        searchable=True,
+        accessor='event_url',
+        write_permission=ModifyPortalContent,
+        validators=('isURL',),
+        widget=atapi.StringWidget(
+            label=_(u'label_event_url', default=u'Event URL'),
+            description=_(u'help_event_url',
+                default=u"Web address with more info about the event. "
+                        u"Add http:// for external links."),
+            ),
+        ),
+
+    atapi.TextField('text',
+        required=False,
+        searchable=True,
+        primary=True,
+        storage=atapi.AnnotationStorage(migrate=True),
+        validators=('isTidyHtmlWithCleanup',),
+        default_output_type='text/x-html-safe',
+        widget=atapi.RichWidget(
+            label=_(u'label_event_announcement', default=u'Event body text'),
+            description=_(u'help_event_announcement', default=u''),
+            rows=25,
+            allow_file_upload=zconf.ATDocument.allow_document_upload
             ),
         ),
 
