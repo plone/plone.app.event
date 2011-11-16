@@ -93,6 +93,8 @@ plone.app.portlets.
 Notes, don't forget
 ===================
 
+* Check ordering of schema fields.
+
 * Fix tests for refactored plone.app.event.
 * atevent tests with recurrence
 
