@@ -93,6 +93,9 @@ plone.app.portlets.
 Notes, don't forget
 ===================
 
+* DX: when calculating default_end time at 23:xx, its 0:xx. the hour component
+  isn't displayed in the datetime widget.
+
 * Check ordering of schema fields.
 
 * Fix tests for refactored plone.app.event.
