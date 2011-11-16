@@ -4,6 +4,7 @@ from datetime import date
 from datetime import timedelta
 
 from zope.component import getUtility
+from zope.site.hooks import getSite
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from plone.registry.interfaces import IRegistry
@@ -135,10 +136,11 @@ def DT(dt):
 
 ### ARE THESE NEEDED?
 
-def localized_now(context):
+def localized_now(context=None):
+    if not context: context = getSite()
     return datetime.now(default_tzinfo(context))
 
-def localized_today(context):
+def localized_today(context=None):
     now = localized_now(context)
     return date(now.year, now.month, now.day)
 
