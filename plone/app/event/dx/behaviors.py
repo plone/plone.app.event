@@ -40,12 +40,6 @@ class IEventBasic(form.Schema):
         required = False
         )
 
-    event_url = schema.TextLine(
-        title = _(u'label_event_url', default=u'Event Url'),
-        description = _(u'help_event_url', default=u'Website of the event'),
-        required = False
-        )
-
 
 class IEventRecurrence(form.Schema):
     """ Recurring Event Schema.
@@ -92,6 +86,12 @@ class IEventContact(form.Schema):
     contact_phone = schema.TextLine(
         title = _(u'label_contact_phone', default=u'Contact Phone'),
         description = _(u'help_contact_phone', default=u'Phone number to contact about this event.'),
+        required = False
+        )
+
+    event_url = schema.TextLine(
+        title = _(u'label_event_url', default=u'Event Url'),
+        description = _(u'help_event_url', default=u'Website of the event'),
         required = False
         )
 
@@ -163,12 +163,6 @@ class EventBasic(EventBase):
         self.context.whole_day = value
     whole_day = property(_get_whole_day, _set_whole_day)
 
-    def _get_event_url(self):
-        return self.context.event_url
-    def _set_event_url(self, value):
-        self.context.event_url = value
-    event_url = property(_get_event_url, _set_event_url)
-
 
 class EventRecurrence(EventBase):
     implements(IEventRecurrence)
@@ -221,6 +215,11 @@ class EventContact(EventBase):
         self.context.contact_phone = value
     contact_phone = property(_get_contact_phone, _set_contact_phone)
 
+    def _get_event_url(self):
+        return self.context.event_url
+    def _set_event_url(self, value):
+        self.context.event_url = value
+    event_url = property(_get_event_url, _set_event_url)
 
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
