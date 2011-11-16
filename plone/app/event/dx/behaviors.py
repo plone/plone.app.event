@@ -11,6 +11,7 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.base import localized_now
+from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEvent
 
 
@@ -30,10 +31,11 @@ class IEventBasic(form.Schema):
         required = True
         )
 
-    timezone = schema.TextLine(
+    timezone = schema.Choice(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
-        required = True
+        required = True,
+        vocabulary="plone.app.event.AvailableTimezones"
         )
 
     whole_day = schema.Bool(
@@ -49,6 +51,10 @@ def default_start(data):
 @form.default_value(field=IEventBasic['end'])
 def default_end(data):
     return localized_now() + timedelta(hours=1)
+
+@form.default_value(field=IEventBasic['timezone'])
+def default_tz(data):
+    return default_timezone()
 
 
 class IEventRecurrence(form.Schema):
