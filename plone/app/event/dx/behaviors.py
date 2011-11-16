@@ -193,6 +193,8 @@ class EventBasic(EventBase):
 
 class EventRecurrence(EventBase):
     implements(IEventRecurrence)
+    # Implicitly need EventBasic here.
+    # TODO: should we subclass from EventBasic?
 
     def _get_recurrence(self):
         return self.context.recurrence
