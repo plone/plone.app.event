@@ -6,14 +6,18 @@ import pytz
 from datetime import timedelta
 from zope import schema
 from zope.component import adapts
-from zope.interface import implements, alsoProvides, invariant
+from zope.interface import implements, alsoProvides, invariant, Invalid
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEvent
+from plone.event.recurrence import recurrence_sequence_ical
 
+class StartBeforeEnd(Invalid):
+    __doc__ = _("exception_start_before_end",
+                default=u"The start or end date is invalid")
 
 class IEventBasic(form.Schema):
     """ Basic event schema.
@@ -43,6 +47,13 @@ class IEventBasic(form.Schema):
         description = _(u'help_whole_day', default=u'Event lasts whole day'),
         required = False
         )
+
+    @invariant
+    def validate_start_end(data):
+        if data.start > data.end:
+            raise StartBeforeEnd(_("exception_start_before_end_text",
+                                   default=u"The start date must be before the\
+                                             end date."))
 
 @form.default_value(field=IEventBasic['start'])
 def default_start(data):
@@ -189,6 +200,17 @@ class EventRecurrence(EventBase):
         self.context.recurrence = value
     recurrence = property(_get_recurrence, _set_recurrence)
 
+    def occurrences(self, limit_start=None, limit_end=None):
+        starts = recurrence_sequence_ical(
+                self.context.start,
+                recrule=self.context.recurrence,
+                from_=limit_start, until=limit_end)
+        ends = recurrence_sequence_ical(
+                self.context.end,
+                recrule=self.context.recurrence,
+                from_=limit_start, until=limit_end)
+        events = map(lambda start,end:(start, end), starts, ends)
+        return events
 
 class EventLocation(EventBase):
     implements(IEventLocation)
