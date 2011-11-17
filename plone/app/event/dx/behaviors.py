@@ -12,8 +12,10 @@ from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
+from plone.app.event.base import dt_to_zone
 from plone.app.event.interfaces import IEvent
 from plone.event.recurrence import recurrence_sequence_ical
+from plone.event.utils import tzdel
 
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
@@ -167,15 +169,15 @@ class EventBasic(EventBase):
     implements(IEventBasic)
 
     def _get_start(self):
-        return self.context.start
+        return self._prepare_dt_get(self.context.start)
     def _set_start(self, value):
-        self.context.start = value
+        self.context.start = self._prepare_dt_set(value)
     start = property(_get_start, _set_start)
 
     def _get_end(self):
-        return self.context.end
+        return self._prepare_dt_get(self.context.end)
     def _set_end(self, value):
-        self.context.end = value
+        self.context.end = self._prepare_dt_set(value)
     end = property(_get_end, _set_end)
 
     def _get_timezone(self):
@@ -189,6 +191,24 @@ class EventBasic(EventBase):
     def _set_whole_day(self, value):
         self.context.whole_day = value
     whole_day = property(_get_whole_day, _set_whole_day)
+
+
+    def _prepare_dt_get(self, dt):
+        # always get the date in event's timezone
+        return dt_to_zone(dt, self.context.timezone)
+
+    def _prepare_dt_set(self, dt):
+        # Always set the date in UTC, saving the timezone in another field.
+        # But since the timezone value isn't known at the time of saving the
+        # form, we have to save it timezone-naive first and let
+        # timezone_handler convert it to the target zone afterwards.
+
+        # TODO: end and start should be updated if the timezone changes. ?
+        return tzdel(dt)
+
+    @property
+    def duration(self):
+        return self.context.end - self.context.start
 
 
 class EventRecurrence(EventBase):
