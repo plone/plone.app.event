@@ -9,6 +9,17 @@ respectively z3cforms, should reside in those subpackages, so that they can
 easily be switched off.
 
 
+TODO, thet's next
+=================
+* use p.a.event.base.get_portal_events all over, where needed (e.g. event
+  portlet)
+* make ical adapters for dx based types
+* begin with developer's documentation
+* refactor for and put some stuff into plone.event or drop that package.
+* fix vincent's dt-javascript's, which are failing now
+* create z3cform based recurrence widget for use with dx types
+* integrate lennart's plone.app.eventindex
+
 TODO, future
 ============
 
@@ -19,6 +30,13 @@ TODO, future
 
 TODO, bigger
 ============
+
+* Factor out generic methods without plone.app.* or Zope2 dependencies and move
+  them to plone.event.
+  - Cleanup plone.event for unused methods
+  - Cleanup plone.event for critical dependencies.
+
+- integrate a localized, nice formated duration function
 
 OK - thet - ditch Products.CMFCalendar, if possible.
     in branch - merge-CMFCalendar
@@ -64,17 +82,10 @@ OK - thet * make generic ical adapter.
 IP - supton * merge sean upton's uu.smartdate with plone.formwidget.datetime
   http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
 
-* Bring pone.formwidget.dateinput forward. Fix tests, finish the merge of
+IP - taito * Bring pone.formwidget.dateinput forward. Fix tests, finish the merge of
   archetypes.datetimewidget and collective.z3form.datetimewidget.
 
-* Factor out generic methods without plone.app.* or Zope2 dependencies and move
-  them to plone.event.
-  - Cleanup plone.event for unused methods
-  - Cleanup plone.event for critical dependencies.
-
 IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
-
-- integrate a localized, nice formated duration function
 
 
 upgrade / migration steps
