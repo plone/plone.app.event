@@ -287,12 +287,14 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
 
 
 def data_postprocessing(obj, event):
-    print "DX: executing invariant"
+    # set the timezone
     tz = pytz.timezone(obj.timezone)
     start = tz.localize(obj.start)
     end = obj.end.replace(tzinfo=tz)
 
+    # adapt for whole day
     if obj.whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)
+
     # TODO: reindex
