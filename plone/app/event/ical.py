@@ -23,11 +23,12 @@ VERSION = "2.0"
 def construct_calendar(context, events):
     """ Returns an icalendar.Calendar object.
 
-    context: A content object, which is used for calendar details like Title
-             and Description. Usually a container, collection or the event
-             itself.
+    :param context: A content object, which is used for calendar details like
+                    Title and Description. Usually a container, collection or
+                    the event itself.
 
-    events: The list of event objects, which are included in this calendar.
+    :param events: The list of event objects, which are included in this
+                   calendar.
 
     """
     cal = icalendar.Calendar()
