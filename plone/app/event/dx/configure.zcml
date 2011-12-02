@@ -15,6 +15,8 @@
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
     <exclude package="zope.contentprovider" />
 
+    <include file="ical.zcml" />
+
     <subscriber for=".interfaces.IDXEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler=".behaviors.data_postprocessing" />
