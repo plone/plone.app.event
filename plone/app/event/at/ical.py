@@ -4,7 +4,7 @@ import icalendar
 from zope.component import adapter
 from zope.interface import implementer
 
-from plone.event.utils import pydt
+from plone.event.utils import pydt, utc
 
 # ical adapter implementation interfaces
 from plone.app.event.interfaces import IICalendarComponent
@@ -20,13 +20,15 @@ def event_component(context):
 
     """
     ical_event = icalendar.Event()
-    ical_event.add('dtstamp', datetime.now())
-    ical_event.add('created', pydt(context.creation_date))
+    # TODO: until VTIMETZONE component is added and TZID used, everything is
+    #       converted to UTC. use real TZID, when VTIMEZONE is used!
+    ical_event.add('dtstamp', utc(pydt(datetime.now())))
+    ical_event.add('created', utc(pydt(context.creation_date)))
     ical_event.add('uid', context.UID())
-    ical_event.add('last-modified', pydt(context.modification_date))
+    ical_event.add('last-modified', utc(pydt(context.modification_date)))
     ical_event.add('summary', context.Title())
-    ical_event.add('dtstart', pydt(context.start()))
-    ical_event.add('dtend', pydt(context.end()))
+    ical_event.add('dtstart', utc(pydt(context.start())))
+    ical_event.add('dtend', utc(pydt(context.end())))
 
     recurrence = context.recurrence
     if recurrence:
