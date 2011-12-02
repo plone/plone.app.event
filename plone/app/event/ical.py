@@ -54,8 +54,20 @@ def construct_calendar(context, events):
     return cal
 
 
+
 @implementer(IICalendar)
-def calendar_component_collection(context):
+def calendar_from_event(context):
+    """ Event adapter. Returns an icalendar.Calendar object from an Event
+    context.
+
+    """
+    context = aq_inner(context)
+    events = [context]
+    return construct_calendar(context, events)
+
+
+@implementer(IICalendar)
+def calendar_from_collection(context):
     """ Container/Event adapter. Returns an icalendar.Calendar object from a
     Collection.
 
@@ -67,21 +79,18 @@ def calendar_component_collection(context):
 
 
 @implementer(IICalendar)
-def calendar_component(context):
-    """ Container/Event adapter. Returns an icalendar.Calendar object from a
-    context like Event or Container.
+def calendar_from_container(context):
+    """ Container adapter. Returns an icalendar.Calendar object from a 
+    Containerish context like a Folder.
 
     """
     context = aq_inner(context)
-    if IEvent.providedBy(context):
-        events = [context]
-    else:
-        path = '/'.join(context.getPhysicalPath())
-        result = get_portal_events(context, path=path)
-        events = [item.getObject() for item in result]
-        # TODO: should i become a generator?
-        # TODO: let construct_calendar expand brains to objects - so a
-        # generator would make some sense...
+    path = '/'.join(context.getPhysicalPath())
+    result = get_portal_events(context, path=path)
+    events = [item.getObject() for item in result]
+    # TODO: should i become a generator?
+    # TODO: let construct_calendar expand brains to objects - so a
+    # generator would make some sense...
     return construct_calendar(context, events)
 
 

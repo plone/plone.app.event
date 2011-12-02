@@ -4,15 +4,15 @@
 
     <adapter factory=".ical.event_component" />
 
-    <adapter factory="..ical.calendar_component_collection"
+    <adapter factory="..ical.calendar_from_collection"
         provides="..interfaces.IICalendar"
         for="Products.ATContentTypes.interfaces.IATTopic"
         />
-    <adapter factory="..ical.calendar_component"
+    <adapter factory="..ical.calendar_from_container"
         provides="..interfaces.IICalendar"
         for="Products.ATContentTypes.interfaces.IATFolder"
         />
-    <adapter factory="..ical.calendar_component"
+    <adapter factory="..ical.calendar_from_container"
         provides="..interfaces.IICalendar"
         for="Products.ATContentTypes.interfaces.IATBTreeFolder"
         />
