@@ -23,7 +23,7 @@ from zope.publisher.browser import TestRequest
 from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event.at.testing import FakeEvent
 from plone.event.utils import pydt
-from plone.app.event.browser.ical import EventsICal
+from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import toDisplay
 from plone.app.event.base import default_end_date
 
