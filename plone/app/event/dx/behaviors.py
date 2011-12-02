@@ -278,6 +278,7 @@ class EventContact(EventBase):
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
     pass
 
+
 def data_postprocessing(obj, event):
     # set the timezone
     tz = pytz.timezone(obj.timezone)
@@ -288,6 +289,9 @@ def data_postprocessing(obj, event):
     if obj.whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)
+
+    # save back
     obj.start = utc(start)
     obj.end = utc(end)
+
     # TODO: reindex
