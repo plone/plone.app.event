@@ -14,13 +14,20 @@ TODO, thet's next
 * use p.a.event.base.get_portal_events all over, where needed (e.g. event
   portlet)
 * make ical adapters for dx based types
-    . remove adapters for IATFolder, etc. since IFolder does the same.
+    OK . remove adapters for IATFolder, etc. since IFolder does the same.
     . can you use IFolder also for IDexterityContainer objects?
 * begin with developer's documentation
 * refactor for and put some stuff into plone.event or drop that package.
 * fix vincent's dt-javascript's, which are failing now
 * create z3cform based recurrence widget for use with dx types
 * integrate lennart's plone.app.eventindex
+* DX
+  - in metadata catalog, timezone'd times should reside, not un-timezone'd (see
+    atevent)
+  - z3cform: for time 0:00, the hour is not displayed. when displaying, 12:00
+    AM is shown.
+  - calendar portlet breaks
+
 
 TODO, future
 ============
