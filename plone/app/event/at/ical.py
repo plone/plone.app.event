@@ -30,6 +30,7 @@ def event_component(context):
 
     recurrence = context.recurrence
     if recurrence:
+        if recurrence.startswith('RRULE:'): recurrence = recurrence[6:]
         ical_event.add('rrule', icalendar.prop.vRecur.from_ical(recurrence))
 
     description = context.Description()
