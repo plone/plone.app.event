@@ -5,7 +5,7 @@
 
     <adapter factory=".ical.event_component" />
 
-    <configure zcml:condition="not-installed plone.app.collection">
+    <!-- configure zcml:condition="not-installed plone.app.collection" -->
       <!-- if plone.app.collection is not installed, register the adapter for
            IATTopic (Pre Plone 4.2) -->
       <adapter factory="..ical.calendar_from_collection"
@@ -18,6 +18,6 @@
           class="..ical.EventsICal"
           permission="zope2.View"
           />
-    </configure>
+    <!-- /configure -->
 
 </configure>
