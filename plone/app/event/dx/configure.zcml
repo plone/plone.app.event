@@ -15,8 +15,11 @@
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
     <exclude package="zope.contentprovider" />
 
-    <subscriber for=".behaviors.IEventBasic
+    <subscriber for=".interfaces.IDXEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+                handler=".behaviors.data_postprocessing" />
+    <subscriber for=".interfaces.IDXEvent
+                     zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
     <plone:behavior
@@ -27,6 +30,7 @@
         provides=".behaviors.IEventBehavior"
         factory=".behaviors.EventBehavior"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventFull"
         />
 
     <plone:behavior
@@ -35,6 +39,7 @@
         provides=".behaviors.IEventBasic"
         factory=".behaviors.EventBasic"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEvent"
         />
 
     <plone:behavior
@@ -43,6 +48,7 @@
         provides=".behaviors.IEventRecurrence"
         factory=".behaviors.EventRecurrence"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventRecurrence"
         />
 
     <plone:behavior
@@ -51,6 +57,7 @@
         provides=".behaviors.IEventLocation"
         factory=".behaviors.EventLocation"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventLocation"
         />
 
     <plone:behavior
@@ -59,6 +66,7 @@
         provides=".behaviors.IEventAttendees"
         factory=".behaviors.EventAttendees"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventAttendees"
         />
 
     <plone:behavior
@@ -67,6 +75,7 @@
         provides=".behaviors.IEventContact"
         factory=".behaviors.EventContact"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventContact"
         />
 
 

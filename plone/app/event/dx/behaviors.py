@@ -6,16 +6,15 @@ import pytz
 from datetime import timedelta
 from zope import schema
 from zope.component import adapts
-from zope.interface import implements, alsoProvides, invariant, Invalid
+from zope.interface import alsoProvides, invariant, Invalid
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
 from plone.app.event.base import dt_to_zone
-from plone.app.event.interfaces import IEvent
 from plone.event.recurrence import recurrence_sequence_ical
-from plone.event.utils import tzdel
+from plone.event.utils import tzdel, utc
 
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
@@ -159,14 +158,12 @@ alsoProvides(IEventBehavior, form.IFormFieldProvider)
 class EventBase(object):
     """ This adapter acts as a Base Adapter for more specific Event Behaviors.
     """
-    implements(IEvent) # TODO: better alsoProvides?
     adapts(IDexterityContent)
 
     def __init__(self, context):
         self.context = context
 
 class EventBasic(EventBase):
-    implements(IEventBasic)
 
     def _get_start(self):
         return self._prepare_dt_get(self.context.start)
@@ -212,7 +209,6 @@ class EventBasic(EventBase):
 
 
 class EventRecurrence(EventBase):
-    implements(IEventRecurrence)
     # Implicitly need EventBasic here.
     # TODO: should we subclass from EventBasic?
 
@@ -235,7 +231,6 @@ class EventRecurrence(EventBase):
         return events
 
 class EventLocation(EventBase):
-    implements(IEventLocation)
 
     def _get_location(self):
         return self.context.location
@@ -245,7 +240,6 @@ class EventLocation(EventBase):
 
 
 class EventAttendees(EventBase):
-    implements(IEventAttendees)
 
     def _get_attendees(self):
         return self.context.attendees
@@ -255,7 +249,6 @@ class EventAttendees(EventBase):
 
 
 class EventContact(EventBase):
-    implements(IEventContact)
 
     def _get_contact_name(self):
         return self.context.contact_name
@@ -283,8 +276,7 @@ class EventContact(EventBase):
 
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
-    implements(IEventBehavior)
-
+    pass
 
 def data_postprocessing(obj, event):
     # set the timezone
@@ -296,5 +288,6 @@ def data_postprocessing(obj, event):
     if obj.whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)
-
+    obj.start = utc(start)
+    obj.end = utc(end)
     # TODO: reindex
