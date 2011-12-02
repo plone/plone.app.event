@@ -4,40 +4,19 @@
 
     <adapter factory=".ical.event_component" />
 
-    <!-- all of the below can go away, since plone 4.0 folders implement
-    IFolder and > 4.1.x will have plone.app.collection's ICollection interface.
-    for both interfaces are adapters registered, one directory up -->
-    <adapter factory="..ical.calendar_from_collection"
-        provides="..interfaces.IICalendar"
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        />
-    <adapter factory="..ical.calendar_from_container"
-        provides="..interfaces.IICalendar"
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        />
-    <adapter factory="..ical.calendar_from_container"
-        provides="..interfaces.IICalendar"
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        />
-
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATTopic"
-        name="ics_view"
-        class="..ical.EventsICal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATFolder"
-        name="ics_view"
-        class="..ical.EventsICal"
-        permission="zope2.View"
-        />
-    <browser:page
-        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
-        name="ics_view"
-        class="..ical.EventsICal"
-        permission="zope2.View"
-        />
-
+    <configure zcml:condition="not-installed plone.app.collection">
+      <!-- if plone.app.collection is not installed, register the adapter for
+           IATTopic (Pre Plone 4.2) -->
+      <adapter factory="..ical.calendar_from_collection"
+          provides="..interfaces.IICalendar"
+          for="Products.ATContentTypes.interfaces.IATTopic"
+          />
+      <browser:page
+          for="Products.ATContentTypes.interfaces.IATTopic"
+          name="ics_view"
+          class="..ical.EventsICal"
+          permission="zope2.View"
+          />
+    </configure>
 
 </configure>

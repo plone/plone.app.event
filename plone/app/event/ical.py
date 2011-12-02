@@ -11,9 +11,6 @@ from plone.app.event.base import get_portal_events
 from plone.app.event.interfaces import IICalendar
 from plone.app.event.interfaces import IICalendarComponent
 
-# ical adapter adapting interfaces
-from plone.app.event.interfaces import IEvent
-
 from plone.app.event import messageFactory as _
 
 
@@ -54,7 +51,6 @@ def construct_calendar(context, events):
     return cal
 
 
-
 @implementer(IICalendar)
 def calendar_from_event(context):
     """ Event adapter. Returns an icalendar.Calendar object from an Event
@@ -63,18 +59,6 @@ def calendar_from_event(context):
     """
     context = aq_inner(context)
     events = [context]
-    return construct_calendar(context, events)
-
-
-@implementer(IICalendar)
-def calendar_from_collection(context):
-    """ Container/Event adapter. Returns an icalendar.Calendar object from a
-    Collection.
-
-    """
-    context = aq_inner(context)
-    result = get_portal_events(context)
-    events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
 
@@ -91,6 +75,18 @@ def calendar_from_container(context):
     # TODO: should i become a generator?
     # TODO: let construct_calendar expand brains to objects - so a
     # generator would make some sense...
+    return construct_calendar(context, events)
+
+
+@implementer(IICalendar)
+def calendar_from_collection(context):
+    """ Container/Event adapter. Returns an icalendar.Calendar object from a
+    Collection.
+
+    """
+    context = aq_inner(context)
+    result = get_portal_events(context)
+    events = [item.getObject() for item in result]
     return construct_calendar(context, events)
 
 
