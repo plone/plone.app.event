@@ -33,6 +33,8 @@ TODO, future
 TODO, bigger
 ============
 
+* Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
+
 * Factor out generic methods without plone.app.* or Zope2 dependencies and move
   them to plone.event.
   - Cleanup plone.event for unused methods
