@@ -14,6 +14,8 @@ TODO, thet's next
 * use p.a.event.base.get_portal_events all over, where needed (e.g. event
   portlet)
 * make ical adapters for dx based types
+    . remove adapters for IATFolder, etc. since IFolder does the same.
+    . can you use IFolder also for IDexterityContainer objects?
 * begin with developer's documentation
 * refactor for and put some stuff into plone.event or drop that package.
 * fix vincent's dt-javascript's, which are failing now
