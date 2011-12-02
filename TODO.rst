@@ -38,6 +38,8 @@ IP - Solgema * recurrence widget dateinput is behind overlay
 * Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
 
+* Proper ATTENDEES support for icalendar export
+
 * Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
 
 * Factor out generic methods without plone.app.* or Zope2 dependencies and move
