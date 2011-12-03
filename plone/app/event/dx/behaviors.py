@@ -16,6 +16,11 @@ from plone.app.event.base import dt_to_zone
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc
 
+from DateTime import DateTime
+from five import grok
+from plone.indexer import indexer
+from plone.app.event.dx.interfaces import IDXEvent
+
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
                 default=u"The start or end date is invalid")
@@ -295,3 +300,21 @@ def data_postprocessing(obj, event):
     obj.end = utc(end)
 
     # TODO: reindex
+
+
+## Indices need DateTime instances. Custom index attr needed.
+# Start indexer
+@indexer(IDXEvent)
+def startIndexer(obj):
+    if obj.start is None:
+        return None
+    return DateTime(obj.start.isoformat())
+grok.global_adapter(startIndexer, name="start")
+
+# End indexer
+@indexer(IDXEvent)
+def endIndexer(obj):
+    if obj.end is None:
+        return None
+    return DateTime(obj.end.isoformat())
+grok.global_adapter(endIndexer, name="end")
