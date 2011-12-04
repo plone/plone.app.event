@@ -304,6 +304,7 @@ def data_postprocessing(obj, event):
 
 
 ## Indices need DateTime instances. Custom index attr needed.
+# TODO: start and end indexer return in UTC instead of selected timezone
 # Start indexer
 @indexer(IDXEvent)
 def startIndexer(obj):
