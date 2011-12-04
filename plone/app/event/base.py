@@ -124,10 +124,11 @@ def DT(dt):
     DT always adds a offset
 
     """
+
     if isinstance(dt, datetime):
-        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzinfo.zone)
     elif isinstance(dt, date):
-        return DateTime(dt.year, dt.month, dt.day)
+        return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, dt.tzinfo.zone)
     elif isinstance(dt, DateTime):
         return dt
     else:
