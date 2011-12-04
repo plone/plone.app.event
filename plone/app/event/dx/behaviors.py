@@ -299,7 +299,8 @@ def data_postprocessing(obj, event):
     obj.start = utc(start)
     obj.end = utc(end)
 
-    # TODO: reindex
+    # reindex
+    obj.reindexObject()
 
 
 ## Indices need DateTime instances. Custom index attr needed.
