@@ -13,10 +13,10 @@ from plone.app.event import messageFactory as _
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
 from plone.app.event.base import dt_to_zone
+from plone.app.event.base import DT
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc
 
-from DateTime import DateTime
 from five import grok
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
@@ -309,7 +309,7 @@ def data_postprocessing(obj, event):
 def startIndexer(obj):
     if obj.start is None:
         return None
-    return DateTime(obj.start.isoformat())
+    return DT(obj.start)
 grok.global_adapter(startIndexer, name="start")
 
 # End indexer
@@ -317,5 +317,5 @@ grok.global_adapter(startIndexer, name="start")
 def endIndexer(obj):
     if obj.end is None:
         return None
-    return DateTime(obj.end.isoformat())
+    return DT(obj.end)
 grok.global_adapter(endIndexer, name="end")
