@@ -40,7 +40,7 @@ TODO, future
 TODO, bigger
 ============
 
-IP - Solgema * recurrence widget dateinput is behind overlay
+OK - Solgema * recurrence widget dateinput is behind overlay
 
 * Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
