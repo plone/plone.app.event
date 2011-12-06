@@ -204,8 +204,6 @@ class EventBasic(EventBase):
         # But since the timezone value isn't known at the time of saving the
         # form, we have to save it timezone-naive first and let
         # timezone_handler convert it to the target zone afterwards.
-
-        # TODO: end and start should be updated if the timezone changes. ?
         return tzdel(dt)
 
     @property
