@@ -223,6 +223,10 @@ class EventRecurrence(EventBase):
         self.context.recurrence = value
     recurrence = property(_get_recurrence, _set_recurrence)
 
+    # TODO: maybe, the behavior itself isn't the perfect place to provide
+    #       recurrence functionality?
+    #       maybe, this should be only done in IRecurrence adapter?
+    #       rethink.
     def occurrences(self, limit_start=None, limit_end=None):
         event = IEventBasic(self.context)
         starts = recurrence_sequence_ical(
