@@ -24,6 +24,7 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
+    <adapter factory=".behaviors.Recurrence" />
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
 

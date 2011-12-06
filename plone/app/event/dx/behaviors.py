@@ -6,7 +6,8 @@ import pytz
 from datetime import timedelta
 from zope import schema
 from zope.component import adapts
-from zope.interface import alsoProvides, invariant, Invalid
+from zope.interface import implements, alsoProvides
+from zope.interface import invariant, Invalid
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.event import messageFactory as _
@@ -14,11 +15,13 @@ from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
 from plone.app.event.base import dt_to_zone
 from plone.app.event.base import DT
+from plone.app.event.interfaces import IRecurrence
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc
 
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx.interfaces import IDXEventRecurrence
 
 
 class StartBeforeEnd(Invalid):
@@ -168,6 +171,7 @@ class EventBase(object):
     def __init__(self, context):
         self.context = context
 
+
 class EventBasic(EventBase):
 
     def _get_start(self):
@@ -231,6 +235,7 @@ class EventRecurrence(EventBase):
         events = map(lambda start,end:(start, end), starts, ends)
         return events
 
+
 class EventLocation(EventBase):
 
     def _get_location(self):
@@ -280,7 +285,24 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
     pass
 
 
-# IDXEvent event subscriber
+## Object adapters
+
+class Recurrence(object):
+    """ Dexterity Recurring Event adapter.
+    """
+    implements(IRecurrence)
+    adapts(IDXEventRecurrence)
+
+    def __init__(self, context):
+        self.context = context
+
+    def occurrences(self, limit_start=None, limit_end=None):
+        return IEventRecurrence(self.context).occurrences(
+            limit_start, limit_end)
+
+
+# Event handlers
+
 def data_postprocessing(obj, event):
     # set the timezone
     tz = pytz.timezone(obj.timezone)
@@ -300,7 +322,7 @@ def data_postprocessing(obj, event):
     obj.reindexObject()
 
 
-## Indices need DateTime instances. Custom attribute indexer needed.
+## Attribute indexer
 
 # Start indexer
 @indexer(IDXEvent)

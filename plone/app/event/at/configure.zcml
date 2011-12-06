@@ -8,6 +8,8 @@
 
     <include file="ical.zcml" />
 
+    <adapter factory=".content.Recurrence" />
+
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler=".content.whole_day_handler" />

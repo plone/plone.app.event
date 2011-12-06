@@ -5,6 +5,13 @@ from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
+class IRecurrence(Interface):
+    """ Adapter for recurring events.
+    """
+    def occurrences(limit_start, limit_end):
+        """ Return the occurrences of the recurring event.
+        """
+
 class IICalendar(Interface):
     """ Adapter, which is used to construct an icalendar object.
     """

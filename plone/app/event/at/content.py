@@ -1,3 +1,4 @@
+from zope.component import adapts
 from zope.interface import implements
 
 from DateTime import DateTime
@@ -21,6 +22,7 @@ from plone.formwidget.datetime.at import DatetimeWidget
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.app.event.interfaces import IEvent
+from plone.app.event.interfaces import IRecurrence
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone as default_tz
 from plone.event.recurrence import recurrence_sequence_ical
@@ -209,16 +211,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     whole_day = atapi.ATFieldProperty('wholeDay')
 
     def occurrences(self, limit_start=None, limit_end=None):
-        starts = recurrence_sequence_ical(
-                self.start(),
-                recrule=self.recurrence,
-                from_=limit_start, until=limit_end)
-        ends = recurrence_sequence_ical(
-                self.end(),
-                recrule=self.recurrence,
-                from_=limit_start, until=limit_end)
-        events = map(lambda start,end:(start, end), starts, ends)
-        return events
+        return IRecurrence(self).occurrences(limit_start, limit_end)
 
     def default_timezone(self):
         return default_tz()
@@ -378,6 +371,32 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
 registerATCT(ATEvent, packageName)
 
+
+## Object adapters
+
+class Recurrence(object):
+    """ ATEvent adapter for recurring events.
+    """
+    implements(IRecurrence)
+    adapts(IATEvent)
+
+    def __init__(self, context):
+        self.context = context
+
+    def occurrences(self, limit_start=None, limit_end=None):
+        starts = recurrence_sequence_ical(
+                self.context.start(),
+                recrule=self.context.recurrence,
+                from_=limit_start, until=limit_end)
+        ends = recurrence_sequence_ical(
+                self.context.end(),
+                recrule=self.context.recurrence,
+                from_=limit_start, until=limit_end)
+        events = map(lambda start,end:(start, end), starts, ends)
+        return events
+
+
+## Event handlers
 
 def whole_day_handler(obj, event):
     """ For whole day events only, set start time to 0:00:00 and end time to
