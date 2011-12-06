@@ -118,9 +118,6 @@ def DT(dt):
 
     >>>
 
-    TODO: respect datetime timezones. add timezone info if it's missing.
-    DT always adds a offset
-
     """
 
     if isinstance(dt, datetime):
