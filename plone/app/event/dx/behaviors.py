@@ -20,6 +20,7 @@ from plone.event.utils import tzdel, utc
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
 
+
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
                 default=u"The start or end date is invalid")
