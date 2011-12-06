@@ -14,6 +14,8 @@ from plone.event.utils import pydt
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 
+from plone.app.event.dx.interfaces import IDXEventRecurrence
+
 
 def default_end_date():
     """
@@ -122,6 +124,14 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     events_by_date = {}
     for event in events:
         obj = event.getObject()
+
+        if IDXEventRecurrence.providedBy(obj):
+            # Adapt obj to provide correct behavior
+            # Import here to avoid circular imports
+            # (dx/behaviors imports localized_now from here)
+            from plone.app.event.dx.behaviors import IEventRecurrence
+            obj = IEventRecurrence(obj)
+
         occurrences = obj.occurrences(range_start, range_end)
         for occ in occurrences:
             # occ: (start, end)
