@@ -87,6 +87,13 @@ def get_portal_events(context, range_start=None, range_end=None, **kw):
 
     query = {}
     query['object_provides'] = IEvent.__identifier__
+
+    if 'path' not in kw:
+        # always limit to the current portal root
+        # TODO: is there a better method to get portal/navigation root's path
+        #       without having to have the request available?
+       query['path'] = '/'.join(getSite().getPhysicalPath())
+
     if range_start:
         query['start'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
