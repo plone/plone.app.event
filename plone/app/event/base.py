@@ -78,7 +78,8 @@ def prepare_range(context, start, end):
     end = pydt(end, missing_zone=tz)
     return start, end
 
-def get_portal_events(context, range_start=None, range_end=None, **kw):
+def get_portal_events(context, range_start=None, range_end=None, limit=None,
+                      **kw):
     """ Return all events as catalog brains, possibly within a given
     timeframe.
 
@@ -99,9 +100,15 @@ def get_portal_events(context, range_start=None, range_end=None, **kw):
     if range_end:
         query['end'] = {'query': DT(range_end), 'range': 'max'}
     query['sort_on'] = 'start'
+
     query.update(kw)
+
     cat = getToolByName(context, 'portal_catalog')
-    result = cat(**query)
+    if limit:
+        query['sort_limit'] = limit
+        result = cat(**query)[:limit]
+    else:
+        result = cat(**query)
     return result
 
 def get_events_by_date(context, range_start=None, range_end=None, **kw):
