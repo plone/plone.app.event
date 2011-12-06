@@ -300,18 +300,20 @@ def data_postprocessing(obj, event):
     obj.reindexObject()
 
 
-## Indices need DateTime instances. Custom index attr needed.
-# TODO: start and end indexer return in UTC instead of selected timezone
+## Indices need DateTime instances. Custom attribute indexer needed.
+
 # Start indexer
 @indexer(IDXEvent)
 def start_indexer(obj):
-    if obj.start is None:
+    event = IEventBasic(obj)
+    if event.start is None:
         return None
-    return DT(obj.start)
+    return DT(event.start)
 
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
-    if obj.end is None:
+    event = IEventBasic(obj)
+    if event.end is None:
         return None
-    return DT(obj.end)
+    return DT(event.end)
