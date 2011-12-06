@@ -96,8 +96,6 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     range_end = pydt(range_end, missing_zone=tz)
 
     events = get_portal_events(context, range_start, range_end, **kw)
-    # TODO: catalog brains are timezone'd. shouldn't they be in UTC?
-    ## example catalog entry: 2011/09/16 16:35:00 Brazil/West
     events_by_date = {}
     for event in events:
         obj = event.getObject()
