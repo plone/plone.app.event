@@ -17,7 +17,6 @@ from plone.app.event.base import DT
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc
 
-from five import grok
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
 
@@ -280,6 +279,7 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
     pass
 
 
+# IDXEvent event subscriber
 def data_postprocessing(obj, event):
     # set the timezone
     tz = pytz.timezone(obj.timezone)
@@ -303,16 +303,14 @@ def data_postprocessing(obj, event):
 # TODO: start and end indexer return in UTC instead of selected timezone
 # Start indexer
 @indexer(IDXEvent)
-def startIndexer(obj):
+def start_indexer(obj):
     if obj.start is None:
         return None
     return DT(obj.start)
-grok.global_adapter(startIndexer, name="start")
 
 # End indexer
 @indexer(IDXEvent)
-def endIndexer(obj):
+def end_indexer(obj):
     if obj.end is None:
         return None
     return DT(obj.end)
-grok.global_adapter(endIndexer, name="end")

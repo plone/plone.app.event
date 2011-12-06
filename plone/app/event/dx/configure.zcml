@@ -24,6 +24,10 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
+    <adapter name="start" factory=".behaviors.start_indexer" />
+    <adapter name="end" factory=".behaviors.end_indexer" />
+
+
     <plone:behavior
         title="Event"
         description="Event/Calendar extension to dexterity content types.
