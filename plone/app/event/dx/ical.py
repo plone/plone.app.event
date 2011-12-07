@@ -20,6 +20,7 @@ from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import IEventLocation
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
+from plone.app.dexterity.behaviors.metadata import ICategorization
 
 from plone.event.utils import pydt, utc
 
@@ -80,11 +81,11 @@ def event_component(context):
         if event_contact.event_url:
             ical_event.add('url', event_contact.event_url)
 
-    # plone.app.dexterity.behaviors.metadata.ICategorization has no marker
-    # interface, so we test for attribute existance.
-    subjects = getattr(context, 'subject', None)
-    if subjects:
-        for subject in subjects:
-            ical_event.add('categories', subject)
+    event_cat = ICategorization(context, None)
+    if event_cat is not None:
+        subjects = event_cat.subjects
+        if subjects:
+            for subject in subjects:
+                ical_event.add('categories', subject)
 
     return ical_event
