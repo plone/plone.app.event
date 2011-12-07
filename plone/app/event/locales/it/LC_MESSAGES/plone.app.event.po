@@ -1,88 +1,89 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translation of plone.app.event.pot to Italian
+# Giacomo Spettoli <giacomo.spettoli@gmail.com>, 2011.
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2011-12-06 23:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2011-12-06 23:00+0200\n"
+"Last-Translator: Giacomo Spettoli <giacomo.spettoli@gmail.com>\n"
+"Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
+"Plural-Forms: nplurals=2; plural=n!=1\n"
+"Language-Code: it\n"
+"Language-Name: Italiano\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone.app.event\n"
+"X-Is-Fallback-For: it-ch it-it\n"
 
 #: ./interfaces.py:103
 msgid "Available timezones"
-msgstr ""
+msgstr "Fusi orari disponibili"
 
 #: ./profiles/default/controlpanel.xml
 msgid "Event Settings"
-msgstr ""
+msgstr "Impostazioni Eventi"
 
 #: ./interfaces.py:93
 msgid "Portal default timezone"
-msgstr ""
+msgstr "Fuso orario predefinito del portale"
 
 #. Default: "End date must be after start date."
 #: ./at/content.py:255
 msgid "error_end_must_be_after_start_date"
-msgstr ""
+msgstr "La data di fine deve essere successiva alla data di inizio."
 
 #. Default: "End date is not valid."
 #: ./at/content.py:237
 msgid "error_invalid_end_date"
-msgstr ""
+msgstr "La data di fine non è valida."
 
 #. Default: "Start date is not valid."
 #: ./at/content.py:245
 msgid "error_invalid_start_date"
-msgstr ""
+msgstr "La data di inizio non è valida."
 
 #. Default: "The start or end date is invalid"
 #: ./dx/behaviors.py:28
 msgid "exception_start_before_end"
-msgstr ""
+msgstr "La data di inizio o di fine non è valida"
 
 #. Default: "The start date must be before the                                             end date."
 #: ./dx/behaviors.py:63
 msgid "exception_start_before_end_text"
-msgstr ""
+msgstr "La data di inizio deve essere precedente alla data di fine."
 
 #. Default: "List of attendees"
 #: ./dx/behaviors.py:103
 msgid "help_attendees"
-msgstr ""
+msgstr "Lista dei partecipanti"
 
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: ./interfaces.py:104
 msgid "help_available_timezones"
-msgstr ""
+msgstr "I fusi orari che saranno disponibili nel portale. Possono essere impostati per utenti e per eventi"
 
 #. Default: "Email address to contact about this event."
 #: ./dx/behaviors.py:118
 msgid "help_contact_email"
-msgstr ""
+msgstr "Indirizzo email da contattare per questo evento"
 
 #. Default: "Name of a person to contact about this event."
 #: ./dx/behaviors.py:112
 msgid "help_contact_name"
-msgstr ""
+msgstr "Nome della persona da contattare per questo evento."
 
 #. Default: "Phone number to contact about this event."
 #: ./dx/behaviors.py:124
 msgid "help_contact_phone"
-msgstr ""
+msgstr "Numero di telefono da contattare per questo evento."
 
 #. Default: "Date and Time, when the event ends."
 #: ./dx/behaviors.py:43
 msgid "help_end"
-msgstr ""
+msgstr "Data e ora della fine dell'evento."
 
 #: ./at/content.py:57
 msgid "help_end_location"
@@ -115,43 +116,43 @@ msgstr ""
 #. Default: "Enter recurrence rules, one per line."
 #: ./at/content.py:94
 msgid "help_event_recurrence"
-msgstr ""
+msgstr "Inserisci le regole di ricorrenza, una per linea."
 
 #. Default: "Event related settings like timezone, etc."
 #: ./browser/controlpanel.py:15
 msgid "help_event_settings"
-msgstr ""
+msgstr "Impostazioni correlate all'evento come il fuso orario, ecc."
 
 #. Default: "Select the Timezone, where this event happens."
 #: ./at/content.py:72
 msgid "help_event_timezone"
-msgstr ""
+msgstr "Seleziona il fuso orario dove accadrà questo evento."
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: ./at/content.py:161
 #: ./dx/behaviors.py:130
 msgid "help_event_url"
-msgstr ""
+msgstr "Indirizzo web con maggiori informazioni sull'evento. Aggiungere http:// per i collegamenti esterni."
 
 #. Default: "First day in the Week."
 #: ./interfaces.py:119
 msgid "help_first_weekday"
-msgstr ""
+msgstr "Primo giorno della settimana."
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
 #: ./interfaces.py:94
 msgid "help_portal_timezone"
-msgstr ""
+msgstr "L'impostazione del fuso orario del portale. Gli utenti potranno impostare il proprio fuso orario, se 'Fusi orari disponibili' è stato valorizzato."
 
 #. Default: "RFC5545 compatible recurrence definition"
 #: ./dx/behaviors.py:86
 msgid "help_recurrence"
-msgstr ""
+msgstr "Definizione di ricorrenza compatibile RFC5545"
 
 #. Default: "Date and Time, when the event begins."
 #: ./dx/behaviors.py:37
 msgid "help_start"
-msgstr ""
+msgstr "Data e ora di inizio dell'evento."
 
 #: ./at/content.py:43
 msgid "help_start_location"
@@ -160,12 +161,12 @@ msgstr ""
 #. Default: "Timezone of the event"
 #: ./dx/behaviors.py:49
 msgid "help_timezone"
-msgstr ""
+msgstr "Fuso orario dell'evento"
 
 #. Default: "Event lasts whole day"
 #: ./dx/behaviors.py:56
 msgid "help_whole_day"
-msgstr ""
+msgstr "L'evento dura l'intera giornata"
 
 #: ./at/content.py:83
 msgid "help_whole_day_location"
@@ -174,111 +175,111 @@ msgstr ""
 #. Default: "No events found."
 #: ./ical.py:98
 msgid "ical_view_no_events"
-msgstr ""
+msgstr "Nessun evento trovato."
 
 #. Default: "Attendees"
 #: ./dx/behaviors.py:102
 msgid "label_attendees"
-msgstr ""
+msgstr "Partecipanti"
 
 #. Default: "Event end date"
 #: ./dx/behaviors.py:42
 msgid "label_end"
-msgstr ""
+msgstr "Data di fine evento"
 
 #. Default: "Event Recurrence"
 #: ./at/content.py:93
 msgid "label_event_recurrence"
-msgstr ""
+msgstr "Ricorrenza dell'evento"
 
 #. Default: "Event settings"
 #: ./browser/controlpanel.py:14
 msgid "label_event_settings"
-msgstr ""
+msgstr "Impostazioni dell'evento"
 
 #. Default: "Timezone"
 #: ./at/content.py:71
 msgid "label_event_timezone"
-msgstr ""
+msgstr "Fuso orario"
 
 #. Default: "Event URL"
 #: ./at/content.py:160
 #: ./dx/behaviors.py:129
 msgid "label_event_url"
-msgstr ""
+msgstr "URL dell'evento"
 
 #. Default: "Event"
 #: ./dx/behaviors.py:141
 msgid "label_fieldset_event"
-msgstr ""
+msgstr "Evento"
 
 #. Default: "First Weekday"
 #: ./interfaces.py:118
 msgid "label_first_weekday"
-msgstr ""
+msgstr "Primo giorno della settimana"
 
 #. Default: "Recurrence"
 #: ./dx/behaviors.py:85
 msgid "label_recurrence"
-msgstr ""
+msgstr "Ricorrenza"
 
 #. Default: "Event start date"
 #: ./dx/behaviors.py:36
 msgid "label_start"
-msgstr ""
+msgstr "Data di inizio dell'evento"
 
 #. Default: "Timezone"
 #: ./dx/behaviors.py:48
 msgid "label_timezone"
-msgstr ""
+msgstr "Fuso orario"
 
 #. Default: "Whole Day"
 #: ./dx/behaviors.py:55
 msgid "label_whole_day"
-msgstr ""
+msgstr "Evento nell'intera giornata"
 
 #. Default: "Whole day event"
 #: ./at/content.py:82
 msgid "label_whole_day_event"
-msgstr ""
+msgstr "Evento di tutta la giornata"
 
 #. Default: "monthname"
 #: ./portlets/portlet_calendar.pt:40
 msgid "month-${month}"
-msgstr ""
+msgstr "mese-${month}"
 
 #. Default: "Monday"
 #: ./vocabulary.py:44
 msgid "weekday-0"
-msgstr ""
+msgstr "Lunedì"
 
 #. Default: "Tuesday"
 #: ./vocabulary.py:45
 msgid "weekday-1"
-msgstr ""
+msgstr "Martedì"
 
 #. Default: "Wednesday"
 #: ./vocabulary.py:46
 msgid "weekday-2"
-msgstr ""
+msgstr "Mercoledì"
 
 #. Default: "Thursday"
 #: ./vocabulary.py:47
 msgid "weekday-3"
-msgstr ""
+msgstr "Giovedì"
 
 #. Default: "Friday"
 #: ./vocabulary.py:48
 msgid "weekday-4"
-msgstr ""
+msgstr "Venerdì"
 
 #. Default: "Saturday"
 #: ./vocabulary.py:49
 msgid "weekday-5"
-msgstr ""
+msgstr "Sabato"
 
 #. Default: "Sunday"
 #: ./vocabulary.py:50
 msgid "weekday-6"
-msgstr ""
+msgstr "Domenica"
 

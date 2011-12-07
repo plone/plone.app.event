@@ -126,7 +126,7 @@ class IEventContact(form.Schema):
         )
 
     event_url = schema.TextLine(
-        title = _(u'label_event_url', default=u'Event Url'),
+        title = _(u'label_event_url', default=u'Event URL'),
         description = _(u'help_event_url', default=u'Website of the event'),
         required = False
         )
