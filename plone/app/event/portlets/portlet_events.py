@@ -9,13 +9,14 @@ from zope.interface import implements
 from zope import schema
 
 from Acquisition import aq_inner
-from DateTime.DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
+
+from plone.app.event.base import get_portal_events
+from plone.app.event.base import localized_now
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -94,17 +95,15 @@ class Renderer(base.Renderer):
     @memoize
     def _data(self):
         context = aq_inner(self.context)
-        catalog = getToolByName(context, 'portal_catalog')
         limit = self.data.count
         state = self.data.state
         path = self.navigation_root_path
-        return catalog(portal_type='Event',
-                       review_state=state,
-                       end={'query': DateTime(),
-                            'range': 'min'},
-                       path=path,
-                       sort_on='start',
-                       sort_limit=limit)[:limit]
+        return get_portal_events(
+                context,
+                range_start=localized_now(context),
+                limit=limit,
+                path=path,
+                review_state=state)
 
 class AddForm(base.AddForm):
     form_fields = form.Fields(IEventsPortlet)
