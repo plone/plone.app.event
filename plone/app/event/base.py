@@ -97,7 +97,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
        query['path'] = '/'.join(getSite().getPhysicalPath())
 
     if range_start:
-        query['start'] = {'query': DT(range_start), 'range': 'min'}
+        query['end'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
         query['end'] = {'query': DT(range_end), 'range': 'max'}
     query['sort_on'] = 'start'
