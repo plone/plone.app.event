@@ -19,6 +19,9 @@ from plone.event.utils import tzdel, utc, utctz
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
 
+# TODO: altern., for backwards compat., we could import from plone.z3cform
+from z3c.form.browser.textlines import TextLinesFieldWidget
+
 
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
@@ -94,11 +97,14 @@ class IEventLocation(form.Schema):
 class IEventAttendees(form.Schema):
     """ Event Attendees Schema.
     """
-    attendees = schema.Text(
+    attendees = schema.Tuple(
         title = _(u'label_attendees', default=u'Attendees'),
         description = _(u'help_attendees', default=u'List of attendees'),
-        required = False
+        value_type = schema.TextLine(),
+        required = False,
+        missing_value = (),
         )
+    form.widget(attendees = TextLinesFieldWidget)
 
 class IEventContact(form.Schema):
     """ Event Contact Schema.
