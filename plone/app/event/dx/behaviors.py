@@ -163,16 +163,10 @@ alsoProvides(IEventContact, form.IFormFieldProvider)
 alsoProvides(IEventBehavior, form.IFormFieldProvider)
 
 
-class EventBase(object):
-    """ This adapter acts as a Base Adapter for more specific Event Behaviors.
-    """
-    adapts(IDexterityContent)
+class EventBasic(object):
 
     def __init__(self, context):
         self.context = context
-
-
-class EventBasic(EventBase):
 
     def _get_start(self):
         return self._prepare_dt_get(self.context.start)
@@ -215,7 +209,10 @@ class EventBasic(EventBase):
         return self.context.end - self.context.start
 
 
-class EventRecurrence(EventBase):
+class EventRecurrence(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def _get_recurrence(self):
         return self.context.recurrence
@@ -241,7 +238,10 @@ class EventRecurrence(EventBase):
         return events
 
 
-class EventLocation(EventBase):
+class EventLocation(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def _get_location(self):
         return self.context.location
@@ -250,7 +250,10 @@ class EventLocation(EventBase):
     location = property(_get_location, _set_location)
 
 
-class EventAttendees(EventBase):
+class EventAttendees(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def _get_attendees(self):
         return self.context.attendees
@@ -259,7 +262,10 @@ class EventAttendees(EventBase):
     attendees = property(_get_attendees, _set_attendees)
 
 
-class EventContact(EventBase):
+class EventContact(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def _get_contact_name(self):
         return self.context.contact_name
