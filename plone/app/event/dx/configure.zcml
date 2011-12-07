@@ -24,10 +24,17 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
-    <adapter factory=".behaviors.Recurrence" />
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
 
+    <!-- EventRecurrence acts as IRecurrence adapter as well as behavior
+         adapter.
+    -->
+    <adapter
+        factory=".behaviors.EventRecurrence"
+        provides="..interfaces.IRecurrence"
+        for=".interfaces.IDXEventRecurrence"
+        />
 
     <plone:behavior
         title="Event"

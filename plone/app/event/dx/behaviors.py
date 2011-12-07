@@ -210,7 +210,8 @@ class EventBasic(object):
 
 
 class EventRecurrence(object):
-
+    """ Adapter for IEventRecurrence behavior as well for IRecurrence.
+    """
     def __init__(self, context):
         self.context = context
 
@@ -220,10 +221,6 @@ class EventRecurrence(object):
         self.context.recurrence = value
     recurrence = property(_get_recurrence, _set_recurrence)
 
-    # TODO: maybe, the behavior itself isn't the perfect place to provide
-    #       recurrence functionality?
-    #       maybe, this should be only done in IRecurrence adapter?
-    #       rethink.
     def occurrences(self, limit_start=None, limit_end=None):
         event = IEventBasic(self.context)
         starts = recurrence_sequence_ical(
@@ -296,23 +293,7 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
     pass
 
 
-## Object adapters
-
-class Recurrence(object):
-    """ Dexterity Recurring Event adapter.
-    """
-    implements(IRecurrence)
-    adapts(IDXEventRecurrence)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        return IEventRecurrence(self.context).occurrences(
-            limit_start, limit_end)
-
-
-# Event handlers
+## Event handlers
 
 def data_postprocessing(obj, event):
     # set the timezone
