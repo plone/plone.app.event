@@ -121,7 +121,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         accessor='contact_name',
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
-            label=_(u'label_event_contact_name', default=u'Contact Name'),
+            label=_(u'label_contact_name', default=u'Contact Name'),
             description=_(u'help_event_contact_name', default=u''),
             ),
         ),
@@ -133,7 +133,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         validators=('isEmail',),
         widget=atapi.StringWidget(
-            label=_(u'label_event_contact_email', default=u'Contact E-mail'),
+            label=_(u'label_contact_email', default=u'Contact E-mail'),
             description=_(u'help_event_contact_email', default=u''),
         ),
     ),
@@ -145,7 +145,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         validators=(),
         widget=atapi.StringWidget(
-            label=_(u'label_event_contact_phone', default=u'Contact Phone'),
+            label=_(u'label_contact_phone', default=u'Contact Phone'),
             description=_(u'help_event_contact_phone', default=u'')
             ),
         ),

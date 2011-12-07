@@ -52,5 +52,6 @@ Lennart Regebro, <regebro@gmail.com>
 Mike Rhodes, <mike.rhodes@gmail.com>
 Dorneles Tremea, <dorneles@tremea.com>
 Nejc Zupan, <nejc.zupan@niteoweb.com>
+Giacomo Spettoli, <giacomo.spettoli@gmail.com>
 
 and possibly many many more...
