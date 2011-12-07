@@ -14,7 +14,7 @@ from plone.app.event.base import default_timezone
 from plone.app.event.base import dt_to_zone
 from plone.app.event.base import DT
 from plone.event.recurrence import recurrence_sequence_ical
-from plone.event.utils import tzdel, utc
+from plone.event.utils import tzdel, utc, utctz
 
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
@@ -194,11 +194,17 @@ class EventBasic(object):
         return dt_to_zone(dt, self.context.timezone)
 
     def _prepare_dt_set(self, dt):
-        # Always set the date in UTC, saving the timezone in another field.
-        # But since the timezone value isn't known at the time of saving the
-        # form, we have to save it timezone-naive first and let
-        # timezone_handler convert it to the target zone afterwards.
-        return tzdel(dt)
+        # TODO: still throws an error, because z3c.form compares naive date
+        # with tzaware before executing this custom setter!
+        # see: z3c.form.form.applyChanges
+
+        # Dates are always set in UTC, saving the actual timezone in another
+        # field. But since the timezone value isn't known at time of saving the
+        # form, we have to save it with a dummy zone first and replace it with
+        # the target zone afterwards.
+        # Saving it timezone-naive first doesn't work, since it has to be
+        # possibly compared (always when editing) to a timezone-awar date.
+        return dt.replace(tzinfo=utctz()) # return with dummy zone
 
     @property
     def duration(self):
@@ -292,10 +298,15 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
 ## Event handlers
 
 def data_postprocessing(obj, event):
+    # We handle date inputs as floating dates without timezones and apply
+    # timezones afterwards.
+    start = tzdel(obj.start)
+    end = tzdel(obj.end)
+
     # set the timezone
     tz = pytz.timezone(obj.timezone)
-    start = tz.localize(obj.start)
-    end = obj.end.replace(tzinfo=tz)
+    start = tz.localize(start)
+    end = tz.localize(end)
 
     # adapt for whole day
     if obj.whole_day:
