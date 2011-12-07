@@ -103,4 +103,8 @@ class EventsICal(BrowserView):
             'attachment; filename="%s"' % name)
 
         # get iCal
+        # TODO: unicode decode error, if umlaute in cal.as_string
+        #       e.g. umlaute in subjects
+        #       cal.as_string returns ascii instead of unicode.
+        #       FIX in icalendar package
         self.request.RESPONSE.write(cal.as_string().encode('utf-8'))
