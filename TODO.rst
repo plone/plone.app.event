@@ -11,22 +11,32 @@ easily be switched off.
 
 TODO, thet's next
 =================
-* use p.a.event.base.get_portal_events all over, where needed (e.g. event
-  portlet)
-* make ical adapters for dx based types
-    OK . remove adapters for IATFolder, etc. since IFolder does the same.
-    . can you use IFolder also for IDexterityContainer objects?
+
 * begin with developer's documentation
+
 * refactor for and put some stuff into plone.event or drop that package.
+
 * fix vincent's dt-javascript's, which are failing now
+
 * create z3cform based recurrence widget for use with dx types
+
 * integrate lennart's plone.app.eventindex
+
+OK * use p.a.event.base.get_portal_events all over, where needed (e.g. event
+  portlet)
+
+OK * make ical adapters for dx based types
+    OK . remove adapters for IATFolder, etc. since IFolder does the same.
+    NO . can you use IFolder also for IDexterityContainer objects?
+
 * DX
+  - editing DX types with event behavior fails, since a tznaive DT is compared
+    to timzone aware DT. see inline TODO statements.
   - in metadata catalog, timezone'd times should reside, not un-timezone'd (see
     atevent)
   - z3cform: for time 0:00, the hour is not displayed. when displaying, 12:00
     AM is shown.
-  - calendar portlet breaks
+  OK - calendar portlet breaks
 
 
 TODO, future
@@ -78,7 +88,7 @@ OK - thet - ditch Products.CMFCalendar, if possible.
 
 * add more ICalendar fields to create an generic interface to event content
   types
-  - eventually ditch start_date and end_date, replacing them with more RFC5545
+  NO - eventually ditch start_date and end_date, replacing them with more RFC5545
     names dtstart, dtend...
     !!! probably NOT. that might cause trouble.
     !!! on the other hand... it's not used anyways and the api changed from pre
@@ -108,13 +118,15 @@ IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
 
 upgrade / migration steps
 -------------------------
-* portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
+OK * portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
 portlet_calendar (calendar is a python module.)
-maybe not needed, since legacy calendar and event modules left in
-plone.app.portlets.
+   not needed, since legacy calendar and event modules left in
+   plone.app.portlets.
 
 * if default timezone is not set, migration cannot run
-- migration from old ATEvent
+
+- migration from old ATEvent (catalog update)
+
 * Check if any upgrade steps are neccassary for changed permission names (see
   config.py)
 
@@ -128,6 +140,7 @@ Notes, don't forget
 * Check ordering of schema fields.
 
 * Fix tests for refactored plone.app.event.
+
 * atevent tests with recurrence
 
 * plone.app.event.browser.event_view.pt -> eventually make view more generic
@@ -149,19 +162,27 @@ isn't modified by a form. is that failure proof?
 More
 ====
 
+
 documentation
 -------------
+
 - plip documentation
+
 - document daterecurringindex benchmark results
+
 - document TZ behavior with examples
+
 - document removal of ICalendarSupport (interface for ical export ability) in
   plone.app.event.interfaces. MAYBE provide that interface in ATContentTypes
   for backwards compatibility
 
+
 general
 -------
+
 - remove recurrence dependency in plone.app.event. makes shipping of first
   release easier.
+
   - disable recurrence for now: hide the recurring field .. add it later, per
   profile or so.
 
@@ -175,6 +196,7 @@ OK - thet - Refactor plone.app.event for usage of an subpackage "at" (later
 
 daterecurringindex
 ------------------
+
 - usage of IIBTree - see discussion on plone-dev
 test if IIBTrees or set are faster
 >>> ts = time.time(); b=difference(IISet(a), IISet(b)); time.time() - ts
@@ -184,6 +206,7 @@ test if IIBTrees or set are faster
 
 timezone support
 ----------------
+
 - eventually provide configlet to configure TZ per user
   user should be able to select his timezone in user properties
 
@@ -192,6 +215,7 @@ timezone support
 
 - GenericSetup import profile for setting the default timezone on install time
   (and upgrade time as well).
+
 - if no timezone is selected: same as mail settings: note in nonfig area - at least
   display in edit form to link in control panel.
 FIXES:
@@ -203,36 +227,49 @@ FIXES:
 
 datetimewidget
 --------------
+
 - calendar starting year, calendar future years options in datetimewidget.
 
 OK - thet - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
   plone.formwidget.dateinput
 
+
 Testing
 -------
+
 OK/IP (check again) - thet - move tests to plone.app.testing
+
 - improve jenkins integration
+
 
 cleanup
 -------
+
 OK/IP (check again) * remove all vcal references in favor or ical
+
 
 plip buildout
 -------------
+
 OK - thet - here are git:// and git@ checkouts for ppl without/with rw permissions.
   maybe https handles both?
 
+
 ATEvent
 -------
+
 - "no end date" boolean option
+
 - [X] recurrence field goes after end date.
   [ ] hide text area with css display:none
   [X] remove schemata recurrence
   [ ] provide checkbox "this date recurrs ..." and toggle textarea then
 
+
 DXEvent
 -------
-IP - provide it. providing behaviors, based on plone.app.page
+
+OK - provide it. providing behaviors, based on plone.app.page
 
 
 done
