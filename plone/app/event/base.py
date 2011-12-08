@@ -144,14 +144,26 @@ def DT(dt):
 
     @param dt: python datetime instance
 
-    >>>
+    >>> from plone.app.event.base import DT
+    >>> from datetime import datetime
+    >>> pdt = datetime(2011, 11, 23)
+    >>> from DateTime import DateTime
+    >>> zDT = DateTime(2011, 11, 23)
+    >>> zDT == DT(pdt)
+    True
 
     """
 
     if isinstance(dt, datetime):
-        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzinfo.zone)
+        if dt.tzinfo:
+            return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzinfo.zone)
+        else:
+            return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
     elif isinstance(dt, date):
-        return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, dt.tzinfo.zone)
+        if dt.tzinfo:
+            return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, dt.tzinfo.zone)
+        else:
+            return DateTime(dt.year, dt.month, dt.day, 0, 0, 0)
     elif isinstance(dt, DateTime):
         return dt
     else:
