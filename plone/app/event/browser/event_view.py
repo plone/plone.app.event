@@ -2,7 +2,7 @@ from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from plone.event.utils import is_same_day, is_same_time
 from plone.app.event.base import DT
-from plone.app.event.interface import IEvent
+from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IRecurrence
 
 
@@ -57,25 +57,22 @@ def prepare_for_display(context, start, end, whole_day):
                  same_time=same_time)
 
 
-
 class EventView(BrowserView):
 
-    def __init__(self, context, request):
-        self.context = IEvent(context)
-        self.request = request
-
     def date_for_display(self):
+        event = IEventAccessor(self.context)
+
         return prepare_for_display(
                 self.context,
-                self.context.start,
-                self.context.end,
-                self.context.whole_day)
+                event['start'],
+                event['end'],
+                event['whole_day'])
 
     @property
     def occurrences(self):
         context = self.context
         events = map(
-            lambda start, end: prepare_for_display(self.context, start, end,
+            lambda (start, end): prepare_for_display(self.context, start, end,
                                                    self.context.whole_day),
             IRecurrence(context).occurrences())
         return events
