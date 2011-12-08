@@ -12,13 +12,17 @@ easily be switched off.
 TODO, thet's next
 =================
 
-* begin with developer's documentation
+* unify AT and DX event browser view
 
 * refactor for and put some stuff into plone.event or drop that package.
 
-* fix vincent's dt-javascript's, which are failing now
+* begin with developer's documentation
 
 * create z3cform based recurrence widget for use with dx types
+
+* unify plone.formwidget.datetime templates
+
+* fix vincent's dt-javascript's, which are failing now
 
 * integrate lennart's plone.app.eventindex
 
