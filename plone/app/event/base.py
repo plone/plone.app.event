@@ -154,16 +154,12 @@ def DT(dt):
 
     """
 
+    tz = default_timezone(getSite())
     if isinstance(dt, datetime):
-        if dt.tzinfo:
-            return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzinfo.zone)
-        else:
-            return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+        tz = dt.tzname() or tz
+        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, tz)
     elif isinstance(dt, date):
-        if dt.tzinfo:
-            return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, dt.tzinfo.zone)
-        else:
-            return DateTime(dt.year, dt.month, dt.day, 0, 0, 0)
+        return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
         return dt
     else:
