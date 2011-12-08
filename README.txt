@@ -53,5 +53,6 @@ Mike Rhodes, <mike.rhodes@gmail.com>
 Dorneles Tremea, <dorneles@tremea.com>
 Nejc Zupan, <nejc.zupan@niteoweb.com>
 Giacomo Spettoli, <giacomo.spettoli@gmail.com>
+Taito Horiuchi, <taito.horiuchi@hexagonit.fi>
 
 and possibly many many more...
