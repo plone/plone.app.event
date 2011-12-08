@@ -25,6 +25,12 @@ TODO, thet's next
 
 * integrate lennart's plone.app.eventindex
 
+* add portlet_calendar and portlet_events (this one with unpublished and published events).
+
+* show unpublished events as such in portlet_events and portlet_calendar
+
+OK * register sample DX event with event_view
+
 OK * unify AT and DX event browser view
 
 OK * use p.a.event.base.get_portal_events all over, where needed (e.g. event
