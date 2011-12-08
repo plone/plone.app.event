@@ -40,6 +40,10 @@ class IICalendarComponent(Interface):
     icalendar.
     """
 
+class IEventAccessor(Interface):
+    """ Generic Event Accessor
+    """
+
 
 # Controlpanel Interface
 

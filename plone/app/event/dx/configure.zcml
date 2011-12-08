@@ -27,6 +27,8 @@
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
 
+    <adapter factory=".behaviors.generic_event_accessor" />
+
     <!-- EventRecurrence acts as IRecurrence adapter as well as behavior
          adapter.
     -->
@@ -36,6 +38,7 @@
         for=".interfaces.IDXEventRecurrence"
         />
 
+    <!-- Behaviors -->
     <plone:behavior
         title="Event"
         description="Event/Calendar extension to dexterity content types.

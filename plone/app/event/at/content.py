@@ -1,5 +1,5 @@
-from zope.component import adapts
-from zope.interface import implements
+from zope.component import adapts, adapter
+from zope.interface import implements, implementer
 
 from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
@@ -23,6 +23,7 @@ from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IRecurrence
+from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import default_end_date
 from plone.app.event.base import default_timezone as default_tz
 from plone.event.recurrence import recurrence_sequence_ical
@@ -373,6 +374,14 @@ registerATCT(ATEvent, packageName)
 
 
 ## Object adapters
+
+@implementer(IEventAccessor)
+@adapter(IATEvent)
+def generic_event_accessor(context):
+    return {'start': context.start_date,
+            'end': context.end_date,
+            'whole_day': context.whole_day}
+
 
 class Recurrence(object):
     """ ATEvent adapter for recurring events.

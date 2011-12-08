@@ -5,10 +5,13 @@ types.
 import pytz
 from datetime import timedelta
 from zope import schema
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import alsoProvides
 from zope.interface import invariant, Invalid
 from plone.directives import form
 from plone.app.event import messageFactory as _
+from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
 from plone.app.event.base import dt_to_zone
@@ -299,6 +302,17 @@ class EventContact(object):
 
 class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
     pass
+
+
+## Object adapters
+
+@implementer(IEventAccessor)
+@adapter(IDXEvent)
+def generic_event_accessor(context):
+    event = IEventBehavior(context)
+    return {'start': event.start,
+            'end': event.end,
+            'whole_day': event.whole_day}
 
 
 ## Event handlers
