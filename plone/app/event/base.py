@@ -170,8 +170,6 @@ def DT(dt):
         return None
 
 
-### ARE THESE NEEDED?
-
 def localized_now(context=None):
     if not context: context = getSite()
     return datetime.now(default_tzinfo(context))
