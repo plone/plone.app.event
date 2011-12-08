@@ -12,7 +12,6 @@ easily be switched off.
 TODO, thet's next
 =================
 
-* unify AT and DX event browser view
 
 * refactor for and put some stuff into plone.event or drop that package.
 
@@ -25,6 +24,8 @@ TODO, thet's next
 * fix vincent's dt-javascript's, which are failing now
 
 * integrate lennart's plone.app.eventindex
+
+OK * unify AT and DX event browser view
 
 OK * use p.a.event.base.get_portal_events all over, where needed (e.g. event
   portlet)
