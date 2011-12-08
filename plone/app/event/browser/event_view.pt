@@ -46,7 +46,6 @@
                                       </span>
                                 </abbr>
                                 to
-                                <br i18n:name="linebreak" />
                                 <abbr i18n:name="enddate"
                                       id="parent-fieldname-endDate"
                                       tal:attributes="title date_dict/end_iso">
@@ -71,7 +70,6 @@
                                 <span tal:replace="date_dict/start_date"
                                       i18n:name="date">
                                     Start Date Time</span>
-                                <br i18n:name="linebreak" />
                                 from
                                 <abbr id="parent-fieldname-startDate"
                                     tal:attributes="title date_dict/start_iso"
@@ -94,11 +92,12 @@
                           <div tal:define="events view/occurrences;
                                            events python:events and events[1:] or None"
                                tal:condition="events">
-                              <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences><br />
-                              <tal:rep repeat="date_dict events">
-                                <tal:event metal:use-macro="view/macros/event_occurrence" />
-                                <hr />
-                              </tal:rep>
+                               <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences>
+                               <ul>
+                                 <li tal:repeat="date_dict events">
+                                   <tal:event metal:use-macro="view/macros/event_occurrence" />
+                                 </li>
+                               </ul>
                           </div>
 
                         </td>
