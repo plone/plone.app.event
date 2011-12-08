@@ -59,20 +59,24 @@ def prepare_for_display(context, start, end, whole_day):
 
 class EventView(BrowserView):
 
-    def date_for_display(self):
-        event = IEventAccessor(self.context)
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.data = IEventAccessor(self.context)
 
+    def date_for_display(self):
         return prepare_for_display(
                 self.context,
-                event['start'],
-                event['end'],
-                event['whole_day'])
+                self.data['start'],
+                self.data['end'],
+                self.data['whole_day'])
 
     @property
     def occurrences(self):
         context = self.context
         events = map(
-            lambda (start, end): prepare_for_display(self.context, start, end,
-                                                   self.context.whole_day),
+            lambda (start, end):
+                prepare_for_display(self.context, start, end,
+                                    self.data['whole_day']),
             IRecurrence(context).occurrences())
         return events

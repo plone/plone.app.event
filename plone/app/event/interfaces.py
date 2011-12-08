@@ -11,15 +11,16 @@ class IEvent(Interface):
     start = Attribute(u"Event start date")
     end = Attribute(u"Event end date")
     timezone = Attribute(u"Timezone of the event")
-    recurrence = Attribute(u"RFC5545 compatible recurrence definition")
     whole_day = Attribute(u"Event lasts whole day")
+    recurrence = Attribute(u"RFC5545 compatible recurrence definition")
     location = Attribute(u"Location of the event")
-    text = Attribute(u"Summary of the event")
     attendees = Attribute(u"List of attendees")
-    event_url = Attribute(u"Website of the event")
     contact_name = Attribute(u"Contact name")
     contact_email = Attribute(u"Contact email")
     contact_phone = Attribute(u"Contact phone")
+    event_url = Attribute(u"Website of the event")
+    subjects = Attribute(u"Categories")
+    text = Attribute(u"Summary of the event")
 
 
 ## Adapter interfaces

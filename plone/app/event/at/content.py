@@ -380,7 +380,17 @@ registerATCT(ATEvent, packageName)
 def generic_event_accessor(context):
     return {'start': context.start_date,
             'end': context.end_date,
-            'whole_day': context.whole_day}
+            'timezone': context.timezone,
+            'whole_day': context.whole_day,
+            'recurrence': context.recurrence,
+            'location': context['location'],
+            'attendees': context['attendees'],
+            'contact_name': context['contactName'],
+            'contact_email': context['contactEmail'],
+            'contact_phone': context['contactPhone'],
+            'event_url': context['eventUrl'],
+            'subjects': context['subject'],
+            'text': context.getText()}
 
 
 class Recurrence(object):

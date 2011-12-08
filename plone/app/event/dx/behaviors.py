@@ -21,6 +21,7 @@ from plone.event.utils import tzdel, utc, utctz
 
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.dexterity.behaviors.metadata import ICategorization
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -309,10 +310,27 @@ class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, 
 @implementer(IEventAccessor)
 @adapter(IDXEvent)
 def generic_event_accessor(context):
-    event = IEventBehavior(context)
-    return {'start': event.start,
-            'end': event.end,
-            'whole_day': event.whole_day}
+    event_basic = IEventBasic(context, None)
+    event_recurrence = IEventRecurrence(context, None)
+    event_attendees = IEventAttendees(context, None)
+    event_location = IEventLocation(context, None)
+    event_contact = IEventContact(context, None)
+    event_cat = ICategorization(context, None)
+
+    return {'start': event_basic and event_basic.start or None,
+            'end': event_basic and event_basic.end or None,
+            'timezone': event_basic and event_basic.timezone or None,
+            'whole_day': event_basic and event_basic.whole_day or None,
+            'recurrence': event_recurrence and event_recurrence.recurrence or None,
+            'location': event_location and event_location.location or None,
+            'attendees': event_attendees and event_attendees.attendees or None,
+            'contact_name': event_contact and event_contact.contact_name or None,
+            'contact_email': event_contact and event_contact.contact_email or None,
+            'contact_phone': event_contact and event_contact.contact_phone or None,
+            'event_url': event_contact and event_contact.event_url or None,
+            'subjects': event_cat and event_cat.subjects or None,
+            'text': None # TODO: implement me
+            }
 
 
 ## Event handlers

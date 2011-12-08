@@ -9,23 +9,22 @@
 
 <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
-                        tal:define="kssClassesView context/@@kss_field_decorator_view;
-                                    getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                                    templateId template/getId;
-                                    toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
+                        tal:define="data view/data">
 
         <div class="eventDetails vcard">
             <table class="vertical listing"
-                   summary="Event details" i18n:attributes="summary summary_event_details;">
+              summary="Event details"
+              i18n:attributes="summary summary_event_details;">
 
                 <tbody>
 
-                    <tr tal:condition="context/Subject">
+                    <tr tal:condition="data/subjects">
                         <th i18n:translate="event_what">What</th>
                         <td>
-                            <metal:field use-macro="python:context.widget('subject', mode='view')">
-                            Categories
-                            </metal:field>
+                          <ul>
+                            <li tal:repeat="item data/subjects"
+                                tal:content="item" />
+                          </ul>
                         </td>
                     </tr>
                     <tr>
@@ -35,16 +34,12 @@
                             <tal:differentday tal:condition="not:date_dict/same_day"
                                               i18n:translate="event_when_differentday">
                                 <abbr i18n:name="startdate"
-                                      metal:define-macro="startdate-field-view"
-                                      tal:define="kss_class python:getKssClasses('startDate',
-                                                  templateId=templateId, macro='startdate-field-view');"
                                       id="parent-fieldname-startDate"
-                                      tal:attributes="class string:$kss_class dtstart;
-                                                      title date_dict/start_iso">
+                                      tal:attributes="title date_dict/start_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/start_date">Start Date</span>
-                                        <tal:notwholeday condition="not:context/whole_day">
+                                        <tal:notwholeday condition="not:data/whole_day">
                                           <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
                                           <span tal:replace="date_dict/start_time">Start Time</span>
                                         </tal:notwholeday>
@@ -53,16 +48,12 @@
                                 to
                                 <br i18n:name="linebreak" />
                                 <abbr i18n:name="enddate"
-                                      metal:define-macro="enddate-field-view"
-                                      tal:define="kss_class python:getKssClasses('endDate',
-                                                  templateId=templateId, macro='enddate-field-view');"
                                       id="parent-fieldname-endDate"
-                                      tal:attributes="class string:$kss_class dtend;
-                                                      title date_dict/end_iso">
+                                      tal:attributes="title date_dict/end_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
                                         <span tal:replace="date_dict/end_date">End Date</span>
-                                        <tal:notwholeday condition="not:context/whole_day">
+                                        <tal:notwholeday condition="not:data/whole_day">
                                           <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
                                           <span tal:replace="date_dict/end_time">End Time</span>
                                         </tal:notwholeday>
@@ -71,38 +62,30 @@
                             </tal:differentday>
 
                             <tal:sameday tal:condition="date_dict/same_day">
-                              <tal:wholeday condition="context/whole_day">
+                              <tal:wholeday condition="data/whole_day">
                                 <span tal:replace="date_dict/start_date"
                                       i18n:translate="" />
                               </tal:wholeday>
-                              <tal:notwholeday condition="not:context/whole_day"
+                              <tal:notwholeday condition="not:data/whole_day"
                                   i18n:translate="event_when_sameday">
                                 <span tal:replace="date_dict/start_date"
                                       i18n:name="date">
                                     Start Date Time</span>
                                 <br i18n:name="linebreak" />
                                 from
-                                <abbr metal:define-macro="startdatesame-field-view"
-                                      tal:define="kss_class python:getKssClasses('startDate',
-                                                  templateId=templateId, macro='startdatesame-field-view');"
-                                      id="parent-fieldname-startDate"
-                                      tal:attributes="class string:$kss_class dtstart;
-                                                      title date_dict/start_iso"
-                                      i18n:name="starttime">
-                                      <span metal:define-slot="inside"
-                                            class="explain"
-                                            tal:content="date_dict/start_time">Start Time</span>
+                                <abbr id="parent-fieldname-startDate"
+                                    tal:attributes="title date_dict/start_iso"
+                                     i18n:name="starttime">
+                                     <span metal:define-slot="inside"
+                                         class="explain"
+                                         tal:content="date_dict/start_time">Start Time</span>
                                 </abbr> to
-                                <abbr metal:define-macro="enddatesame-field-view"
-                                      tal:define="kss_class python:getKssClasses('endDate',
-                                                  templateId=templateId, macro='enddatesame-field-view');"
-                                      id="parent-fieldname-endDate"
-                                      tal:attributes="class string:$kss_class dtend;
-                                                      title date_dict/end_iso"
-                                      i18n:name="endtime">
-                                      <span metal:define-slot="inside"
-                                            class="explain"
-                                            tal:content="date_dict/end_time">End Time</span>
+                                <abbr id="parent-fieldname-endDate"
+                                    tal:attributes="title date_dict/end_iso"
+                                    i18n:name="endtime">
+                                    <span metal:define-slot="inside"
+                                        class="explain"
+                                        tal:content="date_dict/end_time">End Time</span>
                                 </abbr>
                               </tal:notwholeday>
                             </tal:sameday>
@@ -120,17 +103,14 @@
 
                         </td>
                     </tr>
-                    <tr tal:condition="context/location">
+                    <tr tal:condition="data/location">
                         <th i18n:translate="event_where">Where</th>
-                        <td class="location">
-
-                            <metal:field use-macro="python:context.widget('location', mode='view')">
-                            Location
-                            </metal:field>
+                        <td class="location" tal:content="data/location">
+                          location
                         </td>
                     </tr>
-                    <tr tal:define="contact_email context/contact_email;
-                                    contact_name context/contact_name;"
+                    <tr tal:define="contact_email data/contact_email;
+                                    contact_name data/contact_name;"
                         tal:condition="python:contact_name or contact_email">
                         <th i18n:translate="contact_name">Contact Name</th>
                         <td>
@@ -143,20 +123,19 @@
                                   tal:content="contact_name" />
                         </td>
                     </tr>
-                    <tr tal:condition="context/contact_phone">
+                    <tr tal:condition="data/contact_phone">
                         <th i18n:translate="contact_phone">Contact Phone</th>
-                        <td class="tel">
-                            <metal:field use-macro="python:context.widget('contactPhone', mode='view')">
-                            Phone number
-                            </metal:field>
+                        <td class="tel" tal:content="data/contact_phone">
+                            Contact Phone
                         </td>
                     </tr>
-                    <tr tal:condition="context/getAttendees|nothing">
+                    <tr tal:condition="data/attendees|nothing">
                         <th i18n:translate="contact_attendees">Attendees</th>
                         <td class="attendees">
-                            <metal:field use-macro="python:context.widget('attendees', mode='view')">
-                            Attendees
-                            </metal:field>
+                          <ul>
+                            <li tal:repeat="item data/attendees"
+                                tal:content="item" />
+                          </ul>
                         </td>
                     </tr>
                     <tr>
@@ -175,21 +154,18 @@
             </table>
         </div>
 
-        <metal:field use-macro="python:context.widget('text', mode='view')">
-        Body text
-        </metal:field>
+        <tal:txt replace="structure data/text" />
 
-        <p tal:condition="context/event_url|nothing">
+        <p tal:condition="data/event_url|nothing">
             <a class="url"
                href="event_url"
                i18n:translate="event_more_information"
-               tal:define="field python:context.getField('eventUrl');"
-                        id="parent-fieldname-eventUrl"
-                        tal:attributes="href context/event_url">
+               id="parent-fieldname-eventUrl"
+               tal:attributes="href data/event_url">
                More information about this event&hellip;</a>
         </p>
 
-        <span class="visualClear"><!-- --></span>
+        <span class="visualClear" />
 
     </metal:content-core>
 </metal:content-core>
