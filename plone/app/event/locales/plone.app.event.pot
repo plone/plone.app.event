@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-12-06 23:57+0000\n"
+"POT-Creation-Date: 2011-12-09 16:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,103 +17,212 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone.app.event\n"
 
-#: ./interfaces.py:103
+#: ./portlets/portlet_events.py:110
+msgid "Add Events Portlet"
+msgstr ""
+
+#: ./interfaces.py:66
 msgid "Available timezones"
+msgstr ""
+
+#: ./portlets/portlet_calendar.py:25
+msgid "Calendar"
+msgstr ""
+
+#: ./portlets/portlet_events.py:118
+msgid "Edit Events Portlet"
 msgstr ""
 
 #: ./profiles/default/controlpanel.xml
 msgid "Event Settings"
 msgstr ""
 
-#: ./interfaces.py:93
+#: ./portlets/portlet_events.py:46
+msgid "Events"
+msgstr ""
+
+#: ./portlets/portlet_events.py:25
+msgid "How many items to list."
+msgstr ""
+
+#: ./portlets/portlet_events.py:30
+msgid "Items in which workflow state to show."
+msgstr ""
+
+#: ./browser/event_view.pt:95
+msgid "More occurrences of this event:"
+msgstr ""
+
+#: ./portlets/portlet_events.py:24
+msgid "Number of items to display"
+msgstr ""
+
+#: ./interfaces.py:56
 msgid "Portal default timezone"
 msgstr ""
 
+#: ./portlets/portlet_events.py:111
+msgid "This portlet lists upcoming Events."
+msgstr ""
+
+#: ./portlets/portlet_events.py:29
+msgid "Workflow state"
+msgstr ""
+
+#. Default: "Upcoming Events"
+#: ./portlets/portlet_events.pt:10
+msgid "box_events"
+msgstr ""
+
+#. Default: "Previous events…"
+#: ./portlets/portlet_events.pt:71
+msgid "box_previous_events"
+msgstr ""
+
+#. Default: "Upcoming events…"
+#: ./portlets/portlet_events.pt:78
+msgid "box_upcoming_events"
+msgstr ""
+
+#. Default: "Attendees"
+#: ./browser/event_view.pt:132
+msgid "contact_attendees"
+msgstr ""
+
+#. Default: "Contact Name"
+#: ./browser/event_view.pt:114
+msgid "contact_name"
+msgstr ""
+
+#. Default: "Contact Phone"
+#: ./browser/event_view.pt:126
+msgid "contact_phone"
+msgstr ""
+
 #. Default: "End date must be after start date."
-#: ./at/content.py:255
+#: ./at/content.py:256
 msgid "error_end_must_be_after_start_date"
 msgstr ""
 
 #. Default: "End date is not valid."
-#: ./at/content.py:237
+#: ./at/content.py:238
 msgid "error_invalid_end_date"
 msgstr ""
 
 #. Default: "Start date is not valid."
-#: ./at/content.py:245
+#: ./at/content.py:246
 msgid "error_invalid_start_date"
 msgstr ""
 
+#. Default: "More information about this event…"
+#: ./browser/event_view.pt:159
+msgid "event_more_information"
+msgstr ""
+
+#. Default: "What"
+#: ./browser/event_view.pt:22
+msgid "event_what"
+msgstr ""
+
+#. Default: "When"
+#: ./browser/event_view.pt:31
+msgid "event_when"
+msgstr ""
+
+#. Default: "${startdate} to ${enddate}"
+#: ./browser/event_view.pt:49
+msgid "event_when_differentday"
+msgstr ""
+
+#: ./browser/event_view.pt:43
+msgid "event_when_differentday_optional_word_between_date_and_time"
+msgstr ""
+
+#. Default: "${date} from ${starttime} to ${endtime}"
+#: ./browser/event_view.pt:81
+msgid "event_when_sameday"
+msgstr ""
+
+#. Default: "Where"
+#: ./browser/event_view.pt:106
+msgid "event_where"
+msgstr ""
+
 #. Default: "The start or end date is invalid"
-#: ./dx/behaviors.py:28
+#: ./dx/behaviors.py:31
 msgid "exception_start_before_end"
 msgstr ""
 
 #. Default: "The start date must be before the                                             end date."
-#: ./dx/behaviors.py:63
+#: ./dx/behaviors.py:66
 msgid "exception_start_before_end_text"
 msgstr ""
 
+#. Default: "Add event to calendar"
+#: ./browser/event_view.pt:141
+msgid "heading_add_to_calendar"
+msgstr ""
+
 #. Default: "List of attendees"
-#: ./dx/behaviors.py:103
+#: ./dx/behaviors.py:106
 msgid "help_attendees"
 msgstr ""
 
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
-#: ./interfaces.py:104
+#: ./interfaces.py:67
 msgid "help_available_timezones"
 msgstr ""
 
 #. Default: "Email address to contact about this event."
-#: ./dx/behaviors.py:118
+#: ./dx/behaviors.py:124
 msgid "help_contact_email"
 msgstr ""
 
 #. Default: "Name of a person to contact about this event."
-#: ./dx/behaviors.py:112
+#: ./dx/behaviors.py:118
 msgid "help_contact_name"
 msgstr ""
 
 #. Default: "Phone number to contact about this event."
-#: ./dx/behaviors.py:124
+#: ./dx/behaviors.py:130
 msgid "help_contact_phone"
 msgstr ""
 
 #. Default: "Date and Time, when the event ends."
-#: ./dx/behaviors.py:43
+#: ./dx/behaviors.py:46
 msgid "help_end"
 msgstr ""
 
-#: ./at/content.py:57
+#: ./at/content.py:58
 msgid "help_end_location"
 msgstr ""
 
-#: ./at/content.py:176
+#: ./at/content.py:177
 msgid "help_event_announcement"
 msgstr ""
 
-#: ./at/content.py:114
+#: ./at/content.py:115
 msgid "help_event_attendees"
 msgstr ""
 
-#: ./at/content.py:137
+#: ./at/content.py:138
 msgid "help_event_contact_email"
 msgstr ""
 
-#: ./at/content.py:125
+#: ./at/content.py:126
 msgid "help_event_contact_name"
 msgstr ""
 
-#: ./at/content.py:149
+#: ./at/content.py:150
 msgid "help_event_contact_phone"
 msgstr ""
 
-#: ./at/content.py:104
+#: ./at/content.py:105
 msgid "help_event_location"
 msgstr ""
 
 #. Default: "Enter recurrence rules, one per line."
-#: ./at/content.py:94
+#: ./at/content.py:95
 msgid "help_event_recurrence"
 msgstr ""
 
@@ -123,51 +232,56 @@ msgid "help_event_settings"
 msgstr ""
 
 #. Default: "Select the Timezone, where this event happens."
-#: ./at/content.py:72
+#: ./at/content.py:73
 msgid "help_event_timezone"
 msgstr ""
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
-#: ./at/content.py:161
-#: ./dx/behaviors.py:130
+#: ./at/content.py:162
+#: ./dx/behaviors.py:136
 msgid "help_event_url"
 msgstr ""
 
 #. Default: "First day in the Week."
-#: ./interfaces.py:119
+#: ./interfaces.py:82
 msgid "help_first_weekday"
 msgstr ""
 
+#. Default: "Location of the event"
+#: ./dx/behaviors.py:97
+msgid "help_location"
+msgstr ""
+
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
-#: ./interfaces.py:94
+#: ./interfaces.py:57
 msgid "help_portal_timezone"
 msgstr ""
 
 #. Default: "RFC5545 compatible recurrence definition"
-#: ./dx/behaviors.py:86
+#: ./dx/behaviors.py:89
 msgid "help_recurrence"
 msgstr ""
 
 #. Default: "Date and Time, when the event begins."
-#: ./dx/behaviors.py:37
+#: ./dx/behaviors.py:40
 msgid "help_start"
 msgstr ""
 
-#: ./at/content.py:43
+#: ./at/content.py:44
 msgid "help_start_location"
 msgstr ""
 
 #. Default: "Timezone of the event"
-#: ./dx/behaviors.py:49
+#: ./dx/behaviors.py:52
 msgid "help_timezone"
 msgstr ""
 
 #. Default: "Event lasts whole day"
-#: ./dx/behaviors.py:56
+#: ./dx/behaviors.py:59
 msgid "help_whole_day"
 msgstr ""
 
-#: ./at/content.py:83
+#: ./at/content.py:84
 msgid "help_whole_day_location"
 msgstr ""
 
@@ -176,18 +290,61 @@ msgstr ""
 msgid "ical_view_no_events"
 msgstr ""
 
+#. Default: "iCal"
+#: ./browser/event_view.pt:149
+msgid "label_add_to_ical"
+msgstr ""
+
 #. Default: "Attendees"
-#: ./dx/behaviors.py:102
+#: ./dx/behaviors.py:105
 msgid "label_attendees"
 msgstr ""
 
+#. Default: "Contact E-mail"
+#: ./at/content.py:137
+#: ./dx/behaviors.py:123
+msgid "label_contact_email"
+msgstr ""
+
+#. Default: "Contact Name"
+#: ./at/content.py:125
+#: ./dx/behaviors.py:117
+msgid "label_contact_name"
+msgstr ""
+
+#. Default: "Contact Phone"
+#: ./at/content.py:149
+#: ./dx/behaviors.py:129
+msgid "label_contact_phone"
+msgstr ""
+
 #. Default: "Event end date"
-#: ./dx/behaviors.py:42
+#: ./dx/behaviors.py:45
 msgid "label_end"
 msgstr ""
 
+#. Default: "Event body text"
+#: ./at/content.py:176
+msgid "label_event_announcement"
+msgstr ""
+
+#. Default: "Attendees"
+#: ./at/content.py:114
+msgid "label_event_attendees"
+msgstr ""
+
+#. Default: "Event Ends"
+#: ./at/content.py:57
+msgid "label_event_end"
+msgstr ""
+
+#. Default: "Event Location"
+#: ./at/content.py:104
+msgid "label_event_location"
+msgstr ""
+
 #. Default: "Event Recurrence"
-#: ./at/content.py:93
+#: ./at/content.py:94
 msgid "label_event_recurrence"
 msgstr ""
 
@@ -196,55 +353,95 @@ msgstr ""
 msgid "label_event_settings"
 msgstr ""
 
+#. Default: "Event Starts"
+#: ./at/content.py:43
+msgid "label_event_start"
+msgstr ""
+
 #. Default: "Timezone"
-#: ./at/content.py:71
+#: ./at/content.py:72
 msgid "label_event_timezone"
 msgstr ""
 
+#. Default: "Event Type(s)"
+#: ./at/content.py:189
+msgid "label_event_type"
+msgstr ""
+
 #. Default: "Event URL"
-#: ./at/content.py:160
-#: ./dx/behaviors.py:129
+#: ./at/content.py:161
+#: ./dx/behaviors.py:135
 msgid "label_event_url"
 msgstr ""
 
 #. Default: "Event"
-#: ./dx/behaviors.py:141
+#: ./dx/behaviors.py:147
 msgid "label_fieldset_event"
 msgstr ""
 
 #. Default: "First Weekday"
-#: ./interfaces.py:118
+#: ./interfaces.py:81
 msgid "label_first_weekday"
 msgstr ""
 
+#. Default: "Location"
+#: ./dx/behaviors.py:96
+msgid "label_location"
+msgstr ""
+
 #. Default: "Recurrence"
-#: ./dx/behaviors.py:85
+#: ./dx/behaviors.py:88
 msgid "label_recurrence"
 msgstr ""
 
 #. Default: "Event start date"
-#: ./dx/behaviors.py:36
+#: ./dx/behaviors.py:39
 msgid "label_start"
 msgstr ""
 
 #. Default: "Timezone"
-#: ./dx/behaviors.py:48
+#: ./dx/behaviors.py:51
 msgid "label_timezone"
 msgstr ""
 
 #. Default: "Whole Day"
-#: ./dx/behaviors.py:55
+#: ./dx/behaviors.py:58
 msgid "label_whole_day"
 msgstr ""
 
 #. Default: "Whole day event"
-#: ./at/content.py:82
+#: ./at/content.py:83
 msgid "label_whole_day_event"
 msgstr ""
 
 #. Default: "monthname"
 #: ./portlets/portlet_calendar.pt:40
 msgid "month-${month}"
+msgstr ""
+
+#. Default: "Calendar"
+#: ./portlets/portlet_calendar.pt:38
+msgid "summary_calendar"
+msgstr ""
+
+#. Default: "Event details"
+#: ./browser/event_view.pt:15
+msgid "summary_event_details"
+msgstr ""
+
+#. Default: "Download this event in iCal format"
+#: ./browser/event_view.pt:144
+msgid "title_add_to_ical"
+msgstr ""
+
+#. Default: "Next month"
+#: ./portlets/portlet_calendar.pt:26
+msgid "title_next_month"
+msgstr ""
+
+#. Default: "Previous month"
+#: ./portlets/portlet_calendar.pt:13
+msgid "title_previous_month"
 msgstr ""
 
 #. Default: "Monday"

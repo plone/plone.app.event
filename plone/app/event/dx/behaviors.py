@@ -120,7 +120,7 @@ class IEventContact(form.Schema):
         )
 
     contact_email = schema.TextLine(
-        title = _(u'label_contact_email', default=u'Contact Email'),
+        title = _(u'label_contact_email', default=u'Contact E-mail'),
         description = _(u'help_contact_email', default=u'Email address to contact about this event.'),
         required = False
         )
@@ -133,7 +133,7 @@ class IEventContact(form.Schema):
 
     event_url = schema.TextLine(
         title = _(u'label_event_url', default=u'Event URL'),
-        description = _(u'help_event_url', default=u'Website of the event'),
+        description = _(u'help_event_url', default=u'Web address with more info about the event. Add http:// for external links.'),
         required = False
         )
 
