@@ -25,7 +25,7 @@ TODO, thet's next
 
 * integrate lennart's plone.app.eventindex
 
-* add portlet_calendar and portlet_events (this one with unpublished and published events).
+* add portlet_calendar and portlet_events on startpage (this one with unpublished and published events).
 
 * show unpublished events as such in portlet_events and portlet_calendar
 
