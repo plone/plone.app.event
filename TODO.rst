@@ -63,6 +63,8 @@ TODO, bigger
 
 OK - Solgema * recurrence widget dateinput is behind overlay
 
+OK - thet * support allday events in icalendar: export date-only, enddate+1day
+
 * Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
 

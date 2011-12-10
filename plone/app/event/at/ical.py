@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import icalendar
 
 from zope.component import adapter
@@ -27,8 +27,13 @@ def event_component(context):
     ical_event.add('uid', context.UID())
     ical_event.add('last-modified', utc(pydt(context.modification_date)))
     ical_event.add('summary', context.Title())
-    ical_event.add('dtstart', utc(pydt(context.start())))
-    ical_event.add('dtend', utc(pydt(context.end())))
+    if context.whole_day:
+        ical_event.add('dtstart', utc(pydt(context.start().date())))
+        ical_event.add('dtend', utc(pydt(context.end().date()
+                                         + timedelta(days=1))))
+    else:
+        ical_event.add('dtstart', utc(pydt(context.start())))
+        ical_event.add('dtend', utc(pydt(context.end())))
 
     recurrence = context.recurrence
     if recurrence:

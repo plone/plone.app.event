@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import icalendar
 
 from zope.component import adapter
@@ -45,8 +45,13 @@ def event_component(context):
         ical_event.add('description', description)
 
     event_basic = IEventBasic(context)
-    ical_event.add('dtstart', utc(pydt(event_basic.start)))
-    ical_event.add('dtend', utc(pydt(event_basic.end)))
+    if event_basic.whole_day:
+        ical_event.add('dtstart', utc(pydt(event_basic.start.date())))
+        ical_event.add('dtend', utc(pydt(event_basic.end.date()
+                                         + timedelta(days=1))))
+    else:
+        ical_event.add('dtstart', utc(pydt(event_basic.start)))
+        ical_event.add('dtend', utc(pydt(event_basic.end)))
 
     if IDXEventRecurrence.providedBy(context):
         recurrence = IEventRecurrence(context).recurrence
