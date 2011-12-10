@@ -16,10 +16,16 @@ from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
 
-def default_end_date():
+def default_end_dt():
+    """ Return the default end as python datetime for prefilling forms.
     """
+    return localized_now() + timedelta(hours=1)
+
+
+def default_end_DT():
+    """ Return the default end as Zope DateTime for prefilling forms.
     """
-    return DateTime(datetime.now() + timedelta(hours=1))
+    return DT(default_end_dt())
 
 
 def default_timezone(context=None):

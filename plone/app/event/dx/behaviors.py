@@ -3,7 +3,6 @@ types.
 
 """
 import pytz
-from datetime import timedelta
 from zope import schema
 from zope.component import adapter
 from zope.interface import implementer
@@ -12,9 +11,8 @@ from zope.interface import invariant, Invalid
 from plone.directives import form
 from plone.app.event import messageFactory as _
 from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.base import localized_now
-from plone.app.event.base import default_timezone
-from plone.app.event.base import DT
+from plone.app.event.base import localized_now, DT
+from plone.app.event.base import default_timezone, default_end_dt
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 
@@ -72,7 +70,7 @@ def default_start(data):
 
 @form.default_value(field=IEventBasic['end'])
 def default_end(data):
-    return localized_now() + timedelta(hours=1)
+    return default_end_dt()
 
 @form.default_value(field=IEventBasic['timezone'])
 def default_tz(data):
