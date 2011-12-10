@@ -14,10 +14,9 @@ from plone.app.event import messageFactory as _
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import localized_now
 from plone.app.event.base import default_timezone
-from plone.app.event.base import dt_to_zone
 from plone.app.event.base import DT
 from plone.event.recurrence import recurrence_sequence_ical
-from plone.event.utils import tzdel, utc, utctz
+from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
