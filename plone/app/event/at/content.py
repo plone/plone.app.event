@@ -25,7 +25,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IRecurrence
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import default_end_DT
-from plone.app.event.base import default_timezone as default_tz
+from plone.app.event.base import default_timezone
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
 
@@ -67,7 +67,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         languageIndependent=True,
         vocabulary_factory=u"plone.app.event.AvailableTimezones",
         enforceVocabulary=True,
-        default_method='default_timezone',
+        default_method=default_timezone,
         widget=atapi.SelectionWidget(
             label=_(u'label_event_timezone', default=u"Timezone"),
             description=_(u'help_event_timezone',
@@ -213,9 +213,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     def occurrences(self, limit_start=None, limit_end=None):
         return IRecurrence(self).occurrences(limit_start, limit_end)
-
-    def default_timezone(self):
-        return default_tz()
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
