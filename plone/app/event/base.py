@@ -21,6 +21,7 @@ def default_end_date():
     """
     return DateTime(datetime.now() + timedelta(hours=1))
 
+
 def default_timezone(context=None):
     """ Retrieve the timezone from the portal or user.
 
@@ -46,10 +47,12 @@ def default_timezone(context=None):
     # following statement ensures, that timezone is a valid pytz zone
     return pytz.timezone(portal_timezone).zone
 
+
 def default_tzinfo(context=None):
     """ Return the default timezone as tzinfo instance.
     """
     return pytz.timezone(default_timezone(context))
+
 
 def first_weekday():
     """ Returns the number of the first Weekday in a Week, as defined in
@@ -65,6 +68,7 @@ def first_weekday():
     else:
         return int(first_wd)
 
+
 def prepare_range(context, start, end):
     """ Prepare a date-range to contain timezone info and set end to next day,
     if end is a date.
@@ -78,6 +82,7 @@ def prepare_range(context, start, end):
         end = end + timedelta(days=1)
     end = pydt(end, missing_zone=tz)
     return start, end
+
 
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
                       **kw):
@@ -112,6 +117,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         result = cat(**query)
     return result
 
+
 def get_events_by_date(context, range_start=None, range_end=None, **kw):
     """ Return a dictionary with dates in a given timeframe as keys and
     the actual events for that date.
@@ -138,6 +144,7 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
             else:
                 events_by_date[start_str].append(event)
     return events_by_date
+
 
 def DT(dt):
     """ Return a DateTime instance from a python datetime instance.
@@ -170,28 +177,7 @@ def localized_now(context=None):
     if not context: context = getSite()
     return datetime.now(default_tzinfo(context))
 
+
 def localized_today(context=None):
     now = localized_now(context)
     return date(now.year, now.month, now.day)
-
-def dt_from_brain(datestr):
-    """ Return python datetime instance from a catalog brain's date string.
-
-    %Y/%m/%d %H:%M:%S TZINFO
-    Since strptime doesn't handle pytz zones very well, we need to bypass
-    this limitation.
-
-    """
-    # TODO: file a bug for strptime pytz names handling.
-
-    start_parts = datestr.split(' ')
-    start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
-    tz = pytz.timezone(start_parts[2])
-    start = tz.localize(start) # convert naive date to event's zone
-
-def dt_to_zone(dt, tzstring):
-    """ Return a datetime instance converted to the timezone given by the
-    string.
-
-    """
-    return dt.astimezone(pytz.timezone(tzstring))
