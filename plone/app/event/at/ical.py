@@ -28,9 +28,9 @@ def event_component(context):
     ical_event.add('last-modified', utc(pydt(context.modification_date)))
     ical_event.add('summary', context.Title())
     if context.whole_day:
-        ical_event.add('dtstart', utc(pydt(context.start().date())))
-        ical_event.add('dtend', utc(pydt(context.end().date()
-                                         + timedelta(days=1))))
+        ical_event.add('dtstart', utc(pydt(context.start())).date())
+        ical_event.add('dtend', utc(pydt(context.end())
+                                         + timedelta(days=1)).date())
     else:
         ical_event.add('dtstart', utc(pydt(context.start())))
         ical_event.add('dtend', utc(pydt(context.end())))

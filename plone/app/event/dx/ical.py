@@ -36,7 +36,8 @@ def event_component(context):
     #       converted to UTC. use real TZID, when VTIMEZONE is used!
     ical_event.add('dtstamp', utc(pydt(datetime.now())))
     ical_event.add('created', utc(pydt(context.creation_date)))
-    ical_event.add('uid', context.UID())
+    # TODO: UID not present!
+    #ical_event.add('uid', context.UID())
     ical_event.add('last-modified', utc(pydt(context.modification_date)))
     ical_event.add('summary', context.title)
 
@@ -46,9 +47,9 @@ def event_component(context):
 
     event_basic = IEventBasic(context)
     if event_basic.whole_day:
-        ical_event.add('dtstart', utc(pydt(event_basic.start.date())))
-        ical_event.add('dtend', utc(pydt(event_basic.end.date()
-                                         + timedelta(days=1))))
+        ical_event.add('dtstart', utc(pydt(event_basic.start)).date())
+        ical_event.add('dtend', utc(pydt(event_basic.end
+                                         + timedelta(days=1))).date())
     else:
         ical_event.add('dtstart', utc(pydt(event_basic.start)))
         ical_event.add('dtend', utc(pydt(event_basic.end)))
