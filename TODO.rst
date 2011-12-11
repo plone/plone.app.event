@@ -12,6 +12,13 @@ easily be switched off.
 TODO, thet's next
 =================
 
+* fix whole_day event export.... in some cases end date is two days after start
+  date. this has something to do with utc conversion...
+
+* ical export, dx types: UID not present in events
+
+* atevent: after changes to default_start and default_end, start+end is now 1,
+  resp. 2 hours in future. check why
 
 * refactor for and put some stuff into plone.event or drop that package.
 
