@@ -60,6 +60,8 @@ What do do
 Overview, status and code review
 ================================
 
+For a rough status overview, also look into TODO.rst.
+
 plone.app.event
 ---------------
 
