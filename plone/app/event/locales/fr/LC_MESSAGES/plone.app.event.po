@@ -416,51 +416,51 @@ msgstr ""
 
 #: ./i18n.py:10
 msgid "month-1"
-msgstr ""
+msgstr "Janvier"
 
 #: ./i18n.py:19
 msgid "month-10"
-msgstr ""
+msgstr "Octobre"
 
 #: ./i18n.py:20
 msgid "month-11"
-msgstr ""
+msgstr "Novembre"
 
 #: ./i18n.py:21
 msgid "month-12"
-msgstr ""
+msgstr "Décembre"
 
 #: ./i18n.py:11
 msgid "month-2"
-msgstr ""
+msgstr "Février"
 
 #: ./i18n.py:12
 msgid "month-3"
-msgstr ""
+msgstr "Mars"
 
 #: ./i18n.py:13
 msgid "month-4"
-msgstr ""
+msgstr "Avril"
 
 #: ./i18n.py:14
 msgid "month-5"
-msgstr ""
+msgstr "Mai"
 
 #: ./i18n.py:15
 msgid "month-6"
-msgstr ""
+msgstr "Juin"
 
 #: ./i18n.py:16
 msgid "month-7"
-msgstr ""
+msgstr "Juillet"
 
 #: ./i18n.py:17
 msgid "month-8"
-msgstr ""
+msgstr "Aout"
 
 #: ./i18n.py:18
 msgid "month-9"
-msgstr ""
+msgstr "Septembre"
 
 #. Default: "Calendar"
 #: ./portlets/portlet_calendar.pt:38
