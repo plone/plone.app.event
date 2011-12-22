@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-12-22 13:49+0000\n"
+"POT-Creation-Date: 2011-12-22 13:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -413,9 +413,52 @@ msgstr ""
 msgid "label_whole_day_event"
 msgstr ""
 
-#. Default: "monthname"
-#: ./portlets/portlet_calendar.pt:40
-msgid "month-${month}"
+#: ./i18n.py:10
+msgid "month-1"
+msgstr ""
+
+#: ./i18n.py:19
+msgid "month-10"
+msgstr ""
+
+#: ./i18n.py:20
+msgid "month-11"
+msgstr ""
+
+#: ./i18n.py:21
+msgid "month-12"
+msgstr ""
+
+#: ./i18n.py:11
+msgid "month-2"
+msgstr ""
+
+#: ./i18n.py:12
+msgid "month-3"
+msgstr ""
+
+#: ./i18n.py:13
+msgid "month-4"
+msgstr ""
+
+#: ./i18n.py:14
+msgid "month-5"
+msgstr ""
+
+#: ./i18n.py:15
+msgid "month-6"
+msgstr ""
+
+#: ./i18n.py:16
+msgid "month-7"
+msgstr ""
+
+#: ./i18n.py:17
+msgid "month-8"
+msgstr ""
+
+#: ./i18n.py:18
+msgid "month-9"
 msgstr ""
 
 #. Default: "Calendar"
