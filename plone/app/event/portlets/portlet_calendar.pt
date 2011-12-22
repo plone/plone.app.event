@@ -41,7 +41,7 @@
                 i18n:translate="month-${month}">monthname</caption>
             <thead>
               <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
-                <th scope="col" i18n:translate="">weekday-abbrev-<tal:block i18n:name="weekday">Su</tal:block></th>
+                <th scope="col" i18n:translate="" tal:content="string:weekday-abbrev-${weekday}">Su</th>
               </tal:data></tr>
             </thead>
             <tbody>
