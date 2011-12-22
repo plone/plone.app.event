@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-12-09 16:12+0000\n"
+"POT-Creation-Date: 2011-12-22 13:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,17 +99,17 @@ msgid "contact_phone"
 msgstr ""
 
 #. Default: "End date must be after start date."
-#: ./at/content.py:256
+#: ./at/content.py:253
 msgid "error_end_must_be_after_start_date"
 msgstr ""
 
 #. Default: "End date is not valid."
-#: ./at/content.py:238
+#: ./at/content.py:235
 msgid "error_invalid_end_date"
 msgstr ""
 
 #. Default: "Start date is not valid."
-#: ./at/content.py:246
+#: ./at/content.py:243
 msgid "error_invalid_start_date"
 msgstr ""
 
@@ -148,12 +148,12 @@ msgid "event_where"
 msgstr ""
 
 #. Default: "The start or end date is invalid"
-#: ./dx/behaviors.py:31
+#: ./dx/behaviors.py:28
 msgid "exception_start_before_end"
 msgstr ""
 
 #. Default: "The start date must be before the                                             end date."
-#: ./dx/behaviors.py:66
+#: ./dx/behaviors.py:63
 msgid "exception_start_before_end_text"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgid "heading_add_to_calendar"
 msgstr ""
 
 #. Default: "List of attendees"
-#: ./dx/behaviors.py:106
+#: ./dx/behaviors.py:103
 msgid "help_attendees"
 msgstr ""
 
@@ -173,22 +173,22 @@ msgid "help_available_timezones"
 msgstr ""
 
 #. Default: "Email address to contact about this event."
-#: ./dx/behaviors.py:124
+#: ./dx/behaviors.py:121
 msgid "help_contact_email"
 msgstr ""
 
 #. Default: "Name of a person to contact about this event."
-#: ./dx/behaviors.py:118
+#: ./dx/behaviors.py:115
 msgid "help_contact_name"
 msgstr ""
 
 #. Default: "Phone number to contact about this event."
-#: ./dx/behaviors.py:130
+#: ./dx/behaviors.py:127
 msgid "help_contact_phone"
 msgstr ""
 
 #. Default: "Date and Time, when the event ends."
-#: ./dx/behaviors.py:46
+#: ./dx/behaviors.py:43
 msgid "help_end"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: ./at/content.py:162
-#: ./dx/behaviors.py:136
+#: ./dx/behaviors.py:133
 msgid "help_event_url"
 msgstr ""
 
@@ -247,7 +247,7 @@ msgid "help_first_weekday"
 msgstr ""
 
 #. Default: "Location of the event"
-#: ./dx/behaviors.py:97
+#: ./dx/behaviors.py:94
 msgid "help_location"
 msgstr ""
 
@@ -257,12 +257,12 @@ msgid "help_portal_timezone"
 msgstr ""
 
 #. Default: "RFC5545 compatible recurrence definition"
-#: ./dx/behaviors.py:89
+#: ./dx/behaviors.py:86
 msgid "help_recurrence"
 msgstr ""
 
 #. Default: "Date and Time, when the event begins."
-#: ./dx/behaviors.py:40
+#: ./dx/behaviors.py:37
 msgid "help_start"
 msgstr ""
 
@@ -271,12 +271,12 @@ msgid "help_start_location"
 msgstr ""
 
 #. Default: "Timezone of the event"
-#: ./dx/behaviors.py:52
+#: ./dx/behaviors.py:49
 msgid "help_timezone"
 msgstr ""
 
 #. Default: "Event lasts whole day"
-#: ./dx/behaviors.py:59
+#: ./dx/behaviors.py:56
 msgid "help_whole_day"
 msgstr ""
 
@@ -295,30 +295,30 @@ msgid "label_add_to_ical"
 msgstr ""
 
 #. Default: "Attendees"
-#: ./dx/behaviors.py:105
+#: ./dx/behaviors.py:102
 msgid "label_attendees"
 msgstr ""
 
 #. Default: "Contact E-mail"
 #: ./at/content.py:137
-#: ./dx/behaviors.py:123
+#: ./dx/behaviors.py:120
 msgid "label_contact_email"
 msgstr ""
 
 #. Default: "Contact Name"
 #: ./at/content.py:125
-#: ./dx/behaviors.py:117
+#: ./dx/behaviors.py:114
 msgid "label_contact_name"
 msgstr ""
 
 #. Default: "Contact Phone"
 #: ./at/content.py:149
-#: ./dx/behaviors.py:129
+#: ./dx/behaviors.py:126
 msgid "label_contact_phone"
 msgstr ""
 
 #. Default: "Event end date"
-#: ./dx/behaviors.py:45
+#: ./dx/behaviors.py:42
 msgid "label_end"
 msgstr ""
 
@@ -369,12 +369,12 @@ msgstr ""
 
 #. Default: "Event URL"
 #: ./at/content.py:161
-#: ./dx/behaviors.py:135
+#: ./dx/behaviors.py:132
 msgid "label_event_url"
 msgstr ""
 
 #. Default: "Event"
-#: ./dx/behaviors.py:147
+#: ./dx/behaviors.py:144
 msgid "label_fieldset_event"
 msgstr ""
 
@@ -384,27 +384,27 @@ msgid "label_first_weekday"
 msgstr ""
 
 #. Default: "Location"
-#: ./dx/behaviors.py:96
+#: ./dx/behaviors.py:93
 msgid "label_location"
 msgstr ""
 
 #. Default: "Recurrence"
-#: ./dx/behaviors.py:88
+#: ./dx/behaviors.py:85
 msgid "label_recurrence"
 msgstr ""
 
 #. Default: "Event start date"
-#: ./dx/behaviors.py:39
+#: ./dx/behaviors.py:36
 msgid "label_start"
 msgstr ""
 
 #. Default: "Timezone"
-#: ./dx/behaviors.py:51
+#: ./dx/behaviors.py:48
 msgid "label_timezone"
 msgstr ""
 
 #. Default: "Whole Day"
-#: ./dx/behaviors.py:58
+#: ./dx/behaviors.py:55
 msgid "label_whole_day"
 msgstr ""
 
@@ -477,4 +477,32 @@ msgstr "Saturday"
 #: ./vocabulary.py:50
 msgid "weekday-6"
 msgstr "Sunday"
+
+#: ./i18n.py:3
+msgid "weekday-abbrev-0"
+msgstr ""
+
+#: ./i18n.py:4
+msgid "weekday-abbrev-1"
+msgstr ""
+
+#: ./i18n.py:5
+msgid "weekday-abbrev-2"
+msgstr ""
+
+#: ./i18n.py:6
+msgid "weekday-abbrev-3"
+msgstr ""
+
+#: ./i18n.py:7
+msgid "weekday-abbrev-4"
+msgstr ""
+
+#: ./i18n.py:8
+msgid "weekday-abbrev-5"
+msgstr ""
+
+#: ./i18n.py:9
+msgid "weekday-abbrev-6"
+msgstr ""
 
