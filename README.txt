@@ -39,6 +39,7 @@ Contributions
 =============
 Philip Bauer, <bauer@starzel.de>
 Jure Cerjak, <jcerjak@termitnjak.si>
+JeanMichel FRANCOIS, <toutpt@gmail.com>
 Vincent Fretin, <vincent.fretin@gmail.com>
 Rok Garbas, <rok.garbas@gmail.com>
 Tom Gross, <itconsense@gmail.com>
@@ -54,5 +55,6 @@ Dorneles Tremea, <dorneles@tremea.com>
 Nejc Zupan, <nejc.zupan@niteoweb.com>
 Giacomo Spettoli, <giacomo.spettoli@gmail.com>
 Taito Horiuchi, <taito.horiuchi@hexagonit.fi>
+
 
 and possibly many many more...
