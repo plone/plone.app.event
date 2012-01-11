@@ -15,7 +15,10 @@ def prepare_for_display(context, start, end, whole_day):
         'start_time' - time string of the start date
         'end_date'   - date string of the end date
         'end_time'   - time string of the end date
+        'start_iso'  - start date in iso format
+        'end_iso'    - end date in iso format
         'same_day'   - event ends on the same day
+        'same_time'  - event ends at same time
     """
 
     # The behavior os ulocalized_time() with time_only is odd.
