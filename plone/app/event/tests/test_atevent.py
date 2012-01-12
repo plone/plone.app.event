@@ -21,7 +21,6 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
-from plone.app.event.testing import FakeEvent
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import prepare_for_display
@@ -575,59 +574,67 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.default_output_type)
         self.assertTrue('text/html' in field.getAllowedContentTypes(self.obj))
 
-    def _makeOne(self, start, end, whole_day=False):
-        # TODO: get rid of fake event
-        event = FakeEvent(start=start, end=end, whole_day=whole_day)
-        # ulocalized_time need the REQUEST attribute
-        event.REQUEST = self.portal.REQUEST
-        return event
 
     def testToDisplayWithTime(self):
-        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00')
-        context = event
-        self.assertEqual(prepare_for_display(context,
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/12 18:00:00',
+                timezone="Europe/Vienna")
+        event = self.portal[event_id]
+        notify(ObjectModifiedEvent(event))
+        self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
-                {'start_date': 'Oct 12, 2000',
-                 'start_time' : '06:00 AM',
-                 'start_iso': '2000-10-12T06:00:00',
-                 'end_date' : 'Oct 12, 2000',
-                 'end_time' : '06:00 PM',
-                 'end_iso': '2000-10-12T18:00:00',
-                 'same_day' : True,
-                 'same_time' : False,
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': u'06:00 AM',
+                 'start_iso':  u'2000-10-12T06:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   u'06:00 PM',
+                 'end_iso':    u'2000-10-12T18:00:00+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
                 })
 
     def testToDisplayWholeDaySameDay(self):
-        # TODO: fake event doesn't set end time to 23:59
-        event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
-                          whole_day=True)
-        context = event
-        self.assertEqual(prepare_for_display(context,
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/12 18:00:00',
+                timezone="Europe/Vienna",
+                wholeDay=True)
+        event = self.portal[event_id]
+        notify(ObjectModifiedEvent(event))
+        self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
-                {'start_date': 'Oct 12, 2000',
-                 'start_time' : None,
-                 'start_iso': '2000-10-12T06:00:00',
-                 'end_date' : 'Oct 12, 2000',
-                 'end_time' : None,
-                 'end_iso': '2000-10-12T18:00:00',
-                 'same_day' : True,
-                 'same_time' : False,
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-12T23:59:59+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
                 })
 
     def testToDisplayWholeDayDifferentDays(self):
-        event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00',
-                          whole_day=True)
-        context = event
-        self.assertEqual(prepare_for_display(context,
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00',
+                timezone="Europe/Vienna",
+                wholeDay=True)
+        event = self.portal[event_id]
+        notify(ObjectModifiedEvent(event))
+        self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
-                {'start_date': 'Oct 12, 2000',
-                 'start_time' : None,
-                 'start_iso': '2000-10-12T06:00:00',
-                 'end_date' : 'Oct 13, 2000',
-                 'end_time' : None,
-                 'end_iso': '2000-10-13T18:00:00',
-                 'same_day' : False,
-                 'same_time' : False,
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 13, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-13T23:59:59+02:00',
+                 'same_day':   False,
+                 'same_time':  False,
                 })
 
     def test_wholeday_handler(self):
