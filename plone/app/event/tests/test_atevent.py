@@ -21,7 +21,7 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
 from Products.ATContentTypes.interfaces import IATEvent
-from plone.app.event.at.testing import FakeEvent
+from plone.app.event.testing import FakeEvent
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import prepare_for_display
@@ -31,7 +31,7 @@ from plone.formwidget.datetime.at import DatetimeWidget
 
 
 import unittest2 as unittest
-from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 

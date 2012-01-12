@@ -17,7 +17,7 @@ from plone.app.event.portlets import portlet_events
 
 import unittest2 as unittest
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.at.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
