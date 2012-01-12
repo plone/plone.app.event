@@ -94,6 +94,9 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             label=_(u'label_event_recurrence', default=u'Event Recurrence'),
             description=_(u'help_event_recurrence',
                 default='Enter recurrence rules, one per line.'),
+            startFieldYear='startDate-year',
+            startFieldMonth='startDate-month',
+            startFieldDay='startDate-day',
             ),
         ),
 
