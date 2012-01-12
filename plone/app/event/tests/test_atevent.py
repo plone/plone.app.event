@@ -713,6 +713,10 @@ class PAEventATFieldTest(unittest.TestCase):
         notify(ObjectModifiedEvent(event))
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
+        self.assertEqual(event.start().timezone(), 'Europe/Vienna')
+        self.assertEqual(event.end().timezone(), 'Europe/Vienna')
+        self.assertEqual(event.start_date.tzinfo.zone, 'Europe/Vienna')
+        self.assertEqual(event.end_date.tzinfo.zone, 'Europe/Vienna')
 
 
 class PAEventATViewTest(unittest.TestCase):
