@@ -11,8 +11,6 @@ from plone.app.event.base import get_portal_events
 from plone.app.event.interfaces import IICalendar
 from plone.app.event.interfaces import IICalendarComponent
 
-from plone.app.event import messageFactory as _
-
 
 PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
@@ -93,18 +91,17 @@ def calendar_from_collection(context):
 class EventsICal(BrowserView):
     """Returns events in iCal format"""
 
-    def __call__(self):
+    def get_ical_string(self):
         cal = IICalendar(self.context)
-        if not cal: return _(u'ical_view_no_events', default=u'No events found.')
-
-        name = '%s.ics' % self.context.getId()
-        self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        self.request.RESPONSE.setHeader('Content-Disposition',
-            'attachment; filename="%s"' % name)
-
-        # get iCal
         # TODO: unicode decode error, if umlaute in cal.as_string
         #       e.g. umlaute in subjects
         #       cal.as_string returns ascii instead of unicode.
         #       FIX in icalendar package
-        self.request.RESPONSE.write(cal.as_string().encode('utf-8'))
+        return cal.to_ical().encode('utf-8')
+
+    def __call__(self):
+        name = '%s.ics' % self.context.getId()
+        self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
+        self.request.RESPONSE.setHeader('Content-Disposition',
+            'attachment; filename="%s"' % name)
+        self.request.RESPONSE.write(self.get_ical_string())
