@@ -137,17 +137,17 @@ class PAEventATTest(unittest.TestCase):
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
         event.setTimezone('Europe/Vienna')
         event.setTitle('cool event')
-        # TODO: isn't it ab bit odd to always call ObjectModifiedEvent after
-        #  modifying the object?
         notify(ObjectModifiedEvent(event))
         view = EventsICal(event, TestRequest())
-        ical = view.getICal().as_string()
+        ical = view.get_ical_string()
         lines = ical.split('\n')
         self.assertTrue(u"BEGIN:VCALENDAR" in lines[0])
         self.assertTrue(u"BEGIN:VEVENT" in lines[6])
-        self.assertTrue(u"SUMMARY:%s" % safe_unicode(event.Title()) in lines[12])
-        self.assertTrue(u"DTSTART;VALUE=DATE-TIME:20010101T110000Z" in lines[10])
-        self.assertTrue(u"DTEND;VALUE=DATE-TIME:20010101T130000Z" in lines[8])
+        self.assertTrue(u"SUMMARY:%s" % safe_unicode(event.Title()) in lines[7])
+        self.assertTrue(u"DTSTART;VALUE=DATE-TIME:20010101T110000Z" in lines[8])
+        self.assertTrue(u"DTEND;VALUE=DATE-TIME:20010101T130000Z" in lines[9])
+        self.assertTrue(u"END:VEVENT" in lines[14])
+        self.assertTrue(u"END:VCALENDAR" in lines[15])
 
     def test_get_size(self):
         event = self.obj
