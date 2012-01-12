@@ -15,15 +15,36 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
+DEFAULT_END_DELTA = 1 # hours
 
 def default_end_dt():
     """ Return the default end as python datetime for prefilling forms.
+
+    >>> from datetime import timedelta
+    >>> from plone.app.event.base import default_end_dt
+    >>> from plone.app.event.base import localized_now
+    >>> assertTrue(default_end_dt() - timedelta(hours=DEFAULT_END_DELTA) ==
+    ...            localized_now())
     """
-    return localized_now() + timedelta(hours=1)
+    return localized_now() + timedelta(hours=DEFAULT_END_DELTA)
 
 
 def default_end_DT():
     """ Return the default end as Zope DateTime for prefilling forms.
+
+    >>> from DateTime import DateTime
+    >>> from plone.app.event.base import default_end_DT
+    >>> from plone.app.event.base import localized_now
+    >>> from plone.app.event.base import DT
+    >>> DTE = default_end_DT()
+    >>> DTN = DT(localized_now)
+
+    TODO: only True when not run around midnight.
+    >>> assertTrue(DTE.year() == DTN.year() and
+    ...            DTE.month() == DTN.month() and
+    ...            DTE.day() == DTN.day() and
+    ...            DTE.hour() == DTN.hour() + 1 and
+    ...            DTE.minute() == DTN.minute())
     """
     return DT(default_end_dt())
 

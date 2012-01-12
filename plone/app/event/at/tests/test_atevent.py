@@ -24,8 +24,8 @@ from Products.ATContentTypes.interfaces import IATEvent
 from plone.app.event.at.testing import FakeEvent
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
-from plone.app.event.browser.event_view import toDisplay
-from plone.app.event.base import default_end_date
+from plone.app.event.browser.event_view import prepare_for_display
+from plone.app.event.base import default_end_DT
 
 from plone.formwidget.datetime.at import DatetimeWidget
 
@@ -329,7 +329,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == default_end_date,
+        self.assertTrue(field.default_method == default_end_DT,
                         'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
@@ -584,7 +584,9 @@ class PAEventATFieldTest(unittest.TestCase):
 
     def testToDisplayWithTime(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00')
-        self.assertEqual(toDisplay(event),
+        context = event
+        self.assertEqual(prepare_for_display(context,
+            event.start_date, event.end_date, event.whole_day),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : '06:00 AM',
                  'start_iso': '2000-10-12T06:00:00',
@@ -599,7 +601,9 @@ class PAEventATFieldTest(unittest.TestCase):
         # TODO: fake event doesn't set end time to 23:59
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/12 18:00:00',
                           whole_day=True)
-        self.assertEqual(toDisplay(event),
+        context = event
+        self.assertEqual(prepare_for_display(context,
+            event.start_date, event.end_date, event.whole_day),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
                  'start_iso': '2000-10-12T06:00:00',
@@ -613,7 +617,9 @@ class PAEventATFieldTest(unittest.TestCase):
     def testToDisplayWholeDayDifferentDays(self):
         event = self._makeOne('2000/10/12 06:00:00', '2000/10/13 18:00:00',
                           whole_day=True)
-        self.assertEqual(toDisplay(event),
+        context = event
+        self.assertEqual(prepare_for_display(context,
+            event.start_date, event.end_date, event.whole_day),
                 {'start_date': 'Oct 12, 2000',
                  'start_time' : None,
                  'start_iso': '2000-10-12T06:00:00',
