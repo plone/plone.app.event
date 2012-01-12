@@ -52,9 +52,9 @@ def prepare_for_display(context, start, end, whole_day):
 
     return  dict(start_date=start_date,
                  start_time=start_time,
+                 start_iso=start.isoformat(),
                  end_date=end_date,
                  end_time=end_time,
-                 start_iso=start.isoformat(),
                  end_iso=end.isoformat(),
                  same_day=same_day,
                  same_time=same_time)
