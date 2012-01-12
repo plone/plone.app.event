@@ -647,7 +647,7 @@ class PAEventATFieldTest(unittest.TestCase):
                 wholeDay=True)
         event = self.portal[event_id]
         notify(ObjectModifiedEvent(event))
-        self.assertTrue(event.whole_day())
+        self.assertTrue(event.whole_day)
         self.assertEqual(event.start().Time(), '00:00:00')
         self.assertEqual(event.end().Time(), '23:59:59')
 
@@ -660,7 +660,7 @@ class PAEventATFieldTest(unittest.TestCase):
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
         notify(ObjectModifiedEvent(event))
-        self.assertFalse(event.whole_day())
+        self.assertFalse(event.whole_day)
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
 
