@@ -210,6 +210,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
+    # TODO: rethink this
+    # if we want recurrence and timezone be ATFieldProperties, then we need
+    # them to be stored in AnnotationStorage to avoid namespace clashes.
+    # if we access the object via the generic_event_accessor always, we might
+    # not need the convinient ATFieldProperties and avoid AnnotationStorage for
+    # those attributes.
     recurrence = atapi.ATFieldProperty('recurrence')
     timezone = atapi.ATFieldProperty('timezone')
     whole_day = atapi.ATFieldProperty('wholeDay')
