@@ -1,4 +1,5 @@
 import os
+import itertools
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -24,10 +25,11 @@ from Products.ATContentTypes.interfaces import IATEvent
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import prepare_for_display
-from plone.app.event.base import default_end_DT
+from plone.app.event.base import default_end_DT, default_timezone
 
 from plone.formwidget.datetime.at import DatetimeWidget
-
+from plone.formwidget.recurrence.atwidget import RecurrenceWidget
+from plone.formwidget.recurrence.atwidget import RecurrenceValidator
 
 import unittest2 as unittest
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
@@ -147,12 +149,12 @@ class PAEventATFieldTest(unittest.TestCase):
         portal.invokeFactory(type_name='Event', id='event1', title='Event1')
         self.obj = portal['event1']
 
-    def test_locationField(self):
-        field = self.obj.getField('location')
+    def test_attendeesField(self):
+        field = self.obj.getField('attendees')
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.default == (), 'Value is %s' % str(field.default))
         self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -161,227 +163,24 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
         self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'getLocation',
+        self.assertTrue(field.accessor == 'getAttendees',
                         'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setLocation',
-                        'Value is %s' % field.mutator)
-        self.assertTrue(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.assertTrue(field.write_permission == ModifyPortalContent,
-                        'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == EmptyValidator,
-                        'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
-                        'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(self.obj)
-        self.assertTrue(isinstance(vocab, atapi.DisplayList),
-                        'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-    def test_subjectField(self):
-        field = self.obj.getField('subject')
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(str(field.default)))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.assertTrue(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.assertTrue(field.multiValued == 1,
-                        'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'Subject',
-                        'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setSubject',
+        self.assertTrue(field.mutator == 'setAttendees',
                         'Value is %s' % field.mutator)
         self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.assertTrue(field.write_permission ==
                         ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'mVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
-                        'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == EmptyValidator,
-                        'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
-                        'Value is %s' % id(field.widget))
-
-    def test_eventUrlField(self):
-        field = self.obj.getField('eventUrl')
-
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (),
-                        'Value is %s' % str(field.vocabulary))
-        self.assertTrue(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.assertTrue(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'event_url',
-                        'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setEventUrl',
-                        'Value is %s' % field.mutator)
-        self.assertTrue(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.assertTrue(field.write_permission ==
-                        ModifyPortalContent,
-                        'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
         self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertEqual(field.validators, URLValidator)
-        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
-                        'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(self.obj)
-        self.assertTrue(isinstance(vocab, atapi.DisplayList),
-                        'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-    def test_startDateField(self):
-        field = self.obj.getField('startDate')
-
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (),
-                        'Value is %s' % str(field.vocabulary))
-        self.assertTrue(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.assertTrue(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'start',
-                        'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setStartDate',
-                        'Value is %s' % field.mutator)
-        self.assertTrue(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.assertTrue(field.write_permission ==
-                        ModifyPortalContent,
-                        'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == (),
-                        'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, DatetimeWidget),
-                        'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(self.obj)
-        self.assertTrue(isinstance(vocab, atapi.DisplayList),
-                        'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-
-    def test_endDateField(self):
-        field = self.obj.getField('endDate')
-
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == default_end_DT,
-                        'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (),
-                        'Value is %s' % str(field.vocabulary))
-        self.assertTrue(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.assertTrue(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'end',
-                        'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setEndDate',
-                        'Value is %s' % field.mutator)
-        self.assertTrue(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.assertTrue(field.write_permission ==
-                        ModifyPortalContent,
-                        'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == (),
-                        'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, DatetimeWidget),
-                        'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(self.obj)
-        self.assertTrue(isinstance(vocab, atapi.DisplayList),
-                        'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-    def test_contactNameField(self):
-        field = self.obj.getField('contactName')
-
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (),
-                        'Value is %s' % str(field.vocabulary))
-        self.assertTrue(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.assertTrue(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'contact_name',
-                        'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setContactName',
-                        'Value is %s' % field.mutator)
-        self.assertTrue(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.assertTrue(field.write_permission ==
-                        ModifyPortalContent,
-                        'Value is %s' % field.write_permission)
-        self.assertTrue(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == EmptyValidator,
-                        'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
@@ -419,8 +218,47 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % type(field.storage))
         self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmailValidator,
+                        'Value is %s' % str(field.validators))
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_contactNameField(self):
+        field = self.obj.getField('contactName')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'contact_name',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setContactName',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission ==
+                        ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
@@ -460,7 +298,6 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % type(field.storage))
         self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
@@ -469,13 +306,15 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
-    def test_attendeesField(self):
-        field = self.obj.getField('attendees')
+    def test_endDateField(self):
+        field = self.obj.getField('endDate')
 
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == default_end_DT,
+                        'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
@@ -483,9 +322,9 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
         self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.assertTrue(field.accessor == 'getAttendees',
+        self.assertTrue(field.accessor == 'end',
                         'Value is %s' % field.accessor)
-        self.assertTrue(field.mutator == 'setAttendees',
+        self.assertTrue(field.mutator == 'setEndDate',
                         'Value is %s' % field.mutator)
         self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
@@ -495,18 +334,217 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
-        self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
+        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
         self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
+        self.assertTrue(field.validators == (),
+                        'Value is %s' % str(field.validators))
+        self.assertTrue(isinstance(field.widget, DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_eventUrlField(self):
+        field = self.obj.getField('eventUrl')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'event_url',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setEventUrl',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission ==
+                        ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertEqual(field.validators, URLValidator)
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_locationField(self):
+        field = self.obj.getField('location')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getLocation',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setLocation',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission == ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(field.validators == EmptyValidator,
+                        'Value is %s' % str(field.validators))
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_recurrenceField(self):
+        field = self.obj.getField('recurrence')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getRecurrence',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setRecurrence',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission ==
+                        ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+
+        # flatten nested tuples
+        valis = list(itertools.chain(*field.validators))
+        is_recval = False
+        for vali in valis:
+            is_recval = is_recval or isinstance(vali, RecurrenceValidator)
+        self.assertTrue(is_recval)
+
+        self.assertTrue(isinstance(field.widget, RecurrenceWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_startDateField(self):
+        field = self.obj.getField('startDate')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'start',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setStartDate',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission ==
+                        ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(field.validators == (),
+                        'Value is %s' % str(field.validators))
+        self.assertTrue(isinstance(field.widget, DatetimeWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
+    def test_subjectField(self):
+        field = self.obj.getField('subject')
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == (), 'Value is %s' % str(str(field.default)))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 1,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'Subject',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setSubject',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission ==
+                        ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'mVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(field.validators == EmptyValidator,
+                        'Value is %s' % repr(field.validators))
+        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
+                        'Value is %s' % id(field.widget))
 
     def test_textField(self):
         field = self.obj.getField('text')
@@ -539,7 +577,6 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % type(field.storage))
         self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.RichWidget),
@@ -555,6 +592,89 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
         self.assertTrue('text/html' in field.getAllowedContentTypes(self.obj))
+
+    def test_timezoneField(self):
+        field = self.obj.getField('timezone')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == default_timezone,
+                        'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.vocabulary_factory ==
+                        u'plone.app.event.AvailableTimezones')
+        self.assertTrue(field.enforceVocabulary == True,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getTimezone',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setTimezone',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission == ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(field.validators == (),
+                        'Value is %s' % str(field.validators))
+        self.assertTrue(isinstance(field.widget, atapi.SelectionWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue('Africa/Abidjan' in tuple(vocab),
+                        'Value is %s' % str(tuple(vocab)))
+
+    def test_wholeDayField(self):
+        field = self.obj.getField('wholeDay')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (('True', 'Yes', 'yes'), ('False', 'No', 'no')),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getWholeDay',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setWholeDay',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission == ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertEqual(field.validators, EmptyValidator)
+        self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == ('True', 'False'), 'Value is %s' % str(tuple(vocab)))
+
 
     def test_wholeday_handler(self):
         os.environ['TZ'] = "Europe/Vienna"
