@@ -16,22 +16,24 @@ Tryout / Installation
 Build with buildout.cfg:
 
 $ python bootstrap.cfg -d
-$ ./bin/buildout -c buildout.cfg
+
+$ ./bin/buildout -c buildout.cfg  # for normal building
+
+- or -
+
+$ ./bin/buildout -c dev.cfg  # for development building with R/W checkouts
+
 
 Start:
 
 $ ./bin/instance fg
 
-Or add plone.app.event sources-ro.cfg or sources-rw.cfg to your plone 4.2
-buildout.
+After fireing up the Zope instance, visit the ZMI and create a Plone site.
+The plone.app.event's Archetypes profile would automatically be installed due
+to the Products.CMFPlone branch, but please import plone.app.event's dexterity
+profile also. This way, the dexterity behaviors are registered and an example
+Dexterity event type is installed.
 
-Or use 
-Sometime:
-Add plone.app.event egg to your instance. (eventually include a zcml file).
-
-
-Install plone.app.event and import ATContentType respectively the dexterity
-profiles.
 
 
 
