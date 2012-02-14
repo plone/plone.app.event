@@ -1,19 +1,22 @@
 Introduction
 ============
 
-Event content type, browser views, utilities and portlets for Plone.
-The event content type supports whole day events and recurrences based on
-RFC2445.
+Plone.app.event is the calendaring implementation for Plone. It provides Event
+Content Types (Archetypes based as well as Dexterity Behaviors), Timezone
+support, RFC5545 icalendar export, Recurrence support and a lot more.
 
-It replaces the ATContentType event impementation and provides dexterity
-behaviors. The ATContentType and dexterity features are automatically enabled
-depending on installed packages.
+The ATContentType and dexterity features are automatically enabled depending
+on installed packages.
 
 
-Tryout / Installation
-=====================
+Installation
+------------
 
-Build with buildout.cfg:
+If you want to include plone.app.event in your Plone setup, include
+wether the Archetypes or Dexterity or both extras of plone.app.event.
+
+You can also install this package directly via the provided buildout
+configuration:
 
 $ python bootstrap.cfg -d
 
@@ -22,6 +25,9 @@ $ ./bin/buildout -c buildout.cfg  # for normal building
 - or -
 
 $ ./bin/buildout -c dev.cfg  # for development building with R/W checkouts
+
+There is also a dexterity.cfg buildout configuration, which can be used to
+extend another buildout and install the Dexterity flavor of plone.app.event.
 
 
 Start:
