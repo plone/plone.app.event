@@ -79,6 +79,8 @@ test if IIBTrees or set are faster
 types
 -----
 
+- uninstall profiles
+
 - "no end date" boolean option
 
 
