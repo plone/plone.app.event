@@ -73,6 +73,8 @@ test if IIBTrees or set are faster
 0.014604091644287109
 >>> ts = time.time(); b=set(a) - set(b); time.time() - ts
 
+- do we need to add the indices to ATContentTypes.criteria.__init__ indices
+  Constants?
 
 types
 -----
