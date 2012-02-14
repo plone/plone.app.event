@@ -8,16 +8,18 @@ TODO
 thet
 ----
 
+
 thet - fix whole_day event export.... end-date is set startdate+1. in some cases end-date is two days after
 start-date. this has something to do with utc conversion...
 or set end-date to same date as start date, which is semantically more correct?
+
+FIRST: fix timezone support in icalendar export. then this issue is also gone.
+
 
 thet - atevent: after changes to default_start and default_end, start+end is now 1,
   resp. 2 hours in future. check why
 
 thet - add portlet_calendar and portlet_events on startpage (this one with unpublished and published events).
-
-thet - document api to get lsit of eventw
 
 thet - show unpublished events as such in portlet_events and portlet_calendar
 
@@ -127,6 +129,10 @@ documentation
 - document daterecurringindex benchmark results
 
 - document TZ behavior with examples
+
+- document api to get lsit of event
+
+- sphinx API autodoc?
 
 - document removal of ICalendarSupport (interface for ical export ability) in
   plone.app.event.interfaces. MAYBE provide that interface in ATContentTypes
