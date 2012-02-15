@@ -4,9 +4,9 @@ from zope.interface import directlyProvides
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleTerm
+from zope.site.hooks import getSite
 from collective.elephantvocabulary import wrap_vocabulary
-
-from plone.app.event import messageFactory as _
 
 def Timezones(context):
     """ Vocabulary for all timezones.
@@ -41,15 +41,20 @@ def AvailableTimezones(context):
 def Weekdays(context):
     """ Vocabulary for Weekdays.
     """
-    items =[(_(u"weekday-0", default=u"Monday"),'0'),
-           (_(u"weekday-1", default=u"Tuesday"),'1'),
-           (_(u"weekday-2", default=u"Wednesday"),'2'),
-           (_(u"weekday-3", default=u"Thursday"),'3'),
-           (_(u"weekday-4", default=u"Friday"),'4'),
-           (_(u"weekday-5", default=u"Saturday"),'5'),
-           (_(u"weekday-6", default=u"Sunday"),'6'),
+ 
+    translate = getSite().translate   
+    
+    items =[(translate(u'weekday_mon', domain='plonelocales', default=u'Monday'),0),
+            (translate(u'weekday_tue', domain='plonelocales', default=u'Tuesday'),1),
+            (translate(u'weekday_wed', domain='plonelocales', default=u'Wednesday'),2),
+            (translate(u'weekday_thu', domain='plonelocales', default=u'Thursday'),3),
+            (translate(u'weekday_fri', domain='plonelocales', default=u'Friday'),4),
+            (translate(u'weekday_sat', domain='plonelocales', default=u'Saturday'),5),
+            (translate(u'weekday_sun', domain='plonelocales', default=u'Sunday'),6),
            ]
-    return SimpleVocabulary.fromItems(items)
+
+    items = [SimpleTerm(i[1], i[1], i[0]) for i in items]
+    return SimpleVocabulary(items)
 
 directlyProvides(Timezones, IVocabularyFactory)
 directlyProvides(AvailableTimezones, IVocabularyFactory)
