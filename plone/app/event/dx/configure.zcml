@@ -27,6 +27,9 @@
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
 
+    <!-- data manager for datetime fields to resolve timezone comparison issues -->
+    <adapter factory=".behaviors.DatetimeAttributeManager"/>
+
     <adapter factory=".behaviors.generic_event_accessor" />
 
     <!-- EventRecurrence acts as IRecurrence adapter as well as behavior
