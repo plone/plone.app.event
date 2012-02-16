@@ -4,7 +4,7 @@ types.
 """
 import pytz
 from zope import schema
-from zope.component import adapter, adapts
+from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import alsoProvides
 from zope.interface import invariant, Invalid
@@ -373,16 +373,3 @@ def end_indexer(obj):
     if event.end is None:
         return None
     return DT(event.end)
-
-
-from z3c.form.datamanager import AttributeField
-from plone.formwidget.datetime.z3cform.interfaces import IDatetimeField
-
-class DatetimeAttributeManager(AttributeField):
-    adapts(IDXEvent, IDatetimeField)
-
-    def get(self):
-        """ Custom getter for datetime fields. Yet w/out additional functionality.
-        """
-        datetime = super(DatetimeAttributeManager, self).get()
-        return datetime
