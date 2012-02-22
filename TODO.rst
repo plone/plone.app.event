@@ -5,6 +5,12 @@ IP ... that item is in progress
 TODO
 ====
 
+BUG
+---
+
+recurrence and whole day events. occurrences doesn't get all occurences back
+(esp. the end-date occurences)
+
 
 PLONECONF TALk
 --------------
