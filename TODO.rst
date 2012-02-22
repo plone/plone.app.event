@@ -5,9 +5,28 @@ IP ... that item is in progress
 TODO
 ====
 
+
+PLONECONF TALk
+--------------
+
+fix icalendar timezone export
+
+plone.formwidget.datetime
+    fix for AT and DX
+
+polish dx type
+    integrate recurrence widget
+    defaults for recurrencewidget.
+    ical export
+
+fix vincentfretin's start/end js (unify datetime templates for that?)
+
+create uninstall profiles
+create pre-plone43 profiles (uninstalls default plone stuff)
+
+
 thet
 ----
-
 
 thet - fix whole_day event export.... end-date is set startdate+1. in some cases end-date is two days after
 start-date. this has something to do with utc conversion...
@@ -54,6 +73,10 @@ datetime widget
   to plone.formwidget.dateinput or plone.app.event.
 
 - calendar starting year, calendar future years options in datetimewidget.
+
+- option: use textinput style with fallback to selectors if no js is avail.
+
+- integrate timepicker (adapted from mozi)
 
 
 recurring widget
