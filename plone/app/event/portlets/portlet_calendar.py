@@ -94,10 +94,10 @@ class Renderer(base.Renderer):
             if date_events:
                 for event in date_events:
                     events_string += u'%s<a href="%s">%s</a>%s' % (
-                            events_string and u"</br>" or u"",
-                            event.getURL(),
-                            event.Title,
-                            event.location and u" %s" % event.location or u"")
+                        events_string and u"</br>" or u"",
+                        event.getURL(),
+                        event.Title.decode('utf-8'),
+                        event.location and u" %s" % event.location or u"")
 
             cal[-1].append(
                 {'date':dat,
