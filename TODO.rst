@@ -22,10 +22,10 @@ prefix with _...
 BUG
 ---
 
-recurrence and whole day events. occurrences doesn't get all occurences back
+OK cannot reproduce - recurrence and whole day events. occurrences doesn't get all occurences back
 (esp. the end-date occurences)
 
-FIXED: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
+OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
 
 
 PLONECONF TALk
