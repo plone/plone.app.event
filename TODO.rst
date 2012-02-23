@@ -4,12 +4,28 @@ IP ... that item is in progress
 
 TODO
 ====
+plone.app.event.at in seperate egg...
+GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
+into pytz for a converter
+
+timezone getting/in which timezone is an event displayed. --/ document!
+generic event aceesor : also for json...
+
+
+whole day handler : good self speaking test cases, 
+
+timezone of the request???
+different timezone conversion strategies.... > display always in portal
+timezone, display in user timezone..., ...
+prefix with _...
 
 BUG
 ---
 
 recurrence and whole day events. occurrences doesn't get all occurences back
 (esp. the end-date occurences)
+
+FIXED: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
 
 
 PLONECONF TALk
