@@ -94,14 +94,6 @@ class RendererTest(unittest.TestCase):
 
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
 
-    def test_events_nonascii(self):
-        title = u'Plön€¢önf München 2012'
-        self.portal.invokeFactory('Event', 'e1', title=title)
-        #self.wft.doActionFor(self.portal.e1, 'publish')
-        portlet = self.renderer(assignment=portlet_calendar.Assignment())
-        portlet.update()
-        self.assertTrue(title in portlet.render())
-
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
@@ -121,3 +113,12 @@ class RendererTest(unittest.TestCase):
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")
+
+    def test_eventtitle_nonascii(self):
+        # test issue with non-ascii event title
+        title = u'Plön€¢önf München 2012'
+        self.portal.invokeFactory('Event', 'e1', title=title)
+        #self.wft.doActionFor(self.portal.e1, 'publish')
+        portlet = self.renderer(assignment=portlet_calendar.Assignment())
+        portlet.update()
+        self.assertTrue(title in portlet.render())
