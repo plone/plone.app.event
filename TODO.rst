@@ -2,226 +2,146 @@ legend:
 OK ... that item is done
 IP ... that item is in progress
 
+TODO
+====
+plone.app.event.at in seperate egg...
+GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
+into pytz for a converter
 
-INFO: plone.app.event and plone.formwidget.dateinput were refactored to have
-seperated at and dx/z3cform submodules. All functionality dependend on AT or DX
-respectively z3cforms, should reside in those subpackages, so that they can
-easily be switched off.
+timezone getting/in which timezone is an event displayed. --/ document!
+generic event aceesor : also for json...
 
 
-TODO, thet's next
-=================
+whole day handler : good self speaking test cases, 
 
-* fix whole_day event export.... in some cases end date is two days after start
-  date. this has something to do with utc conversion...
+timezone of the request???
+different timezone conversion strategies.... > display always in portal
+timezone, display in user timezone..., ...
+prefix with _...
 
-* ical export, dx types: UID not present in events
+BUG
+---
 
-* atevent: after changes to default_start and default_end, start+end is now 1,
+OK cannot reproduce - recurrence and whole day events. occurrences doesn't get all occurences back
+(esp. the end-date occurences)
+
+OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
+
+
+PLONECONF TALk
+--------------
+
+fix icalendar timezone export
+
+plone.formwidget.datetime
+    fix for AT and DX
+
+polish dx type
+    integrate recurrence widget
+    defaults for recurrencewidget.
+    ical export
+
+fix vincentfretin's start/end js (unify datetime templates for that?)
+
+create uninstall profiles
+create pre-plone43 profiles (uninstalls default plone stuff)
+
+
+thet
+----
+
+thet - fix whole_day event export.... end-date is set startdate+1. in some cases end-date is two days after
+start-date. this has something to do with utc conversion...
+or set end-date to same date as start date, which is semantically more correct?
+
+FIRST: fix timezone support in icalendar export. then this issue is also gone.
+
+
+thet - atevent: after changes to default_start and default_end, start+end is now 1,
   resp. 2 hours in future. check why
 
-* refactor for and put some stuff into plone.event or drop that package.
+thet - add portlet_calendar and portlet_events on startpage (this one with unpublished and published events).
 
-* begin with developer's documentation
-
-* create z3cform based recurrence widget for use with dx types
-
-* unify plone.formwidget.datetime templates
-
-* fix vincent's dt-javascript's, which are failing now
-
-* integrate lennart's plone.app.eventindex
-
-* add portlet_calendar and portlet_events on startpage (this one with unpublished and published events).
-
-* show unpublished events as such in portlet_events and portlet_calendar
-
-OK * register sample DX event with event_view
-
-OK * unify AT and DX event browser view
-
-OK * use p.a.event.base.get_portal_events all over, where needed (e.g. event
-  portlet)
-
-OK * make ical adapters for dx based types
-    OK . remove adapters for IATFolder, etc. since IFolder does the same.
-    NO . can you use IFolder also for IDexterityContainer objects?
-
-* DX
-  - editing DX types with event behavior fails, since a tznaive DT is compared
-    to timzone aware DT. see inline TODO statements.
-  - in metadata catalog, timezone'd times should reside, not un-timezone'd (see
-    atevent)
-  - z3cform: for time 0:00, the hour is not displayed. when displaying, 12:00
-    AM is shown.
-  OK - calendar portlet breaks
+thet - show unpublished events as such in portlet_events and portlet_calendar
 
 
-TODO, future
-============
+ical
+----
 
-- provide caldav support, using webdav. make Zope2.webdav obsolete and use
-  z3c.dav or wsgidav or whatever.
+- ical export, dx types: UID not present in events
 
-- Integrate RSVP - Resource reSerVation Protocol (IP, RFC 2205)
-
-TODO, bigger
-============
-
-OK - Solgema * recurrence widget dateinput is behind overlay
-
-OK - thet * support allday events in icalendar: export date-only, enddate+1day
-
-* Use VTIMEZONE compoenent and TZID properties in ical exports for every
+- Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
 
-* Proper ATTENDEES support for icalendar export
+- Proper ATTENDEES support for icalendar export
 
-* Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
-
-* Factor out generic methods without plone.app.* or Zope2 dependencies and move
-  them to plone.event.
-  - Cleanup plone.event for unused methods
-  - Cleanup plone.event for critical dependencies.
-
-- integrate a localized, nice formated duration function
-
-OK - thet - ditch Products.CMFCalendar, if possible.
-    in branch - merge-CMFCalendar
-
-    cmfcalendar seems to be only used by calendarportlet.
-    $ grept cmfalendar parts/omelette/*
-
-    OK - thet - calendarportlet: refactoring for removed portal_calendar dependency and 
-      new plone.app.event.base based approach.
-        NO - calendar portlet using jquery tools calendar?
-        - template change, so that a viewlet can also use calendar via
-          metal:macros.
-
-    - deprecate/remove portal_calendar from Products.CMFPlone
-
-    OK - thet - merge calendar and plone.app.event portlet.
-    OK - reimplement important functionality from calendar configlet
-        -> upgrade step
-    - Remove calendar configlet from plone.app.controlpanel
+- fix tests
 
 
-* add more ICalendar fields to create an generic interface to event content
-  types
-  NO - eventually ditch start_date and end_date, replacing them with more RFC5545
-    names dtstart, dtend...
-    !!! probably NOT. that might cause trouble.
-    !!! on the other hand... it's not used anyways and the api changed from pre
-    plone.app.event ATEvent implementation anyways...
-    $ grept start_date parts/omelette/*
+datetime widget
+---------------
 
-* permissions of cmfcalendar in plone.app.event
-  or REMOVE those permissions, using at/dx seperated ones - event if their name
-  is more generic? martin says in his book, that cmfcalendar permissions are an
-  historical accident. upgrade step probably needed.
+1) - unify plone.formwidget.datetime templates
 
-IP - thet (regebro) * finish icalendar 3.0 branch, where __str__ isn't used
-  - to_ical method into event content type. method may use more generic one.
+2) - fix vincent's dt-javascript's, which are failing now
 
-OK - thet (regebro) * rrule freq must be present. make/update validator with that.
-
-OK - thet * make generic ical adapter.
-
-IP - supton * merge sean upton's uu.smartdate with plone.formwidget.datetime
+- eventually merge supton's uu.smartdate with plone.formwidget.datetime
   http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
 
-IP - taito * Bring pone.formwidget.dateinput forward. Fix tests, finish the merge of
-  archetypes.datetimewidget and collective.z3form.datetimewidget.
-
-IP - regebro - brong forward plone.formwidget.recurrence and jquery.recurrence
-
-
-upgrade / migration steps
--------------------------
-OK * portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
-portlet_calendar (calendar is a python module.)
-   not needed, since legacy calendar and event modules left in
-   plone.app.portlets.
-
-* if default timezone is not set, migration cannot run
-
-- migration from old ATEvent (catalog update)
-
-* Check if any upgrade steps are neccassary for changed permission names (see
-  config.py)
-
-
-Notes, don't forget
-===================
-
-* DX: when calculating default_end time at 23:xx, its 0:xx. the hour component
+- DX: when calculating default_end time at 23:xx, its 0:xx. the hour component
   isn't displayed in the datetime widget.
 
-* Check ordering of schema fields.
+- move parts/omelette/Products/CMFPlone/skins/plone_form_scripts/validate_start_end_date.vpy
+  to plone.formwidget.dateinput or plone.app.event.
 
-* Fix tests for refactored plone.app.event.
+- calendar starting year, calendar future years options in datetimewidget.
 
-* atevent tests with recurrence
+- option: use textinput style with fallback to selectors if no js is avail.
 
-* plone.app.event.browser.event_view.pt -> eventually make view more generic
-  and usable for dx also... by replacing widget-calls
-
-* move parts/omelette/Products/CMFPlone/skins/plone_form_scripts/validate_start_end_date.vpy
-  to plone.formwidget.dateinput
-
-* notify(ObjectModifiedEvent(event)) has always to be called manually if object
-isn't modified by a form. is that failure proof?
-
-* remove portal_skins/plone_content/event_view.pt
-
-* remove portal/icon_export_vcal.png
-
-* label_add_to_vcal
+- integrate timepicker (adapted from mozi)
 
 
-More
-====
+recurring widget
+----------------
+
+- remove the leading zero 2nd method.
 
 
-documentation
--------------
+index
+-----
 
-- plip documentation
+- integrate lennart's plone.app.eventindex
 
-- document daterecurringindex benchmark results
-
-- document TZ behavior with examples
-
-- document removal of ICalendarSupport (interface for ical export ability) in
-  plone.app.event.interfaces. MAYBE provide that interface in ATContentTypes
-  for backwards compatibility
-
-
-general
--------
-
-- remove recurrence dependency in plone.app.event. makes shipping of first
-  release easier.
-
-  - disable recurrence for now: hide the recurring field .. add it later, per
-  profile or so.
-
-OK - garbas/thet - use icalendar instead of plone.rfc5545 / plone.event
-
-OK - thet - Refactor plone.app.event for usage of an subpackage "at" (later
-    also "dx") where all ATCT (later also dexterity) related stuff resides.
-    when dexterity becomes one day the default content type framework, we won't
-    depend on AT anymore...
-
-
-daterecurringindex
-------------------
+- benchmarks for both indices
 
 - usage of IIBTree - see discussion on plone-dev
 test if IIBTrees or set are faster
 >>> ts = time.time(); b=difference(IISet(a), IISet(b)); time.time() - ts
 0.014604091644287109
 >>> ts = time.time(); b=set(a) - set(b); time.time() - ts
+
+- do we need to add the indices to ATContentTypes.criteria.__init__ indices
+  Constants?
+
+types
+-----
+
+- uninstall profiles
+
+- "no end date" boolean option
+
+
+dexterity behaviors / types
+---------------------------
+
+- editing DX types with event behavior fails, since a tznaive DT is compared
+    to timzone aware DT. see inline TODO statements.
+
+- in metadata catalog, timezone'd times should reside, not un-timezone'd (see
+    atevent)
+
+- z3cform: for time 0:00, the hour is not displayed. when displaying, 12:00
+    AM is shown.
 
 
 timezone support
@@ -239,61 +159,195 @@ timezone support
 - if no timezone is selected: same as mail settings: note in nonfig area - at least
   display in edit form to link in control panel.
 FIXES:
+
 - on fresh install, when creating an event - no timezones are configured and
   cannot be selected - but are mandatory. at least a default timezone has to
   be selected in the event-settings configlet. that should be set at install
   time.
 
 
-datetimewidget
---------------
+documentation
+-------------
 
-- calendar starting year, calendar future years options in datetimewidget.
+- plip documentation
 
-OK - thet - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
-  plone.formwidget.dateinput
+- document daterecurringindex benchmark results
+
+- document TZ behavior with examples
+
+- document api to get lsit of event
+
+- sphinx API autodoc?
+
+- document removal of ICalendarSupport (interface for ical export ability) in
+  plone.app.event.interfaces. MAYBE provide that interface in ATContentTypes
+  for backwards compatibility
 
 
-Testing
+general
 -------
 
-OK/IP (check again) - thet - move tests to plone.app.testing
+- Factor out generic methods without plone.app.* or Zope2 dependencies and move
+  them to plone.event.
+
+check it again  - OK - Solgema * recurrence widget dateinput is behind overlay
+
+maybe.. - integrate a localized, nice formated duration function
+
+- Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
+
+- Generic icalendar types interfaces for event, journal, todo in plone.event
+
+- Check ordering of schema fields.
+
+- Refactor tests.
+
+- the content types depend on event handlers.
+  notify(ObjectModifiedEvent(event)) has always to be called manually if object
+  isn't modified by a form. is that failure proof?
+
+- eventually remove recurrence functionality for plip submission?
 
 - improve jenkins integration
 
 
-cleanup
--------
+CMFPlone
+--------
 
-OK/IP (check again) * remove all vcal references in favor or ical
+- remove portal_skins/plone_content/event_view.pt
+
+- remove portal/icon_export_vcal.png
+
+- remove label_add_to_vcal
 
 
-plip buildout
--------------
+CMFCalendar deprecation
+-----------------------
+
+- deprecate/remove portal_calendar from Products.CMFPlone
+
+- migration steps
+
+- Remove calendar configlet from plone.app.controlpanel
+
+- provide an utility for portal-message/warning viewlet info, so that warnings
+  can be injected and that warning-checker code must not be in the
+  controlpanel-overview template anymore.
+
+- permissions of cmfcalendar in plone.app.event, if possible - or drop em.
+  martin says in his book, that cmfcalendar permissions are an historical 
+  accident. upgrade step probably needed.
+
+
+migration steps
+---------------
+
+- if default timezone is not set, migration cannot run
+
+- migration from old ATEvent (catalog update)
+
+- Check if any upgrade steps are neccassary for changed permission names (see
+  config.py)
+
+
+future
+------
+
+- provide caldav support, using webdav. make Zope2.webdav obsolete and use
+  z3c.dav or wsgidav or whatever.
+
+- Integrate RSVP - Resource reSerVation Protocol (IP, RFC 2205)
+
+
+
+DONE
+====
+
+OK plone.forminput.recurrence * create z3cform based recurrence widget for use with dx types
+
+OK * register sample DX event with event_view
+
+OK * unify AT and DX event browser view
+
+OK * use p.a.event.base.get_portal_events all over, where needed (e.g. event
+  portlet)
+
+OK * make ical adapters for dx based types
+    OK . remove adapters for IATFolder, etc. since IFolder does the same.
+    NO . can you use IFolder also for IDexterityContainer objects?
+
+OK - DX events: calendar portlet breaks
+
+OK - thet * support allday events in icalendar: export date-only, enddate+1day
+
+OK - Cleanup plone.event for unused methods
+
+OK - Cleanup plone.event for critical dependencies.
+
+OK - thet - ditch Products.CMFCalendar, if possible.
+    in branch - merge-CMFCalendar
+
+    cmfcalendar seems to be only used by calendarportlet.
+    $ grept cmfalendar parts/omelette/*
+
+    OK - thet - calendarportlet: refactoring for removed portal_calendar dependency and 
+      new plone.app.event.base based approach.
+        NO - calendar portlet using jquery tools calendar?
+        - template change, so that a viewlet can also use calendar via
+          metal:macros.
+
+    OK - thet - merge calendar and plone.app.event portlet.
+    OK - reimplement important functionality from calendar configlet
+        -> upgrade step
+
+NO - eventually ditch start_date and end_date, replacing them with more RFC5545
+    names dtstart, dtend...
+    !!! probably NOT. that might cause trouble.
+    !!! on the other hand... it's not used anyways and the api changed from pre
+    plone.app.event ATEvent implementation anyways...
+    $ grept start_date parts/omelette/*
+
+OK - thet (regebro) * finish icalendar 3.0 branch, where __str__ isn't used
+  - to_ical method into event content type. method may use more generic one.
+
+OK - thet (regebro) * rrule freq must be present. make/update validator with that.
+
+OK - thet * make generic ical adapter.
+
+OK - regebro - bring forward plone.formwidget.recurrence and jquery.recurrence
+
+OK * portlets renamed, fix it in old instances: event -> portlet_event, calendar ->
+    portlet_calendar (calendar is a python module.)
+   not needed, since legacy calendar and event modules left in
+   plone.app.portlets.
+
+OK * plone.app.event.browser.event_view.pt -> eventually make view more generic
+  and usable for dx also... by replacing widget-calls
+
+OK - garbas/thet - use icalendar instead of plone.rfc5545 / plone.event
+
+OK - thet - Refactor plone.app.event for usage of an subpackage "at" (later
+    also "dx") where all ATCT (later also dexterity) related stuff resides.
+    when dexterity becomes one day the default content type framework, we won't
+    depend on AT anymore...
+
+OK - thet - archetypes.datetimewidget, collective.z3cform.datetimewidget -> merge into
+  plone.formwidget.dateinput
+
+OK - thet - move tests to plone.app.testing
+
+OK - remove all vcal references in favor or ical
 
 OK - thet - here are git:// and git@ checkouts for ppl without/with rw permissions.
   maybe https handles both?
 
-
-ATEvent
--------
-
-- "no end date" boolean option
-
-- [X] recurrence field goes after end date.
+OK - ATEvent
+  [X] recurrence field goes after end date.
   [ ] hide text area with css display:none
   [X] remove schemata recurrence
   [ ] provide checkbox "this date recurrs ..." and toggle textarea then
 
-
-DXEvent
--------
-
-OK - provide it. providing behaviors, based on plone.app.page
-
-
-done
-====
+OK - DX Events: Provide it. providing behaviors, based on plone.app.page
 
 OK * dependency on plone.folder as well as plone.app.collection are only for
   registering ical adapters and might make backporting harder than neccassary.
@@ -317,41 +371,30 @@ OK - TZ fetcher utility
   OK - plone.app.event portal TZ
   - context, user, portal TZ
 
-general
--------
 OK - move buildout configs out of coredev/plip into p.a.event to be used
   independently
+
 OK - merge branches with trunk
 
-plip buildout
--------------
-OK - there is a git checkout which isn't handled by mr.developer because it's no
+OK - buildout: there is a git checkout which isn't handled by mr.developer because it's no
   python package and thus could break. mr.developer supports co option
   egg=false ... use that.
 
-daterecurringindex
-------------------
-OK - complete the benchmark products.daterecurringindex
-OK - sync with hanno's changes to dateindex
+OK - index: complete the benchmark products.daterecurringindex
 
-timezone support
-----------------
-OK - provide widget for TZ field described above
+OK - index: sync with hanno's changes to dateindex
 
+OK - TZ: provide widget for TZ field described above
 
-ATEvent
--------
-OK - jure - error when submitting random data to recurrence field. catch 
+OK - jure - ATEvent: error when submitting random data to recurrence field. catch 
   dateutil's error and raise validation error. display error as error message.
 
+OK - in plone.event.utils now - isSameDay, isSameTime -... taking event as parameter. change to date1, date2
 
-internal notes for thet, forget this..
---------------------------------------
-- isSameDay, isSameTime -... taking event as parameter. change to date1, date2
-- toDisplay, doing nearly the same as function below. factor out a to_display
+OK - toDisplay, doing nearly the same as function below. factor out a to_display
 function which can used in both
-- fix portal_calendar or filtered occurences. calendar portlet is showing event
+
+OK - fix portal_calendar or filtered occurences. calendar portlet is showing event
   from previous month every day.
-- avoid dependency on portal_calendar or bring that tool in here.
 
-
+OK - avoid dependency on portal_calendar or bring that tool in here.

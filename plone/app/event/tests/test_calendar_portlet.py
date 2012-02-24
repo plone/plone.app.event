@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
+
 from zope.component import getUtility, getMultiAdapter
 from zope.site.hooks import setHooks, setSite
 
@@ -77,6 +80,7 @@ class RendererTest(unittest.TestCase):
         portal = self.layer['portal']
         self.portal = portal
         self.request = self.layer['request']
+        self.wft = getToolByName(self.portal, 'portal_workflow')
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
@@ -92,12 +96,12 @@ class RendererTest(unittest.TestCase):
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
-        r = self.renderer(assignment=portlet_calendar.Assignment())
-        html = r.render()
+        portlet = self.renderer(assignment=portlet_calendar.Assignment())
+        portlet.update()
+        html = portlet.render()
 
         # Now let's add a new event in the last day of the current month
-        year, month = r.getYearAndMonthToDisplay()
-        year, month = r.getNextMonth(year, month)
+        year, month = portlet.year_month_display()
         last_day_month = DateTime('%s/%s/1' % (year, month)) - 1
         hour = 1 / 24.0
         # Event starts at 23:00 and ends at 23:30
@@ -105,9 +109,16 @@ class RendererTest(unittest.TestCase):
                                   startDate=last_day_month + 23*hour,
                                   endDate=last_day_month + 23.5*hour)
 
-        # Make sure to publish this event
-        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
-
         # Try to render the calendar portlet again, it must be different now
-        r = self.renderer(assignment=portlet_calendar.Assignment())
-        self.assertNotEqual(html, r.render(), "Cache key wasn't invalidated")
+        portlet = self.renderer(assignment=portlet_calendar.Assignment())
+        portlet.update()
+        self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")
+
+    def test_eventtitle_nonascii(self):
+        # test issue with non-ascii event title
+        title = u'Plön€¢önf München 2012'
+        self.portal.invokeFactory('Event', 'e1', title=title)
+        #self.wft.doActionFor(self.portal.e1, 'publish')
+        portlet = self.renderer(assignment=portlet_calendar.Assignment())
+        portlet.update()
+        self.assertTrue(title in portlet.render())

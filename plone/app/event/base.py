@@ -96,28 +96,13 @@ def first_weekday():
         return int(first_wd)
 
 
-def prepare_range(context, start, end):
-    """ Prepare a date-range to contain timezone info and set end to next day,
-    if end is a date.
-
-    """
-    tz = default_tzinfo(context)
-    start = pydt(start, missing_zone=tz)
-    if isinstance(end, date):
-        # set range_end to the next day, time will be 0:00
-        # so the whole previous day is also used for search
-        end = end + timedelta(days=1)
-    end = pydt(end, missing_zone=tz)
-    return start, end
-
-
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
-                      **kw):
+                      sort='start', sort_reverse=False, **kw):
     """ Return all events as catalog brains, possibly within a given
     timeframe.
 
     """
-    range_start, range_end = prepare_range(context, range_start, range_end)
+    range_start, range_end = _prepare_range(context, range_start, range_end)
 
     query = {}
     query['object_provides'] = IEvent.__identifier__
@@ -132,7 +117,8 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         query['end'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
         query['end'] = {'query': DT(range_end), 'range': 'max'}
-    query['sort_on'] = 'start'
+    query['sort_on'] = sort
+    if sort_reverse: query['sort_order'] = 'reverse'
 
     query.update(kw)
 
@@ -150,7 +136,7 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
     the actual events for that date.
 
     """
-    range_start, range_end = prepare_range(context, range_start, range_end)
+    range_start, range_end = _prepare_range(context, range_start, range_end)
 
     events = get_portal_events(context, range_start, range_end, **kw)
     events_by_date = {}
@@ -208,3 +194,18 @@ def localized_now(context=None):
 def localized_today(context=None):
     now = localized_now(context)
     return date(now.year, now.month, now.day)
+
+
+def _prepare_range(context, start, end):
+    """ Prepare a date-range to contain timezone info and set end to next day,
+    if end is a date.
+
+    """
+    tz = default_tzinfo(context)
+    start = pydt(start, missing_zone=tz)
+    if isinstance(end, date):
+        # set range_end to the next day, time will be 0:00
+        # so the whole previous day is also used for search
+        end = end + timedelta(days=1)
+    end = pydt(end, missing_zone=tz)
+    return start, end
