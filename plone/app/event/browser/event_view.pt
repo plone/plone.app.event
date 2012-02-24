@@ -88,18 +88,11 @@
                               </tal:notwholeday>
                             </tal:sameday>
                           </metal:macro>
-
-                          <div tal:define="events view/occurrences;
-                                           events python:events and events[1:] or None"
-                               tal:condition="events">
-                               <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences>
-                               <ul>
-                                 <li tal:repeat="date_dict events">
-                                   <tal:event metal:use-macro="view/macros/event_occurrence" />
-                                 </li>
-                               </ul>
+                          <div tal:condition="exists:here/getRecurrence">
+                          <metal:field use-macro="python:context.widget('recurrence', mode='view')">
+                                Body text
+                          </metal:field>
                           </div>
-
                         </td>
                     </tr>
                     <tr tal:condition="data/location">
