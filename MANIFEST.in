@@ -1,0 +1,7 @@
+include *.txt
+include README.rst
+
+recursive-include docs *
+recursive-include plone *
+
+global-exclude *pyc
