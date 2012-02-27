@@ -11,9 +11,9 @@ has to be fixed.
 - Check all packages for correct Licenses
 - Add tests to ensure, DateRecurringIndex is actually installed.
 - Make event.recurrence not an ATFieldProperty, since that is deprecated
-- For recurring events, which have occurences in the future, show future
-occurences first and hide past occurences with javascript or so. Needs new
-methods (next_occurences, past_occurences, next_occurence, previous_occurence)
+- For recurring events, which have occurrences in the future, show future
+occurrences first and hide past occurrences with javascript or so. Needs new
+methods (next_occurrences, past_occurrences, next_occurence, previous_occurence)
 in RecurrenceSupport event adapter.
 - upgrade step for portlets move into plone.app.event. see traceback http://pastebin.com/YFyCytXg
 - add <property name="index_naive_time_as_local">True</property> property for

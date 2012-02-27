@@ -29,8 +29,8 @@ prefix with _...
 BUG
 ---
 
-OK cannot reproduce - recurrence and whole day events. occurrences doesn't get all occurences back
-(esp. the end-date occurences)
+OK cannot reproduce - recurrence and whole day events. occurrences doesn't get all occurrences back
+(esp. the end-date occurrences)
 
 OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
 
@@ -401,7 +401,7 @@ OK - in plone.event.utils now - isSameDay, isSameTime -... taking event as param
 OK - toDisplay, doing nearly the same as function below. factor out a to_display
 function which can used in both
 
-OK - fix portal_calendar or filtered occurences. calendar portlet is showing event
+OK - fix portal_calendar or filtered occurrences. calendar portlet is showing event
   from previous month every day.
 
 OK - avoid dependency on portal_calendar or bring that tool in here.
