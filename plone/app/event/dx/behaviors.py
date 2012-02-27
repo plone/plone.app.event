@@ -15,6 +15,7 @@ from plone.app.event.base import localized_now, DT
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 
 from plone.indexer import indexer
 from plone.app.event.dx.interfaces import IDXEvent
@@ -81,6 +82,7 @@ class IEventRecurrence(form.Schema):
     """ Recurring Event Schema.
 
     """
+    form.widget(recurrence=RecurrenceWidget)
     recurrence = schema.TextLine(
         title = _(u'label_recurrence', default=u'Recurrence'),
         description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
