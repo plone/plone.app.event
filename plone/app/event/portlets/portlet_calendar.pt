@@ -3,7 +3,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       tal:omit-tag="">
 <dl class="portlet portletCalendar"
-    i18n:domain="plone.app.event"
+    i18n:domain="plone"
     tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
                 month view/month;
                 year view/year;">
@@ -19,9 +19,14 @@
                            class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;"
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
-        <!-- TODO: tal:name again to be able to do: 2011, November for example -->
-        <span i18n:translate="" tal:content="string:month-${month}">monthname</span>
-        <span tal:replace="year">year</span>
+        <span i18n:translate="" tal:omit-tag="">
+            <span i18n:name="monthname" i18n:translate=""
+                  tal:content="view/month_name"
+                  tal:omit-tag="">monthname</span>
+            <span i18n:name="year" i18n:translate=""
+                  tal:content="year"
+                  tal:omit-tag="">year</span>
+        </span>
 
         <a href="#" rel="nofollow"
            id='calendar-next'
@@ -41,11 +46,11 @@
                 i18n:translate="" tal:content="string:month-${month}">monthname</caption>
             <thead>
               <tr class="weekdays"><tal:data repeat="weekday view/weekdays">
-                <th scope="col" i18n:translate="" tal:content="string:weekday-abbrev-${weekday}">Su</th>
+                <th scope="col" i18n:translate="" tal:content="weekday">Su</th>
               </tal:data></tr>
             </thead>
             <tbody>
-              <tr tal:repeat="week view/cal">
+              <tr tal:repeat="week view/cal_data">
                 <tal:block repeat="day week">
                 <td class="event"
                   tal:define="today day/today;

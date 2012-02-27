@@ -1,5 +1,6 @@
 import calendar
 from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
@@ -21,7 +22,6 @@ class ICalendarPortlet(IPortletDataProvider):
 
 class Assignment(base.Assignment):
     implements(ICalendarPortlet)
-
     title = _(u'Calendar')
 
 
@@ -29,12 +29,22 @@ class Renderer(base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
 
     def update(self):
+        context = aq_inner(self.context)
+
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = self.previous_month(year, month)
         self.next_year, self.next_month = next_year, next_month = self.next_month(year, month)
         # TODO: respect current query string
         self.prev_query = '?month=%s&year=%s' % (prev_year, prev_month)
         self.next_query = '?month=%s&year=%s' % (next_year, next_month)
+
+        self.cal = calendar.Calendar(first_weekday())
+        self._ts = getToolByName(context, 'translation_service')
+        self.month_name = PLMF(self._ts.month_msgid(month),
+                              default=self._ts.month_english(month))
+        self.weekdays = [PLMF(self._ts.day_msgid(day, format='s'),
+                              default=self._ts.weekday_english(day, format='a'))
+                         for day in self.cal.iterweekdays()]
 
     def year_month_display(self):
         """ Return the year and month to display in the calendar.
@@ -71,20 +81,19 @@ class Renderer(base.Renderer):
         return (year, month)
 
     @property
-    def cal(self):
+    def cal_data(self):
         """ Calendar iterator over weeks and days of the month to display.
         """
         context = aq_inner(self.context)
         today = localized_today(context)
         year, month = self.year_month_display()
-        cal = calendar.Calendar(first_weekday())
-        monthdates = [dat for dat in cal.itermonthdates(year, month)]
+        monthdates = [dat for dat in self.cal.itermonthdates(year, month)]
         events = get_events_by_date(context, monthdates[0], monthdates[-1])
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
-        cal = [[]]
+        caldata = [[]]
         for dat in monthdates:
-            if len(cal[-1]) == 7:
-                cal.append([])
+            if len(caldata[-1]) == 7:
+                caldata.append([])
             date_events = None
             isodat = dat.isoformat()
             if isodat in events:
@@ -99,7 +108,7 @@ class Renderer(base.Renderer):
                         event.Title.decode('utf-8'),
                         event.location and u" %s" % event.location or u"")
 
-            cal[-1].append(
+            caldata[-1].append(
                 {'date':dat,
                  'day':dat.day,
                  'prev_month': dat.month < month,
@@ -110,12 +119,7 @@ class Renderer(base.Renderer):
                  'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
                  'events_string': events_string,
                  'events':date_events})
-        return cal
-
-    @property
-    def weekdays(self):
-        cal = calendar.Calendar(first_weekday())
-        return cal.iterweekdays()
+        return caldata
 
 
 class AddForm(base.NullAddForm):
