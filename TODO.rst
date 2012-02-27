@@ -2,6 +2,13 @@ legend:
 OK ... that item is done
 IP ... that item is in progress
 
+portlet_calendar
+++++++++++++++++
+- next/previous: overlay displays raw-overlay string
+- remove kupu dependency, use jquery-only
+
+
+
 TODO
 ====
 plone.app.event.at in seperate egg...

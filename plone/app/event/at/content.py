@@ -416,11 +416,8 @@ class Recurrence(object):
                 self.context.start(),
                 recrule=self.context.recurrence,
                 from_=limit_start, until=limit_end)
-        ends = recurrence_sequence_ical(
-                self.context.end(),
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-        events = map(lambda start,end:(start, end), starts, ends)
+        duration = self.context.duration
+        events = map(lambda start:(start, start+duration), starts)
         return events
 
 

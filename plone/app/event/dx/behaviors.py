@@ -231,16 +231,24 @@ class EventRecurrence(object):
     recurrence = property(_get_recurrence, _set_recurrence)
 
     def occurrences(self, limit_start=None, limit_end=None):
+        """ Return all occurrences of an event, possibly within a start and end
+        limit.
+
+        Please note: Events beginning before limit_start but ending afterwards
+                     won't be found.
+
+        """
         event = IEventBasic(self.context)
         starts = recurrence_sequence_ical(
                 event.start,
                 recrule=self.context.recurrence,
                 from_=limit_start, until=limit_end)
-        ends = recurrence_sequence_ical(
-                event.end,
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-        events = map(lambda start,end:(start, end), starts, ends)
+
+        # We get event ends by adding a duration to the start. This way, we
+        # prevent that the start and end lists are of different size if an
+        # event starts before limit_start but ends afterwards.
+        duration = event.duration
+        events = map(lambda start:(start, start+duration), starts)
         return events
 
 
