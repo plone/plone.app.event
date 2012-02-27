@@ -111,7 +111,9 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         # always limit to the current portal root
         # TODO: is there a better method to get portal/navigation root's path
         #       without having to have the request available?
-       query['path'] = '/'.join(getSite().getPhysicalPath())
+        #query['path'] = '/'.join(getSite().getPhysicalPath())
+        urltool = getToolByName(context, "portal_url")
+        query['path'] = urltool.getPortalObject().getPhysicalPath()
 
     if range_start:
         query['end'] = {'query': DT(range_start), 'range': 'min'}
@@ -146,7 +148,7 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
         # TODO: this returns only occurrences of recurring events.
         #       non-recurring events won't have any hits here.
         #       Maybe provide an adapter for non-recurring events (dx+at) which
-        #       return just start and end date
+        #       return just start and end datetime
         occurrences = IRecurrence(obj).occurrences(range_start, range_end)
         for start, end in occurrences:
             start_str = datetime.strftime(start, '%Y-%m-%d')
