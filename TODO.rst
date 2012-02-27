@@ -7,7 +7,11 @@ portlet_calendar
 - next/previous: overlay displays raw-overlay string
 - remove kupu dependency, use jquery-only
 
+- generalize IRecurrence adapter. move out o' contenttypes and use generic
+  event accessor to access event's attributes.
 
+- use generic event accessor also for ical serialization. no need for
+  content-type specific adapters then.
 
 TODO
 ====
@@ -17,7 +21,6 @@ into pytz for a converter
 
 timezone getting/in which timezone is an event displayed. --/ document!
 generic event aceesor : also for json...
-
 
 whole day handler : good self speaking test cases, 
 
@@ -29,8 +32,10 @@ prefix with _...
 BUG
 ---
 
-OK cannot reproduce - recurrence and whole day events. occurrences doesn't get all occurrences back
-(esp. the end-date occurrences)
+OK - recurring events: when searching for events within a timeframe, the
+IRecurrence.occurrences method possibly returned a list where starts and ends
+are of different lenght, leading into an error.  now, the end dates of the
+occurrences list are calculated from the start date + a duration.
 
 OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
 
@@ -401,7 +406,7 @@ OK - in plone.event.utils now - isSameDay, isSameTime -... taking event as param
 OK - toDisplay, doing nearly the same as function below. factor out a to_display
 function which can used in both
 
-OK - fix portal_calendar or filtered occurrences. calendar portlet is showing event
+OK - fix portal_calendar or filtered occurences. calendar portlet is showing event
   from previous month every day.
 
 OK - avoid dependency on portal_calendar or bring that tool in here.
