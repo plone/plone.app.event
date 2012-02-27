@@ -28,12 +28,8 @@ from plone.app.event.browser.event_view import prepare_for_display
 from plone.app.event.base import default_end_DT, default_timezone
 
 from plone.formwidget.datetime.at import DatetimeWidget
-try:
-    from plone.formwidget.recurrence.atwidget import RecurrenceWidget
-    from plone.formwidget.recurrence.atwidget import RecurrenceValidator
-except ImportError: # TODO: remove when new recurrence widget release is made. 
-    from plone.formwidget.recurrence.at.widget import RecurrenceWidget
-    from plone.formwidget.recurrence.at.widget import RecurrenceValidator
+from plone.formwidget.recurrence.at.widget import RecurrenceWidget
+from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 
 import unittest2 as unittest
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING

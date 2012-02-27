@@ -16,10 +16,7 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-try:
-    from plone.formwidget.recurrence.atwidget import RecurrenceWidget
-except ImportError: # TODO: remove when new recurrence widget release is made. 
-    from plone.formwidget.recurrence.at.widget import RecurrenceWidget
+from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.formwidget.datetime.at import DatetimeWidget
 
 from plone.app.event.at import atapi
