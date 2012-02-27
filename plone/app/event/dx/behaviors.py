@@ -237,6 +237,9 @@ class EventRecurrence(object):
         Please note: Events beginning before limit_start but ending afterwards
                      won't be found.
 
+        TODO: test with event start = 21st feb, event end = start+36h,
+        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
+
         """
         event = IEventBasic(self.context)
         starts = recurrence_sequence_ical(
