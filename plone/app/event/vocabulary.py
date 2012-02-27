@@ -41,9 +41,9 @@ def AvailableTimezones(context):
 def Weekdays(context):
     """ Vocabulary for Weekdays.
     """
- 
-    translate = getSite().translate   
-    
+
+    translate = getSite().translate
+
     items =[(translate(u'weekday_mon', domain='plonelocales', default=u'Monday'),0),
             (translate(u'weekday_tue', domain='plonelocales', default=u'Tuesday'),1),
             (translate(u'weekday_wed', domain='plonelocales', default=u'Wednesday'),2),
