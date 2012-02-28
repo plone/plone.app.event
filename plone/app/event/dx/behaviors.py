@@ -83,7 +83,7 @@ class IEventRecurrence(form.Schema):
 
     """
     form.widget(recurrence=RecurrenceWidget)
-    recurrence = schema.TextLine(
+    recurrence = schema.Text(
         title = _(u'label_recurrence', default=u'Recurrence'),
         description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
         required = False)
