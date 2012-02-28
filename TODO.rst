@@ -7,14 +7,14 @@ portlet_calendar
 - next/previous: overlay displays raw-overlay string
 - remove kupu dependency, use jquery-only
 
+TODO
+====
 - generalize IRecurrence adapter. move out o' contenttypes and use generic
   event accessor to access event's attributes.
 
 - use generic event accessor also for ical serialization. no need for
   content-type specific adapters then.
 
-TODO
-====
 plone.app.event.at in seperate egg...
 GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
 into pytz for a converter
