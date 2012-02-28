@@ -38,18 +38,6 @@
         for=".interfaces.IDXEventRecurrence"
         />
 
-    <!-- Behaviors -->
-    <plone:behavior
-        title="Event"
-        description="Event/Calendar extension to dexterity content types.
-                     Conatains the behaviors Event Basic, Event Recurrence,
-                     Event Location, Event Attendees and Event Contact."
-        provides=".behaviors.IEventBehavior"
-        factory=".behaviors.EventBehavior"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventFull"
-        />
-
     <plone:behavior
         title="Event Basic"
         description="Basic Event schema."

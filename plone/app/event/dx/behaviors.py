@@ -87,6 +87,10 @@ class IEventRecurrence(form.Schema):
         description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
         required = False)
 
+# TODO: DOCUMENT! If a behavior, made out of IEventBasic and IRecurrence is
+# used then a new ParameterizedWidgetFactory has to be used and the start_field
+# parameter must be set to the name of the new behavior.
+
 # Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
 IEventRecurrence.setTaggedValue('plone.autoform.widgets',
     {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
@@ -143,35 +147,12 @@ class IEventContact(form.Schema):
         )
 
 
-class IEventBehavior(IEventBasic, IEventRecurrence, IEventLocation, IEventAttendees, IEventContact):
-    """ Full Event Behavior.
-
-    """
-    form.fieldset(
-            'event',
-            label=_(u'label_fieldset_event', default=u'Event'),
-            fields=(
-                'start',
-                'end',
-                'timezone',
-                'recurrence',
-                'whole_day',
-                'location',
-                'attendees',
-                'event_url',
-                'contact_name',
-                'contact_email',
-                'contact_phone',
-                ),
-        )
-
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, form.IFormFieldProvider)
 alsoProvides(IEventRecurrence, form.IFormFieldProvider)
 alsoProvides(IEventLocation, form.IFormFieldProvider)
 alsoProvides(IEventAttendees, form.IFormFieldProvider)
 alsoProvides(IEventContact, form.IFormFieldProvider)
-alsoProvides(IEventBehavior, form.IFormFieldProvider)
 
 
 class EventBasic(object):
@@ -315,10 +296,6 @@ class EventContact(object):
     def _set_event_url(self, value):
         self.context.event_url = value
     event_url = property(_get_event_url, _set_event_url)
-
-
-class EventBehavior(EventBasic, EventRecurrence, EventLocation, EventAttendees, EventContact):
-    pass
 
 
 ## Object adapters

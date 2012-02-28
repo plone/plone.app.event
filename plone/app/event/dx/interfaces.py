@@ -20,8 +20,3 @@ class IDXEventAttendees(Interface):
 class IDXEventContact(Interface):
     """ Marker interface for Dexterity events with contact information.
     """
-
-class IDXEventFull(IDXEvent, IDXEventRecurrence, IDXEventLocation,
-                   IDXEventAttendees, IDXEventContact):
-    """ Marker interface for full Dexterity events.
-    """

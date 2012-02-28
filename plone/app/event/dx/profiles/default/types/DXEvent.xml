@@ -23,7 +23,11 @@
  <property name="behaviors">
   <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
   <element value="plone.app.content.interfaces.INameFromTitle"/>
-  <element value="plone.app.event.dx.behaviors.IEventBehavior"/>
+  <element value="plone.app.event.dx.behaviors.IEventBasic"/>
+  <element value="plone.app.event.dx.behaviors.IEventRecurrence"/>
+  <element value="plone.app.event.dx.behaviors.IEventLocation"/>
+  <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
+  <element value="plone.app.event.dx.behaviors.IEventContact"/>
  </property>
  <property name="schema"></property>
  <property name="model_source">
