@@ -8,8 +8,8 @@
 
     <i18n:registerTranslations directory="locales" />
 
-    <include zcml:provides="installed Products.ATContentTypes" package=".at" />
-    <include zcml:provides="installed plone.dexterity" package=".dx" />
+    <include zcml:condition="installed Products.ATContentTypes" package=".at" />
+    <include zcml:condition="installed plone.dexterity" package=".dx" />
 
     <include package="plone.formwidget.recurrence" />
     <include package="plone.formwidget.datetime" />
