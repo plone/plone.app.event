@@ -37,9 +37,28 @@
 
     <genericsetup:registerProfile
         name="default"
-        title="plone.app.event"
         directory="profiles/default"
+        title="plone.app.event"
         description="Plone event content type."
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        zcml:condition="not-have plone-43"
+        name="pre-plone43"
+        directory="profiles/default"
+        title="plone.app.event Plone4 integration"
+        description="Integration of plone.app.event into pre Plone 4.3 release."
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+    <genericsetup:registerProfile
+        zcml:condition="not-have plone-43"
+        name="pre-plone43-prepare"
+        directory="profiles/pre-plone43-prepare"
+        title="plone.app.event Plone4 integration preparation"
+        description="Preparation of Integration of plone.app.event into pre Plone 4.3 release. Will be automatically applied by the default profile." 
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
