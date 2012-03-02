@@ -6,61 +6,42 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone.app.event">
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <include zcml:condition="installed Products.ATContentTypes" package=".at" />
-    <include zcml:condition="installed plone.dexterity" package=".dx" />
+  <include zcml:condition="installed Products.ATContentTypes" package=".at" />
+  <include zcml:condition="installed plone.dexterity" package=".dx" />
 
-    <include package="plone.formwidget.recurrence" />
-    <include package="plone.formwidget.datetime" />
-    <include package="plone.app.portlets" />
-    <include package="plone.app.registry" />
+  <include package="plone.formwidget.recurrence" />
+  <include package="plone.formwidget.datetime" />
+  <include package="plone.app.portlets" />
+  <include package="plone.app.registry" />
 
-    <include package=".browser" />
-    <include package=".portlets" />
-    <include file="ical.zcml" />
+  <include package=".browser" />
+  <include package=".portlets" />
+  <include file="ical.zcml" />
 
-    <utility
-        component=".vocabulary.AvailableTimezones"
-        name="plone.app.event.AvailableTimezones"
-        />
+  <utility
+      component=".vocabulary.AvailableTimezones"
+      name="plone.app.event.AvailableTimezones"
+      />
 
-    <utility
-        component=".vocabulary.Timezones"
-        name="plone.app.event.Timezones"
-        />
+  <utility
+      component=".vocabulary.Timezones"
+      name="plone.app.event.Timezones"
+      />
 
-    <utility
-        component=".vocabulary.Weekdays"
-        name="plone.app.event.Weekdays"
-        />
+  <utility
+      component=".vocabulary.Weekdays"
+      name="plone.app.event.Weekdays"
+      />
 
-    <genericsetup:registerProfile
-        name="default"
-        directory="profiles/default"
-        title="plone.app.event"
-        description="Plone event content type."
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-
-    <genericsetup:registerProfile
-        zcml:condition="not-have plone-43"
-        name="pre-plone43"
-        directory="profiles/default"
-        title="plone.app.event Plone4 integration"
-        description="Integration of plone.app.event into pre Plone 4.3 release."
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <genericsetup:registerProfile
-        zcml:condition="not-have plone-43"
-        name="pre-plone43-prepare"
-        directory="profiles/pre-plone43-prepare"
-        title="plone.app.event Plone4 integration preparation"
-        description="Preparation of Integration of plone.app.event into pre Plone 4.3 release. Will be automatically applied by the default profile." 
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      directory="profiles/default"
+      title="plone.app.event"
+      description="plone.app.event framework registration."
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>
