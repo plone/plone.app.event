@@ -1,5 +1,5 @@
-Introduction
-============
+plone.app.event
+===============
 
 Plone.app.event is the calendaring implementation for Plone. It provides Event
 Content Types (Archetypes based as well as Dexterity Behaviors), Timezone
@@ -9,14 +9,41 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
-Installation
-------------
+Installation for Plone 4.1
+--------------------------
 
-If you want to include plone.app.event in your Plone setup, include
-wether the Archetypes or Dexterity or both extras of plone.app.event.
+To install plone.app.event for Plone 4.1, please use the
+plone.app.event-ploneintegration package. Include it in your buildout config or
+in your integration package's setup.py and apply the 
+"plone.app.event Plone4 integration" profile.
+The plone.app.event-ploneintegration package pulls all dependencies, which are
+needed for plone.app.event.
 
-You can also install this package directly via the provided buildout
-configuration:
+
+Warning
+-------
+
+!!!
+Backup! Don't do this on a Plone setups in production, only install
+plone.app.event for new setups or report any upgrade issues. Upgrading is yet
+not tested and no upgrade steps are provided - this is still a task to do.
+Expect weired behavior regarding date/time/timezones and any other bugs.
+!!!
+
+
+Bug reporting
+-------------
+
+Please report bugs here: https://github.com/collective/plone.app.event 
+
+This url may change to https://github.com/plone/plone.app.event some time soon!
+
+
+Installation from the sources
+-----------------------------
+
+If you want to install plone.app.event from the sources for development, run
+the provided buildout files - and read the sources.
 
 $ python bootstrap.cfg -d
 
@@ -41,10 +68,8 @@ profile also. This way, the dexterity behaviors are registered and an example
 Dexterity event type is installed.
 
 
-
-
 Contributions
-=============
+-------------
 Philip Bauer, <bauer@starzel.de>
 Jure Cerjak, <jcerjak@termitnjak.si>
 JeanMichel FRANCOIS, <toutpt@gmail.com>
