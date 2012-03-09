@@ -13,11 +13,10 @@ Installation for Plone 4.1
 --------------------------
 
 To install plone.app.event for Plone 4.1, please use the
-plone.app.event-ploneintegration package. Include it in your buildout config or
-in your integration package's setup.py and apply the 
-"plone.app.event Plone4 integration" profile.
-The plone.app.event-ploneintegration package pulls all dependencies, which are
-needed for plone.app.event.
+plone.app.event-ploneintegration package from pypi. Include it in your buildout
+config or in your integration package's setup.py and apply the "plone.app.event
+Plone4 integration" profile.  The plone.app.event-ploneintegration package
+pulls all dependencies, which are needed for plone.app.event.
 
 
 Warning
@@ -31,6 +30,29 @@ Expect weired behavior regarding date/time/timezones and any other bugs.
 !!!
 
 
+What to do
+----------
+Add some events. Add some with recurrence - but limit the occurences or write
+bug reports. Add some in different timezones and write bug reports. Add the
+calendar portlet. Write bug reports.
+If possible, write fix code and write tests.
+
+Please note, allowing pull requests needs that she/he must have signed the
+contributor agreement.
+
+
+Known issues
+------------
+- Incomplete tests.
+- There is may be one Unicode/Encoding issue with non-ascii chars when
+  exporting to iCal.
+- start-date datetime widget: selecting a date leads to reload.
+- Some timezone related issues.
+- Allowing unlimited occurences for recurring events break at 30000 iterations
+  and take a long time. Solution: not allowing unlimited occurences, breaking
+  earlier.
+
+
 Bug reporting
 -------------
 
@@ -42,23 +64,32 @@ This url may change to https://github.com/plone/plone.app.event some time soon!
 Installation from the sources
 -----------------------------
 
+R/W checkout from github:
+$ git clone git@github.com:collective/plone.app.event.github
+
+R/O checkouts:
+$ git clone git://github.com/collective/plone.app.event.git
+
 If you want to install plone.app.event from the sources for development, run
 the provided buildout files - and read the sources.
 
 $ python bootstrap.cfg -d
 
-$ ./bin/buildout -c buildout.cfg  # for normal building
+For Plone 4.1 and standard ATContentTypes
+$ ./bin/buildout -c alpha.cfg
 
 - or -
+Normal Building
+$ ./bin/buildout -c buildout.cfg
 
-$ ./bin/buildout -c dev.cfg  # for development building with R/W checkouts
+- or -
+For development building with R/W checkouts
+$ ./bin/buildout -c dev.cfg
 
 There is also a dexterity.cfg buildout configuration, which can be used to
 extend another buildout and install the Dexterity flavor of plone.app.event.
 
-
-Start:
-
+Start
 $ ./bin/instance fg
 
 After fireing up the Zope instance, visit the ZMI and create a Plone site.
