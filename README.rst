@@ -34,7 +34,12 @@ What to do
 ----------
 Add some events. Add some with recurrence - but limit the occurences or write
 bug reports. Add some in different timezones and write bug reports. Add the
-calendar portlet. Write bug reports.
+calendar portlet - shows published events. Write bug reports.
+
+Go to the event controlpanel and try different settings. Download events as
+ical. Install dexterity, apply the plone.app.event dexterity profile and start
+using the provided behaviors.
+
 If possible, write fix code and write tests.
 
 Please note, allowing pull requests needs that she/he must have signed the
