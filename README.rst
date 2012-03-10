@@ -51,8 +51,6 @@ Known issues
 - Incomplete tests.
 - There is may be one Unicode/Encoding issue with non-ascii chars when
   exporting to iCal.
-- start-date datetime widget: selecting a date leads to reload.
-- Some timezone related issues.
 - Allowing unlimited occurences for recurring events break at 30000 iterations
   and take a long time. Solution: not allowing unlimited occurences, breaking
   earlier.
