@@ -1,3 +1,5 @@
+var end_start_delta;
+
 function wholeDayHandler(e) {
     if (e.target.checked) {
         jQuery('.datetimewidget-time').fadeOut();
@@ -53,13 +55,12 @@ function portletCalendarTooltips() {
     });
 }
 
-var end_start_delta;
 
 jQuery(document).ready(function() {
     portletCalendarTooltips();
 
     jQuery('#wholeDay').bind('change', wholeDayHandler);
-    jQuery('[id^=startDate]').bind('focus', initDelta);
+    /*jQuery('[id^=startDate]').bind('focus', initDelta);
     jQuery('[id^=endDate]').bind('focus', initDelta);
     jQuery('#startDate').each(function(){
         jQuery(this).data('dateinput').onShow(initDelta);
@@ -68,6 +69,6 @@ jQuery(document).ready(function() {
         jQuery(this).data('dateinput').onShow(initDelta);
     });
     jQuery('[id^=startDate]').change(updateEndDate);
-    jQuery('[id^=endDate]').change(validateEndDate);
+    jQuery('[id^=endDate]').change(validateEndDate);*/
 
 });
