@@ -5,7 +5,7 @@ IP ... that item is in progress
 portlet_calendar
 ++++++++++++++++
 - next/previous: overlay displays raw-overlay string
-- remove kupu dependency, use jquery-only
+- remove kss dependency, use jquery-only
 
 TODO
 ====
