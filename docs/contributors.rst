@@ -7,6 +7,7 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - Andreas Jung
 - Lennart Regebro
 - JeanMichel FRANCOIS, toutpt
+- Philip Bauer, pbauer
 
 
 [1] http://plone.org/foundation/contributors-agreement/contributors-agreement-explained
