@@ -6,7 +6,6 @@
   <!-- Basic properties -->
   <property name="title" i18n:translate="">Event (DX)</property>
   <property name="description" i18n:translate="">Dexterity event</property>
-  <property name="content_icon"></property>
   <property name="icon_expr">string:${portal_url}/event_icon.png</property>
   <property name="allow_discussion">False</property>
 
