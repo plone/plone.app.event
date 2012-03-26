@@ -1,4 +1,4 @@
-""" Behaviours to enable calendarish event extension to dexterity content
+""" Behaviors to enable calendarish event extension to dexterity content
 types.
 
 """
