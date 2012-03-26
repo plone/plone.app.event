@@ -43,3 +43,23 @@ PAEventAT_FIXTURE = PAEventATLayer()
 PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventAT_FIXTURE,),
     name="PAEventAT:Integration")
+
+
+class PAEventDXLayer(PloneSandboxLayer):
+
+    defaultBases = (PAEvent_FIXTURE,)
+
+    def setUpZope(self, app, configurationContext):
+        # Load ZCML
+        import plone.app.event.dx
+        self.loadZCML(package=plone.app.event.dx, context=configurationContext)
+
+        z2.installProduct(app, 'plone.app.event.dx')
+
+    def setUpPloneSite(self, portal):
+        self.applyProfile(portal, 'plone.app.event.dx:default')
+
+PAEventDX_FIXTURE = PAEventDXLayer()
+PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
+    bases=(PAEventDX_FIXTURE,),
+    name="PAEventDX:Integration")
