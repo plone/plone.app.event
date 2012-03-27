@@ -4,8 +4,8 @@ types.
 """
 import pytz
 from zope import schema
-from zope.component import adapter
-from zope.interface import implementer
+from zope.component import adapter, adapts
+from zope.interface import implementer, implements
 from zope.interface import alsoProvides
 from zope.interface import invariant, Invalid
 from plone.directives import form
@@ -18,7 +18,8 @@ from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 
 from plone.indexer import indexer
-from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.interfaces import IRecurrence
+from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
 from plone.app.dexterity.behaviors.metadata import ICategorization
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
@@ -28,6 +29,7 @@ from z3c.form.browser.textlines import TextLinesFieldWidget
 class StartBeforeEnd(Invalid):
     __doc__ = _("exception_start_before_end",
                 default=u"The start or end date is invalid")
+
 
 class IEventBasic(form.Schema):
     """ Basic event schema.
@@ -107,6 +109,7 @@ class IEventLocation(form.Schema):
         required = False
         )
 
+
 class IEventAttendees(form.Schema):
     """ Event Attendees Schema.
     """
@@ -118,6 +121,7 @@ class IEventAttendees(form.Schema):
         missing_value = (),
         )
     form.widget(attendees = TextLinesFieldWidget)
+
 
 class IEventContact(form.Schema):
     """ Event Contact Schema.
@@ -206,99 +210,7 @@ class EventBasic(object):
     def duration(self):
         return self.context.end - self.context.start
 
-
-class EventRecurrence(object):
-    """ Adapter for IEventRecurrence behavior as well for IRecurrence.
-    """
-    def __init__(self, context):
-        self.context = context
-
-    def _get_recurrence(self):
-        return self.context.recurrence
-    def _set_recurrence(self, value):
-        self.context.recurrence = value
-    recurrence = property(_get_recurrence, _set_recurrence)
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        """ Return all occurrences of an event, possibly within a start and end
-        limit.
-
-        Please note: Events beginning before limit_start but ending afterwards
-                     won't be found.
-
-        TODO: test with event start = 21st feb, event end = start+36h,
-        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
-
-        """
-        event = IEventBasic(self.context)
-        starts = recurrence_sequence_ical(
-                event.start,
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-
-        # We get event ends by adding a duration to the start. This way, we
-        # prevent that the start and end lists are of different size if an
-        # event starts before limit_start but ends afterwards.
-        duration = event.duration
-        events = map(lambda start:(start, start+duration), starts)
-        return events
-
-
-class EventLocation(object):
-
-    def __init__(self, context):
-        self.context = context
-
-    def _get_location(self):
-        return self.context.location
-    def _set_location(self, value):
-        self.context.location = value
-    location = property(_get_location, _set_location)
-
-
-class EventAttendees(object):
-
-    def __init__(self, context):
-        self.context = context
-
-    def _get_attendees(self):
-        return self.context.attendees
-    def _set_attendees(self, value):
-        self.context.attendees = value
-    attendees = property(_get_attendees, _set_attendees)
-
-
-class EventContact(object):
-
-    def __init__(self, context):
-        self.context = context
-
-    def _get_contact_name(self):
-        return self.context.contact_name
-    def _set_contact_name(self, value):
-        self.context.contact_name = value
-    contact_name = property(_get_contact_name, _set_contact_name)
-
-    def _get_contact_email(self):
-        return self.context.contact_email
-    def _set_contact_email(self, value):
-        self.context.contact_email = value
-    contact_email = property(_get_contact_email, _set_contact_email)
-
-    def _get_contact_phone(self):
-        return self.context.contact_phone
-    def _set_contact_phone(self, value):
-        self.context.contact_phone = value
-    contact_phone = property(_get_contact_phone, _set_contact_phone)
-
-    def _get_event_url(self):
-        return self.context.event_url
-    def _set_event_url(self, value):
-        self.context.event_url = value
-    event_url = property(_get_event_url, _set_event_url)
-
-
-## Object adapters
+# Object adapters
 
 @implementer(IEventAccessor)
 @adapter(IDXEvent)
@@ -326,6 +238,40 @@ def generic_event_accessor(context):
             }
 
 
+class Recurrence(object):
+    """ IRecurrence Adapter.
+    """
+    implements(IRecurrence)
+    adapts(IDXEventRecurrence)
+
+    def __init__(self, context):
+        self.context = context
+
+    def occurrences(self, limit_start=None, limit_end=None):
+        """ Return all occurrences of an event, possibly within a start and end
+        limit.
+
+        Please note: Events beginning before limit_start but ending afterwards
+                     won't be found.
+
+        TODO: test with event start = 21st feb, event end = start+36h,
+        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
+
+        """
+        event = IEventBasic(self.context)
+        starts = recurrence_sequence_ical(
+                event.start,
+                recrule=self.context.recurrence,
+                from_=limit_start, until=limit_end)
+
+        # We get event ends by adding a duration to the start. This way, we
+        # prevent that the start and end lists are of different size if an
+        # event starts before limit_start but ends afterwards.
+        duration = event.duration
+        events = map(lambda start:(start, start+duration), starts)
+        return events
+
+
 ## Event handlers
 
 def data_postprocessing(obj, event):
@@ -339,7 +285,7 @@ def data_postprocessing(obj, event):
     start = tz.localize(start)
     end = tz.localize(end)
 
-    # adapt for whole day
+    # adapt for whole Day
     if obj.whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)

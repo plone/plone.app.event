@@ -25,19 +25,11 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
+    <adapter factory=".behaviors.generic_event_accessor" />
+    <adapter factory=".behaviors.Recurrence" />
+
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
-
-    <adapter factory=".behaviors.generic_event_accessor" />
-
-    <!-- EventRecurrence acts as IRecurrence adapter as well as behavior
-         adapter.
-    -->
-    <adapter
-        factory=".behaviors.EventRecurrence"
-        provides="..interfaces.IRecurrence"
-        for=".interfaces.IDXEventRecurrence"
-        />
 
     <plone:behavior
         title="Event Basic"
@@ -52,7 +44,7 @@
         title="Event Recurrence"
         description="Recurrence extension for Events."
         provides=".behaviors.IEventRecurrence"
-        factory=".behaviors.EventRecurrence"
+        factory="plone.behavior.AnnotationStorage"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventRecurrence"
         />
@@ -61,7 +53,7 @@
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
-        factory=".behaviors.EventLocation"
+        factory="plone.behavior.AnnotationStorage"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventLocation"
         />
@@ -70,7 +62,7 @@
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
-        factory=".behaviors.EventAttendees"
+        factory="plone.behavior.AnnotationStorage"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventAttendees"
         />
@@ -79,7 +71,7 @@
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"
-        factory=".behaviors.EventContact"
+        factory="plone.behavior.AnnotationStorage"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventContact"
         />
