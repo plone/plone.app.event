@@ -259,9 +259,10 @@ class Recurrence(object):
 
         """
         event = IEventBasic(self.context)
+        recrule = IEventRecurrence(self.context).recurrence
         starts = recurrence_sequence_ical(
                 event.start,
-                recrule=self.context.recurrence,
+                recrule=recrule,
                 from_=limit_start, until=limit_end)
 
         # We get event ends by adding a duration to the start. This way, we
