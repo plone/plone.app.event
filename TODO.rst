@@ -2,6 +2,9 @@ legend:
 OK ... that item is done
 IP ... that item is in progress
 
+
+- plone.app.collection: integrate, add relative time delta
+
 portlet_calendar
 ++++++++++++++++
 - next/previous: overlay displays raw-overlay string
