@@ -104,6 +104,9 @@ class PAEventATTest(unittest.TestCase):
         self.assertEqual(new.end_date, pydt(OBJ_DATA['endDate']))
         self.assertEqual(new.duration, new.end_date - new.start_date)
 
+    def test_sane_start_end(self):
+        self.assertTrue(self.obj.start() <= self.obj.end())
+
     def test_cmp(self):
         portal = self.portal
         e1 = self.obj
