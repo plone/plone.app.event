@@ -3,16 +3,17 @@
 *.sw?
 *.wpr
 .*
-!.gitignore
 
+!.gitignore
 bin/
 dev/
 develop-eggs/
 devsrc/
+dist/
 docs/Makefile
 docs/make.bat
 eggs/
-parts/
 include/
 lib/
+parts/
 var/
