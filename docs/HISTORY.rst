@@ -4,6 +4,10 @@ Changelog
 1.0a2 (2012-03-28)
 ------------------
 
+- Make the start DateTime timezone aware and fix an issue where the start date
+  was after the end date. Fixes: #8.
+  [romanofski]
+
 - Add portlet GenericSetup registration for calendar and event portlet.
   [thet]
 
