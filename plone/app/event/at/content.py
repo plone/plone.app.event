@@ -25,6 +25,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IRecurrence
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import default_end_DT
+from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
@@ -37,7 +38,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         searchable=False,
         accessor='start',
         write_permission=ModifyPortalContent,
-        default_method=DateTime,
+        default_method=default_start_DT,
         languageIndependent=True,
         widget=DatetimeWidget(
             label=_(u'label_event_start', default=u'Event Starts'),

@@ -17,6 +17,7 @@ from plone.app.event.interfaces import IRecurrence
 
 DEFAULT_END_DELTA = 1 # hours
 
+
 def default_end_dt():
     """ Return the default end as python datetime for prefilling forms.
 
@@ -47,6 +48,13 @@ def default_end_DT():
     ...            DTE.minute() == DTN.minute())
     """
     return DT(default_end_dt())
+
+
+def default_start_DT():
+    """ Return the default start as a Zope DateTime for prefilling
+        archetypes forms.
+    """
+    return DT(localized_now())
 
 
 def default_timezone(context=None):
