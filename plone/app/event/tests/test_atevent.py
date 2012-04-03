@@ -25,7 +25,11 @@ from Products.ATContentTypes.interfaces import IATEvent
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import prepare_for_display
-from plone.app.event.base import default_end_DT, default_timezone
+from plone.app.event.base import (
+    default_start_DT,
+    default_end_DT,
+    default_timezone
+)
 
 from plone.formwidget.datetime.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
@@ -481,7 +485,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.default_method == default_start_DT , 'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
