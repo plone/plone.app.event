@@ -71,7 +71,7 @@ setup(name='plone.app.event',
               'zope.component',
           ],
           'test': [
-              #'interlude',
+              'interlude',
               'plone.testing',
               'plone.app.testing',
               'zope.annotation',
