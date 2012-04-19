@@ -4,6 +4,9 @@ Changelog
 1.0a2 (2012-03-28)
 ------------------
 
+- Broken paging in the calendar portlet has been fixed (#11).
+  [romanofski]
+
 - Make the start DateTime timezone aware and fix an issue where the start date
   was after the end date. Fixes: #8.
   [romanofski]

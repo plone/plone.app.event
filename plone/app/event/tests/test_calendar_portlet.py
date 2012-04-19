@@ -122,3 +122,15 @@ class RendererTest(unittest.TestCase):
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertTrue(title in portlet.render())
+
+    def test_prev_next_query(self):
+        portlet = self.renderer(assignment=portlet_calendar.Assignment())
+        portlet.update()
+
+        year, month = portlet.year_month_display()
+        prev_expected = '?month={1}&year={0}'.format(
+            *portlet.get_previous_month(year, month))
+        next_expected = '?month={1}&year={0}'.format(
+            *portlet.get_next_month(year, month))
+        self.assertEqual(next_expected, portlet.next_query)
+        self.assertEqual(prev_expected, portlet.prev_query)
