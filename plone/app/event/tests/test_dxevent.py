@@ -1,6 +1,9 @@
+from plone.app.event.base import localized_now
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+import datetime
 import os
 import unittest2 as unittest
-import datetime
+
 
 from plone.app.event.dx.behaviors import (
     default_start,
@@ -15,6 +18,26 @@ class MockEvent(object):
     """ Mock event.
     """
 
+
+class TestDXEventIntegration(unittest.TestCase):
+
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def test_start_defaults(self):
+        data = MockEvent()
+        default_value = default_start(data)
+        today = localized_now()
+        delta = default_value - today
+        self.assertEquals(-1, delta.days)
+
+    def test_end_default(self):
+        data = MockEvent()
+        default_value = default_end(data)
+        today = localized_now()
+        delta = default_value - today
+        self.assertEquals(0, delta.days)
+
+
 class TestDXEventUnittest(unittest.TestCase):
     """ Unit test for Dexterity event behaviors.
     """
@@ -28,20 +51,6 @@ class TestDXEventUnittest(unittest.TestCase):
             os.environ['TZ'] = self.ostz
         else:
             del os.environ['TZ']
-
-    def test_start_defaults(self):
-        data = MockEvent()
-        default_value = default_start(data)
-        today = datetime.datetime.today()
-        delta = default_value - today
-        self.assertEquals(6, delta.days)
-
-    def test_end_default(self):
-        data = MockEvent()
-        default_value = default_end(data)
-        today = datetime.datetime.today()
-        delta = default_value - today
-        self.assertEquals(9, delta.days)
 
     def test_validate_invariants_ok(self):
         data = MockEvent()

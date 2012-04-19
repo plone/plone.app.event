@@ -32,11 +32,13 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
 
         self.year, self.month = year, month = self.year_month_display()
-        self.prev_year, self.prev_month = prev_year, prev_month = self.previous_month(year, month)
-        self.next_year, self.next_month = next_year, next_month = self.next_month(year, month)
+        self.prev_year, self.prev_month = prev_year, prev_month = (
+            self.get_previous_month(year, month))
+        self.next_year, self.next_month = next_year, next_month = (
+            self.get_next_month(year, month))
         # TODO: respect current query string
-        self.prev_query = '?month=%s&year=%s' % (prev_year, prev_month)
-        self.next_query = '?month=%s&year=%s' % (next_year, next_month)
+        self.prev_query = '?month=%s&year=%s' % (prev_month, prev_year)
+        self.next_query = '?month=%s&year=%s' % (next_month, next_year)
 
         self.cal = calendar.Calendar(first_weekday())
         self._ts = getToolByName(context, 'translation_service')
@@ -66,14 +68,14 @@ class Renderer(base.Renderer):
 
         return int(year), int(month)
 
-    def previous_month(self, year, month):
+    def get_previous_month(self, year, month):
         if month==0 or month==1:
             month, year = 12, year - 1
         else:
             month-=1
         return (year, month)
 
-    def next_month(self, year, month):
+    def get_next_month(self, year, month):
         if month==12:
             month, year = 1, year + 1
         else:
