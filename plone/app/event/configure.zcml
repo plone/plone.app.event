@@ -35,6 +35,8 @@
       name="plone.app.event.Weekdays"
       />
 
+  <adapter factory=".traversal.OccurrenceTraverser" />
+
   <genericsetup:registerProfile
       name="default"
       directory="profiles/default"
