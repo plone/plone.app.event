@@ -35,6 +35,16 @@
       name="plone.app.event.Weekdays"
       />
 
+  <adapter
+    for="plone.app.event.interfaces.IEvent
+         zope.publisher.interfaces.browser.IBrowserRequest"
+    provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+    factory=".occurrence.OccurrenceTraverser"
+    permission="zope.Public"
+    />
+
+  <adapter factory=".occurrence.generic_event_accessor" />
+
   <genericsetup:registerProfile
       name="default"
       directory="profiles/default"

@@ -4,6 +4,10 @@ Changelog
 1.0a2 (2012-03-28)
 ------------------
 
+- Added traverser for occurrences. The event view is used to show
+  individual occurrences.
+  [romanofski]
+
 - Broken paging in the calendar portlet has been fixed (#11).
   [romanofski]
 
