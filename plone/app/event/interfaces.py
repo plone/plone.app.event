@@ -23,6 +23,14 @@ class IEvent(Interface):
     text = Attribute(u"Summary of the event")
 
 
+class IOccurrence(Interface):
+    """ Marker interface for an occurrence item, which represents a
+        single occurrence.
+    """
+
+    start = Attribute(u"Occurrence start date")
+    end = Attribute(u"Occurrence end date")
+
 ## Adapter interfaces
 
 class IRecurrence(Interface):
