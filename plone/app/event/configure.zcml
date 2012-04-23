@@ -39,11 +39,11 @@
     for="plone.app.event.interfaces.IEvent
          zope.publisher.interfaces.browser.IBrowserRequest"
     provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-    factory=".traversal.OccurrenceTraverser"
+    factory=".occurrence.OccurrenceTraverser"
     permission="zope.Public"
     />
 
-  <adapter factory=".traversal.generic_event_accessor" />
+  <adapter factory=".occurrence.generic_event_accessor" />
 
   <genericsetup:registerProfile
       name="default"
