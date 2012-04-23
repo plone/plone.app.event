@@ -1,9 +1,10 @@
-from Products.Five.browser import BrowserView
 from Products.CMFPlone.i18nl10n import ulocalized_time
-from plone.event.utils import is_same_day, is_same_time
+from Products.Five.browser import BrowserView
 from plone.app.event.base import DT
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IRecurrence
+from plone.event.utils import is_same_day, is_same_time
+import zope.component
 
 
 def prepare_for_display(context, start, end, whole_day):
@@ -76,10 +77,13 @@ class EventView(BrowserView):
 
     @property
     def occurrences(self):
+        events = []
         context = self.context
-        events = map(
-            lambda (start, end):
-                prepare_for_display(self.context, start, end,
-                                    self.data['whole_day']),
-            IRecurrence(context).occurrences())
+        adapter = zope.component.queryAdapter(context, IRecurrence)
+        if adapter is not None:
+            events = map(
+                lambda (start, end):
+                    prepare_for_display(self.context, start, end,
+                                        self.data['whole_day']),
+                adapter.occurrences())
         return events
