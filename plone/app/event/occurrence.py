@@ -23,8 +23,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
             return self.fallback(name)
 
         dateobj = pytz.timezone(self.context.timezone).localize(dateobj)
-        occurrences = IRecurrence(self.context).occurrences(
-            dateobj)
+        occurrences = IRecurrence(self.context).occurrences(dateobj)
         start, end = occurrences[0]
         if not is_same_day(dateobj, start):
             return self.fallback(name)
