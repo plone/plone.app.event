@@ -23,6 +23,7 @@ class TestTraversal(unittest.TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory(type_name='Event', id='at',
                                   title='Event1',
+                                  timezone="Australia/Brisbane",
                                   start=DateTime('Australia/Brisbane'),
                                   end=DateTime('Australia/Brisbane') + 1)
         self.at = self.portal['at']
@@ -44,7 +45,7 @@ class TestTraversal(unittest.TestCase):
             self.at_traverser.publishTraverse,
             self.layer['request'], str(qdate))
 
-        qdate = datetime.date.today() + datetime.timedelta(days=6)
+        qdate = datetime.date.today() + datetime.timedelta(days=7)
         item = self.at_traverser.publishTraverse(self.layer['request'],
                                                  str(qdate))
         self.assertTrue(IOccurrence.providedBy(item))
@@ -70,13 +71,14 @@ class TestTraversalBrowser(unittest.TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory(type_name='Event', id='at',
                                   title='Event1',
+                                  timezone="Australia/Brisbane",
                                   start=DateTime('Australia/Brisbane'),
                                   end=DateTime('Australia/Brisbane') + 1)
         self.portal['at'].setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
         transaction.commit()
 
     def test_traverse_occurrence(self):
-        qdate = datetime.date.today() + datetime.timedelta(days=6)
+        qdate = datetime.date.today() + datetime.timedelta(days=7)
         url = '/'.join([self.portal['at'].absolute_url(), str(qdate)])
 
         browser = Browser(self.layer['app'])

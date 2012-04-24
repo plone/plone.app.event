@@ -6,6 +6,7 @@ from plone.app.event.interfaces import IRecurrence
 from plone.event.utils import is_same_day
 from zope.publisher.interfaces.browser import IBrowserPublisher
 import datetime
+import pytz
 import zope.component
 import zope.interface
 
@@ -18,10 +19,12 @@ class OccurrenceTraverser(DefaultPublishTraverse):
     def publishTraverse(self, request, name):
         try:
             dateobj = datetime.datetime.strptime(name, self.format)
-            occurrences = IRecurrence(self.context).occurrences(
-                dateobj)
         except ValueError:
             return self.fallback(name)
+
+        dateobj = pytz.timezone(self.context.timezone).localize(dateobj)
+        occurrences = IRecurrence(self.context).occurrences(
+            dateobj)
         start, end = occurrences[0]
         if not is_same_day(dateobj, start):
             return self.fallback(name)
