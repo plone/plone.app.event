@@ -23,20 +23,18 @@
         tal:define="oddrow repeat/obj/odd;
                     plone_view context/@@plone;
                     getIcon nocall:plone_view/getIcon;
-                    item_icon python:getIcon(obj);
-                    item_startdate python:toLocalizedTime(obj.start);
-                    item_starttime python:toLocalizedTime(obj.start,time_only=1);
-                    item_enddate python:toLocalizedTime(obj.end);
-                    item_endtime python:toLocalizedTime(obj.end,time_only=1);
-                    item_sametime python: obj.start == obj.end;
-                    item_samedate python: obj.end - obj.start &lt; 1"
+                    item_startdate python:toLocalizedTime(obj['start']);
+                    item_starttime python:toLocalizedTime(obj['start'],time_only=1);
+                    item_enddate python:toLocalizedTime(obj['end']);
+                    item_endtime python:toLocalizedTime(obj['end'],time_only=1);
+                    item_sametime python: obj['start'] == obj['end'];
+                    item_samedate python:True"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
         <a href="#"
            class="tile"
-           tal:attributes="href obj/getURL;
+           tal:attributes="href obj/url;
                            title obj/Description">
-            <img tal:replace="structure item_icon/html_tag" />
-            <span tal:replace="obj/pretty_title_or_id">
+            <span tal:replace="obj/title">
              Some Event
             </span>
         </a>

@@ -18,8 +18,11 @@ from plone.app.event.portlets import portlet_events
 import unittest2 as unittest
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.base import DT
+from plone.app.event.base import localized_now
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from DateTime import DateTime
 
 
 class PortletTest(unittest.TestCase):
@@ -117,6 +120,25 @@ class RendererTest(unittest.TestCase):
         self.assertEquals(1, len(r.published_events()))
         r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('published', 'private',)))
         self.assertEquals(2, len(r.published_events()))
+
+    def test_published_events_recurring(self):
+        self.portal.invokeFactory('Event', 'e1', title='Event 1',
+                                  start=DateTime('Australia/Brisbane') - 10,
+                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10')
+        self.portal.invokeFactory('Event', 'e2', title='Event 2',
+                                  start=DateTime('Australia/Brisbane'),
+                                  recurrence='RRULE:FREQ=DAILY;COUNT=3')
+        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+        self.portal.portal_workflow.doActionFor(self.portal.e2, 'publish')
+
+        r = self.renderer(
+            assignment=portlet_events.Assignment(count=5,
+                                                 state=('published',)))
+        events = r.published_events()
+        self.assertEqual(5, len(events))
+        self.assertListEqual(['Event 2', 'Event 2', 'Event 1',
+                              'Event 1', 'Event 1'],
+                             [x['title'] for x in events])
 
     def test_all_events_link(self):
         # if there is an 'events' object in the portal root, we expect

@@ -7,7 +7,7 @@ from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
 from zope import schema
-
+from plone.app.event.interfaces import IRecurrence
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
@@ -67,7 +67,21 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self._data())
 
     def published_events(self):
-        return self._data()
+        result = []
+        for brain in self._data():
+            obj = brain.getObject()
+            occurrences = IRecurrence(obj).occurrences(localized_now())
+            for occ in occurrences:
+                result.append(
+                    dict(start=occ[0],
+                         end=occ[1],
+                         title=brain.Title,
+                         Description=brain.Description,
+                         location=obj.location,
+                         url='/'.join([obj.absolute_url(),
+                                       str(occ[0].date())]))
+                )
+        return sorted(result, key=lambda x: x['start'])[:self.data.count]
 
     @memoize
     def have_events_folder(self):
