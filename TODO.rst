@@ -1,36 +1,36 @@
 legend:
 OK ... that item is done
 IP ... that item is in progress
-
+ISSUED ... moved to github tracker
 
 - plone.app.collection: integrate, add relative time delta
 
 portlet_calendar
 ++++++++++++++++
 - next/previous: overlay displays raw-overlay string
-- remove kss dependency, use jquery-only
+ISSUED - remove kss dependency, use jquery-only
 
 TODO
 ====
-- generalize IRecurrence adapter. move out o' contenttypes and use generic
+ISSUED - generalize IRecurrence adapter. move out o' contenttypes and use generic
   event accessor to access event's attributes.
 
-- use generic event accessor also for ical serialization. no need for
+ISSUED - use generic event accessor also for ical serialization. no need for
   content-type specific adapters then.
 
-plone.app.event.at in seperate egg...
-GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
+ISSUED - plone.app.event.at in seperate egg...
+
+ISSUED - GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
 into pytz for a converter
 
-timezone getting/in which timezone is an event displayed. --/ document!
+ISSUED - timezone getting/in which timezone is an event displayed. --/ document!
 generic event aceesor : also for json...
 
 whole day handler : good self speaking test cases, 
 
 timezone of the request???
-different timezone conversion strategies.... > display always in portal
-timezone, display in user timezone..., ...
-prefix with _...
+ISSUED - different timezone conversion strategies.... > display always in portal timezone, display in user timezone..., ...
+ISSUED - prefix with _...
 
 BUG
 ---
@@ -46,20 +46,20 @@ OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or loca
 PLONECONF TALk
 --------------
 
-fix icalendar timezone export
+ISSUED - fix icalendar timezone export
 
-plone.formwidget.datetime
-    fix for AT and DX
+OK - plone.formwidget.datetime
+OK -    fix for AT and DX
 
-polish dx type
-    integrate recurrence widget
-    defaults for recurrencewidget.
-    ical export
+OK polish dx type
+OK    integrate recurrence widget
+OK    defaults for recurrencewidget.
+OK    ical export
 
-fix vincentfretin's start/end js (unify datetime templates for that?)
+OK fix vincentfretin's start/end js (unify datetime templates for that?)
 
-create uninstall profiles
-create pre-plone43 profiles (uninstalls default plone stuff)
+ISSUED - create uninstall profiles
+OK - create pre-plone43 profiles (uninstalls default plone stuff)
 
 
 thet
