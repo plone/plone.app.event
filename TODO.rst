@@ -83,14 +83,14 @@ thet - show unpublished events as such in portlet_events and portlet_calendar
 ical
 ----
 
-- ical export, dx types: UID not present in events
+ISSUED - ical export, dx types: UID not present in events
 
-- Use VTIMEZONE compoenent and TZID properties in ical exports for every
+ISSUED - Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
 
-- Proper ATTENDEES support for icalendar export
+ISSUED - Proper ATTENDEES support for icalendar export
 
-- fix tests
+OK - fix tests
 
 
 datetime widget
@@ -127,7 +127,7 @@ index
 
 - integrate lennart's plone.app.eventindex
 
-- benchmarks for both indices
+OK (artsprint) - benchmarks for both indices
 
 - usage of IIBTree - see discussion on plone-dev
 test if IIBTrees or set are faster
@@ -141,7 +141,7 @@ test if IIBTrees or set are faster
 types
 -----
 
-- uninstall profiles
+ISSUED - uninstall profiles
 
 - "no end date" boolean option
 
@@ -149,7 +149,7 @@ types
 dexterity behaviors / types
 ---------------------------
 
-- editing DX types with event behavior fails, since a tznaive DT is compared
+OK - editing DX types with event behavior fails, since a tznaive DT is compared
     to timzone aware DT. see inline TODO statements.
 
 - in metadata catalog, timezone'd times should reside, not un-timezone'd (see
@@ -202,12 +202,12 @@ documentation
 general
 -------
 
-- Factor out generic methods without plone.app.* or Zope2 dependencies and move
+ISSUED - Factor out generic methods without plone.app.* or Zope2 dependencies and move
   them to plone.event.
 
-check it again  - OK - Solgema * recurrence widget dateinput is behind overlay
+OK - Solgema * recurrence widget dateinput is behind overlay
 
-maybe.. - integrate a localized, nice formated duration function
+- integrate a localized, nice formated duration function
 
 - Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
 
@@ -215,7 +215,7 @@ maybe.. - integrate a localized, nice formated duration function
 
 - Check ordering of schema fields.
 
-- Refactor tests.
+OK - Refactor tests.
 
 - the content types depend on event handlers.
   notify(ObjectModifiedEvent(event)) has always to be called manually if object
