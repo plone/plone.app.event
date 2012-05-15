@@ -1,5 +1,6 @@
 from OFS.SimpleItem import SimpleItem
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.interfaces import IRecurrence
@@ -22,7 +23,8 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         except ValueError:
             return self.fallback(name)
 
-        dateobj = pytz.timezone(self.context.timezone).localize(dateobj)
+        dateobj = pytz.timezone(
+            default_timezone(self.context)).localize(dateobj)
         occurrences = IRecurrence(self.context).occurrences(dateobj)
         start, end = occurrences[0]
         if not is_same_day(dateobj, start):

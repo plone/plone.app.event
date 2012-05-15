@@ -1,6 +1,7 @@
 from DateTime import DateTime
 from plone.app.event.at.content import IATEvent
 from plone.app.event.interfaces import IEventAccessor
+from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.occurrence import Occurrence
 from plone.app.event.occurrence import OccurrenceTraverser
@@ -8,10 +9,12 @@ from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
 from plone.event.utils import tzdel
+from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 import datetime
 import transaction
 import unittest2 as unittest
+import zope.component
 
 
 class TestTraversal(unittest.TestCase):
@@ -20,10 +23,13 @@ class TestTraversal(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        reg = zope.component.getUtility(IRegistry)
+        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+        settings.portal_timezone = "Australia/Brisbane"
+
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory(type_name='Event', id='at',
                                   title='Event1',
-                                  timezone="Australia/Brisbane",
                                   start=DateTime('Australia/Brisbane'),
                                   end=DateTime('Australia/Brisbane') + 1)
         self.at = self.portal['at']
@@ -62,22 +68,12 @@ class TestTraversal(unittest.TestCase):
         self.assertEqual(start, data['start'])
 
 
-class TestTraversalBrowser(unittest.TestCase):
-
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory(type_name='Event', id='at',
-                                  title='Event1',
-                                  timezone="Australia/Brisbane",
-                                  start=DateTime('Australia/Brisbane'),
-                                  end=DateTime('Australia/Brisbane') + 1)
-        self.portal['at'].setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
-        transaction.commit()
+class TestTraversalBrowser(TestTraversal):
 
     def test_traverse_occurrence(self):
+        self.at.setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
+        transaction.commit()
+
         qdate = datetime.date.today() + datetime.timedelta(days=7)
         url = '/'.join([self.portal['at'].absolute_url(), str(qdate)])
 
