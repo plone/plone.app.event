@@ -1,4 +1,3 @@
-from DateTime import DateTime
 from plone.app.event.at.content import IATEvent
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
@@ -8,6 +7,7 @@ from plone.app.event.occurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
+from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
@@ -29,9 +29,7 @@ class TestTraversal(unittest.TestCase):
 
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory(type_name='Event', id='at',
-                                  title='Event1',
-                                  start=DateTime('Australia/Brisbane'),
-                                  end=DateTime('Australia/Brisbane') + 1)
+                                  title='Event1')
         self.at = self.portal['at']
         self.at_traverser = OccurrenceTraverser(self.at, self.layer['request'])
 
@@ -51,9 +49,9 @@ class TestTraversal(unittest.TestCase):
             self.at_traverser.publishTraverse,
             self.layer['request'], str(qdate))
 
-        qdate = datetime.date.today() + datetime.timedelta(days=7)
+        qdatedt = pydt(self.at.start() + 7)
         item = self.at_traverser.publishTraverse(self.layer['request'],
-                                                 str(qdate))
+                                                 str(qdatedt.date()))
         self.assertTrue(IOccurrence.providedBy(item))
         self.assertTrue(IATEvent.providedBy(item.aq_parent))
 
@@ -74,8 +72,9 @@ class TestTraversalBrowser(TestTraversal):
         self.at.setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
         transaction.commit()
 
-        qdate = datetime.date.today() + datetime.timedelta(days=7)
-        url = '/'.join([self.portal['at'].absolute_url(), str(qdate)])
+        qdatedt = pydt(self.at.start() + 7)
+        url = '/'.join([self.portal['at'].absolute_url(),
+                        str(qdatedt.date())])
 
         browser = Browser(self.layer['app'])
         browser.addHeader('Authorization', 'Basic %s:%s' % (
