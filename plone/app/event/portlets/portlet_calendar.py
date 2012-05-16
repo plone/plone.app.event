@@ -10,7 +10,7 @@ from zope.interface import implements
 
 from plone.app.event.base import first_weekday
 from plone.app.event.base import localized_today
-from plone.app.event.base import get_events_by_date
+from plone.app.event.base import get_occurrences_by_date
 
 PLMF = MessageFactory('plonelocales')
 
@@ -90,7 +90,8 @@ class Renderer(base.Renderer):
         today = localized_today(context)
         year, month = self.year_month_display()
         monthdates = [dat for dat in self.cal.itermonthdates(year, month)]
-        events = get_events_by_date(context, monthdates[0], monthdates[-1])
+        occurrences = get_occurrences_by_date(
+            context, monthdates[0], monthdates[-1])
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
         caldata = [[]]
         for dat in monthdates:
@@ -98,21 +99,21 @@ class Renderer(base.Renderer):
                 caldata.append([])
             date_events = None
             isodat = dat.isoformat()
-            if isodat in events:
-                date_events = events[isodat]
+            if isodat in occurrences:
+                date_events = occurrences[isodat]
 
             events_string = u""
             if date_events:
-                for event in date_events:
+                for occ in date_events:
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        event.getURL(),
-                        event.Title.decode('utf-8'),
-                        event.location and u" %s" % event.location or u"")
+                        occ.absolute_url(),
+                        occ.Title().decode('utf-8'),
+                        occ.location and u" %s" % occ.location or u"")
 
             caldata[-1].append(
-                {'date':dat,
-                 'day':dat.day,
+                {'date': dat,
+                 'day': dat.day,
                  'prev_month': dat.month < month,
                  'next_month': dat.month > month,
                  'today': dat.year == today.year and\
@@ -120,7 +121,7 @@ class Renderer(base.Renderer):
                           dat.day == today.day,
                  'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
                  'events_string': events_string,
-                 'events':date_events})
+                 'events': date_events})
         return caldata
 
 

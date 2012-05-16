@@ -15,6 +15,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
+
 DEFAULT_END_DELTA = 1 # hours
 
 
@@ -127,11 +128,13 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     return result
 
 
-def get_events_by_date(context, range_start=None, range_end=None, **kw):
-    """ Return a dictionary with dates in a given timeframe as keys and
-    the actual events for that date.
+def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
+    """
+    Return a dictionary with dates in a given timeframe as keys and
+    the actual occurrences for that date.
 
     """
+    from plone.app.event.occurrence import Occurrence
     range_start, range_end = _prepare_range(context, range_start, range_end)
 
     events = get_portal_events(context, range_start, range_end, **kw)
@@ -148,10 +151,11 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
             start_str = datetime.strftime(start, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
+            occurrence = Occurrence(start_str, start, end).__of__(obj)
             if start_str not in events_by_date:
-                events_by_date[start_str] = [event]
+                events_by_date[start_str] = [occurrence]
             else:
-                events_by_date[start_str].append(event)
+                events_by_date[start_str].append(occurrence)
     return events_by_date
 
 
