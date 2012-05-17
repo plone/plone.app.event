@@ -1,36 +1,36 @@
 legend:
 OK ... that item is done
 IP ... that item is in progress
-
+ISSUED ... moved to github tracker
 
 - plone.app.collection: integrate, add relative time delta
 
 portlet_calendar
 ++++++++++++++++
 - next/previous: overlay displays raw-overlay string
-- remove kss dependency, use jquery-only
+ISSUED - remove kss dependency, use jquery-only
 
 TODO
 ====
-- generalize IRecurrence adapter. move out o' contenttypes and use generic
+ISSUED - generalize IRecurrence adapter. move out o' contenttypes and use generic
   event accessor to access event's attributes.
 
-- use generic event accessor also for ical serialization. no need for
+ISSUED - use generic event accessor also for ical serialization. no need for
   content-type specific adapters then.
 
-plone.app.event.at in seperate egg...
-GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
+ISSUED - plone.app.event.at in seperate egg...
+
+ISSUED - GMT offsets have to be supported ... maybe a converter btw olson and GMT . look
 into pytz for a converter
 
-timezone getting/in which timezone is an event displayed. --/ document!
+ISSUED - timezone getting/in which timezone is an event displayed. --/ document!
 generic event aceesor : also for json...
 
 whole day handler : good self speaking test cases, 
 
 timezone of the request???
-different timezone conversion strategies.... > display always in portal
-timezone, display in user timezone..., ...
-prefix with _...
+ISSUED - different timezone conversion strategies.... > display always in portal timezone, display in user timezone..., ...
+ISSUED - prefix with _...
 
 BUG
 ---
@@ -46,20 +46,20 @@ OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or loca
 PLONECONF TALk
 --------------
 
-fix icalendar timezone export
+ISSUED - fix icalendar timezone export
 
-plone.formwidget.datetime
-    fix for AT and DX
+OK - plone.formwidget.datetime
+OK -    fix for AT and DX
 
-polish dx type
-    integrate recurrence widget
-    defaults for recurrencewidget.
-    ical export
+OK polish dx type
+OK    integrate recurrence widget
+OK    defaults for recurrencewidget.
+OK    ical export
 
-fix vincentfretin's start/end js (unify datetime templates for that?)
+OK fix vincentfretin's start/end js (unify datetime templates for that?)
 
-create uninstall profiles
-create pre-plone43 profiles (uninstalls default plone stuff)
+ISSUED - create uninstall profiles
+OK - create pre-plone43 profiles (uninstalls default plone stuff)
 
 
 thet
@@ -83,14 +83,14 @@ thet - show unpublished events as such in portlet_events and portlet_calendar
 ical
 ----
 
-- ical export, dx types: UID not present in events
+ISSUED - ical export, dx types: UID not present in events
 
-- Use VTIMEZONE compoenent and TZID properties in ical exports for every
+ISSUED - Use VTIMEZONE compoenent and TZID properties in ical exports for every
   date/datetime
 
-- Proper ATTENDEES support for icalendar export
+ISSUED - Proper ATTENDEES support for icalendar export
 
-- fix tests
+OK - fix tests
 
 
 datetime widget
@@ -127,7 +127,7 @@ index
 
 - integrate lennart's plone.app.eventindex
 
-- benchmarks for both indices
+OK (artsprint) - benchmarks for both indices
 
 - usage of IIBTree - see discussion on plone-dev
 test if IIBTrees or set are faster
@@ -141,7 +141,7 @@ test if IIBTrees or set are faster
 types
 -----
 
-- uninstall profiles
+ISSUED - uninstall profiles
 
 - "no end date" boolean option
 
@@ -149,7 +149,7 @@ types
 dexterity behaviors / types
 ---------------------------
 
-- editing DX types with event behavior fails, since a tznaive DT is compared
+OK - editing DX types with event behavior fails, since a tznaive DT is compared
     to timzone aware DT. see inline TODO statements.
 
 - in metadata catalog, timezone'd times should reside, not un-timezone'd (see
@@ -202,12 +202,12 @@ documentation
 general
 -------
 
-- Factor out generic methods without plone.app.* or Zope2 dependencies and move
+ISSUED - Factor out generic methods without plone.app.* or Zope2 dependencies and move
   them to plone.event.
 
-check it again  - OK - Solgema * recurrence widget dateinput is behind overlay
+OK - Solgema * recurrence widget dateinput is behind overlay
 
-maybe.. - integrate a localized, nice formated duration function
+- integrate a localized, nice formated duration function
 
 - Rethink the catalog metadata entries. ADD whole_day (Solegma asked for it).
 
@@ -215,7 +215,7 @@ maybe.. - integrate a localized, nice formated duration function
 
 - Check ordering of schema fields.
 
-- Refactor tests.
+OK - Refactor tests.
 
 - the content types depend on event handlers.
   notify(ObjectModifiedEvent(event)) has always to be called manually if object
