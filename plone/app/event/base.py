@@ -12,6 +12,7 @@ from plone.registry.interfaces import IRegistry
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.app.event.interfaces import IEvent
+from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
@@ -157,6 +158,33 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
             else:
                 events_by_date[start_str].append(occurrence)
     return events_by_date
+
+
+def get_occurrences(context, range_start=None, range_end=None, **kw):
+    """
+    Returns a flat list of occurrence objects. The list is sorted by the
+    occurrence start date.
+    """
+    result = []
+    start = localized_now() if (range_start is None) else range_start
+    limit = kw.get('limit')
+    for brain in get_portal_events(context, start, range_end, **kw):
+        obj = brain.getObject()
+        occurrences = IRecurrence(obj).occurrences(start, range_end)
+        for occ in occurrences:
+            result.append(
+                dict(start=occ[0],
+                     end=occ[1],
+                     title=brain.Title,
+                     Description=brain.Description,
+                     location=IEventAccessor(obj)['location'],
+                     url='/'.join([obj.absolute_url(),
+                                   str(occ[0].date())]))
+                )
+    result.sort(key=lambda x: x['start'])
+    if limit:
+        result = result[:limit]
+    return result
 
 
 def DT(dt):

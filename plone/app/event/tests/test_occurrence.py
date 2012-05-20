@@ -1,4 +1,6 @@
 from plone.app.event.at.content import IATEvent
+from plone.app.event.base import get_occurrences
+from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IOccurrence
@@ -82,6 +84,65 @@ class TestTraversalBrowser(TestTraversal):
         browser.open(url)
         self.assertTrue(
             self.portal['at'].title.encode('ascii') in browser.contents)
+
+
+class TestOccurrences(unittest.TestCase):
+
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        default_tz = 'CET'
+
+        reg = zope.component.getUtility(IRegistry)
+        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+        settings.portal_timezone = default_tz
+
+        now = localized_now()
+        yesterday = now - datetime.timedelta(days=1)
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory(
+            'Event',
+            'daily',
+            title=u'Daily Event',
+            start=now,
+            end=now + datetime.timedelta(hours=1),
+            location=u'Vienna',
+            timezone=default_tz,
+            whole_day=False)
+
+        self.portal.invokeFactory(
+            'Event',
+            'interval',
+            title=u'Interval Event',
+            start=yesterday,
+            end=yesterday + datetime.timedelta(hours=1),
+            location=u'Halle',
+            timezone=default_tz,
+            whole_day=False)
+
+        self.now = now
+        self.yesterday = yesterday
+
+        self.daily = self.portal['daily']
+        self.daily.setRecurrence('RRULE:FREQ=DAILY;COUNT=4')
+
+        self.interval = self.portal['interval']
+        self.interval.setRecurrence(
+            'RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5')
+        transaction.commit()
+
+    def test_get_occurrences(self):
+        result = get_occurrences(self.portal)
+        self.assertTrue(len(result) == 9)
+
+        result = get_occurrences(self.portal, limit=5)
+        self.assertTrue(len(result) == 5)
+        expected_locations = ['Vienna', 'Halle', 'Vienna', 'Vienna',
+                              'Halle']
+        self.assertEquals(expected_locations,
+                          [x['location'] for x in result])
 
 
 def test_suite():
