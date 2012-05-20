@@ -136,9 +136,6 @@ class RendererTest(unittest.TestCase):
                                                  state=('published',)))
         events = r.published_events()
         self.assertEqual(5, len(events))
-        self.assertListEqual(['Event 2', 'Event 2', 'Event 1',
-                              'Event 1', 'Event 1'],
-                             [x['title'] for x in events])
 
     def test_all_events_link(self):
         # if there is an 'events' object in the portal root, we expect
