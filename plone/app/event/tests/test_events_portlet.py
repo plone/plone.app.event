@@ -129,13 +129,13 @@ class RendererTest(unittest.TestCase):
                                   start=DateTime('Australia/Brisbane'),
                                   recurrence='RRULE:FREQ=DAILY;COUNT=3')
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
-        self.portal.portal_workflow.doActionFor(self.portal.e2, 'publish')
 
         r = self.renderer(
             assignment=portlet_events.Assignment(count=5,
                                                  state=('published',)))
         events = r.published_events()
         self.assertEqual(5, len(events))
+        self.assertTrue('Event 2' not in [x.title for x in events])
 
     def test_all_events_link(self):
         # if there is an 'events' object in the portal root, we expect

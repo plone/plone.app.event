@@ -160,29 +160,29 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     return events_by_date
 
 
-def get_occurrences(context, range_start=None, range_end=None, **kw):
+def get_occurrences(context, brains, limit=None,
+                    range_start=None, range_end=None):
     """
-    Returns a flat list of occurrence objects. The list is sorted by the
-    occurrence start date.
+    Returns a flat list of occurrence objects from a given result of a
+    catalog query. The list is sorted by the occurrence start date.
+
+    Optional can be given a range_start, range_end to narrow the
+    recurrence search.
     """
+    # to prevent circular imports
+    from plone.app.event.occurrence import Occurrence
+
     result = []
     start = localized_now() if (range_start is None) else range_start
-    limit = kw.get('limit')
-    for brain in get_portal_events(context, start, range_end, **kw):
+    for brain in brains:
         obj = brain.getObject()
         occurrences = IRecurrence(obj).occurrences(start, range_end)
-        for occ in occurrences:
+        for ostart, oend in occurrences:
             result.append(
-                dict(start=occ[0],
-                     end=occ[1],
-                     title=brain.Title,
-                     Description=brain.Description,
-                     location=IEventAccessor(obj)['location'],
-                     url='/'.join([obj.absolute_url(),
-                                   str(occ[0].date())]))
-                )
-    result.sort(key=lambda x: x['start'])
-    if limit:
+                Occurrence(str(ostart.date()), ostart, oend).__of__(obj)
+            )
+    result.sort(key=lambda x: x.start)
+    if limit is not None:
         result = result[:limit]
     return result
 

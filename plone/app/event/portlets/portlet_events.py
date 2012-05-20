@@ -15,6 +15,7 @@ from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
 
+from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
 
@@ -67,21 +68,7 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self._data())
 
     def published_events(self):
-        result = []
-        for brain in self._data():
-            obj = brain.getObject()
-            occurrences = IRecurrence(obj).occurrences(localized_now())
-            for occ in occurrences:
-                result.append(
-                    dict(start=occ[0],
-                         end=occ[1],
-                         title=brain.Title,
-                         Description=brain.Description,
-                         location=obj.location,
-                         url='/'.join([obj.absolute_url(),
-                                       str(occ[0].date())]))
-                )
-        return sorted(result, key=lambda x: x['start'])[:self.data.count]
+        return self._data()
 
     @memoize
     def have_events_folder(self):
@@ -112,7 +99,7 @@ class Renderer(base.Renderer):
         limit = self.data.count
         state = self.data.state
         path = self.navigation_root_path
-        return get_portal_events(
+        return get_occurrences(
                 context,
                 range_start=localized_now(context),
                 limit=limit,

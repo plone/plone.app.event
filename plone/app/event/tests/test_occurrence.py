@@ -1,5 +1,6 @@
 from plone.app.event.at.content import IATEvent
 from plone.app.event.base import get_occurrences
+from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
@@ -134,15 +135,14 @@ class TestOccurrences(unittest.TestCase):
         transaction.commit()
 
     def test_get_occurrences(self):
-        result = get_occurrences(self.portal)
+        result = get_occurrences(self.portal,
+                                 get_portal_events(self.portal))
         self.assertTrue(len(result) == 9)
 
-        result = get_occurrences(self.portal, limit=5)
+        result = get_occurrences(self.portal,
+                                 get_portal_events(self.portal), limit=5)
         self.assertTrue(len(result) == 5)
-        expected_locations = ['Vienna', 'Halle', 'Vienna', 'Vienna',
-                              'Halle']
-        self.assertEquals(expected_locations,
-                          [x['location'] for x in result])
+        self.assertTrue(IOccurrence.providedBy(result[0]))
 
 
 def test_suite():
