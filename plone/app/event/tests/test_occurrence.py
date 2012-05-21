@@ -14,6 +14,7 @@ from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
+from zope.publisher.browser import TestRequest
 import datetime
 import transaction
 import unittest2 as unittest
@@ -143,6 +144,48 @@ class TestOccurrences(unittest.TestCase):
                                  get_portal_events(self.portal), limit=5)
         self.assertTrue(len(result) == 5)
         self.assertTrue(IOccurrence.providedBy(result[0]))
+
+
+class TestOccurrencesView(unittest.TestCase):
+
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        default_tz = 'CET'
+
+        reg = zope.component.getUtility(IRegistry)
+        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+        settings.portal_timezone = default_tz
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory(
+            'Event',
+            'e1',
+            title=u'Daily Event',
+            location=u'Vienna',
+            timezone=default_tz,
+            recurrence='RRULE:FREQ=DAILY;COUNT=10',
+            whole_day=False)
+
+        self.e1 = self.portal['e1']
+
+    def test_get_data_startdate(self):
+        future = localized_now() + datetime.timedelta(days=5)
+        form = dict(start=str(future.date()))
+        request = TestRequest(form=form)
+        view = zope.component.getMultiAdapter(
+            (self.portal, request), name='occurrences.html')
+
+        result = view.get_data()
+        self.assertEqual(5, len(result))
+
+    def test_get_data_invalid(self):
+        request = TestRequest(form=dict(start='invalid'))
+        view = zope.component.getMultiAdapter(
+            (self.portal, request), name='occurrences.html')
+        result = view.get_data()
+        self.assertEqual(10, len(result))
 
 
 def test_suite():

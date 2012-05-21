@@ -33,4 +33,12 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        for="*"
+        name="occurrences.html"
+        class=".occurrence.Occurrences"
+        template="occurrence.pt"
+        permission="zope2.View"
+        />
+
 </configure>
