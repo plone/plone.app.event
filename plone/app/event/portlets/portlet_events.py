@@ -68,7 +68,9 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self._data())
 
     def published_events(self):
-        return self._data()
+        context = aq_inner(self.context)
+        return get_occurrences(context, self._data(),
+                               limit=self.data.count)
 
     @memoize
     def have_events_folder(self):
@@ -99,7 +101,7 @@ class Renderer(base.Renderer):
         limit = self.data.count
         state = self.data.state
         path = self.navigation_root_path
-        return get_occurrences(
+        return get_portal_events(
                 context,
                 range_start=localized_now(context),
                 limit=limit,
