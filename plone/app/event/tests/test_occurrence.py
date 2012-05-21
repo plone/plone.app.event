@@ -111,6 +111,7 @@ class TestOccurrences(unittest.TestCase):
             start=now,
             end=now + datetime.timedelta(hours=1),
             location=u'Vienna',
+            recurrence='RRULE:FREQ=DAILY;COUNT=4',
             timezone=default_tz,
             whole_day=False)
 
@@ -121,19 +122,14 @@ class TestOccurrences(unittest.TestCase):
             start=yesterday,
             end=yesterday + datetime.timedelta(hours=1),
             location=u'Halle',
+            recurrence='RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5',
             timezone=default_tz,
             whole_day=False)
 
         self.now = now
         self.yesterday = yesterday
-
         self.daily = self.portal['daily']
-        self.daily.setRecurrence('RRULE:FREQ=DAILY;COUNT=4')
-
         self.interval = self.portal['interval']
-        self.interval.setRecurrence(
-            'RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5')
-        transaction.commit()
 
     def test_get_occurrences(self):
         result = get_occurrences(self.portal,
@@ -145,32 +141,7 @@ class TestOccurrences(unittest.TestCase):
         self.assertTrue(len(result) == 5)
         self.assertTrue(IOccurrence.providedBy(result[0]))
 
-
-class TestOccurrencesView(unittest.TestCase):
-
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        default_tz = 'CET'
-
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = default_tz
-
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory(
-            'Event',
-            'e1',
-            title=u'Daily Event',
-            location=u'Vienna',
-            timezone=default_tz,
-            recurrence='RRULE:FREQ=DAILY;COUNT=10',
-            whole_day=False)
-
-        self.e1 = self.portal['e1']
-
-    def test_get_data_startdate(self):
+    def test_view_get_data_startdate(self):
         future = localized_now() + datetime.timedelta(days=5)
         form = dict(start=str(future.date()))
         request = TestRequest(form=form)
@@ -178,14 +149,14 @@ class TestOccurrencesView(unittest.TestCase):
             (self.portal, request), name='occurrences.html')
 
         result = view.get_data()
-        self.assertEqual(5, len(result))
+        self.assertEqual(2, len(result))
 
-    def test_get_data_invalid(self):
+    def test_view_get_data_invalid(self):
         request = TestRequest(form=dict(start='invalid'))
         view = zope.component.getMultiAdapter(
             (self.portal, request), name='occurrences.html')
         result = view.get_data()
-        self.assertEqual(10, len(result))
+        self.assertEqual(9, len(result))
 
 
 def test_suite():
