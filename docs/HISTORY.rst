@@ -1,8 +1,11 @@
 Changelog
 =========
 
-1.0a2 (2012-03-28)
+1.0a3 (unreleased)
 ------------------
+
+- Added dedicated timezone validator with fallback zone.
+  [thet]
 
 - Added traverser for occurrences. The event view is used to show
   individual occurrences.
@@ -15,12 +18,17 @@ Changelog
   was after the end date. Fixes: #8.
   [romanofski]
 
+
+1.0a2 (2012-03-28)
+------------------
+
 - Add portlet GenericSetup registration for calendar and event portlet.
   [thet]
 
 - API CHANGE: Use zope.annotation for behaviors, remove unnecessary factories,
   create IRecurrence adapter for access to occurrences.
   [thet]
+
 
 1.0a1 (2012-03-12)
 ------------------
