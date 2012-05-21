@@ -148,15 +148,14 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
         #       Maybe provide an adapter for non-recurring events (dx+at) which
         #       return just start and end datetime
         occurrences = IRecurrence(obj).occurrences(range_start, range_end)
-        for start, end in occurrences:
-            start_str = datetime.strftime(start, '%Y-%m-%d')
+        for occ in occurrences:
+            start_str = datetime.strftime(occ.start, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
-            occurrence = Occurrence(start_str, start, end).__of__(obj)
             if start_str not in events_by_date:
-                events_by_date[start_str] = [occurrence]
+                events_by_date[start_str] = [occ]
             else:
-                events_by_date[start_str].append(occurrence)
+                events_by_date[start_str].append(occ)
     return events_by_date
 
 
@@ -169,18 +168,13 @@ def get_occurrences(context, brains, limit=None,
     Optional can be given a range_start, range_end to narrow the
     recurrence search.
     """
-    # to prevent circular imports
-    from plone.app.event.occurrence import Occurrence
-
     result = []
     start = localized_now() if (range_start is None) else range_start
     for brain in brains:
         obj = brain.getObject()
         occurrences = IRecurrence(obj).occurrences(start, range_end)
-        for ostart, oend in occurrences:
-            result.append(
-                Occurrence(str(ostart.date()), ostart, oend).__of__(obj)
-            )
+        for occ in occurrences:
+            result.append(occ)
     result.sort(key=lambda x: x.start)
     if limit is not None:
         result = result[:limit]

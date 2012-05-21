@@ -27,6 +27,7 @@ from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
+from plone.app.event.occurrence import Occurrence
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
 
@@ -415,7 +416,11 @@ class Recurrence(object):
                 recrule=self.context.recurrence,
                 from_=limit_start, until=limit_end)
         duration = self.context.duration
-        events = map(lambda start:(start, start+duration), starts)
+        func = lambda start: Occurrence(
+            str(start.date()),
+            start,
+            start + duration).__of__(self.context)
+        events = map(func, starts)
         return events
 
 
