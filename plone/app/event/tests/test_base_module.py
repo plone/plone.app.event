@@ -63,8 +63,29 @@ class TextBaseModule(unittest.TestCase):
     def test_DT(self):
         from plone.app.event.base import DT
         from datetime import datetime
+        from datetime import date
         from DateTime import DateTime
+        import pytz
 
-        pdt = datetime(2011, 11, 23)
-        zDT = DateTime(2011, 11, 23)
-        self.assertTrue(zDT == DT(pdt))
+        # Python datetime with valid zone. Zope converts it to GMT+1...
+        cet = pytz.timezone('CET')
+        self.assertTrue(DT(datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)) ==
+                        DateTime('2011/11/11 11:00:00 GMT+1'))
+
+        # Python dates get converted to a DateTime with timecomponent including
+        # a timezone
+        self.assertTrue(DT(date(2011, 11, 11)) ==
+                        DateTime('2011/11/11 00:00:00 UTC'))
+
+        # DateTime with valid zone
+        self.assertTrue(DT(DateTime(2011, 11, 11, 11, 0, 0, 'Europe/Vienna'))
+                        == DateTime('2011/11/11 11:00:00 Europe/Vienna'))
+
+        # Zope DateTime with valid DateTime zone but invalid pytz is kept as is
+        self.assertTrue(DT(DateTime(2011, 11, 11, 11, 0, 0, 'GMT+1')) ==
+                        DateTime('2011/11/11 11:00:00 GMT+1'))
+
+        # Invalid datetime zones are converted to the portal timezone
+        # Testing with no timezone
+        self.assertTrue(DT(datetime(2011, 11, 11, 11, 0, 0)) ==
+                        DateTime('2011/11/11 11:00:00 UTC'))

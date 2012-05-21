@@ -11,12 +11,13 @@ from plone.registry.interfaces import IRegistry
 
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
+from plone.event.utils import validated_timezone
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
 DEFAULT_END_DELTA = 1 # hours
-
+FALLBACK_TIMEZONE = 'UTC'
 
 def default_end_dt():
     """ Return the default end as python datetime for prefilling forms.
@@ -65,8 +66,7 @@ def default_timezone(context=None):
     if not portal_timezone:
         return fallback_default_timezone()
 
-    # following statement ensures, that timezone is a valid pytz zone
-    return pytz.timezone(portal_timezone).zone
+    return validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
 
 
 def default_tzinfo(context=None):
@@ -164,11 +164,13 @@ def DT(dt):
 
     tz = default_timezone(getSite())
     if isinstance(dt, datetime):
-        tz = dt.tzname() or tz
-        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, tz)
+        tz = validated_timezone(dt.tzname(), tz)
+        return DateTime(dt.year, dt.month, dt.day,\
+                        dt.hour, dt.minute, dt.second, tz)
     elif isinstance(dt, date):
         return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
+        # No timezone validation. DateTime knows how to handle it's zones.
         return dt
     else:
         return None
