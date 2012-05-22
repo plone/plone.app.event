@@ -5,24 +5,6 @@ from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
-class IEvent(Interface):
-    """ Generic Event
-    """
-    start = Attribute(u"Event start date")
-    end = Attribute(u"Event end date")
-    timezone = Attribute(u"Timezone of the event")
-    whole_day = Attribute(u"Event lasts whole day")
-    recurrence = Attribute(u"RFC5545 compatible recurrence definition")
-    location = Attribute(u"Location of the event")
-    attendees = Attribute(u"List of attendees")
-    contact_name = Attribute(u"Contact name")
-    contact_email = Attribute(u"Contact email")
-    contact_phone = Attribute(u"Contact phone")
-    event_url = Attribute(u"Website of the event")
-    subjects = Attribute(u"Categories")
-    text = Attribute(u"Summary of the event")
-
-
 class IOccurrence(Interface):
     """ Marker interface for an occurrence item, which represents a
         single occurrence.
@@ -47,10 +29,6 @@ class IICalendar(Interface):
 class IICalendarComponent(Interface):
     """ Adapter, which is used to construct an event component object for
     icalendar.
-    """
-
-class IEventAccessor(Interface):
-    """ Generic Event Accessor
     """
 
 

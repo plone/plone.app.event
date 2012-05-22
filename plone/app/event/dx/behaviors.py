@@ -3,24 +3,26 @@ types.
 
 """
 import pytz
-from zope import schema
-from zope.component import adapter, adapts
-from zope.interface import implementer, implements
-from zope.interface import alsoProvides
-from zope.interface import invariant, Invalid
+from Aquisition import aq_base
 from plone.directives import form
-from plone.app.event import messageFactory as _
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.base import localized_now, DT
-from plone.app.event.base import default_timezone, default_end_dt
+from plone.event.interfaces import IEventAccessor
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
-
 from plone.indexer import indexer
-from plone.app.event.interfaces import IRecurrence
-from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
+from plone.uuid.interfaces import IUUID
+from zope import schema
+from zope.component import adapts
+from zope.interface import alsoProvides
+from zope.interface import implements
+from zope.interface import invariant, Invalid
+
 from plone.app.dexterity.behaviors.metadata import ICategorization
+from plone.app.event.base import default_timezone, default_end_dt
+from plone.app.event.base import localized_now, DT
+from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
+from plone.app.event.interfaces import IRecurrence
+from plone.app.event import messageFactory as _
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -210,32 +212,93 @@ class EventBasic(object):
     def duration(self):
         return self.context.end - self.context.start
 
+
 # Object adapters
 
-@implementer(IEventAccessor)
-@adapter(IDXEvent)
-def generic_event_accessor(context):
-    event_basic = IEventBasic(context, None)
-    event_recurrence = IEventRecurrence(context, None)
-    event_attendees = IEventAttendees(context, None)
-    event_location = IEventLocation(context, None)
-    event_contact = IEventContact(context, None)
-    event_cat = ICategorization(context, None)
+class EventAccessor(object):
+    """ Generic event accessor adapter implementation for dexterity content
+        objects.
 
-    return {'start': event_basic and event_basic.start or None,
-            'end': event_basic and event_basic.end or None,
-            'timezone': event_basic and event_basic.timezone or None,
-            'whole_day': event_basic and event_basic.whole_day or None,
-            'recurrence': event_recurrence and event_recurrence.recurrence or None,
-            'location': event_location and event_location.location or None,
-            'attendees': event_attendees and event_attendees.attendees or None,
-            'contact_name': event_contact and event_contact.contact_name or None,
-            'contact_email': event_contact and event_contact.contact_email or None,
-            'contact_phone': event_contact and event_contact.contact_phone or None,
-            'event_url': event_contact and event_contact.event_url or None,
-            'subjects': event_cat and event_cat.subjects or None,
-            'text': None # TODO: implement me
-            }
+    """
+
+    implements(IEventAccessor)
+    adapts(IDXEvent)
+
+    def __init__(self, context):
+        context = aq_base(context)
+        object.__setattr__(self, 'context', context)
+
+        bm = dict(
+            start=IEventBasic,
+            end=IEventBasic,
+            timezone=IEventBasic,
+            whole_day=IEventBasic,
+            recurrence=IEventRecurrence,
+            location=IEventLocation,
+            attendees=IEventAttendees,
+            contact_name=IEventContact,
+            contact_email=IEventContact,
+            contact_phone=IEventContact,
+            event_url=IEventContact,
+            subjects=ICategorization
+        )
+        object.__setattr__(self, '_behavior_map', bm)
+
+    def __getattr__(self, name):
+        bm = self._behavior_map
+        if name in bm:
+           behavior = bm[name](self.context, None)
+           if behavior: return getattr(behavior, name, None)
+        return None
+
+    def __setattr__(self, name, value):
+        bm = self._behavior_map
+        if name in bm:
+            behavior = bm[name](self.context, None)
+            if behavior: setattr(behavior, name, value)
+
+    def __delattr__(self, name):
+        bm = self._behavior_map
+        if name in bm:
+           behavior = bm[name](self.context, None)
+           if behavior: delattr(behavior, name)
+
+
+    # ro properties
+
+    @property
+    def uid(self):
+        return IUUID(self.context, None)
+
+    @property
+    def created(self):
+        return utc(self.context.creation_date)
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+
+
+    # rw properties not in behaviors (yet) # TODO revisit
+
+    def get_title(self):
+        return getattr(self.context, 'title', None)
+    def set_title(self, value):
+        return setattr(self.context, 'title', value)
+    title = property(get_title, set_title)
+
+    def get_description(self):
+        return getattr(self.context, 'description', None)
+    def set_description(self, value):
+        return setattr(self.context, 'description', value)
+    description = property(get_description, set_description)
+
+    def get_text(self):
+        return getattr(self.context, 'text', None)
+    def set_text(self, value):
+        return setattr(self.context, 'text', value)
+    text = property(get_text, set_text)
+
 
 
 class Recurrence(object):
