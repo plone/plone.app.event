@@ -1,14 +1,15 @@
-from OFS.SimpleItem import SimpleItem
-from ZPublisher.BaseRequest import DefaultPublishTraverse
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.interfaces import IOccurrence
-from plone.app.event.interfaces import IRecurrence
-from plone.event.utils import is_same_day
-from zope.publisher.interfaces.browser import IBrowserPublisher
 import datetime
 import pytz
 import zope.component
 import zope.interface
+from OFS.SimpleItem import SimpleItem
+from ZPublisher.BaseRequest import DefaultPublishTraverse
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import is_same_day
+from zope.publisher.interfaces.browser import IBrowserPublisher
+
+from plone.app.event.interfaces import IOccurrence
+from plone.app.event.interfaces import IRecurrence
 
 
 class OccurrenceTraverser(DefaultPublishTraverse):
@@ -46,6 +47,7 @@ class Occurrence(SimpleItem):
         self.end = end
 
 
+# TODO: adapt to new event accessor api
 @zope.interface.implementer(IEventAccessor)
 @zope.component.adapter(IOccurrence)
 def generic_event_accessor(context):

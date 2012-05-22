@@ -1,18 +1,18 @@
+import datetime
+import transaction
+import unittest2 as unittest
 from DateTime import DateTime
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import tzdel
+from plone.testing.z2 import Browser
+
 from plone.app.event.at.content import IATEvent
-from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.occurrence import Occurrence
 from plone.app.event.occurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
-from plone.event.utils import tzdel
-from plone.testing.z2 import Browser
-import datetime
-import transaction
-import unittest2 as unittest
-
 
 class TestTraversal(unittest.TestCase):
 

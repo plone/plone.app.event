@@ -22,8 +22,8 @@ from plone.formwidget.datetime.at import DatetimeWidget
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IRecurrence
-from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone

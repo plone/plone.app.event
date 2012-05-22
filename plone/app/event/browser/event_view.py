@@ -1,10 +1,11 @@
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from Products.Five.browser import BrowserView
-from plone.app.event.base import DT
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.interfaces import IRecurrence
+from plone.event.interfaces import IEventAccessor
 from plone.event.utils import is_same_day, is_same_time
 import zope.component
+
+from plone.app.event.base import DT
+from plone.app.event.interfaces import IRecurrence
 
 
 def prepare_for_display(context, start, end, whole_day):
