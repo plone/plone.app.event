@@ -4,6 +4,10 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- Moved whole_day field in directly after the end date to get a more logical
+  group.
+  [thet]
+
 - Added dedicated timezone validator with fallback zone.
   [thet]
 
