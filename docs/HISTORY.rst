@@ -4,6 +4,13 @@ Changelog
 1.0a2 (2012-03-28)
 ------------------
 
+- IRecurrence adapter returns now acquisition-wrapped occurrence
+  objects.
+  [romanofski]
+
+- Event portlet is now showing occurrences, sorted by start date.
+  [romanofski]
+
 - Added traverser for occurrences. The event view is used to show
   individual occurrences.
   [romanofski]
