@@ -23,11 +23,10 @@ from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
-from plone.app.event.interfaces import IRecurrence
+from plone.event.interfaces import IRecurrenceSupport
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
-from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
 
 
@@ -223,7 +222,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     whole_day = atapi.ATFieldProperty('wholeDay')
 
     def occurrences(self, limit_start=None, limit_end=None):
-        return IRecurrence(self).occurrences(limit_start, limit_end)
+        return IRecurrenceSupport(self).occurrences(limit_start, limit_end)
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
@@ -399,25 +398,6 @@ def generic_event_accessor(context):
             'event_url': context['eventUrl'],
             'subjects': context['subject'],
             'text': context.getText()}
-
-
-class Recurrence(object):
-    """ ATEvent adapter for recurring events.
-    """
-    implements(IRecurrence)
-    adapts(IATEvent)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        starts = recurrence_sequence_ical(
-                self.context.start(),
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-        duration = self.context.duration
-        events = map(lambda start:(start, start+duration), starts)
-        return events
 
 
 ## Event handlers

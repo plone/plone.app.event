@@ -18,13 +18,6 @@ class IOccurrence(Interface):
 
 ## Adapter interfaces
 
-class IRecurrence(Interface):
-    """ Adapter for recurring events.
-    """
-    def occurrences(limit_start, limit_end):
-        """ Return the occurrences of the recurring event.
-        """
-
 class IICalendar(Interface):
     """ Adapter, which is used to construct an icalendar object.
     """

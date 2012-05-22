@@ -6,7 +6,6 @@ import pytz
 from Aquisition import aq_base
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor
-from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 from plone.indexer import indexer
@@ -20,8 +19,7 @@ from zope.interface import invariant, Invalid
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.app.event.base import localized_now, DT
-from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
-from plone.app.event.interfaces import IRecurrence
+from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event import messageFactory as _
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
@@ -208,12 +206,51 @@ class EventBasic(object):
         # possibly compared (always when editing) to a timezone-awar date.
         return dt.replace(tzinfo=utctz()) # return with dummy zone
 
-    @property
-    def duration(self):
-        return self.context.end - self.context.start
+
+## event handlers
+def data_postprocessing(obj, event):
+    # We handle date inputs as floating dates without timezones and apply
+    # timezones afterwards.
+    start = tzdel(obj.start)
+    end = tzdel(obj.end)
+
+    # set the timezone
+    tz = pytz.timezone(obj.timezone)
+    start = tz.localize(start)
+    end = tz.localize(end)
+
+    # adapt for whole Day
+    if obj.whole_day:
+        start = start.replace(hour=0,minute=0,second=0)
+        end = end.replace(hour=23,minute=59,second=59)
+
+    # save back
+    obj.start = utc(start)
+    obj.end = utc(end)
+
+    # reindex
+    obj.reindexObject()
 
 
+## Attribute indexer
+
+# Start indexer
+@indexer(IDXEvent)
+def start_indexer(obj):
+    event = IEventBasic(obj)
+    if event.start is None:
+        return None
+    return DT(event.start)
+
+# End indexer
+@indexer(IDXEvent)
+def end_indexer(obj):
+    event = IEventBasic(obj)
+    if event.end is None:
+        return None
+    return DT(event.end)
 # Object adapters
+
 
 class EventAccessor(object):
     """ Generic event accessor adapter implementation for dexterity content
@@ -278,6 +315,9 @@ class EventAccessor(object):
     def last_modified(self):
         return utc(self.context.modification_date)
 
+    @property
+    def duration(self):
+        return self.end - self.start
 
     # rw properties not in behaviors (yet) # TODO revisit
 
@@ -298,84 +338,3 @@ class EventAccessor(object):
     def set_text(self, value):
         return setattr(self.context, 'text', value)
     text = property(get_text, set_text)
-
-
-
-class Recurrence(object):
-    """ IRecurrence Adapter.
-    """
-    implements(IRecurrence)
-    adapts(IDXEventRecurrence)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        """ Return all occurrences of an event, possibly within a start and end
-        limit.
-
-        Please note: Events beginning before limit_start but ending afterwards
-                     won't be found.
-
-        TODO: test with event start = 21st feb, event end = start+36h,
-        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
-
-        """
-        event = IEventBasic(self.context)
-        recrule = IEventRecurrence(self.context).recurrence
-        starts = recurrence_sequence_ical(
-                event.start,
-                recrule=recrule,
-                from_=limit_start, until=limit_end)
-
-        # We get event ends by adding a duration to the start. This way, we
-        # prevent that the start and end lists are of different size if an
-        # event starts before limit_start but ends afterwards.
-        duration = event.duration
-        events = map(lambda start:(start, start+duration), starts)
-        return events
-
-
-## Event handlers
-
-def data_postprocessing(obj, event):
-    # We handle date inputs as floating dates without timezones and apply
-    # timezones afterwards.
-    start = tzdel(obj.start)
-    end = tzdel(obj.end)
-
-    # set the timezone
-    tz = pytz.timezone(obj.timezone)
-    start = tz.localize(start)
-    end = tz.localize(end)
-
-    # adapt for whole Day
-    if obj.whole_day:
-        start = start.replace(hour=0,minute=0,second=0)
-        end = end.replace(hour=23,minute=59,second=59)
-
-    # save back
-    obj.start = utc(start)
-    obj.end = utc(end)
-
-    # reindex
-    obj.reindexObject()
-
-
-## Attribute indexer
-
-# Start indexer
-@indexer(IDXEvent)
-def start_indexer(obj):
-    event = IEventBasic(obj)
-    if event.start is None:
-        return None
-    return DT(event.start)
-
-# End indexer
-@indexer(IDXEvent)
-def end_indexer(obj):
-    event = IEventBasic(obj)
-    if event.end is None:
-        return None
-    return DT(event.end)
