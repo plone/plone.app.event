@@ -15,6 +15,7 @@ from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
+from plone.app.event.interfaces import ISO_DATE_FORMAT
 
 
 DEFAULT_END_DELTA = 1 # hours
@@ -223,3 +224,21 @@ def _prepare_range(context, start, end):
         end = end + timedelta(days=1)
     end = pydt(end, missing_zone=tz)
     return start, end
+
+
+def guess_date_from(datestr, context=None):
+    """
+    Returns a timezone aware date object if an arbitrary ASCII string is
+    formatted in an ISO date format, otherwise None is returned.
+
+    Optional can be passed in the context, which is used for retrieving
+    the timezone.
+
+    Used for traversing and Occurence ids.
+    """
+    try:
+        dateobj = datetime.strptime(datestr, ISO_DATE_FORMAT)
+    except ValueError:
+        return
+
+    return pytz.timezone(default_timezone(context)).localize(dateobj)

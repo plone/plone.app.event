@@ -1,13 +1,11 @@
 from OFS.SimpleItem import SimpleItem
 from ZPublisher.BaseRequest import DefaultPublishTraverse
-from plone.app.event.base import default_timezone
+from plone.app.event.base import guess_date_from
 from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.interfaces import IRecurrence
 from plone.event.utils import is_same_day
 from zope.publisher.interfaces.browser import IBrowserPublisher
-import datetime
-import pytz
 import zope.component
 import zope.interface
 
@@ -15,16 +13,8 @@ import zope.interface
 class OccurrenceTraverser(DefaultPublishTraverse):
     zope.interface.implements(IBrowserPublisher)
 
-    format = '%Y-%m-%d'
-
     def publishTraverse(self, request, name):
-        try:
-            dateobj = datetime.datetime.strptime(name, self.format)
-        except ValueError:
-            return self.fallback(name)
-
-        dateobj = pytz.timezone(
-            default_timezone(self.context)).localize(dateobj)
+        dateobj = guess_date_from(name, self.context)
         occurrence = IRecurrence(self.context).occurrences(dateobj)[0]
         if not is_same_day(dateobj, occurrence.start):
             return self.fallback(name)
