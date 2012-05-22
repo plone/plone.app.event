@@ -13,6 +13,7 @@
         name="event-settings"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         class=".controlpanel.EventControlPanel"
+        template="controlpanel.pt"
         permission="cmf.ManagePortal"
         />
 

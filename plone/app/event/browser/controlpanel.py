@@ -1,3 +1,5 @@
+from zope.publisher.browser import BrowserView
+from zope.component import getMultiAdapter
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 
@@ -5,6 +7,7 @@ from plone.z3cform import layout
 
 from plone.app.event import messageFactory as _
 from plone.app.event.interfaces import IEventSettings
+from plone.app.event.base import localized_now
 
 
 class EventControlPanelEditForm(RegistryEditForm):
@@ -16,5 +19,18 @@ class EventControlPanelEditForm(RegistryEditForm):
             default=u"Event related settings like timezone, etc.")
 
 
-EventControlPanel = layout.wrap_form(EventControlPanelEditForm,
-                                     ControlPanelFormWrapper)
+class EventControlPanel(BrowserView):
+
+    def __call__(self):
+        view_factor = layout.wrap_form(EventControlPanelEditForm,
+                                       ControlPanelFormWrapper)
+        self.form = view_factor(self.context, self.request)
+        self.form.update()
+        return super(EventControlPanel, self).__call__()
+
+    def current_datetime(self):
+        """
+        Returns the current set date time, based on the registry
+        settings.
+        """
+        return localized_now()
