@@ -61,6 +61,16 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             ),
         ),
 
+    atapi.BooleanField('wholeDay',
+        default=False,
+        write_permission=ModifyPortalContent,
+        languageIndependent=True,
+        widget=atapi.BooleanWidget(
+            label=_(u'label_whole_day_event', u'Whole day event'),
+            description=_(u'help_whole_day_location', default=u""),
+            ),
+        ),
+
     atapi.StringField('timezone',
         storage=atapi.AnnotationStorage(),
         required=True,
@@ -73,16 +83,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             label=_(u'label_event_timezone', default=u"Timezone"),
             description=_(u'help_event_timezone',
                 default=u"Select the Timezone, where this event happens."),
-            ),
-        ),
-
-    atapi.BooleanField('wholeDay',
-        default=False,
-        write_permission=ModifyPortalContent,
-        languageIndependent=True,
-        widget=atapi.BooleanWidget(
-            label=_(u'label_whole_day_event', u'Whole day event'),
-            description=_(u'help_whole_day_location', default=u""),
             ),
         ),
 
@@ -198,10 +198,11 @@ ATEventSchema.changeSchemataForField('subject', 'default')
 finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')
-ATEventSchema.moveField('location', before='wholeDay')
+ATEventSchema.moveField('location', before='attendees')
 
 
 class ATEvent(ATCTContent, HistoryAwareMixin):
+
     """ Information about an upcoming event, which can be displayed in the
         calendar."""
 

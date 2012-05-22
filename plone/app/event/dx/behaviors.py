@@ -47,17 +47,17 @@ class IEventBasic(form.Schema):
         required = True
         )
 
+    whole_day = schema.Bool(
+        title = _(u'label_whole_day', default=u'Whole Day'),
+        description = _(u'help_whole_day', default=u'Event lasts whole day'),
+        required = False
+        )
+
     timezone = schema.Choice(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
         required = True,
         vocabulary="plone.app.event.AvailableTimezones"
-        )
-
-    whole_day = schema.Bool(
-        title = _(u'label_whole_day', default=u'Whole Day'),
-        description = _(u'help_whole_day', default=u'Event lasts whole day'),
-        required = False
         )
 
     @invariant
