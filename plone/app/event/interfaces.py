@@ -5,6 +5,9 @@ from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
+ISO_DATE_FORMAT = '%Y-%m-%d'
+
+
 class IEvent(Interface):
     """ Generic Event
     """
