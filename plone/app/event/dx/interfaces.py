@@ -1,5 +1,5 @@
 from zope.interface import Interface
-from plone.app.event.interfaces import IEvent
+from plone.event.interfaces import IEvent
 
 class IDXEvent(IEvent):
     """ Marker interface for Dexterity events.

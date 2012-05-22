@@ -4,6 +4,9 @@ from zope.interface import Interface, Attribute
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
+### BBB
+#from plone.event.interfaces import IEvent
+
 
 class IOccurrence(Interface):
     """ Marker interface for an occurrence item, which represents a

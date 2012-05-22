@@ -1,18 +1,17 @@
 import pytz
-from datetime import datetime
-from datetime import date
-from datetime import timedelta
-
-from zope.component import getUtility
-from zope.component.hooks import getSite
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
-from plone.registry.interfaces import IRegistry
-
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
+from plone.event.interfaces import IEvent
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
-from plone.app.event.interfaces import IEvent
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+from zope.component.hooks import getSite
+
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 
