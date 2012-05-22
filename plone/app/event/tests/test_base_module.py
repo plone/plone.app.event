@@ -3,7 +3,7 @@ import unittest2 as unittest
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 
 
-class TextBaseModule(unittest.TestCase):
+class TestBaseModule(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
 
     def setUp(self):
