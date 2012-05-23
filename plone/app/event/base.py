@@ -168,6 +168,11 @@ def get_occurrences(context, brains, limit=None,
 
     Optional can be given a range_start, range_end to narrow the
     recurrence search.
+
+    >>> from plone.app.event.base import get_occurrences
+    >>> import datetime
+    >>> get_occurrences(object, [], range_start=datetime.datetime.today())
+    []
     """
     result = []
     start = localized_now() if (range_start is None) else range_start
