@@ -178,8 +178,7 @@ def get_occurrences(context, brains, limit=None,
     for brain in brains:
         obj = brain.getObject()
         occurrences = IRecurrence(obj).occurrences(start, range_end)
-        for occ in occurrences:
-            result.append(occ)
+        result += occurrences
     result.sort(key=lambda x: x.start)
     if limit is not None:
         result = result[:limit]
