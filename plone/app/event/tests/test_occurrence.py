@@ -15,6 +15,7 @@ from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IBrowserView
 import datetime
 import transaction
 import unittest2 as unittest
@@ -42,6 +43,11 @@ class TestTraversal(unittest.TestCase):
             AttributeError,
             self.at_traverser.publishTraverse,
             self.layer['request'], 'foo')
+
+    def test_default_views(self):
+        view = self.at_traverser.publishTraverse(
+            self.layer['request'], 'event_view')
+        self.assertTrue(IBrowserView.providedBy(view))
 
     def test_occurrence(self):
         self.at.setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')

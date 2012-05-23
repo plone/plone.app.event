@@ -16,7 +16,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
     def publishTraverse(self, request, name):
         dateobj = guess_date_from(name, self.context)
         occurrence = IRecurrence(self.context).occurrences(dateobj)[0]
-        if not is_same_day(dateobj, occurrence.start):
+        if not dateobj or not is_same_day(dateobj, occurrence.start):
             return self.fallback(name)
 
         return occurrence
