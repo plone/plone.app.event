@@ -8,12 +8,16 @@
 
   <body>
 
-    <metal:content-core fill-slot="content-core">
+    <metal:content fill-slot="content"
+      tal:define="batch view/get_data">
 
-      <tal:occurrences
+      <h1>Occurrences</h1>
+
+      <div metal:use-macro="context/batch_macros/macros/navigation" />
+      <div id="content-core"
         tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
-        DateTime python:modules['DateTime'].DateTime"
-        tal:repeat="obj view/get_data">
+        DateTime python:modules['DateTime'].DateTime;"
+        tal:repeat="obj batch">
         <div
           tal:define="oddrow repeat/obj/odd;
           plone_view context/@@plone;
@@ -54,8 +58,9 @@
             </span>
           </span>
         </div>
-      </tal:occurrences>
-    </metal:content-core>
+      </div>
+      <div metal:use-macro="context/batch_macros/macros/navigation" />
+    </metal:content>
 
   </body>
 </html>
