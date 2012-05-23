@@ -12,7 +12,6 @@ from plone.registry.interfaces import IRegistry
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.app.event.interfaces import IEvent
-from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
 from plone.app.event.interfaces import ISO_DATE_FORMAT

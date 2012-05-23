@@ -8,6 +8,7 @@ from plone.portlets.interfaces import IPortletDataProvider
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
+from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
 from plone.app.event.base import localized_today
 from plone.app.event.base import get_occurrences_by_date
@@ -105,11 +106,12 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for occ in date_events:
+                    location = IEventAccessor(occ)['location']
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
                         occ.absolute_url(),
                         occ.Title().decode('utf-8'),
-                        occ.location and u" %s" % occ.location or u"")
+                        location and u" %s" % location or u"")
 
             caldata[-1].append(
                 {'date': dat,
