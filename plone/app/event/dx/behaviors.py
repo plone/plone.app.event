@@ -194,16 +194,11 @@ class EventBasic(object):
         return dt_to_zone(dt, self.context.timezone)
 
     def _prepare_dt_set(self, dt):
-        # TODO: still throws an error, because z3c.form compares naive date
-        # with tzaware before executing this custom setter!
-        # see: z3c.form.form.applyChanges
-
         # Dates are always set in UTC, saving the actual timezone in another
         # field. But since the timezone value isn't known at time of saving the
         # form, we have to save it with a dummy zone first and replace it with
-        # the target zone afterwards.
-        # Saving it timezone-naive first doesn't work, since it has to be
-        # possibly compared (always when editing) to a timezone-awar date.
+        # the target zone afterwards. So, it's not timezone naive and can be
+        # compared to timezone aware Dates.
         return dt.replace(tzinfo=utctz()) # return with dummy zone
 
     @property
