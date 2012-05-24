@@ -210,6 +210,19 @@ class EventBasic(object):
     def duration(self):
         return self.context.end - self.context.start
 
+class EventRecurrence(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def recurrence(self):
+        return self.context.recurrence
+    @recurrence.setter
+    def recurrence(self, value):
+        self.context.recurrence = value
+
+
 # Object adapters
 
 @implementer(IEventAccessor)
