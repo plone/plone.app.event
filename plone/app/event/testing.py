@@ -5,6 +5,9 @@ from Products.DateRecurringIndex.testing import DRI_FIXTURE
 
 from plone.testing import z2
 
+from zope.component import getUtility
+from plone.app.event.interfaces import IEventSettings
+from plone.registry.interfaces import IRegistry
 
 class PAEventLayer(PloneSandboxLayer):
 
@@ -17,7 +20,13 @@ class PAEventLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
+
         self.applyProfile(portal, 'plone.app.event:default')
+
+        # Set the portal timezone
+        controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
+                                                    prefix="plone.app.event")
+        controlpanel.portal_timezone = 'UTC'
 
 PAEvent_FIXTURE = PAEventLayer()
 PAEvent_INTEGRATION_TESTING = IntegrationTesting(

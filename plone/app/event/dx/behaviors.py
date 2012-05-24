@@ -48,17 +48,17 @@ class IEventBasic(form.Schema):
         required = True
         )
 
+    whole_day = schema.Bool(
+        title = _(u'label_whole_day', default=u'Whole Day'),
+        description = _(u'help_whole_day', default=u'Event lasts whole day'),
+        required = False
+        )
+
     timezone = schema.Choice(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
         required = True,
         vocabulary="plone.app.event.AvailableTimezones"
-        )
-
-    whole_day = schema.Bool(
-        title = _(u'label_whole_day', default=u'Whole Day'),
-        description = _(u'help_whole_day', default=u'Event lasts whole day'),
-        required = False
         )
 
     @invariant
@@ -165,51 +165,63 @@ class EventBasic(object):
     def __init__(self, context):
         self.context = context
 
-    def _get_start(self):
+    @property
+    def start(self):
         return self._prepare_dt_get(self.context.start)
-    def _set_start(self, value):
+    @start.setter
+    def start(self, value):
         self.context.start = self._prepare_dt_set(value)
-    start = property(_get_start, _set_start)
 
-    def _get_end(self):
+    @property
+    def end(self):
         return self._prepare_dt_get(self.context.end)
-    def _set_end(self, value):
+    @end.setter
+    def end(self, value):
         self.context.end = self._prepare_dt_set(value)
-    end = property(_get_end, _set_end)
 
-    def _get_timezone(self):
+    @property
+    def timezone(self):
         return self.context.timezone
-    def _set_timezone(self, value):
+    @timezone.setter
+    def timezone(self, value):
         self.context.timezone = value
-    timezone = property(_get_timezone, _set_timezone)
 
-    def _get_whole_day(self):
+    @property
+    def whole_day(self):
         return self.context.whole_day
-    def _set_whole_day(self, value):
+    @whole_day.setter
+    def whole_day(self, value):
         self.context.whole_day = value
-    whole_day = property(_get_whole_day, _set_whole_day)
 
+    @property
+    def duration(self):
+        return self.context.end - self.context.start
 
     def _prepare_dt_get(self, dt):
         # always get the date in event's timezone
         return dt_to_zone(dt, self.context.timezone)
 
     def _prepare_dt_set(self, dt):
-        # TODO: still throws an error, because z3c.form compares naive date
-        # with tzaware before executing this custom setter!
-        # see: z3c.form.form.applyChanges
-
         # Dates are always set in UTC, saving the actual timezone in another
         # field. But since the timezone value isn't known at time of saving the
         # form, we have to save it with a dummy zone first and replace it with
-        # the target zone afterwards.
-        # Saving it timezone-naive first doesn't work, since it has to be
-        # possibly compared (always when editing) to a timezone-awar date.
+        # the target zone afterwards. So, it's not timezone naive and can be
+        # compared to timezone aware Dates.
         return dt.replace(tzinfo=utctz()) # return with dummy zone
 
+
+class EventRecurrence(object):
+
+    def __init__(self, context):
+        self.context = context
+
     @property
-    def duration(self):
-        return self.context.end - self.context.start
+    def recurrence(self):
+        return self.context.recurrence
+    @recurrence.setter
+    def recurrence(self, value):
+        self.context.recurrence = value
+
 
 # Object adapters
 

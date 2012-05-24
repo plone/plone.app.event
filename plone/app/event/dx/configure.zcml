@@ -44,7 +44,7 @@
         title="Event Recurrence"
         description="Recurrence extension for Events."
         provides=".behaviors.IEventRecurrence"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventRecurrence"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventRecurrence"
         />

@@ -1,8 +1,13 @@
 Changelog
 =========
 
-1.0a2 (2012-03-28)
+1.0a3 (unreleased)
 ------------------
+
+- Use IEventRecurrence adapter to store attributes directly on the context.
+  This fixes that recurrence occurrences start and end dates were not indexed,
+  because the DateRecurringIndex had not access to the recurrence attribute.
+  [thet]
 
 - IRecurrence adapter returns now acquisition-wrapped occurrence
   objects.
@@ -10,6 +15,12 @@ Changelog
 
 - Event portlet is now showing occurrences, sorted by start date.
   [romanofski]
+  
+- Moved whole_day field in directly after the end date to get a more logical
+  group.
+  [thet]
+
+- Added dedicated timezone validator with fallback zone.
 
 - Added traverser for occurrences. The event view is used to show
   individual occurrences.
@@ -22,12 +33,17 @@ Changelog
   was after the end date. Fixes: #8.
   [romanofski]
 
+
+1.0a2 (2012-03-28)
+------------------
+
 - Add portlet GenericSetup registration for calendar and event portlet.
   [thet]
 
 - API CHANGE: Use zope.annotation for behaviors, remove unnecessary factories,
   create IRecurrence adapter for access to occurrences.
   [thet]
+
 
 1.0a1 (2012-03-12)
 ------------------

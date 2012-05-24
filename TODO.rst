@@ -1,17 +1,26 @@
-legend:
+===========
+PLEASE NOTE
+===========
+
+This file is for reference and will be removed when all relevant issues are
+handled by the github issue tracker. Here are still some TODO's which should be
+checked again.
+
+
+======
+legend
+======
+
 OK ... that item is done
 IP ... that item is in progress
 ISSUED ... moved to github tracker
 
-- plone.app.collection: integrate, add relative time delta
 
-portlet_calendar
-++++++++++++++++
-- next/previous: overlay displays raw-overlay string
-ISSUED - remove kss dependency, use jquery-only
 
 TODO
 ====
+OK - plone.app.collection: integrate, add relative time delta
+
 ISSUED - generalize IRecurrence adapter. move out o' contenttypes and use generic
   event accessor to access event's attributes.
 
@@ -43,6 +52,12 @@ occurrences list are calculated from the start date + a duration.
 OK+Test: calendarportlet: unicodedecodeerror with umlauts in title, desc or location.
 
 
+portlet_calendar
+++++++++++++++++
+- next/previous: overlay displays raw-overlay string
+ISSUED - remove kss dependency, use jquery-only
+
+
 PLONECONF TALk
 --------------
 
@@ -65,11 +80,11 @@ OK - create pre-plone43 profiles (uninstalls default plone stuff)
 thet
 ----
 
-thet - fix whole_day event export.... end-date is set startdate+1. in some cases end-date is two days after
+ISSUED thet - fix whole_day event export.... end-date is set startdate+1. in some cases end-date is two days after
 start-date. this has something to do with utc conversion...
 or set end-date to same date as start date, which is semantically more correct?
 
-FIRST: fix timezone support in icalendar export. then this issue is also gone.
+ISSUED FIRST: fix timezone support in icalendar export. then this issue is also gone.
 
 
 thet - atevent: after changes to default_start and default_end, start+end is now 1,
@@ -96,9 +111,9 @@ OK - fix tests
 datetime widget
 ---------------
 
-1) - unify plone.formwidget.datetime templates
+WONTFIX - 1) - unify plone.formwidget.datetime templates
 
-2) - fix vincent's dt-javascript's, which are failing now
+OK - 2) - fix vincent's dt-javascript's, which are failing now
 
 - eventually merge supton's uu.smartdate with plone.formwidget.datetime
   http://bazaar.launchpad.net/~upiq-dev/upiq/uu.smartdate/changes
@@ -109,11 +124,11 @@ datetime widget
 - move parts/omelette/Products/CMFPlone/skins/plone_form_scripts/validate_start_end_date.vpy
   to plone.formwidget.dateinput or plone.app.event.
 
-- calendar starting year, calendar future years options in datetimewidget.
+OK - years_range - calendar starting year, calendar future years options in datetimewidget.
 
-- option: use textinput style with fallback to selectors if no js is avail.
+ISSUED - option: use textinput style with fallback to selectors if no js is avail.
 
-- integrate timepicker (adapted from mozi)
+ISSUED - integrate timepicker (adapted from mozi)
 
 
 recurring widget
