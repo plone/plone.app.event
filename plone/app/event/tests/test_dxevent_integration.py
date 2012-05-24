@@ -3,14 +3,19 @@ import unittest2 as unittest
 
 import datetime
 from DateTime import DateTime
+from OFS.SimpleItem import SimpleItem
 
 from zope.component import createObject
 from zope.component import queryUtility
+import zope.interface
 
 from plone.dexterity.interfaces import IDexterityFTI
 
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+
+from plone.app.event.interfaces import IOccurrence
+from plone.app.event.interfaces import IRecurrence
 
 from plone.app.event.dx.behaviors import (
     IEventBasic,
@@ -91,6 +96,26 @@ class TextDXIntegration(unittest.TestCase):
         # result returns Zope's DateTime
         self.assertEquals(result[0].start, DateTime('2011/11/11 11:00:00 GMT+1'))
         self.assertEquals(result[0].end, DateTime('2011/11/11 12:00:00 GMT+1'))
+
+
+class MockEvent(SimpleItem):
+    """ Mock event"""
+
+
+class TestDXEventRecurrence(unittest.TestCase):
+
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def test_recurrence(self):
+        data = MockEvent()
+        data.start = datetime.datetime(2011, 11, 11, 11, 00)
+        data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        data.duration = datetime.timedelta(hours=1)
+        zope.interface.alsoProvides(
+            data, IDXEventRecurrence, IEventBasic, IEventRecurrence)
+        result = IRecurrence(data).occurrences()
+        self.assertEqual(4, len(result))
+        self.assertTrue(IOccurrence.providedBy(result[0]))
 
 
 def test_suite():

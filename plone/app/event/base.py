@@ -15,6 +15,8 @@ from plone.event.utils import validated_timezone
 from plone.app.event.interfaces import IEvent
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IRecurrence
+from plone.app.event.interfaces import ISO_DATE_FORMAT
+
 
 DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'
@@ -127,11 +129,13 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     return result
 
 
-def get_events_by_date(context, range_start=None, range_end=None, **kw):
-    """ Return a dictionary with dates in a given timeframe as keys and
-    the actual events for that date.
+def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
+    """
+    Return a dictionary with dates in a given timeframe as keys and
+    the actual occurrences for that date.
 
     """
+    from plone.app.event.occurrence import Occurrence
     range_start, range_end = _prepare_range(context, range_start, range_end)
 
     events = get_portal_events(context, range_start, range_end, **kw)
@@ -144,15 +148,41 @@ def get_events_by_date(context, range_start=None, range_end=None, **kw):
         #       Maybe provide an adapter for non-recurring events (dx+at) which
         #       return just start and end datetime
         occurrences = IRecurrence(obj).occurrences(range_start, range_end)
-        for start, end in occurrences:
-            start_str = datetime.strftime(start, '%Y-%m-%d')
+        for occ in occurrences:
+            start_str = datetime.strftime(occ.start, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
             if start_str not in events_by_date:
-                events_by_date[start_str] = [event]
+                events_by_date[start_str] = [occ]
             else:
-                events_by_date[start_str].append(event)
+                events_by_date[start_str].append(occ)
     return events_by_date
+
+
+def get_occurrences(context, brains, limit=None,
+                    range_start=None, range_end=None):
+    """
+    Returns a flat list of occurrence objects from a given result of a
+    catalog query. The list is sorted by the occurrence start date.
+
+    Optional can be given a range_start, range_end to narrow the
+    recurrence search.
+
+    >>> from plone.app.event.base import get_occurrences
+    >>> import datetime
+    >>> get_occurrences(object, [], range_start=datetime.datetime.today())
+    []
+    """
+    result = []
+    start = localized_now() if (range_start is None) else range_start
+    for brain in brains:
+        obj = brain.getObject()
+        occurrences = IRecurrence(obj).occurrences(start, range_end)
+        result += occurrences
+    result.sort(key=lambda x: x.start)
+    if limit is not None:
+        result = result[:limit]
+    return result
 
 
 def DT(dt):
@@ -199,3 +229,21 @@ def _prepare_range(context, start, end):
         end = end + timedelta(days=1)
     end = pydt(end, missing_zone=tz)
     return start, end
+
+
+def guess_date_from(datestr, context=None):
+    """
+    Returns a timezone aware date object if an arbitrary ASCII string is
+    formatted in an ISO date format, otherwise None is returned.
+
+    Optional can be passed in the context, which is used for retrieving
+    the timezone.
+
+    Used for traversing and Occurence ids.
+    """
+    try:
+        dateobj = datetime.strptime(datestr, ISO_DATE_FORMAT)
+    except ValueError:
+        return
+
+    return pytz.timezone(default_timezone(context)).localize(dateobj)

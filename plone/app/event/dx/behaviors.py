@@ -20,6 +20,7 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, Paramet
 from plone.indexer import indexer
 from plone.app.event.interfaces import IRecurrence
 from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
+from plone.app.event.occurrence import Occurrence
 from plone.app.dexterity.behaviors.metadata import ICategorization
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
@@ -281,7 +282,15 @@ class Recurrence(object):
         # prevent that the start and end lists are of different size if an
         # event starts before limit_start but ends afterwards.
         duration = event.duration
-        events = map(lambda start:(start, start+duration), starts)
+
+        # XXX potentially occurrence won't need to be wrapped anymore
+        # but doing it for backwards compatibility as views/templates
+        # still rely on acquisition-wrapped objects.
+        func = lambda start: Occurrence(
+            str(start.date()),
+            start,
+            start + duration).__of__(self.context)
+        events = map(func, starts)
         return events
 
 

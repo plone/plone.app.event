@@ -82,8 +82,8 @@ class EventView(BrowserView):
         adapter = zope.component.queryAdapter(context, IRecurrence)
         if adapter is not None:
             events = map(
-                lambda (start, end):
-                    prepare_for_display(self.context, start, end,
+                lambda occ:
+                    prepare_for_display(self.context, occ.start, occ.end,
                                         self.data['whole_day']),
                 adapter.occurrences())
         return events
