@@ -164,30 +164,37 @@ class EventBasic(object):
     def __init__(self, context):
         self.context = context
 
-    def _get_start(self):
+    @property
+    def start(self):
         return self._prepare_dt_get(self.context.start)
-    def _set_start(self, value):
+    @start.setter
+    def start(self, value):
         self.context.start = self._prepare_dt_set(value)
-    start = property(_get_start, _set_start)
 
-    def _get_end(self):
+    @property
+    def end(self):
         return self._prepare_dt_get(self.context.end)
-    def _set_end(self, value):
+    @end.setter
+    def end(self, value):
         self.context.end = self._prepare_dt_set(value)
-    end = property(_get_end, _set_end)
 
-    def _get_timezone(self):
+    @property
+    def timezone(self):
         return self.context.timezone
-    def _set_timezone(self, value):
+    @timezone.setter
+    def timezone(self, value):
         self.context.timezone = value
-    timezone = property(_get_timezone, _set_timezone)
 
-    def _get_whole_day(self):
+    @property
+    def whole_day(self):
         return self.context.whole_day
-    def _set_whole_day(self, value):
+    @whole_day.setter
+    def whole_day(self, value):
         self.context.whole_day = value
-    whole_day = property(_get_whole_day, _set_whole_day)
 
+    @property
+    def duration(self):
+        return self.context.end - self.context.start
 
     def _prepare_dt_get(self, dt):
         # always get the date in event's timezone
@@ -201,9 +208,6 @@ class EventBasic(object):
         # compared to timezone aware Dates.
         return dt.replace(tzinfo=utctz()) # return with dummy zone
 
-    @property
-    def duration(self):
-        return self.context.end - self.context.start
 
 class EventRecurrence(object):
 
