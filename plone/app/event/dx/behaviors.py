@@ -290,7 +290,7 @@ class Recurrence(object):
             str(start.date()),
             start,
             start + duration).__of__(self.context)
-        events = map(func, starts)
+        events = map(IEventAccessor, map(func, starts))
         return events
 
 
