@@ -4,8 +4,8 @@ from zope.interface import Interface, Attribute
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
-### BBB
-#from plone.event.interfaces import IEvent
+
+ISO_DATE_FORMAT = '%Y-%m-%d'
 
 
 class IOccurrence(Interface):
@@ -16,7 +16,6 @@ class IOccurrence(Interface):
     start = Attribute(u"Occurrence start date")
     end = Attribute(u"Occurrence end date")
 
-## Adapter interfaces
 
 class IICalendar(Interface):
     """ Adapter, which is used to construct an icalendar object.

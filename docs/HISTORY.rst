@@ -4,12 +4,23 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- Use IEventRecurrence adapter to store attributes directly on the context.
+  This fixes that recurrence occurrences start and end dates were not indexed,
+  because the DateRecurringIndex had not access to the recurrence attribute.
+  [thet]
+
+- IRecurrence adapter returns now acquisition-wrapped occurrence
+  objects.
+  [romanofski]
+
+- Event portlet is now showing occurrences, sorted by start date.
+  [romanofski]
+  
 - Moved whole_day field in directly after the end date to get a more logical
   group.
   [thet]
 
 - Added dedicated timezone validator with fallback zone.
-  [thet]
 
 - Added traverser for occurrences. The event view is used to show
   individual occurrences.

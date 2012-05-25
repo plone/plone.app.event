@@ -8,6 +8,7 @@ DOCFILES = [
     'webdav.txt'
 ]
 DOCMODS = [
+    'plone.app.event.base',
 ]
 
 def test_suite():

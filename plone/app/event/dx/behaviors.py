@@ -5,7 +5,7 @@ types.
 import pytz
 from Aquisition import aq_base
 from plone.directives import form
-from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 from plone.indexer import indexer
@@ -15,11 +15,11 @@ from zope.component import adapts
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant, Invalid
-
+from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
+from plone.app.event.occurrence import Occurrence
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.app.event.base import localized_now, DT
-from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event import messageFactory as _
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
@@ -164,50 +164,111 @@ class EventBasic(object):
     def __init__(self, context):
         self.context = context
 
-    def _get_start(self):
+    @property
+    def start(self):
         return self._prepare_dt_get(self.context.start)
-    def _set_start(self, value):
+    @start.setter
+    def start(self, value):
         self.context.start = self._prepare_dt_set(value)
-    start = property(_get_start, _set_start)
 
-    def _get_end(self):
+    @property
+    def end(self):
         return self._prepare_dt_get(self.context.end)
-    def _set_end(self, value):
+    @end.setter
+    def end(self, value):
         self.context.end = self._prepare_dt_set(value)
-    end = property(_get_end, _set_end)
 
-    def _get_timezone(self):
+    @property
+    def timezone(self):
         return self.context.timezone
-    def _set_timezone(self, value):
+    @timezone.setter
+    def timezone(self, value):
         self.context.timezone = value
-    timezone = property(_get_timezone, _set_timezone)
 
-    def _get_whole_day(self):
+    @property
+    def whole_day(self):
         return self.context.whole_day
-    def _set_whole_day(self, value):
+    @whole_day.setter
+    def whole_day(self, value):
         self.context.whole_day = value
-    whole_day = property(_get_whole_day, _set_whole_day)
 
+    @property
+    def duration(self):
+        return self.context.end - self.context.start
 
     def _prepare_dt_get(self, dt):
         # always get the date in event's timezone
         return dt_to_zone(dt, self.context.timezone)
 
     def _prepare_dt_set(self, dt):
-        # TODO: still throws an error, because z3c.form compares naive date
-        # with tzaware before executing this custom setter!
-        # see: z3c.form.form.applyChanges
-
         # Dates are always set in UTC, saving the actual timezone in another
         # field. But since the timezone value isn't known at time of saving the
         # form, we have to save it with a dummy zone first and replace it with
-        # the target zone afterwards.
-        # Saving it timezone-naive first doesn't work, since it has to be
-        # possibly compared (always when editing) to a timezone-awar date.
+        # the target zone afterwards. So, it's not timezone naive and can be
+        # compared to timezone aware Dates.
         return dt.replace(tzinfo=utctz()) # return with dummy zone
 
 
-## event handlers
+class EventRecurrence(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def recurrence(self):
+        return self.context.recurrence
+    @recurrence.setter
+    def recurrence(self, value):
+        self.context.recurrence = value
+
+
+# Object adapters
+
+class Recurrence(object):
+    """ IRecurrence Adapter.
+    """
+    implements(IRecurrenceSupport)
+    adapts(IDXEventRecurrence)
+
+    def __init__(self, context):
+        self.context = context
+
+    def occurrences(self, limit_start=None, limit_end=None):
+        """ Return all occurrences of an event, possibly within a start and end
+        limit.
+
+        Please note: Events beginning before limit_start but ending afterwards
+                     won't be found.
+
+        TODO: test with event start = 21st feb, event end = start+36h,
+        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
+
+        """
+        event = IEventBasic(self.context)
+        recrule = IEventRecurrence(self.context).recurrence
+        starts = recurrence_sequence_ical(
+                event.start,
+                recrule=recrule,
+                from_=limit_start, until=limit_end)
+
+        # We get event ends by adding a duration to the start. This way, we
+        # prevent that the start and end lists are of different size if an
+        # event starts before limit_start but ends afterwards.
+        duration = event.duration
+
+        # XXX potentially occurrence won't need to be wrapped anymore
+        # but doing it for backwards compatibility as views/templates
+        # still rely on acquisition-wrapped objects.
+        func = lambda start: Occurrence(
+            str(start.date()),
+            start,
+            start + duration).__of__(self.context)
+        events = map(IEventAccessor, map(func, starts))
+        return events
+
+
+## Event handlers
+
 def data_postprocessing(obj, event):
     # We handle date inputs as floating dates without timezones and apply
     # timezones afterwards.

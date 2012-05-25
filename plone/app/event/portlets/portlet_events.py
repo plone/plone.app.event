@@ -7,7 +7,7 @@ from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
 from zope import schema
-
+from plone.app.event.interfaces import IRecurrence
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
@@ -15,6 +15,7 @@ from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
 
+from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
 
@@ -67,7 +68,9 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self._data())
 
     def published_events(self):
-        return self._data()
+        context = aq_inner(self.context)
+        return get_occurrences(context, self._data(),
+                               limit=self.data.count)
 
     @memoize
     def have_events_folder(self):
