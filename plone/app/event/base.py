@@ -135,7 +135,6 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     the actual occurrences for that date.
 
     """
-    from plone.app.event.occurrence import Occurrence
     range_start, range_end = _prepare_range(context, range_start, range_end)
 
     events = get_portal_events(context, range_start, range_end, **kw)
