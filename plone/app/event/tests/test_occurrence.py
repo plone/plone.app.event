@@ -71,9 +71,9 @@ class TestTraversal(unittest.TestCase):
         occ = Occurrence('ignored', start, end)
         occ = occ.__of__(self.portal['at'])
         data = IEventAccessor(occ)
-        self.assertNotEqual(data['start'],
+        self.assertNotEqual(data.start,
                             tzdel(self.portal['at'].start_date))
-        self.assertEqual(start, data['start'])
+        self.assertEqual(start, data.start)
 
 
 class TestTraversalBrowser(TestTraversal):

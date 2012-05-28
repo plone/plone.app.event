@@ -70,20 +70,19 @@ class EventView(BrowserView):
     def date_for_display(self):
         return prepare_for_display(
                 self.context,
-                self.data['start'],
-                self.data['end'],
-                self.data['whole_day'])
+                self.data.start,
+                self.data.end,
+                self.data.whole_day)
 
     @property
     def occurrences(self):
         events = []
         context = self.context
-        import pdb; pdb.set_trace()
         occurrences = IRecurrenceSupport(context, None).occurrences()
         if occurrences is not None:
             events = map(
                 lambda occ:
-                    prepare_for_display(self.context, occ['start'], occ['end'],
-                                        self.data['whole_day']),
+                    prepare_for_display(self.context, occ.start, occ.end,
+                                        occ.whole_day),
                 occurrences)
         return events

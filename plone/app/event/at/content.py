@@ -18,15 +18,18 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.formwidget.datetime.at import DatetimeWidget
+from plone.uuid.interfaces import IUUID
 
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IRecurrenceSupport
+from plone.event.utils import utc
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
+from plone.app.event.base import DT
 from plone.app.event.occurrence import Occurrence
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
@@ -382,22 +385,141 @@ registerATCT(ATEvent, packageName)
 
 ## Object adapters
 
-@implementer(IEventAccessor)
-@adapter(IATEvent)
-def generic_event_accessor(context):
-    return {'start': context.start_date,
-            'end': context.end_date,
-            'timezone': context.timezone,
-            'whole_day': context.whole_day,
-            'recurrence': context.recurrence,
-            'location': context['location'],
-            'attendees': context['attendees'],
-            'contact_name': context['contactName'],
-            'contact_email': context['contactEmail'],
-            'contact_phone': context['contactPhone'],
-            'event_url': context['eventUrl'],
-            'subjects': context['subject'],
-            'text': context.getText()}
+
+class EventAccessor(object):
+    """ Generic event accessor adapter implementation for Archetypes content
+        objects.
+
+    """
+    implements(IEventAccessor)
+    adapts(IATEvent)
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def uid(self):
+        return IUUID(self.context, None)
+
+    @property
+    def created(self):
+        return utc(self.context.creation_date)
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+
+    @property
+    def duration(self):
+        return self.end - self.start
+
+    # rw properties not in behaviors (yet) # TODO revisit
+    @property
+    def title(self):
+        return getattr(self.context, 'title', None)
+    @title.setter
+    def title(self, value):
+        return setattr(self.context, 'title', value)
+
+    @property
+    def description(self):
+        return getattr(self.context, 'description', None)
+    @description.setter
+    def description(self, value):
+        return setattr(self.context, 'description', value)
+
+
+    @property
+    def start(self):
+        return self.context.start_date
+    @start.setter
+    def start(self, value):
+        self.context.setStartDate(DT(value))
+
+    @property
+    def end(self):
+        return self.context.end_date
+    @end.setter
+    def start(self, value):
+        self.context.setEndDate(DT(value))
+
+    @property
+    def whole_day(self):
+        return self.context.whole_day
+    @whole_day.setter
+    def whole_day(self, value):
+        self.context.whole_day = value
+
+    @property
+    def timezone(self):
+        return self.context.timezone
+    @timezone.setter
+    def timezone(self, value):
+        self.context.timezone = value
+
+    @property
+    def recurrence(self):
+        return self.context.recurrence
+    @recurrence.setter
+    def recurrence(self, value):
+        self.context.recurrence = value
+
+    @property
+    def location(self):
+        return self.context.getLocation()
+    @location.setter
+    def location(self, value):
+        self.context.setLocation(value)
+
+    @property
+    def attendees(self):
+        return self.context.getAttendees()
+    @attendees.setter
+    def attendees(self, value):
+        self.context.setAttendees(value)
+
+    @property
+    def contact_name(self):
+        return self.context.getContactName()
+    @contact_name.setter
+    def contact_name(self, value):
+        self.context.setContactName(value)
+
+    @property
+    def contact_email(self):
+        return self.context.getContactEmail()
+    @contact_email.setter
+    def contact_email(self, value):
+        self.context.setContactEmail(value)
+
+    @property
+    def contact_phone(self):
+        return self.context.getContactPhone()
+    @contact_phone.setter
+    def contact_phone(self, value):
+        self.context.setContactPhone(value)
+
+    @property
+    def event_url(self):
+        return self.context.getEventUrl()
+    @event_url.setter
+    def event_url(self, value):
+        self.context.setEventUrl(value)
+
+    @property
+    def subjects(self):
+        return self.context.getSubject()
+    @subjects.setter
+    def subjects(self, value):
+        self.context.setSubject(value)
+
+    @property
+    def text(self):
+        return self.context.getText()
+    @text.setter
+    def text(self, value):
+        self.context.setText(value)
+
 
 
 class Recurrence(object):

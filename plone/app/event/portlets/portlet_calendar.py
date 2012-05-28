@@ -106,8 +106,7 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for occ in date_events:
-                    import pdb; pdb.set_trace()
-                    location = IEventAccessor(occ)['location']
+                    location = IEventAccessor(occ).location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
                         occ.absolute_url(),

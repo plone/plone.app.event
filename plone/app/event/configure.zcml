@@ -43,7 +43,7 @@
     permission="zope.Public"
     />
 
-  <adapter factory=".occurrence.generic_event_accessor" />
+  <adapter factory=".occurrence.EventAccessor" />
 
   <genericsetup:registerProfile
       name="default"

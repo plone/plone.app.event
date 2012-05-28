@@ -313,7 +313,7 @@ def end_indexer(obj):
 
 
 class EventAccessor(object):
-    """ Generic event accessor adapter implementation for dexterity content
+    """ Generic event accessor adapter implementation for Dexterity content
         objects.
 
     """
@@ -322,14 +322,13 @@ class EventAccessor(object):
     adapts(IDXEvent)
 
     def __init__(self, context):
-        context = aq_base(context)
         object.__setattr__(self, 'context', context)
 
         bm = dict(
             start=IEventBasic,
             end=IEventBasic,
-            timezone=IEventBasic,
             whole_day=IEventBasic,
+            timezone=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,
             attendees=IEventAttendees,
@@ -343,14 +342,14 @@ class EventAccessor(object):
 
     def __getattr__(self, name):
         bm = self._behavior_map
-        if name in bm:
+        if name in bm: # adapt object with behavior and return the attribute
            behavior = bm[name](self.context, None)
            if behavior: return getattr(behavior, name, None)
         return None
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
-        if name in bm:
+        if name in bm: # set the attributes on behaviors
             behavior = bm[name](self.context, None)
             if behavior: setattr(behavior, name, value)
 
@@ -380,21 +379,23 @@ class EventAccessor(object):
         return self.end - self.start
 
     # rw properties not in behaviors (yet) # TODO revisit
-
-    def get_title(self):
+    @property
+    def title(self):
         return getattr(self.context, 'title', None)
-    def set_title(self, value):
+    @title.setter
+    def title(self, value):
         return setattr(self.context, 'title', value)
-    title = property(get_title, set_title)
 
-    def get_description(self):
+    @property
+    def description(self):
         return getattr(self.context, 'description', None)
-    def set_description(self, value):
+    @description.setter
+    def description(self, value):
         return setattr(self.context, 'description', value)
-    description = property(get_description, set_description)
 
-    def get_text(self):
+    @property
+    def text(self):
         return getattr(self.context, 'text', None)
-    def set_text(self, value):
+    @text.setter
+    def text(self, value):
         return setattr(self.context, 'text', value)
-    text = property(get_text, set_text)

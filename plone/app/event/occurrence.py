@@ -1,5 +1,5 @@
-from zope.component import adapter
-from zope.interface import implementer, implements
+from zope.component import adapts
+from zope.interface import implements
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
@@ -35,13 +35,31 @@ class Occurrence(object):
         self.end = end
 
 
-# TODO: adapt to new event accessor api
-@implementer(IEventAccessor)
-@adapter(IOccurrence)
-def generic_event_accessor(context):
-    # usually rolled into DXEvent or ATEvent
-    event = context.parent
-    data = IEventAccessor(event)
-    data['start'] = context.start
-    data['end'] = context.end
-    return data
+def EventAccessor(object):
+    """ Generic event accessor adapter implementation for Occurrence objects.
+
+    """
+    implements(IEventAccessor)
+    adapts(IOccurrence)
+
+    def __init__(self, context):
+        object.__setattr__(self, 'context', context)
+
+        own_attr = ['start', 'end']
+        object.__setattr__(self, '_own_attr', own_attr)
+
+    def _get_context(self, name):
+        oa = self._own_attr
+        if name in oa:
+            return self.context
+        else:
+            return self.context.parent
+
+    def __getattr__(self, name):
+        return getattr(self._get_context(name), name, None)
+
+    def __setattr__(self, name, value):
+        return setattr(self._get_context(name), name, value)
+
+    def __delattr__(self, name):
+        delattr(self._get_context(name), name)
