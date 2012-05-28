@@ -35,7 +35,7 @@ class Occurrence(object):
         self.end = end
 
 
-def EventAccessor(object):
+class EventAccessor(object):
     """ Generic event accessor adapter implementation for Occurrence objects.
 
     """
