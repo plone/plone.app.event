@@ -100,7 +100,7 @@ class EventOccurrenceAccessor(object):
         if name in oa:
             return self.context
         else:
-            return aq_parent(self.context)
+            return IEventAccessor(aq_parent(self.context))
 
     def __getattr__(self, name):
         return getattr(self._get_context(name), name, None)
