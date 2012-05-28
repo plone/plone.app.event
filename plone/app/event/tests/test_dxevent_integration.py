@@ -1,22 +1,17 @@
-
+import pytz
 import unittest2 as unittest
-
 import datetime
+import zope.interface
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
-
+from Products.CMFCore.utils import getToolByName
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
-import zope.interface
 
-from plone.dexterity.interfaces import IDexterityFTI
-
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
-
-from plone.app.event.interfaces import IOccurrence
-from plone.app.event.interfaces import IRecurrence
-
+from plone.app.event.base import get_portal_events
 from plone.app.event.dx.behaviors import (
     IEventBasic,
     IEventRecurrence,
@@ -31,6 +26,8 @@ from plone.app.event.dx.interfaces import (
     IDXEventAttendees,
     IDXEventContact
 )
+from plone.app.event.interfaces import IOccurrence
+from plone.app.event.interfaces import IRecurrence
 
 
 
@@ -98,6 +95,29 @@ class TextDXIntegration(unittest.TestCase):
         self.assertEquals(result[0].end, DateTime('2011/11/11 12:00:00 GMT+1'))
 
 
+    def test_recurrence_indexing(self):
+        utc = pytz.utc
+        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
+                start=datetime.datetime(2011,11,11,11,0, tzinfo=utc),
+                end=datetime.datetime(2011,11,11,12,0, tzinfo=utc),
+                timezone='UTC',
+                whole_day=False)
+        e1 = self.portal['event1']
+        e1rec = IEventRecurrence(e1)
+        e1rec.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        e1.reindexObject()
+
+        # test, if the recurrence attribute is available on the context.
+        # DRI needs that for indexing.
+        self.assertTrue(e1.recurrence == e1rec.recurrence)
+
+        # test, if the occurrences are indexed by DRI
+        result = get_portal_events(
+                e1,
+                range_start=datetime.datetime(2011,11,12,11,0, tzinfo=utc))
+        self.assertTrue(len(result)==1)
+
+
 class MockEvent(SimpleItem):
     """ Mock event"""
 
@@ -116,6 +136,7 @@ class TestDXEventRecurrence(unittest.TestCase):
         result = IRecurrence(data).occurrences()
         self.assertEqual(4, len(result))
         self.assertTrue(IOccurrence.providedBy(result[0]))
+
 
 
 def test_suite():
