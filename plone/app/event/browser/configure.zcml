@@ -32,6 +32,10 @@
         template="event_view.pt"
         permission="zope2.View"
         />
+    <browser:defaultView
+        for="plone.app.event.interfaces.IOccurrence"
+        name="index_html"
+        />
 
     <browser:page
         for="*"
