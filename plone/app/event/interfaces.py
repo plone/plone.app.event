@@ -21,7 +21,7 @@ class IICalendar(Interface):
     """ Adapter, which is used to construct an icalendar object.
     """
 
-class IICalendarComponent(Interface):
+class IICalendarEventComponent(Interface):
     """ Adapter, which is used to construct an event component object for
     icalendar.
     """

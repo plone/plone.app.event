@@ -45,7 +45,7 @@ def construct_calendar(context, events):
     if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
     for event in events:
-        cal.add_component(IICalendarComponent(event))
+        cal.add_component(IICalendarEventComponent(event))
 
     return cal
 
