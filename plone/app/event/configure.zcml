@@ -21,17 +21,17 @@
   <include file="ical.zcml" />
 
   <utility
-      component=".vocabulary.AvailableTimezones"
+      component=".vocabularies.AvailableTimezones"
       name="plone.app.event.AvailableTimezones"
       />
 
   <utility
-      component=".vocabulary.Timezones"
+      component=".vocabularies.Timezones"
       name="plone.app.event.Timezones"
       />
 
   <utility
-      component=".vocabulary.Weekdays"
+      component=".vocabularies.Weekdays"
       name="plone.app.event.Weekdays"
       />
 
