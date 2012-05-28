@@ -2,17 +2,17 @@ import calendar
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
-from plone.app.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
 from plone.app.event.base import localized_today
 from plone.app.event.base import get_occurrences_by_date
 
+from plone.app.portlets import PloneMessageFactory as _
 PLMF = MessageFactory('plonelocales')
 
 

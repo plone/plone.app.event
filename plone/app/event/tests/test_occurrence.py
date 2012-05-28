@@ -12,7 +12,7 @@ from plone.app.event.at.content import IATEvent
 from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
-from plone.app.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.occurrence import Occurrence
