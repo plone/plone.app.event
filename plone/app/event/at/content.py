@@ -480,28 +480,28 @@ class EventAccessor(object):
 
     @property
     def contact_name(self):
-        return self.context.getContactName()
+        return self.context.contact_name()
     @contact_name.setter
     def contact_name(self, value):
         self.context.setContactName(value)
 
     @property
     def contact_email(self):
-        return self.context.getContactEmail()
+        return self.context.contact_email()
     @contact_email.setter
     def contact_email(self, value):
         self.context.setContactEmail(value)
 
     @property
     def contact_phone(self):
-        return self.context.getContactPhone()
+        return self.context.contact_phone()
     @contact_phone.setter
     def contact_phone(self, value):
         self.context.setContactPhone(value)
 
     @property
     def event_url(self):
-        return self.context.getEventUrl()
+        return self.context.event_url()
     @event_url.setter
     def event_url(self, value):
         self.context.setEventUrl(value)

@@ -68,7 +68,8 @@ class EventView(BrowserView):
 
     @property
     def data(self):
-        return IEventAccessor(self.context)
+        accessor = IEventAccessor(self.context)
+        return accessor
 
     def date_for_display(self):
         return prepare_for_display(
