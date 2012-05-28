@@ -260,9 +260,10 @@ class Recurrence(object):
         # but doing it for backwards compatibility as views/templates
         # still rely on acquisition-wrapped objects.
         func = lambda start: Occurrence(
-            str(start.date()),
-            start,
-            start + duration).__of__(self.context)
+            id=str(start.date()),
+            parent=event,
+            start=start,
+            end=start + duration).__of__(self.context)
         events = map(IEventAccessor, map(func, starts))
         return events
 

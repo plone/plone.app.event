@@ -1,6 +1,5 @@
-import zope.component
-import zope.interface
-from OFS.SimpleItem import SimpleItem
+from zope.component import adapter
+from zope.interface import implementer, implements
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from plone.app.event.base import guess_date_from
 from plone.app.event.interfaces import IEventAccessor
@@ -11,7 +10,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 
 
 class OccurrenceTraverser(DefaultPublishTraverse):
-    zope.interface.implements(IBrowserPublisher)
+    implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
         dateobj = guess_date_from(name, self.context)
@@ -26,22 +25,22 @@ class OccurrenceTraverser(DefaultPublishTraverse):
             self.request, name)
 
 
-class Occurrence(SimpleItem):
+class Occurrence(object):
+    implements(IOccurrence)
 
-    zope.interface.implements(IOccurrence)
-
-    def __init__(self, id, start, end):
+    def __init__(self, parent, id, start, end):
         self.id = id
+        self.parent = parent
         self.start = start
         self.end = end
 
 
 # TODO: adapt to new event accessor api
-@zope.interface.implementer(IEventAccessor)
-@zope.component.adapter(IOccurrence)
+@implementer(IEventAccessor)
+@adapter(IOccurrence)
 def generic_event_accessor(context):
     # usually rolled into DXEvent or ATEvent
-    event = context.aq_parent
+    event = context.parent
     data = IEventAccessor(event)
     data['start'] = context.start
     data['end'] = context.end
