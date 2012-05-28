@@ -21,6 +21,7 @@ from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.app.event.base import localized_now, DT
 from plone.app.event import messageFactory as _
+from plone.event.recurrence import recurrence_sequence_ical
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -256,14 +257,11 @@ class Recurrence(object):
         # event starts before limit_start but ends afterwards.
         duration = event.duration
 
-        # XXX potentially occurrence won't need to be wrapped anymore
-        # but doing it for backwards compatibility as views/templates
-        # still rely on acquisition-wrapped objects.
         func = lambda start: Occurrence(
             id=str(start.date()),
-            parent=event,
+            parent=self.context,
             start=start,
-            end=start + duration).__of__(self.context)
+            end=start + duration)
         events = map(IEventAccessor, map(func, starts))
         return events
 

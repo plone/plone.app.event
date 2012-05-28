@@ -416,9 +416,10 @@ class Recurrence(object):
                 from_=limit_start, until=limit_end)
         duration = self.context.duration
         func = lambda start: Occurrence(
-            str(start.date()),
-            start,
-            start + duration).__of__(self.context)
+            id=str(start.date()),
+            parent=self.context,
+            start=start,
+            end=start + duration)
         events = map(func, starts)
         return events
 
