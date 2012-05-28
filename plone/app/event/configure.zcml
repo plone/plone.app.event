@@ -42,8 +42,14 @@
     factory=".occurrence.OccurrenceTraverser"
     permission="zope.Public"
     />
-
   <adapter factory=".occurrence.EventAccessor" />
+
+  <class class=".occurrence.Occurrence">
+    <require
+      permission="zope.Public"
+      attributes="id parent start end"
+      />
+  </class>
 
   <genericsetup:registerProfile
       name="default"

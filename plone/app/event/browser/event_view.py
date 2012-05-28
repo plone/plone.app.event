@@ -62,10 +62,6 @@ def prepare_for_display(context, start, end, whole_day):
 
 class EventView(BrowserView):
 
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
     @property
     def data(self):
         accessor = IEventAccessor(self.context)

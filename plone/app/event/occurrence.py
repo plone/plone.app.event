@@ -17,7 +17,6 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         occurrence = IRecurrenceSupport(self.context).occurrences(dateobj)[0]
         if not dateobj or not is_same_day(dateobj, occurrence.start):
             return self.fallback(name)
-
         return occurrence
 
     def fallback(self, name):
