@@ -321,6 +321,10 @@ class EventAccessor(object):
         return IUUID(self.context, None)
 
     @property
+    def url(self):
+        return self.context.absolute_url()
+
+    @property
     def created(self):
         return utc(self.context.creation_date)
 
