@@ -508,7 +508,7 @@ class EventAccessor(object):
 
     @property
     def subjects(self):
-        return self.context.getSubject()
+        return self.context.Subject()
     @subjects.setter
     def subjects(self, value):
         self.context.setSubject(value)
@@ -542,7 +542,7 @@ class Recurrence(object):
             parent=self.context,
             start=start,
             end=start + duration)
-        events = map(func, starts)
+        events = map(IEventAccessor, map(func, starts))
         return events
 
 

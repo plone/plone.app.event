@@ -9,7 +9,7 @@
 
 <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
-                        tal:define="data view/data">
+                        tal:define="data nocall:view/data">
 
         <div class="eventDetails vcard">
             <table class="vertical listing"
