@@ -3,7 +3,6 @@ types.
 
 """
 import pytz
-from Acquisition import aq_base
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
@@ -262,7 +261,7 @@ class Recurrence(object):
             parent=self.context,
             start=start,
             end=start + duration)
-        events = map(IEventAccessor, map(func, starts))
+        events = map(func, starts)
         return events
 
 

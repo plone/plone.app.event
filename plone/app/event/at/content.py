@@ -542,7 +542,7 @@ class Recurrence(object):
             parent=self.context,
             start=start,
             end=start + duration)
-        events = map(IEventAccessor, map(func, starts))
+        events = map(func, starts)
         return events
 
 

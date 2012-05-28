@@ -84,9 +84,8 @@ class EventView(BrowserView):
         context = self.context
         occurrences = IRecurrenceSupport(context, None).occurrences()
         if occurrences is not None:
-            events = map(
-                lambda occ:
-                    prepare_for_display(self.context, occ.start, occ.end,
-                                        occ.whole_day),
-                occurrences)
+            for item in occurrences:
+                occ = IEventAccessor(item)
+                events.append(prepare_for_display(
+                    self.context, occ.start, occ.end, occ.whole_day))
         return events

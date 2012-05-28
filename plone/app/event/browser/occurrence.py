@@ -1,8 +1,9 @@
 from Products.CMFPlone.PloneBatch import Batch
+from zope.publisher.browser import BrowserView
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import guess_date_from
-from zope.publisher.browser import BrowserView
 
 
 class Occurrences(BrowserView):
