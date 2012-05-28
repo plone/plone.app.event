@@ -1,6 +1,7 @@
 import pytz
 from collective.elephantvocabulary import wrap_vocabulary
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
@@ -49,7 +50,7 @@ def Weekdays(context):
               language.
 
     """
-    translate = getSite().translate
+    #translate = getSite().translate
     domain = 'plonelocales'
     items =[(translate(u'weekday_mon', domain=domain, default=u'Monday'),0),
             (translate(u'weekday_tue', domain=domain, default=u'Tuesday'),1),
