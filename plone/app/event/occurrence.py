@@ -1,12 +1,13 @@
 from zope.component import adapter
 from zope.interface import implementer, implements
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from zope.publisher.interfaces.browser import IBrowserPublisher
+
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import guess_date_from
-from plone.app.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IOccurrence
 from plone.app.event.interfaces import IRecurrence
 from plone.event.utils import is_same_day
-from zope.publisher.interfaces.browser import IBrowserPublisher
 
 
 class OccurrenceTraverser(DefaultPublishTraverse):
