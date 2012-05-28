@@ -35,6 +35,8 @@
       name="plone.app.event.Weekdays"
       />
 
+  <adapter factory=".recurrence.RecurrenceSupport" />
+
   <adapter
     for="plone.event.interfaces.IEvent
          zope.publisher.interfaces.browser.IBrowserRequest"

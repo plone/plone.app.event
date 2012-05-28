@@ -8,7 +8,6 @@
 
     <include file="ical.zcml" />
 
-    <adapter factory=".content.Recurrence" />
     <adapter factory=".content.EventAccessor" />
 
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent

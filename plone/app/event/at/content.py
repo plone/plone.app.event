@@ -1,5 +1,5 @@
-from zope.component import adapts, adapter
-from zope.interface import implements, implementer
+from zope.component import adapts
+from zope.interface import implements
 
 from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
@@ -22,16 +22,13 @@ from plone.uuid.interfaces import IUUID
 
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
-from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEvent, IEventRecurrence
 from plone.event.interfaces import IEventAccessor
-from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import utc
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
 from plone.app.event.base import DT
-from plone.app.event.occurrence import Occurrence
-from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import pydt
 
 
@@ -210,7 +207,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     """ Information about an upcoming event, which can be displayed in the
         calendar."""
 
-    implements(IEvent, IATEvent)
+    implements(IEvent, IEventRecurrence, IATEvent)
 
     schema = ATEventSchema
     security = ClassSecurityInfo()
@@ -383,8 +380,54 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 registerATCT(ATEvent, packageName)
 
 
-## Object adapters
+## Event handlers
 
+def whole_day_handler(obj, event):
+    """ For whole day events only, set start time to 0:00:00 and end time to
+        23:59:59
+    """
+
+    if not obj.whole_day:
+        return
+    startDate = obj.startDate.toZone(obj.timezone)
+    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
+    endDate = obj.endDate.toZone(obj.timezone)
+    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
+    obj.setStartDate(DateTime(startDate)) # TODO: setting needed? aren't above operations operating on the instances itself?
+    obj.setEndDate(DateTime(endDate))
+    obj.reindexObject()  # reindex obj to store upd values in catalog
+
+
+def timezone_handler(obj, event):
+    """ When setting the startDate and endDate, the value of the timezone field
+    isn't known, so we have to convert those timezone-naive dates into
+    timezone-aware ones afterwards.
+
+    """
+    timezone = obj.getField('timezone').get(obj)
+    start_field = obj.getField('startDate')
+    end_field = obj.getField('endDate')
+    start = start_field.get(obj)
+    end = end_field.get(obj)
+
+    def make_DT(value, timezone):
+        return DateTime(
+            value.year(),
+            value.month(),
+            value.day(),
+            value.hour(),
+            value.minute(),
+            value.second(),
+            timezone)
+
+    start = make_DT(start, timezone).toZone('UTC')
+    end = make_DT(end, timezone).toZone('UTC')
+    start_field.set(obj, start)
+    end_field.set(obj, end)
+    obj.reindexObject()
+
+
+## Object adapters
 
 class EventAccessor(object):
     """ Generic event accessor adapter implementation for Archetypes content
@@ -519,77 +562,3 @@ class EventAccessor(object):
     @text.setter
     def text(self, value):
         self.context.setText(value)
-
-
-
-class Recurrence(object):
-    """ ATEvent adapter for recurring events.
-    """
-    implements(IRecurrenceSupport)
-    adapts(IATEvent)
-
-    def __init__(self, context):
-        self.context = context
-
-    # XXX potentially occurrence won't need to be wrapped anymore
-    # but doing it for backwards compatibility as views/templates
-    # still rely on acquisition-wrapped objects.
-    def occurrences(self, limit_start=None, limit_end=None):
-        starts = recurrence_sequence_ical(
-                self.context.start(),
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-        duration = self.context.duration
-        func = lambda start: Occurrence(
-            id=str(start.date()),
-            start=start,
-            end=start + duration).__of__(self.context)
-        events = map(func, starts)
-        return events
-
-
-## Event handlers
-
-def whole_day_handler(obj, event):
-    """ For whole day events only, set start time to 0:00:00 and end time to
-        23:59:59
-    """
-
-    if not obj.whole_day:
-        return
-    startDate = obj.startDate.toZone(obj.timezone)
-    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
-    endDate = obj.endDate.toZone(obj.timezone)
-    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
-    obj.setStartDate(DateTime(startDate)) # TODO: setting needed? aren't above operations operating on the instances itself?
-    obj.setEndDate(DateTime(endDate))
-    obj.reindexObject()  # reindex obj to store upd values in catalog
-
-
-def timezone_handler(obj, event):
-    """ When setting the startDate and endDate, the value of the timezone field
-    isn't known, so we have to convert those timezone-naive dates into
-    timezone-aware ones afterwards.
-
-    """
-    timezone = obj.getField('timezone').get(obj)
-    start_field = obj.getField('startDate')
-    end_field = obj.getField('endDate')
-    start = start_field.get(obj)
-    end = end_field.get(obj)
-
-    def make_DT(value, timezone):
-        return DateTime(
-            value.year(),
-            value.month(),
-            value.day(),
-            value.hour(),
-            value.minute(),
-            value.second(),
-            timezone)
-
-    start = make_DT(start, timezone).toZone('UTC')
-    end = make_DT(end, timezone).toZone('UTC')
-    start_field.set(obj, start)
-    end_field.set(obj, end)
-    obj.reindexObject()

@@ -4,7 +4,7 @@ types.
 """
 import pytz
 from plone.directives import form
-from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
+from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 from plone.indexer import indexer
@@ -14,13 +14,11 @@ from zope.component import adapts
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant, Invalid
-from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
-from plone.app.event.occurrence import Occurrence
+from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.app.event.base import localized_now, DT
 from plone.app.event import messageFactory as _
-from plone.event.recurrence import recurrence_sequence_ical
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -220,51 +218,6 @@ class EventRecurrence(object):
     @recurrence.setter
     def recurrence(self, value):
         self.context.recurrence = value
-
-
-# Object adapters
-
-class Recurrence(object):
-    """ IRecurrenceSupport Adapter.
-    """
-    implements(IRecurrenceSupport)
-    adapts(IDXEventRecurrence)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        """ Return all occurrences of an event, possibly within a start and end
-        limit.
-
-        Please note: Events beginning before limit_start but ending afterwards
-                     won't be found.
-
-        TODO: test with event start = 21st feb, event end = start+36h,
-        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
-
-        """
-        event = IEventBasic(self.context)
-        recrule = IEventRecurrence(self.context).recurrence
-        starts = recurrence_sequence_ical(
-                event.start,
-                recrule=recrule,
-                from_=limit_start, until=limit_end)
-
-        # We get event ends by adding a duration to the start. This way, we
-        # prevent that the start and end lists are of different size if an
-        # event starts before limit_start but ends afterwards.
-        duration = event.duration
-
-        # XXX potentially occurrence won't need to be wrapped anymore
-        # but doing it for backwards compatibility as views/templates
-        # still rely on acquisition-wrapped objects.
-        func = lambda start: Occurrence(
-            id=str(start.date()),
-            start=start,
-            end=start + duration).__of__(self.context)
-        events = map(func, starts)
-        return events
 
 
 ## Event handlers
