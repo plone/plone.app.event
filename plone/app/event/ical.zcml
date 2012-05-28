@@ -4,6 +4,8 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="plone.app.event">
 
+    <adapter factory=".ical.ICalendarEventComponent"/>
+
     <adapter factory=".ical.calendar_from_event"
         provides=".interfaces.IICalendar"
         for="plone.event.interfaces.IEvent"
