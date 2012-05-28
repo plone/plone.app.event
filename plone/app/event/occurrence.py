@@ -25,6 +25,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         return super(OccurrenceTraverser, self).publishTraverse(
             self.request, name)
 
+
 class Occurrence(SimpleItem):
     implements(IOccurrence)
 
