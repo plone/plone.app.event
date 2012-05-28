@@ -8,7 +8,7 @@
       for="plone.event.interfaces.IEvent
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".rccurrence.OccurrenceTraverser"
+      factory=".recurrence.OccurrenceTraverser"
       permission="zope.Public"
       />
 
