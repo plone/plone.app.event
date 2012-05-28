@@ -9,11 +9,11 @@ from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.interfaces import (
         IEventRecurrence,
         IEventAccessor,
-        IRecurrenceSupport
+        IRecurrenceSupport,
+        IOccurrence
 )
 from plone.event.utils import is_same_day
 from plone.app.event.base import guess_date_from
-from plone.app.event.interfaces import IOccurrence
 
 
 class RecurrenceSupport(object):

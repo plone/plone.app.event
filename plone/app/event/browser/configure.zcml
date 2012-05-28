@@ -26,7 +26,7 @@
         />
 
     <browser:page
-        for="plone.app.event.interfaces.IOccurrence"
+        for="plone.event.interfaces.IOccurrence"
         name="index_html"
         class=".event_view.EventView"
         template="event_view.pt"

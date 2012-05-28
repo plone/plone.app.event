@@ -1,17 +1,16 @@
+import datetime
 import pytz
 import unittest2 as unittest
-import datetime
 import zope.interface
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.utils import getToolByName
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-from plone.event.interfaces import IRecurrenceSupport
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
 
+from plone.event.interfaces import IRecurrenceSupport, IOccurrence
 from plone.app.event.base import get_portal_events
 from plone.app.event.dx.behaviors import (
     IEventBasic,
@@ -27,11 +26,8 @@ from plone.app.event.dx.interfaces import (
     IDXEventAttendees,
     IDXEventContact
 )
-from plone.app.event.interfaces import IOccurrence
-
-
-
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+
 
 class TextDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING

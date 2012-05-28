@@ -11,7 +11,7 @@
 
     <adapter
         factory=".ical.ICalendarEventComponent"
-        for="plone.app.event.interfaces.IOccurrence"
+        for="plone.event.interfaces.IOccurrence"
         />
 
     <adapter factory=".ical.calendar_from_event"
@@ -21,7 +21,7 @@
 
     <adapter factory=".ical.calendar_from_event"
         provides=".interfaces.IICalendar"
-        for="plone.app.event.interfaces.IOccurrence"
+        for="plone.event.interfaces.IOccurrence"
         />
 
     <adapter factory=".ical.calendar_from_container"
@@ -49,7 +49,7 @@
         />
 
     <browser:page
-        for="plone.app.event.interfaces.IOccurrence"
+        for="plone.event.interfaces.IOccurrence"
         name="ics_view"
         class=".ical.EventsICal"
         permission="zope2.View"
