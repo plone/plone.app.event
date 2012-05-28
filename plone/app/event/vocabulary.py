@@ -2,7 +2,6 @@ import pytz
 
 from zope.interface import directlyProvides
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
@@ -41,12 +40,12 @@ def AvailableTimezones(context):
 
 def Weekdays(context):
     """ Vocabulary for Weekdays.
+
+        Note: Context is here a RecordProxy and cannot be used to get the site
+              root. zope.i18n.translate seems not to respect the portal
+              language.
     """
-
-    # TODO: check translate functionality
-    #import pdb;pdb.set_trace()
-    #translate = getSite().translate
-
+    translate = getSite().translate
     items =[(translate(u'weekday_mon', domain='plonelocales', default=u'Monday'),0),
             (translate(u'weekday_tue', domain='plonelocales', default=u'Tuesday'),1),
             (translate(u'weekday_wed', domain='plonelocales', default=u'Wednesday'),2),
