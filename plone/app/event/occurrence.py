@@ -3,10 +3,9 @@ from zope.interface import implementer, implements
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
-from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.app.event.base import guess_date_from
 from plone.app.event.interfaces import IOccurrence
-from plone.app.event.interfaces import IRecurrence
 from plone.event.utils import is_same_day
 
 
@@ -15,7 +14,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
 
     def publishTraverse(self, request, name):
         dateobj = guess_date_from(name, self.context)
-        occurrence = IRecurrence(self.context).occurrences(dateobj)[0]
+        occurrence = IRecurrenceSupport(self.context).occurrences(dateobj)[0]
         if not dateobj or not is_same_day(dateobj, occurrence.start):
             return self.fallback(name)
 
