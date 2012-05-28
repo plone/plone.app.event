@@ -6,7 +6,7 @@ from plone.event.interfaces import (
         IEventAccessor,
         IRecurrenceSupport
 )
-from plone.app.event.occurrences import Occurrence
+from plone.app.event.occurrence import Occurrence
 
 
 class RecurrenceSupport(object):
