@@ -256,11 +256,13 @@ class Recurrence(object):
         # event starts before limit_start but ends afterwards.
         duration = event.duration
 
+        # XXX potentially occurrence won't need to be wrapped anymore
+        # but doing it for backwards compatibility as views/templates
+        # still rely on acquisition-wrapped objects.
         func = lambda start: Occurrence(
             id=str(start.date()),
-            parent=self.context,
             start=start,
-            end=start + duration)
+            end=start + duration).__of__(self.context)
         events = map(func, starts)
         return events
 

@@ -1,7 +1,9 @@
+from Acquisition import aq_parent
 from zope.component import adapts
 from zope.interface import implements
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from OFS.SimpleItem import SimpleItem
 
 from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.app.event.base import guess_date_from
@@ -23,13 +25,11 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         return super(OccurrenceTraverser, self).publishTraverse(
             self.request, name)
 
-
-class Occurrence(object):
+class Occurrence(SimpleItem):
     implements(IOccurrence)
 
-    def __init__(self, parent, id, start, end):
+    def __init__(self, id, start, end):
         self.id = id
-        self.parent = parent
         self.start = start
         self.end = end
 
@@ -52,7 +52,7 @@ class EventAccessor(object):
         if name in oa:
             return self.context
         else:
-            return self.context.parent
+            return aq_parent(self.context)
 
     def __getattr__(self, name):
         return getattr(self._get_context(name), name, None)

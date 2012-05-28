@@ -531,6 +531,9 @@ class Recurrence(object):
     def __init__(self, context):
         self.context = context
 
+    # XXX potentially occurrence won't need to be wrapped anymore
+    # but doing it for backwards compatibility as views/templates
+    # still rely on acquisition-wrapped objects.
     def occurrences(self, limit_start=None, limit_end=None):
         starts = recurrence_sequence_ical(
                 self.context.start(),
@@ -539,9 +542,8 @@ class Recurrence(object):
         duration = self.context.duration
         func = lambda start: Occurrence(
             id=str(start.date()),
-            parent=self.context,
             start=start,
-            end=start + duration)
+            end=start + duration).__of__(self.context)
         events = map(func, starts)
         return events
 
