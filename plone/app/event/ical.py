@@ -94,7 +94,6 @@ class ICalendarEventComponent(object):
 
     """
     implements(IICalendarEventComponent)
-    adapts(IEvent)
 
     def __init__(self, context):
         self.context = context

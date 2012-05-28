@@ -4,11 +4,24 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="plone.app.event">
 
-    <adapter factory=".ical.ICalendarEventComponent"/>
+    <adapter
+        factory=".ical.ICalendarEventComponent"
+        for="plone.event.interfaces.IEvent"
+        />
+
+    <adapter
+        factory=".ical.ICalendarEventComponent"
+        for="plone.app.event.interfaces.IOccurrence"
+        />
 
     <adapter factory=".ical.calendar_from_event"
         provides=".interfaces.IICalendar"
         for="plone.event.interfaces.IEvent"
+        />
+
+    <adapter factory=".ical.calendar_from_event"
+        provides=".interfaces.IICalendar"
+        for="plone.app.event.interfaces.IOccurrence"
         />
 
     <adapter factory=".ical.calendar_from_container"
@@ -30,6 +43,13 @@
     <!-- ICal Browser Views -->
     <browser:page
         for="plone.event.interfaces.IEvent"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="plone.app.event.interfaces.IOccurrence"
         name="ics_view"
         class=".ical.EventsICal"
         permission="zope2.View"
