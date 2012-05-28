@@ -1,17 +1,16 @@
 import icalendar
 from Acquisition import aq_inner
 from datetime import datetime, timedelta
-from zope.component import adapts
+from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
-from plone.event.interfaces import IEvent, IEventAccessor
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IICalendar
+from plone.event.interfaces import IICalendarEventComponent
 from plone.event.utils import pydt, utc
-from plone.uuid.interfaces import IUUID
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_portal_events
-from plone.app.event.interfaces import IICalendar
-from plone.app.event.interfaces import IICalendarEventComponent
 
 PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
