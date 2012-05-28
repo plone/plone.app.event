@@ -7,14 +7,15 @@ from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEvent, IEventAccessor
 from plone.event.utils import pydt, utc
+from plone.uuid.interfaces import IUUID
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_portal_events
 from plone.app.event.interfaces import IICalendar
 from plone.app.event.interfaces import IICalendarEventComponent
 
-
 PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
+
 
 def construct_calendar(context, events):
     """ Returns an icalendar.Calendar object.
@@ -31,21 +32,20 @@ def construct_calendar(context, events):
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
 
-    # TODO: use plone's new uuid adapter instead of uid
-    # Non-Standard calendar extensions. also see:
-    # http://en.wikipedia.org/wiki/ICalendar#cite_note-11
     cal_title = context.Title()
     if cal_title: cal.add('x-wr-calname', cal_title)
     cal_desc = context.Description()
     if cal_desc: cal.add('x-wr-caldesc', cal_desc)
-    if getattr(context, 'UID', False): # portal object does not have UID
-        cal_uid = context.UID()
-        cal.add('x-wr-relcalid', cal_uid)
+
+    uuid = IUUID(context, None)
+    if uuid: # portal object does not have UID
+        cal.add('x-wr-relcalid', uuid)
+
     cal_tz = default_timezone(context)
     if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
     for event in events:
-        cal.add_component(IICalendarEventComponent(event))
+        cal.add_component(IICalendarEventComponent(event).to_ical())
 
     return cal
 
@@ -111,11 +111,12 @@ class ICalendarEventComponent(object):
         # TODO: until VTIMETZONE component is added and TZID used, everything is
         #       converted to UTC. use real TZID, when VTIMEZONE is used!
 
+        import pdb; pdb.set_trace()
         ical.add('dtstamp', utc(pydt(datetime.now())))
-        ical.add('created', utc(pydt(event.creation_date)))
+        ical.add('created', utc(pydt(event.created)))
 
         ical.add('uid', event.uid)
-        ical.add('last-modified', utc(pydt(event.modification_date)))
+        ical.add('last-modified', utc(pydt(event.last_modified)))
         ical.add('summary', event.title)
 
         if event.description: ical.add('description', event.description)
