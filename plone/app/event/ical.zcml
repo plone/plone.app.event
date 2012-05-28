@@ -6,7 +6,7 @@
 
     <adapter factory=".ical.calendar_from_event"
         provides=".interfaces.IICalendar"
-        for=".interfaces.IEvent"
+        for="plone.event.interfaces.IEvent"
         />
 
     <adapter factory=".ical.calendar_from_container"
@@ -27,7 +27,7 @@
 
     <!-- ICal Browser Views -->
     <browser:page
-        for=".interfaces.IEvent"
+        for="plone.event.interfaces.IEvent"
         name="ics_view"
         class=".ical.EventsICal"
         permission="zope2.View"

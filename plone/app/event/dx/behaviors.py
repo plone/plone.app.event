@@ -3,7 +3,7 @@ types.
 
 """
 import pytz
-from Aquisition import aq_base
+from Acquisition import aq_base
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone

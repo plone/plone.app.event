@@ -18,7 +18,7 @@
 
     <!-- Event view -->
     <browser:page
-        for="plone.app.event.interfaces.IEvent"
+        for="plone.event.interfaces.IEvent"
         name="event_view"
         class=".event_view.EventView"
         template="event_view.pt"
