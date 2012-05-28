@@ -1,0 +1,18 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <utility
+      component=".vocabularies.AvailableTimezones"
+      name="plone.app.event.AvailableTimezones"
+      />
+
+  <utility
+      component=".vocabularies.Timezones"
+      name="plone.app.event.Timezones"
+      />
+
+  <utility
+      component=".vocabularies.Weekdays"
+      name="plone.app.event.Weekdays"
+      />
+
+</configure>

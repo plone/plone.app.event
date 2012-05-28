@@ -19,39 +19,8 @@
   <include package=".browser" />
   <include package=".portlets" />
   <include file="ical.zcml" />
-
-  <utility
-      component=".vocabularies.AvailableTimezones"
-      name="plone.app.event.AvailableTimezones"
-      />
-
-  <utility
-      component=".vocabularies.Timezones"
-      name="plone.app.event.Timezones"
-      />
-
-  <utility
-      component=".vocabularies.Weekdays"
-      name="plone.app.event.Weekdays"
-      />
-
-  <adapter factory=".recurrence.RecurrenceSupport" />
-
-  <adapter
-    for="plone.event.interfaces.IEvent
-         zope.publisher.interfaces.browser.IBrowserRequest"
-    provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-    factory=".occurrence.OccurrenceTraverser"
-    permission="zope.Public"
-    />
-  <adapter factory=".occurrence.EventAccessor" />
-
-  <class class=".occurrence.Occurrence">
-    <require
-      permission="zope.Public"
-      attributes="id parent start end"
-      />
-  </class>
+  <include file="recurrence.zcml" />
+  <include file="vocabularies.zcml" />
 
   <genericsetup:registerProfile
       name="default"

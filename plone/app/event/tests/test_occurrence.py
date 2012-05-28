@@ -15,8 +15,8 @@ from plone.app.event.base import localized_now
 from plone.event.interfaces import IEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import IOccurrence
-from plone.app.event.occurrence import Occurrence
-from plone.app.event.occurrence import OccurrenceTraverser
+from plone.app.event.recurrence import Occurrence
+from plone.app.event.recurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
