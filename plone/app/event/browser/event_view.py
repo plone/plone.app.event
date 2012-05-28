@@ -1,11 +1,9 @@
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from Products.Five.browser import BrowserView
-from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
 from plone.event.utils import is_same_day, is_same_time
-import zope.component
 
 from plone.app.event.base import DT
-from plone.app.event.interfaces import IRecurrence
 
 
 def prepare_for_display(context, start, end, whole_day):
@@ -81,7 +79,7 @@ class EventView(BrowserView):
         events = []
         context = self.context
         import pdb; pdb.set_trace()
-        occurrences = IRecurrence(context, None).occurrences()
+        occurrences = IRecurrenceSupport(context, None).occurrences()
         if occurrences is not None:
             events = map(
                 lambda occ:

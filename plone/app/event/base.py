@@ -4,7 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
-from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEvent, IRecurrenceSupport
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
@@ -13,7 +13,6 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 
 from plone.app.event.interfaces import IEventSettings
-from plone.app.event.interfaces import IRecurrence
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 
 
@@ -145,7 +144,8 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
         #       non-recurring events won't have any hits here.
         #       Maybe provide an adapter for non-recurring events (dx+at) which
         #       return just start and end datetime
-        occurrences = IRecurrence(obj).occurrences(range_start, range_end)
+        occurrences = IRecurrenceSupport(obj).occurrences(
+            range_start, range_end)
         for occ in occurrences:
             start_str = datetime.strftime(occ.start, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
@@ -175,7 +175,7 @@ def get_occurrences(context, brains, limit=None,
     start = localized_now() if (range_start is None) else range_start
     for brain in brains:
         obj = brain.getObject()
-        occurrences = IRecurrence(obj).occurrences(start, range_end)
+        occurrences = IRecurrenceSupport(obj).occurrences(start, range_end)
         result += occurrences
     result.sort(key=lambda x: x.start)
     if limit is not None:

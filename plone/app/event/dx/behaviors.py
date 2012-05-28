@@ -225,7 +225,7 @@ class EventRecurrence(object):
 # Object adapters
 
 class Recurrence(object):
-    """ IRecurrence Adapter.
+    """ IRecurrenceSupport Adapter.
     """
     implements(IRecurrenceSupport)
     adapts(IDXEventRecurrence)

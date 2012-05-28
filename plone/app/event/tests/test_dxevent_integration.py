@@ -7,6 +7,7 @@ from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import getToolByName
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.event.interfaces import IRecurrenceSupport
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
@@ -27,7 +28,6 @@ from plone.app.event.dx.interfaces import (
     IDXEventContact
 )
 from plone.app.event.interfaces import IOccurrence
-from plone.app.event.interfaces import IRecurrence
 
 
 
@@ -133,7 +133,7 @@ class TestDXEventRecurrence(unittest.TestCase):
         data.duration = datetime.timedelta(hours=1)
         zope.interface.alsoProvides(
             data, IDXEventRecurrence, IEventBasic, IEventRecurrence)
-        result = IRecurrence(data).occurrences()
+        result = IRecurrenceSupport(data).occurrences()
         self.assertEqual(4, len(result))
         self.assertTrue(IOccurrence.providedBy(result[0]))
 
