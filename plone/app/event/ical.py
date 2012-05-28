@@ -63,7 +63,7 @@ def calendar_from_event(context):
 
 @implementer(IICalendar)
 def calendar_from_container(context):
-    """ Container adapter. Returns an icalendar.Calendar object from a 
+    """ Container adapter. Returns an icalendar.Calendar object from a
     Containerish context like a Folder.
 
     """
@@ -111,11 +111,12 @@ class ICalendarEventComponent(object):
         # TODO: until VTIMETZONE component is added and TZID used, everything is
         #       converted to UTC. use real TZID, when VTIMEZONE is used!
 
-        import pdb; pdb.set_trace()
         ical.add('dtstamp', utc(pydt(datetime.now())))
         ical.add('created', utc(pydt(event.created)))
 
         ical.add('uid', event.uid)
+        ical.add('url', event.url)
+
         ical.add('last-modified', utc(pydt(event.last_modified)))
         ical.add('summary', event.title)
 
