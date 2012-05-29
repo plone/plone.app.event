@@ -330,18 +330,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security.declareProtected(View, 'start_date')
     @property
     def start_date(self):
-        value = self['startDate']  # This call the accessor.
-        if value is None:
-            value = self['creation_date']
-        return pydt(value)
+        return pydt(self.start())
 
     security.declareProtected(View, 'end_date')
     @property
     def end_date(self):
-        value = self['endDate']
-        if value is None:
-            return self.start_date
-        return pydt(value)
+        return pydt(self.end())
 
     security.declareProtected(View, 'duration')
     @property
@@ -487,7 +481,7 @@ class EventAccessor(object):
     def end(self):
         return self.context.end_date
     @end.setter
-    def start(self, value):
+    def end(self, value):
         self.context.setEndDate(DT(value))
 
     @property
