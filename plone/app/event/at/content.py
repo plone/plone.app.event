@@ -278,8 +278,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # Note: The name of the first parameter shouldn't be field, because
         # it's already in kwargs in some case.
 
-        # TODO the endDate and startDate should be updated if the timezone
-        # of the event change.
         if not isinstance(value, DateTime): value = DateTime(value)
         value = DateTime('%04d-%02d-%02dT%02d:%02d:%02dZ' % (
                     value.year(),
