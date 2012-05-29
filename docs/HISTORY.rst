@@ -4,9 +4,13 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
-- Use custom behavior factory for IEventRecurrence to store attributes directly
-  on the context. This fixes that recurrence occurrences start and end dates
-  were not indexed, because the DateRecurringIndex had not access to the
+- API refactoring:
+  * Move all generic interfaces to plone.event,
+  * Extend IEventAccessor adapters to also be able to set attributes. 
+
+- For dexterity behaviors, use a custom behavior adapter to store attributes
+  directly on the context. This fixes that recurrence occurrences start and end
+  dates were not indexed, because the DateRecurringIndex had not access to the
   recurrence attribute.
   [thet]
 
