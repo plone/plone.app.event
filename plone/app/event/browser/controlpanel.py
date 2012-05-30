@@ -34,3 +34,11 @@ class EventControlPanel(BrowserView):
         settings.
         """
         return localized_now()
+
+    def update(self):
+        """
+        Delegate to the wrapped form in order to please KSS form
+        validation.
+        """
+        if hasattr(self, 'form'):
+            return self.form.update()
