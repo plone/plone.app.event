@@ -4,6 +4,11 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- Copy plonetheme.sunburst styles for the calendar portlet to event.css. This
+  way, the calendar portlet is nicely styled, even without sunburst theme
+  applied.
+  [thet]
+
 - Use IEventRecurrence adapter to store attributes directly on the context.
   This fixes that recurrence occurrences start and end dates were not indexed,
   because the DateRecurringIndex had not access to the recurrence attribute.
