@@ -54,7 +54,7 @@
                  tal:content="string:${item_startdate} - ${item_enddate}">
                 May 5
                 </span>
-                <span tal:condition="obj/location"> &mdash;
+                <span tal:condition="obj/location|nothing"> &mdash;
                     <tal:location content="obj/location">Location</tal:location>
                 </span>
             </span>
