@@ -18,179 +18,179 @@ msgstr ""
 
 #: ./portlets/portlet_events.py:110
 msgid "Add Events Portlet"
-msgstr ""
+msgstr "Terminportlet hinzufügen"
 
 #: ./interfaces.py:66
 msgid "Available timezones"
-msgstr ""
+msgstr "Verfügbare Zeitzonen"
 
 #: ./portlets/portlet_calendar.py:25
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: ./portlets/portlet_events.py:118
 msgid "Edit Events Portlet"
-msgstr ""
+msgstr "Terminportlet bearbeiten"
 
 #: ./profiles/default/controlpanel.xml
 msgid "Event Settings"
-msgstr ""
+msgstr "Termine Einstellungen"
 
 #: ./portlets/portlet_events.py:46
 msgid "Events"
-msgstr ""
+msgstr "Termine"
 
 #: ./portlets/portlet_events.py:25
 msgid "How many items to list."
-msgstr ""
+msgstr "Wie viele Artikel sollen aufgelistet werden?"
 
 #: ./portlets/portlet_events.py:30
 msgid "Items in which workflow state to show."
-msgstr ""
+msgstr "Nur Artikel in diesen Status anzeigen."
 
 #: ./browser/event_view.pt:95
 msgid "More occurrences of this event:"
-msgstr ""
+msgstr "Weitere Termine:"
 
 #: ./portlets/portlet_events.py:24
 msgid "Number of items to display"
-msgstr ""
+msgstr "Wie viele Artikel sollen im Portlet aufgelistet werden?"
 
 #: ./interfaces.py:56
 msgid "Portal default timezone"
-msgstr ""
+msgstr "Standard Zeitzone des Portals"
 
 #: ./portlets/portlet_events.py:111
 msgid "This portlet lists upcoming Events."
-msgstr ""
+msgstr "Dieses Portlet zeigt kommende Termine an."
 
 #: ./portlets/portlet_events.py:29
 msgid "Workflow state"
-msgstr ""
+msgstr "Status"
 
 #. Default: "Upcoming Events"
 #: ./portlets/portlet_events.pt:10
 msgid "box_events"
-msgstr ""
+msgstr "Zukünftige Termine"
 
 #. Default: "Previous events…"
 #: ./portlets/portlet_events.pt:71
 msgid "box_previous_events"
-msgstr ""
+msgstr "Vergangene Termine"
 
 #. Default: "Upcoming events…"
 #: ./portlets/portlet_events.pt:78
 msgid "box_upcoming_events"
-msgstr ""
+msgstr "Zukünftige Termine…"
 
 #. Default: "Attendees"
 #: ./browser/event_view.pt:132
 msgid "contact_attendees"
-msgstr ""
+msgstr "Teilnehmer"
 
 #. Default: "Contact Name"
 #: ./browser/event_view.pt:114
 msgid "contact_name"
-msgstr ""
+msgstr "Kontaktname"
 
 #. Default: "Contact Phone"
 #: ./browser/event_view.pt:126
 msgid "contact_phone"
-msgstr ""
+msgstr "Kontakttelefon"
 
 #. Default: "End date must be after start date."
 #: ./at/content.py:253
 msgid "error_end_must_be_after_start_date"
-msgstr ""
+msgstr "Das Ende des Termins muss nach dem Anfang liegen."
 
 #. Default: "End date is not valid."
 #: ./at/content.py:235
 msgid "error_invalid_end_date"
-msgstr ""
+msgstr "Das Enddatum ist nich gültig."
 
 #. Default: "Start date is not valid."
 #: ./at/content.py:243
 msgid "error_invalid_start_date"
-msgstr ""
+msgstr "Das Startdatum ist nicht gültig."
 
 #. Default: "More information about this event…"
 #: ./browser/event_view.pt:159
 msgid "event_more_information"
-msgstr ""
+msgstr "Weitere Informationen über diesen Termin…"
 
 #. Default: "What"
 #: ./browser/event_view.pt:22
 msgid "event_what"
-msgstr ""
+msgstr "Was"
 
 #. Default: "When"
 #: ./browser/event_view.pt:31
 msgid "event_when"
-msgstr ""
+msgstr "Wann"
 
 #. Default: "${startdate} to ${enddate}"
 #: ./browser/event_view.pt:49
 msgid "event_when_differentday"
-msgstr ""
+msgstr "${startdate} bis ${enddate}"
 
 #: ./browser/event_view.pt:43
 msgid "event_when_differentday_optional_word_between_date_and_time"
-msgstr ""
+msgstr "um"
 
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: ./browser/event_view.pt:81
 msgid "event_when_sameday"
-msgstr ""
+msgstr "${date} ${linebreak} von ${starttime} bis ${endtime}"
 
 #. Default: "Where"
 #: ./browser/event_view.pt:106
 msgid "event_where"
-msgstr ""
+msgstr "Wo"
 
 #. Default: "The start or end date is invalid"
 #: ./dx/behaviors.py:28
 msgid "exception_start_before_end"
-msgstr ""
+msgstr "Das Start- oder Enddatum ist ungültig"
 
 #. Default: "The start date must be before the                                             end date."
 #: ./dx/behaviors.py:63
 msgid "exception_start_before_end_text"
-msgstr ""
+msgstr "Der Beginn des Termins muss vor dem Ende liegen."
 
 #. Default: "Add event to calendar"
 #: ./browser/event_view.pt:141
 msgid "heading_add_to_calendar"
-msgstr ""
+msgstr "Termin übernehmen"
 
 #. Default: "List of attendees"
 #: ./dx/behaviors.py:103
 msgid "help_attendees"
-msgstr ""
+msgstr "Liste der Teilnehmer"
 
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: ./interfaces.py:67
 msgid "help_available_timezones"
-msgstr ""
+msgstr "Die Zeitzonen, welche im Portal verfügbar sind. Können für Bentzuer und Termine gesetzt werden."
 
 #. Default: "Email address to contact about this event."
 #: ./dx/behaviors.py:121
 msgid "help_contact_email"
-msgstr ""
+msgstr "E-mail adresse um den Verantwortlichen des Termins zu kontaktieren."
 
 #. Default: "Name of a person to contact about this event."
 #: ./dx/behaviors.py:115
 msgid "help_contact_name"
-msgstr ""
+msgstr "Name des Verantwortlichen des Termins."
 
 #. Default: "Phone number to contact about this event."
 #: ./dx/behaviors.py:127
 msgid "help_contact_phone"
-msgstr ""
+msgstr "Telefonnummer des Verantwortlichen des Termins."
 
 #. Default: "Date and Time, when the event ends."
 #: ./dx/behaviors.py:43
 msgid "help_end"
-msgstr ""
+msgstr "Datum und Uhrzeit wann der Termin endet."
 
 #: ./at/content.py:58
 msgid "help_end_location"
@@ -223,48 +223,48 @@ msgstr ""
 #. Default: "Enter recurrence rules, one per line."
 #: ./at/content.py:95
 msgid "help_event_recurrence"
-msgstr ""
+msgstr "Tragen Sie zeilenweise die Regeln für die Wiederholung des Termins ein."
 
 #. Default: "Event related settings like timezone, etc."
 #: ./browser/controlpanel.py:15
 msgid "help_event_settings"
-msgstr ""
+msgstr "Terminbezogene Einstellungen wie Zeitzonen, etc."
 
 #. Default: "Select the Timezone, where this event happens."
 #: ./at/content.py:73
 msgid "help_event_timezone"
-msgstr ""
+msgstr "Wählen Sie die Zeitzone in der Termin passiert."
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: ./at/content.py:162
 #: ./dx/behaviors.py:133
 msgid "help_event_url"
-msgstr ""
+msgstr "Webadresse mit mehr Informationen über diesen Termin. Setzen Sie http:// vor externe Links. "
 
 #. Default: "First day in the Week."
 #: ./interfaces.py:82
 msgid "help_first_weekday"
-msgstr ""
+msgstr "Erste Tag der Woche."
 
 #. Default: "Location of the event"
 #: ./dx/behaviors.py:94
 msgid "help_location"
-msgstr ""
+msgstr "Ort des Termins"
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
 #: ./interfaces.py:57
 msgid "help_portal_timezone"
-msgstr ""
+msgstr "Zeitzoneneinstellung des Portal. Benutzer können ihre eigene Zeitzone setzen falls verfügbare Zeitzonen definiert sind."
 
 #. Default: "RFC5545 compatible recurrence definition"
 #: ./dx/behaviors.py:86
 msgid "help_recurrence"
-msgstr ""
+msgstr "RFC5545 kompatible Definition einer Wiederholung"
 
 #. Default: "Date and Time, when the event begins."
 #: ./dx/behaviors.py:37
 msgid "help_start"
-msgstr ""
+msgstr "Datum und Uhrzeit wann der Termin beginnt."
 
 #: ./at/content.py:44
 msgid "help_start_location"
@@ -273,12 +273,12 @@ msgstr ""
 #. Default: "Timezone of the event"
 #: ./dx/behaviors.py:49
 msgid "help_timezone"
-msgstr ""
+msgstr "Zeitzone des Termins"
 
 #. Default: "Event lasts whole day"
 #: ./dx/behaviors.py:56
 msgid "help_whole_day"
-msgstr ""
+msgstr "Der Termin dauert den ganzen Tag."
 
 #: ./at/content.py:84
 msgid "help_whole_day_location"
@@ -287,131 +287,131 @@ msgstr ""
 #. Default: "No events found."
 #: ./ical.py:98
 msgid "ical_view_no_events"
-msgstr ""
+msgstr "Es wurden keine Termine gefunden"
 
 #. Default: "iCal"
 #: ./browser/event_view.pt:149
 msgid "label_add_to_ical"
-msgstr ""
+msgstr "iCal"
 
 #. Default: "Attendees"
 #: ./dx/behaviors.py:102
 msgid "label_attendees"
-msgstr ""
+msgstr "Teilnehmer"
 
 #. Default: "Contact E-mail"
 #: ./at/content.py:137
 #: ./dx/behaviors.py:120
 msgid "label_contact_email"
-msgstr ""
+msgstr "Kontakt E-mailadresse"
 
 #. Default: "Contact Name"
 #: ./at/content.py:125
 #: ./dx/behaviors.py:114
 msgid "label_contact_name"
-msgstr ""
+msgstr "Kontaktname"
 
 #. Default: "Contact Phone"
 #: ./at/content.py:149
 #: ./dx/behaviors.py:126
 msgid "label_contact_phone"
-msgstr ""
+msgstr "Kontakttelefon"
 
 #. Default: "Event end date"
 #: ./dx/behaviors.py:42
 msgid "label_end"
-msgstr ""
+msgstr "Terminende"
 
 #. Default: "Event body text"
 #: ./at/content.py:176
 msgid "label_event_announcement"
-msgstr ""
+msgstr "Terminankündigung"
 
 #. Default: "Attendees"
 #: ./at/content.py:114
 msgid "label_event_attendees"
-msgstr ""
+msgstr "Teilnehmer"
 
 #. Default: "Event Ends"
 #: ./at/content.py:57
 msgid "label_event_end"
-msgstr ""
+msgstr "Terminende"
 
 #. Default: "Event Location"
 #: ./at/content.py:104
 msgid "label_event_location"
-msgstr ""
+msgstr "Terminort"
 
 #. Default: "Event Recurrence"
 #: ./at/content.py:94
 msgid "label_event_recurrence"
-msgstr ""
+msgstr "Weitere Termine"
 
 #. Default: "Event settings"
 #: ./browser/controlpanel.py:14
 msgid "label_event_settings"
-msgstr ""
+msgstr "Termin Einstellungen"
 
 #. Default: "Event Starts"
 #: ./at/content.py:43
 msgid "label_event_start"
-msgstr ""
+msgstr "Terminanfang"
 
 #. Default: "Timezone"
 #: ./at/content.py:72
 msgid "label_event_timezone"
-msgstr ""
+msgstr "Zeitzohne"
 
 #. Default: "Event Type(s)"
 #: ./at/content.py:189
 msgid "label_event_type"
-msgstr ""
+msgstr "Termin Artikeltypen"
 
 #. Default: "Event URL"
 #: ./at/content.py:161
 #: ./dx/behaviors.py:132
 msgid "label_event_url"
-msgstr ""
+msgstr "Webadresse des Termins "
 
 #. Default: "Event"
 #: ./dx/behaviors.py:144
 msgid "label_fieldset_event"
-msgstr ""
+msgstr "Termin"
 
 #. Default: "First Weekday"
 #: ./interfaces.py:81
 msgid "label_first_weekday"
-msgstr ""
+msgstr "Erste Tag der Woche"
 
 #. Default: "Location"
 #: ./dx/behaviors.py:93
 msgid "label_location"
-msgstr ""
+msgstr "Terminort"
 
 #. Default: "Recurrence"
 #: ./dx/behaviors.py:85
 msgid "label_recurrence"
-msgstr ""
+msgstr "Weitere Termine"
 
 #. Default: "Event start date"
 #: ./dx/behaviors.py:36
 msgid "label_start"
-msgstr ""
+msgstr "Terminanfang"
 
 #. Default: "Timezone"
 #: ./dx/behaviors.py:48
 msgid "label_timezone"
-msgstr ""
+msgstr "Zeitzohne"
 
 #. Default: "Whole Day"
 #: ./dx/behaviors.py:55
 msgid "label_whole_day"
-msgstr ""
+msgstr "Ganztags"
 
 #. Default: "Whole day event"
 #: ./at/content.py:83
 msgid "label_whole_day_event"
-msgstr ""
+msgstr "Ganztägiger Termin"
 
 #: ./i18n.py:10
 msgid "month-1"
@@ -464,27 +464,27 @@ msgstr ""
 #. Default: "Calendar"
 #: ./portlets/portlet_calendar.pt:38
 msgid "summary_calendar"
-msgstr ""
+msgstr "Kalender"
 
 #. Default: "Event details"
 #: ./browser/event_view.pt:15
 msgid "summary_event_details"
-msgstr ""
+msgstr "Termindetails"
 
 #. Default: "Download this event in iCal format"
 #: ./browser/event_view.pt:144
 msgid "title_add_to_ical"
-msgstr ""
+msgstr "Termin übernehmen"
 
 #. Default: "Next month"
 #: ./portlets/portlet_calendar.pt:26
 msgid "title_next_month"
-msgstr ""
+msgstr "Nächster Monat"
 
 #. Default: "Previous month"
 #: ./portlets/portlet_calendar.pt:13
 msgid "title_previous_month"
-msgstr ""
+msgstr "Voriger Monat"
 
 #. Default: "Monday"
 #: ./vocabulary.py:44
