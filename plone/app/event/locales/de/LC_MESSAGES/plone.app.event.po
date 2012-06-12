@@ -170,7 +170,7 @@ msgstr "Liste der Teilnehmer"
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: ./interfaces.py:67
 msgid "help_available_timezones"
-msgstr "Die Zeitzonen, welche im Portal verfügbar sind. Können für Bentzuer und Termine gesetzt werden."
+msgstr "Zeitzonen, die im Portal verfügbar sind. Können für Bentzuer und Termine gesetzt werden."
 
 #. Default: "Email address to contact about this event."
 #: ./dx/behaviors.py:121
@@ -244,7 +244,7 @@ msgstr "Webadresse mit mehr Informationen über diesen Termin. Setzen Sie http:/
 #. Default: "First day in the Week."
 #: ./interfaces.py:82
 msgid "help_first_weekday"
-msgstr "Erste Tag der Woche."
+msgstr "Erster Tag der Woche."
 
 #. Default: "Location of the event"
 #: ./dx/behaviors.py:94
@@ -360,7 +360,7 @@ msgstr "Terminanfang"
 #. Default: "Timezone"
 #: ./at/content.py:72
 msgid "label_event_timezone"
-msgstr "Zeitzohne"
+msgstr "Zeitzone"
 
 #. Default: "Event Type(s)"
 #: ./at/content.py:189
@@ -381,7 +381,7 @@ msgstr "Termin"
 #. Default: "First Weekday"
 #: ./interfaces.py:81
 msgid "label_first_weekday"
-msgstr "Erste Tag der Woche"
+msgstr "Wochenbeginn"
 
 #. Default: "Location"
 #: ./dx/behaviors.py:93
@@ -401,12 +401,12 @@ msgstr "Terminanfang"
 #. Default: "Timezone"
 #: ./dx/behaviors.py:48
 msgid "label_timezone"
-msgstr "Zeitzohne"
+msgstr "Zeitzone"
 
 #. Default: "Whole Day"
 #: ./dx/behaviors.py:55
 msgid "label_whole_day"
-msgstr "Ganztags"
+msgstr "Ganztägiger Termin"
 
 #. Default: "Whole day event"
 #: ./at/content.py:83
