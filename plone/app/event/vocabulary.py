@@ -43,9 +43,7 @@ def Weekdays(context):
     """ Vocabulary for Weekdays.
     """
 
-    # TODO: check translate functionality
-    #import pdb;pdb.set_trace()
-    #translate = getSite().translate
+    translate = getSite().translate
 
     items =[(translate(u'weekday_mon', domain='plonelocales', default=u'Monday'),0),
             (translate(u'weekday_tue', domain='plonelocales', default=u'Tuesday'),1),
