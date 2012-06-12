@@ -50,7 +50,8 @@ def Weekdays(context):
               language.
 
     """
-    #translate = getSite().translate
+    translate = getSite().translate
+
     domain = 'plonelocales'
     items =[(translate(u'weekday_mon', domain=domain, default=u'Monday'),0),
             (translate(u'weekday_tue', domain=domain, default=u'Tuesday'),1),
