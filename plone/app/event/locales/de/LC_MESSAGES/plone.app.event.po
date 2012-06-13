@@ -190,7 +190,7 @@ msgstr "Telefonnummer des Verantwortlichen des Termins."
 #. Default: "Date and Time, when the event ends."
 #: ./dx/behaviors.py:43
 msgid "help_end"
-msgstr "Datum und Uhrzeit wann der Termin endet."
+msgstr "Datum und Uhrzeit an dem der Termin endet."
 
 #: ./at/content.py:58
 msgid "help_end_location"
@@ -264,7 +264,7 @@ msgstr "RFC5545 kompatible Definition einer Wiederholung"
 #. Default: "Date and Time, when the event begins."
 #: ./dx/behaviors.py:37
 msgid "help_start"
-msgstr "Datum und Uhrzeit wann der Termin beginnt."
+msgstr "Datum und Uhrzeit an dem der Termin beginnt."
 
 #: ./at/content.py:44
 msgid "help_start_location"
