@@ -111,7 +111,7 @@ class Renderer(base.Renderer):
                         events_string and u"</br>" or u"",
                         occ.absolute_url(),
                         occ.Title().decode('utf-8'),
-                        location and u" %s" % location or u"")
+                        location and u" %s" % location.decode('utf-8') or u"")
 
             caldata[-1].append(
                 {'date': dat,
