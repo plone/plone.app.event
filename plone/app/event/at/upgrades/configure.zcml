@@ -1,0 +1,19 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  i18n_domain="plone.app.event">
+
+  <genericsetup:upgradeSteps
+    source="0"
+    destination="1"
+    profile="plone.app.event.at:default">
+
+    <genericsetup:upgradeStep
+      title="Migrate old ATEvent to plone.app.event"
+      description="Upgrades old AT events to plone.app.events"
+      handler=".event.migrateATEvents"
+      />
+
+  </genericsetup:upgradeSteps>
+
+</configure>
