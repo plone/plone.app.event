@@ -9,7 +9,19 @@
     margin:10px;
     color:#fff;
 }
+
 .tooltip a {
     color:black;
     font-weight:bold;
+}
+
+.eventDetails .timezone {
+    font-size:85%;
+    padding-left:0.2em;
+    background-color:#ffd;
+    color:#354;
+}
+
+.eventDetails a.hCalendar-hidden {
+    display:none; /* hide hCal fields not useful to human eyes */
 }

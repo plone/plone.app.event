@@ -11,7 +11,7 @@
     <metal:content-core define-macro="content-core"
                         tal:define="data nocall:view/data">
 
-        <div class="eventDetails vcard">
+        <div class="eventDetails">
             <table class="vertical listing"
               summary="Event details"
               i18n:attributes="summary summary_event_details;">
@@ -29,12 +29,24 @@
                     </tr>
                     <tr>
                         <th i18n:translate="event_when">When</th>
-                        <td tal:define="date_dict view/date_for_display">
+                        <td tal:define="date_dict view/date_for_display;
+                                        start_tzname python:data.start.tzinfo.tzname(data.start);
+                                        start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
+                                        start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
                           <metal:macro define-macro="event_occurrence">
+                           <div class="vevent">
+                            <a class="url hCalendar-hidden"
+                               href=""
+                               tal:attributes="href context/absolute_url"
+                               tal:content="context/absolute_url"
+                               >
+                            </a>
+                            <span class="hCalendar-hidden summary"
+                                  tal:content="context/Title">event title</span>
                             <tal:differentday tal:condition="not:date_dict/same_day"
                                               i18n:translate="event_when_differentday">
                                 <abbr i18n:name="startdate"
-                                      id="parent-fieldname-startDate"
+                                      class="dtstart"
                                       tal:attributes="title date_dict/start_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
@@ -47,7 +59,7 @@
                                 </abbr>
                                 to
                                 <abbr i18n:name="enddate"
-                                      id="parent-fieldname-endDate"
+                                      class="dtend"
                                       tal:attributes="title date_dict/end_iso">
                                       <span metal:define-slot="inside"
                                             class="explain">
@@ -58,6 +70,9 @@
                                         </tal:notwholeday>
                                       </span>
                                 </abbr>
+                                <span class="timezone" tal:condition="start_tzname">
+                                    (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+                                </span>
                             </tal:differentday>
 
                             <tal:sameday tal:condition="date_dict/same_day">
@@ -71,22 +86,26 @@
                                       i18n:name="date">
                                     Start Date Time</span>
                                 from
-                                <abbr id="parent-fieldname-startDate"
+                                <abbr class="dtstart"
                                     tal:attributes="title date_dict/start_iso"
                                      i18n:name="starttime">
                                      <span metal:define-slot="inside"
                                          class="explain"
                                          tal:content="date_dict/start_time">Start Time</span>
                                 </abbr> to
-                                <abbr id="parent-fieldname-endDate"
+                                <abbr class="dtend"
                                     tal:attributes="title date_dict/end_iso"
                                     i18n:name="endtime">
                                     <span metal:define-slot="inside"
                                         class="explain"
                                         tal:content="date_dict/end_time">End Time</span>
                                 </abbr>
+                                <span class="timezone" tal:condition="start_tzname">
+                                    (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+                                </span>
                               </tal:notwholeday>
                             </tal:sameday>
+                           </div>
                           </metal:macro>
                           <div tal:define="events view/occurrences;
                                            events python:events and events[1:] or None"
@@ -102,8 +121,10 @@
                     </tr>
                     <tr tal:condition="data/location">
                         <th i18n:translate="event_where">Where</th>
-                        <td class="location" tal:content="data/location">
+                        <td class="location">
+                          <span class="location" tal:content="data/location">
                           location
+                          </span>
                         </td>
                     </tr>
                     <tr tal:define="contact_email data/contact_email;
@@ -111,8 +132,7 @@
                         tal:condition="python:contact_name or contact_email">
                         <th i18n:translate="contact_name">Contact Name</th>
                         <td>
-                            <a id="parent-fieldname-contactEmail"
-                               tal:condition="contact_email"
+                            <a tal:condition="contact_email"
                                tal:replace="structure python: context.spamProtect(mailaddress=contact_email, mailname=contact_name, cssclass='email fn')"
                                />
                             <span class="fn"
@@ -157,7 +177,7 @@
             <a class="url"
                href="event_url"
                i18n:translate="event_more_information"
-               id="parent-fieldname-eventUrl"
+               class="eventUrl"
                tal:attributes="href data/event_url">
                More information about this event&hellip;</a>
         </p>
