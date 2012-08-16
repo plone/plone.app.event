@@ -9,6 +9,13 @@ Changelog
   type.
   [seanupton]
 
+- Filter calendar portlet search URLs for each day to a whitelist of
+  event portal_type values.  Prevents non-event add-on types with
+  start/end fields from showing up in calendar, as defense against
+  unintended consequences (add-ons could explicitly override this 
+  template if they define additional Event types).
+  [seanupton]
+
 - API refactoring:
   * Move all generic interfaces to plone.event,
   * Extend IEventAccessor adapters to also be able to set attributes. 
