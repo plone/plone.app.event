@@ -4,6 +4,7 @@ types.
 """
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.textfield import RichText
+from plone.app.textfield.value import RichTextValue
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
@@ -390,7 +391,12 @@ class EventAccessor(object):
 
     @property
     def text(self):
-        return getattr(self.context, 'text', None)
+        behavior = IEventSummary(self.context)
+        textvalue = getattr(behavior, 'text', None)
+        if textvalue is None:
+            return u''
+        return textvalue.output
     @text.setter
     def text(self, value):
-        return setattr(self.context, 'text', value)
+        behavior = IEventSummary(self.context)
+        behavior.text = RichTextValue(raw=value)
