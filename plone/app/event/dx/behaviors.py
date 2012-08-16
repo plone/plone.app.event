@@ -326,7 +326,8 @@ class EventAccessor(object):
             contact_email=IEventContact,
             contact_phone=IEventContact,
             event_url=IEventContact,
-            subjects=ICategorization
+            subjects=ICategorization,
+            text=IEventSummary,
         )
         object.__setattr__(self, '_behavior_map', bm)
 
