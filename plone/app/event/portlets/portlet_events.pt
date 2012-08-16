@@ -24,6 +24,7 @@
                     plone_view context/@@plone;
                     getIcon nocall:plone_view/getIcon;
                     item_startdate python:toLocalizedTime(obj.start);
+                    item_tzname python: obj.start.tzinfo.tzname(obj.start);
                     item_starttime python:toLocalizedTime(obj.start,time_only=1);
                     item_enddate python:toLocalizedTime(obj.end);
                     item_endtime python:toLocalizedTime(obj.end,time_only=1);
@@ -54,6 +55,7 @@
                  tal:content="string:${item_startdate} - ${item_enddate}">
                 May 5
                 </span>
+                <span tal:condition="item_tzname">(<tal:tzname replace="item_tzname">TZ</tal:tzname>)</span>
                 <span tal:condition="obj/location"> &mdash;
                     <tal:location content="obj/location">Location</tal:location>
                 </span>
