@@ -4,6 +4,11 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- IEventSummary behavior added for body text on Dexterity event type,
+  as well as a SearchableText indexer adapter for the Dexterity event
+  type.
+  [seanupton]
+
 - API refactoring:
   * Move all generic interfaces to plone.event,
   * Extend IEventAccessor adapters to also be able to set attributes. 

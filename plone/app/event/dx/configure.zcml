@@ -29,6 +29,7 @@
 
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
+    <adapter name="SearchableText" factory=".behaviors.searchable_text_indexer" />
 
     <plone:behavior
         title="Event Basic"
@@ -75,6 +76,13 @@
         marker=".interfaces.IDXEventContact"
         />
 
+    <plone:behavior
+        title="Event Summary"
+        description="Summary/body text extension for Events."
+        provides=".behaviors.IEventSummary"
+        factory="plone.behavior.AnnotationStorage"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
 
     <genericsetup:registerProfile
         name="default"

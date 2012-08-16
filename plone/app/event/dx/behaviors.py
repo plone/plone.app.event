@@ -2,23 +2,27 @@
 types.
 
 """
-import pytz
+from plone.app.dexterity.behaviors.metadata import ICategorization
+from plone.app.textfield import RichText
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
+import pytz
 from zope import schema
 from zope.component import adapts
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant, Invalid
-from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.dexterity.behaviors.metadata import ICategorization
+
+from plone.app.event import messageFactory as _
 from plone.app.event.base import default_timezone, default_end_dt
 from plone.app.event.base import localized_now, DT
-from plone.app.event import messageFactory as _
+from plone.app.event.dx.interfaces import IDXEvent
+
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -149,12 +153,23 @@ class IEventContact(form.Schema):
         )
 
 
+class IEventSummary(form.Schema):
+    """Event summary (body text) schema."""
+ 
+    text = RichText(
+        title=_(u'label_event_announcement', default=u'Event body text'),
+        description=_(u'help_event_announcement', default=u''),
+        required=False,
+        )
+
+
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, form.IFormFieldProvider)
 alsoProvides(IEventRecurrence, form.IFormFieldProvider)
 alsoProvides(IEventLocation, form.IFormFieldProvider)
 alsoProvides(IEventAttendees, form.IFormFieldProvider)
 alsoProvides(IEventContact, form.IFormFieldProvider)
+alsoProvides(IEventSummary, form.IFormFieldProvider)
 
 
 class EventBasic(object):
@@ -263,6 +278,27 @@ def end_indexer(obj):
     if event.end is None:
         return None
     return DT(event.end)
+
+# Body text indexing
+@indexer(IDXEvent)
+def searchable_text_indexer(obj):
+    text = ''
+    text += '%s\n' % obj.Title()
+    text += '%s\n' % obj.Description()
+    behavior = IEventSummary(obj, None)
+    if behavior is None or behavior.text is None:
+        return text
+    output = behavior.text.output
+    transforms = getToolByName(obj, 'portal_transforms')
+    body_plain = transforms.convertTo(
+        'text/plain',
+        output,
+        mimetype='text/html',
+        ).getData().strip()
+    text += behavior.text.output
+    return text.strip()
+
+
 # Object adapters
 
 

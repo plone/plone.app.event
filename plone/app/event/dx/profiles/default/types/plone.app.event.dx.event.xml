@@ -34,6 +34,7 @@
     <element value="plone.app.event.dx.behaviors.IEventLocation"/>
     <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
     <element value="plone.app.event.dx.behaviors.IEventContact"/>
+    <element value="plone.app.event.dx.behaviors.IEventSummary"/>
   </property>
 
   <!-- View and aliases -->
