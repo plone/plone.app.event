@@ -22,6 +22,6 @@
     color:#354;
 }
 
-.eventDetails a.hCalendar-hidden {
+.eventDetails .hCalendar-hidden {
     display:none; /* hide hCal fields not useful to human eyes */
 }
