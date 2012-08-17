@@ -57,7 +57,7 @@
                                         </tal:notwholeday>
                                       </span>
                                 </abbr>
-                                to
+                                <span class="timespan">to</span>
                                 <abbr i18n:name="enddate"
                                       class="dtend"
                                       tal:attributes="title date_dict/end_iso">
@@ -82,24 +82,27 @@
                               </tal:wholeday>
                               <tal:notwholeday condition="not:data/whole_day"
                                   i18n:translate="event_when_sameday">
-                                <span tal:replace="date_dict/start_date"
+                                <div class="datedisplay" tal:content="date_dict/start_date"
                                       i18n:name="date">
-                                    Start Date Time</span>
-                                from
-                                <abbr class="dtstart"
-                                    tal:attributes="title date_dict/start_iso"
-                                     i18n:name="starttime">
-                                     <span metal:define-slot="inside"
-                                         class="explain"
-                                         tal:content="date_dict/start_time">Start Time</span>
-                                </abbr> to
-                                <abbr class="dtend"
-                                    tal:attributes="title date_dict/end_iso"
-                                    i18n:name="endtime">
-                                    <span metal:define-slot="inside"
-                                        class="explain"
-                                        tal:content="date_dict/end_time">End Time</span>
-                                </abbr>
+                                    Start Date Time</div>
+                                <div class="timerange">
+                                    from
+                                    <abbr class="dtstart"
+                                        tal:attributes="title date_dict/start_iso"
+                                         i18n:name="starttime">
+                                         <span metal:define-slot="inside"
+                                             class="explain"
+                                             tal:content="date_dict/start_time">Start Time</span>
+                                    </abbr>
+                                    <span class="timespan">to</span>
+                                    <abbr class="dtend"
+                                        tal:attributes="title date_dict/end_iso"
+                                        i18n:name="endtime">
+                                        <span metal:define-slot="inside"
+                                            class="explain"
+                                            tal:content="date_dict/end_time">End Time</span>
+                                    </abbr>
+                                </div>
                                 <span class="timezone" tal:condition="start_tzname">
                                     (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
                                 </span>
