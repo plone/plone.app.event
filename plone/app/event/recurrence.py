@@ -62,9 +62,12 @@ class OccurrenceTraverser(DefaultPublishTraverse):
     implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
+        # TODO: here is something odd....
+        #       called every time, when an attribute is traversed/accessed?
         dateobj = guess_date_from(name, self.context)
         occurrence = IRecurrenceSupport(self.context).occurrences(dateobj)[0]
         if not dateobj or not is_same_day(dateobj, occurrence.start):
+            # if not dateobj clause should be done before IRecurrenceSupport call
             return self.fallback(name)
         return occurrence
 
@@ -96,6 +99,7 @@ class EventOccurrenceAccessor(object):
         object.__setattr__(self, '_own_attr', own_attr)
 
     def _get_context(self, name):
+        # TODO: save parent context on self, so it must not be called every time
         oa = self._own_attr
         if name in oa:
             return self.context

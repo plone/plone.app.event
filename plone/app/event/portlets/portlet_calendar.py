@@ -109,7 +109,10 @@ class Renderer(base.Renderer):
                     location = IEventAccessor(occ).location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        occ.url,
+                        occ.url, # TODO: shouldn't we use IEventAccessor's
+                                 # context here? and modify
+                                 # EventOccurrenceAccessor, so that it can
+                                 # return the parent's context?
                         occ.title,
                         location and u" %s" % location or u"")
 
