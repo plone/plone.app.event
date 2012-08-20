@@ -4,6 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent, IRecurrenceSupport, IEventAccessor
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
@@ -102,12 +103,10 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     query['object_provides'] = IEvent.__identifier__
 
     if 'path' not in kw:
-        # always limit to the current portal root
-        # TODO: is there a better method to get portal/navigation root's path
-        #       without having to have the request available?
-        #query['path'] = '/'.join(getSite().getPhysicalPath())
-        urltool = getToolByName(context, "portal_url")
-        query['path'] = urltool.getPortalObject().getPhysicalPath()
+        # limit to the current navigation root, usually (not always) site
+        portal = getSite()
+        navroot = getNavigationRootObject(context, portal)
+        query['path'] = navroot.getPhysicalPath()
 
     if range_start:
         query['end'] = {'query': DT(range_start), 'range': 'min'}
@@ -146,9 +145,9 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
         #       return just start and end datetime
         occurrences = IRecurrenceSupport(obj).occurrences(
             range_start, range_end)
-        for item in occurrences:
-            occ = IEventAccessor(item)
-            start_str = datetime.strftime(occ.start, '%Y-%m-%d')
+        for occ in occurrences:
+            accessor = IEventAccessor(occ)
+            start_str = datetime.strftime(accessor.start, '%Y-%m-%d')
             # TODO: add span_events parameter to include dates btw. start
             # and end also. for events lasting longer than a day...
             if start_str not in events_by_date:
