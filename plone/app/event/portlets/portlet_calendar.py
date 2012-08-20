@@ -109,8 +109,8 @@ class Renderer(base.Renderer):
                     location = IEventAccessor(occ).location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        occ.absolute_url(),
-                        occ.Title().decode('utf-8'),
+                        occ.url,
+                        occ.title,
                         location and u" %s" % location or u"")
 
             caldata[-1].append(
