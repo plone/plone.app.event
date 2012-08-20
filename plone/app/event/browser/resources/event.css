@@ -9,6 +9,7 @@
     margin:10px;
     color:#fff;
 }
+
 .tooltip a {
     color:black;
     font-weight:bold;
@@ -88,4 +89,39 @@
 
 .ploneCalendar .todaynoevent {
     border: 2px solid #205C90;
+}
+
+
+.eventDetails .timezone {
+    display:block;
+    margin-top:0.5em;
+    padding:0.2em 0;
+    background-color:#ffe;
+    color:#354;
+    width:100%;
+}
+
+.eventDetails .hCalendar-hidden {
+    display:none; /* hide hCal fields not useful to human eyes */
+}
+
+.eventDetails .timerange, .eventDetails .timezone {
+    padding-left:0.5em;
+    font-size:85%;
+    line-height:1em;
+}
+
+.eventDetails .datedisplay {
+    line-height:1.5em;
+    margin-bottom:0.2em;
+    font-weight:bold;
+    font-size:100%;
+}
+
+.eventDetails abbr.dtstart {
+    font-weight:bold;
+}
+
+.eventDetails table.listing td {
+    min-width:60%;
 }

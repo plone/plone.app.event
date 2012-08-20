@@ -106,14 +106,12 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for occ in date_events:
-                    location = IEventAccessor(occ).location
+                    accessor = IEventAccessor(occ)
+                    location = accessor.location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        occ.url, # TODO: shouldn't we use IEventAccessor's
-                                 # context here? and modify
-                                 # EventOccurrenceAccessor, so that it can
-                                 # return the parent's context?
-                        occ.title,
+                        accessor.context.absolute_url(),
+                        accessor.title,
                         location and u" %s" % location or u"")
 
             caldata[-1].append(
