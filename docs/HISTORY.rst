@@ -6,12 +6,18 @@ Changelog
 
 - API refactoring:
   * Move all generic interfaces to plone.event,
-  * Extend IEventAccessor adapters to also be able to set attributes. 
+  * Extend IEventAccessor adapters to also be able to set attributes.
+  [thet]
 
-- For dexterity behaviors, use a custom behavior adapter to store attributes
-  directly on the context. This fixes that recurrence occurrences start and end
-  dates were not indexed, because the DateRecurringIndex had not access to the
-  recurrence attribute.
+- Copy plonetheme.sunburst styles for the calendar portlet to event.css. This
+  way, the calendar portlet is nicely styled, even without sunburst theme
+  applied.
+  [thet]
+
+- For Dexterity behaviors, use IEventRecurrence adapter to store attributes
+  directly on the context.  This fixes that recurrence occurrences start and
+  end dates were not indexed, because the DateRecurringIndex had not access to
+  the recurrence attribute.
   [thet]
 
 - IRecurrence adapter returns now acquisition-wrapped occurrence

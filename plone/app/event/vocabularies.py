@@ -1,7 +1,6 @@
 import pytz
 from collective.elephantvocabulary import wrap_vocabulary
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
