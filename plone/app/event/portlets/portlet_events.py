@@ -15,6 +15,7 @@ from zope.interface import implements
 from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
+from plone.event.interfaces import IEventAccessor
 
 from plone.app.portlets import PloneMessageFactory as _
 
@@ -68,8 +69,8 @@ class Renderer(base.Renderer):
 
     def published_events(self):
         context = aq_inner(self.context)
-        return get_occurrences(context, self._data(),
-                               limit=self.data.count)
+        return [IEventAccessor(occ) for occ in\
+                get_occurrences(context, self._data(), limit=self.data.count)]
 
     @memoize
     def have_events_folder(self):
