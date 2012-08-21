@@ -4,6 +4,11 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- Calendar portlet search links now use @@search (from plone.app.search)
+  instead of (since Plone 4.2) deprecated ./search (search.pt).  Requires
+  recent plone.app.search changes.
+  [seanupton]
+
 - IEventSummary behavior added for body text on Dexterity event type,
   as well as a SearchableText indexer adapter for the Dexterity event
   type.
