@@ -56,7 +56,8 @@
                   tal:define="today day/today;
                               next_month day/next_month;
                               prev_month day/prev_month;
-                              events day/events"
+                              events day/events;
+                              limit python:len(events) if events is not None else 0"
                   tal:attributes="class python:u'%s%s%s%s' % 
                               ((today and 'todayevent' or 'event'),
                               (next_month and ' cal_next_month' or ''),
@@ -64,7 +65,7 @@
                               (events and ' cal_has_events' or ''))">
                     <a href=""
                       tal:omit-tag="not:events"
-                      tal:attributes="href string:${navigation_root_url}/search?start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min&amp;portal_type%3Alist=Event&amp;portal_type%3Alist=plone.app.event.dx.event;
+                      tal:attributes="href string:${navigation_root_url}/@@occurrences.html?start=${day/date_string}&limit:int=$limit;
                                       title day/events_string;"
                       tal:content="day/day">31</a>
                 </td>
