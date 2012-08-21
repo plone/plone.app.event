@@ -68,6 +68,15 @@
                       tal:attributes="href string:${navigation_root_url}/@@occurrences.html?start=${day/date_string}&limit:int=$limit;
                                       title day/events_string;"
                       tal:content="day/day">31</a>
+                    
+                    <tal:alternative_linking condition="nothing">
+                    <a 
+                      href=""
+                      tal:omit-tag="not:events"
+                      tal:attributes="href string:${navigation_root_url}/@@search?advanced_search=True&amp;start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min&amp;portal_type%3Alist=Event&amp;portal_type%3Alist=plone.app.event.dx.event;
+                                      title day/events_string;"
+                      tal:content="day/day">31</a>
+                    </tal:alternative_linking>
                 </td>
                 </tal:block>
               </tr>

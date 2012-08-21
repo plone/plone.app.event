@@ -4,6 +4,14 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Moved docs/HISTORY.rst to CHANGES.txt.
+  [seanupton]
+
+- Calendar portlet search links now use @@search (from plone.app.search)
+  instead of (since Plone 4.2) deprecated ./search (search.pt).  Requires
+  recent plone.app.search changes.
+  [seanupton]
+
 - Integrate the plone.app.event-ploneintegration functionality for Plone
   versions without plone.app.event core integration (all current version)
   into this package for simplification.
