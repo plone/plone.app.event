@@ -1,8 +1,13 @@
 Changelog
 =========
 
-1.0a3 (unreleased)
+1.0b1 (unreleased)
 ------------------
+
+- Integrate the plone.app.event-ploneintegration functionality for Plone
+  versions without plone.app.event core integration (all current version)
+  into this package for simplification.
+  [thet]
 
 - IEventSummary behavior added for body text on Dexterity event type,
   as well as a SearchableText indexer adapter for the Dexterity event

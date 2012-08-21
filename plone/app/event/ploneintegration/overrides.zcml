@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="plone">
+
+  <include package="plone.app.portlets"/>
+  <include package="Products.ATContentTypes" file="browser.zcml"/>
+
+  <include package="z3c.unconfigure" file="meta.zcml"/>
+  <unconfigure>
+    <plone:portlet
+        name="portlets.Calendar"
+        interface="plone.app.portlets.portlets.calendar.ICalendarPortlet"
+        assignment="plone.app.portlets.portlets.calendar.Assignment"
+        renderer="plone.app.portlets.portlets.calendar.Renderer"
+        addview="plone.app.portlets.portlets.calendar.AddForm"
+        />
+    <plone:portlet
+        name="portlets.Events"
+        interface="plone.app.portlets.portlets.events.IEventsPortlet"
+        assignment="plone.app.portlets.portlets.events.Assignment"
+        renderer="plone.app.portlets.portlets.events.Renderer"
+        addview="plone.app.portlets.portlets.events.AddForm"
+        editview="plone.app.portlets.portlets.events.EditForm"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATTopic"
+        name="ics_view"
+        class="Products.ATContentTypes.browser.calendar.TopicCalendarView"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class="Products.ATContentTypes.browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+  </unconfigure>
+
+</configure>

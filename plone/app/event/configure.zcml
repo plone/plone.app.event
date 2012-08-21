@@ -8,6 +8,11 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <!-- pre plone 4.? integration -->
+  <configure zcml:condition="not-have plone-43">
+    <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
+  </configure>
+
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
 

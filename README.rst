@@ -12,11 +12,16 @@ on installed packages.
 Installation for Plone 4.1
 --------------------------
 
-To install plone.app.event for Plone 4.1, please use the
-plone.app.event-ploneintegration package from pypi. Include it in your buildout
-config or in your integration package's setup.py and apply the "plone.app.event
-Plone4 integration" profile.  The plone.app.event-ploneintegration package
-pulls all dependencies, which are needed for plone.app.event.
+To install plone.app.event for Plone 4.1, please depend on plone.app.event
+package with the ploneintegration extra. In a buildout, use it like so::
+
+  eggs +=
+      plone.app.event [ploneintegration]
+
+And apply the "plone.app.event Plone4 integration" profile manually or
+automatically via Generic Setup in metadata.xml like so::
+
+  <dependency>profile-plone.app.event.ploneintegration:default</dependency>
 
 
 Warning

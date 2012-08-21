@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a2'
+version = '1.0b1'
 
 setup(name='plone.app.event',
       version=version,
@@ -69,6 +69,10 @@ setup(name='plone.app.event',
               'zope.schema',
               'zope.interface',
               'zope.component',
+          ],
+          'ploneintegration': [
+              'plone.app.event [archetypes]',
+              'z3c.unconfigure',
           ],
           'test': [
               'interlude',

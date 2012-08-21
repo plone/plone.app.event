@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>1</version>
+  <dependencies>
+    <dependency>profile-plone.app.event.ploneintegration:prepare</dependency>
+    <dependency>profile-plone.app.event.at:default</dependency>
+  </dependencies>
+</metadata>

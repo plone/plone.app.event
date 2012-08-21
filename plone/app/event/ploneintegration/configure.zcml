@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="plone">
+  
+  <includeOverrides file="overrides.zcml" />
+    
+  <genericsetup:registerProfile
+      name="default"
+      directory="profiles/default"
+      title="plone.app.event Plone4 integration"
+      description="Integration of plone.app.event into pre Plone 4.3 release."
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="prepare"
+      directory="profiles/prepare"
+      title="plone.app.event Plone4 integration preparation"
+      description="Preparation of Integration of plone.app.event into pre Plone 4.3 release. Will be automatically applied by the default profile." 
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>
