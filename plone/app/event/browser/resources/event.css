@@ -106,9 +106,9 @@
 }
 
 .eventDetails .timerange, .eventDetails .timezone {
-    padding-left:0.5em;
     font-size:85%;
     line-height:1em;
+    white-space:nowrap;
 }
 
 .eventDetails .datedisplay {

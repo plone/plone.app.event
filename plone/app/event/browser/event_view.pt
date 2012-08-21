@@ -30,7 +30,7 @@
                     <tr>
                         <th i18n:translate="event_when">When</th>
                         <td tal:define="date_dict view/date_for_display;
-                                        start_tzname python:data.start.tzinfo.tzname(data.start);
+                                        start_tzname data/timezone;
                                         start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                                         start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
                           <metal:macro define-macro="event_occurrence">
@@ -42,9 +42,11 @@
                                >
                             </a>
                             <span class="hCalendar-hidden summary"
-                                  tal:content="context/Title">event title</span>
+                                  tal:content="data/title">event title</span>
                             <tal:differentday tal:condition="not:date_dict/same_day"
                                               i18n:translate="event_when_differentday">
+              
+                              <a class="url" tal:attributes="href context/absolute_url">
                                 <abbr i18n:name="startdate"
                                       class="dtstart"
                                       tal:attributes="title date_dict/start_iso">
@@ -70,46 +72,45 @@
                                         </tal:notwholeday>
                                       </span>
                                 </abbr>
-                                <span class="timezone" tal:condition="start_tzname">
-                                    (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
-                                </span>
+                              </a>
                             </tal:differentday>
 
                             <tal:sameday tal:condition="date_dict/same_day">
-                              <tal:wholeday condition="data/whole_day">
-                                <span tal:replace="date_dict/start_date"
-                                      i18n:translate="" />
-                              </tal:wholeday>
-                              <tal:notwholeday condition="not:data/whole_day"
-                                  i18n:translate="event_when_sameday">
-                                <div class="datedisplay" tal:content="date_dict/start_date"
-                                      i18n:name="date">
-                                    Start Date Time</div>
-                                <div class="timerange">
-                                    from
-                                    <abbr class="dtstart"
-                                        tal:attributes="title date_dict/start_iso"
-                                         i18n:name="starttime">
-                                         <span metal:define-slot="inside"
-                                             class="explain"
-                                             tal:content="date_dict/start_time">Start Time</span>
-                                    </abbr>
-                                    <span class="timespan">to</span>
-                                    <abbr class="dtend"
-                                        tal:attributes="title date_dict/end_iso"
-                                        i18n:name="endtime">
-                                        <span metal:define-slot="inside"
-                                            class="explain"
-                                            tal:content="date_dict/end_time">End Time</span>
-                                    </abbr>
-                                </div>
-                                <span class="timezone" tal:condition="start_tzname">
-                                    (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
-                                </span>
-                              </tal:notwholeday>
+                                <tal:wholeday condition="data/whole_day">
+                                  <a class="url" tal:attributes="href context/absolute_url">
+                                    <span tal:replace="date_dict/start_date" i18n:translate="" />
+                                  </a>
+                                </tal:wholeday>
+                                <tal:notwholeday condition="not:data/whole_day"
+                                    i18n:translate="event_when_sameday">
+                                  <a class="url" tal:attributes="href context/absolute_url">
+                                    <div class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date Time</div>
+                                  </a>
+                                  <div class="timerange">
+                                      from
+                                      <abbr class="dtstart"
+                                          tal:attributes="title date_dict/start_iso"
+                                           i18n:name="starttime">
+                                           <span metal:define-slot="inside"
+                                               class="explain"
+                                               tal:content="date_dict/start_time">Start Time</span>
+                                      </abbr>
+                                      <span class="timespan">to</span>
+                                      <abbr class="dtend"
+                                          tal:attributes="title date_dict/end_iso"
+                                          i18n:name="endtime">
+                                          <span metal:define-slot="inside"
+                                              class="explain"
+                                              tal:content="date_dict/end_time">End Time</span>
+                                      </abbr>
+                                    </div>
+                                </tal:notwholeday>
                             </tal:sameday>
                            </div>
                           </metal:macro>
+                          <span class="timezone" tal:condition="start_tzname">
+                           (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+                          </span>
                           <div tal:define="events view/occurrences;
                                            events python:events and events[1:] or None"
                                tal:condition="events">
