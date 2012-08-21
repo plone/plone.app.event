@@ -505,10 +505,10 @@ class EventAccessor(object):
 
     @property
     def location(self):
-        return self.context.getLocation()
+        return self.context.location
     @location.setter
     def location(self, value):
-        self.context.setLocation(value)
+        self.context.location = value
 
     @property
     def attendees(self):
