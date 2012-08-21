@@ -6,7 +6,6 @@ from zope.i18n import translate
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
-from zope.site.hooks import getSite
 from collective.elephantvocabulary import wrap_vocabulary
 
 def Timezones(context):
@@ -42,8 +41,6 @@ def AvailableTimezones(context):
 def Weekdays(context):
     """ Vocabulary for Weekdays.
     """
-
-    translate = getSite().translate
 
     items =[(translate(u'weekday_mon', domain='plonelocales', default=u'Monday'),0),
             (translate(u'weekday_tue', domain='plonelocales', default=u'Tuesday'),1),

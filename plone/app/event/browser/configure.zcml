@@ -13,6 +13,7 @@
         name="event-settings"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         class=".controlpanel.EventControlPanel"
+        template="controlpanel.pt"
         permission="cmf.ManagePortal"
         />
 
@@ -31,6 +32,10 @@
         class=".event_view.EventView"
         template="event_view.pt"
         permission="zope2.View"
+        />
+    <browser:defaultView
+        for="plone.app.event.interfaces.IOccurrence"
+        name="index_html"
         />
 
     <browser:page
