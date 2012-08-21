@@ -68,11 +68,13 @@ class EventView(BrowserView):
         return accessor
 
     def date_for_display(self):
-        return prepare_for_display(
+        display = prepare_for_display(
                 self.context,
                 self.data.start,
                 self.data.end,
                 self.data.whole_day)
+        display.update({'url': self.data.context.absolute_url()})
+        return display
 
     @property
     def occurrences(self):
@@ -82,6 +84,8 @@ class EventView(BrowserView):
         if occurrences is not None:
             for occ in occurrences.occurrences():
                 acc = IEventAccessor(occ)
-                events.append(prepare_for_display(
-                    self.context, acc.start, acc.end, acc.whole_day))
+                display = prepare_for_display(
+                    self.context, acc.start, acc.end, acc.whole_day)
+                display.update({'url': acc.context.absolute_url()})
+                events.append(display)
         return events
