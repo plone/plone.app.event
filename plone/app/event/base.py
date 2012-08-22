@@ -252,21 +252,7 @@ def guess_date_from(datestr, context=None):
     return pytz.timezone(default_timezone(context)).localize(dateobj)
 
 
-def DT2dt(v):
-    dt = v 
-    if isinstance(v, date):
-        dt = datetime(*v.timetuple()[:3])
-    elif isinstance(v, DateTime):
-        dt = v.asdatetime()
-        tz = dt.tzinfo
-        if not tz: 
-            return dt
-    else:
-        tz = dt.tzinfo
-    return tz.localize(datetime(*dt.timetuple()[:7]))
-
-
-_strftime = lambda v, fmt: DT2dt(v).strftime(fmt)
+_strftime = lambda v, fmt: pydt(v).strftime(fmt)
 
 
 class PatchedDateTime(DateTime):
