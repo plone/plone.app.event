@@ -79,28 +79,43 @@ class Renderer(base.Renderer):
 
     def all_events_link(self):
         navigation_root_url = self.navigation_root_url
+        url = None
         if self.have_events_folder():
-            return '%s/events' % navigation_root_url
+            url = '%s/events' % navigation_root_url
         else:
+            # search all events which are in the future or ongoing
             now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
             url = '%s/@@search?advanced_search=True'\
                   '&start.query:record:list:date=%s'\
                   '&start.range:record=min'\
+                  '&end.query:record:list:date=%s'\
+                  '&end.range:record=min'\
                   '&object_provides=plone.event.interfaces.IEvent'\
-                   % (navigation_root_url, now)
-            return url
+                   % (navigation_root_url, now, now)
+        return url
 
     def prev_events_link(self):
         # take care dont use self.portal here since support
         # of INavigationRoot features likely will breake #9246 #9668
-        if (self.have_events_folder() and
-            'aggregator' in self.navigation_root_object['events'].objectIds() and
-            'previous' in self.navigation_root_object['events']['aggregator'].objectIds()):
-            return '%s/events/aggregator/previous' % self.navigation_root_url
-        elif (self.have_events_folder() and
-            'previous' in self.navigation_root_object['events'].objectIds()):
-            return '%s/events/previous' % self.navigation_root_url
-        return None
+        url = None
+        navigation_root_url = self.navigation_root_url
+        events_folder = self.have_events_folder()\
+                and self.navigation_root_object['events'] or None
+        if (events_folder and
+            'aggregator' in events_folder.objectIds() and
+            'previous' in events_folder['aggregator'].objectIds()):
+            url = '%s/events/aggregator/previous' % navigation_root_url
+        elif (events_folder and 'previous' in events_folder.objectIds()):
+            url = '%s/events/previous' % navigation_root_url
+        else:
+            # show all past events
+            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
+            url = '%s/@@search?advanced_search=True'\
+                  '&end.query:record:list:date=%s'\
+                  '&end.range:record=max'\
+                  '&object_provides=plone.event.interfaces.IEvent'\
+                   % (navigation_root_url, now)
+        return url
 
     @memoize
     def _data(self):
