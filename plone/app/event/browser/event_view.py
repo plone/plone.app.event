@@ -1,6 +1,10 @@
+from Acquisition import aq_parent
 from Products.CMFPlone.i18nl10n import ulocalized_time
 from Products.Five.browser import BrowserView
-from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IRecurrenceSupport
+from plone.event.interfaces import IOccurrence
+
 from plone.event.utils import is_same_day, is_same_time
 
 from plone.app.event.base import DT
@@ -61,6 +65,16 @@ def prepare_for_display(context, start, end, whole_day):
 
 
 class EventView(BrowserView):
+
+    @property
+    def is_occurrence(self):
+        return IOccurrence.providedBy(self.context)
+
+    @property
+    def occurrence_parent_url(self):
+        if self.is_occurrence:
+            return aq_parent(self.context).absolute_url()
+        return None
 
     @property
     def data(self):

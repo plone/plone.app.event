@@ -125,3 +125,9 @@
 .eventDetails table.listing td {
     min-width:60%;
 }
+
+.eventDetails table.listing td p {
+    margin-top:0.5em;
+    margin-bottom:0;
+    line-height:1.2em;
+}

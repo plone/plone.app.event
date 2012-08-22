@@ -111,6 +111,14 @@
                           <span class="timezone" tal:condition="start_tzname">
                            (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
                           </span>
+                          <tal:occurrence condition="view/is_occurrence">
+                           <p>
+                              <span i18n:translate="">This event is part of a recurring Event.</span>
+                              <a href="" tal:attributes="href view/occurrence_parent_url">
+                                <span i18n:translate="">Go to the original Event.</span>
+                              </a>
+                            </p>
+                          </tal:occurrence>
                           <div tal:define="events view/occurrences;
                                            events python:events and events[1:] or None"
                                tal:condition="events">
