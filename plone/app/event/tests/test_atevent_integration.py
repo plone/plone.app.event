@@ -24,7 +24,7 @@ class PAEventATTest(unittest.TestCase):
         e1 = self.portal['event1']
 
         # setting attributes via the accessor
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         acc = IEventAccessor(e1)
         acc.end = datetime(2011,11,13,10,0)
         acc.timezone = 'CET'
