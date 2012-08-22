@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Add ajax_load attributes for kss ajax requests to refreshCalendar in the
+  calendar portlet. This prevents plone.app.theming to theme the ajax request.
+  [thet]
+
 - Rebind portlet_calendar tooltips after ajax calendar reloads.
   [thet]
 
