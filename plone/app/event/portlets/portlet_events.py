@@ -83,7 +83,7 @@ class Renderer(base.Renderer):
             return '%s/events' % navigation_root_url
         else:
             now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
-            url = '%s//@@search?advanced_search=True'\
+            url = '%s/@@search?advanced_search=True'\
                   '&start.query:record:list:date=%s'\
                   '&start.range:record=min'\
                   '&object_provides=plone.event.interfaces.IEvent'\
