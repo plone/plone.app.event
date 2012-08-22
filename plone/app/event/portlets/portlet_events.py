@@ -1,3 +1,4 @@
+from datetime import datetime
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.navigation.root import getNavigationRootObject
@@ -81,7 +82,13 @@ class Renderer(base.Renderer):
         if self.have_events_folder():
             return '%s/events' % navigation_root_url
         else:
-            return '%s/events_listing' % navigation_root_url
+            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
+            url = '%s//@@search?advanced_search=True'\
+                  '&start.query:record:list:date=%s'\
+                  '&start.range:record=min'\
+                  '&object_provides=plone.event.interfaces.IEvent'\
+                   % (navigation_root_url, now)
+            return url
 
     def prev_events_link(self):
         # take care dont use self.portal here since support
