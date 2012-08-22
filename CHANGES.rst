@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Let portlet_events link to @@search for future events. The previous link to
+  the inexistent event_listing was broken.
+  [thet]
+
 - Moved docs/HISTORY.rst to CHANGES.txt.
   [seanupton]
 
