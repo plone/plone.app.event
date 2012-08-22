@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Rebind portlet_calendar tooltips after ajax calendar reloads.
+  [thet]
+
 - Allow the refreshCalendar kss view also on Occurrence objects.
   [thet]
 

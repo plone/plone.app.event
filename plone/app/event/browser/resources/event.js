@@ -55,9 +55,13 @@ function portletCalendarTooltips() {
     });
 }
 
-
 jQuery(document).ready(function() {
+
+    // bind/rebind calendar portlet
     portletCalendarTooltips();
+    jQuery('.portletWrapper').bind('DOMNodeInserted', function(event) {
+        portletCalendarTooltips();
+    });
 
     jQuery('#wholeDay').bind('change', wholeDayHandler);
     /*jQuery('[id^=startDate]').bind('focus', initDelta);
