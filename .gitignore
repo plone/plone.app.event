@@ -2,6 +2,7 @@
 *.py?
 *.sw?
 *.wpr
+*.mo
 .*
 
 !.gitignore
