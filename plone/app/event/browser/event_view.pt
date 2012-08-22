@@ -46,7 +46,7 @@
                             <tal:differentday tal:condition="not:date_dict/same_day"
                                               i18n:translate="event_when_differentday">
               
-                              <a class="url" tal:attributes="href date_dict/url">
+                              <a href="" class="url" tal:attributes="href date_dict/url">
                                 <abbr i18n:name="startdate"
                                       class="dtstart"
                                       tal:attributes="title date_dict/start_iso">
@@ -77,13 +77,13 @@
 
                             <tal:sameday tal:condition="date_dict/same_day">
                                 <tal:wholeday condition="data/whole_day">
-                                  <a class="url" tal:attributes="href date_dict/url">
+                                  <a href="" class="url" tal:attributes="href date_dict/url">
                                     <span tal:replace="date_dict/start_date" i18n:translate="" />
                                   </a>
                                 </tal:wholeday>
                                 <tal:notwholeday condition="not:data/whole_day"
                                     i18n:translate="event_when_sameday">
-                                  <a class="url" tal:attributes="href date_dict/url">
+                                  <a href="" class="url" tal:attributes="href date_dict/url">
                                     <div class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date Time</div>
                                   </a>
                                   <div class="timerange">
