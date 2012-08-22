@@ -1,6 +1,8 @@
 import pytz
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import i18nl10n
+from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -192,10 +194,10 @@ def DT(dt):
     @param dt: python datetime instance
 
     """
-
     tz = default_timezone(getSite())
     if isinstance(dt, datetime):
-        tz = validated_timezone(dt.tzname(), tz)
+        zone_id = getattr(dt.tzinfo, 'zone', tz)
+        tz = validated_timezone(zone_id, tz)
         return DateTime(dt.year, dt.month, dt.day,\
                         dt.hour, dt.minute, dt.second, tz)
     elif isinstance(dt, date):
@@ -248,3 +250,18 @@ def guess_date_from(datestr, context=None):
         return
 
     return pytz.timezone(default_timezone(context)).localize(dateobj)
+
+
+_strftime = lambda v, fmt: pydt(v).strftime(fmt)
+
+
+class PatchedDateTime(DateTime):
+    
+    def strftime(self, fmt):
+        return _strftime(self, fmt)
+
+
+def ulocalized_time(time, *args, **kwargs):
+    """Corrects for DateTime bugs doing wrong thing with timezones"""
+    wrapped_time = PatchedDateTime(time)
+    return orig_ulocalized_time(wrapped_time, *args, **kwargs)
