@@ -165,11 +165,7 @@ class EventsICal(BrowserView):
 
     def get_ical_string(self):
         cal = IICalendar(self.context)
-        # TODO: unicode decode error, if umlaute in cal.as_string
-        #       e.g. umlaute in subjects
-        #       cal.as_string returns ascii instead of unicode.
-        #       FIX in icalendar package
-        return cal.to_ical().encode('utf-8')
+        return cal.to_ical()
 
     def __call__(self):
         name = '%s.ics' % self.context.getId()

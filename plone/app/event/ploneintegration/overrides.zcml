@@ -25,6 +25,18 @@
         editview="plone.app.portlets.portlets.events.EditForm"
         />
     <browser:page
+        for="Products.ATContentTypes.interfaces.IATFolder"
+        name="ics_view"
+        class="Products.ATContentTypes.browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="Products.ATContentTypes.interfaces.IATBTreeFolder"
+        name="ics_view"
+        class="Products.ATContentTypes.browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+    <browser:page
         for="Products.ATContentTypes.interfaces.IATTopic"
         name="ics_view"
         class="Products.ATContentTypes.browser.calendar.TopicCalendarView"
