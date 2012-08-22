@@ -297,7 +297,7 @@ def searchable_text_indexer(obj):
         output,
         mimetype='text/html',
         ).getData().strip()
-    text += behavior.text.output
+    text += body_plain
     return text.strip()
 
 
