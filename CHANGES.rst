@@ -11,6 +11,10 @@ Changelog
   ploneintegration.
   [rnix]
 
+- Workaround for buggy strftime with timezone handling in DateTime.
+  See: https://github.com/collective/plone.app.event/pull/47
+  [seanupton]
+
 - Rebind portlet_calendar tooltips after ajax calendar reloads.
   [thet]
 
@@ -42,7 +46,7 @@ Changelog
 - Filter calendar portlet search URLs for each day to a whitelist of
   event portal_type values.  Prevents non-event add-on types with
   start/end fields from showing up in calendar, as defense against
-  unintended consequences (add-ons could explicitly override this 
+  unintended consequences (add-ons could explicitly override this
   template if they define additional Event types).
   [seanupton]
 
@@ -68,7 +72,7 @@ Changelog
 
 - Event portlet is now showing occurrences, sorted by start date.
   [romanofski]
-  
+
 - Moved whole_day field in directly after the end date to get a more logical
   group.
   [thet]

@@ -252,14 +252,14 @@ def guess_date_from(datestr, context=None):
     return pytz.timezone(default_timezone(context)).localize(dateobj)
 
 
+# Workaround for buggy strftime with timezone handling in DateTime.
+# See: https://github.com/collective/plone.app.event/pull/47
+# TODO: should land in CMFPlone or fixed in DateTime.
 _strftime = lambda v, fmt: pydt(v).strftime(fmt)
 
-
 class PatchedDateTime(DateTime):
-    
     def strftime(self, fmt):
         return _strftime(self, fmt)
-
 
 def ulocalized_time(time, *args, **kwargs):
     """Corrects for DateTime bugs doing wrong thing with timezones"""
