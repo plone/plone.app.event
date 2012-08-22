@@ -159,6 +159,14 @@
                           </ul>
                         </td>
                     </tr>
+                    <tr tal:condition="data/event_url">
+                        <th i18n:translate="event_url">Web</th>
+                        <td class="url">
+                            <a href="" tal:attributes="href data/event_url">
+                              <span i18n:translate="external_website">Visit external website</span>
+                            </a>
+                        </td>
+                    </tr>
                     <tr>
                         <th i18n:translate="heading_add_to_calendar">Add event to calendar</th>
                         <td tal:define="here_url context/@@plone_context_state/object_url;

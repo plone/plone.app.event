@@ -283,9 +283,10 @@ def end_indexer(obj):
 # Body text indexing
 @indexer(IDXEvent)
 def searchable_text_indexer(obj):
+    acc = IEventAccessor(obj)
     text = ''
-    text += '%s\n' % obj.Title()
-    text += '%s\n' % obj.Description()
+    text += '%s\n' % acc.title
+    text += '%s\n' % acc.description
     behavior = IEventSummary(obj, None)
     if behavior is None or behavior.text is None:
         return text
