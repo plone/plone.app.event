@@ -4,6 +4,13 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Fix utf-8 encoding problem with icalendar export.
+  [rnix]
+
+- Unregister ics_view for ATFolder and ATBTreeFolder as well in
+  ploneintegration.
+  [rnix]
+
 - Rebind portlet_calendar tooltips after ajax calendar reloads.
   [thet]
 
