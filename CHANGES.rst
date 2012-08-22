@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Allow the refreshCalendar kss view also on Occurrence objects.
+  [thet]
+
 - Let portlet_events link to @@search for future and previous events for sites
   without the standard events folder.
   [thet]
