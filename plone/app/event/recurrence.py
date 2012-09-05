@@ -30,11 +30,11 @@ class RecurrenceSupport(object):
         """ Return all occurrences of an event, possibly within a start and end
         limit.
 
-        Please note: Events beginning before limit_start but ending afterwards
+        Please note: Events beginning before range_start but ending afterwards
                      won't be found.
 
         TODO: test with event start = 21st feb, event end = start+36h,
-        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
+        recurring for 10 days, range_start = 1st mar, range_end = last Mark
 
         """
         event = IEventAccessor(self.context)
@@ -44,7 +44,7 @@ class RecurrenceSupport(object):
 
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
-        # event starts before limit_start but ends afterwards.
+        # event starts before range_start but ends afterwards.
         duration = event.duration
 
         # XXX potentially occurrence won't need to be wrapped anymore
