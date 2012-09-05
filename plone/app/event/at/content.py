@@ -379,8 +379,13 @@ def whole_day_handler(obj, event):
         23:59:59
     """
 
+    if not IEvent.providedBy(obj):
+        # don't run me, if i'm not installed
+        return
+
     if not obj.whole_day:
         return
+
     startDate = obj.startDate.toZone(obj.timezone)
     startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
     endDate = obj.endDate.toZone(obj.timezone)
@@ -396,6 +401,11 @@ def timezone_handler(obj, event):
     timezone-aware ones afterwards.
 
     """
+
+    if not IEvent.providedBy(obj):
+        # don't run me, if i'm not installed
+        return
+
     timezone = obj.getField('timezone').get(obj)
     start_field = obj.getField('startDate')
     end_field = obj.getField('endDate')

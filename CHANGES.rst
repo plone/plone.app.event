@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Don't run event handlers for ATEvent, if it doesn't provide IEvent.
+  [thet]
+
 - Fix utf-8 encoding problem with icalendar export.
   [rnix]
 
