@@ -6,6 +6,7 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.site.hooks import getSite
+from Products.CMFCore.utils import getToolByName
 
 
 def Timezones(context):
@@ -49,7 +50,16 @@ def Weekdays(context):
               language.
 
     """
-    translate = getSite().translate
+
+    # TODO: revisit, use zope.i18n
+    # see: http://weblion.psu.edu/chatlogs/%23plone/2012/08/15.txt
+    # avoid using:
+    # translate = getSite().translate
+    # it breaks tests. it's defined in:
+    # Products.CMFPlone.skins.plone_scripts.translate.py
+    # better use:
+    # from zope.i18n import translate
+    translate = getToolByName(getSite(), 'translation_service').translate
 
     domain = 'plonelocales'
     items =[(translate(u'weekday_mon', domain=domain, default=u'Monday'),0),

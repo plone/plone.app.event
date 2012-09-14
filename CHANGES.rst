@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Fix test startup by not depending on getSite().translate, which is a
+  filesystem script.
+  [thet]
+
 - Backport changes from davilima: Add safety check for False all_events_links.
   [davilima6]
 
