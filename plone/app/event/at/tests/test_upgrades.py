@@ -3,10 +3,10 @@ from Products.ATContentTypes.interfaces.event import IATEvent
 from Products.Archetypes.BaseContent import BaseContent
 from Products.Archetypes.tests.utils import mkDummyInContext
 from plone.app.event.at.upgrades.event import migrateATEvents
-from plone.app.event.interfaces import IEvent
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.event.interfaces import IEvent
 import unittest2 as unittest
 import zope.interface
 
