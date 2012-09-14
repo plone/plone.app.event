@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Backport changes from davilima: Add safety check for False all_events_links.
+  [davilima6]
+
 - Make get_occurrences_by_date work for events which do not have
   IRecurrenceSupport (e.g. Dexterity events without the recurrence behavior).
   [thet]
