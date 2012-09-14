@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Make get_occurrences_by_date work for events which do not have
+  IRecurrenceSupport (e.g. Dexterity events without the recurrence behavior).
+  [thet]
+
 - Don't run event handlers for ATEvent, if it doesn't provide IEvent.
   [thet]
 
