@@ -19,6 +19,6 @@ class Occurrences(BrowserView):
         occ = [IEventAccessor(occ) for occ in\
                get_occurrences(self.context,
                                result,
-                               limit=limit,
-                               range_start=start)]
+                               range_start=start,
+                               limit=limit)]
         return Batch(occ, b_size, b_start)
