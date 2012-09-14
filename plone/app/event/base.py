@@ -194,12 +194,12 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     for event in events:
         obj = event.getObject()
 
-        # TODO: this returns only occurrences of recurring events.
-        #       non-recurring events won't have any hits here.
-        #       Maybe provide an adapter for non-recurring events (dx+at) which
-        #       return just start and end datetime
-        occurrences = IRecurrenceSupport(obj).occurrences(
-            range_start, range_end)
+        if IRecurrenceSupport.providedBy(obj):
+            occurrences = IRecurrenceSupport(obj).occurrences(
+                range_start, range_end)
+        else:
+            occurrences = [event]
+
         for occ in occurrences:
             accessor = IEventAccessor(occ)
             start_str = datetime.strftime(accessor.start, '%Y-%m-%d')
