@@ -23,35 +23,56 @@ DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'
 
 def default_end_dt():
-    """ Return the default end as python datetime for prefilling forms.
+    """Return the default end as python datetime for prefilling forms.
+
+    :returns: Default end datetime.
+    :rtype: Python datetime
+
     """
     return localized_now() + timedelta(hours=DEFAULT_END_DELTA)
 
 
 def default_end_DT():
-    """ Return the default end as Zope DateTime for prefilling forms.
+    """Return the default end as Zope DateTime for prefilling forms.
+
+    :returns: Default end DateTime.
+    :rtype: Zope DateTime
+
     """
     return DT(default_end_dt())
 
 
 def default_start_dt():
-    """ Return the default start as python datetime for prefilling forms.
+    """Return the default start as python datetime for prefilling forms.
+
+    :returns: Default start datetime.
+    :rtype: Python datetime
+
     """
     return localized_now()
 
 
 def default_start_DT():
-    """ Return the default start as a Zope DateTime for prefilling
-        archetypes forms.
+    """Return the default start as a Zope DateTime for prefilling archetypes
+    forms.
+
+    :returns: Default start DateTime.
+    :rtype: Zope DateTime
+
     """
     return DT(default_start_dt())
 
 
 def default_timezone(context=None):
-    """ Retrieve the timezone from the portal or user.
+    """Return the timezone from the portal or user.
 
-    TODO: test member timezone
+    :param context: Optional context. If not given, the current Site is used.
+    :type context: Content object
+    :returns: Timezone identifier.
+    :rtype: string
+
     """
+    # TODO: test member timezone
     if not context: context = getSite()
 
     membership = getToolByName(context, 'portal_membership')
@@ -73,15 +94,23 @@ def default_timezone(context=None):
 
 
 def default_tzinfo(context=None):
-    """ Return the default timezone as tzinfo instance.
+    """Return the default timezone as tzinfo instance.
+
+    :param context: Optional context. If not given, the current Site is used.
+    :type context: Content object
+    :returns: Pytz timezone object.
+    :rtype: Python tzinfo
+
     """
     return pytz.timezone(default_timezone(context))
 
 
 def first_weekday():
-    """ Returns the number of the first Weekday in a Week, as defined in
-    the registry.
-    0 is Monday, 6 is Sunday, as expected by python's datetime.
+    """Returns the number of the first Weekday in a Week, as defined in
+    the registry. 0 is Monday, 6 is Sunday, as expected by Python's datetime.
+
+    :returns: Index of first weekday (0..Monday, 6..Sunday)
+    :rtype: integer
 
     """
     controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
@@ -95,8 +124,23 @@ def first_weekday():
 
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
                       sort='start', sort_reverse=False, **kw):
-    """ Return all events as catalog brains, possibly within a given
+    """Return all events as catalog brains, possibly within a given
     timeframe.
+
+    :param context: [required] A context object.
+    :type context: Content object
+    :param range_start: Date, from which on events should be searched.
+    :type range_start: Python datetime.
+    :param range_end: Date, until which events should be searched.
+    :type range_end: Python datetime
+    :param limit: Number of items to be returned.
+    :type limit: integer
+    :param sort: Catalog index id to sort on.
+    :type sort: string
+    :param sort_reverse: Change the order of the sorting.
+    :type sort_reverse: boolean
+    :returns: Portal events, matching the search criteria.
+    :rtype: catalog brains
 
     """
     range_start, range_end = _prepare_range(context, range_start, range_end)
@@ -110,6 +154,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         navroot = getNavigationRootObject(context, portal)
         query['path'] = navroot.getPhysicalPath()
 
+    # TODO: revisit and correct
     if range_start:
         query['end'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
@@ -129,9 +174,17 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
 
 
 def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
-    """
-    Return a dictionary with dates in a given timeframe as keys and
-    the actual occurrences for that date.
+    """Return a dictionary with dates in a given timeframe as keys and the
+    actual occurrences for that date for building calendars.
+
+    :param context: [required] A context object.
+    :type context: Content object
+    :param range_start: Date, from which on events should be searched.
+    :type range_start: Python datetime.
+    :param range_end: Date, until which events should be searched.
+    :type range_end: Python datetime
+    :returns: Dictionary with dates keys and occurrences as values.
+    :rtype: dict
 
     """
     range_start, range_end = _prepare_range(context, range_start, range_end)
@@ -159,19 +212,28 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     return events_by_date
 
 
-def get_occurrences(context, brains, limit=None,
-                    range_start=None, range_end=None):
-    """
-    Returns a flat list of occurrence objects from a given result of a
+def get_occurrences(context, brains, range_start=None, range_end=None,
+                    limit=None):
+    """Returns a flat list of occurrence objects from a given result of a
     catalog query. The list is sorted by the occurrence start date.
 
-    Optional can be given a range_start, range_end to narrow the
-    recurrence search.
+    :param context: [required] A context object.
+    :type context: Content object
+    :param brains: [required] Catalog brains from a previous search.
+    :param range_start: Date, from which on events should be searched.
+    :type range_start: Python datetime.
+    :param range_end: Date, until which events should be searched.
+    :type range_end: Python datetime
+    :param limit: Number of items to be returned.
+    :type limit: integer
+    :returns: List of occurrence objects.
+    :rtype: Occurrence objects
 
     >>> from plone.app.event.base import get_occurrences
     >>> import datetime
     >>> get_occurrences(object, [], range_start=datetime.datetime.today())
     []
+
     """
     result = []
     start = localized_now() if (range_start is None) else range_start
@@ -189,9 +251,12 @@ def get_occurrences(context, brains, limit=None,
 
 
 def DT(dt):
-    """ Return a DateTime instance from a python datetime instance.
+    """Return a Zope DateTime instance from a Python datetime instance.
 
-    @param dt: python datetime instance
+    :param dt: Python datetime instance.
+    :type dt: Python datetime
+    :returns: Zope DateTime
+    :rtype: Zope DateTime
 
     """
     tz = default_timezone(getSite())
@@ -210,18 +275,43 @@ def DT(dt):
 
 
 def localized_now(context=None):
+    """Return the current datetime localized to the default timezone.
+
+    :param context: Context object.
+    :type context: Content object
+    :returns: Localized current datetime.
+    :rtype: Python datetime
+
+    """
     if not context: context = getSite()
     return datetime.now(default_tzinfo(context))
 
 
 def localized_today(context=None):
+    """Return the current date localized to the default timezone.
+
+    :param context: Context object.
+    :type context: Content object
+    :returns: Localized current date.
+    :rtype: Python date
+
+    """
     now = localized_now(context)
     return date(now.year, now.month, now.day)
 
 
 def _prepare_range(context, start, end):
-    """ Prepare a date-range to contain timezone info and set end to next day,
+    """Prepare a date-range to contain timezone info and set end to next day,
     if end is a date.
+
+    :param context: [required] Context object.
+    :type context: Content object
+    :param start: [required] Range start.
+    :type start: Python date or datetime
+    :param end: [required] Range end.
+    :type end: Python date or datetime
+    :returns: Localized start and end datetime.
+    :rtype: tuple
 
     """
     tz = default_tzinfo(context)
@@ -235,14 +325,18 @@ def _prepare_range(context, start, end):
 
 
 def guess_date_from(datestr, context=None):
-    """
-    Returns a timezone aware date object if an arbitrary ASCII string is
+    """Returns a timezone aware date object if an arbitrary ASCII string is
     formatted in an ISO date format, otherwise None is returned.
 
-    Optional can be passed in the context, which is used for retrieving
-    the timezone.
-
     Used for traversing and Occurence ids.
+
+    :param datestr: Date string in an ISO format.
+    :type datestr: string
+    :param context: Context object (for retrieving the timezone).
+    :type context: Content object
+    :returns: Localized date object.
+    :rtype: Python date
+
     """
     try:
         dateobj = datetime.strptime(datestr, ISO_DATE_FORMAT)
