@@ -154,11 +154,14 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         navroot = getNavigationRootObject(context, portal)
         query['path'] = navroot.getPhysicalPath()
 
-    # TODO: revisit and correct
     if range_start:
+        # All events from range_start ongoing:
+        # The minimum end date must be the date from which we search.
         query['end'] = {'query': DT(range_start), 'range': 'min'}
     if range_end:
-        query['end'] = {'query': DT(range_end), 'range': 'max'}
+        # All events until range_end:
+        # The maximum start date must be the date until we search.
+        query['start'] = {'query': DT(range_end), 'range': 'max'}
     query['sort_on'] = sort
     if sort_reverse: query['sort_order'] = 'reverse'
 
@@ -170,6 +173,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         result = cat(**query)[:limit]
     else:
         result = cat(**query)
+
     return result
 
 
@@ -260,18 +264,18 @@ def DT(dt):
 
     """
     tz = default_timezone(getSite())
+    ret = None
     if isinstance(dt, datetime):
         zone_id = getattr(dt.tzinfo, 'zone', tz)
         tz = validated_timezone(zone_id, tz)
-        return DateTime(dt.year, dt.month, dt.day,\
+        ret = DateTime(dt.year, dt.month, dt.day,\
                         dt.hour, dt.minute, dt.second, tz)
     elif isinstance(dt, date):
-        return DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
+        ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
         # No timezone validation. DateTime knows how to handle it's zones.
-        return dt
-    else:
-        return None
+        ret = dt
+    return ret
 
 
 def localized_now(context=None):
@@ -316,7 +320,7 @@ def _prepare_range(context, start, end):
     """
     tz = default_tzinfo(context)
     start = pydt(start, missing_zone=tz)
-    if isinstance(end, date):
+    if not isinstance(end, datetime) and isinstance(end, date):
         # set range_end to the next day, time will be 0:00
         # so the whole previous day is also used for search
         end = end + timedelta(days=1)
