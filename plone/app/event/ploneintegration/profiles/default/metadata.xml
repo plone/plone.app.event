@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>1</version>
+  <dependencies>
+    <!-- first let the prepare profile run completly to be able to deregister
+         some components -->
+    <dependency>profile-plone.app.event.ploneintegration:prepare</dependency>
+    <!-- then run the default profile from plone.app.event -->
+    <dependency>profile-plone.app.event.at:default</dependency>
+  </dependencies>
+</metadata>

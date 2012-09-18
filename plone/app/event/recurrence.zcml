@@ -1,0 +1,21 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <adapter factory=".recurrence.RecurrenceSupport" />
+  
+  <adapter factory=".recurrence.EventOccurrenceAccessor" />
+  
+  <adapter
+      for="plone.event.interfaces.IEvent
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".recurrence.OccurrenceTraverser"
+      permission="zope.Public"
+      />
+
+  <!-- TODO: remove me, once portlet_calendar's kss suport is replaced by
+             jQuery -->
+  <class class="plone.app.event.recurrence.Occurrence">
+    <implements interface="plone.app.kss.interfaces.IPortalObject" />
+  </class>
+
+</configure>

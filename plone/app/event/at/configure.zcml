@@ -9,8 +9,7 @@
     <include file="ical.zcml" />
     <include package=".upgrades" />
 
-    <adapter factory=".content.Recurrence" />
-    <adapter factory=".content.generic_event_accessor" />
+    <adapter factory=".content.EventAccessor" />
 
     <subscriber for="Products.ATContentTypes.interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"

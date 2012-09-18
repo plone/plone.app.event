@@ -2,17 +2,17 @@ import calendar
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
-from plone.app.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
 from plone.app.event.base import localized_today
 from plone.app.event.base import get_occurrences_by_date
 
+from plone.app.portlets import PloneMessageFactory as _
 PLMF = MessageFactory('plonelocales')
 
 
@@ -106,12 +106,13 @@ class Renderer(base.Renderer):
             events_string = u""
             if date_events:
                 for occ in date_events:
-                    location = IEventAccessor(occ)['location']
+                    accessor = IEventAccessor(occ)
+                    location = accessor.location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        occ.absolute_url(),
-                        occ.Title().decode('utf-8'),
-                        location and u" %s" % location.decode('utf-8') or u"")
+                        accessor.context.absolute_url(),
+                        accessor.title,
+                        location and u" %s" % location or u"")
 
             caldata[-1].append(
                 {'date': dat,

@@ -8,6 +8,11 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <!-- pre plone 4.? integration -->
+  <configure zcml:condition="not-have plone-43">
+    <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
+  </configure>
+
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
 
@@ -19,31 +24,8 @@
   <include package=".browser" />
   <include package=".portlets" />
   <include file="ical.zcml" />
-
-  <utility
-      component=".vocabulary.AvailableTimezones"
-      name="plone.app.event.AvailableTimezones"
-      />
-
-  <utility
-      component=".vocabulary.Timezones"
-      name="plone.app.event.Timezones"
-      />
-
-  <utility
-      component=".vocabulary.Weekdays"
-      name="plone.app.event.Weekdays"
-      />
-
-  <adapter
-    for="plone.app.event.interfaces.IEvent
-         zope.publisher.interfaces.browser.IBrowserRequest"
-    provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-    factory=".occurrence.OccurrenceTraverser"
-    permission="zope.Public"
-    />
-
-  <adapter factory=".occurrence.generic_event_accessor" />
+  <include file="recurrence.zcml" />
+  <include file="vocabularies.zcml" />
 
   <genericsetup:registerProfile
       name="default"

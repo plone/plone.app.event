@@ -1,63 +1,11 @@
 from zope import schema
-from zope.interface import Interface, Attribute
+from zope.interface import Interface
 
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
 
 
 ISO_DATE_FORMAT = '%Y-%m-%d'
-
-
-class IEvent(Interface):
-    """ Generic Event
-    """
-    start = Attribute(u"Event start date")
-    end = Attribute(u"Event end date")
-    timezone = Attribute(u"Timezone of the event")
-    whole_day = Attribute(u"Event lasts whole day")
-    recurrence = Attribute(u"RFC5545 compatible recurrence definition")
-    location = Attribute(u"Location of the event")
-    attendees = Attribute(u"List of attendees")
-    contact_name = Attribute(u"Contact name")
-    contact_email = Attribute(u"Contact email")
-    contact_phone = Attribute(u"Contact phone")
-    event_url = Attribute(u"Website of the event")
-    subjects = Attribute(u"Categories")
-    text = Attribute(u"Summary of the event")
-
-
-class IOccurrence(Interface):
-    """ Marker interface for an occurrence item, which represents a
-        single occurrence.
-    """
-
-    start = Attribute(u"Occurrence start date")
-    end = Attribute(u"Occurrence end date")
-
-
-## Adapter interfaces
-class IRecurrence(Interface):
-    """ Adapter for recurring events.
-    """
-    def occurrences(limit_start, limit_end):
-        """
-        Return the occurrences of the recurring event. Each
-        occurrence is providing IOccurrence.
-        """
-
-
-class IICalendar(Interface):
-    """ Adapter, which is used to construct an icalendar object.
-    """
-
-class IICalendarComponent(Interface):
-    """ Adapter, which is used to construct an event component object for
-    icalendar.
-    """
-
-class IEventAccessor(Interface):
-    """ Generic Event Accessor
-    """
 
 
 # Controlpanel Interface
@@ -88,9 +36,6 @@ class IEventSettings(Interface):
                 )
             )
 
-    # TODO: weekday vocab isn't displayed correctly. the default of messageid
-    # isn't displayed but the id itself. the value isn't displayed but also the
-    # messageid.
     first_weekday = schema.Choice(
             title=_(u'label_first_weekday', default=u'First Weekday'),
             description=_(u'help_first_weekday', default=u'First day in the Week.'),

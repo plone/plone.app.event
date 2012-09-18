@@ -1,25 +1,24 @@
-from plone.app.event.at.content import IATEvent
-from plone.app.event.base import get_occurrences
-from plone.app.event.base import get_portal_events
-from plone.app.event.base import localized_now
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.interfaces import IEventSettings
-from plone.app.event.interfaces import IOccurrence
-from plone.app.event.occurrence import Occurrence
-from plone.app.event.occurrence import OccurrenceTraverser
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
-from plone.app.testing import setRoles
-from plone.event.utils import pydt
-from plone.event.utils import tzdel
-from plone.registry.interfaces import IRegistry
-from plone.testing.z2 import Browser
-from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces.browser import IBrowserView
 import datetime
 import transaction
 import unittest2 as unittest
 import zope.component
+from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
+from plone.app.testing import setRoles
+from plone.registry.interfaces import IRegistry
+from plone.testing.z2 import Browser
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IBrowserView
+from plone.event.interfaces import IEventAccessor, IOccurrence
+from plone.event.utils import pydt
+from plone.event.utils import tzdel
+from plone.app.event.at.content import IATEvent
+from plone.app.event.base import get_occurrences
+from plone.app.event.base import get_portal_events
+from plone.app.event.base import localized_now
+from plone.app.event.interfaces import IEventSettings
+from plone.app.event.recurrence import Occurrence
+from plone.app.event.recurrence import OccurrenceTraverser
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 
 
 class TestTraversal(unittest.TestCase):
@@ -71,9 +70,9 @@ class TestTraversal(unittest.TestCase):
         occ = Occurrence('ignored', start, end)
         occ = occ.__of__(self.portal['at'])
         data = IEventAccessor(occ)
-        self.assertNotEqual(data['start'],
+        self.assertNotEqual(data.start,
                             tzdel(self.portal['at'].start_date))
-        self.assertEqual(start, data['start'])
+        self.assertEqual(start, data.start)
 
 
 class TestTraversalBrowser(TestTraversal):

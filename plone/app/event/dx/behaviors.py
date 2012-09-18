@@ -2,26 +2,28 @@
 types.
 
 """
-import pytz
-from zope import schema
-from zope.component import adapter, adapts
-from zope.interface import implementer, implements
-from zope.interface import alsoProvides
-from zope.interface import invariant, Invalid
+from plone.app.dexterity.behaviors.metadata import ICategorization
+from plone.app.textfield import RichText
+from plone.app.textfield.value import RichTextValue
 from plone.directives import form
-from plone.app.event import messageFactory as _
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.base import localized_now, DT
-from plone.app.event.base import default_timezone, default_end_dt
-from plone.event.recurrence import recurrence_sequence_ical
+from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, utctz, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
-
 from plone.indexer import indexer
-from plone.app.event.interfaces import IRecurrence
-from plone.app.event.dx.interfaces import IDXEvent, IDXEventRecurrence
-from plone.app.event.occurrence import Occurrence
-from plone.app.dexterity.behaviors.metadata import ICategorization
+from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
+import pytz
+from zope import schema
+from zope.component import adapts
+from zope.interface import alsoProvides
+from zope.interface import implements
+from zope.interface import invariant, Invalid
+
+from plone.app.event import messageFactory as _
+from plone.app.event.base import default_timezone, default_end_dt
+from plone.app.event.base import localized_now, DT
+from plone.app.event.dx.interfaces import IDXEvent
+
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -152,12 +154,23 @@ class IEventContact(form.Schema):
         )
 
 
+class IEventSummary(form.Schema):
+    """Event summary (body text) schema."""
+ 
+    text = RichText(
+        title=_(u'label_event_announcement', default=u'Event body text'),
+        description=_(u'help_event_announcement', default=u''),
+        required=False,
+        )
+
+
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, form.IFormFieldProvider)
 alsoProvides(IEventRecurrence, form.IFormFieldProvider)
 alsoProvides(IEventLocation, form.IFormFieldProvider)
 alsoProvides(IEventAttendees, form.IFormFieldProvider)
 alsoProvides(IEventContact, form.IFormFieldProvider)
+alsoProvides(IEventSummary, form.IFormFieldProvider)
 
 
 class EventBasic(object):
@@ -223,77 +236,6 @@ class EventRecurrence(object):
         self.context.recurrence = value
 
 
-# Object adapters
-
-@implementer(IEventAccessor)
-@adapter(IDXEvent)
-def generic_event_accessor(context):
-    event_basic = IEventBasic(context, None)
-    event_recurrence = IEventRecurrence(context, None)
-    event_attendees = IEventAttendees(context, None)
-    event_location = IEventLocation(context, None)
-    event_contact = IEventContact(context, None)
-    event_cat = ICategorization(context, None)
-
-    return {'start': event_basic and event_basic.start or None,
-            'end': event_basic and event_basic.end or None,
-            'timezone': event_basic and event_basic.timezone or None,
-            'whole_day': event_basic and event_basic.whole_day or None,
-            'recurrence': event_recurrence and event_recurrence.recurrence or None,
-            'location': event_location and event_location.location or None,
-            'attendees': event_attendees and event_attendees.attendees or None,
-            'contact_name': event_contact and event_contact.contact_name or None,
-            'contact_email': event_contact and event_contact.contact_email or None,
-            'contact_phone': event_contact and event_contact.contact_phone or None,
-            'event_url': event_contact and event_contact.event_url or None,
-            'subjects': event_cat and event_cat.subjects or None,
-            'text': None # TODO: implement me
-            }
-
-
-class Recurrence(object):
-    """ IRecurrence Adapter.
-    """
-    implements(IRecurrence)
-    adapts(IDXEventRecurrence)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        """ Return all occurrences of an event, possibly within a start and end
-        limit.
-
-        Please note: Events beginning before limit_start but ending afterwards
-                     won't be found.
-
-        TODO: test with event start = 21st feb, event end = start+36h,
-        recurring for 10 days, limit_start = 1st mar, limit_end = last Mark
-
-        """
-        event = IEventBasic(self.context)
-        recrule = IEventRecurrence(self.context).recurrence
-        starts = recurrence_sequence_ical(
-                event.start,
-                recrule=recrule,
-                from_=limit_start, until=limit_end)
-
-        # We get event ends by adding a duration to the start. This way, we
-        # prevent that the start and end lists are of different size if an
-        # event starts before limit_start but ends afterwards.
-        duration = event.duration
-
-        # XXX potentially occurrence won't need to be wrapped anymore
-        # but doing it for backwards compatibility as views/templates
-        # still rely on acquisition-wrapped objects.
-        func = lambda start: Occurrence(
-            str(start.date()),
-            start,
-            start + duration).__of__(self.context)
-        events = map(func, starts)
-        return events
-
-
 ## Event handlers
 
 def data_postprocessing(obj, event):
@@ -337,3 +279,125 @@ def end_indexer(obj):
     if event.end is None:
         return None
     return DT(event.end)
+
+# Body text indexing
+@indexer(IDXEvent)
+def searchable_text_indexer(obj):
+    acc = IEventAccessor(obj)
+    text = ''
+    text += '%s\n' % acc.title
+    text += '%s\n' % acc.description
+    behavior = IEventSummary(obj, None)
+    if behavior is None or behavior.text is None:
+        return text
+    output = behavior.text.output
+    transforms = getToolByName(obj, 'portal_transforms')
+    body_plain = transforms.convertTo(
+        'text/plain',
+        output,
+        mimetype='text/html',
+        ).getData().strip()
+    text += body_plain
+    return text.strip()
+
+
+# Object adapters
+
+
+class EventAccessor(object):
+    """ Generic event accessor adapter implementation for Dexterity content
+        objects.
+
+    """
+
+    implements(IEventAccessor)
+    adapts(IDXEvent)
+
+    def __init__(self, context):
+        object.__setattr__(self, 'context', context)
+
+        bm = dict(
+            start=IEventBasic,
+            end=IEventBasic,
+            whole_day=IEventBasic,
+            timezone=IEventBasic,
+            recurrence=IEventRecurrence,
+            location=IEventLocation,
+            attendees=IEventAttendees,
+            contact_name=IEventContact,
+            contact_email=IEventContact,
+            contact_phone=IEventContact,
+            event_url=IEventContact,
+            subjects=ICategorization,
+            text=IEventSummary,
+        )
+        object.__setattr__(self, '_behavior_map', bm)
+
+    def __getattr__(self, name):
+        bm = self._behavior_map
+        if name in bm: # adapt object with behavior and return the attribute
+           behavior = bm[name](self.context, None)
+           if behavior: return getattr(behavior, name, None)
+        return None
+
+    def __setattr__(self, name, value):
+        bm = self._behavior_map
+        if name in bm: # set the attributes on behaviors
+            behavior = bm[name](self.context, None)
+            if behavior: setattr(behavior, name, value)
+
+    def __delattr__(self, name):
+        bm = self._behavior_map
+        if name in bm:
+           behavior = bm[name](self.context, None)
+           if behavior: delattr(behavior, name)
+
+
+    # ro properties
+
+    @property
+    def uid(self):
+        return IUUID(self.context, None)
+
+    @property
+    def url(self):
+        return self.context.absolute_url()
+
+    @property
+    def created(self):
+        return utc(self.context.creation_date)
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+
+    @property
+    def duration(self):
+        return self.end - self.start
+
+    # rw properties not in behaviors (yet) # TODO revisit
+    @property
+    def title(self):
+        return getattr(self.context, 'title', None)
+    @title.setter
+    def title(self, value):
+        return setattr(self.context, 'title', value)
+
+    @property
+    def description(self):
+        return getattr(self.context, 'description', None)
+    @description.setter
+    def description(self, value):
+        return setattr(self.context, 'description', value)
+
+    @property
+    def text(self):
+        behavior = IEventSummary(self.context)
+        textvalue = getattr(behavior, 'text', None)
+        if textvalue is None:
+            return u''
+        return textvalue.output
+    @text.setter
+    def text(self, value):
+        behavior = IEventSummary(self.context)
+        behavior.text = RichTextValue(raw=value)

@@ -1,10 +1,12 @@
-from Products.CMFPlone.i18nl10n import ulocalized_time
+from Acquisition import aq_parent
 from Products.Five.browser import BrowserView
-from plone.app.event.base import DT
-from plone.app.event.interfaces import IEventAccessor
-from plone.app.event.interfaces import IRecurrence
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IRecurrenceSupport
+from plone.event.interfaces import IOccurrence
+
 from plone.event.utils import is_same_day, is_same_time
-import zope.component
+
+from plone.app.event.base import DT, ulocalized_time
 
 
 def prepare_for_display(context, start, end, whole_day):
@@ -63,27 +65,40 @@ def prepare_for_display(context, start, end, whole_day):
 
 class EventView(BrowserView):
 
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-        self.data = IEventAccessor(self.context)
+    @property
+    def is_occurrence(self):
+        return IOccurrence.providedBy(self.context)
+
+    @property
+    def occurrence_parent_url(self):
+        if self.is_occurrence:
+            return aq_parent(self.context).absolute_url()
+        return None
+
+    @property
+    def data(self):
+        accessor = IEventAccessor(self.context)
+        return accessor
 
     def date_for_display(self):
-        return prepare_for_display(
+        display = prepare_for_display(
                 self.context,
-                self.data['start'],
-                self.data['end'],
-                self.data['whole_day'])
+                self.data.start,
+                self.data.end,
+                self.data.whole_day)
+        display.update({'url': self.data.context.absolute_url()})
+        return display
 
     @property
     def occurrences(self):
         events = []
         context = self.context
-        adapter = zope.component.queryAdapter(context, IRecurrence)
-        if adapter is not None:
-            events = map(
-                lambda occ:
-                    prepare_for_display(self.context, occ.start, occ.end,
-                                        self.data['whole_day']),
-                adapter.occurrences())
+        occurrences = IRecurrenceSupport(context, None)
+        if occurrences is not None:
+            for occ in occurrences.occurrences():
+                acc = IEventAccessor(occ)
+                display = prepare_for_display(
+                    self.context, acc.start, acc.end, acc.whole_day)
+                display.update({'url': acc.context.absolute_url()})
+                events.append(display)
         return events

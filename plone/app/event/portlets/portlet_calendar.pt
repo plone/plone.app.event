@@ -15,7 +15,7 @@
            title="Previous month"
            tal:define="prev_month view/prev_month;
                        prev_year view/prev_year"
-           tal:attributes="prev view/prev_query;
+           tal:attributes="href view/prev_query;
                            class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;"
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
@@ -63,9 +63,17 @@
                               (next_month and ' cal_next_month' or ''),
                               (prev_month and ' cal_prev_month' or ''),
                               (events and ' cal_has_events' or ''))">
+                    <tal:alternative_linking condition="nothing">
                     <a href=""
                       tal:omit-tag="not:events"
                       tal:attributes="href string:${navigation_root_url}/@@occurrences.html?start=${day/date_string}&limit:int=$limit;
+                                      title day/events_string;"
+                      tal:content="day/day">31</a>
+                    </tal:alternative_linking>
+                    <a 
+                      href=""
+                      tal:omit-tag="not:events"
+                      tal:attributes="href string:${navigation_root_url}/@@search?advanced_search=True&amp;start.query:record:list:date=${day/date_string}+23%3A59%3A59&amp;start.range:record=max&amp;end.query:record:list:date=${day/date_string}+00%3A00%3A00&amp;end.range:record=min&amp;object_provides=plone.event.interfaces.IEvent;
                                       title day/events_string;"
                       tal:content="day/day">31</a>
                 </td>

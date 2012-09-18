@@ -1,5 +1,5 @@
-from zope.component import adapts, adapter
-from zope.interface import implements, implementer
+from zope.component import adapts
+from zope.interface import implements
 
 from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
@@ -18,17 +18,17 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.formwidget.datetime.at import DatetimeWidget
+from plone.uuid.interfaces import IUUID
 
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
-from plone.app.event.interfaces import IEvent
-from plone.app.event.interfaces import IRecurrence
-from plone.app.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import utc
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
-from plone.app.event.occurrence import Occurrence
-from plone.event.recurrence import recurrence_sequence_ical
+from plone.app.event.base import DT
 from plone.event.utils import pydt
 
 
@@ -207,7 +207,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     """ Information about an upcoming event, which can be displayed in the
         calendar."""
 
-    implements(IEvent, IATEvent)
+    implements(IEvent, IEventRecurrence, IATEvent)
 
     schema = ATEventSchema
     security = ClassSecurityInfo()
@@ -223,8 +223,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     timezone = atapi.ATFieldProperty('timezone')
     whole_day = atapi.ATFieldProperty('wholeDay')
 
-    def occurrences(self, limit_start=None, limit_end=None):
-        return IRecurrence(self).occurrences(limit_start, limit_end)
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
@@ -280,8 +278,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # Note: The name of the first parameter shouldn't be field, because
         # it's already in kwargs in some case.
 
-        # TODO the endDate and startDate should be updated if the timezone
-        # of the event change.
         if not isinstance(value, DateTime): value = DateTime(value)
         value = DateTime('%04d-%02d-%02dT%02d:%02d:%02dZ' % (
                     value.year(),
@@ -332,18 +328,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security.declareProtected(View, 'start_date')
     @property
     def start_date(self):
-        value = self['startDate']  # This call the accessor.
-        if value is None:
-            value = self['creation_date']
-        return pydt(value)
+        return pydt(self.start())
 
     security.declareProtected(View, 'end_date')
     @property
     def end_date(self):
-        value = self['endDate']
-        if value is None:
-            return self.start_date
-        return pydt(value)
+        return pydt(self.end())
 
     security.declareProtected(View, 'duration')
     @property
@@ -382,49 +372,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 registerATCT(ATEvent, packageName)
 
 
-## Object adapters
-
-@implementer(IEventAccessor)
-@adapter(IATEvent)
-def generic_event_accessor(context):
-    return {'start': context.start_date,
-            'end': context.end_date,
-            'timezone': context.timezone,
-            'whole_day': context.whole_day,
-            'recurrence': context.recurrence,
-            'location': context['location'],
-            'attendees': context['attendees'],
-            'contact_name': context['contactName'],
-            'contact_email': context['contactEmail'],
-            'contact_phone': context['contactPhone'],
-            'event_url': context['eventUrl'],
-            'subjects': context['subject'],
-            'text': context.getText()}
-
-
-class Recurrence(object):
-    """ ATEvent adapter for recurring events.
-    """
-    implements(IRecurrence)
-    adapts(IATEvent)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurrences(self, limit_start=None, limit_end=None):
-        starts = recurrence_sequence_ical(
-                self.context.start(),
-                recrule=self.context.recurrence,
-                from_=limit_start, until=limit_end)
-        duration = self.context.duration
-        func = lambda start: Occurrence(
-            str(start.date()),
-            start,
-            start + duration).__of__(self.context)
-        events = map(func, starts)
-        return events
-
-
 ## Event handlers
 
 def whole_day_handler(obj, event):
@@ -432,8 +379,13 @@ def whole_day_handler(obj, event):
         23:59:59
     """
 
+    if not IEvent.providedBy(obj):
+        # don't run me, if i'm not installed
+        return
+
     if not obj.whole_day:
         return
+
     startDate = obj.startDate.toZone(obj.timezone)
     startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
     endDate = obj.endDate.toZone(obj.timezone)
@@ -449,6 +401,11 @@ def timezone_handler(obj, event):
     timezone-aware ones afterwards.
 
     """
+
+    if not IEvent.providedBy(obj):
+        # don't run me, if i'm not installed
+        return
+
     timezone = obj.getField('timezone').get(obj)
     start_field = obj.getField('startDate')
     end_field = obj.getField('endDate')
@@ -470,3 +427,144 @@ def timezone_handler(obj, event):
     start_field.set(obj, start)
     end_field.set(obj, end)
     obj.reindexObject()
+
+
+## Object adapters
+
+class EventAccessor(object):
+    """ Generic event accessor adapter implementation for Archetypes content
+        objects.
+
+    """
+    implements(IEventAccessor)
+    adapts(IATEvent)
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def uid(self):
+        return IUUID(self.context, None)
+
+    @property
+    def url(self):
+        return self.context.absolute_url()
+
+    @property
+    def created(self):
+        return utc(self.context.creation_date)
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+
+    @property
+    def duration(self):
+        return self.end - self.start
+
+    # rw properties not in behaviors (yet) # TODO revisit
+    @property
+    def title(self):
+        return getattr(self.context, 'title', None)
+    @title.setter
+    def title(self, value):
+        return setattr(self.context, 'title', value)
+
+    @property
+    def description(self):
+        return getattr(self.context, 'description', None)
+    @description.setter
+    def description(self, value):
+        return setattr(self.context, 'description', value)
+
+
+    @property
+    def start(self):
+        return self.context.start_date
+    @start.setter
+    def start(self, value):
+        self.context.setStartDate(DT(value))
+
+    @property
+    def end(self):
+        return self.context.end_date
+    @end.setter
+    def end(self, value):
+        self.context.setEndDate(DT(value))
+
+    @property
+    def whole_day(self):
+        return self.context.whole_day
+    @whole_day.setter
+    def whole_day(self, value):
+        self.context.whole_day = value
+
+    @property
+    def timezone(self):
+        return self.context.timezone
+    @timezone.setter
+    def timezone(self, value):
+        self.context.timezone = value
+
+    @property
+    def recurrence(self):
+        return self.context.recurrence
+    @recurrence.setter
+    def recurrence(self, value):
+        self.context.recurrence = value
+
+    @property
+    def location(self):
+        return self.context.location
+    @location.setter
+    def location(self, value):
+        self.context.setLocation(value)
+
+    @property
+    def attendees(self):
+        return self.context.attendees
+    @attendees.setter
+    def attendees(self, value):
+        self.context.setAttendees(value)
+
+    @property
+    def contact_name(self):
+        return self.context.contactName
+    @contact_name.setter
+    def contact_name(self, value):
+        self.context.setContactName(value)
+
+    @property
+    def contact_email(self):
+        return self.context.contactEmail
+    @contact_email.setter
+    def contact_email(self, value):
+        self.context.setContactEmail(value)
+
+    @property
+    def contact_phone(self):
+        return self.context.contactPhone
+    @contact_phone.setter
+    def contact_phone(self, value):
+        self.context.setContactPhone(value)
+
+    @property
+    def event_url(self):
+        return self.context.eventUrl
+    @event_url.setter
+    def event_url(self, value):
+        self.context.setEventUrl(value)
+
+    @property
+    def subjects(self):
+        return self.context.Subject()
+    @subjects.setter
+    def subjects(self, value):
+        self.context.setSubject(value)
+
+    @property
+    def text(self):
+        return self.context.getText()
+    @text.setter
+    def text(self, value):
+        self.context.setText(value)

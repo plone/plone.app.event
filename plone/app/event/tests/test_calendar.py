@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope.component import getMultiAdapter
-from plone.app.event.interfaces import IEvent
+from plone.event.interfaces import IEvent
 
 def makeResponse(request):
     """ create a fake response and set up logging of output """

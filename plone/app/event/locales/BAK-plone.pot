@@ -227,39 +227,3 @@ msgstr ""
 #: ./at/content.py:46
 msgid "label_whole_day_event"
 msgstr ""
-
-#. Default: "Monday"
-#: ./vocabulary.py:44
-msgid "weekday-0"
-msgstr ""
-
-#. Default: "Tuesday"
-#: ./vocabulary.py:45
-msgid "weekday-1"
-msgstr ""
-
-#. Default: "Wednesday"
-#: ./vocabulary.py:46
-msgid "weekday-2"
-msgstr ""
-
-#. Default: "Thursday"
-#: ./vocabulary.py:47
-msgid "weekday-3"
-msgstr ""
-
-#. Default: "Friday"
-#: ./vocabulary.py:48
-msgid "weekday-4"
-msgstr ""
-
-#. Default: "Saturday"
-#: ./vocabulary.py:49
-msgid "weekday-5"
-msgstr ""
-
-#. Default: "Sunday"
-#: ./vocabulary.py:50
-msgid "weekday-6"
-msgstr ""
-

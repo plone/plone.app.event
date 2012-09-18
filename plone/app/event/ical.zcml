@@ -4,30 +4,52 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="plone.app.event">
 
+    <adapter
+        factory=".ical.ICalendarEventComponent"
+        for="plone.event.interfaces.IEvent"
+        />
+
+    <adapter
+        factory=".ical.ICalendarEventComponent"
+        for="plone.event.interfaces.IOccurrence"
+        />
+
     <adapter factory=".ical.calendar_from_event"
-        provides=".interfaces.IICalendar"
-        for=".interfaces.IEvent"
+        provides="plone.event.interfaces.IICalendar"
+        for="plone.event.interfaces.IEvent"
+        />
+
+    <adapter factory=".ical.calendar_from_event"
+        provides="plone.event.interfaces.IICalendar"
+        for="plone.event.interfaces.IOccurrence"
         />
 
     <adapter factory=".ical.calendar_from_container"
-        provides=".interfaces.IICalendar"
+        provides="plone.event.interfaces.IICalendar"
         for="Products.CMFCore.interfaces.ISiteRoot"
         />
 
     <adapter factory=".ical.calendar_from_container"
-        provides=".interfaces.IICalendar"
+        provides="plone.event.interfaces.IICalendar"
         for="plone.folder.interfaces.IFolder"
         />
 
     <adapter factory=".ical.calendar_from_collection"
-        provides=".interfaces.IICalendar"
+        provides="plone.event.interfaces.IICalendar"
         for="plone.app.collection.interfaces.ICollection"
         zcml:condition="installed plone.app.collection"
         />
 
     <!-- ICal Browser Views -->
     <browser:page
-        for=".interfaces.IEvent"
+        for="plone.event.interfaces.IEvent"
+        name="ics_view"
+        class=".ical.EventsICal"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="plone.event.interfaces.IOccurrence"
         name="ics_view"
         class=".ical.EventsICal"
         permission="zope2.View"

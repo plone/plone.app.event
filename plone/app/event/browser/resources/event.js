@@ -1,74 +1,85 @@
-var end_start_delta;
+(function($) {
 
-function wholeDayHandler(e) {
-    if (e.target.checked) {
-        jQuery('.datetimewidget-time').fadeOut();
-    } else {
-        jQuery('.datetimewidget-time').fadeIn();
+    var end_start_delta;
+
+    function wholeDayHandler(e) {
+        if (e.target.checked) {
+            $('.datetimewidget-time').fadeOut();
+        } else {
+            $('.datetimewidget-time').fadeIn();
+        }
     }
-}
 
-function updateEndDate() {
-    var start_date = jQuery('#startDate').data('dateinput').getValue();
-//    var start_date = getDateTime('#archetypes-fieldname-startDate');
-    var new_end_date = new Date(start_date);
-    new_end_date.setDate(start_date.getDate() + end_start_delta);
-    jQuery('#endDate').data('dateinput').setValue(new_end_date);
-//    var end = jQuery('#archetypes-fieldname-endDate');
-//    jQuery(end).find(".hour").val(new_end_date.getHours());
-//    jQuery(end).find(".min").val(new_end_date.getMinutes());
-}
-
-function getDateTime(datetimewidget_id) {
-    var datetimewidget = jQuery(datetimewidget_id);
-    var fields = ['year', 'month', 'day', 'hour', 'min'];
-    var parts = {};
-    jQuery.each(fields, function(){
-        parts[this] = parseInt(jQuery(datetimewidget).find("."+this).val());
-    });
-    var date = new Date(parts.year, parts.month - 1, parts.day,
-                        parts.hour, parts.min);
-    return date;
-}
-
-function validateEndDate() {
-    var start_datetime = getDateTime('#archetypes-fieldname-startDate');
-    var end_datetime = getDateTime('#archetypes-fieldname-endDate');
-
-    if(end_datetime < start_datetime) {
-        jQuery('#archetypes-fieldname-endDate').addClass("error");
-    } else {
-        jQuery('#archetypes-fieldname-endDate').removeClass("error");
+    function updateEndDate() {
+        var start_date = $('#startDate').data('dateinput').getValue();
+    //    var start_date = getDateTime('#archetypes-fieldname-startDate');
+        var new_end_date = new Date(start_date);
+        new_end_date.setDate(start_date.getDate() + end_start_delta);
+        $('#endDate').data('dateinput').setValue(new_end_date);
+    //    var end = $('#archetypes-fieldname-endDate');
+    //    $(end).find(".hour").val(new_end_date.getHours());
+    //    $(end).find(".min").val(new_end_date.getMinutes());
     }
-}
 
-function initDelta(e) {
-    var start_datetime = getDateTime('#archetypes-fieldname-startDate');
-    var end_datetime = getDateTime('#archetypes-fieldname-endDate');
-    // delta in days
-    end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
-}
+    function getDateTime(datetimewidget_id) {
+        var datetimewidget = $(datetimewidget_id);
+        var fields = ['year', 'month', 'day', 'hour', 'min'];
+        var parts = {};
+        $.each(fields, function(){
+            parts[this] = parseInt($(datetimewidget).find("."+this).val(), 10);
+        });
+        var date = new Date(parts.year, parts.month - 1, parts.day,
+                            parts.hour, parts.min);
+        return date;
+    }
 
-function portletCalendarTooltips() {
-    jQuery('.portletCalendar dd a[title]').tooltip({
-        offset: [-10,0]
+    function validateEndDate() {
+        var start_datetime = getDateTime('#archetypes-fieldname-startDate');
+        var end_datetime = getDateTime('#archetypes-fieldname-endDate');
+
+        if(end_datetime < start_datetime) {
+            $('#archetypes-fieldname-endDate').addClass("error");
+        } else {
+            $('#archetypes-fieldname-endDate').removeClass("error");
+        }
+    }
+
+    function initDelta(e) {
+        var start_datetime = getDateTime('#archetypes-fieldname-startDate');
+        var end_datetime = getDateTime('#archetypes-fieldname-endDate');
+        // delta in days
+        end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
+    }
+
+    function portletCalendarTooltips() {
+        $('.portletCalendar dd a[title]').tooltip({
+            offset: [-10,0]
+        });
+    }
+
+    $(document).ready(function() {
+
+        // CALENDAR PORTLET
+        // bind tooltips
+        portletCalendarTooltips();
+        // rebind tooltips after month-change  
+        $('.portletWrapper').bind('DOMNodeInserted', function(event) {
+            portletCalendarTooltips();
+        });
+
+        // EDIT FORM
+        $('#wholeDay').bind('change', wholeDayHandler);
+        /*$('[id^=startDate]').bind('focus', initDelta);
+        $('[id^=endDate]').bind('focus', initDelta);
+        $('#startDate').each(function(){
+            $(this).data('dateinput').onShow(initDelta);
+        });
+        $('#endDate').each(function(){
+            $(this).data('dateinput').onShow(initDelta);
+        });
+        $('[id^=startDate]').change(updateEndDate);
+        $('[id^=endDate]').change(validateEndDate);*/
+
     });
-}
 
-
-jQuery(document).ready(function() {
-    portletCalendarTooltips();
-
-    jQuery('#wholeDay').bind('change', wholeDayHandler);
-    /*jQuery('[id^=startDate]').bind('focus', initDelta);
-    jQuery('[id^=endDate]').bind('focus', initDelta);
-    jQuery('#startDate').each(function(){
-        jQuery(this).data('dateinput').onShow(initDelta);
-    });
-    jQuery('#endDate').each(function(){
-        jQuery(this).data('dateinput').onShow(initDelta);
-    });
-    jQuery('[id^=startDate]').change(updateEndDate);
-    jQuery('[id^=endDate]').change(validateEndDate);*/
-
-});
+})(jQuery);

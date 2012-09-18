@@ -1,16 +1,17 @@
 import pytz
 import unittest2 as unittest
-import datetime
 import zope.interface
+from datetime import datetime, timedelta
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.utils import getToolByName
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
 
+from plone.event.interfaces import IRecurrenceSupport, IOccurrence
+from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import get_portal_events
 from plone.app.event.dx.behaviors import (
     IEventBasic,
@@ -26,12 +27,8 @@ from plone.app.event.dx.interfaces import (
     IDXEventAttendees,
     IDXEventContact
 )
-from plone.app.event.interfaces import IOccurrence
-from plone.app.event.interfaces import IRecurrence
-
-
-
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+
 
 class TextDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
@@ -56,8 +53,8 @@ class TextDXIntegration(unittest.TestCase):
 
     def test_adding(self):
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime.datetime(2011,11,11,11,00),
-                end=datetime.datetime(2011,11,11,12,00),
+                start=datetime(2011,11,11,11,00),
+                end=datetime(2011,11,11,12,00),
                 timezone='CET',
                 whole_day=False)
         e1 = self.portal['event1']
@@ -69,8 +66,8 @@ class TextDXIntegration(unittest.TestCase):
 
     def test_view(self):
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime.datetime(2011,11,11,11,00),
-                end=datetime.datetime(2011,11,11,12,00),
+                start=datetime(2011,11,11,11,00),
+                end=datetime(2011,11,11,12,00),
                 timezone='CET',
                 whole_day=False)
         e1 = self.portal['event1']
@@ -81,8 +78,8 @@ class TextDXIntegration(unittest.TestCase):
 
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime.datetime(2011,11,11,11,00),
-                end=datetime.datetime(2011,11,11,12,00),
+                start=datetime(2011,11,11,11,00),
+                end=datetime(2011,11,11,12,00),
                 timezone='CET',
                 whole_day=False)
         e1 = self.portal['event1']
@@ -98,8 +95,8 @@ class TextDXIntegration(unittest.TestCase):
     def test_recurrence_indexing(self):
         utc = pytz.utc
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime.datetime(2011,11,11,11,0, tzinfo=utc),
-                end=datetime.datetime(2011,11,11,12,0, tzinfo=utc),
+                start=datetime(2011,11,11,11,0, tzinfo=utc),
+                end=datetime(2011,11,11,12,0, tzinfo=utc),
                 timezone='UTC',
                 whole_day=False)
         e1 = self.portal['event1']
@@ -114,8 +111,34 @@ class TextDXIntegration(unittest.TestCase):
         # test, if the occurrences are indexed by DRI
         result = get_portal_events(
                 e1,
-                range_start=datetime.datetime(2011,11,12,11,0, tzinfo=utc))
+                range_start=datetime(2011,11,12,11,0, tzinfo=utc))
         self.assertTrue(len(result)==1)
+
+
+    def test_event_accessor(self):
+        utc = pytz.utc
+        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
+                start=datetime(2011,11,11,11,0, tzinfo=utc),
+                end=datetime(2011,11,11,12,0, tzinfo=utc),
+                timezone='UTC',
+                whole_day=False)
+        e1 = self.portal['event1']
+
+        # setting attributes via the accessor
+        acc = IEventAccessor(e1)
+        acc.end = datetime(2011,11,13,10,0)
+        acc.timezone = 'CET'
+
+        cet = pytz.timezone('CET')
+
+        # accessor should return end datetime in the event's timezone
+        self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=cet))
+
+        # end datetime is stored in utc on the content object
+        self.assertTrue(e1.end == datetime(2011,11,13,10,0, tzinfo=utc))
+
+        # timezone should be the same on the event object and accessor
+        self.assertTrue(e1.timezone == acc.timezone)
 
 
 class MockEvent(SimpleItem):
@@ -128,12 +151,12 @@ class TestDXEventRecurrence(unittest.TestCase):
 
     def test_recurrence(self):
         data = MockEvent()
-        data.start = datetime.datetime(2011, 11, 11, 11, 00)
+        data.start = datetime(2011, 11, 11, 11, 00)
         data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
-        data.duration = datetime.timedelta(hours=1)
+        data.duration = timedelta(hours=1)
         zope.interface.alsoProvides(
             data, IDXEventRecurrence, IEventBasic, IEventRecurrence)
-        result = IRecurrence(data).occurrences()
+        result = IRecurrenceSupport(data).occurrences()
         self.assertEqual(4, len(result))
         self.assertTrue(IOccurrence.providedBy(result[0]))
 
