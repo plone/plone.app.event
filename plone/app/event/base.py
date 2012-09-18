@@ -157,11 +157,11 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     if range_start:
         # All events from range_start ongoing:
         # The minimum end date must be the date from which we search.
-        query['end'] = {'query': DT(range_start), 'range': 'min'}
+        query['end'] = {'query': range_start, 'range': 'min'}
     if range_end:
         # All events until range_end:
         # The maximum start date must be the date until we search.
-        query['start'] = {'query': DT(range_end), 'range': 'max'}
+        query['start'] = {'query': range_end, 'range': 'max'}
     query['sort_on'] = sort
     if sort_reverse: query['sort_order'] = 'reverse'
 
