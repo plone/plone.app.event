@@ -747,8 +747,8 @@ class PAEventATViewTest(unittest.TestCase):
         self.assertTrue(u"SUMMARY:%s" % safe_unicode(event.Title()) in lines[7])
         self.assertTrue(u"DTSTART;VALUE=DATE-TIME:20010101T110000Z" in lines[8])
         self.assertTrue(u"DTEND;VALUE=DATE-TIME:20010101T130000Z" in lines[9])
-        self.assertTrue(u"END:VEVENT" in lines[14])
-        self.assertTrue(u"END:VCALENDAR" in lines[15])
+        self.assertTrue(u"END:VEVENT" in lines[15])
+        self.assertTrue(u"END:VCALENDAR" in lines[16])
 
     def test_prep_display_with_time(self):
         event_id = self.portal.invokeFactory('Event',
