@@ -148,12 +148,11 @@ class RendererTest(unittest.TestCase):
         if 'events' in self.portal:
             self.portal._delObject('events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/events_listing'))
+        self.failUnless('@@search?advanced_search' in r.all_events_link())
 
         self.portal.invokeFactory('Folder', 'events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/events'))
-
 
     def test_all_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
@@ -161,13 +160,13 @@ class RendererTest(unittest.TestCase):
         directlyProvides(self.portal.mynewsite, INavigationRoot)
         self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
 
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/mynewsite/events_listing'))
+        r = self.renderer(context=self.portal.mynewsite,
+                          assignment=portlet_events.Assignment(count=5))
+        self.failUnless('mynewsite/@@search' in r.all_events_link())
 
         self.portal.mynewsite.invokeFactory('Folder', 'events')
         r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/mynewsite/events'))
-
 
     def test_prev_events_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
@@ -186,8 +185,7 @@ class RendererTest(unittest.TestCase):
 
         self.portal._delObject('events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(None, r.prev_events_link())
-
+        self.failUnless('@@search' in r.prev_events_link())
 
     def test_prev_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
@@ -225,4 +223,4 @@ class RendererTest(unittest.TestCase):
         # no mynewsite events
         self.portal.mynewsite._delObject('events')
         r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(None, r.prev_events_link())
+        self.assertTrue('@@search' in r.prev_events_link())
