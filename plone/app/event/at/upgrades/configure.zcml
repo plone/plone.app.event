@@ -4,8 +4,8 @@
   i18n_domain="plone.app.event">
 
   <genericsetup:upgradeSteps
-    source="0"
-    destination="1"
+    source="1"
+    destination="2"
     profile="plone.app.event.at:default">
 
     <genericsetup:upgradeStep

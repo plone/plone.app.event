@@ -18,8 +18,6 @@ from plone.app.event.portlets import portlet_events
 import unittest2 as unittest
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.base import DT
-from plone.app.event.base import localized_now
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from DateTime import DateTime
@@ -110,15 +108,22 @@ class RendererTest(unittest.TestCase):
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
 
     def test_published_events(self):
-        self.portal.invokeFactory('Event', 'e1')
-        self.portal.invokeFactory('Event', 'e2')
+        start = DateTime('Australia/Brisbane') + 2
+        end = DateTime('Australia/Brisbane') + 4
+        self.portal.invokeFactory('Event', 'e1',
+                                  startDate=start, endDate=end)
+        self.portal.invokeFactory('Event', 'e2',
+                                  startDate=start, endDate=end)
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
 
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('draft',)))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('draft',)))
         self.assertEquals(0, len(r.published_events()))
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('published', )))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('published', )))
         self.assertEquals(1, len(r.published_events()))
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('published', 'private',)))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('published', 'private',)))
         self.assertEquals(2, len(r.published_events()))
 
     def test_published_events_recurring(self):
@@ -143,12 +148,11 @@ class RendererTest(unittest.TestCase):
         if 'events' in self.portal:
             self.portal._delObject('events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/events_listing'))
+        self.failUnless('@@search?advanced_search' in r.all_events_link())
 
         self.portal.invokeFactory('Folder', 'events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/events'))
-
 
     def test_all_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
@@ -156,13 +160,13 @@ class RendererTest(unittest.TestCase):
         directlyProvides(self.portal.mynewsite, INavigationRoot)
         self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
 
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/mynewsite/events_listing'))
+        r = self.renderer(context=self.portal.mynewsite,
+                          assignment=portlet_events.Assignment(count=5))
+        self.failUnless('mynewsite/@@search' in r.all_events_link())
 
         self.portal.mynewsite.invokeFactory('Folder', 'events')
         r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
         self.failUnless(r.all_events_link().endswith('/mynewsite/events'))
-
 
     def test_prev_events_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
@@ -181,8 +185,7 @@ class RendererTest(unittest.TestCase):
 
         self.portal._delObject('events')
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(None, r.prev_events_link())
-
+        self.failUnless('@@search' in r.prev_events_link())
 
     def test_prev_events_link_and_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
@@ -220,4 +223,4 @@ class RendererTest(unittest.TestCase):
         # no mynewsite events
         self.portal.mynewsite._delObject('events')
         r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(None, r.prev_events_link())
+        self.assertTrue('@@search' in r.prev_events_link())

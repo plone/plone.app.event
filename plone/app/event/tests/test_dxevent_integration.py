@@ -150,12 +150,14 @@ class TestDXEventRecurrence(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def test_recurrence(self):
+        duration = timedelta(days=4)
         data = MockEvent()
         data.start = datetime(2011, 11, 11, 11, 00)
+        data.end = data.start + duration
         data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
-        data.duration = timedelta(hours=1)
         zope.interface.alsoProvides(
-            data, IDXEventRecurrence, IEventBasic, IEventRecurrence)
+            data, IDXEventRecurrence, IEventBasic, IEventRecurrence,
+            IDXEvent)
         result = IRecurrenceSupport(data).occurrences()
         self.assertEqual(4, len(result))
         self.assertTrue(IOccurrence.providedBy(result[0]))
