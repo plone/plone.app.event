@@ -198,7 +198,7 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
             occurrences = IRecurrenceSupport(obj).occurrences(
                 range_start, range_end)
         else:
-            occurrences = [event]
+            occurrences = [obj]
 
         for occ in occurrences:
             accessor = IEventAccessor(occ)
