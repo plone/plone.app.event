@@ -144,7 +144,7 @@ class TestOccurrences(unittest.TestCase):
         result = get_occurrences(self.portal,
                                  get_portal_events(self.portal), limit=5)
         self.assertTrue(len(result) == 5)
-        self.assertTrue(IOccurrence.providedBy(result[0]))
+        self.assertTrue(IEventAccessor.providedBy(result[0]))
 
     def test_view_get_data_startdate(self):
         future = localized_now() + datetime.timedelta(days=5)

@@ -114,10 +114,11 @@ class RendererTest(unittest.TestCase):
         portlet.update()
         self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")
 
-    def test_eventtitle_nonascii(self):
-        # test issue with non-ascii event title
+    def test_event_nonascii(self):
+        # test issue with non-ascii event title and location
         title = u'Plön€¢önf München 2012'
-        self.portal.invokeFactory('Event', 'e1', title=title)
+        self.portal.invokeFactory('Event', 'e1', title=title,
+                                  location=u'München')
         #self.wft.doActionFor(self.portal.e1, 'publish')
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
