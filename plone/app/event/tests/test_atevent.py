@@ -692,7 +692,6 @@ class PAEventATFieldTest(unittest.TestCase):
                 timezone="Europe/Vienna",
                 wholeDay=True)
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertTrue(event.whole_day)
         self.assertEqual(event.start().Time(), '00:00:00')
         self.assertEqual(event.end().Time(), '23:59:59')
@@ -705,7 +704,6 @@ class PAEventATFieldTest(unittest.TestCase):
                 endDate='2000/10/13 18:00:00',
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertFalse(event.whole_day)
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
@@ -717,7 +715,6 @@ class PAEventATFieldTest(unittest.TestCase):
                 endDate='2000/10/13 18:00:00',
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
         self.assertEqual(event.start().timezone(), 'Europe/Vienna')
@@ -742,7 +739,6 @@ class PAEventATViewTest(unittest.TestCase):
                 endDate='2001/01/01 14:00:00',
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         view = EventsICal(event, TestRequest())
         ical = view.get_ical_string()
         lines = ical.split('\n')
@@ -761,7 +757,6 @@ class PAEventATViewTest(unittest.TestCase):
                 endDate='2000/10/12 18:00:00',
                 timezone="Europe/Vienna")
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
                 {'start_date': u'Oct 12, 2000',
@@ -782,7 +777,6 @@ class PAEventATViewTest(unittest.TestCase):
                 timezone="Europe/Vienna",
                 wholeDay=True)
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
                 {'start_date': u'Oct 12, 2000',
@@ -803,7 +797,6 @@ class PAEventATViewTest(unittest.TestCase):
                 timezone="Europe/Vienna",
                 wholeDay=True)
         event = self.portal[event_id]
-        notify(ObjectModifiedEvent(event))
         self.assertEqual(prepare_for_display(self.portal,
             event.start_date, event.end_date, event.whole_day),
                 {'start_date': u'Oct 12, 2000',
