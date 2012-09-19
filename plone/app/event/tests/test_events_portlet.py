@@ -108,15 +108,22 @@ class RendererTest(unittest.TestCase):
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
 
     def test_published_events(self):
-        self.portal.invokeFactory('Event', 'e1')
-        self.portal.invokeFactory('Event', 'e2')
+        start = DateTime('Australia/Brisbane') + 2
+        end = DateTime('Australia/Brisbane') + 4
+        self.portal.invokeFactory('Event', 'e1',
+                                  startDate=start, endDate=end)
+        self.portal.invokeFactory('Event', 'e2',
+                                  startDate=start, endDate=end)
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
 
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('draft',)))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('draft',)))
         self.assertEquals(0, len(r.published_events()))
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('published', )))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('published', )))
         self.assertEquals(1, len(r.published_events()))
-        r = self.renderer(assignment=portlet_events.Assignment(count=5, state=('published', 'private',)))
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, state=('published', 'private',)))
         self.assertEquals(2, len(r.published_events()))
 
     def test_published_events_recurring(self):
