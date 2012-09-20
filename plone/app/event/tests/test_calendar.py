@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from zope.component import getMultiAdapter
-from plone.event.interfaces import IEvent
 
 def makeResponse(request):
     """ create a fake response and set up logging of output """
@@ -21,7 +20,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
 
-class CalendarTest(unittest.TestCase):
+class ICalendarExportTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
     def setUp(self):
@@ -46,52 +45,22 @@ class CalendarTest(unittest.TestCase):
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')
         self.event2 = portal.events['ploneconf2008']
 
+        portal.invokeFactory("Collection",
+                             "collection",
+                             title="New Collection",
+                             sort_on='start')
+        portal['collection'].setQuery([{
+            'i': 'Type',
+            'o': 'plone.app.querystring.operation.string.is',
+            'v': 'Event',
+        }, ])
+
         self.portal = portal
 
-    def testCalendarView(self):
-        view = getMultiAdapter((self.portal.events, self.request), name='ics_view')
-        events = view.getEvents()
-        self.assertEqual(len(events), 2)
-        self.assertEqual(sorted([e.Title() for e in events]),
-            ['Plone Conf 2007', 'Plone Conf 2008'])
-
-    def testCalendarViewForTopic(self):
-        portal = self.portal
-        portal.invokeFactory('Topic', id='calendar')
-        topic = portal['calendar']
-        crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
-        crit.setValue('DC')
-        view = getMultiAdapter((topic, self.request), name='ics_view')
-        events = view.getEvents()
-        self.assertEqual(len(events), 1)
-        self.assertEqual(
-                sorted([e.Title() for e in events]),
-                ['Plone Conf 2008'])
-        portal.invokeFactory('Event',
-            id='inaug09', title='Inauguration Day 2009',
-            startDate='2009/01/20', endDate='2009/01/20', location='DC')
-        events = view.getEvents()
-        self.assertEqual(len(events), 2)
-        self.assertEqual(sorted([e.Title() for e in events]),
-            ['Inauguration Day 2009', 'Plone Conf 2008'])
-
-    def testDuplicateQueryParameters(self):
-        portal = self.portal
-        portal.invokeFactory('Topic', id='dc')
-        topic = portal['dc']
-        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
-        crit.setValue('Event')
-        crit = topic.addCriterion('object_provides', 'ATSimpleStringCriterion')
-        crit.setValue(IEvent.__identifier__)
-        query = topic.buildQuery()
-        self.assertEqual(len(query), 2)
-        self.assertEqual(query['portal_type'], 'Event')
-        self.assertEqual(query['object_provides'], IEvent.__identifier__)
-        view = getMultiAdapter((topic, self.request), name='ics_view')
-        events = view.getEvents()
-        self.assertEqual(len(events), 2)
-        self.assertEqual(sorted([e.Title() for e in view.getEvents()]),
-            ['Plone Conf 2007', 'Plone Conf 2008'])
+    def testCollectionResult(self):
+        collection = self.portal['collection']
+        results = collection.results()
+        self.assertTrue(len(results)==2)
 
     def checkOrder(self, text, *order):
         for item in order:
@@ -100,26 +69,42 @@ class CalendarTest(unittest.TestCase):
                 'menu item "%s" missing or out of order' % item)
             text = text[position:]
 
-    def testRendering(self):
+    def testCollectionICal(self):
+        headers, output, request = makeResponse(self.request)
+        view = getMultiAdapter((self.portal.collection, request), name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.checkOrder(icalstr,
+            'BEGIN:VCALENDAR',
+            'X-WR-CALNAME:New Collection',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2007',
+            'END:VEVENT',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2008',
+            'END:VEVENT',
+            'END:VCALENDAR')
+
+    def testFolderICal(self):
         headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.portal.events, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
-        self.checkOrder(''.join(output),
+        icalstr = ''.join(output)
+        self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
-            'LOCATION:Naples',
             'SUMMARY:Plone Conf 2007',
-            'URL:http://plone.org/events/conferences/2007-naples',
             'END:VEVENT',
             'BEGIN:VEVENT',
-            'LOCATION:DC',
             'SUMMARY:Plone Conf 2008',
             'END:VEVENT',
             'END:VCALENDAR')
 
-    def testCalendarInfo(self):
+    def testFolderICalInfo(self):
         events = self.portal.events
         events.processForm(values={'title': 'Foo', 'description': 'Bar'})
         headers, output, request = makeResponse(self.request)
@@ -132,6 +117,7 @@ class CalendarTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
+
         # another folder should have another name, even though the set
         # of events might be the same...
         headers, output, request = makeResponse(self.request)
@@ -144,6 +130,7 @@ class CalendarTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'END:VCALENDAR')
         self.assertTrue('X-WR-CALDESC' not in ''.join(output))
+
         # changing the title should be immediately reflected...
         events.processForm(values={'title': u'Föö!!'})
         headers, output, request = makeResponse(self.request)
@@ -156,25 +143,3 @@ class CalendarTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
-
-    def testRenderingForTopic(self):
-        portal = self.portal
-        portal.invokeFactory('Topic', id='calendar')
-        topic = portal['calendar']
-        crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
-        crit.setValue('DC')
-        headers, output, request = makeResponse(self.request)
-        view = getMultiAdapter((topic, request), name='ics_view')
-        view()
-        self.assertEqual(len(headers), 2)
-        self.assertEqual(headers['Content-Type'], 'text/calendar')
-        self.checkOrder(''.join(output),
-            'BEGIN:VCALENDAR',
-            'BEGIN:VEVENT',
-            'LOCATION:DC',
-            'SUMMARY:Plone Conf 2008',
-            'URL:http://plone.org/events/conferences/2008-washington-dc',
-            'END:VEVENT',
-            'END:VCALENDAR')
-        lines = ''.join(output).splitlines()
-        self.assertEqual(len([l for l in lines if l == 'BEGIN:VEVENT']), 1)
