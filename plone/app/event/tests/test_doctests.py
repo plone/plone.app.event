@@ -8,10 +8,7 @@ from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
-    'controlpanel.txt'
-]
-DOCMODS = [
-    'plone.app.event.base',
+    'controlpanel.rst',
 ]
 
 def test_suite():
@@ -25,12 +22,5 @@ def test_suite():
                 globs={'interact': interact}
                 ), layer=PAEvent_INTEGRATION_TESTING
             ) for docfile in DOCFILES
-    ])
-    suite.addTests([
-        doctest.DocTestSuite(
-            docmod,
-            optionflags=OPTIONFLAGS,
-            globs={'interact': interact}
-        ) for docmod in DOCMODS
     ])
     return suite
