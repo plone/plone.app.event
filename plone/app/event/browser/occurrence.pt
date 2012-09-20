@@ -31,9 +31,9 @@
           tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
           <a href="#"
             class="tile"
-            tal:attributes="href obj/absolute_url;
-            title obj/Description">
-            <span tal:replace="obj/Title">
+            tal:attributes="href obj/context/absolute_url;
+            title obj/description">
+            <span tal:replace="obj/title">
               Some Event
             </span>
           </a>
