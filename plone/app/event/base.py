@@ -7,7 +7,8 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from plone.app.layout.navigation.root import getNavigationRootObject
-from plone.event.interfaces import IEvent, IRecurrenceSupport, IEventAccessor
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
@@ -198,7 +199,7 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     for event in events:
         obj = event.getObject()
 
-        if IRecurrenceSupport.providedBy(obj):
+        if IEventRecurrence.providedBy(obj):
             occurrences = IRecurrenceSupport(obj).occurrences(
                 range_start, range_end)
         else:
