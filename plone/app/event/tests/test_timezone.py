@@ -16,7 +16,7 @@ class TimezoneTest(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
-        os.environ['TZ'] = "CET"
+        os.environ['TZ'] = "UTC"
 
     def tearDown(self):
         # delete resources from setUp
@@ -57,7 +57,7 @@ class TimezoneTest(unittest.TestCase):
         assert(len([item for item in avail_zones_vocab]) == 10)
 
     def test_default_timezone(self):
-        assert(os_default_timezone() == default_timezone() == 'CET')
+        assert(os_default_timezone() == default_timezone() == 'UTC')
 
         reg = getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
