@@ -66,27 +66,38 @@ class TestBaseModule(unittest.TestCase):
 
     def test_DT(self):
         # Python datetime with valid zone. Zope converts it to GMT+1...
+        # TODO: DateTime better shouldn't do this!
         cet = pytz.timezone('CET')
-        self.assertTrue(DT(datetime.datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)) ==
-                        DateTime('2011/11/11 11:00:00 GMT+1'))
+        self.assertTrue(
+            DT(datetime.datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)) ==
+            DateTime('2011/11/11 11:00:00 GMT+1')
+        )
 
         # Python dates get converted to a DateTime with timecomponent including
         # a timezone
-        self.assertTrue(DT(datetime.date(2011, 11, 11)) ==
-                        DateTime('2011/11/11 00:00:00 UTC'))
+        self.assertTrue(
+            DT(datetime.date(2011, 11, 11)) ==
+            DateTime('2011/11/11 00:00:00 UTC')
+        )
 
         # DateTime with valid zone
-        self.assertTrue(DT(DateTime(2011, 11, 11, 11, 0, 0, 'Europe/Vienna'))
-                        == DateTime('2011/11/11 11:00:00 Europe/Vienna'))
+        self.assertTrue(
+            DT(DateTime(2011, 11, 11, 11, 0, 0, 'Europe/Vienna')) ==
+            DateTime('2011/11/11 11:00:00 Europe/Vienna')
+        )
 
         # Zope DateTime with valid DateTime zone but invalid pytz is kept as is
-        self.assertTrue(DT(DateTime(2011, 11, 11, 11, 0, 0, 'GMT+1')) ==
-                        DateTime('2011/11/11 11:00:00 GMT+1'))
+        self.assertTrue(
+            DT(DateTime(2011, 11, 11, 11, 0, 0, 'GMT+1')) ==
+            DateTime('2011/11/11 11:00:00 GMT+1')
+        )
 
         # Invalid datetime zones are converted to the portal timezone
         # Testing with no timezone
-        self.assertTrue(DT(datetime.datetime(2011, 11, 11, 11, 0, 0)) ==
-                        DateTime('2011/11/11 11:00:00 UTC'))
+        self.assertTrue(
+            DT(datetime.datetime(2011, 11, 11, 11, 0, 0)) ==
+            DateTime('2011/11/11 11:00:00 UTC')
+        )
 
 
 

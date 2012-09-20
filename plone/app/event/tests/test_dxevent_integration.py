@@ -134,8 +134,13 @@ class TextDXIntegration(unittest.TestCase):
         # accessor should return end datetime in the event's timezone
         self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=cet))
 
-        # end datetime is stored in utc on the content object
+        # the behavior's end datetime is stored in utc on the content object
         self.assertTrue(e1.end == datetime(2011,11,13,10,0, tzinfo=utc))
+
+        # accessing the end property via the behavior adapter, returns the
+        # value converted to the event's timezone
+        self.assertTrue(IEventBasic(e1).end ==
+                datetime(2011,11,13,11,0, tzinfo=cet))
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)

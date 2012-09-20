@@ -35,8 +35,10 @@ class PAEventATTest(unittest.TestCase):
         # accessor should return end datetime in the event's timezone
         self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=vienna))
 
-        # end datetime is stored in utc on the content object
-        self.assertTrue(e1.end() == DateTime('2011/11/13 11:00:00 Europe/Vienna'))
+        # start/end dates are stored in UTC zone on the context, but converted
+        # to event's timezone via the attribute getter.
+        self.assertTrue(e1.end() ==
+                DateTime('2011/11/13 11:00:00 Europe/Vienna'))
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
