@@ -310,7 +310,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     def setEndDate(self, value, **kwargs):
         self._dt_setter('endDate', value, **kwargs)
 
-    # TODO: Why is this needed!!!
+    # TODO: Why is this needed?
     #
     security.declareProtected(ModifyPortalContent, 'update')
     def update(self, event=None, **kwargs):
@@ -348,7 +348,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         If other is a DateTime instance, compare start date with date
         In all other cases there is no specific order
         """
-        # TODO: needed?
         # TODO: maybe also include location to compate two events.
 
         # Please note that we can not use self.Title() here: the generated
@@ -365,7 +364,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             return cmp(self.title, other)
 
     def __hash__(self):
-        # TODO: for what's that?
         return hash((self.start_date, self.duration, self.title))
 
 
