@@ -1,6 +1,7 @@
 import pytz
 import unittest2 as unittest
 from datetime import datetime
+from DateTime import DateTime
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
@@ -26,16 +27,16 @@ class PAEventATTest(unittest.TestCase):
         # setting attributes via the accessor
         #import pdb; pdb.set_trace()
         acc = IEventAccessor(e1)
-        acc.end = datetime(2011,11,13,10,0)
-        acc.timezone = 'CET'
+        acc.end = datetime(2011,11,13,10,0, tzinfo=utc)
+        acc.timezone = 'Europe/Vienna'
 
-        cet = pytz.timezone('CET')
+        vienna = pytz.timezone('Europe/Vienna')
 
         # accessor should return end datetime in the event's timezone
-        self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=cet))
+        self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=vienna))
 
         # end datetime is stored in utc on the content object
-        self.assertTrue(e1.end == datetime(2011,11,13,10,0, tzinfo=utc))
+        self.assertTrue(e1.end() == DateTime('2011/11/13 11:00:00 Europe/Vienna'))
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
