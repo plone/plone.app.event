@@ -9,6 +9,7 @@ from plone.registry.interfaces import IRegistry
 from plone.event.utils import default_timezone as os_default_timezone
 from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEventSettings
+from plone.app.event.testing import reset_timezone
 
 class TimezoneTest(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
@@ -17,6 +18,8 @@ class TimezoneTest(unittest.TestCase):
         self.portal = self.layer['portal']
         self.ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
         os.environ['TZ'] = "UTC"
+
+        reset_timezone()
 
     def tearDown(self):
         # delete resources from setUp
