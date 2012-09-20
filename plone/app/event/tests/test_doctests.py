@@ -8,7 +8,6 @@ from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
-    'webdav.txt',
     'controlpanel.txt'
 ]
 DOCMODS = [
