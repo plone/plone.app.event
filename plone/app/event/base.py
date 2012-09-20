@@ -1,7 +1,6 @@
 import pytz
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import i18nl10n
 from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
 from datetime import date
 from datetime import datetime
