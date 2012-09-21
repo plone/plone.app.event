@@ -154,14 +154,14 @@ class TestOccurrences(unittest.TestCase):
             (self.portal, request), name='occurrences.html')
 
         result = view.get_data()
-        self.assertEqual(2, len(result))
+        self.assertEqual(2, result.length)
 
     def test_view_get_data_invalid(self):
         request = TestRequest(form=dict(start='invalid'))
         view = zope.component.getMultiAdapter(
             (self.portal, request), name='occurrences.html')
         result = view.get_data()
-        self.assertEqual(9, len(result))
+        self.assertEqual(9, result.length)
 
 
 def test_suite():
