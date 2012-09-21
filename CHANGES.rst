@@ -4,6 +4,11 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Limit the amount of occurrences in the event view if the event yields
+  more than 7 occurrences. Show only 6 occurrences and the last
+  occurrence.
+  [romanofski]
+
 - More minor fixes:
   * Don't force DateTime conversion in query parameters of get_portal_events.
     The catalog index uses Python's datetime anyways.

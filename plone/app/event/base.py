@@ -233,11 +233,6 @@ def get_occurrences(context, brains, range_start=None, range_end=None,
     :returns: List of occurrence objects.
     :rtype: Occurrence objects
 
-    >>> from plone.app.event.base import get_occurrences
-    >>> import datetime
-    >>> get_occurrences(object, [], range_start=datetime.datetime.today())
-    []
-
     """
     result = []
     start = localized_now() if (range_start is None) else range_start
