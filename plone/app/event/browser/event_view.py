@@ -92,7 +92,7 @@ class EventView(BrowserView):
     @property
     def occurrences(self):
         """Returns all occurrences for this context. The maximum
-        defaults to 10 occurrences. If there are more occurrences
+        defaults to 7 occurrences. If there are more occurrences
         defined for this context, the result will contain the last item
         of the occurrence list.
 
@@ -116,7 +116,8 @@ class EventView(BrowserView):
         :param occ_list: The list of occurrences returned from
                          IRecurrenceSupport
         :type occ_list: list
-        :param limit: optional, defaults to 10
+        :param limit: optional, defaults to 7
+        :type limit: integer
         :rtype: tuple of (list of events, last item of occ_list)
         """
         events = []
