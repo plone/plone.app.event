@@ -57,7 +57,6 @@ class Renderer(base.Renderer):
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
         self.navigation_root_url = portal_state.navigation_root_url()
         self.portal = portal_state.portal()
-        self.navigation_root_path = portal_state.navigation_root_path()
         self.navigation_root_object = getNavigationRootObject(self.context, self.portal)
 
     @ram.cache(render_cachekey)
@@ -122,12 +121,10 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         limit = self.data.count
         state = self.data.state
-        path = self.navigation_root_path
         return get_portal_events(
                 context,
                 range_start=localized_now(context),
                 limit=limit,
-                path=path,
                 review_state=state)
 
 class AddForm(base.AddForm):
