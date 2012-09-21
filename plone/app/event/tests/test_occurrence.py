@@ -99,6 +99,7 @@ class TestOccurrences(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        self.request = self.layer['request']
         default_tz = 'CET'
 
         reg = zope.component.getUtility(IRegistry)
@@ -154,14 +155,35 @@ class TestOccurrences(unittest.TestCase):
             (self.portal, request), name='occurrences.html')
 
         result = view.get_data()
-        self.assertEqual(2, len(result))
+        self.assertEqual(2, result.length)
 
     def test_view_get_data_invalid(self):
         request = TestRequest(form=dict(start='invalid'))
         view = zope.component.getMultiAdapter(
             (self.portal, request), name='occurrences.html')
         result = view.get_data()
-        self.assertEqual(9, len(result))
+        self.assertEqual(9, result.length)
+
+    def test_eventview_occurrences(self):
+        self.portal.invokeFactory(
+            'Event',
+            'many',
+            title=u'Interval Event',
+            location=u'Brisbane',
+            recurrence='RRULE:FREQ=DAILY;COUNT=1000',
+            whole_day=False)
+
+        view = zope.component.getMultiAdapter(
+            (self.portal['interval'], self.request), name='event_view')
+        result = view.occurrences
+        self.assertEqual(5, len(result['events']))
+        self.assertFalse(result['events'][-1] == result['tail'])
+
+        view = zope.component.getMultiAdapter(
+            (self.portal['many'], self.request), name='event_view')
+        result = view.occurrences
+        self.assertEqual(7, len(result['events']))
+        self.assertFalse(result['events'][-1] == result['tail'])
 
 
 def test_suite():

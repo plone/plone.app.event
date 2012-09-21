@@ -60,7 +60,7 @@ class ICalendarExportTest(unittest.TestCase):
     def testCollectionResult(self):
         collection = self.portal['collection']
         results = collection.results()
-        self.assertTrue(len(results)==2)
+        self.assertTrue(results.length == 2)
 
     def checkOrder(self, text, *order):
         for item in order:

@@ -119,13 +119,20 @@
                               </a>
                             </p>
                           </tal:occurrence>
-                          <div tal:define="events view/occurrences;
-                                           events python:events and events[1:] or None"
+                          <div tal:define="eventsinfo view/occurrences;
+                            events eventsinfo/events;
+                            tail eventsinfo/tail;"
                                tal:condition="events">
                                <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences>
                             <ul>
                               <li tal:repeat="date_dict events">
                                 <tal:event metal:use-macro="view/macros/event_occurrence" />
+                              </li>
+                              <li tal:condition="tail">
+                                  ⋮<br />
+                                  <tal:define define="date_dict tail">
+                                    <tal:event metal:use-macro="view/macros/event_occurrence" />
+                                  </tal:define>
                               </li>
                             </ul>
                           </div>
