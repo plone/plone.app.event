@@ -3,14 +3,17 @@ from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.portlets.portlets import base
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.portlets.interfaces import IPortletDataProvider
+from zope import schema
+from zope.formlib import form
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
 from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
-from plone.app.event.base import localized_today
 from plone.app.event.base import get_occurrences_by_date
+from plone.app.event.base import localized_today
 
 from plone.app.portlets import PloneMessageFactory as _
 PLMF = MessageFactory('plonelocales')
@@ -20,10 +23,35 @@ class ICalendarPortlet(IPortletDataProvider):
     """A portlet displaying a calendar
     """
 
+    state = schema.Tuple(title=_(u"Workflow state"),
+        description=_(u"Items in which workflow state to show."),
+        default=('published', ),
+        required=True,
+        value_type=schema.Choice(
+            vocabulary="plone.app.vocabularies.WorkflowStates")
+     )
+
+    search_base = schema.Choice(
+        title=_(u'portlet_label_search_base', default=u'Search base'),
+        description=_(u'portlet_help_search_base',
+                      default=u'Select events search base folder'),
+        required=False,
+        source=SearchableTextSourceBinder({'is_folderish': True},
+                                           default_query='path:'),
+    )
+
 
 class Assignment(base.Assignment):
     implements(ICalendarPortlet)
     title = _(u'Calendar')
+
+    # reduce upgrade pain
+    state = ('published', )
+    search_base = None
+
+    def __init__(self, state=('published', ), search_base=None):
+        self.state = state
+        self.search_base = search_base
 
 
 class Renderer(base.Renderer):
@@ -37,7 +65,7 @@ class Renderer(base.Renderer):
             self.get_previous_month(year, month))
         self.next_year, self.next_month = next_year, next_month = (
             self.get_next_month(year, month))
-        # TODO: respect current query string
+        # TODO: respect current url-query string
         self.prev_query = '?month=%s&year=%s' % (prev_month, prev_year)
         self.next_query = '?month=%s&year=%s' % (next_month, next_year)
 
@@ -91,8 +119,19 @@ class Renderer(base.Renderer):
         today = localized_today(context)
         year, month = self.year_month_display()
         monthdates = [dat for dat in self.cal.itermonthdates(year, month)]
+
+        data = self.data
+        query_kw = {}
+        if data.search_base:
+            portal = getToolByName(context, 'portal_url').getPortalObject()
+            query_kw['path'] = {'query': '%s%s' % (
+                '/'.join(portal.getPhysicalPath()), data.search_base)}
+
+        if data.state:
+            query_kw['review_state'] = data.state
+
         occurrences = get_occurrences_by_date(
-            context, monthdates[0], monthdates[-1])
+            context, monthdates[0], monthdates[-1], **query_kw)
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
         caldata = [[]]
         for dat in monthdates:
@@ -128,7 +167,16 @@ class Renderer(base.Renderer):
         return caldata
 
 
-class AddForm(base.NullAddForm):
+class AddForm(base.AddForm):
+    form_fields = form.Fields(ICalendarPortlet)
+    label = _(u"Add Calendar Portlet")
+    description = _(u"This portlet displays events in a calendar.")
 
-    def create(self):
-        return Assignment()
+    def create(self, data):
+        return Assignment(state=data.get('state', ('published',)),
+                          search_base=data.get('search_base', None))
+
+class EditForm(base.EditForm):
+    form_fields = form.Fields(ICalendarPortlet)
+    label = _(u"Edit Calendar Portlet")
+    description = _(u"This portlet displays events in a calendar.")

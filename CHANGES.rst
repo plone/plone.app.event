@@ -4,6 +4,11 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Add search_base (select path to search for events) and state (select review
+  state for events to search) to portlet_calendar settings and search_base to
+  portlet_events.
+  [thet]
+
 - Limit the amount of occurrences in the event view if the event yields
   more than 7 occurrences. Show only 6 occurrences and the last
   occurrence.

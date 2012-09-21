@@ -8,6 +8,7 @@
         assignment=".portlet_calendar.Assignment"
         renderer=".portlet_calendar.Renderer"
         addview=".portlet_calendar.AddForm"
+        editview=".portlet_calendar.EditForm"
         />
 
     <plone:portlet
