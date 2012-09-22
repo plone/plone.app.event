@@ -25,8 +25,8 @@ class ICalendarPortlet(IPortletDataProvider):
 
     state = schema.Tuple(title=_(u"Workflow state"),
         description=_(u"Items in which workflow state to show."),
-        default=('published', ),
-        required=True,
+        default=None,
+        required=False,
         value_type=schema.Choice(
             vocabulary="plone.app.vocabularies.WorkflowStates")
      )
@@ -46,10 +46,10 @@ class Assignment(base.Assignment):
     title = _(u'Calendar')
 
     # reduce upgrade pain
-    state = ('published', )
+    state = None
     search_base = None
 
-    def __init__(self, state=('published', ), search_base=None):
+    def __init__(self, state=None, search_base=None):
         self.state = state
         self.search_base = search_base
 
@@ -173,7 +173,7 @@ class AddForm(base.AddForm):
     description = _(u"This portlet displays events in a calendar.")
 
     def create(self, data):
-        return Assignment(state=data.get('state', ('published',)),
+        return Assignment(state=data.get('state', None),
                           search_base=data.get('search_base', None))
 
 class EditForm(base.EditForm):

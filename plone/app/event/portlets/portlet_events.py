@@ -32,8 +32,8 @@ class IEventsPortlet(IPortletDataProvider):
 
     state = schema.Tuple(title=_(u"Workflow state"),
         description=_(u"Items in which workflow state to show."),
-        default=('published', ),
-        required=True,
+        default=None,
+        required=False,
         value_type=schema.Choice(
             vocabulary="plone.app.vocabularies.WorkflowStates")
         )
@@ -54,7 +54,7 @@ class Assignment(base.Assignment):
     # reduce upgrade pain
     search_base = None
 
-    def __init__(self, count=5, state=('published', ), search_base=None):
+    def __init__(self, count=5, state=None, search_base=None):
         self.count = count
         self.state = state
         self.search_base = search_base
@@ -161,7 +161,7 @@ class AddForm(base.AddForm):
 
     def create(self, data):
         return Assignment(count=data.get('count', 5),
-                          state=data.get('state', ('published',)),
+                          state=data.get('state', None),
                           search_base=data.get('search_base', 5))
 
 class EditForm(base.EditForm):

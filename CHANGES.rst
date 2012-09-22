@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- For portlet_calendar and portlet_events configuration, make the workflow
+  state selection optional. If nothing is selected, all states are searched.
+  [thet]
+
 - Add search_base (select path to search for events) and state (select review
   state for events to search) to portlet_calendar settings and search_base to
   portlet_events.
