@@ -57,8 +57,7 @@ class PortletTest(unittest.TestCase):
             del mapping[m]
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
 
-        # This is a NullAddForm - calling it does the work
-        addview()
+        addview.createAndAdd(data={})
 
         self.assertEquals(len(mapping), 1)
         self.failUnless(isinstance(mapping.values()[0], portlet_calendar.Assignment))
@@ -85,6 +84,9 @@ class RendererTest(unittest.TestCase):
         setHooks()
         setSite(portal)
 
+        # Make sure Events use simple_publication_workflow
+        self.portal.portal_workflow.setChainForPortalTypes(['Event'], ['simple_publication_workflow'])
+
     def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
         context = context or self.portal
         request = request or self.request
@@ -93,6 +95,46 @@ class RendererTest(unittest.TestCase):
         assignment = assignment or portlet_calendar.Assignment()
 
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
+
+    def test_portlet_config(self):
+        start = DateTime('Europe/Vienna')
+        end = DateTime('Europe/Vienna') + 0.1
+        self.portal.invokeFactory('Event', 'e1',
+                                  startDate=start, endDate=end)
+        self.portal.invokeFactory('Folder', 'eventfolder')
+        # one event in the events folder
+        self.portal.eventfolder.invokeFactory('Event', 'e2',
+                                              startDate=start, endDate=end)
+        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(
+            state=('draft',)))
+        r.update()
+        rd = r.render()
+        self.assertTrue('e1' not in rd and 'e2' not in rd)
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(
+            state=('published', )))
+        r.update()
+        rd = r.render()
+        self.assertTrue('e1' in rd and 'e2' not in rd)
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(
+            state=('published', 'private',)))
+        r.update()
+        rd = r.render()
+        self.assertTrue('e1' in rd and 'e2' in rd)
+
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
+        rd = r.render()
+        self.assertTrue('e1' in rd and 'e2' in rd)
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(
+            search_base="/eventfolder"))
+        r.update()
+        rd = r.render()
+        self.assertTrue('e1' not in rd and 'e2' in rd)
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events

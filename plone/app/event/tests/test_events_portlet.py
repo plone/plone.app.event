@@ -112,19 +112,31 @@ class RendererTest(unittest.TestCase):
         end = DateTime('Australia/Brisbane') + 4
         self.portal.invokeFactory('Event', 'e1',
                                   startDate=start, endDate=end)
-        self.portal.invokeFactory('Event', 'e2',
-                                  startDate=start, endDate=end)
+        self.portal.invokeFactory('Folder', 'eventfolder')
+        # one event in the events folder
+        self.portal.eventfolder.invokeFactory('Event', 'e2',
+                                              startDate=start, endDate=end)
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
 
         r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
         self.assertEquals(0, len(r.published_events()))
+
         r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
         self.assertEquals(1, len(r.published_events()))
+
         r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
         self.assertEquals(2, len(r.published_events()))
+
+        r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        self.assertEquals(2, len(r.published_events()))
+
+        r = self.renderer(assignment=portlet_events.Assignment(
+            count=5, search_base="/eventfolder"))
+        self.assertEquals(1, len(r.published_events()))
+
 
     def test_published_events_recurring(self):
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
