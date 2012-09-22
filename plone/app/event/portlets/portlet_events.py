@@ -1,6 +1,5 @@
 from datetime import datetime
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.app.portlets.cache import render_cachekey
