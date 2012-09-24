@@ -53,7 +53,7 @@ def prepare_for_display(context, start, end, whole_day):
     if whole_day:
         start_time = end_time = None
 
-    return  dict(start_date=start_date,
+    return dict(start_date=start_date,
                  start_time=start_time,
                  start_iso=start.isoformat(),
                  end_date=end_date,
