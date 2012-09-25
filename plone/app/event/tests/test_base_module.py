@@ -175,50 +175,56 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
     def test_get_portal_events(self):
 
         # whole range
-        res1 = get_portal_events(self.portal)
-        self.assertTrue(len(res1) == 4)
+        res = get_portal_events(self.portal)
+        self.assertTrue(len(res) == 4)
 
-        res2 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past,
                                  range_end=self.future)
-        self.assertTrue(len(res2) == 4)
+        self.assertTrue(len(res) == 4)
 
-        res3 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_end=self.future)
-        self.assertTrue(len(res3) == 4)
+        self.assertTrue(len(res) == 4)
 
-        res4 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past)
-        self.assertTrue(len(res4) == 4)
+        self.assertTrue(len(res) == 4)
 
 
         # only on now-date
-        res5 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.now,
                                  range_end=self.now)
-        self.assertTrue(len(res5) == 2)
+        self.assertTrue(len(res) == 2)
+
+        # only on now-date as date
+        res = get_portal_events(self.portal,
+                                 range_start=self.now.date(),
+                                 range_end=self.now.date())
+        self.assertTrue(len(res) == 2)
 
         # only on past date
-        res6 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past,
                                  range_end=self.past)
-        self.assertTrue(len(res6) == 2)
+        self.assertTrue(len(res) == 2)
 
         # one recurrence occurrence in future
-        res7 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.far,
                                  range_end=self.far)
-        self.assertTrue(len(res7) == 1)
+        self.assertTrue(len(res) == 1)
 
         # from now on
-        res8 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.now)
-        self.assertTrue(len(res8) == 3)
+        self.assertTrue(len(res) == 3)
 
         # until now
-        res9 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_end=self.now)
-        self.assertTrue(len(res9) == 3)
+        self.assertTrue(len(res) == 3)
 
     def test_get_occurrences(self):
         get_occurrences(object, [], range_start=datetime.datetime.today())
@@ -297,47 +303,47 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
     def test_get_portal_events(self):
 
         # whole range
-        res1 = get_portal_events(self.portal)
-        self.assertTrue(len(res1) == 4)
+        res = get_portal_events(self.portal)
+        self.assertTrue(len(res) == 4)
 
-        res2 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past,
                                  range_end=self.future)
-        self.assertTrue(len(res2) == 4)
+        self.assertTrue(len(res) == 4)
 
-        res3 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_end=self.future)
-        self.assertTrue(len(res3) == 4)
+        self.assertTrue(len(res) == 4)
 
-        res4 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past)
-        self.assertTrue(len(res4) == 4)
+        self.assertTrue(len(res) == 4)
 
 
         # only on now-date
-        res5 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.now,
                                  range_end=self.now)
-        self.assertTrue(len(res5) == 2)
+        self.assertTrue(len(res) == 2)
 
         # only on past date
-        res6 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.past,
                                  range_end=self.past)
-        self.assertTrue(len(res6) == 2)
+        self.assertTrue(len(res) == 2)
 
         # one recurrence occurrence in future
-        res7 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.far,
                                  range_end=self.far)
-        self.assertTrue(len(res7) == 1)
+        self.assertTrue(len(res) == 1)
 
         # from now on
-        res8 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_start=self.now)
-        self.assertTrue(len(res8) == 3)
+        self.assertTrue(len(res) == 3)
 
         # until now
-        res9 = get_portal_events(self.portal,
+        res = get_portal_events(self.portal,
                                  range_end=self.now)
-        self.assertTrue(len(res9) == 3)
+        self.assertTrue(len(res) == 3)
