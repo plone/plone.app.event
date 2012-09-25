@@ -29,7 +29,7 @@ class ICalendarPortlet(IPortletDataProvider):
         required=False,
         value_type=schema.Choice(
             vocabulary="plone.app.vocabularies.WorkflowStates")
-     )
+    )
 
     search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
