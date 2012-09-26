@@ -72,6 +72,9 @@ class Renderer(base.Renderer):
         base.Renderer.__init__(self, *args)
 
         self.calendar_linkbase = ICalendarLinkbase(self.context)
+        #BBB
+        self.prev_events_link = self.calendar_linkbase.past_events_url
+        self.all_events_link = self.calendar_linkbase.next_events_url
 
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
         self.portal = portal_state.portal()
