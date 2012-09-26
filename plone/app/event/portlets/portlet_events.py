@@ -1,7 +1,5 @@
-#from datetime import datetime
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-#from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -78,8 +76,6 @@ class Renderer(base.Renderer):
 
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
         self.portal = portal_state.portal()
-        #self.navigation_root_url = portal_state.navigation_root_url()
-        #self.navigation_root_object = getNavigationRootObject(self.context, self.portal)
 
     @ram.cache(render_cachekey)
     def render(self):
@@ -93,52 +89,6 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         return [IEventAccessor(occ) for occ in\
                 get_occurrences(context, self._data(), limit=self.data.count)]
-
-    """
-    @memoize
-    def have_events_folder(self):
-        return 'events' in self.navigation_root_object.objectIds()
-
-    def all_events_link(self):
-        navigation_root_url = self.navigation_root_url
-        url = None
-        if self.have_events_folder():
-            url = '%s/events' % navigation_root_url
-        else:
-            # search all events which are in the future or ongoing
-            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
-            url = '%s/@@search?advanced_search=True'\
-                  '&start.query:record:list:date=%s'\
-                  '&start.range:record=min'\
-                  '&end.query:record:list:date=%s'\
-                  '&end.range:record=min'\
-                  '&object_provides=plone.event.interfaces.IEvent'\
-                   % (navigation_root_url, now, now)
-        return url
-
-    def prev_events_link(self):
-        # take care dont use self.portal here since support
-        # of INavigationRoot features likely will breake #9246 #9668
-        url = None
-        navigation_root_url = self.navigation_root_url
-        events_folder = self.have_events_folder()\
-                and self.navigation_root_object['events'] or None
-        if (events_folder and
-            'aggregator' in events_folder.objectIds() and
-            'previous' in events_folder['aggregator'].objectIds()):
-            url = '%s/events/aggregator/previous' % navigation_root_url
-        elif (events_folder and 'previous' in events_folder.objectIds()):
-            url = '%s/events/previous' % navigation_root_url
-        else:
-            # show all past events
-            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
-            url = '%s/@@search?advanced_search=True'\
-                  '&end.query:record:list:date=%s'\
-                  '&end.range:record=max'\
-                  '&object_provides=plone.event.interfaces.IEvent'\
-                   % (navigation_root_url, now)
-        return url
-    """
 
     @memoize
     def _data(self):
