@@ -15,12 +15,14 @@ from plone.app.event.base import (
     get_portal_events,
     localized_now
 )
-from plone.app.event.interfaces import IEventSettings
+from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
+from zope.interface import directlyProvides
 
 
 class TestBaseModule(unittest.TestCase):
@@ -99,6 +101,128 @@ class TestBaseModule(unittest.TestCase):
             DateTime('2011/11/11 11:00:00 UTC')
         )
 
+
+class TestCalendarLinkbase(unittest.TestCase):
+    # TODO: test overriding of ICalendarLinkbase
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_date_events_url(self):
+        lb = ICalendarLinkbase(self.portal)
+        res = 'http://nohost/plone/@@search?advanced_search=True&start.query'\
+              ':record:list:date=2012-12-24+23:59:59&start.range:record=max&'\
+              'end.query:record:list:date=2012-12-24+00:00:00&end.range:reco'\
+              'rd=min&object_provides=plone.event.interfaces.IEvent'
+        self.assertTrue(lb.date_events_url('2012-12-24') == res)
+
+    def test_all_events_url(self):
+        # if there is an 'events' object in the portal root, we expect
+        # the events portlet to link to it
+        if 'events' in self.portal:
+            self.portal._delObject('events')
+        lb = ICalendarLinkbase(self.portal)
+        self.failUnless('@@search?advanced_search=True&object_provides'
+                        in lb.all_events_url())
+
+        self.portal.invokeFactory('Folder', 'events')
+        self.failUnless(lb.all_events_url().endswith('/events'))
+
+    def test_all_events_url_and_navigation_root(self):
+        # ensure support of INavigationRoot features dosen't break #9246 #9668
+        self.portal.invokeFactory('Folder', 'mynewsite')
+        directlyProvides(self.portal.mynewsite, INavigationRoot)
+        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
+
+        lb = ICalendarLinkbase(self.portal.mynewsite)
+        self.failUnless('mynewsite/@@search?advanced_search=True&object_prov'
+                        in lb.all_events_url())
+
+        self.portal.mynewsite.invokeFactory('Folder', 'events')
+        self.failUnless(lb.all_events_url().endswith('/mynewsite/events'))
+
+    def test_next_events_url(self):
+        # if there is an 'events' object in the portal root, we expect
+        # the events portlet to link to it
+        if 'events' in self.portal:
+            self.portal._delObject('events')
+        lb = ICalendarLinkbase(self.portal)
+        self.failUnless('@@search?advanced_search=True&start.query'
+                        in lb.next_events_url())
+
+        self.portal.invokeFactory('Folder', 'events')
+        self.failUnless(lb.next_events_url().endswith('/events'))
+
+    def test_next_events_url_and_navigation_root(self):
+        # ensure support of INavigationRoot features dosen't break #9246 #9668
+        self.portal.invokeFactory('Folder', 'mynewsite')
+        directlyProvides(self.portal.mynewsite, INavigationRoot)
+        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
+
+        lb = ICalendarLinkbase(self.portal.mynewsite)
+        self.failUnless('mynewsite/@@search?advanced_search=True&start.query'
+                        in lb.next_events_url())
+
+        self.portal.mynewsite.invokeFactory('Folder', 'events')
+        self.failUnless(lb.next_events_url().endswith('/mynewsite/events'))
+
+    def test_past_events_url(self):
+        lb = ICalendarLinkbase(self.portal)
+        if lb._events_folder():
+            self.failUnless(lb.past_events_url().endswith(
+                '/events/aggregator/previous'))
+
+        if lb._events_folder():
+            self.portal._delObject('events')
+
+        self.portal.invokeFactory('Folder', 'events')
+        self.portal.events.invokeFactory('Folder', 'previous')
+        self.failUnless(lb.past_events_url().endswith(
+            '/events/previous'))
+
+        self.portal._delObject('events')
+        self.failUnless('@@search?advanced_search=True&end.query'
+                        in lb.past_events_url())
+
+    def test_past_events_url_and_navigation_root(self):
+        # ensure support of INavigationRoot features dosen't break #9246 #9668
+
+        # remove default plone content(s)
+        if 'events' in self.portal:
+            self.portal._delObject('events')
+
+        # lets create mynewsite
+        self.portal.invokeFactory('Folder', 'mynewsite')
+        directlyProvides(self.portal.mynewsite, INavigationRoot)
+        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
+
+        lb = ICalendarLinkbase(self.portal.mynewsite)
+
+        # mynewsite events:
+        # -- events
+        # ---- aggregator
+        # ------ previous
+        self.portal.mynewsite.invokeFactory('Folder', 'events')
+        self.portal.mynewsite.events.invokeFactory('Folder', 'aggregator')
+        self.portal.mynewsite.events.aggregator.invokeFactory('Folder', 'previous')
+        self.failUnless(lb.past_events_url().endswith(
+            '/mynewsite/events/aggregator/previous'))
+
+        # mynewsite events:
+        # -- events
+        # ---- previous
+        self.portal.mynewsite._delObject('events')
+        self.portal.mynewsite.invokeFactory('Folder', 'events')
+        self.portal.mynewsite.events.invokeFactory('Folder', 'previous')
+        self.failUnless(lb.past_events_url().endswith(
+            '/mynewsite/events/previous'))
+
+        # no mynewsite events
+        self.portal.mynewsite._delObject('events')
+        self.assertTrue('@@search?advanced_search=True&end.query'
+                        in lb.past_events_url())
 
 
 class TestBaseModuleQueryPydt(unittest.TestCase):

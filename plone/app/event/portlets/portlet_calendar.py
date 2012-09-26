@@ -14,6 +14,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_occurrences_by_date
 from plone.app.event.base import localized_today
+from plone.app.event.interfaces import ICalendarLinkbase
 
 from plone.app.portlets import PloneMessageFactory as _
 PLMF = MessageFactory('plonelocales')
@@ -59,6 +60,8 @@ class Renderer(base.Renderer):
 
     def update(self):
         context = aq_inner(self.context)
+
+        self.calendar_linkbase = ICalendarLinkbase(context)
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (

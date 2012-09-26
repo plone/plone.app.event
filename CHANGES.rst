@@ -4,6 +4,12 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Create adapter ICalendarLinkbase which returns links to calendar views and
+  can be overridden through a more specific implementation by addon products.
+  For example, the portlet_calendar and portlet_events links to the @@search
+  view can be changed to URLs to a real calendar view, if one is installed.
+  [thet]
+
 - For portlet_calendar and portlet_events configuration, make the workflow
   state selection optional. If nothing is selected, all states are searched.
   [thet]

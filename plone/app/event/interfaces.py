@@ -8,10 +8,50 @@ from plone.app.event import messageFactory as _
 ISO_DATE_FORMAT = '%Y-%m-%d'
 
 
-# Controlpanel Interface
+class ICalendarLinkbase(Interface):
+    """Adapter Interface to retrieve a base url for a calendar view.
+
+    """
+
+    def date_events_url(date):
+        """Get a URL to retrieve all events on a given day.
+
+        :param date: The date to search events for in isoformat (ISO 8601,
+                    YYYY-MM-DD).
+        :type date: string
+
+        :returns: URL linking to a page with events on the given date.
+        :rtype: string
+
+        """
+
+    def past_events_url():
+        """Get a URL to retrieve past events.
+
+        :returns: URL linking to a page with past events.
+        :rtype: string
+
+        """
+
+    def next_events_url():
+        """Get a URL to retrieve upcoming events.
+
+        :returns: URL linking to a page with upcoming events.
+        :rtype: string
+
+        """
+
+    def all_events_url(date):
+        """Get a URL to retrieve all events.
+
+        :returns: URL linking to a page with events on the given date.
+        :rtype: string
+
+        """
+
 
 class IEventSettings(Interface):
-    """ Global settings for eventish content types.
+    """Global Controlpanel settings for eventish content types.
     """
 
     portal_timezone = schema.Choice(

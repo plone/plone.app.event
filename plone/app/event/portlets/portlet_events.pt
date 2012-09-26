@@ -9,9 +9,9 @@
         <span class="portletTopLeft"></span>
         <a href=""
            class="tile"
-           tal:define="all_events_link view/all_events_link"
-           tal:omit-tag="not:all_events_link"
-           tal:attributes="href all_events_link"
+           tal:define="next_link view/calendar_linkbase/next_events_url"
+           tal:omit-tag="not:next_link"
+           tal:attributes="href next_link"
            i18n:translate="box_events">
             Upcoming Events
         </a>
@@ -64,10 +64,11 @@
     </tal:events>
 
     <dd class="portletFooter"
-           tal:condition="view/prev_events_link">
+        tal:define="prev_link view/calendar_linkbase/past_events_url"
+        tal:condition="prev_link">
         <a href=""
-           tal:attributes="href view/prev_events_link"
-           class="tile">
+            tal:attributes="href prev_link"
+            class="tile">
             <span i18n:translate="box_previous_events">
                 Previous events&hellip;
             </span>
@@ -76,10 +77,11 @@
 
     <dd class="portletFooter">
         <a href=""
-           class="tile"
-           tal:attributes="href view/all_events_link"
-           i18n:translate="box_upcoming_events">
-                Upcoming events&hellip;
+            class="tile"
+            tal:define="next_link view/calendar_linkbase/next_events_url"
+            tal:attributes="href next_link"
+            i18n:translate="box_upcoming_events">
+            Upcoming events&hellip;
         </a>
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>

@@ -27,6 +27,12 @@
   <include file="recurrence.zcml" />
   <include file="vocabularies.zcml" />
 
+  <adapter
+      factory=".base.CalendarLinkbase"
+      provides=".interfaces.ICalendarLinkbase"
+      for="zope.interface.Interface"
+      />
+
   <genericsetup:registerProfile
       name="default"
       directory="profiles/default"

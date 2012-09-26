@@ -1,7 +1,7 @@
-from datetime import datetime
+#from datetime import datetime
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.layout.navigation.root import getNavigationRootObject
+#from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -18,6 +18,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
+from plone.app.event.interfaces import ICalendarLinkbase
 
 from plone.app.portlets import PloneMessageFactory as _
 
@@ -70,10 +71,12 @@ class Renderer(base.Renderer):
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
 
+        self.calendar_linkbase = ICalendarLinkbase(self.context)
+
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
-        self.navigation_root_url = portal_state.navigation_root_url()
         self.portal = portal_state.portal()
-        self.navigation_root_object = getNavigationRootObject(self.context, self.portal)
+        #self.navigation_root_url = portal_state.navigation_root_url()
+        #self.navigation_root_object = getNavigationRootObject(self.context, self.portal)
 
     @ram.cache(render_cachekey)
     def render(self):
@@ -88,6 +91,7 @@ class Renderer(base.Renderer):
         return [IEventAccessor(occ) for occ in\
                 get_occurrences(context, self._data(), limit=self.data.count)]
 
+    """
     @memoize
     def have_events_folder(self):
         return 'events' in self.navigation_root_object.objectIds()
@@ -131,6 +135,7 @@ class Renderer(base.Renderer):
                   '&object_provides=plone.event.interfaces.IEvent'\
                    % (navigation_root_url, now)
         return url
+    """
 
     @memoize
     def _data(self):

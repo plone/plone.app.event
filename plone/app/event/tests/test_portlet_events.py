@@ -1,6 +1,5 @@
 from zope.component import getUtility, getMultiAdapter
 from zope.site.hooks import setHooks, setSite
-from zope.interface import directlyProvides
 
 from Products.GenericSetup.utils import _getDottedName
 
@@ -11,7 +10,6 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletRenderer
 
 from plone.app.portlets.storage import PortletAssignmentMapping
-from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from plone.app.event.portlets import portlet_events
 
@@ -80,7 +78,6 @@ class PortletTest(unittest.TestCase):
         self.failUnless(isinstance(renderer, portlet_events.Renderer))
 
 
-
 class RendererTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
@@ -118,25 +115,27 @@ class RendererTest(unittest.TestCase):
                                               startDate=start, endDate=end)
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
 
-        r = self.renderer(assignment=portlet_events.Assignment(
+        portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
-        self.assertEquals(0, len(r.published_events()))
+        self.assertEquals(0, len(portlet.published_events()))
 
-        r = self.renderer(assignment=portlet_events.Assignment(
+        portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
-        self.assertEquals(1, len(r.published_events()))
+        self.assertEquals(1, len(portlet.published_events()))
 
-        r = self.renderer(assignment=portlet_events.Assignment(
+        portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
-        self.assertEquals(2, len(r.published_events()))
+        self.assertEquals(2, len(portlet.published_events()))
 
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(2, len(r.published_events()))
+        portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
+        self.assertEquals(2, len(portlet.published_events()))
 
-        r = self.renderer(assignment=portlet_events.Assignment(
+        portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base="/eventfolder"))
-        self.assertEquals(1, len(r.published_events()))
+        self.assertEquals(1, len(portlet.published_events()))
 
+        # TODO: better create objects at setup and use thest in these tests
+        self.portal.manage_delObjects(['e1', 'eventfolder'])
 
     def test_published_events_recurring(self):
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
@@ -154,85 +153,22 @@ class RendererTest(unittest.TestCase):
         self.assertEqual(5, len(events))
         self.assertTrue('Event 2' not in [x.title for x in events])
 
-    def test_all_events_link(self):
+        self.portal.manage_delObjects(['e1', 'e2'])
+
+    def test_next_events_link(self):
         # if there is an 'events' object in the portal root, we expect
         # the events portlet to link to it
         if 'events' in self.portal:
             self.portal._delObject('events')
+
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless('@@search?advanced_search' in r.all_events_link())
+        self.failUnless('@@search?advanced_search=True&amp;start.query'
+                        in r.render())
 
-        self.portal.invokeFactory('Folder', 'events')
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/events'))
-
-    def test_all_events_link_and_navigation_root(self):
-        # ensure support of INavigationRoot features dosen't break #9246 #9668
-        self.portal.invokeFactory('Folder', 'mynewsite')
-        directlyProvides(self.portal.mynewsite, INavigationRoot)
-        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-
-        r = self.renderer(context=self.portal.mynewsite,
-                          assignment=portlet_events.Assignment(count=5))
-        self.failUnless('mynewsite/@@search' in r.all_events_link())
-
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.all_events_link().endswith('/mynewsite/events'))
-
-    def test_prev_events_link(self):
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        if r.have_events_folder():
-            self.failUnless(r.prev_events_link().endswith(
-                '/events/aggregator/previous'))
-
-        if r.have_events_folder():
-            self.portal._delObject('events')
-
-        self.portal.invokeFactory('Folder', 'events')
-        self.portal.events.invokeFactory('Folder', 'previous')
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.prev_events_link().endswith(
-            '/events/previous'))
-
-        self.portal._delObject('events')
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless('@@search' in r.prev_events_link())
-
-    def test_prev_events_link_and_navigation_root(self):
-        # ensure support of INavigationRoot features dosen't break #9246 #9668
-
-        # remove default plone content(s)
+    def test_past_events_link(self):
         if 'events' in self.portal:
             self.portal._delObject('events')
 
-        # lets create mynewsite
-        self.portal.invokeFactory('Folder', 'mynewsite')
-        directlyProvides(self.portal.mynewsite, INavigationRoot)
-        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-
-        # mynewsite events:
-        # -- events
-        # ---- aggregator
-        # ------ previous
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.portal.mynewsite.events.invokeFactory('Folder', 'aggregator')
-        self.portal.mynewsite.events.aggregator.invokeFactory('Folder', 'previous')
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.prev_events_link().endswith(
-            '/mynewsite/events/aggregator/previous'))
-
-        # mynewsite events:
-        # -- events
-        # ---- previous
-        self.portal.mynewsite._delObject('events')
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.portal.mynewsite.events.invokeFactory('Folder', 'previous')
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.failUnless(r.prev_events_link().endswith(
-            '/mynewsite/events/previous'))
-
-        # no mynewsite events
-        self.portal.mynewsite._delObject('events')
-        r = self.renderer(context=self.portal.mynewsite, assignment=portlet_events.Assignment(count=5))
-        self.assertTrue('@@search' in r.prev_events_link())
+        r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        self.failUnless('@@search?advanced_search=True&amp;end.query'
+                        in r.render())

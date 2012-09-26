@@ -135,6 +135,8 @@ class RendererTest(unittest.TestCase):
         r.update()
         rd = r.render()
         self.assertTrue('e1' not in rd and 'e2' in rd)
+        # test link from base.CalendarLinkbase.date_events_url
+        self.assertTrue('@@search?advanced_search=True&amp;start.query' in rd)
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
@@ -177,3 +179,5 @@ class RendererTest(unittest.TestCase):
             *portlet.get_next_month(year, month))
         self.assertEqual(next_expected, portlet.next_query)
         self.assertEqual(prev_expected, portlet.prev_query)
+
+

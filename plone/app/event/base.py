@@ -22,6 +22,120 @@ from plone.app.event.interfaces import ISO_DATE_FORMAT
 DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'
 
+
+from zope.interface import implements, Interface
+from zope.component import adapts
+from plone.app.event.interfaces import ICalendarLinkbase
+
+class CalendarLinkbase(object):
+    """Default adapter to retrieve a base url for a calendar view. The methods
+    in this default implementation return the @@search view as calendar view.
+
+    """
+    adapts(Interface)
+    implements(ICalendarLinkbase)
+
+    def __init__(self, context):
+        self.context = context
+        portal = getSite()
+        self.navroot = getNavigationRootObject(context, portal)
+        self.navroot_url = self.navroot.absolute_url()
+
+    def date_events_url(self, date):
+        """Get a URL to retrieve all events on a given day.
+
+        :param date: The date to search events for in isoformat (ISO 8601,
+                    YYYY-MM-DD).
+        :type date: string
+
+        :returns: URL linking to a page with events on the given date.
+        :rtype: string
+
+        """
+        url = '%s/@@search?advanced_search=True&'\
+              'start.query:record:list:date=%s+23:59:59&'\
+              'start.range:record=max&'\
+              'end.query:record:list:date=%s+00:00:00&'\
+              'end.range:record=min&'\
+              'object_provides=plone.event.interfaces.IEvent'\
+              % (self.navroot_url, date, date)
+        return url
+
+    def past_events_url(self):
+        """Get a URL to retrieve past events.
+
+        :returns: URL linking to a page with past events.
+        :rtype: string
+
+        """
+        # take care dont use self.portal here since support
+        # of INavigationRoot features likely will breake #9246 #9668
+        url = None
+        navigation_root_url = self.navroot_url
+        events_folder = self._events_folder()
+        if (events_folder and
+            'aggregator' in events_folder.objectIds() and
+            'previous' in events_folder['aggregator'].objectIds()):
+            url = '%s/events/aggregator/previous' % navigation_root_url
+        elif (events_folder and 'previous' in events_folder.objectIds()):
+            url = '%s/events/previous' % navigation_root_url
+        else:
+            # show all past events
+            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
+            url = '%s/@@search?advanced_search=True'\
+                  '&end.query:record:list:date=%s'\
+                  '&end.range:record=max'\
+                  '&object_provides=plone.event.interfaces.IEvent'\
+                   % (navigation_root_url, now)
+        return url
+
+    def next_events_url(self):
+        """Get a URL to retrieve upcoming events.
+
+        :returns: URL linking to a page with upcoming events.
+        :rtype: string
+
+        """
+        navigation_root_url = self.navroot_url
+        url = None
+        if self._events_folder():
+            url = '%s/events' % navigation_root_url
+        else:
+            # search all events which are in the future or ongoing
+            now = datetime.utcnow().strftime('%Y-%m-%d+%H:%M')
+            url = '%s/@@search?advanced_search=True'\
+                  '&start.query:record:list:date=%s'\
+                  '&start.range:record=min'\
+                  '&end.query:record:list:date=%s'\
+                  '&end.range:record=min'\
+                  '&object_provides=plone.event.interfaces.IEvent'\
+                   % (navigation_root_url, now, now)
+        return url
+
+    def all_events_url(self):
+        """Get a URL to retrieve all events.
+
+        :returns: URL linking to a page with events on the given date.
+        :rtype: string
+
+        """
+        navigation_root_url = self.navroot_url
+        url = None
+        if self._events_folder():
+            url = '%s/events' % navigation_root_url
+        else:
+            # search all events which are in the future or ongoing
+            url = '%s/@@search?advanced_search=True'\
+                  '&object_provides=plone.event.interfaces.IEvent'\
+                   % navigation_root_url
+        return url
+
+    def _events_folder(self):
+        navroot = self.navroot
+        return 'events' in navroot and navroot['events'] or None
+
+
+
 def default_end_dt():
     """Return the default end as python datetime for prefilling forms.
 
