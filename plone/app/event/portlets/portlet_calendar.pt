@@ -79,7 +79,7 @@
                     <a
                       href=""
                       tal:omit-tag="not:events"
-                      tal:attributes="href python:view.calendar_linkbase.date_events_url(day['date_string']);
+                      tal:attributes="href python:view.date_events_url(day['date_string']);
                                       title day/events_string;"
                       tal:content="day/day">31</a>
 

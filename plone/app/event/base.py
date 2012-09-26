@@ -40,12 +40,15 @@ class CalendarLinkbase(object):
         self.navroot = getNavigationRootObject(context, portal)
         self.navroot_url = self.navroot.absolute_url()
 
-    def date_events_url(self, date):
+    def date_events_url(self, date, path=None):
         """Get a URL to retrieve all events on a given day.
 
         :param date: The date to search events for in isoformat (ISO 8601,
                     YYYY-MM-DD).
         :type date: string
+        
+        :param path: Events context path (optional).
+        :type path: string
 
         :returns: URL linking to a page with events on the given date.
         :rtype: string

@@ -114,6 +114,10 @@ class Renderer(base.Renderer):
             month+=1
         return (year, month)
 
+    def date_events_url(self, date):
+        return self.calendar_linkbase.date_events_url(
+            date, path=self.data.search_base)
+
     @property
     def cal_data(self):
         """ Calendar iterator over weeks and days of the month to display.

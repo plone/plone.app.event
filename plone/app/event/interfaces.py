@@ -13,12 +13,15 @@ class ICalendarLinkbase(Interface):
 
     """
 
-    def date_events_url(date):
+    def date_events_url(date, path=None):
         """Get a URL to retrieve all events on a given day.
 
         :param date: The date to search events for in isoformat (ISO 8601,
                     YYYY-MM-DD).
         :type date: string
+        
+        :param path: Events context path (optional).
+        :type path: string
 
         :returns: URL linking to a page with events on the given date.
         :rtype: string
