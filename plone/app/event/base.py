@@ -12,9 +12,12 @@ from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
+from zope.component import adapts
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.interface import implements, Interface
 
+from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 
@@ -22,10 +25,6 @@ from plone.app.event.interfaces import ISO_DATE_FORMAT
 DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'
 
-
-from zope.interface import implements, Interface
-from zope.component import adapts
-from plone.app.event.interfaces import ICalendarLinkbase
 
 class CalendarLinkbase(object):
     """Default adapter to retrieve a base url for a calendar view. The methods
