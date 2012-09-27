@@ -102,7 +102,7 @@ class EventView(BrowserView):
         context = self.context
         adapter = IRecurrenceSupport(context, None)
         if adapter is not None:
-            occurrences = adapter.occurrences()
+            occurrences = adapter.occurrences()[1:] # don't include first
             eventsinfo['events'], eventsinfo['tail'] = (
                 self._get_occurrences_helper(occurrences)
             )

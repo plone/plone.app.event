@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Don't show start occurrence in "More occurrences" section in event_view.
+  [thet]
+
 - Create adapter ICalendarLinkbase which returns links to calendar views and
   can be overridden through a more specific implementation by addon products.
   For example, the portlet_calendar and portlet_events links to the @@search
