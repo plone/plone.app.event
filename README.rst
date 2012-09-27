@@ -9,6 +9,14 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
+Note
+----
+
+You have to set your timezone to a valid pytz/Olson timezone in the
+Controlpanel @@event-settings. Using CET as timezone is broken. Maybe other
+Three Letter Timezone abbreviations too.
+
+
 Installation for Plone 4.1
 --------------------------
 
