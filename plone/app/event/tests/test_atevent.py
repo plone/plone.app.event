@@ -21,7 +21,10 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
-from Products.ATContentTypes.interfaces import IATEvent
+from Products.ATContentTypes.interfaces import IATEvent as IATEvent_ATCT
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
+
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
 from plone.app.event.browser.event_view import prepare_for_display
@@ -84,9 +87,17 @@ class PAEventATTest(unittest.TestCase):
         obj.setTimezone(OBJ_DATA['timezone'])
         notify(ObjectModifiedEvent(obj))
 
-    def test_implementsATEvent(self):
+    def test_implementsInterfaces(self):
+        """Test if an ATEvent object implements all relevant interfaces.
+
+        """
+        self.assertTrue(IEvent.providedBy(self.obj))
+        self.assertTrue(IEventRecurrence.providedBy(self.obj))
         self.assertTrue(IATEvent.providedBy(self.obj))
-        self.assertTrue(verifyObject(IATEvent, self.obj))
+        self.assertTrue(IATEventRecurrence.providedBy(self.obj))
+
+        self.assertTrue(IATEvent_ATCT.providedBy(self.obj))
+        self.assertTrue(verifyObject(IATEvent_ATCT, self.obj))
 
     def test_validation(self):
         req = {'startDate':'2010-10-30'}

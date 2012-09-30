@@ -11,17 +11,17 @@
 
     <adapter factory=".content.EventAccessor" />
 
-    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+    <subscriber for=".interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler=".content.whole_day_handler" />
-    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+    <subscriber for=".interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".content.whole_day_handler" />
 
-    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+    <subscriber for=".interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler=".content.timezone_handler" />
-    <subscriber for="Products.ATContentTypes.interfaces.IATEvent
+    <subscriber for=".interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".content.timezone_handler" />
 

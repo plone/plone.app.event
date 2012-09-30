@@ -8,6 +8,17 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <!-- external dependencies -->
+
+  <include package="plone.event" />
+  <include package="plone.formwidget.recurrence" />
+  <include package="plone.formwidget.datetime" />
+  <include package="plone.app.portlets" />
+  <include package="plone.app.registry" />
+
+
+  <!-- internal dependencies -->
+
   <!-- pre plone 4.? integration -->
   <configure zcml:condition="not-have plone-43">
     <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
@@ -15,11 +26,6 @@
 
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
-
-  <include package="plone.formwidget.recurrence" />
-  <include package="plone.formwidget.datetime" />
-  <include package="plone.app.portlets" />
-  <include package="plone.app.registry" />
 
   <include package=".browser" />
   <include package=".portlets" />

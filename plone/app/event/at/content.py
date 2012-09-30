@@ -12,7 +12,6 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -22,7 +21,8 @@ from plone.uuid.interfaces import IUUID
 
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
-from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
+from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import utc
 from plone.app.event.base import default_end_DT
@@ -203,11 +203,11 @@ ATEventSchema.moveField('location', before='attendees')
 
 
 class ATEvent(ATCTContent, HistoryAwareMixin):
+    """Information about an upcoming event, which can be displayed in the
+    calendar.
 
-    """ Information about an upcoming event, which can be displayed in the
-        calendar."""
-
-    implements(IEvent, IEventRecurrence, IATEvent)
+    """
+    implements(IATEvent, IATEventRecurrence)
 
     schema = ATEventSchema
     security = ClassSecurityInfo()

@@ -4,6 +4,14 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Include plone.event's new configure.zcml.
+  [thet]
+
+- For the ATEvent type, use a more specific IATEvent interface with IEvent and
+  P.ATCT's IATEvent as bases. So we can provide adapters, overriding more
+  general IEvent adapting adapters.
+  [thet]
+
 - Don't show start occurrence in "More occurrences" section in event_view.
   [thet]
 
