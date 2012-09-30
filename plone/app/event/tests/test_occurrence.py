@@ -180,7 +180,8 @@ class TestOccurrences(unittest.TestCase):
         view = zope.component.getMultiAdapter(
             (self.portal['interval'], self.request), name='event_view')
         result = view.occurrences
-        self.assertEqual(5, len(result['events']))
+        # altogether 5 occurrences, but start occurrence is not included
+        self.assertEqual(4, len(result['events']))
         self.assertFalse(result['events'][-1] == result['tail'])
 
         view = zope.component.getMultiAdapter(

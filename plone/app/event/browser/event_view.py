@@ -91,12 +91,14 @@ class EventView(BrowserView):
 
     @property
     def occurrences(self):
-        """Returns all occurrences for this context. The maximum
-        defaults to 7 occurrences. If there are more occurrences
+        """Returns all occurrences for this context, except the start
+        occurrence.
+        The maximum defaults to 7 occurrences. If there are more occurrences
         defined for this context, the result will contain the last item
         of the occurrence list.
 
         :rtype: dict - with ``events`` and ``tail`` as keys.
+
         """
         eventsinfo = dict(events=[], tail=None)
         context = self.context
