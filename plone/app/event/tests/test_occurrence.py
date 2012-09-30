@@ -1,17 +1,10 @@
 import datetime
+import pytz
 import transaction
 import unittest2 as unittest
 import zope.component
-from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
-from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
-from plone.testing.z2 import Browser
-from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces.browser import IBrowserView
-from plone.event.interfaces import IEventAccessor, IOccurrence
-from plone.event.utils import pydt
-from plone.event.utils import tzdel
-from plone.app.event.at.content import IATEvent
+from OFS.SimpleItem import SimpleItem
+from plone.app.event.at.interfaces import IATEvent
 from plone.app.event.base import get_occurrences
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
@@ -19,6 +12,17 @@ from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.recurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
+from plone.app.testing import setRoles
+from plone.event.interfaces import IEvent, IEventRecurrence, IOccurrence
+from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
+from plone.event.utils import pydt
+from plone.event.utils import tzdel
+from plone.registry.interfaces import IRegistry
+from plone.testing.z2 import Browser
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IBrowserView
 
 
 class TestTraversal(unittest.TestCase):
@@ -184,6 +188,33 @@ class TestOccurrences(unittest.TestCase):
         result = view.occurrences
         self.assertEqual(7, len(result['events']))
         self.assertFalse(result['events'][-1] == result['tail'])
+
+
+class MockEvent(SimpleItem):
+    """ Mock event"""
+
+
+class TestRecurrenceSupport(unittest.TestCase):
+
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def test_recurrence(self):
+        tz = pytz.timezone('Europe/Vienna')
+        duration = datetime.timedelta(days=4)
+        data = MockEvent()
+        data.start = datetime.datetime(2011, 11, 11, 11, 00, tzinfo=tz)
+        data.end = data.start + duration
+        data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        zope.interface.alsoProvides(data, IEvent, IEventRecurrence)
+        result = IRecurrenceSupport(data).occurrences()
+
+        self.assertEqual(4, len(result))
+
+        # First occurrence is an IEvent object
+        self.assertTrue(IEvent.providedBy(result[0]))
+
+        # Subsequent ones are IOccurrence objects
+        self.assertTrue(IOccurrence.providedBy(result[1]))
 
 
 def test_suite():

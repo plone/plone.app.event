@@ -4,6 +4,11 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Let IRecurrenceSupport adapter's occurrences method return as first
+  occurrence the event object itself instead of an Occurrence object.
+  Fixes #58.
+  [thet]
+
 - Include plone.event's new configure.zcml.
   [thet]
 

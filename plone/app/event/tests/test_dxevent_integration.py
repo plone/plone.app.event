@@ -10,7 +10,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
 
-from plone.event.interfaces import IRecurrenceSupport, IOccurrence
+from plone.event.interfaces import IEvent, IRecurrenceSupport, IOccurrence
 from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import get_portal_events
 from plone.app.event.dx.behaviors import (
@@ -155,18 +155,23 @@ class TestDXEventRecurrence(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def test_recurrence(self):
+        tz = pytz.timezone('Europe/Vienna')
         duration = timedelta(days=4)
         data = MockEvent()
-        data.start = datetime(2011, 11, 11, 11, 00)
+        data.start = datetime(2011, 11, 11, 11, 00, tzinfo=tz)
         data.end = data.start + duration
         data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
         zope.interface.alsoProvides(
-            data, IDXEventRecurrence, IEventBasic, IEventRecurrence,
-            IDXEvent)
+            data, IEvent, IEventBasic, IEventRecurrence,
+            IDXEvent, IDXEventRecurrence)
         result = IRecurrenceSupport(data).occurrences()
         self.assertEqual(4, len(result))
-        self.assertTrue(IOccurrence.providedBy(result[0]))
 
+        # First occurrence is an IEvent object
+        self.assertTrue(IEvent.providedBy(result[0]))
+
+        # Subsequent ones are IOccurrence objects
+        self.assertTrue(IOccurrence.providedBy(result[1]))
 
 
 def test_suite():

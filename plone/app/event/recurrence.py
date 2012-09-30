@@ -50,11 +50,17 @@ class RecurrenceSupport(object):
         # XXX potentially occurrence won't need to be wrapped anymore
         # but doing it for backwards compatibility as views/templates
         # still rely on acquisition-wrapped objects.
-        func = lambda start: Occurrence(
-            id=str(start.date()),
-            start=start,
-            end=start + duration).__of__(self.context)
-        events = map(func, starts)
+        def get_obj(start):
+            if event.start == start:
+                # If the occurrence date is the same as the event object, the
+                # occurrence is the event itself. return it as such.
+                return self.context
+            return Occurrence(
+                id=str(start.date()),
+                start=start,
+                end=start + duration).__of__(self.context)
+
+        events = map(get_obj, starts)
         return events
 
 
@@ -65,11 +71,13 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         # TODO: here is something odd....
         #       called every time, when an attribute is traversed/accessed?
         dateobj = guess_date_from(name, self.context)
-        occurrence = IRecurrenceSupport(self.context).occurrences(dateobj)[0]
-        if not dateobj or not is_same_day(dateobj, occurrence.start):
-            # if not dateobj clause should be done before IRecurrenceSupport call
-            return self.fallback(name)
-        return occurrence
+        if dateobj:
+            occurrence = IRecurrenceSupport(self.context).occurrences(
+                range_start=dateobj)[0]
+            occ_acc = IEventAccessor(occurrence)
+            if is_same_day(dateobj, occ_acc.start):
+                return occurrence
+        return self.fallback(name)
 
     def fallback(self, name):
         return super(OccurrenceTraverser, self).publishTraverse(
