@@ -121,15 +121,17 @@ class EventView(BrowserView):
         :rtype: tuple of (list of events, last item of occ_list)
         """
         events = []
-        occurrences = occ_list[:limit]
-        occurrences.append(occ_list.pop())
-        many = len(occ_list) > limit
-        for occ in occurrences:
-            acc = IEventAccessor(occ)
-            display = prepare_for_display(
-                self.context, acc.start, acc.end, acc.whole_day)
-            display.update({'url': acc.context.absolute_url()})
-            events.append(display)
-        tail = events.pop()
-        tail = tail if many else None
+        tail = None
+        if occ_list:
+            occurrences = occ_list[:limit]
+            occurrences.append(occ_list.pop())
+            many = len(occ_list) > limit
+            for occ in occurrences:
+                acc = IEventAccessor(occ)
+                display = prepare_for_display(
+                    self.context, acc.start, acc.end, acc.whole_day)
+                display.update({'url': acc.context.absolute_url()})
+                events.append(display)
+            tail = events and events.pop() or None
+            tail = tail if many else None
         return (events, tail)
