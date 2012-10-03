@@ -9,8 +9,9 @@ from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent, IEventRecurrence
 from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
 from plone.event.utils import default_timezone as fallback_default_timezone
-from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
+from plone.event.utils import pydt
+from plone.event.utils import is_same_day, is_same_time
 from plone.registry.interfaces import IRegistry
 from zope.component import adapts
 from zope.component import getUtility
@@ -484,7 +485,6 @@ def format_event_dates(context, start, end, whole_day=False):
                                   formated_dates['end_time'])
 
 
-from plone.event.utils import is_same_day, is_same_time
 def prepare_for_display(context, start, end, whole_day):
     """ Return a dictionary containing pre-calculated information for building
     <start>-<end> date strings.
@@ -498,30 +498,37 @@ def prepare_for_display(context, start, end, whole_day):
         'end_iso'    - end date in iso format
         'same_day'   - event ends on the same day
         'same_time'  - event ends at same time
-    """
 
-    # The behavior os ulocalized_time() with time_only is odd.
-    # Setting time_only=False should return the date part only and *not*
-    # the time
-    #
-    # ulocalized_time(event.start(), False,  time_only=True, context=event)
-    # u'14:40'
-    # ulocalized_time(event.start(), False,  time_only=False, context=event)
-    # u'14:40'
-    # ulocalized_time(event.start(), False,  time_only=None, context=event)
-    # u'16.03.2010'
+
+    The behavior os ulocalized_time() with time_only is odd.
+    Setting time_only=False should return the date part only and *not*
+    the time
+
+    >>> from DateTime import DateTime
+    >>> start = DateTime(2010,3,16,14,40)
+    >>> from zope.componen.hooks import getSite
+    >>> site = getSite()
+    >>> ulocalized_time(start, False,  time_only=True, context=site)
+    u'14:40'
+    >>> ulocalized_time(start, False,  time_only=False, context=site)
+    u'14:40'
+    >>> ulocalized_time(start, False,  time_only=None, context=site)
+    u'16.03.2010'
+
+    """
 
     # this needs to separate date and time as ulocalized_time does
     DT_start = DT(start)
     DT_end = DT(end)
-    start_date = ulocalized_time(DT_start, long_format=False, time_only=None,
-                                 context=context)
-    start_time = ulocalized_time(DT_start, long_format=False, time_only=True,
-                                 context=context)
-    end_date = ulocalized_time(DT_end, long_format=False, time_only=None,
-                               context=context)
-    end_time = ulocalized_time(DT_end, long_format=False, time_only=True,
-                               context=context)
+    start_date = ulocalized_time(
+            DT_start, long_format=False, time_only=None, context=context)
+    start_time = ulocalized_time(
+            DT_start, long_format=False, time_only=True, context=context)
+    end_date = ulocalized_time(
+            DT_end, long_format=False, time_only=None, context=context)
+    end_time = ulocalized_time(
+            DT_end, long_format=False, time_only=True, context=context)
+
     same_day = is_same_day(start, end)
     same_time = is_same_time(start, end)
 
