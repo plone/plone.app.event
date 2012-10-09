@@ -4,6 +4,11 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Fix calendar portlet header, which day names were shifted by one day since a
+  incompatibility between the calendar module (0 is Monday) and the strftime
+  function (0 is Sunday).
+  [thet]
+
 - Create an formated_date content provider, which takes an occurrence or event
   object when called and formats the start/end date and times for display. This
   content provider can be overridden for other contexts. E.g. the events

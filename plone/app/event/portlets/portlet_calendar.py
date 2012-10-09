@@ -14,6 +14,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_occurrences_by_date
 from plone.app.event.base import localized_today
+from plone.app.event.base import cal_to_strftime_wkday
 from plone.app.event.interfaces import ICalendarLinkbase
 
 from plone.app.portlets import PloneMessageFactory as _
@@ -76,9 +77,13 @@ class Renderer(base.Renderer):
         self._ts = getToolByName(context, 'translation_service')
         self.month_name = PLMF(self._ts.month_msgid(month),
                               default=self._ts.month_english(month))
+
+        # strftime %w interprets 0 as Sunday unlike the calendar.
+        strftime_wkdays = [cal_to_strftime_wkday(day)
+                for day in self.cal.iterweekdays()]
         self.weekdays = [PLMF(self._ts.day_msgid(day, format='s'),
                               default=self._ts.weekday_english(day, format='a'))
-                         for day in self.cal.iterweekdays()]
+                         for day in strftime_wkdays]
 
     def year_month_display(self):
         """ Return the year and month to display in the calendar.

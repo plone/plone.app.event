@@ -179,5 +179,3 @@ class RendererTest(unittest.TestCase):
             *portlet.get_next_month(year, month))
         self.assertEqual(next_expected, portlet.next_query)
         self.assertEqual(prev_expected, portlet.prev_query)
-
-

@@ -45,6 +45,8 @@ directlyProvides(AvailableTimezones, IVocabularyFactory)
 def Weekdays(context):
     """ Vocabulary for Weekdays.
 
+    PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
+
         Note: Context is here a RecordProxy and cannot be used to get the site
               root. zope.i18n.translate seems not to respect the portal
               language.

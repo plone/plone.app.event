@@ -226,6 +226,8 @@ def first_weekday():
     """Returns the number of the first Weekday in a Week, as defined in
     the registry. 0 is Monday, 6 is Sunday, as expected by Python's datetime.
 
+    PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
+
     :returns: Index of first weekday (0..Monday, 6..Sunday)
     :rtype: integer
 
@@ -237,6 +239,38 @@ def first_weekday():
         return 0
     else:
         return int(first_wd)
+
+
+def cal_to_strftime_wkday(day):
+    """Convert calendar day numbers to strftime day numbers.
+    Strftime %w interprets 0 as Sunday unlike the calendar:
+    Calendar: 0..Monday, 6..Sunday
+    Strftime: 0..Sunday, 6..Saturday
+
+    :param day: The calendar.Calendar day number.
+    :type day: integer
+    :returns: The strftime day number.
+    :rtype: integer
+
+    """
+    if day==6: return 0
+    else: return day+1
+
+
+def strftime_to_cal_wkday(day):
+    """Convert strftime day numbers to calendar day numbers.
+    Strftime %w interprets 0 as Sunday unlike the calendar:
+    Calendar: 0..Monday, 6..Sunday
+    Strftime: 0..Sunday, 6..Saturday
+
+    :param day: The strftime day number.
+    :type day: integer
+    :returns: The calendar.Calendar day number.
+    :rtype: integer
+
+    """
+    if day==0: return 6
+    else: return day-1
 
 
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
