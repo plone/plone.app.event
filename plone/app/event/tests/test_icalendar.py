@@ -81,7 +81,7 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2007',
-            'VALUE=DATE-TIME:20071010T000000Z',
+            'DTSTART;VALUE=DATE-TIME:20071010T000000Z',
             'DTEND;VALUE=DATE-TIME:20071012T000000Z',
             'END:VEVENT',
             'END:VCALENDAR')
