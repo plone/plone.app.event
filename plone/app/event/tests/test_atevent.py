@@ -27,11 +27,11 @@ from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
 
 from plone.event.utils import pydt
 from plone.app.event.ical import EventsICal
-from plone.app.event.browser.event_view import prepare_for_display
 from plone.app.event.base import (
     default_start_DT,
     default_end_DT,
-    default_timezone
+    default_timezone,
+    dates_for_display
 )
 
 from plone.formwidget.datetime.at import DatetimeWidget
@@ -732,90 +732,3 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertEqual(event.end().timezone(), 'Europe/Vienna')
         self.assertEqual(event.start_date.tzinfo.zone, 'Europe/Vienna')
         self.assertEqual(event.end_date.tzinfo.zone, 'Europe/Vienna')
-
-
-class PAEventATViewTest(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def setUp(self):
-        portal = self.layer['portal']
-        self.portal = portal
-        setRoles(portal, TEST_USER_ID, ['Manager'])
-
-    def test_ical(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                title="cool event",
-                startDate='2001/01/01 12:00:00',
-                endDate='2001/01/01 14:00:00',
-                timezone="Europe/Vienna")
-        event = self.portal[event_id]
-        view = EventsICal(event, TestRequest())
-        ical = view.get_ical_string()
-        lines = ical.split('\n')
-        self.assertTrue(u"BEGIN:VCALENDAR" in lines[0])
-        self.assertTrue(u"BEGIN:VEVENT" in lines[6])
-        self.assertTrue(u"SUMMARY:%s" % safe_unicode(event.Title()) in lines[7])
-        self.assertTrue(u"DTSTART;VALUE=DATE-TIME:20010101T110000Z" in lines[8])
-        self.assertTrue(u"DTEND;VALUE=DATE-TIME:20010101T130000Z" in lines[9])
-        self.assertTrue(u"END:VEVENT" in lines[15])
-        self.assertTrue(u"END:VCALENDAR" in lines[16])
-
-    def test_prep_display_with_time(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/12 18:00:00',
-                timezone="Europe/Vienna")
-        event = self.portal[event_id]
-        self.assertEqual(prepare_for_display(self.portal,
-            event.start_date, event.end_date, event.whole_day),
-                {'start_date': u'Oct 12, 2000',
-                 'start_time': u'06:00 AM',
-                 'start_iso':  u'2000-10-12T06:00:00+02:00',
-                 'end_date':   u'Oct 12, 2000',
-                 'end_time':   u'06:00 PM',
-                 'end_iso':    u'2000-10-12T18:00:00+02:00',
-                 'same_day':   True,
-                 'same_time':  False,
-                })
-
-    def test_prep_display_wholeday_sameday(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/12 18:00:00',
-                timezone="Europe/Vienna",
-                wholeDay=True)
-        event = self.portal[event_id]
-        self.assertEqual(prepare_for_display(self.portal,
-            event.start_date, event.end_date, event.whole_day),
-                {'start_date': u'Oct 12, 2000',
-                 'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
-                 'end_date':   u'Oct 12, 2000',
-                 'end_time':   None,
-                 'end_iso':    u'2000-10-12T23:59:59+02:00',
-                 'same_day':   True,
-                 'same_time':  False,
-                })
-
-    def test_prep_display_wholeday_differentdays(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/13 18:00:00',
-                timezone="Europe/Vienna",
-                wholeDay=True)
-        event = self.portal[event_id]
-        self.assertEqual(prepare_for_display(self.portal,
-            event.start_date, event.end_date, event.whole_day),
-                {'start_date': u'Oct 12, 2000',
-                 'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
-                 'end_date':   u'Oct 13, 2000',
-                 'end_time':   None,
-                 'end_iso':    u'2000-10-13T23:59:59+02:00',
-                 'same_day':   False,
-                 'same_time':  False,
-                })

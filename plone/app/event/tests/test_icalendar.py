@@ -69,6 +69,23 @@ class ICalendarExportTest(unittest.TestCase):
                 'menu item "%s" missing or out of order' % item)
             text = text[position:]
 
+    def testEventICal(self):
+        headers, output, request = makeResponse(self.request)
+        view = getMultiAdapter((self.portal.events.ploneconf2007, request),
+                                name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.checkOrder(icalstr,
+            'BEGIN:VCALENDAR',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2007',
+            'VALUE=DATE-TIME:20071010T000000Z',
+            'DTEND;VALUE=DATE-TIME:20071012T000000Z',
+            'END:VEVENT',
+            'END:VCALENDAR')
+
     def testCollectionICal(self):
         headers, output, request = makeResponse(self.request)
         view = getMultiAdapter((self.portal.collection, request), name='ics_view')
