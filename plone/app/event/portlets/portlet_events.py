@@ -8,6 +8,7 @@ from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
+from zope.contentprovider.interfaces import IContentProvider
 from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
@@ -89,6 +90,11 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         return [IEventAccessor(occ) for occ in\
                 get_occurrences(context, self._data(), limit=self.data.count)]
+
+    def formated_date(self, event):
+        provider = getMultiAdapter((self.context, self.request, self),
+                IContentProvider, name=u"formated_date")
+        return provider(event)
 
     @memoize
     def _data(self):

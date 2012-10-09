@@ -13,10 +13,12 @@ from plone.app.event.base import (
     default_timezone,
     get_occurrences,
     get_portal_events,
-    localized_now
+    localized_now,
+    dates_for_display
 )
 from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.testing import TEST_USER_ID
@@ -471,3 +473,143 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
         res = get_portal_events(self.portal,
                                  range_end=self.now)
         self.assertTrue(len(res) == 3)
+
+
+class TestDatesForDisplayAT(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_prep_display_with_time(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/12 18:00:00',
+                timezone="Europe/Vienna")
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': u'06:00 AM',
+                 'start_iso':  u'2000-10-12T06:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   u'06:00 PM',
+                 'end_iso':    u'2000-10-12T18:00:00+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
+                 'whole_day':  False,
+                 'url': 'http://nohost/plone/event'
+                })
+
+    def test_prep_display_wholeday_sameday(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/12 18:00:00',
+                timezone="Europe/Vienna",
+                wholeDay=True)
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-12T23:59:59+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
+                 'whole_day':  True,
+                 'url': 'http://nohost/plone/event'
+                })
+
+    def test_prep_display_wholeday_differentdays(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/13 18:00:00',
+                timezone="Europe/Vienna",
+                wholeDay=True)
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 13, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-13T23:59:59+02:00',
+                 'same_day':   False,
+                 'same_time':  False,
+                 'whole_day':  True,
+                 'url': 'http://nohost/plone/event'
+                })
+
+
+class TestDatesForDisplayDX(unittest.TestCase):
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_prep_display_with_time(self):
+        event_id = self.portal.invokeFactory('plone.app.event.dx.event',
+                id="event",
+                start=datetime.datetime(2000, 10, 12, 6, 0, 0),
+                end=datetime.datetime(2000, 10, 12, 18, 0, 0),
+                timezone="Europe/Vienna")
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': u'06:00 AM',
+                 'start_iso':  u'2000-10-12T06:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   u'06:00 PM',
+                 'end_iso':    u'2000-10-12T18:00:00+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
+                 'whole_day':  False,
+                 'url': 'http://nohost/plone/event'
+                })
+
+    def test_prep_display_wholeday_sameday(self):
+        event_id = self.portal.invokeFactory('plone.app.event.dx.event',
+                id="event",
+                start=datetime.datetime(2000, 10, 12, 6, 0, 0),
+                end=datetime.datetime(2000, 10, 12, 18, 0, 0),
+                timezone="Europe/Vienna",
+                whole_day=True)
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 12, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-12T23:59:59+02:00',
+                 'same_day':   True,
+                 'same_time':  False,
+                 'whole_day':  True,
+                 'url': 'http://nohost/plone/event'
+                })
+
+    def test_prep_display_wholeday_differentdays(self):
+        event_id = self.portal.invokeFactory('plone.app.event.dx.event',
+                id="event",
+                start=datetime.datetime(2000, 10, 12, 6, 0, 0),
+                end=datetime.datetime(2000, 10, 13, 18, 0, 0),
+                timezone="Europe/Vienna",
+                whole_day=True)
+        event = self.portal[event_id]
+        self.assertEqual(dates_for_display(event),
+                {'start_date': u'Oct 12, 2000',
+                 'start_time': None,
+                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'end_date':   u'Oct 13, 2000',
+                 'end_time':   None,
+                 'end_iso':    u'2000-10-13T23:59:59+02:00',
+                 'same_day':   False,
+                 'same_time':  False,
+                 'whole_day':  True,
+                 'url': 'http://nohost/plone/event'
+                })

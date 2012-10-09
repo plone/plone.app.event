@@ -11,6 +11,7 @@
     <metal:content-core define-macro="content-core"
                         tal:define="data nocall:view/data">
 
+
         <div class="eventDetails">
             <table class="vertical listing"
               summary="Event details"
@@ -29,85 +30,20 @@
                     </tr>
                     <tr>
                         <th i18n:translate="event_when">When</th>
-                        <td tal:define="date_dict view/date_for_display;
-                                        start_tzname data/timezone;
+                        <td tal:define="start_tzname data/timezone;
                                         start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                                         start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
-                          <metal:macro define-macro="event_occurrence">
                            <div class="vevent">
                             <a class="url hCalendar-hidden"
                                href=""
-                               tal:attributes="href date_dict/url"
-                               tal:content="date_dict/url"
+                               tal:attributes="href data/url"
+                               tal:content="data/url"
                                >
                             </a>
                             <span class="hCalendar-hidden summary"
-                                  tal:content="data/title">event title</span>
-                            <tal:differentday tal:condition="not:date_dict/same_day"
-                                              i18n:translate="event_when_differentday">
-              
-                              <a href="" class="url" tal:attributes="href date_dict/url">
-                                <abbr i18n:name="startdate"
-                                      class="dtstart"
-                                      tal:attributes="title date_dict/start_iso">
-                                      <span metal:define-slot="inside"
-                                            class="explain">
-                                        <span tal:replace="date_dict/start_date">Start Date</span>
-                                        <tal:notwholeday condition="not:data/whole_day">
-                                          <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
-                                          <span tal:replace="date_dict/start_time">Start Time</span>
-                                        </tal:notwholeday>
-                                      </span>
-                                </abbr>
-                                <span class="timespan">to</span>
-                                <abbr i18n:name="enddate"
-                                      class="dtend"
-                                      tal:attributes="title date_dict/end_iso">
-                                      <span metal:define-slot="inside"
-                                            class="explain">
-                                        <span tal:replace="date_dict/end_date">End Date</span>
-                                        <tal:notwholeday condition="not:data/whole_day">
-                                          <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
-                                          <span tal:replace="date_dict/end_time">End Time</span>
-                                        </tal:notwholeday>
-                                      </span>
-                                </abbr>
-                              </a>
-                            </tal:differentday>
-
-                            <tal:sameday tal:condition="date_dict/same_day">
-                                <tal:wholeday condition="data/whole_day">
-                                  <a href="" class="url" tal:attributes="href date_dict/url">
-                                    <span tal:replace="date_dict/start_date" i18n:translate="" />
-                                  </a>
-                                </tal:wholeday>
-                                <tal:notwholeday condition="not:data/whole_day"
-                                    i18n:translate="event_when_sameday">
-                                  <a href="" class="url" tal:attributes="href date_dict/url">
-                                    <div class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date Time</div>
-                                  </a>
-                                  <div class="timerange">
-                                      from
-                                      <abbr class="dtstart"
-                                          tal:attributes="title date_dict/start_iso"
-                                           i18n:name="starttime">
-                                           <span metal:define-slot="inside"
-                                               class="explain"
-                                               tal:content="date_dict/start_time">Start Time</span>
-                                      </abbr>
-                                      <span class="timespan">to</span>
-                                      <abbr class="dtend"
-                                          tal:attributes="title date_dict/end_iso"
-                                          i18n:name="endtime">
-                                          <span metal:define-slot="inside"
-                                              class="explain"
-                                              tal:content="date_dict/end_time">End Time</span>
-                                      </abbr>
-                                    </div>
-                                </tal:notwholeday>
-                            </tal:sameday>
-                           </div>
-                          </metal:macro>
+                              tal:content="data/title">event title</span>
+                            <tal:date replace="structure python:view.formated_date(context)" />
+                          </div>
                           <span class="timezone" tal:condition="start_tzname">
                            (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
                           </span>
@@ -119,20 +55,18 @@
                               </a>
                             </p>
                           </tal:occurrence>
-                          <div tal:define="eventsinfo view/occurrences;
-                            events eventsinfo/events;
-                            tail eventsinfo/tail;"
+                          <div tal:define="next_occurrences view/next_occurrences;
+                                           events next_occurrences/events"
                                tal:condition="events">
-                               <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences>
+                            <tal:occurrences i18n:translate="">More occurrences of this event:</tal:occurrences>
                             <ul>
-                              <li tal:repeat="date_dict events">
-                                <tal:event metal:use-macro="view/macros/event_occurrence" />
+                              <li tal:repeat="occ events">
+                                <tal:date replace="structure python:view.formated_date(occ)" />
                               </li>
-                              <li tal:condition="tail">
+                              <li tal:define="tail next_occurrences/tail"
+                                  tal:condition="tail">
                                   ⋮<br />
-                                  <tal:define define="date_dict tail">
-                                    <tal:event metal:use-macro="view/macros/event_occurrence" />
-                                  </tal:define>
+                                  <tal:date replace="structure python:view.formated_date(tail)" />
                               </li>
                             </ul>
                           </div>

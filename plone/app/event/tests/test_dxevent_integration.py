@@ -72,8 +72,8 @@ class TextDXIntegration(unittest.TestCase):
                 whole_day=False)
         e1 = self.portal['event1']
         view = e1.restrictedTraverse('@@event_view')
-        self.assertTrue(view.date_for_display() is not None)
-        self.assertTrue(view.occurrences is not None)
+        self.assertTrue(view.formated_date(e1) is not None)
+        self.assertTrue(view.next_occurrences is not None)
 
 
     def test_start_end_dates_indexed(self):

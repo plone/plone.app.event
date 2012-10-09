@@ -46,4 +46,22 @@
         permission="zope2.View"
         />
 
+    <adapter
+        name="formated_date"
+        provides="zope.contentprovider.interfaces.IContentProvider"
+        for="zope.interface.Interface
+             zope.publisher.interfaces.browser.IBrowserRequest
+             zope.publisher.interfaces.browser.IBrowserView"
+        factory=".formated_date.FormatedDateProvider"
+        />
+
+    <adapter
+        name="formated_date"
+        provides="zope.contentprovider.interfaces.IContentProvider"
+        for="zope.interface.Interface
+             zope.publisher.interfaces.browser.IBrowserRequest
+             plone.portlets.interfaces.IPortletRenderer"
+        factory=".formated_date.FormatedStartDateProvider"
+        />
+
 </configure>

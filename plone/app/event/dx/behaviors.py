@@ -199,9 +199,11 @@ class EventBasic(object):
     def timezone(self, value):
         self.context.timezone = value
 
+    # TODO: whole day - and other attributes - might not be set at this time!
+    # TODO: how to provide default values?
     @property
     def whole_day(self):
-        return self.context.whole_day
+        return getattr(self.context, 'whole_day', False)
     @whole_day.setter
     def whole_day(self, value):
         self.context.whole_day = value
@@ -249,8 +251,8 @@ def data_postprocessing(obj, event):
     start = tz.localize(start)
     end = tz.localize(end)
 
-    # adapt for whole Day
-    if obj.whole_day:
+    # adapt for whole day
+    if IEventBasic(obj).whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)
 

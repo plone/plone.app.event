@@ -3,8 +3,8 @@ from Products.Five.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.interfaces import IOccurrence
-
-from plone.app.event.base import prepare_for_display
+from zope.contentprovider.interfaces import IContentProvider
+from zope.component import getMultiAdapter
 
 
 class EventView(BrowserView):
@@ -24,35 +24,32 @@ class EventView(BrowserView):
         accessor = IEventAccessor(self.context)
         return accessor
 
-    def date_for_display(self):
-        display = prepare_for_display(
-                self.context,
-                self.data.start,
-                self.data.end,
-                self.data.whole_day)
-        display.update({'url': self.data.context.absolute_url()})
-        return display
+    def formated_date(self, occ):
+        provider = getMultiAdapter((self.context, self.request, self),
+                IContentProvider, name=u"formated_date")
+        return provider(occ)
 
     @property
-    def occurrences(self):
+    def next_occurrences(self):
         """Returns all occurrences for this context, except the start
         occurrence.
         The maximum defaults to 7 occurrences. If there are more occurrences
         defined for this context, the result will contain the last item
         of the occurrence list.
 
-        :rtype: dict - with ``events`` and ``tail`` as keys.
+        :returns: Dictionary with ``events`` and ``tail`` as keys.
+        :rtype: dict 
 
         """
-        eventsinfo = dict(events=[], tail=None)
+        occ_dict = dict(events=[], tail=None)
         context = self.context
         adapter = IRecurrenceSupport(context, None)
         if adapter is not None:
             occurrences = adapter.occurrences()[1:] # don't include first
-            eventsinfo['events'], eventsinfo['tail'] = (
-                self._get_occurrences_helper(occurrences)
-            )
-        return eventsinfo
+            occ_dict['events'], occ_dict['tail'] = (
+                    self._get_occurrences_helper(occurrences)
+                )
+        return occ_dict
 
     def _get_occurrences_helper(self, occ_list, limit=7):
         """For many occurrences we limit the amount of occurrences to
@@ -65,19 +62,13 @@ class EventView(BrowserView):
         :param limit: optional, defaults to 7
         :type limit: integer
         :rtype: tuple of (list of events, last item of occ_list)
+
         """
         events = []
         tail = None
         if occ_list:
-            occurrences = occ_list[:limit]
-            occurrences.append(occ_list.pop())
+            events = occ_list[:limit]
             many = len(occ_list) > limit
-            for occ in occurrences:
-                acc = IEventAccessor(occ)
-                display = prepare_for_display(
-                    self.context, acc.start, acc.end, acc.whole_day)
-                display.update({'url': acc.context.absolute_url()})
-                events.append(display)
-            tail = events and events.pop() or None
+            tail = events and occ_list.pop() or None
             tail = tail if many else None
         return (events, tail)

@@ -4,6 +4,12 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Create an formated_date content provider, which takes an occurrence or event
+  object when called and formats the start/end date and times for display. This
+  content provider can be overridden for other contexts. E.g. the events
+  portlet uses just shows the start date and not the end date.
+  [thet]
+
 - Let IRecurrenceSupport adapter's occurrences method return as first
   occurrence the event object itself instead of an Occurrence object.
   Fixes #58.

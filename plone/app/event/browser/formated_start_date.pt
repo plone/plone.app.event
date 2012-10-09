@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      tal:omit-tag=""
+      i18n:domain="plone.app.event">
+<body tal:omit-tag="" tal:define="date_dict view/date_dict">
+
+  <span tal:replace="date_dict/start_date" />
+  <tal:notwholeday condition="not:date_dict/whole_day">
+    &dash;
+    <abbr class="dtstart" tal:attributes="title date_dict/start_iso">
+      <span class="explain" tal:content="date_dict/start_time">Start Time</span>
+    </abbr>
+  </tal:notwholeday>
+
+</body>
+</html>
