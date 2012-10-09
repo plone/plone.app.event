@@ -253,8 +253,10 @@ def cal_to_strftime_wkday(day):
     :rtype: integer
 
     """
-    if day==6: return 0
-    else: return day+1
+    if day==6:
+        return 0
+    else:
+        return day+1
 
 
 def strftime_to_cal_wkday(day):
@@ -269,8 +271,10 @@ def strftime_to_cal_wkday(day):
     :rtype: integer
 
     """
-    if day==0: return 6
-    else: return day-1
+    if day==0:
+        return 6
+    else:
+        return day-1
 
 
 def get_portal_events(context, range_start=None, range_end=None, limit=None,

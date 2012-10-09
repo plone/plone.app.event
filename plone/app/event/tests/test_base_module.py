@@ -105,13 +105,13 @@ class TestBaseModule(unittest.TestCase):
 
     def test_cal_to_strftime_wkday(self):
         from plone.app.event.base import cal_to_strftime_wkday
-        li = [cal_to_strftime_wkday(day) for day in range(0,6)]
-        self.assertTrue(li == [1,2,3,4,5,6,0])
+        li = [cal_to_strftime_wkday(day) for day in range(0,7)]
+        self.assertTrue(li == [1, 2, 3, 4, 5, 6, 0])
 
     def test_strftime_to_cal_wkday(self):
-        from plone.app.event.base import cal_to_strftime_wkday
-        li = [cal_to_strftime_wkday(day) for day in range(0,6)]
-        self.assertTrue(li == [6,0,1,2,3,4,5])
+        from plone.app.event.base import strftime_to_cal_wkday
+        li = [strftime_to_cal_wkday(day) for day in range(0,7)]
+        self.assertTrue(li == [6, 0, 1, 2, 3, 4, 5])
 
 
 class TestCalendarLinkbase(unittest.TestCase):
