@@ -77,6 +77,10 @@ class ICalendarExportTest(unittest.TestCase):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
+        # TODO: there is a side effect when running all tests, where this one fails.
+        # icalstr when running all tests is:
+        # 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Plone.org//NONSGML plone.app.event//EN\r\nX-WR-CALNAME:Plone Conf 2007\r\nX-WR-RELCALID:68c3f018da8940dc87b4631f64b9a0a9\r\nX-WR-TIMEZONE:Atlantic/Bermuda\r\nBEGIN:VEVENT\r\nSUMMARY:Plone Conf 2007\r\nDTSTART;VALUE=DATE-TIME:20071010T030000Z\r\nDTEND;VALUE=DATE-TIME:20071012T030000Z\r\nDTSTAMP;VALUE=DATE-TIME:20121009T165501Z\r\nUID:68c3f018da8940dc87b4631f64b9a0a9\r\nCONTACT:http://plone.org/events/conferences/2007-naples\r\nCREATED;VALUE=DATE-TIME:20121009T145501Z\r\nLAST-MODIFIED;VALUE=DATE-TIME:20121009T145501Z\r\nLOCATION:Naples\r\nURL:http://nohost/plone/events/ploneconf2007\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n'
+        # maybe there is somewhere a timezone set, but not reset?
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
