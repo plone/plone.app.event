@@ -15,13 +15,13 @@ def makeResponse(request):
 
 
 import unittest2 as unittest
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-
+from datetime import datetime
 
 class ICalendarExportTest(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventATDX_INTEGRATION_TESTING
 
     def setUp(self):
         self.request = self.layer['request']
@@ -37,13 +37,18 @@ class ICalendarExportTest(unittest.TestCase):
                 startDate='2007/10/10', endDate='2007/10/12',
                 location='Naples',
                 eventUrl='http://plone.org/events/conferences/2007-naples')
-        self.event1 = portal.events['ploneconf2007']
 
         portal.events.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')
-        self.event2 = portal.events['ploneconf2008']
+
+        portal.events.invokeFactory('plone.app.event.dx.event',
+            id='ploneconf2012', title='Plone Conf 2012',
+            start=datetime(2012,10,10,8,0),
+            end=datetime(2012,10,12,18,0),
+            timezone="Europe/Amsterdam",
+            location='Arnhem')
 
         portal.invokeFactory("Collection",
                              "collection",
@@ -68,6 +73,24 @@ class ICalendarExportTest(unittest.TestCase):
             self.failUnless(position >= 0,
                 'menu item "%s" missing or out of order' % item)
             text = text[position:]
+
+    def testEventDXICal(self):
+        headers, output, request = makeResponse(self.request)
+        view = getMultiAdapter((self.portal.events.ploneconf2012, request),
+                                name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.checkOrder(icalstr,
+            'BEGIN:VCALENDAR',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2012',
+            'DTSTART;VALUE=DATE-TIME:20121010T060000Z',
+            'DTEND;VALUE=DATE-TIME:20121012T160000Z',
+            'UID:',
+            'END:VEVENT',
+            'END:VCALENDAR')
 
     def testEventICal(self):
         headers, output, request = makeResponse(self.request)
