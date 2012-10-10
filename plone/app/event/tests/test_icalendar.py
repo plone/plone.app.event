@@ -33,10 +33,10 @@ class ICalendarExportTest(unittest.TestCase):
                 Description=u"The portal's Events")
 
         portal.events.invokeFactory('Event',
-                id='ploneconf2007', title='Plone Conf 2007',
-                startDate='2007/10/10', endDate='2007/10/12',
-                location='Naples',
-                eventUrl='http://plone.org/events/conferences/2007-naples')
+            id='ploneconf2007', title='Plone Conf 2007',
+            startDate='2007/10/10', endDate='2007/10/12',
+            location='Naples',
+            eventUrl='http://plone.org/events/conferences/2007-naples')
 
         portal.events.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
@@ -120,6 +120,18 @@ class ICalendarExportTest(unittest.TestCase):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
+
+        self.assertTrue(
+            'URL:http://nohost/plone/events/ploneconf2007' in icalstr)
+        self.assertTrue(
+            'URL:http://nohost/plone/events/ploneconf2008' in icalstr)
+        self.assertTrue(
+            'URL:http://nohost/plone/events/ploneconf2012' in icalstr)
+
+        self.assertTrue(
+            'CONTACT:http://plone.org/events/conferences/2008-washington-dc' in
+            icalstr)
+
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:New Collection',
