@@ -14,6 +14,8 @@ from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.event.portlets import portlet_events
 
 import unittest2 as unittest
+from plone.app.event.base import default_timezone
+from plone.app.event.testing import set_timezone
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.testing import setRoles
@@ -89,6 +91,8 @@ class RendererTest(unittest.TestCase):
         setHooks()
         setSite(portal)
 
+        set_timezone("Australia/Brisbane")
+
         # TODO: don't use admin privileges for test methods except
         # test_prev_events_link and test_prev_events_link_and_navigation_root
 
@@ -138,12 +142,16 @@ class RendererTest(unittest.TestCase):
         self.portal.manage_delObjects(['e1', 'eventfolder'])
 
     def test_published_events_recurring(self):
+        startDT = DateTime('Australia/Brisbane')+1
+
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
-                                  start=DateTime('Australia/Brisbane') - 10,
-                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10')
+                                  startDate=startDT,
+                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10',
+                                  timezone="Australia/Brisbane")
         self.portal.invokeFactory('Event', 'e2', title='Event 2',
-                                  start=DateTime('Australia/Brisbane'),
-                                  recurrence='RRULE:FREQ=DAILY;COUNT=3')
+                                  startDate=startDT,
+                                  recurrence='RRULE:FREQ=DAILY;COUNT=3',
+                                  timezone="Australia/Brisbane")
         self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
 
         r = self.renderer(
@@ -152,6 +160,12 @@ class RendererTest(unittest.TestCase):
         events = r.published_events()
         self.assertEqual(5, len(events))
         self.assertTrue('Event 2' not in [x.title for x in events])
+
+        rd = r.render()
+        occ1DT = startDT+7
+        self.assertTrue('http://nohost/plone/e1"' in rd)
+        self.assertTrue('http://nohost/plone/e1/%s-%s-%s' %
+                (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd)
 
         self.portal.manage_delObjects(['e1', 'e2'])
 

@@ -9,11 +9,12 @@ from zope.component import getUtility
 from plone.app.event.interfaces import IEventSettings
 from plone.registry.interfaces import IRegistry
 
-def reset_timezone():
+
+def set_timezone(tz="UTC"):
     # Set the portal timezone
     reg = getUtility(IRegistry)
     settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-    settings.portal_timezone = 'UTC'
+    settings.portal_timezone = tz
 
 
 class PAEventLayer(PloneSandboxLayer):
@@ -27,9 +28,8 @@ class PAEventLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
-
         self.applyProfile(portal, 'plone.app.event:default')
-        reset_timezone()
+        set_timezone(tz='UTC')
 
 
 PAEvent_FIXTURE = PAEventLayer()

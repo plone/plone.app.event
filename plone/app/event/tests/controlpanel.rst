@@ -5,8 +5,8 @@
 ==========================
 
 For testing, reset the timezone
->>> from plone.app.event.testing import reset_timezone
->>> reset_timezone()
+>>> from plone.app.event.testing import set_timezone
+>>> set_timezone(tz="UTC")
 
 Oskar Öhman is a successful CEO of his startup company specialized in
 Toys. He's a sharp thinker and an even sharper HTML programmer (he
