@@ -9,7 +9,7 @@ Changelog
   [thet]
 
 - Don't allow ambiguous timezones like 'CET', which also have implementation
-  errors in DateTime. Force them to another zone. Timezones should be
+  errors in DateTime. Force them to another zone. Timezones should be set
   explicitly anyways.
   [thet]
 
