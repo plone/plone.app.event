@@ -30,7 +30,9 @@ class TimezoneTest(unittest.TestCase):
 
     def test_timezone_vocabulary(self):
         tzvocab = getUtility(IVocabularyFactory, 'plone.app.event.Timezones')
-        assert('Africa/Abidjan' in [item.value for item in tzvocab(self.portal)])
+        tz_list = [item.value for item in tzvocab(self.portal)]
+        self.assertTrue('Africa/Abidjan' in tz_list)
+        self.assertTrue('CET' not in tz_list)
 
     def test_available_timezones_vocabulary(self):
         reg = getUtility(IRegistry)
@@ -39,7 +41,7 @@ class TimezoneTest(unittest.TestCase):
         # initially, all zones are available in AvailableTimezones
         all_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.Timezones')(self.portal)
         avail_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.AvailableTimezones')(self.portal)
-        assert(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
+        self.assertTrue(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
 
         # let's limit it to the first 10 zones of all_zones
         all_zones = [term.value for term in all_zones_vocab]
@@ -51,19 +53,19 @@ class TimezoneTest(unittest.TestCase):
         avail_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.AvailableTimezones')(self.portal)
 
         # the length of the avail_zones_vocab is still the same as all_zones_vocab
-        assert(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
+        self.assertTrue(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
         # but when iterating over every item, the length equals the
         # available_timezones setting.
         # this magic is done by collective.elephantvocabulary and has the
         # purpose that timezones are still available for events or users, who
         # used them, even if the portal manager retracked them later.
-        assert(len([item for item in avail_zones_vocab]) == 10)
+        self.assertTrue(len([item for item in avail_zones_vocab]) == 10)
 
     def test_default_timezone(self):
-        assert(os_default_timezone() == default_timezone() == 'UTC')
+        self.assertTrue(os_default_timezone() == default_timezone() == 'UTC')
 
         reg = getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
 
         settings.portal_timezone = "Europe/Vienna"
-        assert(default_timezone() == 'Europe/Vienna')
+        self.assertTrue(default_timezone() == 'Europe/Vienna')

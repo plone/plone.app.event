@@ -5,7 +5,7 @@ import unittest2 as unittest
 import zope.component
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.interfaces import IATEvent
-from plone.app.event.base import get_occurrences
+from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEventSettings
@@ -23,6 +23,8 @@ from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserView
+
+TZNAME = "Europe/Vienna"
 
 
 class TestTraversal(unittest.TestCase):
@@ -105,13 +107,13 @@ class TestOccurrences(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
-        default_tz = 'CET'
 
         reg = zope.component.getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = default_tz
+        settings.portal_timezone = TZNAME
 
         now = localized_now()
+
         yesterday = now - datetime.timedelta(days=1)
 
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
@@ -123,7 +125,7 @@ class TestOccurrences(unittest.TestCase):
             end=now + datetime.timedelta(hours=1),
             location=u'Vienna',
             recurrence='RRULE:FREQ=DAILY;COUNT=4',
-            timezone=default_tz,
+            timezone=TZNAME,
             whole_day=False)
 
         self.portal.invokeFactory(
@@ -134,7 +136,7 @@ class TestOccurrences(unittest.TestCase):
             end=yesterday + datetime.timedelta(hours=1),
             location=u'Halle',
             recurrence='RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5',
-            timezone=default_tz,
+            timezone=TZNAME,
             whole_day=False)
 
         self.now = now
@@ -143,12 +145,16 @@ class TestOccurrences(unittest.TestCase):
         self.interval = self.portal['interval']
 
     def test_get_occurrences(self):
-        result = get_occurrences(self.portal,
-                                 get_portal_events(self.portal))
+        brains = get_portal_events(self.portal)
+
+        result = get_occurrences_from_brains(self.portal, brains)
         self.assertTrue(len(result) == 9)
 
-        result = get_occurrences(self.portal,
-                                 get_portal_events(self.portal), limit=5)
+        result = get_occurrences_from_brains(self.portal, brains,
+                range_start=self.now)
+        self.assertTrue(len(result) == 9)
+
+        result = get_occurrences_from_brains(self.portal, brains, limit=5)
         self.assertTrue(len(result) == 5)
         self.assertTrue(IEventAccessor.providedBy(result[0]))
 

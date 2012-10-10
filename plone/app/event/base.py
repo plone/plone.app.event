@@ -21,6 +21,7 @@ from zope.interface import implements, Interface
 from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
+from plone.app.event.vocabularies import replacement_zones
 
 
 DEFAULT_END_DELTA = 1 # hours
@@ -138,7 +139,6 @@ class CalendarLinkbase(object):
         return 'events' in navroot and navroot['events'] or None
 
 
-
 def default_end_dt():
     """Return the default end as python datetime for prefilling forms.
 
@@ -205,10 +205,13 @@ def default_timezone(context=None):
 
     # fallback to what plone.event is doing
     if not portal_timezone:
-        return fallback_default_timezone()
+        portal_timezone = fallback_default_timezone()
 
-    return validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
+    if portal_timezone in replacement_zones.keys():
+        portal_timezone = replacement_zones[portal_timezone]
+    portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
 
+    return portal_timezone
 
 def default_tzinfo(context=None):
     """Return the default timezone as tzinfo instance.
@@ -371,8 +374,8 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     return events_by_date
 
 
-def get_occurrences(context, brains, range_start=None, range_end=None,
-                    limit=None):
+def get_occurrences_from_brains(context, brains,
+        range_start=None, range_end=None, limit=None):
     """Returns a flat list of occurrence objects from a given result of a
     catalog query. The list is sorted by the occurrence start date.
 
@@ -390,12 +393,11 @@ def get_occurrences(context, brains, range_start=None, range_end=None,
 
     """
     result = []
-    start = localized_now() if (range_start is None) else range_start
     for brain in brains:
         obj = brain.getObject()
         occurrences = [
             IEventAccessor(occ) for occ in
-            IRecurrenceSupport(obj).occurrences(start, range_end)
+            IRecurrenceSupport(obj).occurrences(range_start, range_end)
         ]
         result += occurrences
     result.sort(key=lambda x: x.start)
@@ -419,7 +421,8 @@ def DT(dt):
         zone_id = getattr(dt.tzinfo, 'zone', tz)
         tz = validated_timezone(zone_id, tz)
         ret = DateTime(dt.year, dt.month, dt.day,\
-                        dt.hour, dt.minute, dt.second, tz)
+                        dt.hour, dt.minute, dt.second+dt.microsecond/1000000.0,
+                        tz)
     elif isinstance(dt, date):
         ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):

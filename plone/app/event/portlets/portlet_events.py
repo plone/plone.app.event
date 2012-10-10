@@ -14,7 +14,7 @@ from zope.formlib import form
 from zope.interface import implements
 
 from plone.event.interfaces import IEventAccessor
-from plone.app.event.base import get_occurrences
+from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
 from plone.app.event.interfaces import ICalendarLinkbase
@@ -88,7 +88,8 @@ class Renderer(base.Renderer):
 
     def published_events(self):
         context = aq_inner(self.context)
-        return get_occurrences(context, self._data(), limit=self.data.count)
+        return get_occurrences_from_brains(context, self._data(),
+                range_start=localized_now(), limit=self.data.count)
 
     def formated_date(self, event):
         provider = getMultiAdapter((self.context, self.request, self),

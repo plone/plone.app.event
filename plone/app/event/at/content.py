@@ -279,13 +279,20 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # it's already in kwargs in some case.
 
         if not isinstance(value, DateTime): value = DateTime(value)
-        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02dZ' % (
+
+        # Get microseconds from seconds, which is a floating value. Round it
+        # up, to bypass precision errors.
+        micro = int(round(value.second()%1 * 1000000))
+
+        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02d%sZ' % (
                     value.year(),
                     value.month(),
                     value.day(),
                     value.hour(),
                     value.minute(),
-                    value.second())
+                    value.second(),
+                    micro and '.%s' % micro or ''
+                    )
                 )
         self.getField(fieldtoset).set(self, value, **kwargs)
 

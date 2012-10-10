@@ -4,6 +4,15 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Support microseconds for DateTime conversions. For recurrence rules,
+  timezones are not supported due to a python-datetime limitation.
+  [thet]
+
+- Don't allow ambiguous timezones like 'CET', which also have implementation
+  errors in DateTime. Force them to another zone. Timezones should be
+  explicitly anyways.
+  [thet]
+
 - Let EventOccurrenceAccessor return its own URL instead of its parent.
   Once again fixes #58.
   [thet]

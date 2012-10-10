@@ -13,6 +13,8 @@ from plone.app.event.dx.behaviors import (
     IEventBasic
 )
 
+TZNAME = "Europe/Vienna"
+
 
 class MockEvent(object):
     """ Mock event.
@@ -44,7 +46,7 @@ class TestDXEventUnittest(unittest.TestCase):
 
     def setUp(self):
         self.ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
-        os.environ['TZ'] = 'CET'
+        os.environ['TZ'] = TZNAME
 
     def tearDown(self):
         if self.ostz:

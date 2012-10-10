@@ -163,6 +163,7 @@ class RendererTest(unittest.TestCase):
 
         rd = r.render()
         occ1DT = startDT+7
+        import pdb; pdb.set_trace()
         self.assertTrue('http://nohost/plone/e1"' in rd)
         self.assertTrue('http://nohost/plone/e1/%s-%s-%s' %
                 (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd)

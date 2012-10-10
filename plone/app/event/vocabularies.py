@@ -9,11 +9,20 @@ from zope.site.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 
 
+replacement_zones = {
+    'CET': 'Europe/Vienna',
+    'MET': 'Europe/Vienna',
+    'EET': 'Europe/Helsinki',
+    'WET': 'Europe/Lisbon',
+}
+
 def Timezones(context):
     """ Vocabulary for all timezones.
 
     """
-    return SimpleVocabulary.fromValues(pytz.all_timezones)
+    rpl_keys = replacement_zones.keys()
+    tz_list = [it for it in pytz.all_timezones if it not in rpl_keys]
+    return SimpleVocabulary.fromValues(tz_list)
 
 directlyProvides(Timezones, IVocabularyFactory)
 

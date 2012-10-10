@@ -11,7 +11,7 @@ from plone.app.event.base import (
     default_start_DT,
     default_start_dt,
     default_timezone,
-    get_occurrences,
+    get_occurrences_from_brains,
     get_portal_events,
     localized_now,
     dates_for_display
@@ -102,6 +102,15 @@ class TestBaseModule(unittest.TestCase):
             DT(datetime.datetime(2011, 11, 11, 11, 0, 0)) ==
             DateTime('2011/11/11 11:00:00 UTC')
         )
+
+        # Testing conversion of datetime with microseconds
+        tz = pytz.timezone('Europe/Vienna')
+        self.assertTrue(
+            DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
+               tzinfo=tz)) ==
+            DateTime('2012/12/12 10:10:10.123456 Europe/Vienna')
+        )
+
 
     def test_cal_to_strftime_wkday(self):
         from plone.app.event.base import cal_to_strftime_wkday
@@ -363,7 +372,8 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
         self.assertTrue(len(res) == 3)
 
     def test_get_occurrences(self):
-        get_occurrences(object, [], range_start=datetime.datetime.today())
+        get_occurrences_from_brains(object, [],
+                range_start=datetime.datetime.today())
 
 class TestBaseModuleQueryZDT(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING

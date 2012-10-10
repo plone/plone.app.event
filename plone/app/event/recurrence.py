@@ -51,9 +51,12 @@ class RecurrenceSupport(object):
         # but doing it for backwards compatibility as views/templates
         # still rely on acquisition-wrapped objects.
         def get_obj(start):
-            if event.start == start:
+            if event.start.replace(microsecond=0) == start:
                 # If the occurrence date is the same as the event object, the
                 # occurrence is the event itself. return it as such.
+                # Dates from recurrence_sequence_ical are explicitly without
+                # microseconds, while event.start may contain it. So we have to
+                # remove it for a valid comparison.
                 return self.context
             return Occurrence(
                 id=str(start.date()),

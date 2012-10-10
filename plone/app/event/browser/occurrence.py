@@ -1,7 +1,7 @@
 from Products.CMFPlone.PloneBatch import Batch
 from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
-from plone.app.event.base import get_occurrences
+from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import guess_date_from
 
@@ -17,8 +17,8 @@ class Occurrences(BrowserView):
         # TODO: performance issue! the batch is somehow useless, if we
         # calculate every result item anyways.
         occ = [IEventAccessor(occ) for occ in\
-               get_occurrences(self.context,
-                               result,
-                               range_start=start,
-                               limit=limit)]
+               get_occurrences_from_brains(self.context,
+                                           result,
+                                           range_start=start,
+                                           limit=limit)]
         return Batch(occ, b_size, b_start)
