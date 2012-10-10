@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Let EventOccurrenceAccessor return its own URL instead of its parent.
+  Once again fixes #58.
+  [thet]
+
 - Fix calendar portlet header, which day names were shifted by one day since a
   incompatibility between the calendar module (0 is Monday) and the strftime
   function (0 is Sunday).

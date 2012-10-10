@@ -161,7 +161,7 @@ class Renderer(base.Renderer):
                     location = accessor.location
                     events_string += u'%s<a href="%s">%s</a>%s' % (
                         events_string and u"</br>" or u"",
-                        accessor.context.absolute_url(),
+                        accessor.url,
                         accessor.title,
                         location and u" %s" % location or u"")
 

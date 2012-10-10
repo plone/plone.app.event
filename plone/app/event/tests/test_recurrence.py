@@ -77,6 +77,7 @@ class TestTraversal(unittest.TestCase):
         self.assertNotEqual(data.start,
                             tzdel(self.portal['at'].start_date))
         self.assertEqual(start, data.start)
+        self.assertEqual(data.url, 'http://nohost/plone/at/ignored')
 
 
 class TestTraversalBrowser(TestTraversal):
