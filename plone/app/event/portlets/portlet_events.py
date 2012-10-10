@@ -88,8 +88,7 @@ class Renderer(base.Renderer):
 
     def published_events(self):
         context = aq_inner(self.context)
-        return [IEventAccessor(occ) for occ in\
-                get_occurrences(context, self._data(), limit=self.data.count)]
+        return get_occurrences(context, self._data(), limit=self.data.count)
 
     def formated_date(self, event):
         provider = getMultiAdapter((self.context, self.request, self),
