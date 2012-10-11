@@ -9,109 +9,55 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
-Note
-----
+.. note::
 
-You have to set your timezone to a valid pytz/Olson timezone in the
-Controlpanel @@event-settings. Using CET as timezone is broken. Maybe other
-Three Letter Timezone abbreviations too.
+Please set your timezone in the @@event-settings controlpanel. Otherwise there
+some weired behavior can occur, like you're apparently unable to set the time
+for dexterity types not to what you want.
+For timezone handling, we use pytz.
 
 
-Installation for Plone 4.1
+Installation for Plone 4.2
 --------------------------
 
-To install plone.app.event for Plone 4.1, please depend on plone.app.event
-package with the ploneintegration extra. In a buildout, use it like so::
+Just run the buildout.cfg, which is included with plone.app.event. There is
+also a dev.cfg buildout file, which includes the sources of Plone core
+package branches with integration changes for plone.app.event.
+
+Or include the plone.app.event egg::
 
   eggs +=
-      plone.app.event [ploneintegration]
+      plone.app.event [ploneintegration,archetypes,dexterity]
 
-And apply the "plone.app.event Plone4 integration" profile manually or
-automatically via Generic Setup in metadata.xml like so::
+Last, instal Plone with the "plone.app.event Plone4 integration" profile or
+depend in Generic Setup in metadata.xml like so::
 
   <dependency>profile-plone.app.event.ploneintegration:default</dependency>
 
-
-Warning
--------
-
-!!!
-Backup! Don't do this on a Plone setups in production, only install
-plone.app.event for new setups or report any upgrade issues. Upgrading is yet
-not tested and no upgrade steps are provided - this is still a task to do.
-Expect weired behavior regarding date/time/timezones and any other bugs.
-!!!
+You can also install optionally or additionally the dexterity profile.
 
 
-What to do
-----------
+.. warning::
+Upgrading from the old ATEvent type is not tested, so don't rely on this.
 
-Add some events. Add some with recurrence - but limit the occurences or write
-bug reports. Add some in different timezones and write bug reports. Add the
-calendar portlet - shows published events. Write bug reports.
-
-Go to the event controlpanel and try different settings. Download events as
-ical. Install dexterity, apply the plone.app.event dexterity profile and start
-using the provided behaviors.
-
-If possible, write fix code and write tests.
-
-Please note, allowing pull requests needs that she/he must have signed the
-contributor agreement.
+Add some events, play with recurrence, whole day events and timezones, try out
+the calendar and event portlets...
 
 
-Known issues
+.. note::
+A limitation on recurrence is, that unlimited occurrences are not supported at
+the moment. The number of possible recurrences of an event is limited to 1000
+at the moment, so indexing - and other operations - doesn't take too long (see:
+plone.event.recurrence).
+
+
+Contributing
 ------------
 
-- Incomplete tests.
-
-- There is may be one Unicode/Encoding issue with non-ascii chars when
-  exporting to iCal.
-
-- Allowing unlimited occurences for recurring events break at 30000 iterations
-  and take a long time. Solution: not allowing unlimited occurences, breaking
-  earlier.
+- Report issues: https://github.com/collective/plone.app.event
+- Write code and tests.
 
 
-Bug reporting
--------------
-
-Please report bugs here: https://github.com/collective/plone.app.event 
-
-This url may change to https://github.com/plone/plone.app.event some time soon!
-
-
-Installation from the sources
------------------------------
-
-R/W checkout from github:
-$ git clone git@github.com:collective/plone.app.event.github
-
-R/O checkouts:
-$ git clone git://github.com/collective/plone.app.event.git
-
-If you want to install plone.app.event from the sources for development, run
-the provided buildout files - and read the sources.
-
-$ python bootstrap.cfg -d
-
-For Plone 4.1 and standard ATContentTypes
-$ ./bin/buildout -c alpha.cfg
-
-Or do a Normal build
-$ ./bin/buildout -c buildout.cfg
-
-Or do a development build with R/W checkouts
-$ ./bin/buildout -c dev.cfg
-
-There is also a dexterity.cfg buildout configuration, which can be used to
-extend another buildout and install the Dexterity flavor of plone.app.event.
-
-Start
-$ ./bin/instance fg
-
-After fireing up the Zope instance, visit the ZMI and create a Plone site.
-The plone.app.event's Archetypes profile would automatically be installed due
-to the Products.CMFPlone branch, but please import plone.app.event's dexterity
-profile also. This way, the dexterity behaviors are registered and an example
-Dexterity event type is installed.
+.. note::
+Please note, allowing pull requests require the signation of the contributor
+agreement.
