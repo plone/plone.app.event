@@ -51,6 +51,13 @@ at the moment, so indexing - and other operations - doesn't take too long (see:
 plone.event.recurrence).
 
 
+PLIP implementation
+-------------------
+
+This packages and the other listed in sources.cfg are part of the PLIP 10886.
+See: http://dev.plone.org/plone/ticket/10886
+
+
 Contributing
 ------------
 

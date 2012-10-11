@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Buildout infrastructure update.
+  [thet]
+
 - Icalendar export of attendees almost according to the RFC5545 standard. At
   the moment, we do not distinguish between CN and CAL-ADDRESS in Plone, so we
   just put the attendee value to the CN and CAL-ADDRESS parameter. Fixes #24.

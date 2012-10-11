@@ -6,7 +6,7 @@ plone.app.event - The Calendar Framework for Plone
 
     plone.app.event is a new calendar framework for Plone.
 
-    It offers rich functionality like:
+    Features:
 
     * Archetypes and Dexterity Type,
     * Timezone support,
