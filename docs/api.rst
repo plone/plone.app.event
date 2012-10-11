@@ -1,11 +1,41 @@
-=================================
-plone.app.event API documentation
-=================================
+plone.app.event API
+===================
 
-... in progress
+... not far yet and still in progress.
+Please also go through the the sourcecode.
+
+Accessing event objects
+-----------------------
+
+Event objects implement the ```IEvent``` interface from
+```plone.event.interfaces```.
+
+
+The objects can be accessed like so::
+
+>>> from plone.event.interfaces import IEvent
+>>> from plone.event.interfaces import IEventAccessor
+
+>>> IEvent.providedBy(obj)
+True
+
+>>> acc = IEventAccessor(obj)
+>>> acc.start
+datetime...
+
+>>> acc.timezone
+'Europe/Vienna'
+
+>>> acc.recurrence
+...
+
+>>> acc.occurrences
+[IEventAccessor...
+
 
 dexterity
 =========
+
 
 plone.app.event behaviors
 -------------------------
