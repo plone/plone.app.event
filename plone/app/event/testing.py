@@ -1,28 +1,32 @@
-from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import IntegrationTesting
+import os
 from Products.DateRecurringIndex.testing import DRI_FIXTURE
-
-from plone.testing import z2
-
-from zope.component import getUtility
-from plone.app.event.interfaces import IEventSettings
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
 from plone.registry.interfaces import IRegistry
+from plone.testing import z2
+from zope.component import getUtility
+
+from plone.app.event.interfaces import IEventSettings
 
 
-def set_timezone(tz="UTC"):
+def set_timezone(tz):
     # Set the portal timezone
     reg = getUtility(IRegistry)
     settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
     settings.portal_timezone = tz
 
+def set_env_timezone(tz):
+    os.environ['TZ'] = tz
+
 
 class PAEventLayer(PloneSandboxLayer):
-
-    # TODO: DRI_FIXTURE temporary until removal of DRI
     defaultBases = (DRI_FIXTURE, PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
+        # store original TZ, for the case it's overwritten
+        self.ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
+
         # Load ZCML
         import plone.app.event
         self.loadZCML(package=plone.app.event, context=configurationContext)
@@ -30,6 +34,13 @@ class PAEventLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event:default')
         set_timezone(tz='UTC')
+
+    def tearDownZope(self, app):
+        # reset OS TZ
+        if self.ostz:
+            os.environ['TZ'] = self.ostz
+        elif 'TZ' in os.environ:
+            del os.environ['TZ']
 
 
 PAEvent_FIXTURE = PAEventLayer()

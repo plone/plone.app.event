@@ -40,18 +40,21 @@ from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 
 import unittest2 as unittest
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
+
+TZNAME = "Europe/Vienna"
 
 OBJ_DATA = {
     'location': 'my location',
     'subject': 'Meeting',
     'eventUrl': 'http://example.org/',
-    'startDate': DateTime('Europe/Vienna'), # Initialize with timezone, even if
-    'endDate': DateTime('Europe/Vienna')+1, # it wouldn't be needed here.
+    'startDate': DateTime(TZNAME), # Initialize with timezone, even if
+    'endDate': DateTime(TZNAME)+1, # it wouldn't be needed here.
                                             # It's needed for test comparsion.
-    'timezone': 'Europe/Vienna',
+    'timezone': TZNAME,
     'contactName': 'John Doe',
     'contactPhone': '+1212356789',
     'contactEmail': 'john@example.org',
@@ -71,6 +74,7 @@ class PAEventATTest(unittest.TestCase):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.invokeFactory(type_name='Event', id='event1', title='Event1')
         self.obj = portal['event1']
+        set_env_timezone(TZNAME)
 
     def _edit_atevent(self, obj):
         dcEdit(obj)
@@ -695,12 +699,11 @@ class PAEventATFieldTest(unittest.TestCase):
 
 
     def test_wholeday_handler(self):
-        os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
                 id="event",
                 startDate='2000/10/12 06:00:00',
                 endDate='2000/10/13 18:00:00',
-                timezone="Europe/Vienna",
+                timezone=TZNAME,
                 wholeDay=True)
         event = self.portal[event_id]
         self.assertTrue(event.whole_day)
@@ -708,12 +711,11 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertEqual(event.end().Time(), '23:59:59')
 
     def test_wholeday_handler_notwholeday(self):
-        os.environ['TZ'] = "Europe/Vienna"
         event_id = self.portal.invokeFactory('Event',
                 id="event",
                 startDate='2000/10/12 06:00:00',
                 endDate='2000/10/13 18:00:00',
-                timezone="Europe/Vienna")
+                timezone=TZNAME)
         event = self.portal[event_id]
         self.assertFalse(event.whole_day)
         self.assertEqual(event.start().Time(), '06:00:00')
@@ -724,11 +726,11 @@ class PAEventATFieldTest(unittest.TestCase):
                 id="event",
                 startDate='2000/10/12 06:00:00',
                 endDate='2000/10/13 18:00:00',
-                timezone="Europe/Vienna")
+                timezone=TZNAME)
         event = self.portal[event_id]
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
-        self.assertEqual(event.start().timezone(), 'Europe/Vienna')
-        self.assertEqual(event.end().timezone(), 'Europe/Vienna')
-        self.assertEqual(event.start_date.tzinfo.zone, 'Europe/Vienna')
-        self.assertEqual(event.end_date.tzinfo.zone, 'Europe/Vienna')
+        self.assertEqual(event.start().timezone(), TZNAME)
+        self.assertEqual(event.end().timezone(), TZNAME)
+        self.assertEqual(event.start_date.tzinfo.zone, TZNAME)
+        self.assertEqual(event.end_date.tzinfo.zone, TZNAME)

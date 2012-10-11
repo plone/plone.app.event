@@ -12,6 +12,7 @@ from plone.app.event.dx.behaviors import (
     StartBeforeEnd,
     IEventBasic
 )
+from plone.app.event.testing import set_env_timezone
 
 TZNAME = "Europe/Vienna"
 
@@ -45,14 +46,7 @@ class TestDXEventUnittest(unittest.TestCase):
     """
 
     def setUp(self):
-        self.ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
-        os.environ['TZ'] = TZNAME
-
-    def tearDown(self):
-        if self.ostz:
-            os.environ['TZ'] = self.ostz
-        else:
-            del os.environ['TZ']
+        set_env_timezone(TZNAME)
 
     def test_validate_invariants_ok(self):
         data = MockEvent()
