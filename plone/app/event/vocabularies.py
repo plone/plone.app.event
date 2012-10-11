@@ -10,10 +10,10 @@ from Products.CMFCore.utils import getToolByName
 
 
 replacement_zones = {
-    'CET': 'Europe/Vienna',
-    'MET': 'Europe/Vienna',
-    'EET': 'Europe/Helsinki',
-    'WET': 'Europe/Lisbon',
+    'CET': 'Europe/Vienna',   # Central European Time
+    'MET': 'Europe/Vienna',   # Middle European Time
+    'EET': 'Europe/Helsinki', # East European Time
+    'WET': 'Europe/Lisbon',   # West European Time
 }
 
 def Timezones(context):
