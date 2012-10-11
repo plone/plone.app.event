@@ -13,7 +13,6 @@ from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
 
-from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import localized_now
