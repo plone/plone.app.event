@@ -36,7 +36,8 @@ class ICalendarExportTest(unittest.TestCase):
             id='ploneconf2007', title='Plone Conf 2007',
             startDate='2007/10/10', endDate='2007/10/12',
             location='Naples',
-            eventUrl='http://plone.org/events/conferences/2007-naples')
+            eventUrl='http://plone.org/events/conferences/2007-naples',
+            attendees=['anne','bob','cesar'])
 
         portal.events.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
@@ -110,6 +111,9 @@ class ICalendarExportTest(unittest.TestCase):
             'SUMMARY:Plone Conf 2007',
             'DTSTART;VALUE=DATE-TIME:20071010T000000Z',
             'DTEND;VALUE=DATE-TIME:20071012T000000Z',
+            'ATTENDEE;CN=anne;ROLE=REQ-PARTICIPANT:anne',
+            'ATTENDEE;CN=bob;ROLE=REQ-PARTICIPANT:bob',
+            'ATTENDEE;CN=cesar;ROLE=REQ-PARTICIPANT:cesar',
             'END:VEVENT',
             'END:VCALENDAR')
 

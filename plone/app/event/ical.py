@@ -139,7 +139,10 @@ class ICalendarEventComponent(object):
         # TODO: revisit and implement attendee export according to RFC
         if event.attendees:
             for attendee in event.attendees:
-                ical.add('attendee', attendee)
+                att = icalendar.prop.vCalAddress(attendee)
+                att.params['cn'] = icalendar.prop.vText(attendee)
+                att.params['ROLE'] = icalendar.prop.vText('REQ-PARTICIPANT')
+                ical.add('attendee', att)
 
         cn = []
         if event.contact_name:
