@@ -163,7 +163,10 @@ class RendererTest(unittest.TestCase):
 
         rd = r.render()
         occ1DT = startDT+7
+        # The first occurrence of the event itself should show up. It should
+        # link to the event and not an occurrence.
         self.assertTrue('http://nohost/plone/e1"' in rd)
+        # Occurrences should link to the Occurrence.
         self.assertTrue('http://nohost/plone/e1/%s-%s-%s' %
                 (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd)
 
