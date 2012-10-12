@@ -30,7 +30,7 @@
      category="context"
      key="/"
      type="portlets.Calendar"
-     name="events"
+     name="calendar"
      />
  <assignment
      manager="plone.rightcolumn"
