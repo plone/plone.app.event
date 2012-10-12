@@ -16,7 +16,9 @@
            tal:define="prev_month view/prev_month;
                        prev_year view/prev_year"
            tal:attributes="href view/prev_query;
-                           class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;"
+                           class string:kssCalendarChange kssattr-year-${prev_year} kssattr-month-${prev_month} calendarPrevious;
+                           data-year prev_year;
+                           data-month prev_month;"
            i18n:attributes="title title_previous_month;">&laquo;</a>
 
         <span i18n:translate="" tal:omit-tag="">
@@ -34,7 +36,9 @@
            tal:define="next_month view/next_month;
                        next_year view/next_year"
            tal:attributes="href view/next_query;
-                           class string:kssCalendarChange kssattr-year-${next_year} kssattr-month-${next_month} calendarNext;"
+                           class string:kssCalendarChange kssattr-year-${next_year} kssattr-month-${next_month} calendarNext;
+                           data-year next_year;
+                           data-month next_month;"
            i18n:attributes="title title_next_month;">&raquo;</a>
         <span class="portletTopRight"></span>
     </dt>

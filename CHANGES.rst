@@ -4,6 +4,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Backport changes from "merge plip-10888-kss branch" in plone.app.portlets.
+  KSS attributes still left in place for backwards compatibility.
+  [thet]
+
 - Buildout infrastructure update.
   [thet]
 
