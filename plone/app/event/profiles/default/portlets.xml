@@ -29,6 +29,13 @@
      manager="plone.rightcolumn"
      category="context"
      key="/"
+     type="portlets.Calendar"
+     name="events"
+     />
+ <assignment
+     manager="plone.rightcolumn"
+     category="context"
+     key="/"
      type="portlets.Events"
      name="events"
      />

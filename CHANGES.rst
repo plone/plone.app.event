@@ -4,6 +4,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Add the calendar portlet by default when installing plone.app.event.
+  [thet]
+
 - Backport changes from "merge plip-10888-kss branch" in plone.app.portlets.
   KSS attributes still left in place for backwards compatibility.
   [thet]
