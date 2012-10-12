@@ -10,11 +10,10 @@ on installed packages.
 
 
 .. note::
-
-Please set your timezone in the @@event-settings controlpanel. Otherwise there
-some weired behavior can occur, like you're apparently unable to set the time
-for dexterity types not to what you want.
-For timezone handling, we use pytz.
+  Please set your timezone in the @@event-settings controlpanel. Otherwise
+  there some weired behavior can occur, like you're apparently unable to set
+  the time for dexterity types not to what you want.  For timezone handling, we
+  use pytz.
 
 
 Installation for Plone 4.2
@@ -38,17 +37,17 @@ You can also install optionally or additionally the dexterity profile.
 
 
 .. warning::
-Upgrading from the old ATEvent type is not tested, so don't rely on this.
+  Upgrading from the old ATEvent type is not tested, so don't rely on this.
 
 Add some events, play with recurrence, whole day events and timezones, try out
 the calendar and event portlets...
 
 
 .. note::
-A limitation on recurrence is, that unlimited occurrences are not supported at
-the moment. The number of possible recurrences of an event is limited to 1000
-at the moment, so indexing - and other operations - doesn't take too long (see:
-plone.event.recurrence).
+  A limitation on recurrence is, that unlimited occurrences are not supported
+  at the moment. The number of possible recurrences of an event is limited to
+  1000 at the moment, so indexing - and other operations - doesn't take too
+  long (see: plone.event.recurrence).
 
 
 PLIP implementation
@@ -66,5 +65,5 @@ Contributing
 
 
 .. note::
-Please note, allowing pull requests require the signation of the contributor
-agreement.
+  Please note, allowing pull requests require the signation of the contributor
+  agreement.
