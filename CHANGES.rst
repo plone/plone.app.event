@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b1 (unreleased)
+1.0b1 (2012-10-12)
 ------------------
 
 - Add the calendar portlet by default when installing plone.app.event.
