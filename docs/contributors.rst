@@ -1,5 +1,6 @@
-Contributions by
-----------------
+Contributors
+============
+
 Contributors, please add you name here! By doing this, you also state, that you
 have signed the Plone Contributors Agreement [1][2]. Thanks!
 
@@ -10,7 +11,9 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - Philip Bauer, pbauer
 - Róman Joost, romanofski
 
+
 To be confirmed:
+
 - Florian Sprenger <f.sprenger@4teamwork.ch>
 - Franklin Kingma <franklin@fourdigits.nl>
 - Giacomo Spettoli <giacomo.spettoli@gmail.com>

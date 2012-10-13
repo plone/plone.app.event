@@ -1,15 +1,12 @@
-plone.app.event API
-===================
+Developer documentation
+=======================
 
-... not far yet and still in progress.
-Please also go through the the sourcecode.
 
 Accessing event objects
 -----------------------
 
 Event objects implement the ```IEvent``` interface from
 ```plone.event.interfaces```.
-
 
 The objects can be accessed like so::
 
@@ -33,12 +30,8 @@ datetime...
 [IEventAccessor...
 
 
-dexterity
-=========
-
-
-plone.app.event behaviors
--------------------------
+Dexterity behaviors
+-------------------
 
 To use the functionality provided by the behaviors, get the behavior adapter
 first. For example, for setting or getting attributes of an event object, do:
@@ -51,6 +44,3 @@ first. For example, for setting or getting attributes of an event object, do:
 
 >>> import transaction
 >>> transaction.commit()
-
-
-

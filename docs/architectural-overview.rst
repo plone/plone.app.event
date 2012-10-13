@@ -1,5 +1,5 @@
-plone.app.event overview
-========================
+Architectural Overview
+======================
 
 
 Design goals
@@ -57,8 +57,8 @@ wished. User timezones are planned. Whole day events get their starttime set to
 (excluding any scientific events...).
 
 
-plone.app.event package overview
---------------------------------
+plone.app.event
+---------------
 
 The "at" submodule provides the Archetypes based ATEvent content type as a
 drop-in replacement of the ATContentType based ATEvent. Ical, recurrence and
@@ -148,7 +148,8 @@ icalendar parser/generator framework.
 Branches of core packages for plone.app.event
 ---------------------------------------------
 
-* Products.CMFPlone
 * Products.ATContentTypes
-* plone.app.portlets
+* Products.CMFPlone
 * Products.PloneTestCase
+* plone.app.portlets
+* plone.app.testing
