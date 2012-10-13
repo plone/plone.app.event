@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0b2 (unreleased)
-------------------
+1.0dev (unreleased)
+-------------------
 
 - Portlet assignment fix. Now both - calendar and event portlet - are
   installed.
