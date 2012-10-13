@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0b2 (unreleased)
+------------------
+
+- Portlet assignment fix. Now both - calendar and event portlet - are
+  installed.
+  [thet]
+
+
 1.0b1 (2012-10-12)
 ------------------
 
