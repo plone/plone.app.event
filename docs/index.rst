@@ -1,6 +1,6 @@
-**************************************************
-plone.app.event - The Calendar Framework for Plone
-**************************************************
+************************************************
+plone.app.event - a calendar framework for Plone
+************************************************
 
 .. topic:: Overview
 
@@ -51,11 +51,3 @@ Complete API and advanced usage
 .. toctree::
 
     api/index.rst
-
-
-Indices and tables
-++++++++++++++++++
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
