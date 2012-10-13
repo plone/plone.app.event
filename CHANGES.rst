@@ -79,14 +79,17 @@ Changelog
   occurrence.
   [romanofski]
 
-- More minor fixes:
+- More minor fixes.
+  [thet]
+
   * Don't force DateTime conversion in query parameters of get_portal_events.
     The catalog index uses Python's datetime anyways.
+
   * Only set end date in _prepare_range to next day, if it's a date and not
     datetime.
+
   * Register the Archetypes postprocessing event subscribers also for
     IObjectCreatedEvent.
-  [thet]
 
 - Fix #51, logical error with range_end parameter in get_portal_events.
   [thet]
