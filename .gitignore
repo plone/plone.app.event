@@ -11,6 +11,8 @@ dev/
 develop-eggs/
 devsrc/
 dist/
+docs/doctrees
+docs/html
 docs/Makefile
 docs/make.bat
 eggs/
