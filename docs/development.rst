@@ -47,7 +47,8 @@ TODO: test the above! Are getters/setters properly called?
 Getting occurrences from IEventRecurrence implementing objects
 --------------------------------------------------------------
 
-Events with recurrence support should implement the IEventRecurrence (```plone.event.interfaces.IEventRecurrence```) interface.
+Events with recurrence support should implement the IEventRecurrence
+(```plone.event.interfaces.IEventRecurrence```) interface.
 
 An IRecurrenceSupport implementing adapter allows the calculation of all
 occurrences::
