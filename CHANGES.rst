@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Treat start/end datetime input as localized values, so that changing the 
+  timezone doesn't convert the start/end values to target zone.
+  [thet]
+
+- Fix moving start/end dates when saving an unchanged DX event (issue #62).
+  [thet]
+
 - Portlet assignment fix. Now both - calendar and event portlet - are
   installed.
   [thet]

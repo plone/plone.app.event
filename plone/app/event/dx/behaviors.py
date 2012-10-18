@@ -210,9 +210,18 @@ class EventBasic(object):
 
     @property
     def timezone(self):
-        return self.context.timezone
+        return getattr(self.context, 'timezone', None)
     @timezone.setter
     def timezone(self, value):
+        if self.timezone:
+            # The event is edited and not newly created, otherwise the timezone
+            # info wouldn't exist.
+            # In order to treat user datetime input as localized, so that the
+            # values aren't converted to the target timezone, we have to set
+            # start and end too. Then that a temporary fake zone is applied and
+            # the data_postprocessing event subscriber can do it's job.
+            self.start = self.start
+            self.end = self.end
         self.context.timezone = value
 
     # TODO: whole day - and other attributes - might not be set at this time!
@@ -260,7 +269,7 @@ def data_postprocessing(obj, event):
     # We handle date inputs as floating dates without timezones and apply
     # timezones afterwards.
 
-    def _fix_zone(dt, dt_localized, zone):
+    def _fix_zone(dt, zone):
 
         if dt.tzinfo is not None and isinstance(dt.tzinfo, FakeZone):
             # Delete the tzinfo only, if it was set by IEventBasic setter.
@@ -277,20 +286,9 @@ def data_postprocessing(obj, event):
             dt = tz.localize(dt)
 
         else:
-            # This is the case, when an existing EventBasic object was edited,
-            # but no start/end changes were made. So, the _prepare_dt_set
-            # setter wasn't called, the FakeZone not applied, obj.start/end
-            # likely in UTC and IEventBasic(obj).start/end in the correct
-            # timezone with date/time values as the user entered it.
-            # Since the timezone might have changed, we have to apply the
-            # target timezone to the dt value.
-
-            # We might prefer to treat the user input as localized datetime
-            # values and just adapt the timezone.
-            # But this isn't possible, since we do not know what timezone the
-            # event was before. So the only option is to convert the object's
-            # datetime values to the target zone and treat this behavior as an
-            # feature.
+            # In this case, no changes to start, end or the timezone were made.
+            # Just return the object's datetime (which is in UTC) localized to
+            # the target timezone.
             dt = dt.astimezone(tz)
 
         return dt
@@ -299,8 +297,8 @@ def data_postprocessing(obj, event):
     tz = pytz.timezone(behavior.timezone)
 
     # Fix zones
-    start = _fix_zone(obj.start, behavior.start, tz)
-    end = _fix_zone(obj.end, behavior.end, tz)
+    start = _fix_zone(obj.start, tz)
+    end = _fix_zone(obj.end, tz)
 
     # Adapt for whole day
     if behavior.whole_day:

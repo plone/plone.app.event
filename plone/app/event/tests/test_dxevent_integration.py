@@ -1,14 +1,16 @@
 import pytz
 import unittest2 as unittest
 import zope.interface
-from datetime import datetime, timedelta
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
+from datetime import datetime, timedelta
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 from plone.event.interfaces import IEvent, IRecurrenceSupport, IOccurrence
 from plone.event.interfaces import IEventAccessor
@@ -93,6 +95,54 @@ class TextDXIntegration(unittest.TestCase):
                 DateTime('2011/11/11 11:00:00 %s' % TZNAME))
         self.assertEquals(result[0].end,
                 DateTime('2011/11/11 12:00:00 %s' % TZNAME))
+
+
+    def test_data_postprocessing(self):
+        # Addressing bug #62
+        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
+                start=datetime(2012,10,19,0,30),
+                end=datetime(2012,10,19,1,30),
+                timezone="Europe/Vienna",
+                whole_day=False)
+        e1 = self.portal['event1']
+        e1.reindexObject()
+
+        # Prepare reference objects
+        tzname_1 = "Europe/Vienna"
+        tz_1 = pytz.timezone(tzname_1)
+        dt_1 = tz_1.localize(datetime(2012,10,19,0,30))
+        dt_1_1 = tz_1.localize(datetime(2012,10,19,0,0))
+        dt_1_2 = tz_1.localize(datetime(2012,10,19,23,59,59))
+
+        tzname_2 = "Hongkong"
+        tz_2 = pytz.timezone(tzname_2)
+        dt_2 = tz_2.localize(datetime(2012,10,19,0,30))
+        dt_2_1 = tz_2.localize(datetime(2012,10,19,0,0))
+        dt_2_2 = tz_2.localize(datetime(2012,10,19,23,59,59))
+
+        # See, if start isn't moved by timezone offset. Addressing issue #62
+        self.assertTrue(IEventBasic(e1).start == dt_1)
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(IEventBasic(e1).start == dt_1)
+
+        # After timezone changes, only the timezone should be applied, but the
+        # date and time values not converted.
+        IEventAccessor(e1).timezone = tzname_2
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(IEventBasic(e1).start == dt_2)
+
+        # Likewise with whole_day events. If values were converted, the days
+        # would drift apart.
+        IEventAccessor(e1).whole_day = True
+        IEventAccessor(e1).timezone = tzname_1
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(IEventBasic(e1).start == dt_1_1)
+        self.assertTrue(IEventBasic(e1).end == dt_1_2)
+
+        IEventAccessor(e1).timezone = tzname_2
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(IEventBasic(e1).start == dt_2_1)
+        self.assertTrue(IEventBasic(e1).end == dt_2_2)
 
 
     def test_recurrence_indexing(self):
