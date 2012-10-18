@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import os
 
 version = '1.0dev'
 
@@ -16,7 +15,7 @@ setup(name='plone.app.event',
       keywords='plone event',
       author='Plone Foundation',
       author_email='plone-developers@lists.sourceforge.net',
-      url='https://github.com/collective/plone.app.event',
+      url='https://github.com/plone/plone.app.event',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['plone','plone.app'],
