@@ -2,6 +2,7 @@
 types.
 
 """
+from datetime import tzinfo, timedelta
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
@@ -156,7 +157,7 @@ class IEventContact(form.Schema):
 
 class IEventSummary(form.Schema):
     """Event summary (body text) schema."""
- 
+
     text = RichText(
         title=_(u'label_event_announcement', default=u'Event body text'),
         description=_(u'help_event_announcement', default=u''),
@@ -171,6 +172,21 @@ alsoProvides(IEventLocation, form.IFormFieldProvider)
 alsoProvides(IEventAttendees, form.IFormFieldProvider)
 alsoProvides(IEventContact, form.IFormFieldProvider)
 alsoProvides(IEventSummary, form.IFormFieldProvider)
+
+
+class FakeZone(tzinfo):
+    """Fake timezone to be applied to EventBasic start and end dates before
+    data_postprocessing event handler sets the correct one.
+
+    """
+    def utcoffset(self, dt):
+        return timedelta(0)
+
+    def tzname(self, dt):
+        return "FAKEZONE"
+
+    def dst(self, dt):
+        return timedelta(0)
 
 
 class EventBasic(object):
@@ -219,10 +235,10 @@ class EventBasic(object):
     def _prepare_dt_set(self, dt):
         # Dates are always set in UTC, saving the actual timezone in another
         # field. But since the timezone value isn't known at time of saving the
-        # form, we have to save it with a dummy zone first and replace it with
+        # form, we have to save it with a fake zone first and replace it with
         # the target zone afterwards. So, it's not timezone naive and can be
         # compared to timezone aware Dates.
-        return dt.replace(tzinfo=utctz()) # return with dummy zone
+        return dt.replace(tzinfo=FakeZone()) # return with fake zone
 
 
 class EventRecurrence(object):
@@ -243,24 +259,59 @@ class EventRecurrence(object):
 def data_postprocessing(obj, event):
     # We handle date inputs as floating dates without timezones and apply
     # timezones afterwards.
-    start = tzdel(obj.start)
-    end = tzdel(obj.end)
 
-    # set the timezone
-    tz = pytz.timezone(obj.timezone)
-    start = tz.localize(start)
-    end = tz.localize(end)
+    def _fix_zone(dt, dt_localized, zone):
 
-    # adapt for whole day
-    if IEventBasic(obj).whole_day:
+        if dt.tzinfo is not None and isinstance(dt.tzinfo, FakeZone):
+            # Delete the tzinfo only, if it was set by IEventBasic setter.
+            # Only in this case the start value on the object itself is what
+            # was entered by the user. After running this event subscriber,
+            # it's in UTC then.
+            # If tzinfo it's not available at all, a naive datetime was set
+            # probably by invokeFactory in tests.
+            dt = tzdel(dt)
+
+        if dt.tzinfo is None:
+            # In case the tzinfo was deleted above or was not present, we can
+            # localize the dt value to the target timezone.
+            dt = tz.localize(dt)
+
+        else:
+            # This is the case, when an existing EventBasic object was edited,
+            # but no start/end changes were made. So, the _prepare_dt_set
+            # setter wasn't called, the FakeZone not applied, obj.start/end
+            # likely in UTC and IEventBasic(obj).start/end in the correct
+            # timezone with date/time values as the user entered it.
+            # Since the timezone might have changed, we have to apply the
+            # target timezone to the dt value.
+
+            # We might prefer to treat the user input as localized datetime
+            # values and just adapt the timezone.
+            # But this isn't possible, since we do not know what timezone the
+            # event was before. So the only option is to convert the object's
+            # datetime values to the target zone and treat this behavior as an
+            # feature.
+            dt = dt.astimezone(tz)
+
+        return dt
+
+    behavior = IEventBasic(obj)
+    tz = pytz.timezone(behavior.timezone)
+
+    # Fix zones
+    start = _fix_zone(obj.start, behavior.start, tz)
+    end = _fix_zone(obj.end, behavior.end, tz)
+
+    # Adapt for whole day
+    if behavior.whole_day:
         start = start.replace(hour=0,minute=0,second=0)
         end = end.replace(hour=23,minute=59,second=59)
 
-    # save back
+    # Save back
     obj.start = utc(start)
     obj.end = utc(end)
 
-    # reindex
+    # Reindex
     obj.reindexObject()
 
 
