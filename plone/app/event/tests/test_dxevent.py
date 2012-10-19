@@ -41,12 +41,29 @@ from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 TZNAME = "Europe/Vienna"
 
 
+class MockEvent(SimpleItem):
+    """ Mock event"""
+
 class TextDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_start_defaults(self):
+        data = MockEvent()
+        default_value = default_start(data)
+        today = localized_now()
+        delta = default_value - today
+        self.assertEquals(-1, delta.days)
+
+    def test_end_default(self):
+        data = MockEvent()
+        default_value = default_end(data)
+        today = localized_now()
+        delta = default_value - today
+        self.assertEquals(0, delta.days)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='plone.app.event.dx.event')
@@ -207,9 +224,6 @@ class TextDXIntegration(unittest.TestCase):
         self.assertTrue(e1.timezone == acc.timezone)
 
 
-class MockEvent(SimpleItem):
-    """ Mock event"""
-
 
 class TestDXEventRecurrence(unittest.TestCase):
 
@@ -241,20 +255,6 @@ class TestDXEventUnittest(unittest.TestCase):
 
     def setUp(self):
         set_env_timezone(TZNAME)
-
-    def test_start_defaults(self):
-        data = MockEvent()
-        default_value = default_start(data)
-        today = localized_now()
-        delta = default_value - today
-        self.assertEquals(-1, delta.days)
-
-    def test_end_default(self):
-        data = MockEvent()
-        default_value = default_end(data)
-        today = localized_now()
-        delta = default_value - today
-        self.assertEquals(0, delta.days)
 
     def test_validate_invariants_ok(self):
         data = MockEvent()
