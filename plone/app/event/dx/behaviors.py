@@ -93,15 +93,14 @@ class IEventRecurrence(form.Schema):
         description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
         required = False)
 
-# TODO: DOCUMENT! If a behavior, made out of IEventBasic and IRecurrence is
-# used then a new ParameterizedWidgetFactory has to be used and the start_field
-# parameter must be set to the name of the new behavior.
+# Please note: If a new behavior, made out of IEventBasic and IRecurrence is
+# created then a new ParameterizedWidgetFactory has to be used and the
+# start_field parameter must be set to the name of the new behavior.
 
 # Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
 IEventRecurrence.setTaggedValue('plone.autoform.widgets',
     {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
         start_field='IEventBasic.start')})
-
 
 
 class IEventLocation(form.Schema):
