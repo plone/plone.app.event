@@ -44,7 +44,7 @@ TZNAME = "Europe/Vienna"
 class MockEvent(SimpleItem):
     """ Mock event"""
 
-class TextDXIntegration(unittest.TestCase):
+class TestDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
