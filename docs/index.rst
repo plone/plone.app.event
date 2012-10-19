@@ -32,8 +32,8 @@ plone.app.event - a calendar framework for Plone
     - Recurring events based on the RFC5545 standard.
 
 
-Narrative documentation
-+++++++++++++++++++++++
+Documentation
++++++++++++++
 
 .. toctree::
     :maxdepth: 2
@@ -45,8 +45,8 @@ Narrative documentation
     contributors.rst
 
 
-Complete API and advanced usage
-+++++++++++++++++++++++++++++++
+API documentation
++++++++++++++++++
 
 .. toctree::
 
