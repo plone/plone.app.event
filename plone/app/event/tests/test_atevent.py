@@ -1,48 +1,39 @@
-import os
 import itertools
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFPlone.utils import safe_unicode
-from Products.Archetypes.interfaces.layer import ILayerContainer
-
-from Products.Archetypes import atapi
-
-from Products.ATContentTypes.tests.utils import dcEdit
-from Products.ATContentTypes.tests.utils import EmptyValidator
-from Products.ATContentTypes.tests.utils import EmailValidator
-from Products.ATContentTypes.tests.utils import URLValidator
-from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-
+import pytz
+import unittest2 as unittest
 from DateTime import DateTime
-
+from Products.ATContentTypes.tests.utils import EmailValidator
+from Products.ATContentTypes.tests.utils import EmptyValidator
+from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
+from Products.ATContentTypes.tests.utils import URLValidator
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.Archetypes import atapi
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from datetime import datetime
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
 from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.verify import verifyObject
-from zope.publisher.browser import TestRequest
-
+from zope.lifecycleevent import ObjectModifiedEvent
 from Products.ATContentTypes.interfaces import IATEvent as IATEvent_ATCT
-from plone.event.interfaces import IEvent, IEventRecurrence
-from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
-
-from plone.event.utils import pydt
-from plone.app.event.ical import EventsICal
-from plone.app.event.base import (
-    default_start_DT,
-    default_end_DT,
-    default_timezone,
-    dates_for_display
-)
 
 from plone.formwidget.datetime.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 
-import unittest2 as unittest
+from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
+from plone.app.event.base import (
+    default_start_DT,
+    default_end_DT,
+    default_timezone
+)
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import pydt
 
 
 TZNAME = "Europe/Vienna"
@@ -63,6 +54,41 @@ OBJ_DATA = {
         'john@doe.org',
         'john@example.org'),
     'text': "lorem ipsum"}
+
+
+class PAEventAccessorTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_event_accessor(self):
+        utc = pytz.utc
+        self.portal.invokeFactory('Event', 'event1',
+                start=datetime(2011,11,11,11,0, tzinfo=utc),
+                end=datetime(2011,11,11,12,0, tzinfo=utc),
+                timezone='UTC',
+                whole_day=False)
+        e1 = self.portal['event1']
+
+        # setting attributes via the accessor
+        acc = IEventAccessor(e1)
+        acc.end = datetime(2011,11,13,10,0, tzinfo=utc)
+        acc.timezone = 'Europe/Vienna'
+
+        vienna = pytz.timezone('Europe/Vienna')
+
+        # accessor should return end datetime in the event's timezone
+        self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=vienna))
+
+        # start/end dates are stored in UTC zone on the context, but converted
+        # to event's timezone via the attribute getter.
+        self.assertTrue(e1.end() ==
+                DateTime('2011/11/13 11:00:00 Europe/Vienna'))
+
+        # timezone should be the same on the event object and accessor
+        self.assertTrue(e1.timezone == acc.timezone)
 
 
 class PAEventATTest(unittest.TestCase):
