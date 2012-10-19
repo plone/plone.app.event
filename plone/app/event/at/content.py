@@ -263,8 +263,10 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             errors['endDate'] = _(u'error_end_must_be_after_start_date',
                               default=u'End date must be after start date.')
 
+    ###
+    # Start / end getter / setter
     def _dt_getter(self, field):
-        # always get the date in event's timezone
+        # Always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
         return dt.toZone(timezone)
@@ -296,11 +298,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                 )
         self.getField(fieldtoset).set(self, value, **kwargs)
 
-
-    #
-    # We MUST make sure we are storing datetime fields in UTC
-    #
-
     security.declareProtected('View', 'start')
     def start(self):
         return self._dt_getter('startDate')
@@ -317,6 +314,43 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     def setEndDate(self, value, **kwargs):
         self._dt_setter('endDate', value, **kwargs)
 
+    security.declareProtected(View, 'start_date')
+    @property
+    def start_date(self):
+        """ Return start date as Python datetime.
+
+        :returns: Start of the event.
+        :rtype: Python datetime
+
+        """
+        return pydt(self.start())
+
+    security.declareProtected(View, 'end_date')
+    @property
+    def end_date(self):
+        """ Return end date as Python datetime.
+
+        Please note, the end date marks only the end of an individual
+        occurrence and not the end of a recurrence sequence.
+
+        :returns: End of the event.
+        :rtype: Python datetime
+
+        """
+        return pydt(self.end())
+
+    security.declareProtected(View, 'duration')
+    @property
+    def duration(self):
+        """ Return duration of the event as Python timedelta.
+
+        :returns: Duration of the event.
+        :rtype: Python timedelta
+
+        """
+        return self.end_date - self.start_date
+
+
     # TODO: Why is this needed?
     #
     security.declareProtected(ModifyPortalContent, 'update')
@@ -330,22 +364,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         elif kwargs:
             info = kwargs
         ATCTContent.update(self, **info)
-
-
-    security.declareProtected(View, 'start_date')
-    @property
-    def start_date(self):
-        return pydt(self.start())
-
-    security.declareProtected(View, 'end_date')
-    @property
-    def end_date(self):
-        return pydt(self.end())
-
-    security.declareProtected(View, 'duration')
-    @property
-    def duration(self):
-        return self.end_date - self.start_date
 
     def __cmp__(self, other):
         """Compare method
