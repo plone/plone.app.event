@@ -4,8 +4,8 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Treat start/end datetime input as localized values, so that changing the 
-  timezone doesn't convert the start/end values to target zone.
+- Treat start/end datetime input always as localized values. Changing the
+  timezone now doesn't convert the start/end values to the new zone (AT, DX).
   [thet]
 
 - Fix moving start/end dates when saving an unchanged DX event (issue #62).

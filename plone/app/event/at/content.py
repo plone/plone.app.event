@@ -73,7 +73,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.StringField('timezone',
-        storage=atapi.AnnotationStorage(),
         required=True,
         searchable=False,
         languageIndependent=True,
@@ -220,9 +219,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     # not need the convinient ATFieldProperties and avoid AnnotationStorage for
     # those attributes.
     recurrence = atapi.ATFieldProperty('recurrence')
-    timezone = atapi.ATFieldProperty('timezone')
     whole_day = atapi.ATFieldProperty('wholeDay')
-
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
@@ -264,7 +261,21 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                               default=u'End date must be after start date.')
 
     ###
-    # Start / end getter / setter
+    # Timezone / start / end getter / setter
+    def setTimezone(self, value, **kwargs):
+        tz = self.getField('timezone').get(self)
+        if tz:
+            # The event is edited and not newly created, otherwise the timezone
+            # info wouldn't exist.
+            # In order to avoid converting the datetime input to the new target
+            # zone after changing the zone but to treat user datetime input as
+            # localized, we have to store the old timezone. This way we can
+            # restore the datetime input from the context's UTC value before
+            # applying the new zone in the data_postprocessing event
+            # subscriber.
+            self.previous_timezone = tz
+        self.getField('timezone').set(self, value, **kwargs)
+
     def _dt_getter(self, field):
         # Always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
@@ -286,7 +297,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         # up, to bypass precision errors.
         micro = int(round(value.second()%1 * 1000000))
 
-        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02d%sZ' % (
+        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02d%s' % (
                     value.year(),
                     value.month(),
                     value.day(),
@@ -397,31 +408,13 @@ registerATCT(ATEvent, packageName)
 
 ## Event handlers
 
-def whole_day_handler(obj, event):
-    """ For whole day events only, set start time to 0:00:00 and end time to
-        23:59:59
-    """
-
-    if not IEvent.providedBy(obj):
-        # don't run me, if i'm not installed
-        return
-
-    if not obj.whole_day:
-        return
-
-    startDate = obj.startDate.toZone(obj.timezone)
-    startDate = startDate.Date() + ' 0:00:00 ' + startDate.timezone()
-    endDate = obj.endDate.toZone(obj.timezone)
-    endDate = endDate.Date() + ' 23:59:59 ' + endDate.timezone()
-    obj.setStartDate(DateTime(startDate)) # TODO: setting needed? aren't above operations operating on the instances itself?
-    obj.setEndDate(DateTime(endDate))
-    obj.reindexObject()  # reindex obj to store upd values in catalog
-
-
-def timezone_handler(obj, event):
-    """ When setting the startDate and endDate, the value of the timezone field
+def data_postprocessing(obj, event):
+    """When setting the startDate and endDate, the value of the timezone field
     isn't known, so we have to convert those timezone-naive dates into
     timezone-aware ones afterwards.
+
+    For whole day events, set start time to 0:00:00 and end time toZone
+    23:59:59.
 
     """
 
@@ -432,8 +425,25 @@ def timezone_handler(obj, event):
     timezone = obj.getField('timezone').get(obj)
     start_field = obj.getField('startDate')
     end_field = obj.getField('endDate')
-    start = start_field.get(obj)
-    end = end_field.get(obj)
+
+    # The previous_timezone is set, when the timezone has changed to another
+    # value. In this case we need to convert the UTC dt values to the
+    # previous_timezone, so that we get the datetime values, as the user
+    # entered them. However, this value might be always set, even when creating
+    # an event, since ObjectModifiedEvent is called several times when editing.
+    prev_tz = getattr(obj, 'previous_timezone', None)
+    if prev_tz: delattr(obj, 'previous_timezone')
+
+    def _fix_zone(dt, tz):
+        if not dt.timezoneNaive():
+            # The object is edited and the value alreadty stored in UTC on the
+            # object. In this case we want the value converted to the given
+            # timezone, in which the user entered the data.
+            dt = dt.toZone(tz)
+        return dt
+
+    start = _fix_zone(start_field.get(obj), prev_tz and prev_tz or timezone)
+    end = _fix_zone(end_field.get(obj), prev_tz and prev_tz or timezone)
 
     def make_DT(value, timezone):
         return DateTime(
@@ -445,10 +455,15 @@ def timezone_handler(obj, event):
             value.second(),
             timezone)
 
-    start = make_DT(start, timezone).toZone('UTC')
-    end = make_DT(end, timezone).toZone('UTC')
-    start_field.set(obj, start)
-    end_field.set(obj, end)
+    start = make_DT(start, timezone)
+    end = make_DT(end, timezone)
+
+    if obj.whole_day:
+        start = DateTime('%s 0:00:00 %s' % (start.Date(), timezone))
+        end = DateTime('%s 23:59:59 %s' % (end.Date(), timezone))
+
+    start_field.set(obj, start.toZone('UTC'))
+    end_field.set(obj, end.toZone('UTC'))
     obj.reindexObject()
 
 
@@ -524,10 +539,10 @@ class EventAccessor(object):
 
     @property
     def timezone(self):
-        return self.context.timezone
+        return self.context.getTimezone()
     @timezone.setter
     def timezone(self, value):
-        self.context.timezone = value
+        self.context.setTimezone(value)
 
     @property
     def recurrence(self):

@@ -88,7 +88,7 @@ class PAEventAccessorTest(unittest.TestCase):
                 DateTime('2011/11/13 11:00:00 Europe/Vienna'))
 
         # timezone should be the same on the event object and accessor
-        self.assertTrue(e1.timezone == acc.timezone)
+        self.assertTrue(e1.getTimezone() == acc.timezone)
 
 
 class PAEventATTest(unittest.TestCase):
@@ -185,6 +185,59 @@ class PAEventATTest(unittest.TestCase):
         event = self.obj
         self._edit_atevent(event)
         self.assertEqual(event.get_size(), len(OBJ_DATA['text']))
+
+    def test_data_postprocessing(self):
+        # TODO: since we use an IEventAccessor here, this is a possible
+        # canditate for merging with
+        # the test_dxevent.TestDXIntegration.test_data_postprocessing test.
+
+        # Addressing bug #62
+        self.portal.invokeFactory('Event', 'ate1',
+                startDate=DateTime(2012,10,19,0,30),
+                endDate=DateTime(2012,10,19,1,30),
+                timezone="Europe/Vienna",
+                whole_day=False)
+        e1 = self.portal['ate1']
+        e1.reindexObject()
+
+        acc = IEventAccessor(e1)
+
+        # Prepare reference objects
+        tzname_1 = "Europe/Vienna"
+        tz_1 = pytz.timezone(tzname_1)
+        dt_1 = tz_1.localize(datetime(2012,10,19,0,30))
+        dt_1_1 = tz_1.localize(datetime(2012,10,19,0,0))
+        dt_1_2 = tz_1.localize(datetime(2012,10,19,23,59,59))
+
+        tzname_2 = "Hongkong"
+        tz_2 = pytz.timezone(tzname_2)
+        dt_2 = tz_2.localize(datetime(2012,10,19,0,30))
+        dt_2_1 = tz_2.localize(datetime(2012,10,19,0,0))
+        dt_2_2 = tz_2.localize(datetime(2012,10,19,23,59,59))
+
+        # See, if start isn't moved by timezone offset.
+        self.assertTrue(acc.start == dt_1)
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(acc.start == dt_1)
+
+        # After timezone changes, only the timezone should be applied, but the
+        # date and time values not converted.
+        acc.timezone = tzname_2
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(acc.start == dt_2)
+
+        # Likewise with whole_day events. If values were converted, the days
+        # would drift apart.
+        acc.whole_day = True
+        acc.timezone = tzname_1
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(acc.start == dt_1_1)
+        self.assertTrue(acc.end == dt_1_2)
+
+        acc.timezone = tzname_2
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(acc.start == dt_2_1)
+        self.assertTrue(acc.end == dt_2_2)
 
 
 class PAEventATFieldTest(unittest.TestCase):
@@ -671,9 +724,9 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
