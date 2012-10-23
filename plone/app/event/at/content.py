@@ -87,7 +87,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.StringField('recurrence',
-        storage=atapi.AnnotationStorage(),
         languageIndependent=True,
         write_permission=ModifyPortalContent,
         validators=('isRecurrence',),
@@ -218,7 +217,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     # if we access the object via the generic_event_accessor always, we might
     # not need the convinient ATFieldProperties and avoid AnnotationStorage for
     # those attributes.
-    recurrence = atapi.ATFieldProperty('recurrence')
     whole_day = atapi.ATFieldProperty('wholeDay')
 
     security.declareProtected(View, 'post_validate')
@@ -546,10 +544,10 @@ class EventAccessor(object):
 
     @property
     def recurrence(self):
-        return self.context.recurrence
+        return self.context.getRecurrence()
     @recurrence.setter
     def recurrence(self, value):
-        self.context.recurrence = value
+        self.context.setRecurrence(value)
 
     @property
     def location(self):
