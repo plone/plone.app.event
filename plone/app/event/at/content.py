@@ -211,14 +211,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
-    # TODO: rethink this
-    # if we want recurrence and timezone be ATFieldProperties, then we need
-    # them to be stored in AnnotationStorage to avoid namespace clashes.
-    # if we access the object via the generic_event_accessor always, we might
-    # not need the convinient ATFieldProperties and avoid AnnotationStorage for
-    # those attributes.
-    whole_day = atapi.ATFieldProperty('wholeDay')
-
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
         """Validates start and end date
@@ -456,7 +448,7 @@ def data_postprocessing(obj, event):
     start = make_DT(start, timezone)
     end = make_DT(end, timezone)
 
-    if obj.whole_day:
+    if obj.getWholeDay():
         start = DateTime('%s 0:00:00 %s' % (start.Date(), timezone))
         end = DateTime('%s 23:59:59 %s' % (end.Date(), timezone))
 
@@ -530,10 +522,10 @@ class EventAccessor(object):
 
     @property
     def whole_day(self):
-        return self.context.whole_day
+        return self.context.getWholeDay()
     @whole_day.setter
     def whole_day(self, value):
-        self.context.whole_day = value
+        self.context.setWholeDay(value)
 
     @property
     def timezone(self):

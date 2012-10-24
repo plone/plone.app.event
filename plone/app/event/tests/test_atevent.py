@@ -69,7 +69,7 @@ class PAEventAccessorTest(unittest.TestCase):
                 start=datetime(2011,11,11,11,0, tzinfo=utc),
                 end=datetime(2011,11,11,12,0, tzinfo=utc),
                 timezone='UTC',
-                whole_day=False)
+                wholeDay=False)
         e1 = self.portal['event1']
 
         # setting attributes via the accessor
@@ -196,7 +196,7 @@ class PAEventATTest(unittest.TestCase):
                 startDate=DateTime(2012,10,19,0,30),
                 endDate=DateTime(2012,10,19,1,30),
                 timezone="Europe/Vienna",
-                whole_day=False)
+                wholeDay=False)
         e1 = self.portal['ate1']
         e1.reindexObject()
 
@@ -226,7 +226,7 @@ class PAEventATTest(unittest.TestCase):
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(acc.start == dt_2)
 
-        # Likewise with whole_day events. If values were converted, the days
+        # Likewise with wholeDay events. If values were converted, the days
         # would drift apart.
         acc.whole_day = True
         acc.timezone = tzname_1
@@ -554,9 +554,9 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
 
         # flatten nested tuples
@@ -785,7 +785,7 @@ class PAEventATFieldTest(unittest.TestCase):
                 timezone=TZNAME,
                 wholeDay=True)
         event = self.portal[event_id]
-        self.assertTrue(event.whole_day)
+        self.assertTrue(event.getWholeDay())
         self.assertEqual(event.start().Time(), '00:00:00')
         self.assertEqual(event.end().Time(), '23:59:59')
 
@@ -796,7 +796,7 @@ class PAEventATFieldTest(unittest.TestCase):
                 endDate='2000/10/13 18:00:00',
                 timezone=TZNAME)
         event = self.portal[event_id]
-        self.assertFalse(event.whole_day)
+        self.assertFalse(event.getWholeDay())
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
 

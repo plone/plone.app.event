@@ -125,8 +125,7 @@ class TestOccurrences(unittest.TestCase):
             end=now + datetime.timedelta(hours=1),
             location=u'Vienna',
             recurrence='RRULE:FREQ=DAILY;COUNT=4',
-            timezone=TZNAME,
-            whole_day=False)
+            timezone=TZNAME)
 
         self.portal.invokeFactory(
             'Event',
@@ -136,8 +135,7 @@ class TestOccurrences(unittest.TestCase):
             end=yesterday + datetime.timedelta(hours=1),
             location=u'Halle',
             recurrence='RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5',
-            timezone=TZNAME,
-            whole_day=False)
+            timezone=TZNAME)
 
         self.now = now
         self.yesterday = yesterday
@@ -181,8 +179,7 @@ class TestOccurrences(unittest.TestCase):
             'many',
             title=u'Interval Event',
             location=u'Brisbane',
-            recurrence='RRULE:FREQ=DAILY;COUNT=1000',
-            whole_day=False)
+            recurrence='RRULE:FREQ=DAILY;COUNT=1000')
 
         view = zope.component.getMultiAdapter(
             (self.portal['interval'], self.request), name='event_view')

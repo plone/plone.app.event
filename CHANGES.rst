@@ -4,6 +4,15 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Align ATEvent more to Archetypes standards and avoid AnnotationStorage and
+  ATFieldProperty. We needed to remove the ATFieldProperty for the timezone
+  field for a custom setter. By doing so, the other two ATFieldProperties were
+  changed too. This way, the ATEvent API gets more consistent. For a convenient
+  access to ATEvent as well as dextterity based event types, use the
+  IEventAccessor from plone.event.interfaces. Upgrade step from pre 1.0b2 based
+  ATEvent types is provided. 
+  [thet]
+
 - Treat start/end datetime input always as localized values. Changing the
   timezone now doesn't convert the start/end values to the new zone (AT, DX).
   [thet]

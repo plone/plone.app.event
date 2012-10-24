@@ -272,8 +272,7 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
             startDate=past,
             endDate=past + datetime.timedelta(hours=1),
             location=u'Vienna',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -283,8 +282,7 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
             endDate=now + datetime.timedelta(hours=1),
             location=u'Vienna',
             recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -293,8 +291,7 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
             startDate=future,
             endDate=future + datetime.timedelta(hours=1),
             location=u'Graz',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -303,8 +300,7 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
             startDate=past,
             endDate=future,
             location=u'Schaftal',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.now = now
         self.past = past
@@ -401,8 +397,7 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
             startDate=past,
             endDate=past+0.1, # Zope DT
             location=u'Vienna',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -412,8 +407,7 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
             endDate=now+0.1,
             location=u'Vienna',
             recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -422,8 +416,7 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
             startDate=future,
             endDate=future+0.1,
             location=u'Graz',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.portal.invokeFactory(
             'Event',
@@ -432,8 +425,7 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
             startDate=past,
             endDate=future,
             location=u'Schaftal',
-            timezone=default_tz,
-            whole_day=False)
+            timezone=default_tz)
 
         self.now = now
         self.past = past
