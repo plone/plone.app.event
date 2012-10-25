@@ -41,11 +41,17 @@ def upgrade_step_1(context):
     return walker.getOutput()
 
 def upgrade_step_2(context):
-    """ Upgrade timezone and recurrence from AnnotationStorage to new storage
+    """Upgrade timezone and recurrence from AnnotationStorage to new storage
     (AttributeStorage).
 
     Using Products.contentmigration doesn't work here, since on migration time,
     the fields' storage is already an AttributeStorage.
+
+    !!! ATTENTION !!!
+    This upgrade steps migrates fields if there is a AnnotationStorage entry
+    for it, even if there is already a value in AttributeStorage. We have to
+    do so, because there is a default value for the timezone, which might not
+    be the value previously set with AnnotationStorage.
 
     """
     migrate_fields = ['timezone', 'recurrence']
@@ -66,11 +72,13 @@ def upgrade_step_2(context):
                 del ann[key] # Delete the annotation entry
 
                 getter = getattr(obj, 'get%s' % field.title()) # Get the getter
-                if getter():
-                    # Already set. Skipping setting
-                    continue
 
                 setter = getattr(obj, 'set%s' % field.title()) # Get the setter
                 setter(val) # Set the val on new storage
+
+                logger.info("""'Field migration for obj %s, field %s from
+                AnnotationStorage to AttributeStorage done. Previous value: %s,
+                new value from AnnotationStorage: %s."""
+                % (obj, field, getter(), val))
 
         # done :)
