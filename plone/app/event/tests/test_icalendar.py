@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+import unittest2 as unittest
+from datetime import datetime
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
 from zope.component import getMultiAdapter
+
+from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
+
 
 def makeResponse(request):
     """ create a fake response and set up logging of output """
@@ -13,12 +20,6 @@ def makeResponse(request):
     request.RESPONSE = Response()
     return headers, output, request
 
-
-import unittest2 as unittest
-from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
-from datetime import datetime
 
 class ICalendarExportTest(unittest.TestCase):
     layer = PAEventATDX_INTEGRATION_TESTING

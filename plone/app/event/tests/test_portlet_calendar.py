@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
+import unittest2 as unittest
+from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
-
+from Products.GenericSetup.utils import _getDottedName
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.portlets.interfaces import IPortletAssignment
+from plone.portlets.interfaces import IPortletDataProvider
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import IPortletRenderer
+from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility, getMultiAdapter
 from zope.site.hooks import setHooks, setSite
 
-from Products.GenericSetup.utils import _getDottedName
-
-from plone.portlets.interfaces import IPortletType
-from plone.portlets.interfaces import IPortletManager
-from plone.portlets.interfaces import IPortletAssignment
-from plone.portlets.interfaces import IPortletDataProvider
-from plone.portlets.interfaces import IPortletRenderer
-
-from DateTime import DateTime
 from plone.app.event.portlets import portlet_calendar
-
-import unittest2 as unittest
-from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 
 
 class PortletTest(unittest.TestCase):

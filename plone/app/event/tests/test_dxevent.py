@@ -4,7 +4,6 @@ import zope.interface
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
-from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.interfaces import IDexterityFTI
@@ -35,6 +34,7 @@ from plone.app.event.dx.interfaces import (
     IDXEventAttendees,
     IDXEventContact
 )
+from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 
 

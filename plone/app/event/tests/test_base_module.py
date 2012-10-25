@@ -3,6 +3,12 @@ import pytz
 import unittest2 as unittest
 import zope.component
 from DateTime import DateTime
+from plone.app.layout.navigation.interfaces import INavigationRoot
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.registry.interfaces import IRegistry
+from zope.interface import directlyProvides
+
 from plone.app.event.base import (
     DEFAULT_END_DELTA,
     DT,
@@ -20,11 +26,6 @@ from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.layout.navigation.interfaces import INavigationRoot
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
-from zope.interface import directlyProvides
 
 
 class TestBaseModule(unittest.TestCase):

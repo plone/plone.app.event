@@ -2,6 +2,7 @@ import itertools
 import pytz
 import unittest2 as unittest
 from DateTime import DateTime
+from Products.ATContentTypes.interfaces import IATEvent as IATEvent_ATCT
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
@@ -17,7 +18,6 @@ from plone.app.testing import setRoles
 from zope.event import notify
 from zope.interface.verify import verifyObject
 from zope.lifecycleevent import ObjectModifiedEvent
-from Products.ATContentTypes.interfaces import IATEvent as IATEvent_ATCT
 
 from plone.formwidget.datetime.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget

@@ -1,9 +1,9 @@
-import unittest2 as unittest
 import doctest
 import os.path
+import unittest2 as unittest
 from interlude import interact
-from plone.testing import layered
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.testing import layered
 
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
