@@ -1,9 +1,10 @@
 from Products.ATContentTypes.interfaces.event import IATEvent
+from Products.Archetypes.annotations import getAnnotation
+from Products.CMFCore.utils import getToolByName
 from Products.contentmigration.archetypes import ATItemMigrator
 from Products.contentmigration.migrator import InlineFieldActionMigrator
 from Products.contentmigration.walker import CustomQueryWalker
-from Products.CMFCore.utils import getToolByName
-from plone.app.event.at import atapi
+from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
 from transaction import savepoint
 import logging
 
@@ -40,21 +41,36 @@ def upgrade_step_1(context):
     return walker.getOutput()
 
 def upgrade_step_2(context):
-    portal = getToolByName(context, 'portal_url').getPortalObject()
-    PAEATInlineMigrator.fieldActions = (
-        {'fieldName': 'timezone',
-         'storage':    atapi.AnnotationStorage(),
-         'newStorage': atapi.AttributeStorage()
-        },
-        {'fieldName': 'recurrence',
-         'storage':    atapi.AnnotationStorage(),
-         'newStorage': atapi.AttributeStorage()
-        },
-    )
-    from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
-    walker = CustomQueryWalker(
-        portal, PAEATInlineMigrator,
-        query=dict(object_provides=IATEvent_PAE.__identifier__))
-    savepoint(optimistic=True)
-    walker.go()
-    return walker.getOutput()
+    """ Upgrade timezone and recurrence from AnnotationStorage to new storage
+    (AttributeStorage).
+
+    Using Products.contentmigration doesn't work here, since on migration time,
+    the fields' storage is already an AttributeStorage.
+
+    """
+    migrate_fields = ['timezone', 'recurrence']
+
+    query = {}
+    query['object_provides'] = IATEvent_PAE.__identifier__
+    cat = getToolByName(context, 'portal_catalog')
+    result = cat(**query)
+
+    for brain in result:
+        obj = brain.getObject()
+        ann = getAnnotation(obj)
+
+        for field in migrate_fields:
+            key = 'Archetypes.storage.AnnotationStorage-%s' % field
+            if key in ann:
+                val = key in ann and ann[key] or None
+                del ann[key] # Delete the annotation entry
+
+                getter = getattr(obj, 'get%s' % field.title()) # Get the getter
+                if getter():
+                    # Already set. Skipping setting
+                    continue
+
+                setter = getattr(obj, 'set%s' % field.title()) # Get the setter
+                setter(val) # Set the val on new storage
+
+        # done :)
