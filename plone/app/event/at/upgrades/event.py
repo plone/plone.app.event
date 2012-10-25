@@ -72,6 +72,7 @@ def upgrade_step_2(context):
                 del ann[key] # Delete the annotation entry
 
                 getter = getattr(obj, 'get%s' % field.title()) # Get the getter
+                prev_val = getter()
 
                 setter = getattr(obj, 'set%s' % field.title()) # Get the setter
                 setter(val) # Set the val on new storage
@@ -79,6 +80,6 @@ def upgrade_step_2(context):
                 logger.info("""'Field migration for obj %s, field %s from
                 AnnotationStorage to AttributeStorage done. Previous value: %s,
                 new value from AnnotationStorage: %s."""
-                % (obj, field, getter(), val))
+                % (obj, field, prev_val, val))
 
         # done :)
