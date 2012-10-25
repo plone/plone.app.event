@@ -138,6 +138,8 @@ class RendererTest(unittest.TestCase):
         # test link from base.CalendarLinkbase.date_events_url
         self.assertTrue('@@search?advanced_search=True&amp;start.query' in rd)
 
+        self.portal.manage_delObjects(['e1', 'eventfolder'])
+
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
@@ -157,6 +159,8 @@ class RendererTest(unittest.TestCase):
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")
+
+        self.portal.manage_delObjects(['e1'])
 
     def test_event_nonascii(self):
         # test issue with non-ascii event title and location

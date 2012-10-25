@@ -90,6 +90,7 @@ class PAEventAccessorTest(unittest.TestCase):
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.getTimezone() == acc.timezone)
 
+        self.portal.manage_delObjects(['event1'])
 
 class PAEventATTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
@@ -145,6 +146,13 @@ class PAEventATTest(unittest.TestCase):
         self._edit_atevent(new)
         self.assertEqual(new.start_date, pydt(new.start()))
         self.assertEqual(new.end_date, pydt(new.end()))
+
+        # TODO: sometimes the following tests fails, because of comparison of
+        # microseconds. Is it an rounding error?
+        # AssertionError: datetime.datetime(2012, 10, 25, 14, 2, 11, 855640,
+        # tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>) !=
+        # datetime.datetime(2012, 10, 25, 14, 2, 11, 85564, tzinfo=<DstTzInfo
+        # 'Europe/Vienna' CEST+2:00:00 DST>)
         self.assertEqual(new.start_date, pydt(OBJ_DATA['startDate']))
         self.assertEqual(new.end_date, pydt(OBJ_DATA['endDate']))
         self.assertEqual(new.duration, new.end_date - new.start_date)
@@ -180,6 +188,8 @@ class PAEventATTest(unittest.TestCase):
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='evenz')
         self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
+
+        self.portal.manage_delObjects(['event2'])
 
     def test_get_size(self):
         event = self.obj
@@ -238,6 +248,8 @@ class PAEventATTest(unittest.TestCase):
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(acc.start == dt_2_1)
         self.assertTrue(acc.end == dt_2_2)
+
+        self.portal.manage_delObjects(['ate1'])
 
 
 class PAEventATFieldTest(unittest.TestCase):
@@ -789,6 +801,8 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertEqual(event.start().Time(), '00:00:00')
         self.assertEqual(event.end().Time(), '23:59:59')
 
+        self.portal.manage_delObjects(['event'])
+
     def test_wholeday_handler_notwholeday(self):
         event_id = self.portal.invokeFactory('Event',
                 id="event",
@@ -799,6 +813,8 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertFalse(event.getWholeDay())
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')
+
+        self.portal.manage_delObjects(['event'])
 
     def test_timezone_handler(self):
         event_id = self.portal.invokeFactory('Event',
@@ -813,3 +829,5 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertEqual(event.end().timezone(), TZNAME)
         self.assertEqual(event.start_date.tzinfo.zone, TZNAME)
         self.assertEqual(event.end_date.tzinfo.zone, TZNAME)
+
+        self.portal.manage_delObjects(['event'])

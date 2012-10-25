@@ -14,7 +14,6 @@ from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.event.portlets import portlet_events
 
 import unittest2 as unittest
-from plone.app.event.base import default_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING

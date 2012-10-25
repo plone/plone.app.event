@@ -92,6 +92,8 @@ class TestDXIntegration(unittest.TestCase):
         self.failUnless(IDXEventAttendees.providedBy(e1))
         self.failUnless(IDXEventContact.providedBy(e1))
 
+        self.portal.manage_delObjects(['event1'])
+
     def test_view(self):
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
                 start=datetime(2011,11,11,11,00),
@@ -103,6 +105,7 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(view.formated_date(e1) is not None)
         self.assertTrue(view.next_occurrences is not None)
 
+        self.portal.manage_delObjects(['event1'])
 
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
@@ -121,6 +124,7 @@ class TestDXIntegration(unittest.TestCase):
         self.assertEquals(result[0].end,
                 DateTime('2011/11/11 12:00:00 %s' % TZNAME))
 
+        self.portal.manage_delObjects(['event1'])
 
     def test_data_postprocessing(self):
         # Addressing bug #62
@@ -169,6 +173,7 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventBasic(e1).start == dt_2_1)
         self.assertTrue(IEventBasic(e1).end == dt_2_2)
 
+        self.portal.manage_delObjects(['event1'])
 
     def test_recurrence_indexing(self):
         utc = pytz.utc
@@ -192,6 +197,7 @@ class TestDXIntegration(unittest.TestCase):
                 range_start=datetime(2011,11,12,11,0, tzinfo=utc))
         self.assertTrue(len(result)==1)
 
+        self.portal.manage_delObjects(['event1'])
 
     def test_event_accessor(self):
         utc = pytz.utc
@@ -223,6 +229,7 @@ class TestDXIntegration(unittest.TestCase):
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
 
+        self.portal.manage_delObjects(['event1'])
 
 
 class TestDXEventRecurrence(unittest.TestCase):
