@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix ical export of RDATE and EXDATE recurrence definitions. Fixes #63.
+  [thet]
+
 - Align ATEvent more to Archetypes standards and avoid AnnotationStorage and
   ATFieldProperty. We needed to remove the ATFieldProperty for the timezone
   field for a custom setter. By doing so, the other two ATFieldProperties were

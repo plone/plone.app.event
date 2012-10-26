@@ -8,6 +8,11 @@ from zope.component import getMultiAdapter
 from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
 
 
+# TODO:
+# * test all event properties
+# * enforce correct order: EXDATE and RDATE directly after RRULE
+# * localize dates
+
 def makeResponse(request):
     """ create a fake response and set up logging of output """
     headers = {}
@@ -43,12 +48,14 @@ class ICalendarExportTest(unittest.TestCase):
         portal.events.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
+            recurrence=u'RRULE:FREQ=DAILY;COUNT=5\r\nEXDATE:20081011T000000,20081012T000000\r\nRDATE:20081007T000000',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')
 
         portal.events.invokeFactory('plone.app.event.dx.event',
             id='ploneconf2012', title='Plone Conf 2012',
+            recurrence=u'RRULE:FREQ=DAILY;COUNT=5\r\nEXDATE:20121013T000000,20121014T000000\r\nRDATE:20121009T000000',
             start=datetime(2012,10,10,8,0),
-            end=datetime(2012,10,12,18,0),
+            end=datetime(2012,10,10,18,0),
             timezone="Europe/Amsterdam",
             location='Arnhem')
 
@@ -89,8 +96,11 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2012',
             'DTSTART;VALUE=DATE-TIME:20121010T060000Z',
-            'DTEND;VALUE=DATE-TIME:20121012T160000Z',
+            'DTEND;VALUE=DATE-TIME:20121010T160000Z',
             'UID:',
+            'RDATE:20121009T000000',
+            'EXDATE:20121013T000000,20121014T000000',
+            'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
             'END:VCALENDAR')
 
@@ -145,6 +155,15 @@ class ICalendarExportTest(unittest.TestCase):
             'END:VEVENT',
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2008',
+            'RDATE:20081007T000000',
+            'EXDATE:20081011T000000,20081012T000000',
+            'RRULE:FREQ=DAILY;COUNT=5',
+            'END:VEVENT',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2012',
+            'RDATE:20121009T000000',
+            'EXDATE:20121013T000000,20121014T000000',
+            'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
             'END:VCALENDAR')
 
@@ -162,6 +181,15 @@ class ICalendarExportTest(unittest.TestCase):
             'END:VEVENT',
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2008',
+            'RDATE:20081007T000000',
+            'EXDATE:20081011T000000,20081012T000000',
+            'RRULE:FREQ=DAILY;COUNT=5',
+            'END:VEVENT',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2012',
+            'RDATE:20121009T000000',
+            'EXDATE:20121013T000000,20121014T000000',
+            'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
             'END:VCALENDAR')
 

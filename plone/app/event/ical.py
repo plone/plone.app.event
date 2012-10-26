@@ -128,11 +128,14 @@ class ICalendarEventComponent(object):
             ical.add('dtend', utc(pydt(event.end)))
 
         if event.recurrence:
-            if event.recurrence.startswith('RRULE:'):
-                recurrence = event.recurrence[6:]
-            else:
-                recurrence = event.recurrence
-            ical.add('rrule', icalendar.prop.vRecur.from_ical(recurrence))
+            for recdef in event.recurrence.split():
+                prop, val = recdef.split(':')
+                if prop == 'RRULE':
+                    ical.add(prop, icalendar.prop.vRecur.from_ical(val))
+                elif prop in ('EXDATE', 'RDATE'):
+                    factory = icalendar.prop.vDDDLists
+                    ical.add(prop, factory(factory.from_ical(val)), encode=0)
+
 
         if event.location: ical.add('location', event.location)
 
