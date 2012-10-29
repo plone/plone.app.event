@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b2 (2012-10-29)
+------------------
 
 - Fix ical export of RDATE and EXDATE recurrence definitions. Fixes #63.
   [thet]
