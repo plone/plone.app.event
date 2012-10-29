@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Nothing changed yet.
+
+
 1.0b2 (2012-10-29)
 ------------------
 
@@ -13,7 +19,7 @@ Changelog
   changed too. This way, the ATEvent API gets more consistent. For a convenient
   access to ATEvent as well as dextterity based event types, use the
   IEventAccessor from plone.event.interfaces. Upgrade step from pre 1.0b2 based
-  ATEvent types is provided. 
+  ATEvent types is provided.
   [thet]
 
 - Treat start/end datetime input always as localized values. Changing the
