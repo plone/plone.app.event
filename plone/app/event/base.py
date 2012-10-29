@@ -571,7 +571,7 @@ def dates_for_display(occurrence):
 
 
 # Workaround for buggy strftime with timezone handling in DateTime.
-# See: https://github.com/collective/plone.app.event/pull/47
+# See: https://github.com/plone/plone.app.event/pull/47
 # TODO: should land in CMFPlone or fixed in DateTime.
 _strftime = lambda v, fmt: pydt(v).strftime(fmt)
 

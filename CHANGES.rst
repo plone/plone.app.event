@@ -143,7 +143,7 @@ Changelog
   [rnix]
 
 - Workaround for buggy strftime with timezone handling in DateTime.
-  See: https://github.com/collective/plone.app.event/pull/47
+  See: https://github.com/plone/plone.app.event/pull/47
   [seanupton]
 
 - Rebind portlet_calendar tooltips after ajax calendar reloads.

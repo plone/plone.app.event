@@ -60,7 +60,7 @@ See: http://dev.plone.org/plone/ticket/10886
 Contributing
 ------------
 
-- Report issues: https://github.com/collective/plone.app.event
+- Report issues: https://github.com/plone/plone.app.event
 - Write code and tests.
 
 
