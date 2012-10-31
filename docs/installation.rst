@@ -40,3 +40,34 @@ the calendar and event portlets...
   at the moment. The number of possible recurrences of an event is limited to
   1000 at the moment, so indexing - and other operations - doesn't take too
   long (see: plone.event.recurrence).
+
+
+Upgrading from previous versions of the plone.app.event ATEvent type
+--------------------------------------------------------------------
+
+If you have used plone.app.event before, it's good to know following things:
+
+- The ATEvent type now implements plone.app.event.at.interfaces.IATEvent, which
+  itself derives from Products.ATContentTypes.interfaces.IATEvent. In order to
+  get the object_provides catalog metadata updated, please clear and rebuild
+  your catalog.
+
+- The ATEvent fields "recurrence", "timezone" and "wholeDay" now do not have
+  ATFieldProperty definitions anymore and aren't stored in Annotations but
+  directly on the context. The change was neccasary for the timezone field,
+  since we had to implement a custom setter. Besides, it avoids confusion, that
+  wholeDay has to be set as wholeDay for invokeFactory but as whole_day on the
+  context itself.  There is an upgrade step, addressing this change ("Upgrade
+  to plone.app.event beta2", from metadata version 2 to 3).
+
+
+Upgrading from Products.ATContentType to plone.app.event
+--------------------------------------------------------
+
+If you want to upgrade Products.ATContentTypes based ATEvents to
+plone.app.event ones, there is an upgrade step for that: "Upgrades old AT
+events to plone.app.events" (Metadata version 1 to 2).
+
+Please note, that this feature is still experimental. Please report any issues
+with upgrading from old ATEvent types here:
+https://github.com/plone/plone.app.event/issues
