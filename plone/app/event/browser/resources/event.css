@@ -67,6 +67,12 @@
     padding: 2px;
 }
 
+/* grey out prev/next month incl. links and background */
+.ploneCalendar td.cal_prev_month,
+.ploneCalendar td.cal_next_month {
+    opacity:0.4;
+}
+
 .ploneCalendar .weekdays th {
     background-color: #eee;
     text-align: center;

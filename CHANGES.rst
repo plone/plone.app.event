@@ -4,7 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Nothing changed yet.
+- In portlet_calendar, grey-out previous and next month dates by making them
+  transparent.
+  [thet]
 
 
 1.0b2 (2012-10-29)
