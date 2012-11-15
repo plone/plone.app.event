@@ -1,5 +1,4 @@
 from zope.publisher.browser import BrowserView
-from zope.component import getMultiAdapter
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 
