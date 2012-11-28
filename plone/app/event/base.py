@@ -376,7 +376,7 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
 
 def get_occurrences_from_brains(context, brains,
         range_start=None, range_end=None, limit=None):
-    """Returns a flat list of occurrence objects from a given result of a
+    """Returns a flat list of EventAccessor objects from a given result of a
     catalog query. The list is sorted by the occurrence start date.
 
     :param context: [required] A context object.
