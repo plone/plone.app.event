@@ -570,6 +570,46 @@ def dates_for_display(occurrence):
                 url=acc.url)
 
 
+def date_formater(context, dt):
+    """Return a dictionary with formated and localized date parts.
+    """
+    dt = DT(dt)
+    util = getToolByName(context, 'translation_service')
+    dom = 'plonelocales'
+
+    def zero_pad(num):
+        return '%02d' % num
+
+    date_dict = dict(
+        year = dt.year(),
+
+        month = util.translate(util.month_msgid(dt.month()),
+                domain=dom, context=context),
+
+        month_abbr = util.translate(util.month_msgid(dt.month(),'a'),
+                domain=dom, context=context),
+
+        wkday = util.translate(util.day_msgid(dt.dow()),
+                domain=dom, context=context),
+
+        wkday_abbr = util.translate(util.day_msgid(dt.dow(),'a'),
+                domain=dom, context=context),
+
+        day = dt.day(),
+        day2 = zero_pad(dt.day()),
+
+        hour = dt.hour(),
+        hour2 = zero_pad(dt.hour()),
+
+        minute = dt.minute(),
+        minute2 = zero_pad(dt.minute()),
+
+        second = dt.second(),
+        second2 = zero_pad(dt.second())
+    )
+    return date_dict
+
+
 # Workaround for buggy strftime with timezone handling in DateTime.
 # See: https://github.com/plone/plone.app.event/pull/47
 # TODO: should land in CMFPlone or fixed in DateTime.
