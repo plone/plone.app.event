@@ -14,6 +14,30 @@
 }
 
 
+/* event listing styles */
+.event_listing div.cal_date { 
+    float:left;
+    margin:0 1em 1em 0;
+    padding:0.5em;
+    background-color:white;
+    border-radius:0.5em;
+    box-shadow: 0.5em 0.5em 0.4em black;
+}
+.event_listing span.cal_wkday {
+    display:block;
+    font-size:2em;
+    font-weight:bold;
+    border-bottom:2px solid black;
+}
+.event_listing span.cal_day {
+    font-size:1.5em;
+}
+.event_listing span.cal_month {
+    font-size:1em;
+}
+    
+
+
 /* portlet calendar styles */
 .portletCalendar {
     width: 100%;

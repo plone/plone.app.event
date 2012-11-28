@@ -10,20 +10,22 @@
     fill-slot="content-core"
     tal:define="batch view/get_events;
                 toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
+  <div class="event_listing">
   <tal:items repeat="item batch">
     <article tal:define="startf python:view.date_formater(item.start)">
       <div class="cal_date">
-          <span class="cal_wkday" tal:replace="python:startf['wkday_abbr'][:2]">Tue</span>
-          <span class="cal_day" tal:replace="string:${startf/day}.">15.</span>
-          <span class="cal_month" tal:replace="string:${startf/month_abbr}.">Oct.</span>
+          <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
+          <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
+          <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
       </div>
-      <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
-      <p tal:content="item/description" />
-      <div class="documentByLine">
-        <tal:date replace="structure python:view.formated_date(item)" />
-      </div>
+        <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
+        <p tal:content="item/description" />
+        <div class="documentByLine visualClear">
+          <tal:date replace="structure python:view.formated_date(item)" />
+        </div>
     </article>
   </tal:items>
+  </div>
   <div metal:use-macro="context/batch_macros/macros/navigation" />
 </metal:content-core>
 </body>
