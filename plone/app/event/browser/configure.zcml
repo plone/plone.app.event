@@ -17,6 +17,16 @@
         permission="cmf.ManagePortal"
         />
 
+
+    <!-- Event listing -->
+    <browser:page
+        for="*"
+        name="event_listing"
+        class=".event_listing.EventListing"
+        template="event_listing.pt"
+        permission="zope2.View"
+        />
+
     <!-- Event view -->
     <browser:page
         for="plone.event.interfaces.IEvent"
