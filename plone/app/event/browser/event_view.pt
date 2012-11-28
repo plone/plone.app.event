@@ -11,7 +11,6 @@
     <metal:content-core define-macro="content-core"
                         tal:define="data nocall:view/data">
 
-
         <div class="eventDetails">
             <table class="vertical listing"
               summary="Event details"
