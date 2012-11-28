@@ -22,6 +22,7 @@
     background-color:white;
     border-radius:0.5em;
     box-shadow: 0.5em 0.5em 0.4em black;
+    min-width:4.4em;
 }
 .event_listing span.cal_wkday {
     display:block;

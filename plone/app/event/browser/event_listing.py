@@ -31,7 +31,7 @@ class EventListing(BrowserView):
         occs = get_occurrences_from_brains(
                 context,
                 get_portal_events(context, start, end,
-                    b_start=b_start, b_size=b_size,
+                    #b_start=b_start, b_size=b_size,
                     path=context.getPhysicalPath()),
                 start,
                 end)
