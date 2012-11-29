@@ -496,15 +496,14 @@ class EventAccessor(object):
         return getattr(self.context, 'title', None)
     @title.setter
     def title(self, value):
-        return setattr(self.context, 'title', value)
+        setattr(self.context, 'title', value)
 
     @property
     def description(self):
-        return getattr(self.context, 'description', None)
+        return self.context.Description()
     @description.setter
     def description(self, value):
-        return setattr(self.context, 'description', value)
-
+        self.context.setDescription(value)
 
     @property
     def start(self):

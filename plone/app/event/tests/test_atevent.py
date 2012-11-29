@@ -66,6 +66,7 @@ class PAEventAccessorTest(unittest.TestCase):
     def test_event_accessor(self):
         utc = pytz.utc
         self.portal.invokeFactory('Event', 'event1',
+                Description='a description',
                 start=datetime(2011,11,11,11,0, tzinfo=utc),
                 end=datetime(2011,11,11,12,0, tzinfo=utc),
                 timezone='UTC',
@@ -78,6 +79,11 @@ class PAEventAccessorTest(unittest.TestCase):
         acc.timezone = 'Europe/Vienna'
 
         vienna = pytz.timezone('Europe/Vienna')
+
+        # test description
+        self.assertTrue(acc.description == 'a description')
+        acc.description = 'another desc'
+        self.assertTrue(acc.description == 'another desc')
 
         # accessor should return end datetime in the event's timezone
         self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=vienna))
