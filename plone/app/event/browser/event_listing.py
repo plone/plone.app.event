@@ -6,7 +6,7 @@ from zope.contentprovider.interfaces import IContentProvider
 from plone.app.event.base import date_formater
 from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
-from plone.app.event.base import localized_now
+from plone.app.event.base import start_end_from_mode
 
 
 class EventListing(BrowserView):
@@ -22,37 +22,13 @@ class EventListing(BrowserView):
         self.mode    = 'mode'    in req and req['mode']         or None
 
     def get_events(self, start=None, end=None, batch=True, mode=None):
-        """
-        :param mode: Optional. One of the following modes:
-                        'all' Show all events.
-                        'past': Show only past events with descending sorting.
-                        'future': Show only future events (default).
-                     These settings override the start and end parameters.
-
-                        TODO:
-                        'today': Show todays events.
-                        'week': Show this weeks events.
-                        '7days': Show events until 7 days in future.
-                        'month': Show this month's events.
-        :type mode: string
-        """
         context = self.context
 
         mode = mode or self.mode
         if not mode and not start and not end:
             mode = 'future'
-
-        if mode == 'all':
-            start = None
-            end = None
-        elif mode == 'past':
-            start = None
-            end = localized_now(context)
-        elif mode == 'future':
-            start = localized_now(context)
-            end = None
-        # TODO: more modes
-
+        if mode:
+            start, end = start_end_from_mode(mode, context)
 
         b_start = b_size = None
         if batch:

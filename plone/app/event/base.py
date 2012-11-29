@@ -139,6 +139,74 @@ class CalendarLinkbase(object):
         return 'events' in navroot and navroot['events'] or None
 
 
+def dt_start_of_day(dt):
+    """Returns a Python datetime instance set to the start time of the given
+    day (00:00:00).
+
+    :param dt: datetime to set to the start time of the day.
+    :type dt: Python datetime
+    :returns: datetime set to the start time of the day (00:00:00).
+    :rtype: Python datetime
+
+    """
+    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
+def dt_end_of_day(dt):
+    """Returns a Python datetime instance set to the end time of the given day
+    (23:59:59).
+
+    :param dt: datetime to set to the end time of the day.
+    :type dt: Python datetime
+    :returns: datetime set to the end time of the day (23:59:59).
+    :rtype: Python datetime
+
+    """
+    return dt.replace(hour=23, minute=59, second=59, microsecond=0)
+
+
+def start_end_from_mode(mode, context=None):
+    """Return a start and end date from a given mode string, like
+    "today", "past" or "future". This can be used in event retrieval
+    functions.
+
+    :param mode: Optional. One of the following modes:
+                    'all' Show all events.
+                    'past': Show only past events with descending sorting.
+                    'future': Show only future events (default).
+                    'today': Show todays events.
+                    'now': Show todays upcoming events.
+                    '7days': Show events until 7 days in future.
+                 These settings override the start and end parameters.
+                    Not implemented yet:
+                    'week': Show this weeks events.
+                    'month': Show this month's events.
+    :type mode: string
+
+    """
+    if not context: context = getSite()
+    now = localized_now(context)
+    if mode == 'all':
+        start = None
+        end = None
+    elif mode == 'past':
+        start = None
+        end = now
+    elif mode == 'future':
+        start = now
+        end = None
+    elif mode == 'today':
+        start = dt_start_of_day(now)
+        end = dt_end_of_day(now)
+    elif mode == 'now':
+        start = now
+        end = dt_end_of_day(now)
+    elif mode == '7days':
+        start = now
+        end = dt_end_of_day(now+timedelta(days=7))
+
+    return start, end
+
+
 def default_end_dt():
     """Return the default end as python datetime for prefilling forms.
 
