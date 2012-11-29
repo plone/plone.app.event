@@ -7,6 +7,7 @@ from plone.app.event.base import date_speller
 from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import start_end_from_mode
+from plone.app.event.base import guess_date_from
 
 
 class EventListing(BrowserView):
@@ -20,6 +21,7 @@ class EventListing(BrowserView):
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
         self.mode    = 'mode'    in req and req['mode']         or None
+        self.date    = 'date'    in req and req['date']         or None
 
     def get_events(self, start=None, end=None, batch=True, mode=None):
         context = self.context
@@ -28,7 +30,13 @@ class EventListing(BrowserView):
         if not mode and not start and not end:
             mode = 'future'
         if mode:
-            start, end = start_end_from_mode(mode, context)
+            dt = None
+            if self.date:
+                try:
+                    dt = guess_date_from(self.date)
+                except TypeError:
+                    pass
+            start, end = start_end_from_mode(mode, dt, context)
 
         b_start = b_size = None
         if batch:

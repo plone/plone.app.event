@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Use event_listing instead of the search view for listing future, past or
+  events on a specific date.
+  [thet]
+
 - Add new API functions:
   - date_speller to format a date in a readable manner,
   - start_end_from_mode to return start and end date accordin to a mode string
