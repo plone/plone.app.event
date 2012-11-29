@@ -20,6 +20,7 @@
     margin:0 1em 1em 0;
     padding:0.5em;
     background-color:white;
+    border:1px solid black;
     border-radius:0.5em;
     box-shadow: 0.5em 0.5em 0.4em black;
     min-width:4.4em;
