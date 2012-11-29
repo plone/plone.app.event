@@ -8,7 +8,7 @@ from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.directives import form
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import tzdel, utc, utctz, dt_to_zone
+from plone.event.utils import tzdel, utc, dt_to_zone
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
@@ -21,8 +21,11 @@ from zope.interface import implements
 from zope.interface import invariant, Invalid
 
 from plone.app.event import messageFactory as _
-from plone.app.event.base import default_timezone, default_end_dt
+from plone.app.event.base import default_timezone
+from plone.app.event.base import default_end_dt
 from plone.app.event.base import localized_now, DT
+from plone.app.event.base import dt_start_of_day
+from plone.app.event.base import dt_end_of_day
 from plone.app.event.dx.interfaces import IDXEvent
 
 
@@ -301,8 +304,8 @@ def data_postprocessing(obj, event):
 
     # Adapt for whole day
     if behavior.whole_day:
-        start = start.replace(hour=0,minute=0,second=0)
-        end = end.replace(hour=23,minute=59,second=59)
+        start = dt_start_of_day(start)
+        end = dt_end_of_day(end)
 
     # Save back
     obj.start = utc(start)
