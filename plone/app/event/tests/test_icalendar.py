@@ -3,7 +3,10 @@ import unittest2 as unittest
 from datetime import datetime
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.event.interfaces import IEventAccessor
 from zope.component import getMultiAdapter
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
 
@@ -56,8 +59,12 @@ class ICalendarExportTest(unittest.TestCase):
             recurrence=u'RRULE:FREQ=DAILY;COUNT=5\r\nEXDATE:20121013T000000,20121014T000000\r\nRDATE:20121009T000000',
             start=datetime(2012,10,10,8,0),
             end=datetime(2012,10,10,18,0),
-            timezone="Europe/Amsterdam",
-            location='Arnhem')
+            timezone='Europe/Amsterdam')
+        pc12 = IEventAccessor(portal.events.ploneconf2012)
+        pc12.location='Arnhem'
+        pc12.contact_name='Four Digits'
+        pc12.contact_email='info@ploneconf.org'
+        notify(ObjectModifiedEvent(pc12))
 
         portal.invokeFactory("Collection",
                              "collection",
@@ -100,6 +107,8 @@ class ICalendarExportTest(unittest.TestCase):
             'UID:',
             'RDATE:20121009T000000',
             'EXDATE:20121013T000000,20121014T000000',
+            'CONTACT:Four Digits\\, info@ploneconf.org',
+            'LOCATION:Arnhem',
             'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
             'END:VCALENDAR')
