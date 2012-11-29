@@ -66,7 +66,7 @@ class PAEventAccessorTest(unittest.TestCase):
     def test_event_accessor(self):
         utc = pytz.utc
         self.portal.invokeFactory('Event', 'event1',
-                Description='a description',
+                description='a description',
                 start=datetime(2011,11,11,11,0, tzinfo=utc),
                 end=datetime(2011,11,11,12,0, tzinfo=utc),
                 timezone='UTC',
