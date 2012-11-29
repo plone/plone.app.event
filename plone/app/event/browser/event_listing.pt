@@ -18,11 +18,14 @@
           <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
           <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
       </div>
-        <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
-        <p tal:content="item/description" />
-        <div class="documentByLine visualClear">
-          <tal:date replace="structure python:view.formated_date(item)" />
-        </div>
+      <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
+      <div class="documentByLine">
+        <tal:date replace="structure python:view.formated_date(item)"
+        /><span class="cal_location" tal:condition="item/location" tal:content="string:, ${item/location}"
+        />
+      </div>
+      <p tal:content="item/description" />
+      <div class="visualClear" />
     </article>
   </tal:items>
   </div>

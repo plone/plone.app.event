@@ -6,6 +6,7 @@ from Products.CMFPlone.PloneBatch import Batch
 from zope.contentprovider.interfaces import IContentProvider
 from zope.component import getMultiAdapter
 
+from plone.app.event.base import localized_now
 
 class EventListing(BrowserView):
 
@@ -13,15 +14,42 @@ class EventListing(BrowserView):
         super(EventListing, self).__init__(context, request)
 
         # Batch parameter
-        self.b_start = 'b_start' in self.request and\
-                        int(self.request['b_start']) or 0
-        self.b_size  = 'b_size' in self.request and\
-                        int(self.request['b_size']) or 10
-        self.orphan  = 'orphan' in self.request and\
-                        int(self.request['orphan']) or 1
+        req = self.request
+        self.b_start = 'b_start' in req and int(req['b_start']) or 0
+        self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
+        self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
+        self.mode    = 'mode'    in req and req['mode']         or None
 
-    def get_events(self, start=None, end=None, batch=True):
+    def get_events(self, start=None, end=None, batch=True, mode=None):
+        """
+        :param mode: Optional. One of the following modes:
+                        'all' Show all events,
+                        'past': Show only past events with descending sorting,
+                        'future': Show only future events (default),
+                        'today': Show todays events,
+                        'week': Show this weeks events,
+                        '7days': Show events until 7 days in future,
+                        'month': Show this month's events.
+                    These settings override the start and end parameters.
+        :type mode: string
+        """
         context = self.context
+
+        mode = mode or self.mode
+        if not mode and not start and not end:
+            mode = 'future'
+
+        if mode == 'all':
+            start = None
+            end = None
+        elif mode == 'past':
+            start = None
+            end = localized_now(context)
+        elif mode == 'future':
+            start = localized_now(context)
+            end = None
+        # TODO: more modes
+
 
         b_start = b_size = None
         if batch:
