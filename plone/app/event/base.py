@@ -638,8 +638,9 @@ def dates_for_display(occurrence):
                 url=acc.url)
 
 
-def date_formater(context, dt):
-    """Return a dictionary with formated and localized date parts.
+def date_speller(context, dt):
+    """Return a dictionary with localized and readably formated date parts.
+
     """
     dt = DT(dt)
     util = getToolByName(context, 'translation_service')

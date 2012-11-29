@@ -3,7 +3,7 @@ from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
-from plone.app.event.base import date_formater
+from plone.app.event.base import date_speller
 from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import start_end_from_mode
@@ -55,5 +55,5 @@ class EventListing(BrowserView):
                 IContentProvider, name=u"formated_date")
         return provider(occ.context)
 
-    def date_formater(self, date):
-        return date_formater(self.context, date)
+    def date_speller(self, date):
+        return date_speller(self.context, date)

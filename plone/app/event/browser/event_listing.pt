@@ -12,7 +12,7 @@
                 toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
   <div class="event_listing">
   <tal:items repeat="item batch">
-    <article tal:define="startf python:view.date_formater(item.start)">
+    <article tal:define="startf python:view.date_speller(item.start)">
       <div class="cal_date">
           <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
           <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
