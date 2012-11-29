@@ -1,12 +1,13 @@
+from Products.CMFPlone.PloneBatch import Batch
 from Products.Five.browser import BrowserView
+from zope.component import getMultiAdapter
+from zope.contentprovider.interfaces import IContentProvider
+
+from plone.app.event.base import date_formater
 from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
-from plone.app.event.base import date_formater
-from Products.CMFPlone.PloneBatch import Batch
-from zope.contentprovider.interfaces import IContentProvider
-from zope.component import getMultiAdapter
-
 from plone.app.event.base import localized_now
+
 
 class EventListing(BrowserView):
 
@@ -23,14 +24,16 @@ class EventListing(BrowserView):
     def get_events(self, start=None, end=None, batch=True, mode=None):
         """
         :param mode: Optional. One of the following modes:
-                        'all' Show all events,
-                        'past': Show only past events with descending sorting,
-                        'future': Show only future events (default),
-                        'today': Show todays events,
-                        'week': Show this weeks events,
-                        '7days': Show events until 7 days in future,
+                        'all' Show all events.
+                        'past': Show only past events with descending sorting.
+                        'future': Show only future events (default).
+                     These settings override the start and end parameters.
+
+                        TODO:
+                        'today': Show todays events.
+                        'week': Show this weeks events.
+                        '7days': Show events until 7 days in future.
                         'month': Show this month's events.
-                    These settings override the start and end parameters.
         :type mode: string
         """
         context = self.context
