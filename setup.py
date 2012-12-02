@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.0htug10'
+version = '1.0dev'
 
 setup(name='plone.app.event',
       version=version,
