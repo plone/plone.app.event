@@ -78,8 +78,8 @@ class ControlpanelTest(unittest.TestCase):
         timezones are for chumps and every region on the world should use:
         """
 
-        tz = ['Atlantic/Bermuda']
-        browser.getControl('Portal default timezone').displayValue = tz
+        tz = 'Atlantic/Bermuda'
+        browser.getControl('Portal default timezone').displayValue = [tz]
         browser.getControl('Save').click()
 
         """Every event he now creates will be set to the 'Atlantic/Bermuda'
