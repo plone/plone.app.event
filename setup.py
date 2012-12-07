@@ -77,7 +77,6 @@ setup(name='plone.app.event',
               'z3c.unconfigure',
           ],
           'test': [
-              'interlude',
               'plone.testing',
               'plone.app.testing',
               'zope.annotation',
