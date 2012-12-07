@@ -167,20 +167,8 @@ class RendererTest(unittest.TestCase):
 
         self.portal.manage_delObjects(['e1', 'e2'])
 
-    def test_next_events_link(self):
-        # if there is an 'events' object in the portal root, we expect
-        # the events portlet to link to it
-        if 'events' in self.portal:
-            self.portal._delObject('events')
-
+    def test_events_listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless('@@search?advanced_search=True&amp;start.query'
-                        in r.render())
-
-    def test_past_events_link(self):
-        if 'events' in self.portal:
-            self.portal._delObject('events')
-
-        r = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.failUnless('@@search?advanced_search=True&amp;end.query'
-                        in r.render())
+        rd = r.render()
+        self.assertTrue('@@event_listing?mode=future' in rd)
+        self.assertTrue('@@event_listing?mode=past' in rd)

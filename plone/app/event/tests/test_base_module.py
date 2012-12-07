@@ -134,117 +134,42 @@ class TestCalendarLinkbase(unittest.TestCase):
 
     def test_date_events_url(self):
         lb = ICalendarLinkbase(self.portal)
-        res = 'http://nohost/plone/@@search?advanced_search=True&start.query'\
-              ':record:list:date=2012-12-24+23:59:59&start.range:record=max&'\
-              'end.query:record:list:date=2012-12-24+00:00:00&end.range:reco'\
-              'rd=min&object_provides=plone.event.interfaces.IEvent'
-        self.assertTrue(lb.date_events_url('2012-12-24') == res)
+        url = 'http://nohost/plone/@@event_listing?mode=day&date=2012-12-07'
+        self.assertTrue(lb.date_events_url('2012-12-07') == url)
 
     def test_all_events_url(self):
-        # if there is an 'events' object in the portal root, we expect
-        # the events portlet to link to it
-        if 'events' in self.portal:
-            self.portal._delObject('events')
         lb = ICalendarLinkbase(self.portal)
-        self.failUnless('@@search?advanced_search=True&object_provides'
-                        in lb.all_events_url())
-
-        self.portal.invokeFactory('Folder', 'events')
-        self.failUnless(lb.all_events_url().endswith('/events'))
-
-    def test_all_events_url_and_navigation_root(self):
-        # ensure support of INavigationRoot features dosen't break #9246 #9668
-        self.portal.invokeFactory('Folder', 'mynewsite')
-        directlyProvides(self.portal.mynewsite, INavigationRoot)
-        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-
-        lb = ICalendarLinkbase(self.portal.mynewsite)
-        self.failUnless('mynewsite/@@search?advanced_search=True&object_prov'
-                        in lb.all_events_url())
-
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.failUnless(lb.all_events_url().endswith('/mynewsite/events'))
+        url = 'http://nohost/plone/@@event_listing?mode=all'
+        self.failUnless(lb.all_events_url() == url)
 
     def test_next_events_url(self):
-        # if there is an 'events' object in the portal root, we expect
-        # the events portlet to link to it
-        if 'events' in self.portal:
-            self.portal._delObject('events')
         lb = ICalendarLinkbase(self.portal)
-        self.failUnless('@@search?advanced_search=True&start.query'
-                        in lb.next_events_url())
-
-        self.portal.invokeFactory('Folder', 'events')
-        self.failUnless(lb.next_events_url().endswith('/events'))
-
-    def test_next_events_url_and_navigation_root(self):
-        # ensure support of INavigationRoot features dosen't break #9246 #9668
-        self.portal.invokeFactory('Folder', 'mynewsite')
-        directlyProvides(self.portal.mynewsite, INavigationRoot)
-        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-
-        lb = ICalendarLinkbase(self.portal.mynewsite)
-        self.failUnless('mynewsite/@@search?advanced_search=True&start.query'
-                        in lb.next_events_url())
-
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.failUnless(lb.next_events_url().endswith('/mynewsite/events'))
+        url = 'http://nohost/plone/@@event_listing?mode=future'
+        self.failUnless(lb.next_events_url() == url)
 
     def test_past_events_url(self):
         lb = ICalendarLinkbase(self.portal)
-        if lb._events_folder():
-            self.failUnless(lb.past_events_url().endswith(
-                '/events/aggregator/previous'))
+        url = 'http://nohost/plone/@@event_listing?mode=past'
+        self.failUnless(lb.past_events_url() == url)
 
-        if lb._events_folder():
-            self.portal._delObject('events')
-
-        self.portal.invokeFactory('Folder', 'events')
-        self.portal.events.invokeFactory('Folder', 'previous')
-        self.failUnless(lb.past_events_url().endswith(
-            '/events/previous'))
-
-        self.portal._delObject('events')
-        self.failUnless('@@search?advanced_search=True&end.query'
-                        in lb.past_events_url())
-
-    def test_past_events_url_and_navigation_root(self):
+    def test_events_url_with_navigation_root(self):
         # ensure support of INavigationRoot features dosen't break #9246 #9668
-
-        # remove default plone content(s)
-        if 'events' in self.portal:
-            self.portal._delObject('events')
-
-        # lets create mynewsite
         self.portal.invokeFactory('Folder', 'mynewsite')
         directlyProvides(self.portal.mynewsite, INavigationRoot)
         self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-
         lb = ICalendarLinkbase(self.portal.mynewsite)
 
-        # mynewsite events:
-        # -- events
-        # ---- aggregator
-        # ------ previous
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.portal.mynewsite.events.invokeFactory('Folder', 'aggregator')
-        self.portal.mynewsite.events.aggregator.invokeFactory('Folder', 'previous')
-        self.failUnless(lb.past_events_url().endswith(
-            '/mynewsite/events/aggregator/previous'))
+        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=day&date=2012-12-07'
+        self.failUnless(lb.date_events_url('2012-12-07') == url)
 
-        # mynewsite events:
-        # -- events
-        # ---- previous
-        self.portal.mynewsite._delObject('events')
-        self.portal.mynewsite.invokeFactory('Folder', 'events')
-        self.portal.mynewsite.events.invokeFactory('Folder', 'previous')
-        self.failUnless(lb.past_events_url().endswith(
-            '/mynewsite/events/previous'))
+        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=all'
+        self.failUnless(lb.all_events_url() == url)
 
-        # no mynewsite events
-        self.portal.mynewsite._delObject('events')
-        self.assertTrue('@@search?advanced_search=True&end.query'
-                        in lb.past_events_url())
+        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=future'
+        self.failUnless(lb.next_events_url() == url)
+
+        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=past'
+        self.failUnless(lb.past_events_url() == url)
 
 
 class TestBaseModuleQueryPydt(unittest.TestCase):
