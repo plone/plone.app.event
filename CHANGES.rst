@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove dependency on Grok for the Dexterity behaviors.
+  [thet]
+
 - Just use classes instead of id's for the calendar portlet's page switcher.
   [thet]
 

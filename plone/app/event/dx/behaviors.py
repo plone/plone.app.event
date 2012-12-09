@@ -6,10 +6,12 @@ from datetime import tzinfo, timedelta
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
-from plone.directives import form
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, dt_to_zone
-from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget, ParameterizedWidgetFactory
+from plone.formwidget.recurrence.z3cform.widget import (
+    RecurrenceWidget,
+    ParameterizedWidgetFactory
+)
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
@@ -28,6 +30,13 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import dt_end_of_day
 from plone.app.event.dx.interfaces import IDXEvent
 
+from plone.autoform import directives as form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
+
+from zope.component import provideAdapter
+from z3c.form.widget import ComputedWidgetAttribute
+
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -38,7 +47,7 @@ class StartBeforeEnd(Invalid):
                 default=u"The start or end date is invalid")
 
 
-class IEventBasic(form.Schema):
+class IEventBasic(model.Schema):
     """ Basic event schema.
 
     """
@@ -74,20 +83,23 @@ class IEventBasic(form.Schema):
                                    default=u"The start date must be before the\
                                              end date."))
 
-@form.default_value(field=IEventBasic['start'])
 def default_start(data):
     return localized_now()
+provideAdapter(ComputedWidgetAttribute(
+    default_start, field=IEventBasic['start']), name='default')
 
-@form.default_value(field=IEventBasic['end'])
 def default_end(data):
     return default_end_dt()
+provideAdapter(ComputedWidgetAttribute(
+    default_end, field=IEventBasic['end']), name='default')
 
-@form.default_value(field=IEventBasic['timezone'])
 def default_tz(data):
     return default_timezone()
+provideAdapter(ComputedWidgetAttribute(
+    default_tz, field=IEventBasic['timezone']), name='default')
 
 
-class IEventRecurrence(form.Schema):
+class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
 
     """
@@ -106,7 +118,7 @@ IEventRecurrence.setTaggedValue('plone.autoform.widgets',
         start_field='IEventBasic.start')})
 
 
-class IEventLocation(form.Schema):
+class IEventLocation(model.Schema):
     """ Event Location Schema.
     """
     location = schema.TextLine(
@@ -116,7 +128,7 @@ class IEventLocation(form.Schema):
         )
 
 
-class IEventAttendees(form.Schema):
+class IEventAttendees(model.Schema):
     """ Event Attendees Schema.
     """
     attendees = schema.Tuple(
@@ -129,7 +141,7 @@ class IEventAttendees(form.Schema):
     form.widget(attendees = TextLinesFieldWidget)
 
 
-class IEventContact(form.Schema):
+class IEventContact(model.Schema):
     """ Event Contact Schema.
     """
     contact_name = schema.TextLine(
@@ -157,7 +169,7 @@ class IEventContact(form.Schema):
         )
 
 
-class IEventSummary(form.Schema):
+class IEventSummary(model.Schema):
     """Event summary (body text) schema."""
 
     text = RichText(
@@ -168,12 +180,12 @@ class IEventSummary(form.Schema):
 
 
 # Mark these interfaces as form field providers
-alsoProvides(IEventBasic, form.IFormFieldProvider)
-alsoProvides(IEventRecurrence, form.IFormFieldProvider)
-alsoProvides(IEventLocation, form.IFormFieldProvider)
-alsoProvides(IEventAttendees, form.IFormFieldProvider)
-alsoProvides(IEventContact, form.IFormFieldProvider)
-alsoProvides(IEventSummary, form.IFormFieldProvider)
+alsoProvides(IEventBasic, IFormFieldProvider)
+alsoProvides(IEventRecurrence, IFormFieldProvider)
+alsoProvides(IEventLocation, IFormFieldProvider)
+alsoProvides(IEventAttendees, IFormFieldProvider)
+alsoProvides(IEventContact, IFormFieldProvider)
+alsoProvides(IEventSummary, IFormFieldProvider)
 
 
 class FakeZone(tzinfo):
