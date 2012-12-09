@@ -10,7 +10,7 @@ from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility, getMultiAdapter
-from zope.site.hooks import setHooks, setSite
+from zope.component.hooks import setHooks, setSite
 
 from plone.app.event.portlets import portlet_events
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING

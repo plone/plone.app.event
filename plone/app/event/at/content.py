@@ -6,7 +6,6 @@ from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
-#from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT

@@ -1,11 +1,11 @@
 import pytz
 from collective.elephantvocabulary import wrap_vocabulary
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.interface import directlyProvides
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.site.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 
 
