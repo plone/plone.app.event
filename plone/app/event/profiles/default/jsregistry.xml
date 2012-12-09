@@ -10,4 +10,13 @@
       inline="False"
       />
 
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="True"
+      id="++resource++plone.app.event.portlet_calendar.js"
+      inline="False"
+      />
+
 </object>

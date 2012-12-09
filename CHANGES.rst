@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Reimplement the calendar page switcher from the calendar portlet with jQuery
+  and remove the implicit dependency on KSS.
+  [thet]
+
 - Use event_listing instead of the search view for listing future, past or
   events on a specific date.
   [thet]
