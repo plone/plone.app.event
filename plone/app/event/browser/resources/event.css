@@ -59,13 +59,13 @@
     padding: 0;
 }
 
-.portletCalendar dt a#calendar-previous {
+.portletCalendar dt a.calendarPrevious {
     float: left;
     padding: 0 1em;
     margin: 0 -.5em;
 }
 
-.portletCalendar dt a#calendar-next {
+.portletCalendar dt a.calendarNext {
     float: right;
     padding: 0 1em;
     margin: 0 -.5em;

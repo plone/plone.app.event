@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Just use classes instead of id's for the calendar portlet's page switcher.
+  [thet]
+
 - Reimplement the calendar page switcher from the calendar portlet with jQuery
   and remove the implicit dependency on KSS.
   [thet]

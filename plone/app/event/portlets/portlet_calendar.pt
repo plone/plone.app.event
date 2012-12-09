@@ -11,7 +11,6 @@
     <dt class="portletHeader">
       <span class="portletTopLeft"></span>
       <a href="#" rel="nofollow"
-           id='calendar-previous'
            class="calendarPrevious"
            title="Previous month"
            tal:define="prev_month view/prev_month;
@@ -31,7 +30,6 @@
         </span>
 
         <a href="#" rel="nofollow"
-           id='calendar-next'
            class="calendarNext"
            title="Next month"
            tal:define="next_month view/next_month;
