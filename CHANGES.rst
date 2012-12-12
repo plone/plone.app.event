@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Depend on plone.app.portlets >= 2.4.0, since portlet_calendar needs the
+  render_portlet view for it's ajaxification. This may break Plone 4.2
+  integrations, until you make a buildout version fix.
+  [thet]
+
 - Remove dependency on Grok for the Dexterity behaviors.
   [thet]
 
