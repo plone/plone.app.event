@@ -51,21 +51,7 @@
         end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
     }
 
-    function portletCalendarTooltips() {
-        $('.portletCalendar dd a[title]').tooltip({
-            offset: [-10,0]
-        });
-    }
-
     $(document).ready(function() {
-
-        // CALENDAR PORTLET
-        // bind tooltips
-        portletCalendarTooltips();
-        // rebind tooltips after month-change  
-        $('.portletWrapper').bind('DOMNodeInserted', function(event) {
-            portletCalendarTooltips();
-        });
 
         // EDIT FORM
         $('#wholeDay').bind('change', wholeDayHandler);

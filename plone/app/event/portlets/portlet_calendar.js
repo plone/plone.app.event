@@ -28,6 +28,9 @@
         $('.portletCalendar a.calendarPrevious').click(function(event) {
             load_portlet_calendar(event, $(this));
         });
+        $('.portletCalendar dd a[title]').tooltip({
+            offset: [-10,0]
+        });
     }
 
     $(document).ready(function() {
