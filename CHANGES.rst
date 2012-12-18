@@ -28,12 +28,15 @@ Changelog
   [thet]
 
 - Add new API functions:
+  [thet]
+
   - date_speller to format a date in a readable manner,
+
   - start_end_from_mode to return start and end date accordin to a mode string
     (today, past, future, etc.),
+
   - dt_start_of_day and dt_end_of_day to set a date to the start of the day
     (00:00:00) and to the end of the day (23:59:59) for use in searches.
-  [thet]
 
 - Add new event_listing view to show previous, upcoming, todays and other
   events in a listing.
