@@ -29,8 +29,9 @@ FALLBACK_TIMEZONE = 'UTC'
 
 
 class CalendarLinkbase(object):
-    """Default adapter to retrieve a base url for a calendar view. The methods
-    in this default implementation return the @@search view as calendar view.
+    """Default adapter to retrieve a base url for a calendar view. 
+    In this default implementation we use the @@event_listing view as calendar
+    view.
 
     For method documentation, see interfaces.py.
 
@@ -41,28 +42,28 @@ class CalendarLinkbase(object):
     def __init__(self, context):
         self.context = context
         portal = getSite()
-        self.navroot = getNavigationRootObject(context, portal).absolute_url()
+        self.urlpath = getNavigationRootObject(context, portal).absolute_url()
 
-    def date_events_url(self, date, path=None):
-        url = '%s/@@event_listing?mode=day&date=%s' % (self.navroot, date)
+    def date_events_url(self, date):
+        url = '%s/@@event_listing?mode=day&date=%s' % (self.urlpath, date)
         return url
 
     def past_events_url(self):
         """Get a URL to retrieve past events.
         """
-        url = '%s/@@event_listing?mode=past' % (self.navroot)
+        url = '%s/@@event_listing?mode=past' % self.urlpath
         return url
 
     def next_events_url(self):
         """Get a URL to retrieve upcoming events.
         """
-        url = '%s/@@event_listing?mode=future' % (self.navroot)
+        url = '%s/@@event_listing?mode=future' % self.urlpath
         return url
 
     def all_events_url(self):
         """Get a URL to retrieve all events.
         """
-        url = '%s/@@event_listing?mode=all' % (self.navroot)
+        url = '%s/@@event_listing?mode=all' % self.urlpath
         return url
 
 

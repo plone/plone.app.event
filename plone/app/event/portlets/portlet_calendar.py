@@ -63,6 +63,8 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
 
         self.calendar_linkbase = ICalendarLinkbase(context)
+        self.calendar_linkbase.urlpath = '%s%s' % (
+                self.calendar_linkbase.urlpath, self.data.search_base)
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (
@@ -120,8 +122,7 @@ class Renderer(base.Renderer):
         return (year, month)
 
     def date_events_url(self, date):
-        return self.calendar_linkbase.date_events_url(
-            date, path=self.data.search_base)
+        return self.calendar_linkbase.date_events_url(date)
 
     @property
     def cal_data(self):

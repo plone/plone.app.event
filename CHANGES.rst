@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Set the CalendarLinkbase urlpath to respect the search_base in calendar and
+  event portlets.
+  [thet]
+
 - Depend on plone.app.portlets >= 2.4.0, since portlet_calendar needs the
   render_portlet view for it's ajaxification. This may break Plone 4.2
   integrations, until you make a buildout version fix.

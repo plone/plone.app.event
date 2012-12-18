@@ -1,5 +1,6 @@
 from zope import schema
 from zope.interface import Interface
+from zope.interface import Attribute
 
 from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
@@ -13,15 +14,17 @@ class ICalendarLinkbase(Interface):
 
     """
 
-    def date_events_url(date, path=None):
+    urlpath = Attribute("""Urlpath for the CalendarLinkbase methods. In the
+            default implementation, it's the NavigationRoot's absolute_url.
+            After instantiating the class, you can easily overwrite or extend
+            this attribute.""")
+
+    def date_events_url(date):
         """Get a URL to retrieve all events on a given day.
 
         :param date: The date to search events for in isoformat (ISO 8601,
                     YYYY-MM-DD).
         :type date: string
-        
-        :param path: Events context path (optional).
-        :type path: string
 
         :returns: URL linking to a page with events on the given date.
         :rtype: string
@@ -44,7 +47,7 @@ class ICalendarLinkbase(Interface):
 
         """
 
-    def all_events_url(date):
+    def all_events_url():
         """Get a URL to retrieve all events.
 
         :returns: URL linking to a page with events on the given date.

@@ -70,6 +70,8 @@ class Renderer(base.Renderer):
         base.Renderer.__init__(self, *args)
 
         self.calendar_linkbase = ICalendarLinkbase(self.context)
+        self.calendar_linkbase.urlpath = '%s%s' % (
+                self.calendar_linkbase.urlpath, self.data.search_base)
         #BBB
         self.prev_events_link = self.calendar_linkbase.past_events_url
         self.all_events_link = self.calendar_linkbase.next_events_url
