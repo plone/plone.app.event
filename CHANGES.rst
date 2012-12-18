@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b3 (2012-12-18)
+------------------
 
 - Set the CalendarLinkbase urlpath to respect the search_base in calendar and
   event portlets.
@@ -23,8 +23,8 @@ Changelog
   and remove the implicit dependency on KSS.
   [thet]
 
-- Use event_listing instead of the search view for listing future, past or
-  events on a specific date.
+- Use event_listing instead of the search view in CalendarLinkbase for calendar
+  and event portlets.
   [thet]
 
 - Add new API functions:
