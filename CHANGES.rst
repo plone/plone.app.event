@@ -1,6 +1,14 @@
 Changelog
 =========
 
+
+1.0dev (unreleased)
+-------------------
+
+- Style .tooltip only for .portletCalendar.
+  [thet]
+
+
 1.0b3 (2012-12-18)
 ------------------
 

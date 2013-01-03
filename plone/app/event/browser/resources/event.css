@@ -1,5 +1,5 @@
 /* tooltip styling. by default the element to be styled is .tooltip  */
-.tooltip {
+.portletCalendar .tooltip {
     display:none;
     background:#CCC;
     border:1px solid black;
@@ -8,7 +8,7 @@
     margin:10px;
 }
 
-.tooltip a {
+.portletCalendar .tooltip a {
     color:black;
     font-weight:bold;
 }
