@@ -29,7 +29,8 @@
             load_portlet_calendar(event, $(this));
         });
         $('.portletCalendar dd a[title]').tooltip({
-            offset: [-10,0]
+            offset: [-10,0],
+            tipClass: 'pae_calendar_tooltip'
         });
     }
 
