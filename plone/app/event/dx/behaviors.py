@@ -115,7 +115,8 @@ class IEventRecurrence(model.Schema):
 # Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
 IEventRecurrence.setTaggedValue('plone.autoform.widgets',
     {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
-        start_field='IEventBasic.start')})
+        start_field='IEventBasic.start'
+    )})
 
 
 class IEventLocation(model.Schema):
