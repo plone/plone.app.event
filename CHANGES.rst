@@ -10,7 +10,7 @@ Changelog
   layer to be used in some cases.
   [thet]
 
-- Style .tooltip only for .portletCalendar.
+- Style the calendar portlet tooltips only for the calendar portlet.
   [thet]
 
 
