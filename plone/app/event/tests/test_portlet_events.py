@@ -162,7 +162,7 @@ class RendererTest(unittest.TestCase):
         # link to the event and not an occurrence.
         self.assertTrue('http://nohost/plone/e1"' in rd)
         # Occurrences should link to the Occurrence.
-        self.assertTrue('http://nohost/plone/e1/%s-%s-%s' %
+        self.assertTrue('http://nohost/plone/e1/%s-%02d-%02d' %
                 (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd)
 
         self.portal.manage_delObjects(['e1', 'e2'])
