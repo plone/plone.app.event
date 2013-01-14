@@ -248,6 +248,18 @@ def first_weekday():
     else:
         return int(first_wd)
 
+def first_weekday_sun0():
+    """Returns the number of the first Weekday in a Week, as defined in
+    the registry.
+    In this case 0 is Sunday and 6 is Saturday, as expected by Strftime.
+
+    This method exists, because IRegistry utility isn't early available and in
+    some cases we need to pass a first weekday config parameter to another
+    package, which then gets just called.
+
+    """
+    return cal_to_strftime_wkday(first_weekday())
+
 
 def cal_to_strftime_wkday(day):
     """Convert calendar day numbers to strftime day numbers.

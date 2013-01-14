@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Configure the RecurrenceWidget's first_day parameter for AT and DX.
+  [thet]
+
 - Configure the default_view of plone.app.event's ATEvent to be @@event_view.
   This prevents of referencing the old event_view from the plone_content skin
   layer to be used in some cases.

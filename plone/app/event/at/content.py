@@ -28,6 +28,7 @@ from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
 from plone.app.event.base import DT
+from plone.app.event.base import first_weekday_sun0
 from plone.event.utils import pydt
 
 
@@ -96,6 +97,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             startFieldYear='startDate-year',
             startFieldMonth='startDate-month',
             startFieldDay='startDate-day',
+            first_day=first_weekday_sun0,
             ),
         ),
 

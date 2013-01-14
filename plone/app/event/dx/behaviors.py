@@ -28,6 +28,7 @@ from plone.app.event.base import default_end_dt
 from plone.app.event.base import localized_now, DT
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import dt_end_of_day
+from plone.app.event.base import first_weekday_sun0
 from plone.app.event.dx.interfaces import IDXEvent
 
 from plone.autoform import directives as form
@@ -115,7 +116,8 @@ class IEventRecurrence(model.Schema):
 # Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
 IEventRecurrence.setTaggedValue('plone.autoform.widgets',
     {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
-        start_field='IEventBasic.start'
+        start_field='IEventBasic.start',
+        first_day=first_weekday_sun0
     )})
 
 
