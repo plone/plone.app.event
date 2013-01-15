@@ -5,7 +5,7 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Configure the RecurrenceWidget's first_day parameter for AT and DX.
+- Configure first_day parameter for DateTime and Recurrence Widget (AT and DX).
   [thet]
 
 - Configure the default_view of plone.app.event's ATEvent to be @@event_view.

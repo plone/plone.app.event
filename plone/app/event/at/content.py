@@ -45,6 +45,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             label=_(u'label_event_start', default=u'Event Starts'),
             description=_(u'help_start_location', default=u""),
             with_time=1,
+            first_day=first_weekday_sun0,
             ),
         ),
 
@@ -59,6 +60,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             label=_(u'label_event_end', default=u'Event Ends'),
             description=_(u'help_end_location', default=u""),
             with_time=1,
+            first_day=first_weekday_sun0,
             ),
         ),
 

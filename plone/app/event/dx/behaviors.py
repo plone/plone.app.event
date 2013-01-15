@@ -8,10 +8,8 @@ from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, dt_to_zone
-from plone.formwidget.recurrence.z3cform.widget import (
-    RecurrenceWidget,
-    ParameterizedWidgetFactory
-)
+from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
@@ -30,6 +28,7 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import first_weekday_sun0
 from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx import ParameterizedWidgetFactory
 
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -83,6 +82,14 @@ class IEventBasic(model.Schema):
             raise StartBeforeEnd(_("exception_start_before_end_text",
                                    default=u"The start date must be before the\
                                              end date."))
+
+# Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
+IEventBasic.setTaggedValue('plone.autoform.widgets',
+    {'start': ParameterizedWidgetFactory(DatetimeWidget,
+        first_day=first_weekday_sun0),
+     'end': ParameterizedWidgetFactory(DatetimeWidget,
+        first_day=first_weekday_sun0),
+    })
 
 def default_start(data):
     return localized_now()
