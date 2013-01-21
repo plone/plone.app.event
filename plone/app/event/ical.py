@@ -17,7 +17,7 @@ VERSION = "2.0"
 
 
 def construct_calendar(context, events):
-    """ Returns an icalendar.Calendar object.
+    """Returns an icalendar.Calendar object.
 
     :param context: A content object, which is used for calendar details like
                     Title and Description. Usually a container, collection or
@@ -51,7 +51,7 @@ def construct_calendar(context, events):
 
 @implementer(IICalendar)
 def calendar_from_event(context):
-    """ Event adapter. Returns an icalendar.Calendar object from an Event
+    """Event adapter. Returns an icalendar.Calendar object from an Event
     context.
 
     """
@@ -62,7 +62,7 @@ def calendar_from_event(context):
 
 @implementer(IICalendar)
 def calendar_from_container(context):
-    """ Container adapter. Returns an icalendar.Calendar object from a
+    """Container adapter. Returns an icalendar.Calendar object from a
     Containerish context like a Folder.
 
     """
@@ -78,7 +78,7 @@ def calendar_from_container(context):
 
 @implementer(IICalendar)
 def calendar_from_collection(context):
-    """ Container/Event adapter. Returns an icalendar.Calendar object from a
+    """Container/Event adapter. Returns an icalendar.Calendar object from a
     Collection.
 
     """
@@ -89,7 +89,7 @@ def calendar_from_collection(context):
 
 
 class ICalendarEventComponent(object):
-    """ Returns an icalendar object of the event.
+    """Returns an icalendar object of the event.
 
     """
     implements(IICalendarEventComponent)
@@ -167,7 +167,9 @@ class ICalendarEventComponent(object):
 
 
 class EventsICal(BrowserView):
-    """Returns events in iCal format"""
+    """Returns events in iCal format.
+
+    """
 
     def get_ical_string(self):
         cal = IICalendar(self.context)
