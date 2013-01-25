@@ -19,8 +19,8 @@
 
   <!-- internal dependencies -->
 
-  <!-- pre plone 4.? integration -->
-  <configure zcml:condition="not-have plone-43">
+  <!-- pre plone 4.4 integration -->
+  <configure zcml:condition="not-have plone-44">
     <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
   </configure>
 
