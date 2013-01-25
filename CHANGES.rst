@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Don't set icon_expr for the Dexterity content type and use css instead.
+  [thet]
+
 - Restore compatibility to Plone 4.3 by zcml including the ploneintegration
   module also for Plone 4.3 but not 4.4.
   [thet]
