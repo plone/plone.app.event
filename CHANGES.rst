@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add icon_export_ical.png from Products.ATContentTypes to plone.app.event.
+  [thet]
+
 - Configure first_day parameter for DateTime and Recurrence Widget (AT and DX).
   [thet]
 
