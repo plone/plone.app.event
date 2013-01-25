@@ -16,8 +16,8 @@ on installed packages.
   use pytz.
 
 
-Installation for Plone 4.2
---------------------------
+Installation for Plone 4.2 and 4.3
+----------------------------------
 
 Just run the buildout.cfg, which is included with plone.app.event. There is
 also a dev.cfg buildout file, which includes the sources of Plone core
