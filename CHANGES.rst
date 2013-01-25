@@ -5,6 +5,14 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Restore compatibility to Plone 4.3 by zcml including the ploneintegration
+  module also for Plone 4.3 but not 4.4.
+  [thet]
+
+- Version fix for z3c.unconfigure==1.0.1. This fix can be removed, once Plone
+  depends on zope.configuration>=3.8.
+  [thet]
+
 - Add icon_export_ical.png from Products.ATContentTypes to plone.app.event.
   [thet]
 
