@@ -5,6 +5,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add icalendar timezone support and properly export whole day events.
+  Fixes #22, Fixes #71.
+  [thet]
+
 - Don't set icon_expr for the Dexterity content type and use css instead.
   [thet]
 

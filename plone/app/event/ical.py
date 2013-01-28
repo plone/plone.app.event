@@ -51,16 +51,10 @@ def construct_calendar(context, events):
     for event in events:
         acc = IEventAccessor(event)
         tz = acc.timezone
-        tzmap = add_to_zones_map(tzmap, tz, acc.start)
-        tzmap = add_to_zones_map(tzmap, tz, acc.end)
         # TODO: the standard wants each recurrence to have a valid timezone
         # definition. sounds decent, but not realizable.
-
-        #if not tz in tzlist:
-        #    # Only add Timezone to ical, if it isn't already there.
-        #    cal.add_component(IICalendarTimezoneComponent(event).to_ical())
-        #    tzlist.append(tz)
-
+        tzmap = add_to_zones_map(tzmap, tz, acc.start)
+        tzmap = add_to_zones_map(tzmap, tz, acc.end)
         cal.add_component(IICalendarEventComponent(event).to_ical())
 
     for (tzid, transitions) in tzmap.items():
@@ -213,26 +207,24 @@ class ICalendarEventComponent(object):
 
         # TODO: event.text
 
-        # TODO: until VTIMETZONE component is added and TZID used, everything is
-        #       converted to UTC. use real TZID, when VTIMEZONE is used!
-
+        # must be in utc
         ical.add('dtstamp', utc(pydt(datetime.now())))
         ical.add('created', utc(pydt(event.created)))
+        ical.add('last-modified', utc(pydt(event.last_modified)))
 
         ical.add('uid', event.uid)
         ical.add('url', event.url)
 
-        ical.add('last-modified', utc(pydt(event.last_modified)))
         ical.add('summary', event.title)
 
         if event.description: ical.add('description', event.description)
 
         if event.whole_day:
-            ical.add('dtstart', utc(pydt(event.start)).date())
-            ical.add('dtend', utc(pydt(event.end + timedelta(days=1))).date())
+            ical.add('dtstart', event.start.date())
+            ical.add('dtend', event.end.date())
         else:
-            ical.add('dtstart', utc(pydt(event.start)))
-            ical.add('dtend', utc(pydt(event.end)))
+            ical.add('dtstart', event.start)
+            ical.add('dtend', event.end)
 
         if event.recurrence:
             for recdef in event.recurrence.split():
@@ -242,7 +234,6 @@ class ICalendarEventComponent(object):
                 elif prop in ('EXDATE', 'RDATE'):
                     factory = icalendar.prop.vDDDLists
                     ical.add(prop, factory(factory.from_ical(val)), encode=0)
-
 
         if event.location: ical.add('location', event.location)
 
