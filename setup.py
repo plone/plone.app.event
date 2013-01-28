@@ -79,8 +79,7 @@ setup(name='plone.app.event',
           ],
           'ploneintegration': [
               'plone.app.event [archetypes]',
-              'z3c.unconfigure==1.0.1', # version fix as long as plone depends
-                                        # on zope.configuration < 3.8
+              'z3c.unconfigure',
           ],
           'test': [
               'plone.app.testing',
