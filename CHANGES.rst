@@ -8,8 +8,8 @@ Changelog
 - Don't set icon_expr for the Dexterity content type and use css instead.
   [thet]
 
-- Restore compatibility to Plone 4.3 by zcml including the ploneintegration
-  module also for Plone 4.3 but not 4.4.
+- Restore compatibility to Plone 4.3 by including the ploneintegration module
+  also for Plone 4.3 but not 4.4.
   [thet]
 
 - Version fix for z3c.unconfigure==1.0.1. This fix can be removed, once Plone
