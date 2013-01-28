@@ -1,6 +1,6 @@
 import icalendar
 from Acquisition import aq_inner
-from datetime import datetime, timedelta
+from datetime import datetime
 from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
@@ -8,7 +8,6 @@ from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
-from plone.event.interfaces import IICalendarTimezoneComponent
 from plone.event.utils import pydt, utc
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_portal_events
@@ -152,41 +151,6 @@ def calendar_from_collection(context):
     result = get_portal_events(context)
     events = [item.getObject() for item in result]
     return construct_calendar(context, events)
-
-
-class ICalendarTimezoneComponent(object):
-    """Returns an icalendar object of the event.
-
-    """
-    implements(IICalendarTimezoneComponent)
-
-    def __init__(self, context):
-        self.context = context
-        self.event = IEventAccessor(context)
-
-    def to_ical(self):
-        import pdb; pdb.set_trace()
-        tzc = icalendar.Timezone()
-        tzc.add('tzid', 'Europe/Vienna')
-        tzc.add('x-lic-location', 'Europe/Vienna')
-
-        tzs = icalendar.TimezoneStandard()
-        tzs.add('tzname', 'CET')
-        tzs.add('dtstart', datetime.datetime(1970, 10, 25, 3, 0, 0))
-        tzs.add('rrule', {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
-        tzs.add('TZOFFSETFROM', timedelta(hours=2))
-        tzs.add('TZOFFSETTO', timedelta(hours=1))
-
-        tzd = icalendar.TimezoneDaylight()
-        tzd.add('tzname', 'CEST')
-        tzd.add('dtstart', datetime.datetime(1970, 3, 29, 2, 0, 0))
-        tzs.add('rrule', {'freq': 'yearly', 'bymonth': 3, 'byday': '-1su'})
-        tzd.add('TZOFFSETFROM', timedelta(hours=1))
-        tzd.add('TZOFFSETTO', timedelta(hours=2))
-
-        tzc.add_component(tzs)
-        tzc.add_component(tzd)
-        return tzc
 
 
 class ICalendarEventComponent(object):
