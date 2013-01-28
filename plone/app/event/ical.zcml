@@ -14,6 +14,16 @@
         for="plone.event.interfaces.IOccurrence"
         />
 
+    <adapter
+        factory=".ical.ICalendarTimezoneComponent"
+        for="plone.event.interfaces.IEvent"
+        />
+
+    <adapter
+        factory=".ical.ICalendarTimezoneComponent"
+        for="plone.event.interfaces.IOccurrence"
+        />
+
     <adapter factory=".ical.calendar_from_event"
         provides="plone.event.interfaces.IICalendar"
         for="plone.event.interfaces.IEvent"

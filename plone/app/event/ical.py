@@ -8,9 +8,13 @@ from zope.publisher.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
+from plone.event.interfaces import IICalendarTimezoneComponent
 from plone.event.utils import pydt, utc
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_portal_events
+from plone.event.utils import tzdel
+import pytz
+
 
 PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
@@ -43,10 +47,71 @@ def construct_calendar(context, events):
     cal_tz = default_timezone(context)
     if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
+    tzmap = {}
     for event in events:
+        acc = IEventAccessor(event)
+        tz = acc.timezone
+        tzmap = add_to_zones_map(tzmap, tz, acc.start)
+        tzmap = add_to_zones_map(tzmap, tz, acc.end)
+        # TODO: the standard wants each recurrence to have a valid timezone
+        # definition. sounds decent, but not realizable.
+
+        #if not tz in tzlist:
+        #    # Only add Timezone to ical, if it isn't already there.
+        #    cal.add_component(IICalendarTimezoneComponent(event).to_ical())
+        #    tzlist.append(tz)
+
         cal.add_component(IICalendarEventComponent(event).to_ical())
 
+    for (tzid, transitions) in tzmap.items():
+        cal_tz = icalendar.Timezone()
+        cal_tz.add('tzid', tzid)
+        cal_tz.add('x-lic-location', tzid)
+
+        for (transition, tzinfo) in transitions.items():
+
+            if tzinfo['dst']:
+                cal_tz_sub = icalendar.TimezoneDaylight()
+            else:
+                cal_tz_sub = icalendar.TimezoneStandard()
+
+            cal_tz_sub.add('tzname', tzinfo['name'])
+            cal_tz_sub.add('dtstart', transition)
+            cal_tz_sub.add('tzoffsetfrom', tzinfo['tzoffsetfrom'])
+            cal_tz_sub.add('tzoffsetto', tzinfo['tzoffsetto'])
+            # TODO: add rrule
+            #tzi.add('rrule', {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
+
+            cal_tz.add_component(cal_tz_sub)
+        cal.add_component(cal_tz)
+
     return cal
+
+
+def add_to_zones_map(tzmap, tzid, dt):
+    null = datetime(1,1,1)
+    tz = pytz.timezone(tzid)
+    transitions = getattr(tz, '_utc_transition_times', null)
+    dtzl = tzdel(utc(dt))
+    # get transition time, which is the dtstart of timezone
+    transition = max(transitions, key=lambda item:item<=dtzl and item or null)
+    # convert to local time
+    transition = transition is null and null or tzdel(tz.localize(transition))
+
+    if tzid not in tzmap: tzmap[tzid] = {} # initial
+    if transition in tzmap[tzid]: return tzmap # already there
+    import pdb; pdb.set_trace()
+    tzmap[tzid][transition] = {
+            'dst': tz.dst(dt).total_seconds() > 0,
+            'name': tz.tzname(dt),
+            # 'tzoffsetfrom': tz.fromutc(dt),
+            'tzoffsetfrom': tz.utcoffset(dt+timedelta(days=30*6)), # that's an
+                # ugly workaround around the missing information. try to fiddle
+                # it out from pytz.
+            'tzoffsetto': tz.utcoffset(dt),
+            # TODO: recurrence rule
+    }
+    return tzmap
 
 
 @implementer(IICalendar)
@@ -86,6 +151,41 @@ def calendar_from_collection(context):
     result = get_portal_events(context)
     events = [item.getObject() for item in result]
     return construct_calendar(context, events)
+
+
+class ICalendarTimezoneComponent(object):
+    """Returns an icalendar object of the event.
+
+    """
+    implements(IICalendarTimezoneComponent)
+
+    def __init__(self, context):
+        self.context = context
+        self.event = IEventAccessor(context)
+
+    def to_ical(self):
+        import pdb; pdb.set_trace()
+        tzc = icalendar.Timezone()
+        tzc.add('tzid', 'Europe/Vienna')
+        tzc.add('x-lic-location', 'Europe/Vienna')
+
+        tzs = icalendar.TimezoneStandard()
+        tzs.add('tzname', 'CET')
+        tzs.add('dtstart', datetime.datetime(1970, 10, 25, 3, 0, 0))
+        tzs.add('rrule', {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
+        tzs.add('TZOFFSETFROM', timedelta(hours=2))
+        tzs.add('TZOFFSETTO', timedelta(hours=1))
+
+        tzd = icalendar.TimezoneDaylight()
+        tzd.add('tzname', 'CEST')
+        tzd.add('dtstart', datetime.datetime(1970, 3, 29, 2, 0, 0))
+        tzs.add('rrule', {'freq': 'yearly', 'bymonth': 3, 'byday': '-1su'})
+        tzd.add('TZOFFSETFROM', timedelta(hours=1))
+        tzd.add('TZOFFSETTO', timedelta(hours=2))
+
+        tzc.add_component(tzs)
+        tzc.add_component(tzd)
+        return tzc
 
 
 class ICalendarEventComponent(object):
