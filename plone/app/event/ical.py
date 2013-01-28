@@ -93,22 +93,29 @@ def add_to_zones_map(tzmap, tzid, dt):
     tz = pytz.timezone(tzid)
     transitions = getattr(tz, '_utc_transition_times', null)
     dtzl = tzdel(utc(dt))
+
     # get transition time, which is the dtstart of timezone
     transition = max(transitions, key=lambda item:item<=dtzl and item or null)
-    # convert to local time
-    transition = transition is null and null or tzdel(tz.localize(transition))
+
+    # get previous transition to calculate tzoffsetfrom
+    idx = transitions.index(transition)
+    prev_idx = idx > 0 and idx - 1 or idx
+    prev_transition = transitions[prev_idx]
+
+    def localize(tz, dt):
+        if dt is null: return null # dummy time
+        return pytz.utc.localize(dt).astimezone(tz) # naive to utc and localize
+    transition = localize(tz, transition)
+    dtstart = tzdel(transition) # timezone dtstart must be in local time
+    prev_transition = localize(tz, prev_transition)
 
     if tzid not in tzmap: tzmap[tzid] = {} # initial
-    if transition in tzmap[tzid]: return tzmap # already there
-    import pdb; pdb.set_trace()
-    tzmap[tzid][transition] = {
-            'dst': tz.dst(dt).total_seconds() > 0,
-            'name': tz.tzname(dt),
-            # 'tzoffsetfrom': tz.fromutc(dt),
-            'tzoffsetfrom': tz.utcoffset(dt+timedelta(days=30*6)), # that's an
-                # ugly workaround around the missing information. try to fiddle
-                # it out from pytz.
-            'tzoffsetto': tz.utcoffset(dt),
+    if dtstart in tzmap[tzid]: return tzmap # already there
+    tzmap[tzid][dtstart] = {
+            'dst': transition.dst().total_seconds() > 0,
+            'name': transition.tzname(),
+            'tzoffsetfrom': prev_transition.utcoffset(),
+            'tzoffsetto': transition.utcoffset(),
             # TODO: recurrence rule
     }
     return tzmap
