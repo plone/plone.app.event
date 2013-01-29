@@ -12,6 +12,7 @@ from plone.event.utils import pydt, utc
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_portal_events
 from plone.event.utils import tzdel
+from Products.ZCatalog.interfaces import ICatalogBrain
 import pytz
 
 
@@ -47,7 +48,11 @@ def construct_calendar(context, events):
     if cal_tz: cal.add('x-wr-timezone', cal_tz)
 
     tzmap = {}
+    if not hasattr(events, '__getslice__'): # LazyMap doesn't have __iter__
+        events = [events]
     for event in events:
+        if ICatalogBrain.providedBy(event):
+            event = event.getObject()
         acc = IEventAccessor(event)
         tz = acc.timezone
         # TODO: the standard wants each recurrence to have a valid timezone
@@ -135,8 +140,7 @@ def calendar_from_event(context):
 
     """
     context = aq_inner(context)
-    events = [context]
-    return construct_calendar(context, events)
+    return construct_calendar(context, context)
 
 
 @implementer(IICalendar)
@@ -148,11 +152,7 @@ def calendar_from_container(context):
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
     result = get_portal_events(context, path=path)
-    events = [item.getObject() for item in result] # TODO: don't do that.
-    # TODO: should i become a generator?
-    # TODO: let construct_calendar expand brains to objects - so a
-    # generator would make some sense...
-    return construct_calendar(context, events)
+    return construct_calendar(context, result)
 
 
 @implementer(IICalendar)
@@ -163,8 +163,7 @@ def calendar_from_collection(context):
     """
     context = aq_inner(context)
     result = get_portal_events(context)
-    events = [item.getObject() for item in result]
-    return construct_calendar(context, events)
+    return construct_calendar(context, result)
 
 
 class ICalendarEventComponent(object):
