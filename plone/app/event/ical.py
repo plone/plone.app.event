@@ -213,9 +213,8 @@ class ICalendarEventComponent(object):
 
                     # localize ex/rdate
                     # TODO: should better already be localized by event object
-                    tz = pytz.timezone(event.timezone)
-                    dtlist = factory.from_ical(val)
-                    dtlist = [tz.localize(item) for item in dtlist]
+                    tzid = event.timezone
+                    dtlist = factory.from_ical(val, timezone=tzid)
 
                     ical.add(prop, factory(dtlist), encode=0)
 
