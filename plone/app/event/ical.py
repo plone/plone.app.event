@@ -52,8 +52,10 @@ def construct_calendar(context, events):
         tz = acc.timezone
         # TODO: the standard wants each recurrence to have a valid timezone
         # definition. sounds decent, but not realizable.
-        tzmap = add_to_zones_map(tzmap, tz, acc.start)
-        tzmap = add_to_zones_map(tzmap, tz, acc.end)
+        if not acc.whole_day: # whole day events are exported as dates without
+                              # timezone information
+            tzmap = add_to_zones_map(tzmap, tz, acc.start)
+            tzmap = add_to_zones_map(tzmap, tz, acc.end)
         cal.add_component(IICalendarEventComponent(event).to_ical())
 
     for (tzid, transitions) in tzmap.items():
@@ -82,12 +84,22 @@ def construct_calendar(context, events):
 
 
 def add_to_zones_map(tzmap, tzid, dt):
+    if tzid.lower() == 'utc' or not isinstance(dt, datetime):
+        # no need to define UTC nor timezones for date objects.
+        return tzmap
     null = datetime(1,1,1)
     tz = pytz.timezone(tzid)
-    transitions = getattr(tz, '_utc_transition_times', null)
+    transitions = getattr(tz, '_utc_transition_times', None)
+    if not transitions: return tzmap # we need transition definitions
     dtzl = tzdel(utc(dt))
 
-    # get transition time, which is the dtstart of timezone
+    # get transition time, which is the dtstart of timezone.
+    #     the key function returns the value to compare with. as long as item
+    #     is smaller or equal like the dt value in UTC, return the item. as
+    #     soon as it becomes greater, compare with the smallest possible
+    #     datetime, which wouldn't create a match within the max-function. this
+    #     way we get the maximum transition time which is smaller than the
+    #     given datetime.
     transition = max(transitions, key=lambda item:item<=dtzl and item or null)
 
     # get previous transition to calculate tzoffsetfrom
@@ -96,7 +108,9 @@ def add_to_zones_map(tzmap, tzid, dt):
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):
-        if dt is null: return null # dummy time
+        if dt is null: return null # dummy time, edge case
+                                   # (dt at beginning of all transitions,
+                                   # see above.)
         return pytz.utc.localize(dt).astimezone(tz) # naive to utc and localize
     transition = localize(tz, transition)
     dtstart = tzdel(transition) # timezone dtstart must be in local time
@@ -134,7 +148,7 @@ def calendar_from_container(context):
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
     result = get_portal_events(context, path=path)
-    events = [item.getObject() for item in result]
+    events = [item.getObject() for item in result] # TODO: don't do that.
     # TODO: should i become a generator?
     # TODO: let construct_calendar expand brains to objects - so a
     # generator would make some sense...

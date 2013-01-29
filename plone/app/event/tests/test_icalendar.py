@@ -66,6 +66,13 @@ class ICalendarExportTest(unittest.TestCase):
         pc12.contact_email='info@ploneconf.org'
         notify(ObjectModifiedEvent(pc12))
 
+        portal.events.invokeFactory('plone.app.event.dx.event',
+            id='artsprint2013', title='Artsprint 2013',
+            start=datetime(2013,2,18),
+            end=datetime(2012,2,22),
+            whole_day=True,
+            timezone='Europe/Vienna')
+
         portal.invokeFactory("Collection",
                              "collection",
                              title="New Collection",
@@ -102,14 +109,42 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2012',
-            'DTSTART;VALUE=DATE-TIME:20121010T060000Z',
-            'DTEND;VALUE=DATE-TIME:20121010T160000Z',
+            'DTSTART;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T080000',
+            'DTEND;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T180000',
             'UID:',
             'RDATE:20121009T000000',
             'EXDATE:20121013T000000,20121014T000000',
             'CONTACT:Four Digits\\, info@ploneconf.org',
             'LOCATION:Arnhem',
             'RRULE:FREQ=DAILY;COUNT=5',
+            'END:VEVENT',
+            'BEGIN:VTIMEZONE',
+            'TZID:Europe/Amsterdam',
+            'X-LIC-LOCATION:Europe/Amsterdam',
+            'BEGIN:DAYLIGHT',
+            'DTSTART;VALUE=DATE-TIME:20120325T030000',
+            'TZNAME:CEST',
+            'TZOFFSETFROM:+0100',
+            'TZOFFSETTO:+0200',
+            'END:DAYLIGHT',
+            'END:VTIMEZONE',
+            'END:VCALENDAR')
+
+    def testWholeDayICal(self):
+        headers, output, request = makeResponse(self.request)
+        view = getMultiAdapter((self.portal.events.artsprint2013, request),
+                                name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.checkOrder(icalstr,
+            'BEGIN:VCALENDAR',
+            'X-WR-CALNAME:Artsprint 2013',
+            'BEGIN:VEVENT',
+            'SUMMARY:Artsprint 2013',
+            'DTSTART;VALUE=DATE:20130218',
+            'DTEND;VALUE=DATE:20120222',
             'END:VEVENT',
             'END:VCALENDAR')
 
