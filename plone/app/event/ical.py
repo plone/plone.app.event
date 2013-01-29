@@ -214,9 +214,10 @@ class ICalendarEventComponent(object):
                     # localize ex/rdate
                     # TODO: should better already be localized by event object
                     tzid = event.timezone
+                    # get list of datetime values from ical string
                     dtlist = factory.from_ical(val, timezone=tzid)
 
-                    ical.add(prop, factory(dtlist), encode=0)
+                    ical.add(prop, dtlist)
 
         if event.location: ical.add('location', event.location)
 
