@@ -112,8 +112,8 @@ class ICalendarExportTest(unittest.TestCase):
             'DTSTART;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T080000',
             'DTEND;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T180000',
             'UID:',
-            'RDATE:20121009T000000',
-            'EXDATE:20121013T000000,20121014T000000',
+            'RDATE;TZID=Europe/Amsterdam:20121009T000000',
+            'EXDATE;TZID=Europe/Amsterdam:20121013T000000,20121014T000000',
             'CONTACT:Four Digits\\, info@ploneconf.org',
             'LOCATION:Arnhem',
             'RRULE:FREQ=DAILY;COUNT=5',
@@ -190,21 +190,48 @@ class ICalendarExportTest(unittest.TestCase):
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'X-WR-CALNAME:New Collection',
+            'X-WR-TIMEZONE:UTC',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2007',
+            'DTSTART;VALUE=DATE-TIME:20071010T000000Z',
+            'DTEND;VALUE=DATE-TIME:20071012T000000Z',
             'END:VEVENT',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2008',
-            'RDATE:20081007T000000',
-            'EXDATE:20081011T000000,20081012T000000',
+            'DTSTART;VALUE=DATE-TIME:20081008T000000Z',
+            'DTEND;VALUE=DATE-TIME:20081010T000000Z',
+            'RDATE:20081007T000000Z',
+            'EXDATE:20081011T000000Z,20081012T000000Z',
             'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2012',
-            'RDATE:20121009T000000',
-            'EXDATE:20121013T000000,20121014T000000',
+            'DTSTART;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T080000',
+            'DTEND;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T180000',
+            'RDATE;TZID=Europe/Amsterdam:20121009T000000',
+            'EXDATE;TZID=Europe/Amsterdam:20121013T000000,20121014T000000',
             'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
+
+            'BEGIN:VEVENT',
+            'SUMMARY:Artsprint 2013',
+            'DTSTART;VALUE=DATE:20130218',
+            'DTEND;VALUE=DATE:20120222',
+            'END:VEVENT',
+
+            'BEGIN:VTIMEZONE',
+            'TZID:Europe/Amsterdam',
+            'BEGIN:DAYLIGHT',
+            'DTSTART;VALUE=DATE-TIME:20120325T030000',
+            'TZNAME:CEST',
+            'TZOFFSETFROM:+0100',
+            'TZOFFSETTO:+0200',
+            'END:DAYLIGHT',
+            'END:VTIMEZONE',
+
             'END:VCALENDAR')
 
     def testFolderICal(self):
@@ -214,23 +241,52 @@ class ICalendarExportTest(unittest.TestCase):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
+
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
+            'X-WR-CALNAME:Events',
+            'X-WR-TIMEZONE:UTC',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2007',
+            'DTSTART;VALUE=DATE-TIME:20071010T000000Z',
+            'DTEND;VALUE=DATE-TIME:20071012T000000Z',
             'END:VEVENT',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2008',
-            'RDATE:20081007T000000',
-            'EXDATE:20081011T000000,20081012T000000',
+            'DTSTART;VALUE=DATE-TIME:20081008T000000Z',
+            'DTEND;VALUE=DATE-TIME:20081010T000000Z',
+            'RDATE:20081007T000000Z',
+            'EXDATE:20081011T000000Z,20081012T000000Z',
             'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
+
             'BEGIN:VEVENT',
             'SUMMARY:Plone Conf 2012',
-            'RDATE:20121009T000000',
-            'EXDATE:20121013T000000,20121014T000000',
+            'DTSTART;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T080000',
+            'DTEND;TZID=Europe/Amsterdam;VALUE=DATE-TIME:20121010T180000',
+            'RDATE;TZID=Europe/Amsterdam:20121009T000000',
+            'EXDATE;TZID=Europe/Amsterdam:20121013T000000,20121014T000000',
             'RRULE:FREQ=DAILY;COUNT=5',
             'END:VEVENT',
+
+            'BEGIN:VEVENT',
+            'SUMMARY:Artsprint 2013',
+            'DTSTART;VALUE=DATE:20130218',
+            'DTEND;VALUE=DATE:20120222',
+            'END:VEVENT',
+
+            'BEGIN:VTIMEZONE',
+            'TZID:Europe/Amsterdam',
+            'BEGIN:DAYLIGHT',
+            'DTSTART;VALUE=DATE-TIME:20120325T030000',
+            'TZNAME:CEST',
+            'TZOFFSETFROM:+0100',
+            'TZOFFSETTO:+0200',
+            'END:DAYLIGHT',
+            'END:VTIMEZONE',
+
             'END:VCALENDAR')
 
     def testFolderICalInfo(self):

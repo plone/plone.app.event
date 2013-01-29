@@ -210,7 +210,14 @@ class ICalendarEventComponent(object):
                     ical.add(prop, icalendar.prop.vRecur.from_ical(val))
                 elif prop in ('EXDATE', 'RDATE'):
                     factory = icalendar.prop.vDDDLists
-                    ical.add(prop, factory(factory.from_ical(val)), encode=0)
+
+                    # localize ex/rdate
+                    # TODO: should better already be localized by event object
+                    tz = pytz.timezone(event.timezone)
+                    dtlist = factory.from_ical(val)
+                    dtlist = [tz.localize(item) for item in dtlist]
+
+                    ical.add(prop, factory(dtlist), encode=0)
 
         if event.location: ical.add('location', event.location)
 
