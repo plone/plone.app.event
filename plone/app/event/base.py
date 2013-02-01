@@ -14,7 +14,7 @@ from plone.event.utils import pydt
 from plone.event.utils import is_same_day, is_same_time
 from plone.registry.interfaces import IRegistry
 from zope.component import adapts
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from zope.component.hooks import getSite
 from zope.interface import implements, Interface
 
@@ -77,6 +77,9 @@ def dt_start_of_day(dt):
     :rtype: Python datetime
 
     """
+    if not isinstance(dt, datetime):
+        # is a date
+        dt = datetime.fromordinal(dt.toordinal())
     return dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
 def dt_end_of_day(dt):
@@ -89,6 +92,9 @@ def dt_end_of_day(dt):
     :rtype: Python datetime
 
     """
+    if not isinstance(dt, datetime):
+        # is a date
+        dt = datetime.fromordinal(dt.toordinal())
     return dt.replace(hour=23, minute=59, second=59, microsecond=0)
 
 
@@ -128,16 +134,14 @@ def start_end_from_mode(mode, dt=None, context=None):
     elif mode == 'future':
         start = now
         end = None
-    elif mode == 'today':
-        start = dt_start_of_day(now)
-        end = dt_end_of_day(now)
     elif mode == 'now':
         start = now
         end = dt_end_of_day(now)
     elif mode == '7days':
         start = now
         end = dt_end_of_day(now+timedelta(days=7))
-    elif mode == 'day' and isinstance(dt, datetime):
+    elif mode == 'day' or mode =='today':
+        if not dt: dt = now # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
 
@@ -197,16 +201,18 @@ def default_timezone(context=None):
     # TODO: test member timezone
     if not context: context = getSite()
 
-    membership = getToolByName(context, 'portal_membership')
-    if not membership.isAnonymousUser(): # the user has not logged in
+    membership = getToolByName(context, 'portal_membership', None)
+    if membership and not membership.isAnonymousUser(): # the user has not logged in
         member = membership.getAuthenticatedMember()
         member_timezone = member.getProperty('timezone', None)
         if member_timezone:
             return pytz.timezone(member_timezone).zone
 
-    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
-                                                    prefix="plone.app.event")
-    portal_timezone = controlpanel.portal_timezone
+    portal_timezone = None
+    reg = queryUtility(IRegistry, context=context, default=None)
+    if reg:
+        portal_timezone= reg.forInterface(
+                IEventSettings, prefix="plone.app.event").portal_timezone
 
     # fallback to what plone.event is doing
     if not portal_timezone:
@@ -217,6 +223,7 @@ def default_timezone(context=None):
     portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
 
     return portal_timezone
+
 
 def default_tzinfo(context=None):
     """Return the default timezone as tzinfo instance.

@@ -123,6 +123,73 @@ class TestBaseModule(unittest.TestCase):
         li = [strftime_to_cal_wkday(day) for day in range(0,7)]
         self.assertTrue(li == [6, 0, 1, 2, 3, 4, 5])
 
+    def test__default_timezone(self):
+        """Test, if default_timezone returns something other than None if
+        called with and without a context.
+        """
+        self.assertTrue(default_timezone() is not None)
+        self.assertTrue(default_timezone(context=self.portal) is not None)
+
+    def test__dt_start_of_day(self):
+        from plone.app.event.base import dt_start_of_day
+        self.assertTrue(dt_start_of_day(datetime.datetime(2013,2,1,18,35))
+                        == datetime.datetime(2013,2,1,0,0,0,0))
+        self.assertTrue(dt_start_of_day(datetime.date(2013,2,1))
+                        == datetime.datetime(2013,2,1,0,0,0,0))
+
+    def test__dt_end_of_day(self):
+        from plone.app.event.base import dt_end_of_day
+        self.assertTrue(dt_end_of_day(datetime.datetime(2013,2,1,18,35))
+                        == datetime.datetime(2013,2,1,23,59,59,0))
+        self.assertTrue(dt_end_of_day(datetime.date(2013,2,1))
+                        == datetime.datetime(2013,2,1,23,59,59,0))
+
+    def test__start_end_from_mode(self):
+        from plone.app.event.base import start_end_from_mode
+        from plone.app.event.base import dt_end_of_day
+
+        start, end = start_end_from_mode('all')
+        self.assertTrue(start is None and end is None)
+
+        start, end = start_end_from_mode('past')
+        self.assertTrue(start is None and isinstance(end, datetime.datetime))
+
+        start, end = start_end_from_mode('future')
+        self.assertTrue(isinstance(start, datetime.datetime) and end is None)
+
+        start, end = start_end_from_mode('now')
+        self.assertTrue(isinstance(start, datetime.datetime) and
+                        isinstance(end, datetime.datetime) and
+                        end.hour==23 and end.minute==59 and end.second==59)
+
+        start, end = start_end_from_mode('7days')
+        self.assertTrue(isinstance(start, datetime.datetime) and
+                        isinstance(end, datetime.datetime) and
+                        end == dt_end_of_day(start+datetime.timedelta(days=7)))
+
+        start, end = start_end_from_mode('today')
+        self.assertTrue(isinstance(start, datetime.datetime) and
+                        isinstance(end, datetime.datetime) and
+                        start.hour==0 and start.minute==0 and start.second==0
+                        and
+                        end.hour==23 and end.minute==59 and end.second==59 and
+                        (start, end) == start_end_from_mode('day'))
+
+        day = datetime.datetime(2013,2,1,18,22)
+        start, end = start_end_from_mode('day', day)
+        self.assertTrue(start.date() == day.date() == end.date() and
+                        start.hour==0 and start.minute==0 and start.second==0
+                        and
+                        end.hour==23 and end.minute==59 and end.second==59)
+
+        # test with date-only
+        day = datetime.datetime(2013,2,1)
+        start, end = start_end_from_mode('day', day)
+        self.assertTrue(start.date() == day.date() == end.date() and
+                        start.hour==0 and start.minute==0 and start.second==0
+                        and
+                        end.hour==23 and end.minute==59 and end.second==59)
+
 
 class TestCalendarLinkbase(unittest.TestCase):
     # TODO: test overriding of ICalendarLinkbase
