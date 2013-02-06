@@ -166,7 +166,7 @@ class TestBaseModule(unittest.TestCase):
         start, end = start_end_from_mode('7days')
         self.assertTrue(isinstance(start, datetime.datetime) and
                         isinstance(end, datetime.datetime) and
-                        end == dt_end_of_day(start+datetime.timedelta(days=7)))
+                        end == dt_end_of_day(start+datetime.timedelta(days=6)))
 
         start, end = start_end_from_mode('today')
         self.assertTrue(isinstance(start, datetime.datetime) and

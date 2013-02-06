@@ -139,7 +139,7 @@ def start_end_from_mode(mode, dt=None, context=None):
         end = dt_end_of_day(now)
     elif mode == '7days':
         start = now
-        end = dt_end_of_day(now+timedelta(days=7))
+        end = dt_end_of_day(now+timedelta(days=6))
     elif mode == 'day' or mode =='today':
         if not dt: dt = now # show today
         start = dt_start_of_day(dt)
