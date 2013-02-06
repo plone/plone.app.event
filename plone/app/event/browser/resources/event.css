@@ -28,29 +28,47 @@
 
 
 /* event listing styles */
+.event_listing article {
+    background-color: #E2E2E2;
+    border-radius: 1em 1em 1em 1em;
+    margin-top: 1em;
+    padding: 1em;
+}
+.event_listing article .documentByLine {
+    background: none repeat scroll 0 0 transparent;
+    color: black !important;
+    font-size: 1em !important;
+    font-weight: bold;
+    padding: 0;
+}
 .event_listing div.cal_date { 
     float:left;
-    margin:0 1em 1em 0;
-    padding:0.5em;
+    margin: 0 1.5em 0.5em 0;
+    padding:0.7em 0.7em 0.5em;
     background-color:white;
-    border:1px solid black;
+    border:none;
     border-radius:0.5em;
     box-shadow: 0.5em 0.5em 0.4em black;
     min-width:4.4em;
 }
 .event_listing span.cal_wkday {
     display:block;
-    font-size:2em;
+    font-size:2.3em;
     font-weight:bold;
     border-bottom:2px solid black;
+    padding-bottom:0.3em;
 }
 .event_listing span.cal_day {
-    font-size:1.5em;
+    font-size:1.7em;
+    display:inline-block;
+    padding-top:0.3em;
 }
 .event_listing span.cal_month {
-    font-size:1em;
+    font-size:1.3em;
+    line-height:1.3em;
+    display:inline-block;
 }
-    
+
 
 
 /* portlet calendar styles */

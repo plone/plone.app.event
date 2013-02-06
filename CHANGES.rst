@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Event listing: Better styles.
+  [thet]
+
 - Implement week mode for start_end_from_mode function.
   [thet]
 
