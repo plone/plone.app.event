@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Implement week mode for start_end_from_mode function.
+  [thet]
+
 - Add icalendar timezone support and properly export whole day events.
   Fixes #22, Fixes #71.
   [thet]

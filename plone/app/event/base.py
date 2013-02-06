@@ -29,7 +29,7 @@ FALLBACK_TIMEZONE = 'UTC'
 
 
 class CalendarLinkbase(object):
-    """Default adapter to retrieve a base url for a calendar view. 
+    """Default adapter to retrieve a base url for a calendar view.
     In this default implementation we use the @@event_listing view as calendar
     view.
 
@@ -112,9 +112,9 @@ def start_end_from_mode(mode, dt=None, context=None):
                     '7days': Show events until 7 days in future.
                     'day': Return all events on the given day (dt parameter
                            required)
+                    'week': Show a weeks events, optionally from a given date.
                  These settings override the start and end parameters.
                     Not implemented yet:
-                    'week': Show this weeks events.
                     'month': Show this month's events.
     :type mode: string
 
@@ -144,6 +144,18 @@ def start_end_from_mode(mode, dt=None, context=None):
         if not dt: dt = now # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
+    elif mode == 'week':
+        if not dt: dt = now # show this week
+        wkd = dt.weekday()
+        first = first_weekday()
+
+        if first <= wkd:
+            delta = wkd - first # >= 0
+        if first > wkd:
+            delta = wkd + 7 - first # > 0
+
+        start = dt_start_of_day(dt - timedelta(days=delta))
+        end = dt_end_of_day(start + timedelta(days=6))
 
     return start, end
 

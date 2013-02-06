@@ -22,6 +22,7 @@ from plone.app.event.base import (
     localized_now,
     dates_for_display
 )
+from plone.app.event import base
 from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
@@ -189,6 +190,32 @@ class TestBaseModule(unittest.TestCase):
                         start.hour==0 and start.minute==0 and start.second==0
                         and
                         end.hour==23 and end.minute==59 and end.second==59)
+
+
+        def ret_0(): return 0 # Monday
+        def ret_1(): return 1 # Tuesday
+        def ret_6(): return 6 # Sunday
+        orig_first_weekday = base.first_weekday # prepare patched first_weekday
+
+        base.first_weekday = ret_0
+        day = datetime.datetime(2013,2,2)
+        start, end = start_end_from_mode('week', day)
+        self.assertTrue(start.isoformat() == '2013-01-28T00:00:00' and
+                        end.isoformat()   == '2013-02-03T23:59:59')
+
+        base.first_weekday = ret_1
+        day = datetime.datetime(2013,2,2)
+        start, end = start_end_from_mode('week', day)
+        self.assertTrue(start.isoformat() == '2013-01-29T00:00:00' and
+                        end.isoformat()   == '2013-02-04T23:59:59')
+
+        base.first_weekday = ret_6
+        day = datetime.datetime(2013,2,1)
+        start, end = start_end_from_mode('week', day)
+        self.assertTrue(start.isoformat() == '2013-01-27T00:00:00' and
+                        end.isoformat()   == '2013-02-02T23:59:59')
+
+        base.first_weekday = orig_first_weekday # restore orig first_weekday
 
 
 class TestCalendarLinkbase(unittest.TestCase):
