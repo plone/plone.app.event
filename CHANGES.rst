@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Better calendar portlet and tooltip styling.
+  [thet]
+
 - Event listing: Better styles.
   [thet]
 

@@ -160,11 +160,17 @@ class Renderer(base.Renderer):
                 for occ in date_events:
                     accessor = IEventAccessor(occ)
                     location = accessor.location
-                    events_string += u'%s<a href="%s">%s</a>%s' % (
-                        events_string and u"</br>" or u"",
+                    whole_day = accessor.whole_day
+                    time = accessor.start.time().strftime('%H:%M')
+                    # TODO: make 24/12 hr format configurable
+                    base = u'<a href="%s"><span class="title">%s</span>'\
+                           u'%s%s%s</a>'
+                    events_string +=  base % (
                         accessor.url,
                         accessor.title,
-                        location and u" %s" % location or u"")
+                        not whole_day and u' %s' % time or u'',
+                        not whole_day and location and u', ' or u'',
+                        location and u' %s' % location or u'')
 
             caldata[-1].append(
                 {'date': dat,
