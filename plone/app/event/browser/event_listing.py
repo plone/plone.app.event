@@ -39,19 +39,15 @@ class EventListing(BrowserView):
                 pass
         return dt
 
-    def get_events(self, start=None, end=None, batch=True, mode=None):
+    @property
+    def get_events(self):
         context = self.context
 
-        mode = mode or self.mode
-        if not mode and not start and not end:
-            mode = 'future'
-        if mode:
-            start, end = start_end_from_mode(mode, self.date, context)
+        mode = self.mode or 'future'
+        start, end = start_end_from_mode(mode, self.date, context)
 
-        b_start = b_size = None
-        if batch:
-            b_start=self.b_start
-            b_size=self.b_size
+        b_start=self.b_start
+        b_size=self.b_size
 
         occs = get_occurrences_from_brains(
                 context,
@@ -61,12 +57,7 @@ class EventListing(BrowserView):
                 start,
                 end)
 
-        if batch:
-            ret = Batch(occs, size=b_size, start=b_start, orphan=self.orphan)
-        else:
-            ret = occs
-
-        return ret
+        return Batch(occs, size=b_size, start=b_start, orphan=self.orphan)
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
