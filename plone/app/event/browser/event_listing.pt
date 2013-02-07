@@ -6,53 +6,44 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="plone.app.event">
 <body>
-<metal:content-core
-    fill-slot="content-core"
-    tal:define="batch view/get_events;
-                mode request/mode|string:future;
-                toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
+
+<metal:content-core fill-slot="content-core">
+<metal:block define-macro="content-core">
+<tal:def define="batch view/get_events;
+                 mode request/mode|string:future;
+                 toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
+
   <div class="event_listing">
-  <nav>
-    <ul>
-      <li>
-        <a href=""
-            tal:attributes="href view/prev_week_url">
-            Previous Week
-        </a>
-      </li>
-      <li>
-        <a href=""
-            tal:attributes="href view/today_url">
-            Today
-        </a>
-      </li>
-      <li>
-        <a href=""
-            tal:attributes="href view/next_week_url">
-            Next Week
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <tal:items repeat="item batch">
-    <article tal:define="startf python:view.date_speller(item.start)">
-      <div class="cal_date">
-          <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
-          <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
-          <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
-      </div>
-      <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
-      <div class="documentByLine">
-        <tal:date replace="structure python:view.formated_date(item)"
-        /><span class="cal_location" tal:condition="item/location" tal:content="string:, ${item/location}"
-        />
-      </div>
-      <p tal:content="item/description" />
-      <div class="visualClear" />
-    </article>
-  </tal:items>
+    <nav>
+      <ul>
+        <li><a href="" tal:attributes="href view/prev_week_url" i18n:translate="prev_week_link">Previous Week</a></li>
+        <li><a href="" tal:attributes="href view/today_url" i18n:translate="today_link">Today</a></li>
+        <li><a href="" tal:attributes="href view/next_week_url" i18n:translate="next_week_link">Next Week</a></li>
+      </ul>
+    </nav>
+    <tal:items repeat="item batch">
+      <article tal:define="startf python:view.date_speller(item.start)">
+        <div class="cal_date">
+            <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
+            <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
+            <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
+        </div>
+        <h2><a href="" tal:attributes="href item/url" tal:content="item/title">Title</a></h2>
+        <div class="documentByLine">
+          <tal:date replace="structure python:view.formated_date(item)"
+          /><span class="cal_location" tal:condition="item/location" tal:content="string:, ${item/location}"
+          />
+        </div>
+        <p tal:content="item/description" />
+        <div class="visualClear" />
+      </article>
+    </tal:items>
   </div>
   <div metal:use-macro="context/batch_macros/macros/navigation" />
+
+</tal:def>
+</metal:block>
 </metal:content-core>
+
 </body>
 </html>
