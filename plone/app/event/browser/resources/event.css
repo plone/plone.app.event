@@ -15,6 +15,16 @@
 
 
 /* event listing styles */
+
+#content .event_listing nav ul { list-style-type:none; }
+#content .event_listing nav ul li {
+    display:inline-block;
+    padding:0.2em;
+    margin-right:0.2em;
+    font-weight:bold;
+}
+#content .event_listing nav ul li:last-of-type { margin-right:0; }
+
 .event_listing article {
     background-color: #EAEAEA;
     border-radius: 1em 1em 1em 1em;
@@ -77,7 +87,9 @@
 .pae_calendar_tooltip a .title { font-weight:bold; }
 
 
-/* portlet calendar styles */
+/* 
+ * PORTLET CALENDAR STYLES
+ */
 .portletCalendar {
     width: 100%;
     margin: 1px 0 1em 0;
@@ -108,19 +120,23 @@
     margin: 0 -.5em;
 }
 
-.portletCalendar a, .portletCalendar a:focus,
-.portletCalendar a, .portletCalendar a:hover {
-    text-decoration: none;
-}
-
 .ploneCalendar {
     border-spacing: 0;
     width: 100%;
 }
 
+.portletCalendar a, .portletCalendar a:focus,
+.portletCalendar a, .portletCalendar a:hover,
 .ploneCalendar a {
     text-decoration: none;
     border-bottom: none !important;
+}
+
+.ploneCalendar .weekdays th {
+    background-color: #eee;
+    text-align: center;
+    padding: 2px;
+    font-weight: normal;
 }
 
 .ploneCalendar td {
@@ -128,7 +144,15 @@
     width: 14%;
     text-align: center;
     padding: 2px;
+    border: 2px solid #eee;
+    background-color: #eee;
 }
+.ploneCalendar td.cal_has_events { font-weight: bold; }
+.ploneCalendar td.today {
+    background-color: white;
+    border: 2px solid #205C90;
+}
+.ploneCalendar td:hover { background-color: white; }
 .ploneCalendar td a {
     display:inline-block;
     width:100%;
@@ -141,29 +165,10 @@
     opacity:0.4;
 }
 
-.ploneCalendar .weekdays th {
-    background-color: #eee;
-    text-align: center;
-    padding: 2px;
-    font-weight: normal;
-}
 
-.ploneCalendar .event {
-    background-color: #eee;
-    font-weight: bold;
-}
-
-.ploneCalendar .todayevent {
-    background-color: white;
-    border: 2px solid #205C90;
-    font-weight: bold;
-}
-
-.ploneCalendar .todaynoevent {
-    border: 2px solid #205C90;
-}
-
-
+/* 
+ * EVENT VIEW
+ */
 .eventDetails .timezone {
     display:block;
     margin-top:0.5em;

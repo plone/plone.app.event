@@ -60,8 +60,8 @@
                               prev_month day/prev_month;
                               events day/events;
                               limit python:len(events) if events is not None else 0"
-                  tal:attributes="class python:u'%s%s%s%s' %
-                              ((today and 'todayevent' or 'event'),
+                  tal:attributes="class python:u'event%s%s%s%s' %
+                              ((today and ' today' or ''),
                               (next_month and ' cal_next_month' or ''),
                               (prev_month and ' cal_prev_month' or ''),
                               (events and ' cal_has_events' or ''))">

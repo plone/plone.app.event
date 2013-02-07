@@ -9,10 +9,11 @@ Changelog
   main_template's master macro.
   [thet]
 
-- Better calendar portlet and tooltip styling.
+- Better calendar portlet and tooltip styling. Drop usage of todayevent and
+  todaynoevent classes.
   [thet]
 
-- Event listing: Better styles.
+- Event listing: Better styles, calendar-navigation.
   [thet]
 
 - Implement week and month mode for start_end_from_mode function.
