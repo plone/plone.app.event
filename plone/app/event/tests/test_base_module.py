@@ -218,6 +218,22 @@ class TestBaseModule(unittest.TestCase):
         base.first_weekday = orig_first_weekday # restore orig first_weekday
 
 
+        # MONTH
+        #
+        start, end = start_end_from_mode('month')
+        self.assertTrue(start < end and start.day==1)
+
+        day = datetime.datetime(2013,2,7)
+        start, end = start_end_from_mode('month', day)
+        self.assertTrue(start.year==2013 and start.month==2 and start.day==1
+                        and
+                        start.hour==0 and start.minute==0 and start.second==0
+                        and
+                        end.year==2013 and end.month==2 and end.day==28
+                        and
+                        end.hour==23 and end.minute==59 and end.second==59)
+
+
 class TestCalendarLinkbase(unittest.TestCase):
     # TODO: test overriding of ICalendarLinkbase
     layer = PAEvent_INTEGRATION_TESTING

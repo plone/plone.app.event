@@ -1,10 +1,12 @@
+from calendar import monthrange
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
+
 import pytz
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
-from datetime import date
-from datetime import datetime
-from datetime import timedelta
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent, IEventRecurrence
 from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
@@ -156,6 +158,13 @@ def start_end_from_mode(mode, dt=None, context=None):
 
         start = dt_start_of_day(dt - timedelta(days=delta))
         end = dt_end_of_day(start + timedelta(days=6))
+    elif mode =='month':
+        if not dt: dt = now # show this month
+        year = dt.year
+        month = dt.month
+        last_day = monthrange(year, month)[1] # (wkday, days)
+        start = dt_start_of_day(datetime(year, month, 1))
+        end = dt_end_of_day(datetime(year, month, last_day))
 
     return start, end
 
