@@ -16,9 +16,11 @@
   <div class="event_listing">
     <nav>
       <ul>
+        <li><a href="" tal:attributes="href view/prev_month_url" i18n:translate="prev_month_link">Previous Month</a></li>
         <li><a href="" tal:attributes="href view/prev_week_url" i18n:translate="prev_week_link">Previous Week</a></li>
         <li><a href="" tal:attributes="href view/today_url" i18n:translate="today_link">Today</a></li>
         <li><a href="" tal:attributes="href view/next_week_url" i18n:translate="next_week_link">Next Week</a></li>
+        <li><a href="" tal:attributes="href view/next_month_url" i18n:translate="next_month_link">Next Month</a></li>
       </ul>
     </nav>
     <tal:items repeat="item batch">
