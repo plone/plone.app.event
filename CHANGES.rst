@@ -5,6 +5,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Use content-core fill/define metal definitions in all templates which use
+  main_template's master macro.
+  [thet]
+
 - Better calendar portlet and tooltip styling.
   [thet]
 
