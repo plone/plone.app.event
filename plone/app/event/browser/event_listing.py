@@ -25,7 +25,7 @@ class EventListing(BrowserView):
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
         self.mode    = 'mode'    in req and req['mode']         or None
-        self._date    = 'date'    in req and req['date']         or None
+        self._date   = 'date'    in req and req['date']         or None
 
         self.now = localized_now(context)
 
