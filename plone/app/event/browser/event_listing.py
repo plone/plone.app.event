@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from Products.CMFPlone.PloneBatch import Batch
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
@@ -8,6 +10,8 @@ from plone.app.event.base import get_occurrences_from_brains
 from plone.app.event.base import get_portal_events
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
+from plone.app.event.base import localized_now
+
 
 
 class EventListing(BrowserView):
@@ -21,7 +25,17 @@ class EventListing(BrowserView):
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
         self.mode    = 'mode'    in req and req['mode']         or None
-        self.date    = 'date'    in req and req['date']         or None
+        self._date    = 'date'    in req and req['date']         or None
+
+    @property
+    def date(self):
+        dt = None
+        if self._date:
+            try:
+                dt = guess_date_from(self._date)
+            except TypeError:
+                pass
+        return dt
 
     def get_events(self, start=None, end=None, batch=True, mode=None):
         context = self.context
@@ -30,13 +44,7 @@ class EventListing(BrowserView):
         if not mode and not start and not end:
             mode = 'future'
         if mode:
-            dt = None
-            if self.date:
-                try:
-                    dt = guess_date_from(self.date)
-                except TypeError:
-                    pass
-            start, end = start_end_from_mode(mode, dt, context)
+            start, end = start_end_from_mode(mode, self.date, context)
 
         b_start = b_size = None
         if batch:
@@ -65,3 +73,24 @@ class EventListing(BrowserView):
 
     def date_speller(self, date):
         return date_speller(self.context, date)
+
+    def today_url(self):
+        return '%s/%s?mode=today' % (
+                self.context.absolute_url(),
+                self.__name__)
+
+    def next_week_url(self):
+        now = self.date or localized_now(self.context)
+        datestr = (now + timedelta(days=7)).date().isoformat()
+        return '%s/%s?mode=week&date=%s' % (
+                self.context.absolute_url(),
+                self.__name__,
+                datestr)
+
+    def prev_week_url(self):
+        now = self.date or localized_now(self.context)
+        datestr = (now - timedelta(days=7)).date().isoformat()
+        return '%s/%s?mode=week&date=%s' % (
+                self.context.absolute_url(),
+                self.__name__,
+                datestr)

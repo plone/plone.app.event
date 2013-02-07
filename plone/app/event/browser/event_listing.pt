@@ -9,8 +9,31 @@
 <metal:content-core
     fill-slot="content-core"
     tal:define="batch view/get_events;
+                mode request/mode|string:future;
                 toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
   <div class="event_listing">
+  <nav>
+    <ul>
+      <li>
+        <a href=""
+            tal:attributes="href view/prev_week_url">
+            Previous Week
+        </a>
+      </li>
+      <li>
+        <a href=""
+            tal:attributes="href view/today_url">
+            Today
+        </a>
+      </li>
+      <li>
+        <a href=""
+            tal:attributes="href view/next_week_url">
+            Next Week
+        </a>
+      </li>
+    </ul>
+  </nav>
   <tal:items repeat="item batch">
     <article tal:define="startf python:view.date_speller(item.start)">
       <div class="cal_date">
