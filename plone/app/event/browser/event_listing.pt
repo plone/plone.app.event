@@ -25,6 +25,11 @@
         </ul>
       </nav>
     </header>
+
+    <section class="cal_group">
+      <header class="cal_group">
+        <h2 tal:content="view/header_string">FROM UNTIL</h2>
+      </header>
     <tal:items repeat="item batch">
       <article tal:define="startf python:view.date_speller(item.start)">
         <div class="cal_date">
@@ -42,6 +47,8 @@
         <div class="visualClear" />
       </article>
     </tal:items>
+    <section>
+
   </div>
   <div metal:use-macro="context/batch_macros/macros/navigation" />
 

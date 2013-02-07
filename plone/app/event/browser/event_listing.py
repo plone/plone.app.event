@@ -24,7 +24,7 @@ class EventListing(BrowserView):
         self.b_start = 'b_start' in req and int(req['b_start']) or 0
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
-        self.mode    = 'mode'    in req and req['mode']         or None
+        self.mode    = 'mode'    in req and req['mode']         or 'future'
         self._date   = 'date'    in req and req['date']         or None
 
         self.now = localized_now(context)
@@ -40,15 +40,18 @@ class EventListing(BrowserView):
         return dt
 
     @property
+    def _start_end(self):
+        start, end = start_end_from_mode(self.mode, self.date, self.context)
+        return start, end
+
+    @property
     def get_events(self):
         context = self.context
-
-        mode = self.mode or 'future'
-        start, end = start_end_from_mode(mode, self.date, context)
 
         b_start=self.b_start
         b_size=self.b_size
 
+        start, end = self._start_end
         occs = get_occurrences_from_brains(
                 context,
                 get_portal_events(context, start, end,
@@ -67,12 +70,56 @@ class EventListing(BrowserView):
     def date_speller(self, date):
         return date_speller(self.context, date)
 
+    @property
+    def header_string(self):
+        start, end = self._start_end
+        start_dict = start and date_speller(self.context, start) or None
+        end_dict = end and date_speller(self.context, end) or None
 
+        mode = self.mode
+        if mode == 'all':
+            return "All Events"
+
+        elif mode == 'past':
+            return "Past Events"
+
+        elif mode == 'future':
+            return "Future Events"
+
+        elif mode == 'now':
+            return "Todays upcoming Events"
+
+        elif mode == '7days':
+            return "Events from %02d.%02d.%s until %02d.%02d.%s" % (
+                        start.day, start.month, start.year,
+                        end.day, end.month, end.year)
+
+        elif mode == 'today':
+            return "Todays events"
+
+        elif mode == 'day':
+            return "Events on %s, %s. %s %s" % (
+                        start_dict['wkday'],
+                        start.day,
+                        start_dict['month'],
+                        start.year)
+
+        elif mode == 'week':
+            return "Events in %s. week from %02d.%02d.%s until %02d.%02d.%s" % (
+                        start.isocalendar()[1],
+                        start.day, start.month, start.year,
+                        end.day, end.month, end.year)
+
+        elif mode == 'month':
+            return "Events in %s %s" % (start_dict['month'], start.year)
+
+    @property
     def today_url(self):
         return '%s/%s?mode=today' % (
                 self.context.absolute_url(),
                 self.__name__)
 
+    @property
     def next_week_url(self):
         now = self.date or self.now
         datestr = (now + timedelta(days=7)).date().isoformat()
@@ -81,6 +128,7 @@ class EventListing(BrowserView):
                 self.__name__,
                 datestr)
 
+    @property
     def prev_week_url(self):
         now = self.date or self.now
         datestr = (now - timedelta(days=7)).date().isoformat()
@@ -89,6 +137,7 @@ class EventListing(BrowserView):
                 self.__name__,
                 datestr)
 
+    @property
     def next_month_url(self):
         now = self.date or self.now
         last_day = monthrange(now.year, now.month)[1] # (wkday, days)
@@ -99,6 +148,7 @@ class EventListing(BrowserView):
                 self.__name__,
                 datestr)
 
+    @property
     def prev_month_url(self):
         now = self.date or self.now
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
