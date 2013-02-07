@@ -127,25 +127,32 @@ def start_end_from_mode(mode, dt=None, context=None):
     if not context: context = getSite()
     now = localized_now(context)
     start = end = None
+
     if mode == 'all':
         start = None
         end = None
+
     elif mode == 'past':
         start = None
         end = now
+
     elif mode == 'future':
         start = now
         end = None
+
     elif mode == 'now':
         start = now
         end = dt_end_of_day(now)
+
     elif mode == '7days':
         start = now
         end = dt_end_of_day(now+timedelta(days=6))
+
     elif mode == 'day' or mode =='today':
         if not dt: dt = now # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
+
     elif mode == 'week':
         if not dt: dt = now # show this week
         wkd = dt.weekday()
@@ -158,6 +165,7 @@ def start_end_from_mode(mode, dt=None, context=None):
 
         start = dt_start_of_day(dt - timedelta(days=delta))
         end = dt_end_of_day(start + timedelta(days=6))
+
     elif mode =='month':
         if not dt: dt = now # show this month
         year = dt.year

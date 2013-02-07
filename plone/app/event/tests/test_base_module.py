@@ -149,25 +149,37 @@ class TestBaseModule(unittest.TestCase):
         from plone.app.event.base import start_end_from_mode
         from plone.app.event.base import dt_end_of_day
 
+        # ALL
+        #
         start, end = start_end_from_mode('all')
         self.assertTrue(start is None and end is None)
 
+        # PAST
+        #
         start, end = start_end_from_mode('past')
         self.assertTrue(start is None and isinstance(end, datetime.datetime))
 
+        # FUTURE
+        #
         start, end = start_end_from_mode('future')
         self.assertTrue(isinstance(start, datetime.datetime) and end is None)
 
+        # NOW
+        #
         start, end = start_end_from_mode('now')
         self.assertTrue(isinstance(start, datetime.datetime) and
                         isinstance(end, datetime.datetime) and
                         end.hour==23 and end.minute==59 and end.second==59)
 
+        # 7DAYS
+        #
         start, end = start_end_from_mode('7days')
         self.assertTrue(isinstance(start, datetime.datetime) and
                         isinstance(end, datetime.datetime) and
                         end == dt_end_of_day(start+datetime.timedelta(days=6)))
 
+        # TODAY
+        #
         start, end = start_end_from_mode('today')
         self.assertTrue(isinstance(start, datetime.datetime) and
                         isinstance(end, datetime.datetime) and
@@ -176,6 +188,8 @@ class TestBaseModule(unittest.TestCase):
                         end.hour==23 and end.minute==59 and end.second==59 and
                         (start, end) == start_end_from_mode('day'))
 
+        # DAY
+        #
         day = datetime.datetime(2013,2,1,18,22)
         start, end = start_end_from_mode('day', day)
         self.assertTrue(start.date() == day.date() == end.date() and
@@ -191,7 +205,8 @@ class TestBaseModule(unittest.TestCase):
                         and
                         end.hour==23 and end.minute==59 and end.second==59)
 
-
+        # WEEK
+        #
         def ret_0(): return 0 # Monday
         def ret_1(): return 1 # Tuesday
         def ret_6(): return 6 # Sunday
@@ -216,7 +231,6 @@ class TestBaseModule(unittest.TestCase):
                         end.isoformat()   == '2013-02-02T23:59:59')
 
         base.first_weekday = orig_first_weekday # restore orig first_weekday
-
 
         # MONTH
         #
