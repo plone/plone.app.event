@@ -13,6 +13,7 @@ from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 
+from plone.app.event import messageFactory as _
 
 class EventListing(BrowserView):
 
@@ -78,41 +79,78 @@ class EventListing(BrowserView):
 
         mode = self.mode
         if mode == 'all':
-            return "All Events"
+            msgid = _(u"all_events", default=u"All events")
 
         elif mode == 'past':
-            return "Past Events"
+            msgid = _(u"past_events", default=u"Past events")
 
         elif mode == 'future':
-            return "Future Events"
+            msgid = _(u"future_events", default=u"Future events")
 
         elif mode == 'now':
-            return "Todays upcoming Events"
-
-        elif mode == '7days':
-            return "Events from %02d.%02d.%s until %02d.%02d.%s" % (
-                        start.day, start.month, start.year,
-                        end.day, end.month, end.year)
+            msgid = _(u"todays_upcoming_events", default=u"Todays upcoming events")
 
         elif mode == 'today':
-            return "Todays events"
+            msgid = _(u"todays_events", default=u"Todays events")
+
+        elif mode == '7days':
+            msgid = _(u"events_from_until",
+                      default=u"Events from ${from} until ${until}",
+                      mapping={
+                          'from': "%s, %s. %s %s" % (
+                                start_dict['wkday'],
+                                start.day,
+                                start_dict['month'],
+                                start.year),
+                          'until': "%s, %s. %s %s" % (
+                                end_dict['wkday'],
+                                end.day,
+                                end_dict['month'],
+                                end.year),
+                        }
+                    )
 
         elif mode == 'day':
-            return "Events on %s, %s. %s %s" % (
-                        start_dict['wkday'],
-                        start.day,
-                        start_dict['month'],
-                        start.year)
+            msgid = _(u"events_on_day",
+                      default=u"Events on ${day}",
+                      mapping={
+                          'day': "%s, %s. %s %s" % (
+                                start_dict['wkday'],
+                                start.day,
+                                start_dict['month'],
+                                start.year),
+                        }
+                    )
 
         elif mode == 'week':
-            return "Events in %s. week from %02d.%02d.%s until %02d.%02d.%s" % (
-                        start.isocalendar()[1],
-                        start.day, start.month, start.year,
-                        end.day, end.month, end.year)
+            msgid = _(u"events_in_week",
+                      default=u"Events in week ${weeknumber},"
+                              u" from ${from} until ${until}",
+                      mapping={
+                          'weeknumber': start.isocalendar()[1],
+                          'from': "%s, %s. %s %s" % (
+                                start_dict['wkday'],
+                                start.day,
+                                start_dict['month'],
+                                start.year),
+                          'until': "%s, %s. %s %s" % (
+                                end_dict['wkday'],
+                                end.day,
+                                end_dict['month'],
+                                end.year),
+                        }
+                    )
 
         elif mode == 'month':
-            return "Events in %s %s" % (start_dict['month'], start.year)
+            msgid = _(u"events_in_month",
+                      default=u"Events in ${month} ${year}",
+                      mapping={
+                          'month': start_dict['month'],
+                          'year': start.year,
+                        }
+                    )
 
+        return self.context.translate(msgid)
 
 
     # MODE URLs
