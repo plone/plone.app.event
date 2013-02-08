@@ -39,7 +39,7 @@
       <span tal:replace="date_dict/start_date" i18n:translate="" />
     </tal:wholeday>
     <tal:notwholeday condition="not:date_dict/whole_day" i18n:translate="event_when_sameday">
-      <span class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date Time</span>
+      <span class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date</span>
       <div class="timerange">
           from
         <abbr class="dtstart"
