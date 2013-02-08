@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-02-08 14:05+0000\n"
+"POT-Creation-Date: 2013-02-08 14:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,10 +191,11 @@ msgstr "Termine vom ${from} bis ${until}"
 msgid "events_in_month"
 msgstr "Termine im ${month} ${year}"
 
-#. Default: "Events in week ${weeknumber}, from ${from} until ${until}"
+#. Default: "Events in week ${weeknumber} from ${from} until ${until}"
 #: ./plone/app/event/browser/event_listing.py:126
+#, fuzzy
 msgid "events_in_week"
-msgstr "Termine in der ${weeknumber}. Woche, vom ${from} bis ${until}"
+msgstr "Termine in der ${weeknumber}. Woche vom ${from} bis ${until}"
 
 #. Default: "Events on ${day}"
 #: ./plone/app/event/browser/event_listing.py:114

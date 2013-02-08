@@ -124,7 +124,7 @@ class EventListing(BrowserView):
 
         elif mode == 'week':
             msgid = _(u"events_in_week",
-                      default=u"Events in week ${weeknumber},"
+                      default=u"Events in week ${weeknumber}"
                               u" from ${from} until ${until}",
                       mapping={
                           'weeknumber': start.isocalendar()[1],

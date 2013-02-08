@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-02-08 14:05+0000\n"
+"POT-Creation-Date: 2013-02-08 14:13+0000\n"
 "PO-Revision-Date: 2011-12-06 23:00+0200\n"
 "Last-Translator: JeanMichel FRANCOIS <toutpt@gmail.com>\n"
 "Language-Team: Plone fr <plone-fr@lists.plone.org>\n"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "events_in_month"
 msgstr ""
 
-#. Default: "Events in week ${weeknumber}, from ${from} until ${until}"
+#. Default: "Events in week ${weeknumber} from ${from} until ${until}"
 #: ./plone/app/event/browser/event_listing.py:126
 msgid "events_in_week"
 msgstr ""
