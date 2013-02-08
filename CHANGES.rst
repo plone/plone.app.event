@@ -13,7 +13,8 @@ Changelog
   todaynoevent classes.
   [thet]
 
-- Event listing: Better styles, calendar-navigation, timespan header.
+- Event listing: Better styles, mode switch, calendar-navigation, timespan
+  header.
   [thet]
 
 - Implement week and month mode for start_end_from_mode function.
