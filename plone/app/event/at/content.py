@@ -43,7 +43,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         languageIndependent=True,
         widget=DatetimeWidget(
             label=_(u'label_event_start', default=u'Event Starts'),
-            description=_(u'help_start_location', default=u""),
+            description=_(u'help_start',
+                          default=u"Date and Time, when the event begins."),
             with_time=1,
             first_day=first_weekday_sun0,
             ),
@@ -58,7 +59,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         languageIndependent=True,
         widget=DatetimeWidget(
             label=_(u'label_event_end', default=u'Event Ends'),
-            description=_(u'help_end_location', default=u""),
+            description=_(u'help_end',
+                          default=u"Date and Time, when the event ends."),
             with_time=1,
             first_day=first_weekday_sun0,
             ),
@@ -70,7 +72,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         languageIndependent=True,
         widget=atapi.BooleanWidget(
             label=_(u'label_whole_day_event', u'Whole day event'),
-            description=_(u'help_whole_day_location', default=u""),
+            description=_(u'help_whole_day', default=u"Event lasts whole day"),
             ),
         ),
 

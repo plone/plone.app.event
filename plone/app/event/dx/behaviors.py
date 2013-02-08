@@ -53,13 +53,15 @@ class IEventBasic(model.Schema):
     """
     start = schema.Datetime(
         title = _(u'label_start', default=u'Event start date'),
-        description = _(u'help_start', default=u'Date and Time, when the event begins.'),
+        description = _(u'help_start',
+                        default=u'Date and Time, when the event begins.'),
         required = True
         )
 
     end = schema.Datetime(
         title = _(u'label_end', default=u'Event end date'),
-        description = _(u'help_end', default=u'Date and Time, when the event ends.'),
+        description = _(u'help_end',
+                        default=u'Date and Time, when the event ends.'),
         required = True
         )
 
@@ -83,7 +85,8 @@ class IEventBasic(model.Schema):
                                    default=u"The start date must be before the\
                                              end date."))
 
-# Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
+# Adding a parametirized widget
+# (this will be simpler in future versions of plone.autoform)
 IEventBasic.setTaggedValue('plone.autoform.widgets',
     {'start': ParameterizedWidgetFactory(DatetimeWidget,
         first_day=first_weekday_sun0),
@@ -113,14 +116,16 @@ class IEventRecurrence(model.Schema):
     """
     recurrence = schema.Text(
         title = _(u'label_recurrence', default=u'Recurrence'),
-        description = _(u'help_recurrence', default=u'RFC5545 compatible recurrence definition'),
+        description = _(u'help_recurrence',
+                        default=u'RFC5545 compatible recurrence definition'),
         required = False)
 
 # Please note: If a new behavior, made out of IEventBasic and IRecurrence is
 # created then a new ParameterizedWidgetFactory has to be used and the
 # start_field parameter must be set to the name of the new behavior.
 
-# Adding a parametirized widget (this will be simpler in future versions of plone.autoform)
+# Adding a parametirized widget
+# (this will be simpler in future versions of plone.autoform)
 IEventRecurrence.setTaggedValue('plone.autoform.widgets',
     {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
         start_field='IEventBasic.start',
@@ -156,25 +161,31 @@ class IEventContact(model.Schema):
     """
     contact_name = schema.TextLine(
         title = _(u'label_contact_name', default=u'Contact Name'),
-        description = _(u'help_contact_name', default=u'Name of a person to contact about this event.'),
+        description = _(u'help_contact_name',
+                        default=u'Name of a person to contact about this '
+                                u'event.'),
         required = False
         )
 
     contact_email = schema.TextLine(
         title = _(u'label_contact_email', default=u'Contact E-mail'),
-        description = _(u'help_contact_email', default=u'Email address to contact about this event.'),
+        description = _(u'help_contact_email',
+                        default=u'Email address to contact about this event.'),
         required = False
         )
 
     contact_phone = schema.TextLine(
         title = _(u'label_contact_phone', default=u'Contact Phone'),
-        description = _(u'help_contact_phone', default=u'Phone number to contact about this event.'),
+        description = _(u'help_contact_phone',
+                        default=u'Phone number to contact about this event.'),
         required = False
         )
 
     event_url = schema.TextLine(
         title = _(u'label_event_url', default=u'Event URL'),
-        description = _(u'help_event_url', default=u'Web address with more info about the event. Add http:// for external links.'),
+        description = _(u'help_event_url',
+                        default=u'Web address with more info about the event. '
+                        u'Add http:// for external links.'),
         required = False
         )
 
