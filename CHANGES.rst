@@ -13,8 +13,8 @@ Changelog
   todayevent and todaynoevent classes. Fix Linking to calendar_listing.
   [thet]
 
-- Event listing: Better styles, mode switch, calendar-navigation, timespan
-  header.
+- Event listing: Optimized layout and styles, mode switch, calendar-navigation,
+  timespan header.
   [thet]
 
 - Implement week and month mode for start_end_from_mode function.

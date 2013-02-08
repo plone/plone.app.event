@@ -34,15 +34,10 @@
     margin-top: 1em;
     padding: 1em;
 }
-.event_listing article .documentByLine {
-    background: none repeat scroll 0 0 transparent;
-    color: black !important;
-    font-size: 1em !important;
-    font-weight: bold;
-    padding: 0;
-}
+
 .event_listing div.cal_date { 
-    float:left;
+    display:inline-block;
+    vertical-align:top;
     margin: 0 1.5em 0.5em 0;
     padding:0.7em 0.7em 0.5em;
     background-color:white;
@@ -69,6 +64,15 @@
     display:inline-block;
 }
 
+.event_listing div.cal_info { display:inline-block; }
+.event_listing article .documentByLine {
+    background: none repeat scroll 0 0 transparent;
+    color: black !important;
+    font-size: 1em !important;
+    font-weight: bold;
+    padding: 0;
+}
+#content .event_listing p { margin:0; }
 
 /* tooltip styling. by default the element to be styled is .tooltip  */
 .pae_calendar_tooltip {
