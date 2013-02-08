@@ -49,14 +49,6 @@
         name="index_html"
         />
 
-    <browser:page
-        for="*"
-        name="occurrences.html"
-        class=".occurrence.Occurrences"
-        template="occurrence.pt"
-        permission="zope2.View"
-        />
-
     <adapter
         name="formated_date"
         provides="zope.contentprovider.interfaces.IContentProvider"

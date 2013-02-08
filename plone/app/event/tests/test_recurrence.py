@@ -156,23 +156,6 @@ class TestOccurrences(unittest.TestCase):
         self.assertTrue(len(result) == 5)
         self.assertTrue(IEventAccessor.providedBy(result[0]))
 
-    def test_view_get_data_startdate(self):
-        future = localized_now() + datetime.timedelta(days=5)
-        form = dict(start=str(future.date()))
-        request = TestRequest(form=form)
-        view = zope.component.getMultiAdapter(
-            (self.portal, request), name='occurrences.html')
-
-        result = view.get_data()
-        self.assertEqual(2, result.length)
-
-    def test_view_get_data_invalid(self):
-        request = TestRequest(form=dict(start='invalid'))
-        view = zope.component.getMultiAdapter(
-            (self.portal, request), name='occurrences.html')
-        result = view.get_data()
-        self.assertEqual(9, result.length)
-
     def test_eventview_occurrences(self):
         self.portal.invokeFactory(
             'Event',

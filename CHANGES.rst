@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove occurrences.html view because it's replaced by event_listing view.
+  [thet]
+
 - Changed Dexterity event-type title from "Event (DX)" to "Event" for
   consistent naming between Archetypes and Dexterity content types.
   [thet]
