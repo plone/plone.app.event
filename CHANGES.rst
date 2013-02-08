@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.0dev (unreleased)
--------------------
+1.0b4 (2013-02-08)
+------------------
 
 - Remove occurrences.html view because it's replaced by event_listing view.
   [thet]
