@@ -9,8 +9,8 @@ Changelog
   main_template's master macro.
   [thet]
 
-- Better calendar portlet and tooltip styling. Drop usage of todayevent and
-  todaynoevent classes.
+- Calendar Portlet: Better portlet and tooltip styling. Drop usage of
+  todayevent and todaynoevent classes. Fix Linking to calendar_listing.
   [thet]
 
 - Event listing: Better styles, mode switch, calendar-navigation, timespan

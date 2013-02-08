@@ -62,9 +62,10 @@ class Renderer(base.Renderer):
     def update(self):
         context = aq_inner(self.context)
 
+        sb = self.data.search_base
         self.calendar_linkbase = ICalendarLinkbase(context)
         self.calendar_linkbase.urlpath = '%s%s' % (
-                self.calendar_linkbase.urlpath, self.data.search_base)
+                self.calendar_linkbase.urlpath, sb and sb or '')
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (
