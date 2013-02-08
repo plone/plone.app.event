@@ -88,7 +88,8 @@ class ICalendarExportTest(unittest.TestCase):
     def testCollectionResult(self):
         collection = self.portal['collection']
         results = collection.results()
-        self.assertTrue(results.length == 2)
+        # Should find Archetypes and Dexterity events
+        self.assertTrue(results.length == 4)
 
     def checkOrder(self, text, *order):
         for item in order:

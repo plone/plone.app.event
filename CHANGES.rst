@@ -5,6 +5,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Changed Dexterity event-type title from "Event (DX)" to "Event" for
+  consistent naming between Archetypes and Dexterity content types.
+  [thet]
+
 - Updated and synced translations (.pot and German translations).
   [thet]
 
