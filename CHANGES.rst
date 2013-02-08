@@ -5,6 +5,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Updated and synced translations (.pot and German translations).
+  [thet]
+
 - Use content-core fill/define metal definitions in all templates which use
   main_template's master macro.
   [thet]
