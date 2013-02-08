@@ -70,21 +70,21 @@
                 tal:condition="item/event_url"
                 tal:attributes="href item/event_url"
                 i18n:translate="label_web">Web</a>
-            <tal:sep condition="item/event_url|nothing">
+            <tal:sep condition="python:item.event_url and item.contact_email">
                 &ndash;
             </tal:sep>
             <a class="contact_email"
                 tal:condition="item/contact_email"
                 tal:attributes="href string:mailto:${item/contact_email}"
                 i18n:translate="label_email">Email</a>
-            <tal:sep condition="item/event_url|item/contact_email|nothing">
+            <tal:sep condition="python:(item.event_url or item.contact_email) and item.contact_phone">
                 &ndash;
             </tal:sep>
             <a class="contact_phone"
                 tal:condition="item/contact_phone"
                 tal:attributes="href string:tel:${item/contact_phone}"
                 i18n:translate="label_phone">Phone</a>
-            <tal:sep condition="item/event_url|item/contact_email|item/contact_phone|nothing">
+            <tal:sep condition="python:item.event_url or item.contact_email or item.contact_phone">
                 &ndash;
             </tal:sep>
             <a class="event_ical"
