@@ -1,6 +1,7 @@
 import icalendar
 from Acquisition import aq_inner
 from datetime import datetime
+from datetime import timedelta
 from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
@@ -124,7 +125,7 @@ def add_to_zones_map(tzmap, tzid, dt):
     if tzid not in tzmap: tzmap[tzid] = {} # initial
     if dtstart in tzmap[tzid]: return tzmap # already there
     tzmap[tzid][dtstart] = {
-            'dst': transition.dst().total_seconds() > 0,
+            'dst': transition.dst() > timedelta(0),
             'name': transition.tzname(),
             'tzoffsetfrom': prev_transition.utcoffset(),
             'tzoffsetto': transition.utcoffset(),

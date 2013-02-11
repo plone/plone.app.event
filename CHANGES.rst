@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0b5 (unreleased)
+------------------
+
+- Restore Python 2.6 compatibility by avoiding total_seconds method from
+  timedelta instances in icalendar export.
+  [thet]
+
 
 1.0b4 (2013-02-08)
 ------------------
