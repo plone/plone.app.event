@@ -154,32 +154,27 @@ class EventListing(BrowserView):
 
 
     # MODE URLs
-    @property
-    def mode_day_url(self):
+    def mode_url(self, mode):
         now = self.date
         datestr = now and now.date().isoformat() or None
-        return '%s/%s?mode=day%s' % (
+        return '%s/%s?mode=%s%s' % (
                 self.context.absolute_url(),
                 self.__name__,
+                mode,
                 datestr and '&date=%s' % datestr or '')
+
+    @property
+    def mode_day_url(self):
+        return self.mode_url('day')
 
     @property
     def mode_week_url(self):
-        now = self.date
-        datestr = now and now.date().isoformat() or None
-        return '%s/%s?mode=week%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr and '&date=%s' % datestr or '')
+        return self.mode_url('week')
 
     @property
     def mode_month_url(self):
-        now = self.date
-        datestr = now and now.date().isoformat() or None
-        return '%s/%s?mode=month%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr and '&date=%s' % datestr or '')
+        return self.mode_url('month')
+
 
     # DAY NAV
     @property
