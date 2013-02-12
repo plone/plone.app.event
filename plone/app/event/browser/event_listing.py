@@ -56,7 +56,7 @@ class EventListing(BrowserView):
         start, end = self._start_end
         occs = get_occurrences_from_brains(
                 context,
-                get_portal_events(context, start, end, path,
+                get_portal_events(context, start, end, path=path,
                     #b_start=b_start, b_size=b_size,
                     ),
                 start,
