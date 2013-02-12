@@ -363,7 +363,9 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
         # limit to the current navigation root, usually (not always) site
         portal = getSite()
         navroot = getNavigationRootObject(context, portal)
-        query['path'] = navroot.getPhysicalPath()
+        query['path'] = '/'.join(navroot.getPhysicalPath())
+    else:
+        query['path'] = kw['path']
 
     if range_start:
         # All events from range_start ongoing:

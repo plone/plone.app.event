@@ -48,6 +48,7 @@ class EventListing(BrowserView):
     @property
     def get_events(self):
         context = self.context
+        path = '/'.join(context.getPhysicalPath())
 
         b_start=self.b_start
         b_size=self.b_size
@@ -55,9 +56,9 @@ class EventListing(BrowserView):
         start, end = self._start_end
         occs = get_occurrences_from_brains(
                 context,
-                get_portal_events(context, start, end,
+                get_portal_events(context, start, end, path,
                     #b_start=b_start, b_size=b_size,
-                    path=context.getPhysicalPath()),
+                    ),
                 start,
                 end)
 

@@ -1,6 +1,20 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Fix event_listing to search only for events in the current context's path.
+  [thet]
+
+- Backport change from seanupton: get_portal_events() fix: navroot path index
+  incorrectly passed as tuple, now fixed to path string.
+  [thet, seanupton]
+
+- Fix get_portal_events to respect path for query if given in keywords.
+  [thet]
+
+
 1.0b5 (2013-02-11)
 ------------------
 

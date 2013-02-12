@@ -343,7 +343,8 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
             location=u'Graz',
             timezone=default_tz)
 
-        self.portal.invokeFactory(
+        self.portal.invokeFactory('Folder', 'sub', title=u'sub')
+        self.portal.sub.invokeFactory(
             'Event',
             'long',
             title=u'Long event',
@@ -360,7 +361,7 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
         self.now_event = self.portal['now']
         self.past_event = self.portal['past']
         self.future_event = self.portal['future']
-        self.long_event = self.portal['long']
+        self.long_event = self.portal['sub']['long']
 
 
     def test_get_portal_events(self):
@@ -417,6 +418,11 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
                                  range_end=self.now)
         self.assertTrue(len(res) == 3)
 
+        # in subfolder
+        path = '/'.join(self.portal.sub.getPhysicalPath())
+        res = get_portal_events(self.portal, path=path)
+        self.assertTrue(len(res) == 1)
+
     def test_get_occurrences(self):
         get_occurrences_from_brains(object, [],
                 range_start=datetime.datetime.today())
@@ -468,7 +474,8 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
             location=u'Graz',
             timezone=default_tz)
 
-        self.portal.invokeFactory(
+        self.portal.invokeFactory('Folder', 'sub', title=u'sub')
+        self.portal.sub.invokeFactory(
             'Event',
             'long',
             title=u'Long event',
@@ -485,7 +492,7 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
         self.now_event = self.portal['now']
         self.past_event = self.portal['past']
         self.future_event = self.portal['future']
-        self.long_event = self.portal['long']
+        self.long_event = self.portal['sub']['long']
 
 
     def test_get_portal_events(self):
@@ -535,6 +542,11 @@ class TestBaseModuleQueryZDT(unittest.TestCase):
         res = get_portal_events(self.portal,
                                  range_end=self.now)
         self.assertTrue(len(res) == 3)
+
+        # in subfolder
+        path = '/'.join(self.portal.sub.getPhysicalPath())
+        res = get_portal_events(self.portal, path=path)
+        self.assertTrue(len(res) == 1)
 
 
 class TestDatesForDisplayAT(unittest.TestCase):
