@@ -155,9 +155,7 @@ class EventListing(BrowserView):
 
 
     # MODE URLs
-    def mode_url(self, mode):
-        now = self.date
-        datestr = now and now.date().isoformat() or None
+    def _date_nav_url(self, mode, datestr=''):
         return '%s/%s?mode=%s%s' % (
                 self.context.absolute_url(),
                 self.__name__,
@@ -166,15 +164,15 @@ class EventListing(BrowserView):
 
     @property
     def mode_day_url(self):
-        return self.mode_url('day')
+        return self._date_nav_url('day')
 
     @property
     def mode_week_url(self):
-        return self.mode_url('week')
+        return self._date_nav_url('week')
 
     @property
     def mode_month_url(self):
-        return self.mode_url('month')
+        return self._date_nav_url('month')
 
 
     # DAY NAV
@@ -182,53 +180,26 @@ class EventListing(BrowserView):
     def next_day_url(self):
         now = self.date or self.now
         datestr = (now + timedelta(days=1)).date().isoformat()
-        return '%s/%s?mode=day&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
-
-    @property
-    def today_url(self):
-        return '%s/%s?mode=today' % (
-                self.context.absolute_url(),
-                self.__name__)
+        return self._date_nav_url('day', datestr)
 
     @property
     def prev_day_url(self):
         now = self.date or self.now
         datestr = (now - timedelta(days=1)).date().isoformat()
-        return '%s/%s?mode=day&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
+        return self._date_nav_url('day', datestr)
 
     # WEEK NAV
     @property
     def next_week_url(self):
         now = self.date or self.now
         datestr = (now + timedelta(days=7)).date().isoformat()
-        return '%s/%s?mode=week&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
-
-    @property
-    def this_week_url(self):
-        now = self.now
-        datestr = now.date().isoformat()
-        return '%s/%s?mode=week&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
+        return self._date_nav_url('week', datestr)
 
     @property
     def prev_week_url(self):
         now = self.date or self.now
         datestr = (now - timedelta(days=7)).date().isoformat()
-        return '%s/%s?mode=week&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
+        return self._date_nav_url('week', datestr)
 
     # MONTH NAV
     @property
@@ -237,25 +208,10 @@ class EventListing(BrowserView):
         last_day = monthrange(now.year, now.month)[1] # (wkday, days)
         datestr = (now.replace(day=last_day) +
                    timedelta(days=1)).date().isoformat()
-        return '%s/%s?mode=month&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
-
-    @property
-    def this_month_url(self):
-        now = self.now
-        datestr = now.date().isoformat()
-        return '%s/%s?mode=month&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
+        return self._date_nav_url('month', datestr)
 
     @property
     def prev_month_url(self):
         now = self.date or self.now
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
-        return '%s/%s?mode=month&date=%s' % (
-                self.context.absolute_url(),
-                self.__name__,
-                datestr)
+        return self._date_nav_url('month', datestr)

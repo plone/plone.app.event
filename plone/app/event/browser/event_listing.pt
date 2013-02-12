@@ -24,21 +24,21 @@
         <tal:month condition="python:mode=='month'">
         <ul class="pae-list-nav">
           <li><a class="prev_month" href="" tal:attributes="href view/prev_month_url" i18n:translate="prev_month_link">Previous Month</a></li>
-          <li><a class="this_month" href="" tal:attributes="href view/this_month_url" i18n:translate="this_month_link">This Month</a></li>
+          <li><a class="this_month" href="" tal:attributes="href view/mode_month_url" i18n:translate="this_month_link">This Month</a></li>
           <li><a class="next_month" href="" tal:attributes="href view/next_month_url" i18n:translate="next_month_link">Next Month</a></li>
         </ul>
         </tal:month>
         <tal:week condition="python:mode=='week'">
         <ul class="pae-list-nav">
           <li><a class="prev_week"  href="" tal:attributes="href view/prev_week_url"  i18n:translate="prev_week_link">Previous Week</a></li>
-          <li><a class="this_week"  href="" tal:attributes="href view/this_week_url"  i18n:translate="this_week_link">This Week</a></li>
+          <li><a class="this_week"  href="" tal:attributes="href view/mode_week_url"  i18n:translate="this_week_link">This Week</a></li>
           <li><a class="next_week"  href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a></li>
         </ul>
         </tal:week>
         <tal:day condition="python:mode in ('day', 'today')">
         <ul class="pae-list-nav">
           <li><a class="prev_day"   href="" tal:attributes="href view/prev_day_url"   i18n:translate="prev_day_link">Previous Day</a></li>
-          <li><a class="today"      href="" tal:attributes="href view/today_url"      i18n:translate="today_link">Today</a></li>
+          <li><a class="today"      href="" tal:attributes="href view/mode_day_url"   i18n:translate="today_link">Today</a></li>
           <li><a class="next_day"   href="" tal:attributes="href view/next_day_url"   i18n:translate="next_day_link">Next Day</a></li>
         </ul>
         </tal:day>
