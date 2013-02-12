@@ -12,7 +12,7 @@ Changelog
 
 - Backport change from seanupton: get_portal_events() fix: navroot path index
   incorrectly passed as tuple, now fixed to path string.
-  [thet, seanupton]
+  [seanupton, thet]
 
 - Fix get_portal_events to respect path for query if given in keywords.
   [thet]
