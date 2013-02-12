@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add datepicker for day selection in event_listing view.
+  [thet]
+
 - Fix event_listing to search only for events in the current context's path.
   [thet]
 

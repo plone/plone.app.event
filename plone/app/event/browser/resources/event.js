@@ -69,3 +69,48 @@
     });
 
 })(jQuery);
+
+
+(function($) {
+
+    $(document).ready(function() {
+
+        // Dateinput selector for event_listing view
+        var event_listing_calendar = $("#event_listing_calendar");
+        if ($().dateinput && event_listing_calendar.length > 0) {
+
+            function get_req_param(name){
+               if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                  return decodeURIComponent(name[1]);
+            }
+
+            // Preselect current date, if exists
+            var val = get_req_param('date');
+            if (val === undefined) {
+                val = new Date();
+            } else {
+                val = new Date(val);
+            }
+
+            event_listing_calendar.dateinput({
+                selectors: true,
+                trigger: true,
+                format: 'yyyy-mm-dd',
+                yearRange: [-10, 10],
+                firstDay: 1,
+                value: val,
+                change: function() {
+                    var value = this.getValue("yyyy-mm-dd");
+                    window.location.href = 'event_listing?mode=day&date=' + value;
+                }
+            }).unbind('change').bind('onShow', function (event) {
+                var trigger_offset = $(this).next().offset();
+                $(this).data('dateinput').getCalendar().offset({
+                    top: trigger_offset.top+20,
+                    left: trigger_offset.left
+                });
+            });
+        }
+    });
+
+})(jQuery);
