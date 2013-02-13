@@ -80,8 +80,10 @@
         if ($().dateinput && event_listing_calendar.length > 0) {
 
             function get_req_param(name){
-               if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-                  return decodeURIComponent(name[1]);
+                // http://stackoverflow.com/questions/831030/how-to-get-get-request-parameters-in-javascript
+                if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
+                    return decodeURIComponent(name[1]);
+                }
             }
 
             // Preselect current date, if exists
