@@ -22,11 +22,35 @@
 }
 #content .event_listing nav ul li {
     display:inline-block;
-    padding:0.2em;
-    margin-right:0.2em;
-    font-weight:bold;
+    padding: 0 0.75em;
+    line-height: 2em;
+    margin:0;
 }
 #content .event_listing nav ul li:last-of-type { margin-right:0; }
+
+.event_listing ul.mode_selector {
+    background-color: #DDDDDD;
+    border: 0.3em solid #DDDDDD;
+    border-bottom:none;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    display: block;
+    margin-left: 0;
+}
+#content .event_listing ul.mode_selector li a {
+    border:none;
+    display: inline-block;
+}
+.event_listing ul.mode_selector li:hover,
+.event_listing ul.mode_selector li.selected {
+    background: white;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    color: Black;
+}
+.event_listing ul.mode_selector li.selected {
+    font-weight: bold;
+}
 
 .event_listing article {
     background-color: #EAEAEA;
