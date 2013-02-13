@@ -28,16 +28,30 @@
 }
 #content .event_listing nav ul li:last-of-type { margin-right:0; }
 
-.event_listing ul.mode_selector {
+.event_listing ul.sub_nav,
+.event_listing nav {
     background-color: #DDDDDD;
+    min-height:2em;
+}
+.event_listing nav {
     border: 0.3em solid #DDDDDD;
     border-bottom:none;
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
+}
+.event_listing ul.mode_selector {
     display: block;
     margin-left: 0;
+    float:left;
 }
-#content .event_listing ul.mode_selector li a {
+.event_listing ul.sub_nav {
+    display: block;
+    margin-left: 0;
+    float:right;
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+#content .event_listing nav ul li a {
     border:none;
     display: inline-block;
 }
