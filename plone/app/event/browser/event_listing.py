@@ -164,15 +164,18 @@ class EventListing(BrowserView):
 
     @property
     def mode_day_url(self):
-        return self._date_nav_url('day')
+        now = self.date or self.now
+        return self._date_nav_url('day', now.date().isoformat())
 
     @property
     def mode_week_url(self):
-        return self._date_nav_url('week')
+        now = self.date or self.now
+        return self._date_nav_url('week', now.date().isoformat())
 
     @property
     def mode_month_url(self):
-        return self._date_nav_url('month')
+        now = self.date or self.now
+        return self._date_nav_url('month', now.date().isoformat())
 
 
     # DAY NAV
@@ -181,6 +184,11 @@ class EventListing(BrowserView):
         now = self.date or self.now
         datestr = (now + timedelta(days=1)).date().isoformat()
         return self._date_nav_url('day', datestr)
+
+    @property
+    def today_url(self):
+        return self._date_nav_url('day')
+
 
     @property
     def prev_day_url(self):
@@ -196,6 +204,10 @@ class EventListing(BrowserView):
         return self._date_nav_url('week', datestr)
 
     @property
+    def this_week_url(self):
+        return self._date_nav_url('week')
+
+    @property
     def prev_week_url(self):
         now = self.date or self.now
         datestr = (now - timedelta(days=7)).date().isoformat()
@@ -209,6 +221,10 @@ class EventListing(BrowserView):
         datestr = (now.replace(day=last_day) +
                    timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
+
+    @property
+    def this_month_url(self):
+        return self._date_nav_url('month')
 
     @property
     def prev_month_url(self):
