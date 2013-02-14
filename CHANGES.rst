@@ -4,10 +4,14 @@ Changelog
 1.0b6 (2013-02-14)
 ------------------
 
+- Styles for event_listing date navigation.
+  [thet]
+
 - Add datepicker for day selection in event_listing view.
   [thet]
 
 - Fix event_listing to search only for events in the current context's path.
+  Allow "all" request parameter for no path restriction in searches.
   [thet]
 
 - Backport change from seanupton: get_portal_events() fix: navroot path index
