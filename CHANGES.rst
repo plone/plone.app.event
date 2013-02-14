@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b6 (2013-02-14)
+------------------
 
 - Add datepicker for day selection in event_listing view.
   [thet]
