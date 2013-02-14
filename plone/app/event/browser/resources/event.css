@@ -74,7 +74,7 @@
 }
 
 .event_listing div.cal_date { 
-    display:inline-block;
+    float:left;
     vertical-align:top;
     margin: 0 1.5em 0.5em 0;
     padding:0.7em 0.7em 0.5em;
@@ -102,7 +102,7 @@
     display:inline-block;
 }
 
-.event_listing div.cal_info { display:inline-block; }
+.event_listing div.cal_info { margin-left:8em; }
 .event_listing article .documentByLine {
     background: none repeat scroll 0 0 transparent;
     color: black !important;
