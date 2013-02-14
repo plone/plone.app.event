@@ -4,7 +4,7 @@ version = '1.0b6'
 
 setup(name='plone.app.event',
       version=version,
-      description="Event content type for plone",
+      description="The Plone calendar framework",
       long_description=open("README.rst").read() + "\n" +
                        open("CHANGES.rst").read(),
       # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
