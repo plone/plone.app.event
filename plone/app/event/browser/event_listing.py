@@ -27,6 +27,7 @@ class EventListing(BrowserView):
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
         self.mode    = 'mode'    in req and req['mode']         or 'future'
         self._date   = 'date'    in req and req['date']         or None
+        self._all    = 'all'     in req and True                or False
 
         self.now = localized_now(context)
 
@@ -48,19 +49,20 @@ class EventListing(BrowserView):
     @property
     def get_events(self):
         context = self.context
-        path = '/'.join(context.getPhysicalPath())
+        kw = {}
+        if not self._all:
+            kw['path'] = '/'.join(context.getPhysicalPath())
 
-        b_start=self.b_start
-        b_size=self.b_size
+        b_start = self.b_start
+        b_size  = self.b_size
+        #kw['b_start'] = self.b_start
+        #kw['b_size']  = self.b_size
 
         start, end = self._start_end
         occs = get_occurrences_from_brains(
                 context,
-                get_portal_events(context, start, end, path=path,
-                    #b_start=b_start, b_size=b_size,
-                    ),
-                start,
-                end)
+                get_portal_events(context, start, end, **kw),
+                start, end)
 
         return Batch(occs, size=b_size, start=b_start, orphan=self.orphan)
 
