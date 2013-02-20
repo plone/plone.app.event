@@ -68,7 +68,7 @@ class EventListing(BrowserView):
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name=u"formated_date")
+                IContentProvider, name='formated_date')
         return provider(occ.context)
 
     def date_speller(self, date):

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Backport from plone.app.portlets: Use str view names for getMultiAdapter
+  calls.
+  [wichert, thet]
+
+
+
 1.0b6 (2013-02-14)
 ------------------
 

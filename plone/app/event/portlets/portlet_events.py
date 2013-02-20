@@ -76,7 +76,7 @@ class Renderer(base.Renderer):
         self.prev_events_link = self.calendar_linkbase.past_events_url
         self.all_events_link = self.calendar_linkbase.next_events_url
 
-        portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
+        portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
         self.portal = portal_state.portal()
 
     @ram.cache(render_cachekey)
@@ -94,7 +94,7 @@ class Renderer(base.Renderer):
 
     def formated_date(self, event):
         provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name=u"formated_date")
+                IContentProvider, name='formated_date')
         return provider(event)
 
     @memoize
