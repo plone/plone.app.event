@@ -13,6 +13,7 @@ from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setHooks, setSite
 
+from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -180,3 +181,11 @@ class RendererTest(unittest.TestCase):
             *portlet.get_next_month(year, month))
         self.assertEqual(next_expected, portlet.next_query)
         self.assertEqual(prev_expected, portlet.prev_query)
+
+    def test_invalid_request(self):
+        self.request.form['month'] = [3, 4]
+        self.request.form['year'] = [2011]
+        r = self.renderer()
+        r.update()
+        today = localized_today(self.portal)
+        self.assertEqual(r.year_month_display(), (today.year, today.month))

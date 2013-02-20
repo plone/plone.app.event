@@ -99,14 +99,20 @@ class Renderer(base.Renderer):
         month = request.get('month', None)
 
         # Or use current date
-        if not year or month:
-            today = localized_today(context)
-            if not year:
-                year = today.year
-            if not month:
-                month = today.month
+        today = localized_today(context)
+        if not year:
+            year = today.year
+        if not month:
+            month = today.month
 
-        return int(year), int(month)
+        # try to transform to number but fall back to current
+        # date if this is ambiguous
+        try:
+            year, month = int(year), int(month)
+        except (TypeError, ValueError):
+            year, month = today.year, today.month
+
+        return year, month
 
     def get_previous_month(self, year, month):
         if month==0 or month==1:

@@ -4,10 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Backport from plone.app.portlets: Use str view names for getMultiAdapter
-  calls.
-  [wichert, thet]
+- Backport from plone.app.portlets: Don't fail on invalid (ambigous) date
+  information in request (Commit a322676 on plone.app.portlets).
+  [tomgross, thet]
 
+- Backport from plone.app.portlets: Use str view names for getMultiAdapter
+  calls (commit c296408 on plone.app.portlets).
+  [wichert, thet]
 
 
 1.0b6 (2013-02-14)
