@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Additionally to the 'date' parameter, allow passing of year, month and day
+  query string parameters to the event_listing view and automatically set the
+  mode to 'day' if a date was passed.
+  [thet]
+
 - Backport from plone.app.portlets: Don't fail on invalid (ambigous) date
   information in request (Commit a322676 on plone.app.portlets).
   [tomgross, thet]

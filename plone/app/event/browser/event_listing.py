@@ -1,4 +1,5 @@
 from calendar import monthrange
+from datetime import date
 from datetime import timedelta
 
 from Products.CMFPlone.PloneBatch import Batch
@@ -20,16 +21,28 @@ class EventListing(BrowserView):
     def __init__(self, context, request):
         super(EventListing, self).__init__(context, request)
 
+        self.now = now = localized_now(context)
+
         # Batch parameter
         req = self.request
         self.b_start = 'b_start' in req and int(req['b_start']) or 0
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
-        self.mode    = 'mode'    in req and req['mode']         or 'future'
+        self.mode    = 'mode'    in req and req['mode']         or None
         self._date   = 'date'    in req and req['date']         or None
         self._all    = 'all'     in req and True                or False
 
-        self.now = localized_now(context)
+        day   = 'day'   in req and int(req['day'])   or None
+        month = 'month' in req and int(req['month']) or None
+        year  = 'year'  in req and int(req['year'])  or None
+
+        if not self._date and day or month or year:
+            self._date = date(year or now.year,
+                              month or now.month,
+                              day or now.day).isoformat()
+
+        if self.mode == None:
+            self.mode = self._date and 'day' or 'future'
 
     @property
     def date(self):
