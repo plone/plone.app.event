@@ -199,7 +199,20 @@ class ICalendarEventComponent(object):
 
         if event.whole_day:
             ical.add('dtstart', event.start.date())
-            ical.add('dtend', event.end.date())
+            # RFC5545 doesn't define properly, if all-day events should have
+            # a end date on the same date or one day after the start day at
+            # 0:00. Most icalendar libraries use the latter method.
+            # Internally, whole_day events end on the same day one second
+            # before midnight. Using the RFC5545 preferred method for 
+            # plone.app.event seems not appropriate, since we would have to fix
+            # the date to end a day before for displaying.
+            # For exporting, we let whole_day events end on the next day at
+            # midnight.
+            # See:
+            # http://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
+            # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/ 
+            # http://www.innerjoin.org/iCalendar/all-day-events.html
+            ical.add('dtend', event.end.date() + timedelta(days=1))
         else:
             ical.add('dtstart', event.start)
             ical.add('dtend', event.end)

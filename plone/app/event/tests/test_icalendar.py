@@ -69,7 +69,7 @@ class ICalendarExportTest(unittest.TestCase):
         portal.events.invokeFactory('plone.app.event.dx.event',
             id='artsprint2013', title='Artsprint 2013',
             start=datetime(2013,2,18),
-            end=datetime(2012,2,22),
+            end=datetime(2013,2,22),
             whole_day=True,
             timezone='Europe/Vienna')
 
@@ -145,7 +145,7 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'SUMMARY:Artsprint 2013',
             'DTSTART;VALUE=DATE:20130218',
-            'DTEND;VALUE=DATE:20120222',
+            'DTEND;VALUE=DATE:20130223',
             'END:VEVENT',
             'END:VCALENDAR')
 
@@ -220,7 +220,7 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'SUMMARY:Artsprint 2013',
             'DTSTART;VALUE=DATE:20130218',
-            'DTEND;VALUE=DATE:20120222',
+            'DTEND;VALUE=DATE:20130223',
             'END:VEVENT',
 
             'BEGIN:VTIMEZONE',
@@ -275,7 +275,7 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'SUMMARY:Artsprint 2013',
             'DTSTART;VALUE=DATE:20130218',
-            'DTEND;VALUE=DATE:20120222',
+            'DTEND;VALUE=DATE:20130223',
             'END:VEVENT',
 
             'BEGIN:VTIMEZONE',

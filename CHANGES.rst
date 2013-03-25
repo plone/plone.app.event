@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- When exporting whole_day/all day events to icalendar, let them end a day
+  after at midnight instead on the defined day one second before midnight. This
+  behavior is the preferred method of exporting all day events to icalendar.
+  [thet]
+
 - Additionally to the 'date' parameter, allow passing of year, month and day
   query string parameters to the event_listing view and automatically set the
   mode to 'day' if a date was passed.
