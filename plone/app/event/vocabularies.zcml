@@ -15,4 +15,14 @@
       name="plone.app.event.Weekdays"
       />
 
+  <utility
+      component=".vocabularies.EventTypes"
+      name="plone.app.event.EventTypes"
+      />
+
+  <utility
+      component=".vocabularies.SynchronizationStrategies"
+      name="plone.app.event.SynchronizationStrategies"
+      />
+
 </configure>

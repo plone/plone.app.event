@@ -86,3 +86,19 @@ def Weekdays(context):
     return SimpleVocabulary(items)
 
 directlyProvides(Weekdays, IVocabularyFactory)
+
+
+def EventTypes(context):
+    """ Vocabulary for available event types.
+    """
+    items = ['ATEvent', 'plone.app.event.dx.event']
+    return SimpleVocabulary.fromValues(items)
+directlyProvides(EventTypes, IVocabularyFactory)
+
+
+def SynchronizationStrategies(context):
+    """ Vocabulary for icalendar synchronization strategies.
+    """
+    items = ['keep_newer', 'keep_mine', 'keep_theirs']
+    return SimpleVocabulary.fromValues(items)
+directlyProvides(SynchronizationStrategies, IVocabularyFactory)

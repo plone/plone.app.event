@@ -77,4 +77,11 @@
         zcml:condition="installed plone.app.collection"
         />
 
+    <browser:page
+        for="plone.folder.interfaces.IFolder"
+        name="ical_import_settings"
+        class=".importer.IcalendarImportSettingsFormView"
+        permission="cmf.ManagePortal"
+        />
+
 </configure>

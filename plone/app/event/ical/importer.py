@@ -19,22 +19,22 @@ ICS_RESOURCE = urllib2.urlopen('http://htu.tugraz.at/veranstaltungen/ics_view', 
 
 def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
     cal = icalendar.Calendar.from_ical(ics_resource)
-    subs = cal.subcomponents
+    events = cal.walk('VEVENT')
 
-    def _get_prop(prop, sub, _as_unicode=True):
+    def _get_prop(prop, item, _as_unicode=True):
         ret = None
-        if prop in sub:
+        if prop in item:
             if _as_unicode:
-                ret = safe_unicode(sub.decoded(prop))
+                ret = safe_unicode(item.decoded(prop))
             else:
-                ret = sub.decoded(prop)
+                ret = item.decoded(prop)
         return ret
 
-    for sub in subs:
-        start = _get_prop('DTSTART', sub)
-        end = _get_prop('DTEND', sub)
+    for item in events:
+        start = _get_prop('DTSTART', item)
+        end = _get_prop('DTEND', item)
         if not end:
-            duration = _get_prop('DURATION', sub)
+            duration = _get_prop('DURATION', item)
             if duration:
                 end = start + duration
             else:
@@ -56,9 +56,11 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
                 end = end-datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
+        assert(isinstance(start, datetime.datetime))
+        assert(isinstance(end, datetime.datetime))
 
-        title = _get_prop('SUMMARY', sub)
-        description = _get_prop('DESCRIPTION', sub)
+        title = _get_prop('SUMMARY', item)
+        description = _get_prop('DESCRIPTION', item)
 
         # TODO: better use plone.api, from which some of the code here is
         # copied
@@ -87,4 +89,76 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
         new_id = chooser.chooseName(title, content)
         transaction.savepoint(optimistic=True)
         content.aq_parent.manage_renameObject(content_id, new_id)
+
+
+from zope.interface import Interface
+from zope import schema
+from plone.app.event import messageFactory as _
+
+class IIcalendarImportSettings(Interface):
+
+    event_type = schema.Choice(
+        title = _(u'Event Type'),
+        vocabulary = 'plone.app.event.EventTypes',
+        required = True
+    )
+
+    ical_url = schema.URI(
+        title = _(u'Icalendar URL'),
+        required = False
+    )
+
+    ical_file = schema.TextLine(
+        title = _(u"Icalendar File"),
+        required = False
+    )
+
+    sync_strategy = schema.Choice(
+        title = _(u"Synchronization Strategy"),
+        vocabulary = 'plone.app.event.SynchronizationStrategies',
+        required = True
+    )
+
+
+from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import button
+from z3c.form import form, field
+
+class IcalendarImportSettingsForm(form.Form):
+
+    fields = field.Fields(IIcalendarImportSettings)
+    ignoreContext = True
+
+    def updateWidgets(self):
+        super(IcalendarImportSettingsForm, self).updateWidgets()
+
+    @button.buttonAndHandler(u'Save and Import')
+    def handleSave(self, action):
+        data, errors = self.extractData()
+        if errors:
+            return False
+
+        event_type = data['event_type']
+        ical_url = data['ical_url']
+        ical_resource = urllib2.urlopen(ical_url, 'rb').read()
+        ical_import(
+            self.context,
+            ics_resource=ical_resource,
+            event_type=event_type
+        )
+
+        IStatusMessage(self.request).addStatusMessage(
+            "Icalendar file from %s imported" % ical_url,
+            'info')
+        redirect_url = self.context.absolute_url()
+        self.request.response.redirect(redirect_url)
+
+    @button.buttonAndHandler(u'Cancel')
+    def handleCancel(self, action):
+        redirect_url = self.context.absolute_url()
+        self.request.response.redirect(redirect_url)
+
+from plone.z3cform.layout import wrap_form
+IcalendarImportSettingsFormView = wrap_form(IcalendarImportSettingsForm)
+
 
