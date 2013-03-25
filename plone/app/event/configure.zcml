@@ -29,7 +29,7 @@
 
   <include package=".browser" />
   <include package=".portlets" />
-  <include file="ical.zcml" />
+  <include package=".ical" />
   <include file="recurrence.zcml" />
   <include file="vocabularies.zcml" />
 

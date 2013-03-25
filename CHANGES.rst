@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Since more ical related code is upcoming (importer), add ical subpackage and
+  move ical related code in here.
+  [thet]
+
 - When exporting whole_day/all day events to icalendar, let them end a day
   after at midnight instead on the defined day one second before midnight. This
   behavior is the preferred method of exporting all day events to icalendar.

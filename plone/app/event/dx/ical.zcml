@@ -3,7 +3,7 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <adapter factory="..ical.calendar_from_container"
+    <adapter factory="..ical.exporter.calendar_from_container"
         provides="plone.event.interfaces.IICalendar"
         for="plone.dexterity.interfaces.IDexterityContainer"
         />
@@ -11,7 +11,7 @@
     <browser:page
         for="plone.dexterity.interfaces.IDexterityContainer"
         name="ics_view"
-        class="..ical.EventsICal"
+        class="..ical.exporter.EventsICal"
         permission="zope2.View"
         />
 
