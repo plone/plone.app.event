@@ -91,7 +91,7 @@ directlyProvides(Weekdays, IVocabularyFactory)
 def EventTypes(context):
     """ Vocabulary for available event types.
     """
-    items = ['ATEvent', 'plone.app.event.dx.event']
+    items = ['Event', 'plone.app.event.dx.event']
     return SimpleVocabulary.fromValues(items)
 directlyProvides(EventTypes, IVocabularyFactory)
 
