@@ -119,8 +119,6 @@ class IIcalendarImportSettings(Interface):
     )
 
 
-
-
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import form, field
@@ -170,5 +168,3 @@ class IcalendarImportSettingsForm(form.Form):
 
 from plone.z3cform.layout import wrap_form
 IcalendarImportSettingsFormView = wrap_form(IcalendarImportSettingsForm)
-
-
