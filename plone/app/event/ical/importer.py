@@ -30,6 +30,7 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
                 ret = item.decoded(prop)
         return ret
 
+    count = 0
     for item in events:
         start = _get_prop('DTSTART', item)
         end = _get_prop('DTEND', item)
@@ -90,10 +91,15 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
         transaction.savepoint(optimistic=True)
         content.aq_parent.manage_renameObject(content_id, new_id)
 
+        count += 1
+
+    return {'count': count}
+
 
 from zope.interface import Interface
 from zope import schema
 from plone.app.event import messageFactory as _
+from plone.namedfile.field import NamedFile
 
 class IIcalendarImportSettings(Interface):
 
@@ -108,7 +114,7 @@ class IIcalendarImportSettings(Interface):
         required = False
     )
 
-    ical_file = schema.TextLine(
+    ical_file = NamedFile(
         title = _(u"Icalendar File"),
         required = False
     )
@@ -118,6 +124,8 @@ class IIcalendarImportSettings(Interface):
         vocabulary = 'plone.app.event.SynchronizationStrategies',
         required = True
     )
+
+
 
 
 from Products.statusmessages.interfaces import IStatusMessage
@@ -138,17 +146,26 @@ class IcalendarImportSettingsForm(form.Form):
         if errors:
             return False
 
+        ical_file = data['ical_file']
+        if ical_file:
+            ical_resource = ical_file.data
+            ical_import_from = ical_file.filename
+        else:
+            ical_url = data['ical_url']
+            ical_resource = urllib2.urlopen(ical_url, 'rb').read()
+            ical_import_from = ical_url
         event_type = data['event_type']
-        ical_url = data['ical_url']
-        ical_resource = urllib2.urlopen(ical_url, 'rb').read()
-        ical_import(
+
+        import_metadata = ical_import(
             self.context,
             ics_resource=ical_resource,
             event_type=event_type
         )
 
+        count = import_metadata['count']
+
         IStatusMessage(self.request).addStatusMessage(
-            "Icalendar file from %s imported" % ical_url,
+            "%s events imported from %s" % (count, ical_import_from),
             'info')
         redirect_url = self.context.absolute_url()
         self.request.response.redirect(redirect_url)
