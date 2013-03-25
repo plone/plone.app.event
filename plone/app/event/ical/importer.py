@@ -8,8 +8,6 @@ import datetime
 import random
 import transaction
 
-from Products.Archetypes.interfaces.base import IBaseObject
-
 FACTORY_TYPE = 'plone.app.event.dx.event'
 ICS_RESOURCE = open('/home/thet/Desktop/ical/derkalender_at_2013_v1d.ics', 'rb').read()
 
@@ -71,7 +69,7 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
         event.whole_day = whole_day
 
         # Archetypes specific code
-        if IBaseObject.providedBy(content):
+        if getattr(content, 'processForm', False):
             # Will finish Archetypes content item creation process,
             # rename-after-creation and such
             content.processForm()
