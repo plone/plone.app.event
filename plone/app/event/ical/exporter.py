@@ -199,7 +199,7 @@ class ICalendarEventComponent(object):
 
         if event.whole_day:
             ical.add('dtstart', event.start.date())
-            # RFC5545 doesn't define properly, if all-day events should have
+            # RFC5545 doesn't define clearly, if all-day events should have
             # a end date on the same date or one day after the start day at
             # 0:00. Most icalendar libraries use the latter method.
             # Internally, whole_day events end on the same day one second
