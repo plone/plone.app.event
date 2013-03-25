@@ -1,15 +1,20 @@
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import is_date, date_to_dateime
+from plone.event.utils import is_date, date_to_datetime
 from zope.container.interfaces import INameChooser
 import icalendar
 import datetime
 import random
 import transaction
+import urllib2
 
 FACTORY_TYPE = 'plone.app.event.dx.event'
-ICS_RESOURCE = open('/home/thet/Desktop/ical/derkalender_at_2013_v1d.ics', 'rb').read()
+
+#ICS_RESOURCE = open('/home/thet/Desktop/ical/derkalender_at_2013_v1d.ics', 'rb').read()
+#ICS_RESOURCE = open('/home/thet/Desktop/ical/kulturserver-graz.ics', 'rb').read()
+
+ICS_RESOURCE = urllib2.urlopen('http://htu.tugraz.at/veranstaltungen/ics_view', 'rb').read()
 
 
 def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
@@ -26,11 +31,14 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
         return ret
 
     for sub in subs:
-        start = _get_prop('DTSTART')
-        end = _get_prop('DTEND')
+        start = _get_prop('DTSTART', sub)
+        end = _get_prop('DTEND', sub)
         if not end:
-            duration = _get_prop('DURATION')
-            end = start + duration
+            duration = _get_prop('DURATION', sub)
+            if duration:
+                end = start + duration
+            else:
+                end = start
 
         timezone = getattr(getattr(start, 'tzinfo', None), 'zone', None) or\
                 base.default_timezone(container)
@@ -46,8 +54,8 @@ def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
                 # Internally, we handle all day events with start=0:00,
                 # end=:23:59:59, so we substract one day here.
                 end = end-datetime.timedelta(days=1)
-            start = base.dt_start_of_day(date_to_dateime(start))
-            end = base.dt_end_of_day(date_to_dateime(end))
+            start = base.dt_start_of_day(date_to_datetime(start))
+            end = base.dt_end_of_day(date_to_datetime(end))
 
         title = _get_prop('SUMMARY', sub)
         description = _get_prop('DESCRIPTION', sub)

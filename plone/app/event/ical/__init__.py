@@ -6,3 +6,4 @@ from .exporter import (
     ICalendarEventComponent,
     EventsICal
 )
+from .importer import ical_import
