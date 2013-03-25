@@ -9,15 +9,8 @@ import random
 import transaction
 import urllib2
 
-FACTORY_TYPE = 'plone.app.event.dx.event'
 
-#ICS_RESOURCE = open('/home/thet/Desktop/ical/derkalender_at_2013_v1d.ics', 'rb').read()
-#ICS_RESOURCE = open('/home/thet/Desktop/ical/kulturserver-graz.ics', 'rb').read()
-
-ICS_RESOURCE = urllib2.urlopen('http://htu.tugraz.at/veranstaltungen/ics_view', 'rb').read()
-
-
-def ical_import(container, ics_resource=ICS_RESOURCE, event_type=FACTORY_TYPE):
+def ical_import(container, ics_resource, event_type):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk('VEVENT')
 
