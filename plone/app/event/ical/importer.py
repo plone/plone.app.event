@@ -116,11 +116,12 @@ class IIcalendarImportSettings(Interface):
         required = False
     )
 
-    sync_strategy = schema.Choice(
-        title = _(u"Synchronization Strategy"),
-        vocabulary = 'plone.app.event.SynchronizationStrategies',
-        required = True
-    )
+    # TODO: to implement
+    #sync_strategy = schema.Choice(
+    #    title = _(u"Synchronization Strategy"),
+    #    vocabulary = 'plone.app.event.SynchronizationStrategies',
+    #    required = True
+    #)
 
 
 from Products.Five.browser import BrowserView
