@@ -1,7 +1,8 @@
 # TODO:
 #  - support more RFC5545 icalendar properties,
 #  - better integration in plone ui (content tabs),
-#  - save ical settings at all and in annotation
+#  - save ical settings at all and in annotation,
+#  - implement sync strategies,
 #  - cleanup,
 #  - tests
 
