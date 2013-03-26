@@ -109,31 +109,17 @@ def EventTypes(context):
 
     portal_types = getToolByName(context, 'portal_types')
     all_types = portal_types.listTypeInfo(context)
-    tmp_id = '__temporary__event_types__%s' % random.randint(0, 99999999)
-
-    event_types = []
-    for fti in all_types:
-        try:
-            ## TODO: BETTER, but doesn't work
-            ## Works only for DexterityFTI types, which implement
-            ## zope.component.interfaces.IFactory
-            #tmp = createObject(fti.id)
-            #if IEvent.providedBy(tmp):
-            #    event_types.append(fti.id)
-
-            ## TODO: Using TempFolder fails too, since it cannot resolve
-            ## portal_types
-            #from Products.CMFPlone.FactoryTool import TempFolder
-
-            ## TODO: So, I'm creating the temporary object within the context.
-            context.invokeFactory(fti.id, tmp_id, tmp_id)
-            if IEvent.providedBy(context[tmp_id]):
-                import pdb; pdb.set_trace()
-                event_types.append(fti.id)
-            context.manage_delObjects([tmp_id])
-            # Jeezez, if that goes well!
-        except:
-            continue
+    event_types = [fti.id for fti in all_types]
+    #event_types = []
+    #for fti in all_types:
+    #    try:
+    #        # TODO: Works only for DexterityFTI types, which implement
+    #        # zope.component.interfaces.IFactory
+    #        tmp = createObject(fti.id)
+    #        if IEvent.providedBy(tmp):
+    #            event_types.append(fti.id)
+    #    except:
+    #        continue
     return SimpleVocabulary.fromValues(event_types)
 directlyProvides(EventTypes, IVocabularyFactory)
 
