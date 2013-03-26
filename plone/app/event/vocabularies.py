@@ -8,6 +8,9 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
 
+from Products.CMFCore.utils import getToolByName
+from zope.component import createObject
+from plone.event.interfaces import IEvent
 
 replacement_zones = {
     'CET': 'Europe/Vienna',   # Central European Time
@@ -91,11 +94,47 @@ directlyProvides(Weekdays, IVocabularyFactory)
 
 # TODO: translate, use really registered content types from FTI
 
+import random
+
+
 def EventTypes(context):
     """ Vocabulary for available event types.
     """
-    items = ['Event', 'plone.app.event.dx.event']
-    return SimpleVocabulary.fromValues(items)
+
+    # TODO: Since I have not found a elegant way to get all FTI types which
+    # implement IEvent, I'm creating temporary objects within the context, test
+    # them for the Interface and delete them afterwards.
+    # TODO: I'd love to query the factory for types, who's instances are
+    # implementing a specific interface via the portal_factory API.
+
+    portal_types = getToolByName(context, 'portal_types')
+    all_types = portal_types.listTypeInfo(context)
+    tmp_id = '__temporary__event_types__%s' % random.randint(0, 99999999)
+
+    event_types = []
+    for fti in all_types:
+        try:
+            ## TODO: BETTER, but doesn't work
+            ## Works only for DexterityFTI types, which implement
+            ## zope.component.interfaces.IFactory
+            #tmp = createObject(fti.factory)
+            #if IEvent.providedBy(tmp):
+            #    event_types.append(fti.factory)
+
+            ## TODO: Using TempFolder fails too, since it cannot resolve
+            ## portal_types
+            #from Products.CMFPlone.FactoryTool import TempFolder
+
+            ## TODO: So, I'm creating the temporary object within the context.
+            context.invokeFactory(fti.factory, tmp_id, tmp_id)
+            import pdb; pdb.set_trace()
+            if IEvent.providedBy(context[tmp_id]):
+                event_types.append(fti.factory)
+            context.manage_delObjects([tmp_id])
+            # Jeezez, if that goes well!
+        except:
+            continue
+    return SimpleVocabulary.fromValues(event_types)
 directlyProvides(EventTypes, IVocabularyFactory)
 
 
