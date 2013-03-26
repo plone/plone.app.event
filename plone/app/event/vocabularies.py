@@ -102,6 +102,6 @@ directlyProvides(EventTypes, IVocabularyFactory)
 def SynchronizationStrategies(context):
     """ Vocabulary for icalendar synchronization strategies.
     """
-    items = ['keep_newer', 'keep_mine', 'keep_theirs']
+    items = ['none', 'keep_newer', 'keep_mine', 'keep_theirs']
     return SimpleVocabulary.fromValues(items)
 directlyProvides(SynchronizationStrategies, IVocabularyFactory)
