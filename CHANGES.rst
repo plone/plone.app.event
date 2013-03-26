@@ -3,6 +3,8 @@ Changelog
 
 1.0dev (unreleased)
 -------------------
+- Add Brazilian Portuguese translation
+  [ericof]
 
 - Add ical import feature. .ics files can be fetched from the net from other
   calendar servers or uploaded at @@ical_import_settings.
