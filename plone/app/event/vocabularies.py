@@ -117,19 +117,19 @@ def EventTypes(context):
             ## TODO: BETTER, but doesn't work
             ## Works only for DexterityFTI types, which implement
             ## zope.component.interfaces.IFactory
-            #tmp = createObject(fti.factory)
+            #tmp = createObject(fti.id)
             #if IEvent.providedBy(tmp):
-            #    event_types.append(fti.factory)
+            #    event_types.append(fti.id)
 
             ## TODO: Using TempFolder fails too, since it cannot resolve
             ## portal_types
             #from Products.CMFPlone.FactoryTool import TempFolder
 
             ## TODO: So, I'm creating the temporary object within the context.
-            context.invokeFactory(fti.factory, tmp_id, tmp_id)
-            import pdb; pdb.set_trace()
+            context.invokeFactory(fti.id, tmp_id, tmp_id)
             if IEvent.providedBy(context[tmp_id]):
-                event_types.append(fti.factory)
+                import pdb; pdb.set_trace()
+                event_types.append(fti.id)
             context.manage_delObjects([tmp_id])
             # Jeezez, if that goes well!
         except:
