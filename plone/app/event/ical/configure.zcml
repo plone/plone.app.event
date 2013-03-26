@@ -77,11 +77,24 @@
         zcml:condition="installed plone.app.collection"
         />
 
+    <!-- Ical import -->
     <browser:page
         for="plone.folder.interfaces.IFolder"
         name="ical_import_settings"
         class=".importer.IcalendarImportSettingsFormView"
+        allowed_attributes="enable
+                            disable"
         permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="*"
+        name="ical_import_tool"
+        class=".importer.IcalendarImportTool"
+        allowed_attributes="enabled
+                            available
+                            available_disabled"
+        permission="zope2.View"
         />
 
 </configure>

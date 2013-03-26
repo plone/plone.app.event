@@ -8,6 +8,9 @@ from plone.app.event import messageFactory as _
 
 ISO_DATE_FORMAT = '%Y-%m-%d'
 
+class IICalendarImportEnabled(Interface):
+    """Marker interface for contexts, where icalendar import is enabled.
+    """
 
 class ICalendarLinkbase(Interface):
     """Adapter Interface to retrieve a base url for a calendar view.

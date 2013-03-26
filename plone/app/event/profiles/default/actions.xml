@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+ <object name="object" meta_type="CMF Action Category">
+  <object name="ical_import_settings" meta_type="CMF Action" i18n:domain="plone.app.event">
+   <property name="title" i18n:translate="">Ical Import</property>
+   <property name="description" i18n:translate=""></property>
+   <property name="url_expr">string:${object_url}/@@ical_import_settings</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">object/@@ical_import_tool/enabled</property>
+   <property name="permissions">
+    <element value="Manage properties"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="ical_import_enable" meta_type="CMF Action" i18n:domain="plone">
+   <property name="title" i18n:translate="">Enable Ical Import</property>
+   <property name="description" i18n:translate=""></property>
+   <property name="url_expr">string:$object_url/@@ical_import_settings/enable</property>
+   <property name="available_expr">object/@@ical_import_tool/available_disabled</property>
+   <property name="permissions">
+    <element value="Manage properties" />
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="ical_import_disable" meta_type="CMF Action" i18n:domain="plone">
+   <property name="title" i18n:translate="">Disable Ical Import</property>
+   <property name="description" i18n:translate=""></property>
+   <property name="url_expr">string:$object_url/@@ical_import_settings/disable</property>
+   <property name="available_expr">object/@@ical_import_tool/enabled</property>
+   <property name="permissions">
+    <element value="Manage properties" />
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+
+</object>

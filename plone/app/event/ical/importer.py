@@ -1,6 +1,5 @@
 # TODO:
 #  - support more RFC5545 icalendar properties,
-#  - better integration in plone ui (content tabs),
 #  - save ical settings at all and in annotation,
 #  - implement sync strategies,
 #  - cleanup,
@@ -124,9 +123,29 @@ class IIcalendarImportSettings(Interface):
     )
 
 
+from Products.Five.browser import BrowserView
+from plone.folder.interfaces import IFolder
+from plone.app.event.interfaces import IICalendarImportEnabled
+
+class IcalendarImportTool(BrowserView):
+
+    @property
+    def available(self):
+        return IFolder.providedBy(self.context)
+
+    @property
+    def available_disabled(self):
+        return self.available and not self.enabled
+
+    @property
+    def enabled(self):
+        return IICalendarImportEnabled.providedBy(self.context)
+
+
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import form, field
+from zope.interface import alsoProvides, noLongerProvides
 
 class IcalendarImportSettingsForm(form.Form):
 
@@ -163,13 +182,28 @@ class IcalendarImportSettingsForm(form.Form):
         IStatusMessage(self.request).addStatusMessage(
             "%s events imported from %s" % (count, ical_import_from),
             'info')
-        redirect_url = self.context.absolute_url()
-        self.request.response.redirect(redirect_url)
+        self.request.response.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(u'Cancel')
     def handleCancel(self, action):
-        redirect_url = self.context.absolute_url()
-        self.request.response.redirect(redirect_url)
+        self.request.response.redirect(self.context.absolute_url())
 
-from plone.z3cform.layout import wrap_form
-IcalendarImportSettingsFormView = wrap_form(IcalendarImportSettingsForm)
+from plone.z3cform.layout import FormWrapper
+
+class IcalendarImportSettingsFormView(FormWrapper):
+    form = IcalendarImportSettingsForm
+
+    def enable(self):
+        """Enable icalendar import on this context.
+        """
+        alsoProvides(self.context, IICalendarImportEnabled)
+        self.context.reindexObject(idxs=('object_provides'))
+        self.request.response.redirect(self.context.absolute_url())
+
+
+    def disable(self):
+        """Disable icalendar import on this context.
+        """
+        noLongerProvides(self.context, IICalendarImportEnabled)
+        self.context.reindexObject(idxs=('object_provides'))
+        self.request.response.redirect(self.context.absolute_url())
