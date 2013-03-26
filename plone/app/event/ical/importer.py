@@ -10,8 +10,10 @@ from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import is_date, date_to_datetime
 from zope.container.interfaces import INameChooser
-import icalendar
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
+import icalendar
 import random
 import transaction
 import urllib2
@@ -74,6 +76,9 @@ def ical_import(container, ics_resource, event_type):
         content = container[content_id]
 
         event = IEventAccessor(content)
+        event.start = start
+        event.end = end
+        event.timezone = timezone
         event.whole_day = whole_day
 
         # Archetypes specific code
@@ -87,6 +92,8 @@ def ical_import(container, ics_resource, event_type):
         new_id = chooser.chooseName(title, content)
         transaction.savepoint(optimistic=True)
         content.aq_parent.manage_renameObject(content_id, new_id)
+
+        notify(ObjectModifiedEvent(content))
 
         count += 1
 
