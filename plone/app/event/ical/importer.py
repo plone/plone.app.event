@@ -22,13 +22,10 @@ def ical_import(container, ics_resource, event_type):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk('VEVENT')
 
-    def _get_prop(prop, item, _as_unicode=True):
+    def _get_prop(prop, item):
         ret = None
         if prop in item:
-            if _as_unicode:
-                ret = safe_unicode(item.decoded(prop))
-            else:
-                ret = item.decoded(prop)
+            ret = safe_unicode(item.decoded(prop))
         return ret
 
     count = 0
