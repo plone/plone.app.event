@@ -88,6 +88,9 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
+
+# TODO: translate, use really registered content types from FTI
+
 def EventTypes(context):
     """ Vocabulary for available event types.
     """
