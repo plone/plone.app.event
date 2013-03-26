@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add ical import feature. .ics files can be fetched from the net from other
+  calendar servers or uploaded at @@ical_import_settings.
+  [thet]
+
 - Since more ical related code is upcoming (importer), add ical subpackage and
   move ical related code in here.
   [thet]
