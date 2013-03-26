@@ -91,19 +91,10 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
-
 # TODO: translate, use really registered content types from FTI
-
-import random
-
-
 def EventTypes(context):
     """ Vocabulary for available event types.
     """
-
-    # TODO: Since I have not found a elegant way to get all FTI types which
-    # implement IEvent, I'm creating temporary objects within the context, test
-    # them for the Interface and delete them afterwards.
     # TODO: I'd love to query the factory for types, who's instances are
     # implementing a specific interface via the portal_factory API.
 
