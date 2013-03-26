@@ -1,3 +1,10 @@
+# TODO:
+#  - support more RFC5545 icalendar properties,
+#  - better integration in plone ui (content tabs),
+#  - save ical settings at all and in annotation
+#  - cleanup,
+#  - tests
+
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
