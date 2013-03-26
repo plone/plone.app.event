@@ -8,10 +8,6 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
 
-from Products.CMFCore.utils import getToolByName
-from zope.component import createObject
-from plone.event.interfaces import IEvent
-
 replacement_zones = {
     'CET': 'Europe/Vienna',   # Central European Time
     'MET': 'Europe/Vienna',   # Middle European Time
@@ -101,6 +97,10 @@ def EventTypes(context):
     portal_types = getToolByName(context, 'portal_types')
     all_types = portal_types.listTypeInfo(context)
     event_types = [fti.id for fti in all_types]
+
+    # TODO: stub.
+    #from zope.component import createObject
+    #from plone.event.interfaces import IEvent
     #event_types = []
     #for fti in all_types:
     #    try:
@@ -111,6 +111,7 @@ def EventTypes(context):
     #            event_types.append(fti.id)
     #    except:
     #        continue
+
     return SimpleVocabulary.fromValues(event_types)
 directlyProvides(EventTypes, IVocabularyFactory)
 
