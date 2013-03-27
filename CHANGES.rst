@@ -3,6 +3,10 @@ Changelog
 
 1.0dev (unreleased)
 -------------------
+
+- Restrict calendar tooltips to 30em max-with in css.
+  [thet]
+
 - Add Brazilian Portuguese translation
   [ericof]
 
