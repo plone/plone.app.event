@@ -10,8 +10,9 @@ Changelog
 - Add Brazilian Portuguese translation
   [ericof]
 
-- Add ical import feature. .ics files can be fetched from the net from other
-  calendar servers or uploaded at @@ical_import_settings.
+- Add ical import feature, register action to enable it and add a object tab to
+  the @@ical_import_settings form. .ics files can be uploaded or fetched from
+  the net from other calendar servers.
   [thet]
 
 - Since more ical related code is upcoming (importer), add ical subpackage and
