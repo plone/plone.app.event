@@ -63,6 +63,25 @@ def ical_import(container, ics_resource, event_type):
         description = _get_prop('DESCRIPTION', item)
         location = _get_prop('LOCATION', item)
 
+        url = _get_prop('URL', item)
+
+        rrule = _get_prop('RRULE', item)
+        rrule = rrule and 'RRULE:%s' % rrule.to_ical() or ''
+        rdate = _get_prop('RDATE', item)
+        rrule = rdate and '%s\nRDATE:%s' % (rrule, rdate.to_ical()) or ''
+        exdate = _get_prop('EXDATE', item)
+        rrule = exdate and '%s\nEXDATE:%s' % (rrule, exdate.to_ical()) or ''
+
+        attendees = _get_prop('ATTENDEE', item)
+        contact = _get_prop('CONTACT', item)
+        categories = _get_prop('CATEGORIES', item)
+        if hasattr(categories, '__iter__'):
+            categories = [safe_unicode(it) for it in categories]
+
+        # for sync
+        created = _get_prop('CREATED', item)
+        modified = _get_prop('LAST-MODIFIED', item)
+
         # TODO: better use plone.api, from which some of the code here is
         # copied
         content_id = str(random.randint(0, 99999999))
@@ -81,6 +100,11 @@ def ical_import(container, ics_resource, event_type):
         event.timezone = timezone
         event.whole_day = whole_day
         event.location = location
+        event.event_url = url
+        event.recurrence = rrule
+        event.attendees = attendees
+        event.contact_name = contact
+        event.subjects = categories
         notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code
