@@ -66,13 +66,12 @@ def ical_import(container, ics_resource, event_type):
         # copied
         content_id = str(random.randint(0, 99999999))
 
+        # TODO: if AT had the same attrs like IDXEventBase, we could set
+        # everything within this invokeFactory call.
         container.invokeFactory(event_type,
                                 id=content_id,
                                 title=title,
-                                description=description,
-                                start=start,
-                                end=end,
-                                timezone=timezone)
+                                description=description)
         content = container[content_id]
 
         event = IEventAccessor(content)
@@ -80,6 +79,7 @@ def ical_import(container, ics_resource, event_type):
         event.end = end
         event.timezone = timezone
         event.whole_day = whole_day
+        notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code
         if getattr(content, 'processForm', False):
@@ -92,8 +92,6 @@ def ical_import(container, ics_resource, event_type):
         new_id = chooser.chooseName(title, content)
         transaction.savepoint(optimistic=True)
         content.aq_parent.manage_renameObject(content_id, new_id)
-
-        notify(ObjectModifiedEvent(content))
 
         count += 1
 
