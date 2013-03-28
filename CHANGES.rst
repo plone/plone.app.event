@@ -7,7 +7,7 @@ Changelog
 - Backport from seanupton: IObjectModifiedEvent subscriber returns early on
   newly created event (Commite c60c8b521c6b1ca219bfeaddb08e26605707e17 on
   https://github.com/seanupton/plone.app.event).
-  [seanupton, thet]
+  [seanupton]
 
 - Restrict calendar portlet tooltips to 30em max-with in css.
   [thet]
@@ -36,11 +36,11 @@ Changelog
 
 - Backport from plone.app.portlets: Don't fail on invalid (ambigous) date
   information in request (Commit a322676 on plone.app.portlets).
-  [tomgross, thet]
+  [tomgross]
 
 - Backport from plone.app.portlets: Use str view names for getMultiAdapter
   calls (commit c296408 on plone.app.portlets).
-  [wichert, thet]
+  [wichert]
 
 
 1.0b6 (2013-02-14)
