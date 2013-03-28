@@ -475,6 +475,21 @@ class EventAccessor(object):
     def __init__(self, context):
         self.context = context
 
+    """
+    @staticmethod
+    def create_(context, start=None, end=None, timezone=None, whole_day=None):
+        container.invokeFactory(event_type,
+                                id=content_id,
+                                title=title,
+                                description=description,
+                                start=start,
+                                end=end,
+                                timezone=timezone)
+        content = container[content_id]
+
+        event = IEventAccessor(content)
+    """
+
     @property
     def uid(self):
         return IUUID(self.context, None)
@@ -515,14 +530,14 @@ class EventAccessor(object):
         return self.context.start_date
     @start.setter
     def start(self, value):
-        self.context.setStartDate(DT(value))
+        self.context.setStartDate(value)
 
     @property
     def end(self):
         return self.context.end_date
     @end.setter
     def end(self, value):
-        self.context.setEndDate(DT(value))
+        self.context.setEndDate(value)
 
     @property
     def whole_day(self):
