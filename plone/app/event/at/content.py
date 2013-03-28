@@ -476,8 +476,11 @@ class EventAccessor(object):
         self.context = context
 
     """
+    # Unified create method via Accessor
     @staticmethod
-    def create_(context, start=None, end=None, timezone=None, whole_day=None):
+    def create_(container,
+                content_id, title, description=None,
+                start=None, end=None, timezone=None, whole_day=None):
         container.invokeFactory(event_type,
                                 id=content_id,
                                 title=title,
@@ -486,8 +489,7 @@ class EventAccessor(object):
                                 end=end,
                                 timezone=timezone)
         content = container[content_id]
-
-        event = IEventAccessor(content)
+        return IEventAccessor(content)
     """
 
     @property
