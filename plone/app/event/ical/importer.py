@@ -61,6 +61,7 @@ def ical_import(container, ics_resource, event_type):
 
         title = _get_prop('SUMMARY', item)
         description = _get_prop('DESCRIPTION', item)
+        location = _get_prop('LOCATION', item)
 
         # TODO: better use plone.api, from which some of the code here is
         # copied
@@ -79,6 +80,7 @@ def ical_import(container, ics_resource, event_type):
         event.end = end
         event.timezone = timezone
         event.whole_day = whole_day
+        event.location = location
         notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code
