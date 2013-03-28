@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Backport from seanupton: IObjectModifiedEvent subscriber returns early on
+  newly created event (Commite c60c8b521c6b1ca219bfeaddb08e26605707e17 on
+  https://github.com/seanupton/plone.app.event).
+  [seanupton, thet]
+
 - Restrict calendar portlet tooltips to 30em max-with in css.
   [thet]
 
