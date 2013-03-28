@@ -575,7 +575,8 @@ class EventAccessor(object):
         return self.context.attendees
     @attendees.setter
     def attendees(self, value):
-        self.context.setAttendees(value)
+        if value:
+            self.context.setAttendees(value)
 
     @property
     def contact_name(self):
@@ -610,7 +611,8 @@ class EventAccessor(object):
         return self.context.Subject()
     @subjects.setter
     def subjects(self, value):
-        self.context.setSubject(value)
+        if value:
+            self.context.setSubject(value)
 
     @property
     def text(self):
