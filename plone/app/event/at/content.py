@@ -475,6 +475,7 @@ class EventAccessor(object):
     def __init__(self, context):
         self.context = context
 
+    # TODO: remove
     """
     # Unified create method via Accessor
     @staticmethod
