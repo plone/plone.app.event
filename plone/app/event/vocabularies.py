@@ -1,12 +1,16 @@
-import pytz
+from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
+from plone.event.interfaces import IEvent
+from plone.memoize import forever
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.interface import directlyProvides
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from Products.CMFCore.utils import getToolByName
+import pytz
+import random
+
 
 replacement_zones = {
     'CET': 'Europe/Vienna',   # Central European Time
@@ -14,6 +18,7 @@ replacement_zones = {
     'EET': 'Europe/Helsinki', # East European Time
     'WET': 'Europe/Lisbon',   # West European Time
 }
+
 
 def Timezones(context):
     """ Vocabulary for all timezones.
@@ -87,11 +92,6 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
-# TODO: translate
-import random
-from plone.event.interfaces import IEvent
-from plone.memoize import forever
-
 @forever.memoize
 def EventTypes(context):
     """ Vocabulary for available event types.
@@ -102,9 +102,6 @@ def EventTypes(context):
     """
     # TODO: I'd love to query the factory for types, who's instances are
     # implementing a specific interface via the portal_factory API.
-
-    # get temporary folder
-    #tmp_folder = context.restrictedTraverse('temp_folder')
 
     portal = getSite()
     tmp_folder_id = 'event_types_temp_folder__%s' % random.randint(0, 99999999)
@@ -128,20 +125,6 @@ def EventTypes(context):
         # Delete the tmp_folder again
         tmp_folder.__parent__.manage_delObjects([tmp_folder_id])
 
-    # TODO: stub.
-    #from zope.component import createObject
-    #from plone.event.interfaces import IEvent
-    #event_types = []
-    #for fti in all_types:
-    #    try:
-    #        # TODO: Works only for DexterityFTI types, which implement
-    #        # zope.component.interfaces.IFactory
-    #        tmp = createObject(fti.id)
-    #        if IEvent.providedBy(tmp):
-    #            event_types.append(fti.id)
-    #    except:
-    #        continue
-
     return SimpleVocabulary.fromValues(event_types)
 directlyProvides(EventTypes, IVocabularyFactory)
 
@@ -149,6 +132,7 @@ directlyProvides(EventTypes, IVocabularyFactory)
 def SynchronizationStrategies(context):
     """ Vocabulary for icalendar synchronization strategies.
     """
+    # TODO: translate
     items = ['none', 'keep_newer', 'keep_mine', 'keep_theirs']
     return SimpleVocabulary.fromValues(items)
 directlyProvides(SynchronizationStrategies, IVocabularyFactory)
