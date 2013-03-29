@@ -87,16 +87,46 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
-# TODO: translate, use really registered content types from FTI
+# TODO: translate
+import random
+from plone.event.interfaces import IEvent
+from plone.memoize import forever
+
+@forever.memoize
 def EventTypes(context):
     """ Vocabulary for available event types.
+
+    Insane stuff: All types are created temporary and checked if the provide
+    the IEvent interface. At least, this function is cached forever the Zope
+    process lives.
     """
     # TODO: I'd love to query the factory for types, who's instances are
     # implementing a specific interface via the portal_factory API.
 
-    portal_types = getToolByName(context, 'portal_types')
-    all_types = portal_types.listTypeInfo(context)
-    event_types = [fti.id for fti in all_types]
+    # get temporary folder
+    #tmp_folder = context.restrictedTraverse('temp_folder')
+
+    portal = getSite()
+    tmp_folder_id = 'event_types_temp_folder__%s' % random.randint(0, 99999999)
+    portal.invokeFactory('Folder', tmp_folder_id)
+    try:
+        tmp_folder = portal._getOb(tmp_folder_id)
+        portal_types = getToolByName(portal, 'portal_types')
+        all_types = portal_types.listTypeInfo(portal)
+        event_types = []
+        cnt = 0
+        for fti in all_types:
+            cnt += 1
+            tmp_id = 'temporary__event_types__%s' % cnt
+            tmp_obj = None
+            fti.constructInstance(tmp_folder, tmp_id)
+            tmp_obj = tmp_folder._getOb(tmp_id)
+            if tmp_obj:
+                if IEvent.providedBy(tmp_obj):
+                    event_types.append(fti.id)
+    finally:
+        # Delete the tmp_folder again
+        tmp_folder.__parent__.manage_delObjects([tmp_folder_id])
 
     # TODO: stub.
     #from zope.component import createObject

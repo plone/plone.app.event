@@ -1,5 +1,4 @@
 # TODO:
-#  - support more RFC5545 icalendar properties,
 #  - save ical settings at all and in annotation,
 #  - implement sync strategies,
 #  - cleanup,
