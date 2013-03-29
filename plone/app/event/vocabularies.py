@@ -92,7 +92,7 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
-@forever.memoize
+#@forever.memoize
 def EventTypes(context):
     """ Vocabulary for available event types.
 
@@ -113,6 +113,8 @@ def EventTypes(context):
         event_types = []
         cnt = 0
         for fti in all_types:
+            if not getattr(fti, 'global_allow', False):
+                continue
             cnt += 1
             tmp_id = 'temporary__event_types__%s' % cnt
             tmp_obj = None
