@@ -92,7 +92,7 @@ def Weekdays(context):
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
-#@forever.memoize
+@forever.memoize
 def EventTypes(context):
     """ Vocabulary for available event types.
 
