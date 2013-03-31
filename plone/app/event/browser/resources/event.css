@@ -123,6 +123,7 @@
     padding:10px;
     margin:10px;
     max-width: 30em;
+    z-index: 10;
 }
 .pae_calendar_tooltip a {
     color:black;

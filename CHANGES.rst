@@ -9,7 +9,7 @@ Changelog
   https://github.com/seanupton/plone.app.event).
   [seanupton]
 
-- Restrict calendar portlet tooltips to 30em max-with in css.
+- Calendar portlet tooltips css optimizations: max-with and z-index.
   [thet]
 
 - Add Brazilian Portuguese translation
