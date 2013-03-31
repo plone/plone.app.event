@@ -78,6 +78,8 @@
         />
 
     <!-- Ical import -->
+    <adapter factory=".importer.IcalendarImportSettings"/>
+
     <browser:page
         for="plone.folder.interfaces.IFolder"
         name="ical_import_settings"

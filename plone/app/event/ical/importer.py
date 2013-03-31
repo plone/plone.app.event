@@ -127,7 +127,6 @@ from zope.interface import Interface
 from zope import schema
 from plone.app.event import messageFactory as _
 from plone.namedfile.field import NamedFile
-
 class IIcalendarImportSettings(Interface):
 
     event_type = schema.Choice(
@@ -154,10 +153,50 @@ class IIcalendarImportSettings(Interface):
     #)
 
 
+from zope.annotation.interfaces import IAnnotations
+from persistent.dict import PersistentDict
+class AnnotationAdapter(object):
+    """Abstract Base Class for an annotation storage.
+    """
+    ANNOTATION_KEY = None
+
+    def __init__(self, context):
+        self.context = context
+        annotations = IAnnotations(context)
+        self._data = annotations.get(self.ANNOTATION_KEY, None)
+        if self._data is None:
+            self._data = PersistentDict()
+            annotations[self.ANNOTATION_KEY] = self._data
+
+    def __setattr__(self, name, value):
+        if name in ('context', '_data'):
+            self.__dict__[name] = value
+        else:
+            self._data[name] = value
+
+    def __getattr__(self, name):
+        return self._data.get(name, None)
+
+
+from zope.component import adapts
+from zope.interface import implements
+#from plone.folder.interfaces import IFolder
+class IcalendarImportSettings(AnnotationAdapter):
+    """Annotation Adapter for IIcalendarImportSettings.
+    """
+    implements(IIcalendarImportSettings)
+    adapts(Interface)
+
+    #adapts(IFolder) ## ?? TODO: when adapting this in z3c.form, why is a
+                     ## ATFolder not adaptable to this adapter, when it
+                     ## implements IFolder?
+
+    ANNOTATION_KEY = "icalendar_import_settings"
+
+
 from Products.Five.browser import BrowserView
 from plone.folder.interfaces import IFolder
 from plone.app.event.interfaces import IICalendarImportEnabled
-
 class IcalendarImportTool(BrowserView):
 
     @property
@@ -177,14 +216,21 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import form, field
 from zope.interface import alsoProvides, noLongerProvides
-
 class IcalendarImportSettingsForm(form.Form):
 
     fields = field.Fields(IIcalendarImportSettings)
-    ignoreContext = True
+    ignoreContext = False
 
     def updateWidgets(self):
         super(IcalendarImportSettingsForm, self).updateWidgets()
+
+    def getContent(self):
+        data = {}
+        settings = IIcalendarImportSettings(self.context)
+        data['event_type'] = settings.event_type
+        data['ical_url'] = settings.ical_url
+        #data['sync_strategy'] = settings.sync_strategy
+        return data
 
     @button.buttonAndHandler(u'Save and Import')
     def handleSave(self, action):
@@ -192,15 +238,18 @@ class IcalendarImportSettingsForm(form.Form):
         if errors:
             return False
 
+        settings = IIcalendarImportSettings(self.context)
+
         ical_file = data['ical_file']
         if ical_file:
+            # File upload is not saved in settings
             ical_resource = ical_file.data
             ical_import_from = ical_file.filename
         else:
-            ical_url = data['ical_url']
+            ical_url = settings.ical_url = data['ical_url']
             ical_resource = urllib2.urlopen(ical_url, 'rb').read()
             ical_import_from = ical_url
-        event_type = data['event_type']
+        event_type = settings.event_type = data['event_type']
 
         import_metadata = ical_import(
             self.context,
@@ -219,8 +268,8 @@ class IcalendarImportSettingsForm(form.Form):
     def handleCancel(self, action):
         self.request.response.redirect(self.context.absolute_url())
 
-from plone.z3cform.layout import FormWrapper
 
+from plone.z3cform.layout import FormWrapper
 class IcalendarImportSettingsFormView(FormWrapper):
     form = IcalendarImportSettingsForm
 
