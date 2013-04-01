@@ -1,5 +1,4 @@
 # TODO:
-#  - save ical settings at all and in annotation,
 #  - implement sync strategies,
 #  - cleanup,
 #  - tests
