@@ -115,9 +115,10 @@ def ical_import(container, ics_resource, event_type):
             # Rename with new id from title, if processForm didn't do it.
             chooser = INameChooser(container)
             new_id = chooser.chooseName(title, content)
+            transaction.savepoint(optimistic=True) # Commit before renaming
             content.aq_parent.manage_renameObject(content_id, new_id)
-
-        transaction.savepoint(optimistic=True)
+        else:
+            transaction.savepoint(optimistic=True)
 
         count += 1
 
