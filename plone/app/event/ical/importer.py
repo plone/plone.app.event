@@ -111,11 +111,13 @@ def ical_import(container, ics_resource, event_type):
             # rename-after-creation and such
             content.processForm()
 
-        # Create a new id from title
-        chooser = INameChooser(container)
-        new_id = chooser.chooseName(title, content)
+        if content_id in container:
+            # Rename with new id from title, if processForm didn't do it.
+            chooser = INameChooser(container)
+            new_id = chooser.chooseName(title, content)
+            content.aq_parent.manage_renameObject(content_id, new_id)
+
         transaction.savepoint(optimistic=True)
-        content.aq_parent.manage_renameObject(content_id, new_id)
 
         count += 1
 
