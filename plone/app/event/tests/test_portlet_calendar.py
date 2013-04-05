@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest2 as unittest
+from calendar import monthrange
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
@@ -144,16 +145,17 @@ class RendererTest(unittest.TestCase):
         portlet.update()
         html = portlet.render()
 
-        # Now let's add a new event in the last day of the current month
+        # Now let's add a new event on the first day of the current month
         year, month = portlet.year_month_display()
-        last_day_month = DateTime('%s/%s/1' % (year, month)) - 1
+        day = monthrange(year, month)[1] # (wkday, days)
+        last_day_month = DateTime('%s/%s/%s' % (year, month, day))
         hour = 1 / 24.0
         # Event starts at 23:00 and ends at 23:30
         self.portal.invokeFactory('Event', 'e1',
                                   startDate=last_day_month + 23*hour,
                                   endDate=last_day_month + 23.5*hour)
 
-        # Try to render the calendar portlet again, it must be different now
+        # Try to render the calendar portlet again, it must be different Now
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")

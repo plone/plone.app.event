@@ -94,7 +94,7 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         request = self.request
 
-        # Try to get year and month from requst
+        # Try to get year and month from request
         year = request.get('year', None)
         month = request.get('month', None)
 
