@@ -84,8 +84,6 @@ class PAEventDXLayer(PloneSandboxLayer):
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx, context=configurationContext)
 
-        z2.installProduct(app, 'plone.app.event.dx')
-
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.dx:default')
         set_timezone(tz='UTC')
@@ -109,8 +107,6 @@ class PAEventATDXLayer(PloneSandboxLayer):
 
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx, context=configurationContext)
-
-        z2.installProduct(app, 'plone.app.event.dx')
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.at:default')
