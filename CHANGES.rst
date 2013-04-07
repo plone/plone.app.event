@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Depend on plone.app.dextterity in ZCML, so that all DublinCore metadata
+  behaviors are set up correctly.
+  [thet]
+
 - Backport from seanupton: IObjectModifiedEvent subscriber returns early on
   newly created event (Commite c60c8b521c6b1ca219bfeaddb08e26605707e17 on
   https://github.com/seanupton/plone.app.event).

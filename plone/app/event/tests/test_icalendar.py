@@ -14,7 +14,6 @@ from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE
-# * localize dates
 
 def makeResponse(request):
     """ create a fake response and set up logging of output """
@@ -67,8 +66,6 @@ class ICalendarExportTest(unittest.TestCase):
         pc12.contact_phone = '+123456789'
         pc12.event_url = 'http://ploneconf.org'
         pc12.subjects = ['plone', 'conference',]
-        # import pdb; pdb.set_trace()
-        # TODO: why is subjects not stored on the event here?
         notify(ObjectModifiedEvent(portal.events.ploneconf2012))
 
         portal.events.invokeFactory('plone.app.event.dx.event',
@@ -118,8 +115,6 @@ class ICalendarExportTest(unittest.TestCase):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
-        # import pdb; pdb.set_trace()
-        # TODO: check for subjects
 
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
@@ -130,6 +125,8 @@ class ICalendarExportTest(unittest.TestCase):
             'UID:',
             'RDATE;TZID=Europe/Amsterdam:20121009T000000',
             'EXDATE;TZID=Europe/Amsterdam:20121013T000000,20121014T000000',
+            'CATEGORIES:plone',
+            'CATEGORIES:conference',
             'CONTACT:Four Digits\\, +123456789\\, info@ploneconf.org\\, http://ploneconf.o\r\n rg\r\n',
             'LOCATION:Arnhem',
             'RRULE:FREQ=DAILY;COUNT=5',
