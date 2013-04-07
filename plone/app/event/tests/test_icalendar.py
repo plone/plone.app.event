@@ -61,16 +61,28 @@ class ICalendarExportTest(unittest.TestCase):
             end=datetime(2012,10,10,18,0),
             timezone='Europe/Amsterdam')
         pc12 = IEventAccessor(portal.events.ploneconf2012)
-        pc12.location='Arnhem'
-        pc12.contact_name='Four Digits'
-        pc12.contact_email='info@ploneconf.org'
-        notify(ObjectModifiedEvent(pc12))
+        pc12.location = 'Arnhem'
+        pc12.contact_name = 'Four Digits'
+        pc12.contact_email = 'info@ploneconf.org'
+        pc12.contact_phone = '+123456789'
+        pc12.event_url = 'http://ploneconf.org'
+        pc12.subjects = ['plone', 'conference',]
+        # import pdb; pdb.set_trace()
+        # TODO: why is subjects not stored on the event here?
+        notify(ObjectModifiedEvent(portal.events.ploneconf2012))
 
         portal.events.invokeFactory('plone.app.event.dx.event',
             id='artsprint2013', title='Artsprint 2013',
             start=datetime(2013,2,18),
             end=datetime(2013,2,22),
             whole_day=True,
+            timezone='Europe/Vienna')
+
+        # Standard Time
+        portal.events.invokeFactory('plone.app.event.dx.event',
+            id='standardtime', title='Standard Time',
+            start=datetime(2013,12,24,12,0),
+            end=datetime(2013,12,24,13,0),
             timezone='Europe/Vienna')
 
         portal.invokeFactory("Collection",
@@ -89,7 +101,7 @@ class ICalendarExportTest(unittest.TestCase):
         collection = self.portal['collection']
         results = collection.results()
         # Should find Archetypes and Dexterity events
-        self.assertTrue(results.length == 4)
+        self.assertEqual(results.length, 5)
 
     def checkOrder(self, text, *order):
         for item in order:
@@ -106,6 +118,9 @@ class ICalendarExportTest(unittest.TestCase):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
+        # import pdb; pdb.set_trace()
+        # TODO: check for subjects
+
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'BEGIN:VEVENT',
@@ -115,9 +130,10 @@ class ICalendarExportTest(unittest.TestCase):
             'UID:',
             'RDATE;TZID=Europe/Amsterdam:20121009T000000',
             'EXDATE;TZID=Europe/Amsterdam:20121013T000000,20121014T000000',
-            'CONTACT:Four Digits\\, info@ploneconf.org',
+            'CONTACT:Four Digits\\, +123456789\\, info@ploneconf.org\\, http://ploneconf.o\r\n rg\r\n',
             'LOCATION:Arnhem',
             'RRULE:FREQ=DAILY;COUNT=5',
+            'URL:http://nohost/plone/events/ploneconf2012',
             'END:VEVENT',
             'BEGIN:VTIMEZONE',
             'TZID:Europe/Amsterdam',
@@ -130,6 +146,37 @@ class ICalendarExportTest(unittest.TestCase):
             'END:DAYLIGHT',
             'END:VTIMEZONE',
             'END:VCALENDAR')
+
+    def testEventStandardTime(self):
+        headers, output, request = makeResponse(self.request)
+        view = getMultiAdapter((self.portal.events.standardtime, request),
+                                name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+
+        self.checkOrder(icalstr,
+            'BEGIN:VCALENDAR',
+            'BEGIN:VEVENT',
+            'SUMMARY:Standard Time',
+            'DTSTART;TZID=Europe/Vienna;VALUE=DATE-TIME:20131224T120000',
+            'DTEND;TZID=Europe/Vienna;VALUE=DATE-TIME:20131224T130000',
+            'URL:http://nohost/plone/events/standardtime',
+            'END:VEVENT',
+            'BEGIN:VTIMEZONE',
+            'TZID:Europe/Vienna',
+            'X-LIC-LOCATION:Europe/Vienna',
+            'BEGIN:STANDARD',
+            'DTSTART;VALUE=DATE-TIME:20131027T020000',
+            'TZNAME:CET',
+            'TZOFFSETFROM:+0200',
+            'TZOFFSETTO:+0100',
+            'END:STANDARD',
+            'END:VTIMEZONE',
+            'END:VCALENDAR',
+        )
+
 
     def testWholeDayICal(self):
         headers, output, request = makeResponse(self.request)
