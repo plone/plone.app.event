@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Update translations and translate event_view and event_listing.
+  [thet]
+
+- Configure event_listing to be an available view on Collections, Folders,
+  Plone Sites and Topics.
+  [thet]
+
 - Depend on plone.app.dextterity in ZCML, so that all DublinCore metadata
   behaviors are set up correctly.
   [thet]
