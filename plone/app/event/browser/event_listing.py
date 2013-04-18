@@ -81,7 +81,6 @@ class EventListing(BrowserView):
 
     @property
     def get_events(self):
-        import pdb; pdb.set_trace()
         events = self._get_events()
         b_start = self.b_start
         b_size  = self.b_size
@@ -89,7 +88,6 @@ class EventListing(BrowserView):
 
     @property
     def ical(self):
-        import pdb; pdb.set_trace()
         events = self._get_events()
         return construct_calendar(self.context, events)
 
