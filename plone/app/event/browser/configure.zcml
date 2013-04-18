@@ -24,6 +24,7 @@
         for="*"
         name="event_listing"
         class=".event_listing.EventListing"
+        allowed_attributes="ical"
         template="event_listing.pt"
         permission="zope2.View"
         />

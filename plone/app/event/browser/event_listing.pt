@@ -30,18 +30,27 @@
           <li class="" tal:attributes="class python:mode=='day' and 'selected' or ''">
             <a class="mode_day"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
           </li>
+          <li>
+            <a class="mode_ical"  href="" tal:attributes="href string:${request/getURL}/ical"
+               title="Download this event in iCal format"
+               i18n:attributes="title title_add_to_ical;">
+                <img src="" alt=""
+                    tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
+                <span i18n:translate="label_add_to_ical">iCal</span></a>
+
+          </li>
         </ul>
         <tal:month condition="python:mode=='month'">
         <ul class="sub_nav">
           <li><a class="prev_month" href="" tal:attributes="href view/prev_month_url" i18n:translate="prev_month_link">Previous Month</a></li>
-          <li><a class="this_month" href="" tal:attributes="href view/this_month_url"      i18n:translate="this_month_link">This Month</a></li>
+          <li><a class="this_month" href="" tal:attributes="href view/this_month_url" i18n:translate="this_month_link">This Month</a></li>
           <li><a class="next_month" href="" tal:attributes="href view/next_month_url" i18n:translate="next_month_link">Next Month</a></li>
         </ul>
         </tal:month>
         <tal:week condition="python:mode=='week'">
         <ul class="sub_nav">
           <li><a class="prev_week"  href="" tal:attributes="href view/prev_week_url"  i18n:translate="prev_week_link">Previous Week</a></li>
-          <li><a class="this_week"  href="" tal:attributes="href view/this_week_url"       i18n:translate="this_week_link">This Week</a></li>
+          <li><a class="this_week"  href="" tal:attributes="href view/this_week_url"  i18n:translate="this_week_link">This Week</a></li>
           <li><a class="next_week"  href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a></li>
         </ul>
         </tal:week>

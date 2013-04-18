@@ -13,8 +13,11 @@ from plone.app.event.base import get_portal_events
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
+from plone.app.event.ical.exporter import construct_calendar
+from plone.memoize import view
 
 from plone.app.event import messageFactory as _
+
 
 class EventListing(BrowserView):
 
@@ -59,15 +62,13 @@ class EventListing(BrowserView):
         start, end = start_end_from_mode(self.mode, self.date, self.context)
         return start, end
 
-    @property
-    def get_events(self):
+    @view.memoize
+    def _get_events(self):
         context = self.context
         kw = {}
         if not self._all:
             kw['path'] = '/'.join(context.getPhysicalPath())
 
-        b_start = self.b_start
-        b_size  = self.b_size
         #kw['b_start'] = self.b_start
         #kw['b_size']  = self.b_size
 
@@ -76,8 +77,21 @@ class EventListing(BrowserView):
                 context,
                 get_portal_events(context, start, end, **kw),
                 start, end)
+        return occs
 
-        return Batch(occs, size=b_size, start=b_start, orphan=self.orphan)
+    @property
+    def get_events(self):
+        import pdb; pdb.set_trace()
+        events = self._get_events()
+        b_start = self.b_start
+        b_size  = self.b_size
+        return Batch(events, size=b_size, start=b_start, orphan=self.orphan)
+
+    @property
+    def ical(self):
+        import pdb; pdb.set_trace()
+        events = self._get_events()
+        return construct_calendar(self.context, events)
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
@@ -171,9 +185,8 @@ class EventListing(BrowserView):
 
     # MODE URLs
     def _date_nav_url(self, mode, datestr=''):
-        return '%s/%s?mode=%s%s' % (
-                self.context.absolute_url(),
-                self.__name__,
+        return '%s?mode=%s%s' % (
+                self.request.getURL(),
                 mode,
                 datestr and '&date=%s' % datestr or '')
 
