@@ -4,8 +4,8 @@
 
  <object name="object" meta_type="CMF Action Category">
   <object name="ical_import_settings" meta_type="CMF Action" i18n:domain="plone.app.event">
-   <property name="title" i18n:translate="">Ical Import</property>
-   <property name="description" i18n:translate=""></property>
+   <property name="title" i18n:translate="title_ical_import">Ical import</property>
+   <property name="description" i18n:translate="help_ical_import">Import Events from icalendar files.</property>
    <property name="url_expr">string:${object_url}/@@ical_import_settings</property>
    <property name="icon_expr"></property>
    <property name="available_expr">object/@@ical_import_tool/enabled</property>
@@ -17,9 +17,9 @@
  </object>
 
  <object name="object_buttons" meta_type="CMF Action Category">
-  <object name="ical_import_enable" meta_type="CMF Action" i18n:domain="plone">
-   <property name="title" i18n:translate="">Enable Ical Import</property>
-   <property name="description" i18n:translate=""></property>
+  <object name="ical_import_enable" meta_type="CMF Action" i18n:domain="plone.app.event">
+   <property name="title" i18n:translate="title_ical_import_enable">Enable icalendar import</property>
+   <property name="description" i18n:translate="help_ical_import_enable">Click to enable the icalendar import feature on this context.</property>
    <property name="url_expr">string:$object_url/@@ical_import_settings/enable</property>
    <property name="available_expr">object/@@ical_import_tool/available_disabled</property>
    <property name="permissions">
@@ -30,9 +30,9 @@
  </object>
 
  <object name="object_buttons" meta_type="CMF Action Category">
-  <object name="ical_import_disable" meta_type="CMF Action" i18n:domain="plone">
-   <property name="title" i18n:translate="">Disable Ical Import</property>
-   <property name="description" i18n:translate=""></property>
+  <object name="ical_import_disable" meta_type="CMF Action" i18n:domain="plone.app.event">
+   <property name="title" i18n:translate="title_ical_import_disable">Disable icalendar import</property>
+   <property name="description" i18n:translate="help_ical_import_disable">Click to disable the icalendar import feature on this context.</property>
    <property name="url_expr">string:$object_url/@@ical_import_settings/disable</property>
    <property name="available_expr">object/@@ical_import_tool/enabled</property>
    <property name="permissions">

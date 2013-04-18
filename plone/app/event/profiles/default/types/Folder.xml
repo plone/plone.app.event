@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="Folder">
+ <property name="view_methods" purge="False">
+  <element value="event_listing"/>
+ </property>
+</object>
