@@ -16,7 +16,7 @@ Changelog
   [thet]
 
 - Backport from seanupton: IObjectModifiedEvent subscriber returns early on
-  newly created event (Commite c60c8b521c6b1ca219bfeaddb08e26605707e17 on
+  newly created event (Commit c60c8b521c6b1ca219bfeaddb08e26605707e17 on
   https://github.com/seanupton/plone.app.event).
   [seanupton]
 
