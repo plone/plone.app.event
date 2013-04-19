@@ -21,6 +21,9 @@
     <header>
       <nav>
         <ul class="mode_selector">
+          <li class="" tal:attributes="class python:mode=='all' and 'selected' or ''">
+            <a class="mode_all"   href="" tal:attributes="href view/mode_all_url"   i18n:translate="mode_all_link">All</a>
+          </li>
           <li class="" tal:attributes="class python:mode=='month' and 'selected' or ''">
             <a class="mode_month" href="" tal:attributes="href view/mode_month_url" i18n:translate="mode_month_link">Month</a>
           </li>

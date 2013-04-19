@@ -199,6 +199,10 @@ class EventListing(BrowserView):
                 datestr and '&date=%s' % datestr or '')
 
     @property
+    def mode_all_url(self):
+        return self._date_nav_url('all')
+
+    @property
     def mode_day_url(self):
         now = self.date or self.now
         return self._date_nav_url('day', now.date().isoformat())
