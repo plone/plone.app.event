@@ -17,7 +17,7 @@ from plone.app.event.base import (
     default_start_dt,
     default_timezone,
     get_occurrences_from_brains,
-    get_portal_events,
+    get_events,
     localized_now,
     dates_for_display
 )
@@ -304,64 +304,64 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     def event_factory(self):
         return DXEventAccessor.create
 
-    def test_get_portal_events(self):
+    def test_get_events(self):
         # whole range
-        res = get_portal_events(self.portal)
+        res = get_events(self.portal)
         self.assertTrue(len(res) == 4)
 
-        res = get_portal_events(self.portal,
-                                 range_start=self.past,
-                                 range_end=self.future)
+        res = get_events(self.portal,
+                         start=self.past,
+                         end=self.future)
         self.assertTrue(len(res) == 4)
 
-        res = get_portal_events(self.portal,
-                                 range_end=self.future)
+        res = get_events(self.portal,
+                         end=self.future)
         self.assertTrue(len(res) == 4)
 
-        res = get_portal_events(self.portal,
-                                 range_start=self.past)
+        res = get_events(self.portal,
+                         start=self.past)
         self.assertTrue(len(res) == 4)
 
 
         # only on now-date
-        res = get_portal_events(self.portal,
-                                 range_start=self.now,
-                                 range_end=self.now)
+        res = get_events(self.portal,
+                         start=self.now,
+                         end=self.now)
         self.assertTrue(len(res) == 2)
 
         # only on now-date as date
         # NOTE: converting self.now to python datetime to allow testing also
         # with dates as Zope DateTime objects.
-        res = get_portal_events(self.portal,
-                                 range_start=pydt(self.now).date(),
-                                 range_end=pydt(self.now).date())
+        res = get_events(self.portal,
+                         start=pydt(self.now).date(),
+                         end=pydt(self.now).date())
         self.assertTrue(len(res) == 2)
 
         # only on past date
-        res = get_portal_events(self.portal,
-                                 range_start=self.past,
-                                 range_end=self.past)
+        res = get_events(self.portal,
+                         start=self.past,
+                         end=self.past)
         self.assertTrue(len(res) == 2)
 
         # one recurrence occurrence in future
-        res = get_portal_events(self.portal,
-                                 range_start=self.far,
-                                 range_end=self.far)
+        res = get_events(self.portal,
+                         start=self.far,
+                         end=self.far)
         self.assertTrue(len(res) == 1)
 
         # from now on
-        res = get_portal_events(self.portal,
-                                 range_start=self.now)
+        res = get_events(self.portal,
+                         start=self.now)
         self.assertTrue(len(res) == 3)
 
         # until now
-        res = get_portal_events(self.portal,
-                                 range_end=self.now)
+        res = get_events(self.portal,
+                         end=self.now)
         self.assertTrue(len(res) == 3)
 
         # in subfolder
         path = '/'.join(self.portal.sub.getPhysicalPath())
-        res = get_portal_events(self.portal, path=path)
+        res = get_events(self.portal, path=path)
         self.assertTrue(len(res) == 1)
 
     def test_get_occurrences(self):
