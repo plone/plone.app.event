@@ -134,7 +134,7 @@ class EventListing(BrowserView):
             main_msgid = _(u"todays_events", default=u"Todays events")
 
         elif mode == '7days':
-            main_msgid = _(u"7days_events", default=u"Next 7 days' events.")
+            main_msgid = _(u"7days_events", default=u"Events in next 7 days.")
             sub_msgid = _(u"events_from_until",
                       default=u"${from} until ${until}.",
                       mapping={
