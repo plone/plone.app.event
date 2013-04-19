@@ -103,7 +103,7 @@ class RendererTest(unittest.TestCase):
 
         return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
 
-    def test_published_events(self):
+    def test_events(self):
         start = DateTime('Australia/Brisbane') + 2
         end = DateTime('Australia/Brisbane') + 4
         self.portal.invokeFactory('Event', 'e1',
@@ -116,27 +116,27 @@ class RendererTest(unittest.TestCase):
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
-        self.assertEquals(0, len(portlet.published_events()))
+        self.assertEquals(0, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
-        self.assertEquals(1, len(portlet.published_events()))
+        self.assertEquals(1, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
-        self.assertEquals(2, len(portlet.published_events()))
+        self.assertEquals(2, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(2, len(portlet.published_events()))
+        self.assertEquals(2, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base="/eventfolder"))
-        self.assertEquals(1, len(portlet.published_events()))
+        self.assertEquals(1, len(portlet.events))
 
         # TODO: better create objects at setup and use thest in these tests
         self.portal.manage_delObjects(['e1', 'eventfolder'])
 
-    def test_published_events_recurring(self):
+    def test_events_recurring(self):
         startDT = DateTime('Australia/Brisbane')+1
 
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
@@ -152,7 +152,7 @@ class RendererTest(unittest.TestCase):
         r = self.renderer(
             assignment=portlet_events.Assignment(count=5,
                                                  state=('published',)))
-        events = r.published_events()
+        events = r.events
         self.assertEqual(5, len(events))
         self.assertTrue('Event 2' not in [x.title for x in events])
 

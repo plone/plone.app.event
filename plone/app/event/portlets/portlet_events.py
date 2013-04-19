@@ -1,9 +1,7 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.portlets.cache import render_cachekey
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
-from plone.memoize import ram
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
@@ -13,8 +11,7 @@ from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
 
-from plone.app.event.base import get_occurrences_from_brains
-from plone.app.event.base import get_portal_events
+from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.interfaces import ICalendarLinkbase
 
@@ -79,44 +76,34 @@ class Renderer(base.Renderer):
         portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
         self.portal = portal_state.portal()
 
-    @ram.cache(render_cachekey)
     def render(self):
         return xhtml_compress(self._template())
 
     @property
     def available(self):
-        return self.data.count > 0 and len(self._data())
+        return self.data.count > 0 and len(self.events)
 
-    def published_events(self):
+    @property
+    @memoize
+    def events(self):
         context = aq_inner(self.context)
-        return get_occurrences_from_brains(context, self._data(),
-                range_start=localized_now(), limit=self.data.count)
+        data = self.data
+
+        kw = {}
+        if data.search_base:
+            kw['path'] = {'query': '%s%s' % (
+                '/'.join(self.portal.getPhysicalPath()), data.search_base)}
+        if data.state:
+            kw['review_state'] = data.state
+
+        return get_events(context, start=localized_now(context),
+                          ret_mode=3, expand=True, limit=data.count, **kw)
 
     def formated_date(self, event):
         provider = getMultiAdapter((self.context, self.request, self),
                 IContentProvider, name='formated_date')
         return provider(event)
 
-    @memoize
-    def _data(self):
-        context = aq_inner(self.context)
-        data = self.data
-
-        query_kw = {}
-        if data.search_base:
-            query_kw['path'] = {'query': '%s%s' % (
-                '/'.join(self.portal.getPhysicalPath()), data.search_base)}
-
-        if data.state:
-            query_kw['review_state'] = data.state
-
-        ret = get_portal_events(
-                context,
-                range_start=localized_now(context),
-                limit=data.count,
-                **query_kw)
-
-        return ret
 
 class AddForm(base.AddForm):
     form_fields = form.Fields(IEventsPortlet)

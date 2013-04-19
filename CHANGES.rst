@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove render_cachekey from portlet_events, since it depends on an
+  undocumented internal _data structure, which must contain catalog brains.
+  [thet]
+
 - In tests, use AbstractSampleDataEvents as base class for tests, which depend
   on AT or DX event content.
   [thet]

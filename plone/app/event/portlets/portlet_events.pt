@@ -18,7 +18,7 @@
         <span class="portletTopRight"></span>
     </dt>
 
-    <tal:events repeat="item view/published_events">
+    <tal:events repeat="item view/events">
     <dd class="portletItem"
         tal:define="oddrow repeat/item/odd"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
