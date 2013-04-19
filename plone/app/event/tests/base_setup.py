@@ -45,7 +45,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=past,
             end=past + duration,
             location=u"Vienna",
-            timezone=default_tz)
+            timezone=default_tz,
+            recurrence='RRULE:FREQ=WEEKLY;COUNT=5',
+            )
 
         self.now_event = factory(
             container=self.portal,
@@ -54,8 +56,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=now,
             end=now + duration,
             location=u"Vienna",
+            timezone=default_tz,
             recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
-            timezone=default_tz)
+            )
 
         self.future_event = factory(
             container=self.portal,

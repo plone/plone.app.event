@@ -335,11 +335,11 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal, ret_mode=3)
         self.assertTrue(IEventAccessor.providedBy(res[0]))
         # Test sorting
-        self.assertTrue(res[0].start < res[3].start)
+        self.assertTrue(res[0].start < res[-1].start)
 
         # Test reversed sorting
         res = get_events(self.portal, ret_mode=3, sort_reverse=True)
-        self.assertTrue(res[0].start > res[3].start)
+        self.assertTrue(res[0].start > res[-1].start)
 
         # Test sort_on
         res = get_events(self.portal, ret_mode=3, sort="end")
@@ -347,21 +347,21 @@ class TestGetEventsDX(AbstractSampleDataEvents):
 
         # Test expansion
         res = get_events(self.portal, ret_mode=2, expand=True)
-        self.assertEqual(len(res), 7)
+        self.assertEqual(len(res), 11)
 
         res = get_events(self.portal, ret_mode=3, expand=True)
-        self.assertEqual(len(res), 7)
-        self.assertTrue(res[0] < res[6])
+        self.assertEqual(len(res), 11)
+        self.assertTrue(res[0] < res[-1])
 
         res = get_events(self.portal, ret_mode=3, expand=True,
                          sort_reverse=True)
-        self.assertTrue(res[0] > res[6])
+        self.assertTrue(res[0] > res[-1])
 
         # only on now-date
         res = get_events(self.portal,
                          start=self.now,
                          end=self.now)
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 3)
 
         # only on now-date as date
         # NOTE: converting self.now to python datetime to allow testing also
@@ -369,7 +369,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal,
                          start=pydt(self.now).date(),
                          end=pydt(self.now).date())
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 3)
 
         # only on past date
         res = get_events(self.portal,
@@ -377,16 +377,16 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                          end=self.past)
         self.assertEqual(len(res), 2)
 
-        # one recurrence occurrence in future
+        # two recurrence occurrences in future
         res = get_events(self.portal,
                          start=self.far,
                          end=self.far)
-        self.assertEqual(len(res), 1)
+        self.assertEqual(len(res), 2)
 
         # from now on
         res = get_events(self.portal,
                          start=self.now)
-        self.assertEqual(len(res), 3)
+        self.assertEqual(len(res), 4)
 
         # until now
         res = get_events(self.portal,
@@ -401,7 +401,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=2, expand=True)
         cal = construct_calendar(res)
-        self.assertEqual(len(cal.keys()), 6) # keys are date-strings
+        self.assertEqual(len(cal.keys()), 9) # keys are date-strings
 
 
 class TestGetEventsATPydt(TestGetEventsDX):
