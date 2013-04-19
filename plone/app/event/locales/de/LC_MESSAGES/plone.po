@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-04-19 23:03+0000\n"
+"POT-Creation-Date: 2013-04-19 23:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,11 @@ msgstr ""
 #: plone/app/event/portlets/portlet_calendar.pt:27
 msgid "${monthname} ${year}"
 msgstr ""
+
+#. Default: "Next 7 days' events."
+#: plone/app/event/browser/event_listing.py:137
+msgid "7days_events"
+msgstr "Termine in den nächsten 7 Tagen"
 
 #: plone/app/event/profiles/default/portlets.xml
 msgid "A portlet which can render a calendar."
@@ -117,7 +122,7 @@ msgid "Workflow state"
 msgstr ""
 
 #. Default: "All events"
-#: plone/app/event/browser/event_listing.py:120
+#: plone/app/event/browser/event_listing.py:122
 msgid "all_events"
 msgstr ""
 
@@ -146,23 +151,23 @@ msgstr "Terminliste"
 msgid "event_view"
 msgstr "Termin"
 
-#. Default: "Events from ${from} until ${until}"
-#: plone/app/event/browser/event_listing.py:135
+#. Default: "${from} until ${until}."
+#: plone/app/event/browser/event_listing.py:138
 msgid "events_from_until"
 msgstr ""
 
 #. Default: "Events in ${month} ${year}"
-#: plone/app/event/browser/event_listing.py:183
+#: plone/app/event/browser/event_listing.py:187
 msgid "events_in_month"
 msgstr ""
 
-#. Default: "Events in week ${weeknumber} from ${from} until ${until}"
-#: plone/app/event/browser/event_listing.py:164
+#. Default: "Events in week ${weeknumber}"
+#: plone/app/event/browser/event_listing.py:167
 msgid "events_in_week"
 msgstr ""
 
 #. Default: "Events on ${day}"
-#: plone/app/event/browser/event_listing.py:152
+#: plone/app/event/browser/event_listing.py:155
 msgid "events_on_day"
 msgstr ""
 
@@ -177,7 +182,7 @@ msgid "exception_start_before_end_text"
 msgstr ""
 
 #. Default: "Future events"
-#: plone/app/event/browser/event_listing.py:126
+#: plone/app/event/browser/event_listing.py:128
 msgid "future_events"
 msgstr ""
 
@@ -411,7 +416,7 @@ msgid "label_whole_day_event"
 msgstr ""
 
 #. Default: "Past events"
-#: plone/app/event/browser/event_listing.py:123
+#: plone/app/event/browser/event_listing.py:125
 msgid "past_events"
 msgstr ""
 
@@ -443,12 +448,12 @@ msgid "title_previous_month"
 msgstr ""
 
 #. Default: "Todays events"
-#: plone/app/event/browser/event_listing.py:132
+#: plone/app/event/browser/event_listing.py:134
 msgid "todays_events"
 msgstr ""
 
 #. Default: "Todays upcoming events"
-#: plone/app/event/browser/event_listing.py:129
+#: plone/app/event/browser/event_listing.py:131
 msgid "todays_upcoming_events"
 msgstr ""
 
