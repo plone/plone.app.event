@@ -39,9 +39,8 @@ class TestBaseModule(unittest.TestCase):
     def assertEqualDatetime(self, date1, date2, msg=None):
         """ Compare two datetime instances to a resolution of minutes.
         """
-        compare_str = '%Y-%m-%d %H:%M %Z'
-        self.assertTrue(date1.strftime(compare_str) ==\
-                        date2.strftime(compare_str), msg)
+        format_ = '%Y-%m-%d %H:%M %Z'
+        self.assertEqual(date1.strftime(format_), date2.strftime(format_), msg)
 
     def test_default_end_dt(self):
         self.assertEqualDatetime(
@@ -75,42 +74,42 @@ class TestBaseModule(unittest.TestCase):
         # Python datetime with valid zone. Zope converts it to GMT+1...
         # TODO: DateTime better shouldn't do this!
         cet = pytz.timezone('CET')
-        self.assertTrue(
-            DT(datetime.datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)) ==
+        self.assertEqual(
+            DT(datetime.datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)),
             DateTime('2011/11/11 11:00:00 GMT+1')
         )
 
         # Python dates get converted to a DateTime with timecomponent including
         # a timezone
-        self.assertTrue(
-            DT(datetime.date(2011, 11, 11)) ==
+        self.assertEqual(
+            DT(datetime.date(2011, 11, 11)),
             DateTime('2011/11/11 00:00:00 UTC')
         )
 
         # DateTime with valid zone
-        self.assertTrue(
-            DT(DateTime(2011, 11, 11, 11, 0, 0, 'Europe/Vienna')) ==
+        self.assertEqual(
+            DT(DateTime(2011, 11, 11, 11, 0, 0, 'Europe/Vienna')),
             DateTime('2011/11/11 11:00:00 Europe/Vienna')
         )
 
         # Zope DateTime with valid DateTime zone but invalid pytz is kept as is
-        self.assertTrue(
-            DT(DateTime(2011, 11, 11, 11, 0, 0, 'GMT+1')) ==
+        self.assertEqual(
+            DT(DateTime(2011, 11, 11, 11, 0, 0, 'GMT+1')),
             DateTime('2011/11/11 11:00:00 GMT+1')
         )
 
         # Invalid datetime zones are converted to the portal timezone
         # Testing with no timezone
-        self.assertTrue(
-            DT(datetime.datetime(2011, 11, 11, 11, 0, 0)) ==
+        self.assertEqual(
+            DT(datetime.datetime(2011, 11, 11, 11, 0, 0)),
             DateTime('2011/11/11 11:00:00 UTC')
         )
 
         # Testing conversion of datetime with microseconds
         tz = pytz.timezone('Europe/Vienna')
-        self.assertTrue(
+        self.assertEqual(
             DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
-               tzinfo=tz)) ==
+               tzinfo=tz)),
             DateTime('2012/12/12 10:10:10.123456 Europe/Vienna')
         )
 
@@ -118,12 +117,12 @@ class TestBaseModule(unittest.TestCase):
     def test_cal_to_strftime_wkday(self):
         from plone.app.event.base import cal_to_strftime_wkday
         li = [cal_to_strftime_wkday(day) for day in range(0,7)]
-        self.assertTrue(li == [1, 2, 3, 4, 5, 6, 0])
+        self.assertEqual(li, [1, 2, 3, 4, 5, 6, 0])
 
     def test_strftime_to_cal_wkday(self):
         from plone.app.event.base import strftime_to_cal_wkday
         li = [strftime_to_cal_wkday(day) for day in range(0,7)]
-        self.assertTrue(li == [6, 0, 1, 2, 3, 4, 5])
+        self.assertEqual(li, [6, 0, 1, 2, 3, 4, 5])
 
     def test__default_timezone(self):
         """Test, if default_timezone returns something other than None if
@@ -134,17 +133,17 @@ class TestBaseModule(unittest.TestCase):
 
     def test__dt_start_of_day(self):
         from plone.app.event.base import dt_start_of_day
-        self.assertTrue(dt_start_of_day(datetime.datetime(2013,2,1,18,35))
-                        == datetime.datetime(2013,2,1,0,0,0,0))
-        self.assertTrue(dt_start_of_day(datetime.date(2013,2,1))
-                        == datetime.datetime(2013,2,1,0,0,0,0))
+        self.assertEqual(dt_start_of_day(datetime.datetime(2013,2,1,18,35)),
+                         datetime.datetime(2013,2,1,0,0,0,0))
+        self.assertEqual(dt_start_of_day(datetime.date(2013,2,1)),
+                         datetime.datetime(2013,2,1,0,0,0,0))
 
     def test__dt_end_of_day(self):
         from plone.app.event.base import dt_end_of_day
-        self.assertTrue(dt_end_of_day(datetime.datetime(2013,2,1,18,35))
-                        == datetime.datetime(2013,2,1,23,59,59,0))
-        self.assertTrue(dt_end_of_day(datetime.date(2013,2,1))
-                        == datetime.datetime(2013,2,1,23,59,59,0))
+        self.assertEqual(dt_end_of_day(datetime.datetime(2013,2,1,18,35)),
+                         datetime.datetime(2013,2,1,23,59,59,0))
+        self.assertEqual(dt_end_of_day(datetime.date(2013,2,1)),
+                         datetime.datetime(2013,2,1,23,59,59,0))
 
     def test__start_end_from_mode(self):
         from plone.app.event.base import start_end_from_mode
@@ -260,7 +259,7 @@ class TestCalendarLinkbase(unittest.TestCase):
     def test_date_events_url(self):
         lb = ICalendarLinkbase(self.portal)
         url = 'http://nohost/plone/@@event_listing?mode=day&date=2012-12-07'
-        self.assertTrue(lb.date_events_url('2012-12-07') == url)
+        self.assertEqual(lb.date_events_url('2012-12-07'), url)
 
     def test_all_events_url(self):
         lb = ICalendarLinkbase(self.portal)
@@ -307,27 +306,27 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     def test_get_events(self):
         # whole range
         res = get_events(self.portal)
-        self.assertTrue(len(res) == 4)
+        self.assertEqual(len(res), 4)
 
         res = get_events(self.portal,
                          start=self.past,
                          end=self.future)
-        self.assertTrue(len(res) == 4)
+        self.assertEqual(len(res), 4)
 
         res = get_events(self.portal,
                          end=self.future)
-        self.assertTrue(len(res) == 4)
+        self.assertEqual(len(res), 4)
 
         res = get_events(self.portal,
                          start=self.past)
-        self.assertTrue(len(res) == 4)
+        self.assertEqual(len(res), 4)
 
 
         # only on now-date
         res = get_events(self.portal,
                          start=self.now,
                          end=self.now)
-        self.assertTrue(len(res) == 2)
+        self.assertEqual(len(res), 2)
 
         # only on now-date as date
         # NOTE: converting self.now to python datetime to allow testing also
@@ -335,34 +334,34 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal,
                          start=pydt(self.now).date(),
                          end=pydt(self.now).date())
-        self.assertTrue(len(res) == 2)
+        self.assertEqual(len(res), 2)
 
         # only on past date
         res = get_events(self.portal,
                          start=self.past,
                          end=self.past)
-        self.assertTrue(len(res) == 2)
+        self.assertEqual(len(res), 2)
 
         # one recurrence occurrence in future
         res = get_events(self.portal,
                          start=self.far,
                          end=self.far)
-        self.assertTrue(len(res) == 1)
+        self.assertEqual(len(res), 1)
 
         # from now on
         res = get_events(self.portal,
                          start=self.now)
-        self.assertTrue(len(res) == 3)
+        self.assertEqual(len(res), 3)
 
         # until now
         res = get_events(self.portal,
                          end=self.now)
-        self.assertTrue(len(res) == 3)
+        self.assertEqual(len(res), 3)
 
         # in subfolder
         path = '/'.join(self.portal.sub.getPhysicalPath())
         res = get_events(self.portal, path=path)
-        self.assertTrue(len(res) == 1)
+        self.assertEqual(len(res), 1)
 
     def test_get_occurrences(self):
         get_occurrences_from_brains(object, [],
