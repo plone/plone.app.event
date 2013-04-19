@@ -179,6 +179,33 @@ def construct_calendar(context, events):
     return events_by_date
 
 
+def _prepare_range(context, start, end):
+    """Prepare a date-range to contain timezone info and set end to next day,
+    if end is a date.
+
+    :param context: [required] Context object.
+    :type context: Content object
+
+    :param start: [required] Range start.
+    :type start: Python date or datetime
+
+    :param end: [required] Range end.
+    :type end: Python date or datetime
+
+    :returns: Localized start and end datetime.
+    :rtype: tuple
+
+    """
+    tz = default_tzinfo(context)
+    start = pydt(start, missing_zone=tz)
+    if not isinstance(end, datetime) and isinstance(end, date):
+        # set range_end to the next day, time will be 0:00
+        # so the whole previous day is also used for search
+        end = end + timedelta(days=1)
+    end = pydt(end, missing_zone=tz)
+    return start, end
+
+
 class CalendarLinkbase(object):
     """Default adapter to retrieve a base url for a calendar view.
     In this default implementation we use the @@event_listing view as calendar
@@ -531,30 +558,6 @@ def localized_today(context=None):
     """
     now = localized_now(context)
     return date(now.year, now.month, now.day)
-
-
-def _prepare_range(context, start, end):
-    """Prepare a date-range to contain timezone info and set end to next day,
-    if end is a date.
-
-    :param context: [required] Context object.
-    :type context: Content object
-    :param start: [required] Range start.
-    :type start: Python date or datetime
-    :param end: [required] Range end.
-    :type end: Python date or datetime
-    :returns: Localized start and end datetime.
-    :rtype: tuple
-
-    """
-    tz = default_tzinfo(context)
-    start = pydt(start, missing_zone=tz)
-    if not isinstance(end, datetime) and isinstance(end, date):
-        # set range_end to the next day, time will be 0:00
-        # so the whole previous day is also used for search
-        end = end + timedelta(days=1)
-    end = pydt(end, missing_zone=tz)
-    return start, end
 
 
 def guess_date_from(datestr, context=None):
