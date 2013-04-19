@@ -11,7 +11,7 @@ from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
 from plone.event.utils import pydt, utc
 from plone.app.event.base import default_timezone
-from plone.app.event.base import get_portal_events
+from plone.app.event.base import get_events
 from plone.event.utils import tzdel
 from Products.ZCatalog.interfaces import ICatalogBrain
 import pytz
@@ -152,7 +152,7 @@ def calendar_from_container(context):
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
-    result = get_portal_events(context, path=path)
+    result = get_events(context, path=path)
     return construct_calendar(context, result)
 
 
@@ -163,7 +163,7 @@ def calendar_from_collection(context):
 
     """
     context = aq_inner(context)
-    result = get_portal_events(context)
+    result = get_events(context)
     return construct_calendar(context, result)
 
 

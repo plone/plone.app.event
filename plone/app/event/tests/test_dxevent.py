@@ -14,18 +14,14 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.app.event.base import get_portal_events
+from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import (
     default_start,
     default_end,
-    default_tz,
     StartBeforeEnd,
     IEventBasic,
     IEventRecurrence,
-    IEventLocation,
-    IEventAttendees,
-    IEventContact
 )
 from plone.app.event.dx.interfaces import (
     IDXEvent,
@@ -192,9 +188,7 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(e1.recurrence == e1rec.recurrence)
 
         # test, if the occurrences are indexed by DRI
-        result = get_portal_events(
-                e1,
-                range_start=datetime(2011,11,12,11,0, tzinfo=utc))
+        result = get_events(e1, start=datetime(2011,11,12,11,0, tzinfo=utc))
         self.assertTrue(len(result)==1)
 
         self.portal.manage_delObjects(['event1'])

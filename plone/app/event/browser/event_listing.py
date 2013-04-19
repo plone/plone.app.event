@@ -8,8 +8,7 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
 from plone.app.event.base import date_speller
-from plone.app.event.base import get_occurrences_from_brains
-from plone.app.event.base import get_portal_events
+from plone.app.event.base import get_events
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
@@ -68,23 +67,19 @@ class EventListing(BrowserView):
         kw = {}
         if not self._all:
             kw['path'] = '/'.join(context.getPhysicalPath())
-
         #kw['b_start'] = self.b_start
         #kw['b_size']  = self.b_size
 
         start, end = self._start_end
-        occs = get_occurrences_from_brains(
-                context,
-                get_portal_events(context, start, end, **kw),
-                start, end)
-        return occs
+        return get_events(context, start=start, end=end,
+                          ret_mode=3, expand=True, **kw)
 
     @property
-    def get_events(self):
-        events = self._get_events()
+    def events(self):
+        res = self._get_events()
         b_start = self.b_start
         b_size  = self.b_size
-        return Batch(events, size=b_size, start=b_start, orphan=self.orphan)
+        return Batch(res, size=b_size, start=b_start, orphan=self.orphan)
 
     @property
     def ical(self):

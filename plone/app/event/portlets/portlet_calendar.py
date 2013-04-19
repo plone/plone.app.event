@@ -12,7 +12,7 @@ from zope.interface import implements
 
 from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import first_weekday
-from plone.app.event.base import get_occurrences_by_date
+from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
 from plone.app.event.base import cal_to_strftime_wkday
 from plone.app.event.interfaces import ICalendarLinkbase
@@ -150,8 +150,10 @@ class Renderer(base.Renderer):
         if data.state:
             query_kw['review_state'] = data.state
 
-        occurrences = get_occurrences_by_date(
-            context, monthdates[0], monthdates[-1], **query_kw)
+        events = get_events(context, start=monthdates[0], end=monthdates[-1],
+                            ret_mode=2, expand=True, **query_kw)
+        cal_dict = construct_calendar(events)
+
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
         caldata = [[]]
         for dat in monthdates:
@@ -159,8 +161,8 @@ class Renderer(base.Renderer):
                 caldata.append([])
             date_events = None
             isodat = dat.isoformat()
-            if isodat in occurrences:
-                date_events = occurrences[isodat]
+            if isodat in cal_dict:
+                date_events = cal_dict[isodat]
 
             events_string = u""
             if date_events:

@@ -64,13 +64,12 @@ occurrences::
     end = datetime(2012,1,3)
     rec_support.occurrences(range_start=start, range_end=end)
 
-If you have a list of brain objects (e.g. from a catalog query), you can get
-the occurrences like so (here we get all occurrences from all event objects in
-the portal. This can be quite slow, if you have many events)::
 
-    from plone.app.event.base import get_portal_events
-    from plone.app.event.base import get_occurrences_from_brains
-    occ = get_occurrences_from_brains(get_portal_events())
+If you want to get all occurrences from any event within a timeframe, use the
+get_events function like so::
+
+    from plone.app.event.base import get_events, localized_now
+    occ = get_events(context, start=localized_now(), ret_mode=2, expand=True)
 
 
 The IEvent interface

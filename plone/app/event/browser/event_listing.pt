@@ -13,7 +13,7 @@
 
 <metal:content-core fill-slot="content-core">
 <metal:block define-macro="content-core">
-<tal:def define="batch view/get_events;
+<tal:def define="batch view/events;
                  mode request/mode|string:future;
                  toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
 

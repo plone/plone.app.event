@@ -5,8 +5,7 @@ import unittest2 as unittest
 import zope.component
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.interfaces import IATEvent
-from plone.app.event.base import get_occurrences_from_brains
-from plone.app.event.base import get_portal_events
+from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
@@ -21,7 +20,6 @@ from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
-from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserView
 
 TZNAME = "Europe/Vienna"
@@ -143,18 +141,15 @@ class TestOccurrences(unittest.TestCase):
         self.interval = self.portal['interval']
 
     def test_get_occurrences(self):
-        brains = get_portal_events(self.portal)
+        res = get_events(self.portal, ret_mode=3, expand=True)
+        self.assertTrue(len(res) == 9)
 
-        result = get_occurrences_from_brains(self.portal, brains)
-        self.assertTrue(len(result) == 9)
+        res = get_events(self.portal, start=self.now, ret_mode=3, expand=True)
+        self.assertTrue(len(res) == 9)
 
-        result = get_occurrences_from_brains(self.portal, brains,
-                range_start=self.now)
-        self.assertTrue(len(result) == 9)
-
-        result = get_occurrences_from_brains(self.portal, brains, limit=5)
-        self.assertTrue(len(result) == 5)
-        self.assertTrue(IEventAccessor.providedBy(result[0]))
+        res = get_events(self.portal, ret_mode=3, expand=True, limit=5)
+        self.assertTrue(len(res) == 5)
+        self.assertTrue(IEventAccessor.providedBy(res[0]))
 
     def test_eventview_occurrences(self):
         self.portal.invokeFactory(
