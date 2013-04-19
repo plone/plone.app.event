@@ -26,7 +26,7 @@ class EventListing(BrowserView):
         self.now = now = localized_now(context)
 
         # Batch parameter
-        req = self.request
+        req = self.request.form
         self.b_start = 'b_start' in req and int(req['b_start']) or 0
         self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
