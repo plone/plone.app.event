@@ -26,6 +26,7 @@ from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.event.vocabularies import replacement_zones
 
+from zope.deprecation import deprecate
 
 DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'
@@ -705,18 +706,24 @@ def ulocalized_time(time, *args, **kwargs):
     return orig_ulocalized_time(wrapped_time, *args, **kwargs)
 
 
-
 # BBB - Remove with 1.0
+@deprecate('get_portal_events is deprecated and will be removed in version'
+           '1.0. Please use get_events instead.')
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
                       sort='start', sort_reverse=False, **kw):
     return get_events(context, start=range_start, end=range_end, limit=limit,
                       sort=sort, sort_reverse=sort_reverse, **kw)
 
+@deprecate('get_occurrences_by_date is deprecated and will be removed in'
+           'version 1.0. Please use construct_calendar and get_events'
+           'instead.')
 def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     events = get_events(context, start=range_start, end=range_end,
                         ret_mode=2, expand=True, **kw)
     return construct_calendar(events)
 
+@deprecate('get_occurrences_from_brains is deprecated and will be removed in'
+           'version 1.0. Please use get_events instead.')
 def get_occurrences_from_brains(context, brains,
         range_start=None, range_end=None, limit=None):
     """Returns a flat list of EventAccessor objects from a given result of a
@@ -747,4 +754,3 @@ def get_occurrences_from_brains(context, brains,
     if limit is not None:
         result = result[:limit]
     return result
-
