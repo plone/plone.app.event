@@ -13,9 +13,18 @@ import unittest2 as unittest
 class AbstractSampleDataEvents(unittest.TestCase):
     layer = None # Set the plone.app.testing layer in concrete implementation
 
+
     def event_factory(self):
         # Return the IEventAccessor.create event factory.
         raise NotImplementedError
+
+    def make_dates(self):
+        now      = self.now      = localized_now()
+        past     = self.past     = now - datetime.timedelta(days=2)
+        future   = self.future   = now + datetime.timedelta(days=2)
+        far      = self.far      = now + datetime.timedelta(days=8)
+        duration = self.duration = datetime.timedelta(hours=1)
+        return (now, past, future, far, duration)
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -25,11 +34,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
         settings.portal_timezone = default_tz
 
-        now = localized_now()
-        past = now - datetime.timedelta(days=2)
-        future = now + datetime.timedelta(days=2)
-        far = now + datetime.timedelta(days=8)
-
+        now, past, future, far, duration = self.make_dates()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
         factory = self.event_factory()
@@ -38,7 +43,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             content_id='past',
             title=u'Past Event',
             start=past,
-            end=past + datetime.timedelta(hours=1),
+            end=past + duration,
             location=u"Vienna",
             timezone=default_tz)
 
@@ -47,7 +52,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             content_id='now',
             title=u'Now Event',
             start=now,
-            end=now + datetime.timedelta(hours=1),
+            end=now + duration,
             location=u"Vienna",
             recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
             timezone=default_tz)
@@ -57,7 +62,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             content_id='future',
             title=u'Future Event',
             start=future,
-            end=future + datetime.timedelta(hours=1),
+            end=future + duration,
             location=u'Graz',
             timezone=default_tz)
 
@@ -70,8 +75,3 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=future,
             location=u'Schaftal',
             timezone=default_tz)
-
-        self.now = now
-        self.past = past
-        self.future = future
-        self.far = far

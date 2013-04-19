@@ -1,13 +1,12 @@
 import datetime
 import pytz
 import unittest2 as unittest
-import zope.component
 from DateTime import DateTime
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
 from zope.interface import directlyProvides
+from plone.event.utils import pydt
 
 from plone.app.event.base import (
     DEFAULT_END_DELTA,
@@ -25,7 +24,7 @@ from plone.app.event.base import (
 from plone.app.event import base
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
+from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -299,6 +298,8 @@ class TestCalendarLinkbase(unittest.TestCase):
 
 
 class TestGetEventsDX(AbstractSampleDataEvents):
+    """Test get_events with DX objects.
+    """
     layer = PAEventDX_INTEGRATION_TESTING
     def event_factory(self):
         return DXEventAccessor.create
@@ -329,9 +330,11 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertTrue(len(res) == 2)
 
         # only on now-date as date
+        # NOTE: converting self.now to python datetime to allow testing also
+        # with dates as Zope DateTime objects.
         res = get_portal_events(self.portal,
-                                 range_start=self.now.date(),
-                                 range_end=self.now.date())
+                                 range_start=pydt(self.now).date(),
+                                 range_end=pydt(self.now).date())
         self.assertTrue(len(res) == 2)
 
         # only on past date
@@ -366,132 +369,27 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                 range_start=datetime.datetime.today())
 
 
-class TestGetEventsAT(TestGetEventsDX):
+class TestGetEventsATPydt(TestGetEventsDX):
+    """Test get_events with AT objects and datetime based dates.
+    """
     layer = PAEventAT_INTEGRATION_TESTING
     def event_factory(self):
         return ATEventAccessor.create
 
 
-class TestBaseModuleQueryZDT(unittest.TestCase):
+class TestGetEventsATZDT(TestGetEventsATPydt):
+    """Test get_events with AT objects and Zope DateTime based dates.
+    """
     layer = PAEventAT_INTEGRATION_TESTING
 
-    def setUp(self):
-        self.portal = self.layer['portal']
-        default_tz = default_timezone()
-
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = default_tz
-
-        # Zope DateTime
-        now =    DateTime(2012, 9,10,10,10, 0, default_tz)
-        past =   DateTime(2012, 9, 1,10,10, 0, default_tz)
-        future = DateTime(2012, 9,20,10,10, 0, default_tz)
-        far =    DateTime(2012, 9,22,10,10, 0, default_tz)
-
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
-        self.portal.invokeFactory(
-            'Event',
-            'past',
-            title=u'Past event',
-            startDate=past,
-            endDate=past+0.1, # Zope DT
-            location=u'Vienna',
-            timezone=default_tz)
-
-        self.portal.invokeFactory(
-            'Event',
-            'now',
-            title=u'Now event',
-            startDate=now,
-            endDate=now+0.1,
-            location=u'Vienna',
-            recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
-            timezone=default_tz)
-
-        self.portal.invokeFactory(
-            'Event',
-            'future',
-            title=u'Future event',
-            startDate=future,
-            endDate=future+0.1,
-            location=u'Graz',
-            timezone=default_tz)
-
-        self.portal.invokeFactory('Folder', 'sub', title=u'sub')
-        self.portal.sub.invokeFactory(
-            'Event',
-            'long',
-            title=u'Long event',
-            startDate=past,
-            endDate=future,
-            location=u'Schaftal',
-            timezone=default_tz)
-
-        self.now = now
-        self.past = past
-        self.future = future
-        self.far = far
-
-        self.now_event = self.portal['now']
-        self.past_event = self.portal['past']
-        self.future_event = self.portal['future']
-        self.long_event = self.portal['sub']['long']
-
-
-    def test_get_portal_events(self):
-
-        # whole range
-        res = get_portal_events(self.portal)
-        self.assertTrue(len(res) == 4)
-
-        res = get_portal_events(self.portal,
-                                 range_start=self.past,
-                                 range_end=self.future)
-        self.assertTrue(len(res) == 4)
-
-        res = get_portal_events(self.portal,
-                                 range_end=self.future)
-        self.assertTrue(len(res) == 4)
-
-        res = get_portal_events(self.portal,
-                                 range_start=self.past)
-        self.assertTrue(len(res) == 4)
-
-
-        # only on now-date
-        res = get_portal_events(self.portal,
-                                 range_start=self.now,
-                                 range_end=self.now)
-        self.assertTrue(len(res) == 2)
-
-        # only on past date
-        res = get_portal_events(self.portal,
-                                 range_start=self.past,
-                                 range_end=self.past)
-        self.assertTrue(len(res) == 2)
-
-        # one recurrence occurrence in future
-        res = get_portal_events(self.portal,
-                                 range_start=self.far,
-                                 range_end=self.far)
-        self.assertTrue(len(res) == 1)
-
-        # from now on
-        res = get_portal_events(self.portal,
-                                 range_start=self.now)
-        self.assertTrue(len(res) == 3)
-
-        # until now
-        res = get_portal_events(self.portal,
-                                 range_end=self.now)
-        self.assertTrue(len(res) == 3)
-
-        # in subfolder
-        path = '/'.join(self.portal.sub.getPhysicalPath())
-        res = get_portal_events(self.portal, path=path)
-        self.assertTrue(len(res) == 1)
+    def make_dates(self):
+        def_tz = default_timezone()
+        now      = self.now      = DateTime(2012, 9,10,10,10, 0, def_tz)
+        past     = self.past     = DateTime(2012, 9, 1,10,10, 0, def_tz)
+        future   = self.future   = DateTime(2012, 9,20,10,10, 0, def_tz)
+        far      = self.far      = DateTime(2012, 9,22,10,10, 0, def_tz)
+        duration = self.duration = 0.1
+        return (now, past, future, far, duration)
 
 
 class TestDatesForDisplayAT(unittest.TestCase):
