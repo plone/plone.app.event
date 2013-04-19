@@ -210,7 +210,7 @@ msgstr "Termine im ${month} ${year}"
 #. Default: "Events in week ${weeknumber} from ${from} until ${until}"
 #: plone/app/event/browser/event_listing.py:142
 msgid "events_in_week"
-msgstr "Termine in der ${weeknumber}. Woche vom ${from} bis ${until}"
+msgstr "Termine in der ${weeknumber}. Woche"
 
 #. Default: "Events on ${day}"
 #: plone/app/event/browser/event_listing.py:130

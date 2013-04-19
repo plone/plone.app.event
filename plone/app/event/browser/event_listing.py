@@ -116,24 +116,27 @@ class EventListing(BrowserView):
         end_dict = end and date_speller(self.context, end) or None
 
         mode = self.mode
+        main_msgid = None
+        sub_msgid = None
         if mode == 'all':
-            msgid = _(u"all_events", default=u"All events")
+            main_msgid = _(u"all_events", default=u"All events")
 
         elif mode == 'past':
-            msgid = _(u"past_events", default=u"Past events")
+            main_msgid = _(u"past_events", default=u"Past events")
 
         elif mode == 'future':
-            msgid = _(u"future_events", default=u"Future events")
+            main_msgid = _(u"future_events", default=u"Future events")
 
         elif mode == 'now':
-            msgid = _(u"todays_upcoming_events", default=u"Todays upcoming events")
+            main_msgid = _(u"todays_upcoming_events", default=u"Todays upcoming events")
 
         elif mode == 'today':
-            msgid = _(u"todays_events", default=u"Todays events")
+            main_msgid = _(u"todays_events", default=u"Todays events")
 
         elif mode == '7days':
-            msgid = _(u"events_from_until",
-                      default=u"Events from ${from} until ${until}",
+            main_msgid = _(u"7days_events", default=u"Next 7 days' events.")
+            sub_msgid = _(u"events_from_until",
+                      default=u"${from} until ${until}.",
                       mapping={
                           'from': "%s, %s. %s %s" % (
                                 start_dict['wkday'],
@@ -149,7 +152,7 @@ class EventListing(BrowserView):
                     )
 
         elif mode == 'day':
-            msgid = _(u"events_on_day",
+            main_msgid = _(u"events_on_day",
                       default=u"Events on ${day}",
                       mapping={
                           'day': "%s, %s. %s %s" % (
@@ -161,11 +164,12 @@ class EventListing(BrowserView):
                     )
 
         elif mode == 'week':
-            msgid = _(u"events_in_week",
-                      default=u"Events in week ${weeknumber}"
-                              u" from ${from} until ${until}",
+            main_msgid = _(u"events_in_week",
+                           default=u"Events in week ${weeknumber}",
+                           mapping={'weeknumber': start.isocalendar()[1]})
+            sub_msgid = _(u"events_from_until",
+                      default= u"${from} until ${until}.",
                       mapping={
-                          'weeknumber': start.isocalendar()[1],
                           'from': "%s, %s. %s %s" % (
                                 start_dict['wkday'],
                                 start.day,
@@ -180,7 +184,7 @@ class EventListing(BrowserView):
                     )
 
         elif mode == 'month':
-            msgid = _(u"events_in_month",
+            main_msgid = _(u"events_in_month",
                       default=u"Events in ${month} ${year}",
                       mapping={
                           'month': start_dict['month'],
@@ -188,7 +192,9 @@ class EventListing(BrowserView):
                         }
                     )
 
-        return self.context.translate(msgid)
+        trans = self.context.translate
+        return {'main': main_msgid and trans(main_msgid) or '',
+                'sub': sub_msgid and trans(sub_msgid) or ''}
 
 
     # MODE URLs

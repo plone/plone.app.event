@@ -7,8 +7,9 @@
       i18n:domain="plone.app.event">
 <body>
 
-<metal:custom_title fill-slot="content-title">
-  <h1 class="documentFirstHeading" tal:content="view/header_string" />
+<metal:custom_title fill-slot="content-title" tal:define="header view/header_string">
+  <h1 class="documentFirstHeading" tal:content="header/main" tal:condition="header/main" />
+  <h3 tal:content="header/sub" tal:condition="header/sub" />
 </metal:custom_title>
 
 <metal:content-core fill-slot="content-core">
