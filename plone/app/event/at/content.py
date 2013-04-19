@@ -1,5 +1,7 @@
 from zope.component import adapts
 from zope.interface import implements
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
@@ -27,7 +29,6 @@ from plone.event.utils import utc
 from plone.app.event.base import default_end_DT
 from plone.app.event.base import default_start_DT
 from plone.app.event.base import default_timezone
-from plone.app.event.base import DT
 from plone.app.event.base import first_weekday_sun0
 from plone.event.utils import pydt
 
@@ -471,27 +472,32 @@ class EventAccessor(object):
     """
     implements(IEventAccessor)
     adapts(IATEvent)
+    event_type = 'Event' # If you use a custom content-type, override this.
 
-    def __init__(self, context):
-        self.context = context
-
-    # TODO: remove
-    """
     # Unified create method via Accessor
-    @staticmethod
-    def create_(container,
-                content_id, title, description=None,
-                start=None, end=None, timezone=None, whole_day=None):
-        container.invokeFactory(event_type,
+    @classmethod
+    def create(cls, container, content_id, title, description=None,
+               start=None, end=None, timezone=None, whole_day=None, **kwargs):
+        container.invokeFactory(cls.event_type,
                                 id=content_id,
                                 title=title,
                                 description=description,
-                                start=start,
-                                end=end,
+                                startDate=start,
+                                endDate=end,
+                                wholeDay=whole_day,
                                 timezone=timezone)
         content = container[content_id]
-        return IEventAccessor(content)
-    """
+        acc = IEventAccessor(content)
+        acc.edit(**kwargs)
+        return acc
+
+    def edit(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        notify(ObjectModifiedEvent(self.context))
+
+    def __init__(self, context):
+        self.context = context
 
     @property
     def uid(self):

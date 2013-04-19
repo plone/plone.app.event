@@ -23,11 +23,13 @@ from plone.app.event.base import (
     dates_for_display
 )
 from plone.app.event import base
+from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.interfaces import IEventSettings, ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 
 class TestBaseModule(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
@@ -296,76 +298,12 @@ class TestCalendarLinkbase(unittest.TestCase):
         self.failUnless(lb.past_events_url() == url)
 
 
-class TestBaseModuleQueryPydt(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        default_tz = default_timezone()
-        #default_tz = 'Europe/Vienna'
-
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = default_tz
-
-        now = localized_now()
-        past = now - datetime.timedelta(days=2)
-        future = now + datetime.timedelta(days=2)
-        far = now + datetime.timedelta(days=8)
-
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
-        self.portal.invokeFactory(
-            'Event',
-            'past',
-            title=u'Past event',
-            startDate=past,
-            endDate=past + datetime.timedelta(hours=1),
-            location=u'Vienna',
-            timezone=default_tz)
-
-        self.portal.invokeFactory(
-            'Event',
-            'now',
-            title=u'Now event',
-            startDate=now,
-            endDate=now + datetime.timedelta(hours=1),
-            location=u'Vienna',
-            recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
-            timezone=default_tz)
-
-        self.portal.invokeFactory(
-            'Event',
-            'future',
-            title=u'Future event',
-            startDate=future,
-            endDate=future + datetime.timedelta(hours=1),
-            location=u'Graz',
-            timezone=default_tz)
-
-        self.portal.invokeFactory('Folder', 'sub', title=u'sub')
-        self.portal.sub.invokeFactory(
-            'Event',
-            'long',
-            title=u'Long event',
-            startDate=past,
-            endDate=future,
-            location=u'Schaftal',
-            timezone=default_tz)
-
-        self.now = now
-        self.past = past
-        self.future = future
-        self.far = far
-
-        self.now_event = self.portal['now']
-        self.past_event = self.portal['past']
-        self.future_event = self.portal['future']
-        self.long_event = self.portal['sub']['long']
-
+class TestGetEventsDX(AbstractSampleDataEvents):
+    layer = PAEventDX_INTEGRATION_TESTING
+    def event_factory(self):
+        return DXEventAccessor.create
 
     def test_get_portal_events(self):
-
         # whole range
         res = get_portal_events(self.portal)
         self.assertTrue(len(res) == 4)
@@ -426,6 +364,13 @@ class TestBaseModuleQueryPydt(unittest.TestCase):
     def test_get_occurrences(self):
         get_occurrences_from_brains(object, [],
                 range_start=datetime.datetime.today())
+
+
+class TestGetEventsAT(TestGetEventsDX):
+    layer = PAEventAT_INTEGRATION_TESTING
+    def event_factory(self):
+        return ATEventAccessor.create
+
 
 class TestBaseModuleQueryZDT(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING

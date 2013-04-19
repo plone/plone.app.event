@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- In tests, use AbstractSampleDataEvents as base class for tests, which depend
+  on AT or DX event content.
+  [thet]
+
+- Introduce create and edit functions in IEventAccessor objects.
+  [thet]
+
 - API Refactoring in base.py:
     * get_portal_events and get_occurrences_from_brains combined to get_events.
     * get_occurrences_by_date refactored to construct_calendar.

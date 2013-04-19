@@ -19,6 +19,8 @@ from zope.component import adapts
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant, Invalid
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 from plone.app.event import messageFactory as _
 from plone.app.event.base import default_timezone
@@ -404,6 +406,30 @@ class EventAccessor(object):
 
     implements(IEventAccessor)
     adapts(IDXEvent)
+    event_type = 'plone.app.event.dx.event' # If you use a custom content-type,
+                                            # override this.
+
+    # Unified create method via Accessor
+    @classmethod
+    def create(cls, container, content_id, title, description=None,
+               start=None, end=None, timezone=None, whole_day=None, **kwargs):
+        container.invokeFactory(cls.event_type,
+                                id=content_id,
+                                title=title,
+                                description=description,
+                                start=start,
+                                end=end,
+                                whole_day=whole_day,
+                                timezone=timezone)
+        content = container[content_id]
+        acc = IEventAccessor(content)
+        acc.edit(**kwargs)
+        return acc
+
+    def edit(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        notify(ObjectModifiedEvent(self.context))
 
     def __init__(self, context):
         object.__setattr__(self, 'context', context)
