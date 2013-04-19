@@ -62,7 +62,7 @@ class EventListing(BrowserView):
         return start, end
 
     @view.memoize
-    def _get_events(self):
+    def _get_events(self, ret_mode=3):
         context = self.context
         kw = {}
         if not self._all:
@@ -72,7 +72,7 @@ class EventListing(BrowserView):
 
         start, end = self._start_end
         return get_events(context, start=start, end=end,
-                          ret_mode=3, expand=True, **kw)
+                          ret_mode=ret_mode, expand=True, **kw)
 
     @property
     def events(self):
@@ -83,7 +83,7 @@ class EventListing(BrowserView):
 
     @property
     def ical(self):
-        events = self._get_events()
+        events = self._get_events(ret_mode=2) # get as objects
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')

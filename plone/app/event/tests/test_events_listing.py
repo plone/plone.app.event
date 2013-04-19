@@ -36,3 +36,11 @@ class TestEventsListingDX(AbstractSampleDataEvents):
         self.request.form.update({'mode': 'day', 'date': today})
         view = self.portal.restrictedTraverse('@@event_listing')
         self.assertEqual(len(view._get_events()), 1)
+
+    def test_events_listing_ical(self):
+        # Default mode is to show all events from now on.
+        view = self.portal.restrictedTraverse('@@event_listing_ical')
+        view() # At least, this should not fail.
+               # Don't know yet how to catch Content-Disposition output
+        #out = view()
+        #self.assertEqual(out.count('BEGIN:VEVENT'), 8)
