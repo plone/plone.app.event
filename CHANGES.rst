@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- API Refactoring in base.py:
+    * get_portal_events and get_occurrences_from_brains combined to get_events.
+    * get_occurrences_by_date refactored to construct_calendar.
+    * BBB code will be removed with 1.0.
+
+  [thet]
+
 - Update translations and translate event_view and event_listing.
   [thet]
 

@@ -7,6 +7,7 @@ import pytz
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
+from Products.CMFPlone.utils import safe_callable
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent, IEventRecurrence
 from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
@@ -333,28 +334,51 @@ def strftime_to_cal_wkday(day):
         return day-1
 
 
-def get_portal_events(context, range_start=None, range_end=None, limit=None,
-                      sort='start', sort_reverse=False, **kw):
+def get_events(context, start=None, end=None, limit=None,
+               ret_mode=1, expand=False,
+               sort='start', sort_reverse=False, **kw):
     """Return all events as catalog brains, possibly within a given
     timeframe.
 
     :param context: [required] A context object.
     :type context: Content object
-    :param range_start: Date, from which on events should be searched.
-    :type range_start: Python datetime.
-    :param range_end: Date, until which events should be searched.
-    :type range_end: Python datetime
+
+    :param start: Date, from which on events should be searched.
+    :type start: Python datetime.
+
+    :param end: Date, until which events should be searched.
+    :type end: Python datetime
+
     :param limit: Number of items to be returned.
     :type limit: integer
-    :param sort: Catalog index id to sort on.
+
+    :param ret_mode: Return type of search results. These options are
+                     available:
+                         * 1 (brains): Return results as catalog brains.
+                         * 2 (objects): Return results as IEvent and/or
+                                        IOccurrence objects.
+                         * 3 (accessors): Return results as IEventAccessor
+                                          wrapper objects.
+    :type ret_mode: integer [1|2|3]
+
+    :param expand: Expand the results to all occurrences (withing the
+                   timeframe, if given.). With this option set to True, the
+                   resultset also includes the event's recurrence occurrences.
+                   The result is sorted by the start date.
+                   Only available in ret_mode 2 (objects) and 3 (accessors).
+    :type expand: boolean
+
+    :param sort: Catalog index id to sort on. Not available with expand=True.
     :type sort: string
+
     :param sort_reverse: Change the order of the sorting.
     :type sort_reverse: boolean
+
     :returns: Portal events, matching the search criteria.
     :rtype: catalog brains
 
     """
-    range_start, range_end = _prepare_range(context, range_start, range_end)
+    start, end = _prepare_range(context, start, end)
 
     query = {}
     query['object_provides'] = IEvent.__identifier__
@@ -367,98 +391,93 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     else:
         query['path'] = kw['path']
 
-    if range_start:
-        # All events from range_start ongoing:
-        # The minimum end date must be the date from which we search.
-        query['end'] = {'query': range_start, 'range': 'min'}
-    if range_end:
+    if start:
+        # All events from start date ongoing:
+        # The minimum end date of events is the date from which we search.
+        query['end'] = {'query': start, 'range': 'min'}
+    if end:
         # All events until range_end:
         # The maximum start date must be the date until we search.
-        query['start'] = {'query': range_end, 'range': 'max'}
-    query['sort_on'] = sort
-    if sort_reverse: query['sort_order'] = 'reverse'
+        query['start'] = {'query': end, 'range': 'max'}
+
+    if not expand:
+        # Expanded results will be sorted later.
+        query['sort_on'] = sort
+        if sort_reverse: query['sort_order'] = 'reverse'
+
+    if limit:
+        query['sort_limit'] = limit
 
     query.update(kw)
 
     cat = getToolByName(context, 'portal_catalog')
+    result = cat(**query)
+
+    def _getattr_safe_called(obj, attr):
+        val = getattr(obj, attr, None)
+        if safe_callable(val):
+            val = val()
+        return val
+    def _obj_or_acc(obj, ret_mode):
+        if ret_mode == 2:
+            return obj
+        elif ret_mode == 3:
+            return IEventAccessor(obj)
+
+    if ret_mode in (2, 3) and expand == False:
+        result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
+    elif ret_mode in (2, 3) and expand == True:
+        exp_result = []
+        for it in result:
+            obj = it.getObject()
+            if IEventRecurrence.providedBy(obj):
+                occurrences = [_obj_or_acc(occ, ret_mode) for occ in
+                               IRecurrenceSupport(obj).occurrences(start, end)]
+            else:
+                occurrences = [obj]
+            exp_result += occurrences
+        if sort:
+            # support AT and DX without wrapped by IEventAccessor (mainly for
+            # sorting after "start" or "end").
+            exp_result.sort(key=lambda x: _getattr_safe_called(x, sort))
+        if sort_reverse:
+            exp_result.reverse()
+        result = exp_result
+
     if limit:
-        query['sort_limit'] = limit
-        result = cat(**query)[:limit]
-    else:
-        result = cat(**query)
+        # Expanded events as well as catalog search results (which might not
+        # exactly be limited by the query) must be limited again.
+        result = result[:limit]
 
     return result
 
 
-def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
+def construct_calendar(context, events):
     """Return a dictionary with dates in a given timeframe as keys and the
     actual occurrences for that date for building calendars.
 
     :param context: [required] A context object.
     :type context: Content object
-    :param range_start: Date, from which on events should be searched.
-    :type range_start: Python datetime.
-    :param range_end: Date, until which events should be searched.
-    :type range_end: Python datetime
+
+    :param events: List of IEvent and/or IOccurrence objects, to construct a
+                   calendar data structure from.
+    :type events: list
+
     :returns: Dictionary with dates keys and occurrences as values.
     :rtype: dict
 
     """
-    range_start, range_end = _prepare_range(context, range_start, range_end)
-
-    events = get_portal_events(context, range_start, range_end, **kw)
     events_by_date = {}
     for event in events:
-        obj = event.getObject()
-
-        if IEventRecurrence.providedBy(obj):
-            occurrences = IRecurrenceSupport(obj).occurrences(
-                range_start, range_end)
+        acc = IEventAccessor(event)
+        start_str = datetime.strftime(acc.start, '%Y-%m-%d')
+        # TODO: add span_events parameter to include dates btw. start
+        # and end also. for events lasting longer than a day...
+        if start_str not in events_by_date:
+            events_by_date[start_str] = [event]
         else:
-            occurrences = [obj]
-
-        for occ in occurrences:
-            accessor = IEventAccessor(occ)
-            start_str = datetime.strftime(accessor.start, '%Y-%m-%d')
-            # TODO: add span_events parameter to include dates btw. start
-            # and end also. for events lasting longer than a day...
-            if start_str not in events_by_date:
-                events_by_date[start_str] = [occ]
-            else:
-                events_by_date[start_str].append(occ)
+            events_by_date[start_str].append(event)
     return events_by_date
-
-
-def get_occurrences_from_brains(context, brains,
-        range_start=None, range_end=None, limit=None):
-    """Returns a flat list of EventAccessor objects from a given result of a
-    catalog query. The list is sorted by the occurrence start date.
-
-    :param context: [required] A context object.
-    :type context: Content object
-    :param brains: [required] Catalog brains from a previous search.
-    :param range_start: Date, from which on events should be searched.
-    :type range_start: Python datetime.
-    :param range_end: Date, until which events should be searched.
-    :type range_end: Python datetime
-    :param limit: Number of items to be returned.
-    :type limit: integer
-    :returns: List of occurrence objects.
-    :rtype: Occurrence objects
-
-    """
-    result = []
-    for brain in brains:
-        obj = brain.getObject()
-        occurrences = [
-            IEventAccessor(occ) for occ in
-            IRecurrenceSupport(obj).occurrences(range_start, range_end)
-        ]
-        result += occurrences
-    result.sort(key=lambda x: x.start)
-    if limit is not None:
-        result = result[:limit]
-    return result
 
 
 def DT(dt):
@@ -679,3 +698,48 @@ def ulocalized_time(time, *args, **kwargs):
     """Corrects for DateTime bugs doing wrong thing with timezones"""
     wrapped_time = PatchedDateTime(time)
     return orig_ulocalized_time(wrapped_time, *args, **kwargs)
+
+
+
+# BBB - Remove with 1.0
+def get_portal_events(context, range_start=None, range_end=None, limit=None,
+                      sort='start', sort_reverse=False, **kw):
+    return get_events(context, start=range_start, end=range_end, limit=limit,
+                      sort=sort, sort_reverse=sort_reverse, **kw)
+
+def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
+    events = get_events(context, start=range_start, end=range_end,
+                        ret_mode=2, expand=True, **kw)
+    return construct_calendar(context, events)
+
+def get_occurrences_from_brains(context, brains,
+        range_start=None, range_end=None, limit=None):
+    """Returns a flat list of EventAccessor objects from a given result of a
+    catalog query. The list is sorted by the occurrence start date.
+
+    :param context: [required] A context object.
+    :type context: Content object
+    :param brains: [required] Catalog brains from a previous search.
+    :param range_start: Date, from which on events should be searched.
+    :type range_start: Python datetime.
+    :param range_end: Date, until which events should be searched.
+    :type range_end: Python datetime
+    :param limit: Number of items to be returned.
+    :type limit: integer
+    :returns: List of occurrence objects.
+    :rtype: Occurrence objects
+
+    """
+    result = []
+    for brain in brains:
+        obj = brain.getObject()
+        occurrences = [
+            IEventAccessor(occ) for occ in
+            IRecurrenceSupport(obj).occurrences(range_start, range_end)
+        ]
+        result += occurrences
+    result.sort(key=lambda x: x.start)
+    if limit is not None:
+        result = result[:limit]
+    return result
+
