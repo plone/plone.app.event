@@ -89,7 +89,22 @@ class EventListing(BrowserView):
     @property
     def ical(self):
         events = self._get_events()
-        return construct_calendar(self.context, events)
+        cal = construct_calendar(self.context, events)
+        name = '%s.ics' % self.context.getId()
+        self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
+        self.request.RESPONSE.setHeader('Content-Disposition',
+            'attachment; filename="%s"' % name)
+        self.request.RESPONSE.write(cal.to_ical())
+
+    @property
+    def ical_url(self):
+        date = self.date
+        mode = self.mode
+        qstr = (date or mode) and '?%s%s%s' %\
+                (mode and 'mode=%s' % mode,
+                 mode and date and '&' or '',
+                 date and 'date=%s' % date or '') or ''
+        return '%s/@@event_listing_ical%s' % (self.context.absolute_url(), qstr)
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
@@ -203,7 +218,6 @@ class EventListing(BrowserView):
         now = self.date or self.now
         return self._date_nav_url('month', now.date().isoformat())
 
-
     # DAY NAV
     @property
     def next_day_url(self):
@@ -257,3 +271,10 @@ class EventListing(BrowserView):
         now = self.date or self.now
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
+
+
+class EventListingIcal(EventListing):
+
+    def __call__(self, *args, **kwargs):
+        return self.ical
+

@@ -28,6 +28,12 @@
         template="event_listing.pt"
         permission="zope2.View"
         />
+    <browser:page
+        for="*"
+        name="event_listing_ical"
+        class=".event_listing.EventListingIcal"
+        permission="zope2.View"
+        />
 
     <!-- Event view -->
     <browser:page

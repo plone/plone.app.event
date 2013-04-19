@@ -31,7 +31,7 @@
             <a class="mode_day"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
           </li>
           <li>
-            <a class="mode_ical"  href="" tal:attributes="href string:${request/getURL}/ical"
+            <a class="mode_ical"  href="" tal:attributes="href view/ical_url"
                title="Download this event in iCal format"
                i18n:attributes="title title_add_to_ical;">
                 <img src="" alt=""
