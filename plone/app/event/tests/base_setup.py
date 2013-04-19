@@ -13,7 +13,6 @@ import unittest2 as unittest
 class AbstractSampleDataEvents(unittest.TestCase):
     layer = None # Set the plone.app.testing layer in concrete implementation
 
-
     def event_factory(self):
         # Return the IEventAccessor.create event factory.
         raise NotImplementedError
@@ -28,10 +27,12 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        default_tz = default_timezone()
+        self.app = self.layer['app']
+        self.request = self.layer['request']
 
         reg = zope.component.getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+        default_tz = default_timezone()
         settings.portal_timezone = default_tz
 
         now, past, future, far, duration = self.make_dates()
