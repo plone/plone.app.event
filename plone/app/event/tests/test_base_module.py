@@ -18,8 +18,8 @@ from plone.app.event.base import (
     default_start_DT,
     default_start_dt,
     default_timezone,
-    get_occurrences_from_brains,
     get_events,
+    construct_calendar,
     localized_now,
     dates_for_display
 )
@@ -357,7 +357,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                          sort_reverse=True)
         self.assertTrue(res[0] > res[6])
 
-
         # only on now-date
         res = get_events(self.portal,
                          start=self.now,
@@ -399,9 +398,10 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal, path=path)
         self.assertEqual(len(res), 1)
 
-    def test_get_occurrences(self):
-        get_occurrences_from_brains(object, [],
-                range_start=datetime.datetime.today())
+    def test_construct_calendar(self):
+        res = get_events(self.portal, ret_mode=2, expand=True)
+        cal = construct_calendar(res)
+        self.assertEqual(len(cal.keys()), 6) # keys are date-strings
 
 
 class TestGetEventsATPydt(TestGetEventsDX):

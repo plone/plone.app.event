@@ -154,12 +154,9 @@ def get_events(context, start=None, end=None, limit=None,
     return result
 
 
-def construct_calendar(context, events):
+def construct_calendar(events):
     """Return a dictionary with dates in a given timeframe as keys and the
     actual occurrences for that date for building calendars.
-
-    :param context: [required] A context object.
-    :type context: Content object
 
     :param events: List of IEvent and/or IOccurrence objects, to construct a
                    calendar data structure from.
@@ -718,7 +715,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
 def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     events = get_events(context, start=range_start, end=range_end,
                         ret_mode=2, expand=True, **kw)
-    return construct_calendar(context, events)
+    return construct_calendar(events)
 
 def get_occurrences_from_brains(context, brains,
         range_start=None, range_end=None, limit=None):
