@@ -12,7 +12,7 @@ from plone.app.event.base import get_events
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
-from plone.app.event.ical.exporter import construct_calendar
+from plone.app.event.ical.exporter import construct_icalendar
 from plone.memoize import view
 
 from plone.app.event import messageFactory as _
@@ -84,7 +84,7 @@ class EventListing(BrowserView):
     @property
     def ical(self):
         events = self._get_events()
-        cal = construct_calendar(self.context, events)
+        cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         self.request.RESPONSE.setHeader('Content-Disposition',

@@ -18,8 +18,12 @@ Changelog
 - API Refactoring in base.py:
     * get_portal_events and get_occurrences_from_brains combined to get_events.
     * get_occurrences_by_date refactored to construct_calendar.
-    * BBB code will be removed with 1.0.
 
+  In ical:
+    * Renamed construct_calendar to construct_icalendar to avoid same name as
+      in base.py.
+  
+  BBB code will be removed with 1.0.
   [thet]
 
 - Update translations and translate event_view and event_listing.

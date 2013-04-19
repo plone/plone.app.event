@@ -21,7 +21,7 @@ PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
 
 
-def construct_calendar(context, events):
+def construct_icalendar(context, events):
     """Returns an icalendar.Calendar object.
 
     :param context: A content object, which is used for calendar details like
@@ -141,7 +141,7 @@ def calendar_from_event(context):
 
     """
     context = aq_inner(context)
-    return construct_calendar(context, context)
+    return construct_icalendar(context, context)
 
 
 @implementer(IICalendar)
@@ -153,7 +153,7 @@ def calendar_from_container(context):
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
     result = get_events(context, path=path)
-    return construct_calendar(context, result)
+    return construct_icalendar(context, result)
 
 
 @implementer(IICalendar)
@@ -164,7 +164,7 @@ def calendar_from_collection(context):
     """
     context = aq_inner(context)
     result = get_events(context)
-    return construct_calendar(context, result)
+    return construct_icalendar(context, result)
 
 
 class ICalendarEventComponent(object):
