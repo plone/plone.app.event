@@ -7,6 +7,8 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from zope.interface import directlyProvides
 from plone.event.utils import pydt
+from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
 
 from plone.app.event.base import (
     DEFAULT_END_DELTA,
@@ -320,6 +322,40 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal,
                          start=self.past)
         self.assertEqual(len(res), 4)
+
+        # Limit
+        res = get_events(self.portal, limit=2)
+        self.assertEqual(len(res), 2)
+
+        # Return IEvent
+        res = get_events(self.portal, ret_mode=2)
+        self.assertTrue(IEvent.providedBy(res[0]))
+
+        # Return IEventAccessor
+        res = get_events(self.portal, ret_mode=3)
+        self.assertTrue(IEventAccessor.providedBy(res[0]))
+        # Test sorting
+        self.assertTrue(res[0].start < res[3].start)
+
+        # Test reversed sorting
+        res = get_events(self.portal, ret_mode=3, sort_reverse=True)
+        self.assertTrue(res[0].start > res[3].start)
+
+        # Test sort_on
+        res = get_events(self.portal, ret_mode=3, sort="end")
+        self.assertTrue(res[0].start == res[2].start)
+
+        # Test expansion
+        res = get_events(self.portal, ret_mode=2, expand=True)
+        self.assertEqual(len(res), 7)
+
+        res = get_events(self.portal, ret_mode=3, expand=True)
+        self.assertEqual(len(res), 7)
+        self.assertTrue(res[0] < res[6])
+
+        res = get_events(self.portal, ret_mode=3, expand=True,
+                         sort_reverse=True)
+        self.assertTrue(res[0] > res[6])
 
 
         # only on now-date

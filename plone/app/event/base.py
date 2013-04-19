@@ -112,16 +112,19 @@ def get_events(context, start=None, end=None, limit=None,
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
 
-    def _getattr_safe_called(obj, attr):
-        val = getattr(obj, attr, None)
-        if safe_callable(val):
-            val = val()
-        return val
+
     def _obj_or_acc(obj, ret_mode):
         if ret_mode == 2:
             return obj
         elif ret_mode == 3:
             return IEventAccessor(obj)
+    def _get_compare_attr(obj, attr):
+        val = getattr(obj, attr, None)
+        if safe_callable(val):
+            val = val()
+        if isinstance(val, DateTime):
+            val = pydt(val)
+        return val
 
     if ret_mode in (2, 3) and expand == False:
         result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
@@ -138,7 +141,7 @@ def get_events(context, start=None, end=None, limit=None,
         if sort:
             # support AT and DX without wrapped by IEventAccessor (mainly for
             # sorting after "start" or "end").
-            exp_result.sort(key=lambda x: _getattr_safe_called(x, sort))
+            exp_result.sort(key=lambda x: _get_compare_attr(x, sort))
         if sort_reverse:
             exp_result.reverse()
         result = exp_result
