@@ -26,12 +26,19 @@ from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import utc
-from plone.app.event.base import default_end_DT
-from plone.app.event.base import default_start_DT
+from plone.app.event.base import DT
+from plone.app.event.base import default_end as default_end_dt
+from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
 from plone.app.event.base import first_weekday_sun0
 from plone.event.utils import pydt
 
+
+def default_start():
+    return DT(default_start_dt())
+
+def default_end():
+    return DT(default_end_dt())
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -40,7 +47,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         searchable=False,
         accessor='start',
         write_permission=ModifyPortalContent,
-        default_method=default_start_DT,
+        default_method=default_start,
         languageIndependent=True,
         widget=DatetimeWidget(
             label=_(u'label_event_start', default=u'Event Starts'),
@@ -56,7 +63,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         searchable=False,
         accessor='end',
         write_permission=ModifyPortalContent,
-        default_method=default_end_DT,
+        default_method=default_end,
         languageIndependent=True,
         widget=DatetimeWidget(
             label=_(u'label_event_end', default=u'Event Ends'),

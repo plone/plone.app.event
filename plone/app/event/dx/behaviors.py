@@ -24,8 +24,9 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 from plone.app.event import messageFactory as _
 from plone.app.event.base import default_timezone
-from plone.app.event.base import default_end_dt
-from plone.app.event.base import localized_now, DT
+from plone.app.event.base import default_end as default_end_dt
+from plone.app.event.base import default_start as default_start_dt
+from plone.app.event.base import DT
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import first_weekday_sun0
@@ -97,12 +98,12 @@ IEventBasic.setTaggedValue('plone.autoform.widgets',
     })
 
 def default_start(data):
-    return localized_now()
+    return default_start_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
     default_start, field=IEventBasic['start']), name='default')
 
 def default_end(data):
-    return default_end_dt()
+    return default_end_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
     default_end, field=IEventBasic['end']), name='default')
 

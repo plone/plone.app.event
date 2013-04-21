@@ -13,10 +13,8 @@ from plone.event.interfaces import IEventAccessor
 from plone.app.event.base import (
     DEFAULT_END_DELTA,
     DT,
-    default_end_DT,
-    default_end_dt,
-    default_start_DT,
-    default_start_dt,
+    default_end,
+    default_start,
     default_timezone,
     get_events,
     construct_calendar,
@@ -44,33 +42,13 @@ class TestBaseModule(unittest.TestCase):
         format_ = '%Y-%m-%d %H:%M %Z'
         self.assertEqual(date1.strftime(format_), date2.strftime(format_), msg)
 
-    def test_default_end_dt(self):
+    def test_default_end(self):
         self.assertEqualDatetime(
-            default_end_dt() - datetime.timedelta(hours=DEFAULT_END_DELTA),
+            default_end() - datetime.timedelta(hours=DEFAULT_END_DELTA),
             localized_now())
 
-    def test_default_start_dt(self):
-        self.assertEqualDatetime(default_start_dt(), localized_now())
-
-    def test_default_end_DT(self):
-        DTE = default_end_DT()
-        DTN = DT(localized_now() + datetime.timedelta(hours=DEFAULT_END_DELTA))
-
-        self.assertTrue(DTE.year() == DTN.year() and
-                        DTE.month() == DTN.month() and
-                        DTE.day() == DTN.day() and
-                        DTE.hour() == DTN.hour() and
-                        DTE.minute() == DTN.minute())
-
-    def test_default_start_DT(self):
-        DTS = default_start_DT()
-        DTN = DT(localized_now())
-
-        self.assertTrue(DTS.year() == DTN.year() and
-                        DTS.month() == DTN.month() and
-                        DTS.day() == DTN.day() and
-                        DTS.hour() == DTN.hour() and
-                        DTS.minute() == DTN.minute())
+    def test_default_start(self):
+        self.assertEqualDatetime(default_start(), localized_now())
 
     def test_DT(self):
         # Python datetime with valid zone. Zope converts it to GMT+1...

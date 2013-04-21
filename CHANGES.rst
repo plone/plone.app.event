@@ -15,9 +15,15 @@ Changelog
 - Introduce create and edit functions in IEventAccessor objects.
   [thet]
 
-- API Refactoring in base.py:
+- API Refactorings. In base.py:
     * get_portal_events and get_occurrences_from_brains combined to get_events.
     * get_occurrences_by_date refactored to construct_calendar.
+    * Renamings:
+        - default_start_dt -> default_start,
+        - default_end_dt -> default_end.
+    * Remove:
+        - default_start_DT,
+        - default_end_DT.
 
   In ical:
     * Renamed construct_calendar to construct_icalendar to avoid same name as

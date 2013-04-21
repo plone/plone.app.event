@@ -49,6 +49,7 @@ class TestDXIntegration(unittest.TestCase):
 
     def test_start_defaults(self):
         data = MockEvent()
+        data.context = MockEvent()
         default_value = default_start(data)
         today = localized_now()
         delta = default_value - today
@@ -56,6 +57,7 @@ class TestDXIntegration(unittest.TestCase):
 
     def test_end_default(self):
         data = MockEvent()
+        data.context = MockEvent()
         default_value = default_end(data)
         today = localized_now()
         delta = default_value - today
@@ -233,14 +235,14 @@ class TestDXEventRecurrence(unittest.TestCase):
     def test_recurrence(self):
         tz = pytz.timezone('Europe/Vienna')
         duration = timedelta(days=4)
-        data = MockEvent()
-        data.start = datetime(2011, 11, 11, 11, 00, tzinfo=tz)
-        data.end = data.start + duration
-        data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        mock = MockEvent()
+        mock.start = datetime(2011, 11, 11, 11, 00, tzinfo=tz)
+        mock.end = mock.start + duration
+        mock.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
         zope.interface.alsoProvides(
-            data, IEvent, IEventBasic, IEventRecurrence,
+            mock, IEvent, IEventBasic, IEventRecurrence,
             IDXEvent, IDXEventRecurrence)
-        result = IRecurrenceSupport(data).occurrences()
+        result = IRecurrenceSupport(mock).occurrences()
         self.assertEqual(4, len(result))
 
         # First occurrence is an IEvent object
@@ -258,33 +260,33 @@ class TestDXEventUnittest(unittest.TestCase):
         set_env_timezone(TZNAME)
 
     def test_validate_invariants_ok(self):
-        data = MockEvent()
-        data.start = datetime(2009, 1, 1)
-        data.end = datetime(2009, 1, 2)
+        mock = MockEvent()
+        mock.start = datetime(2009, 1, 1)
+        mock.end = datetime(2009, 1, 2)
 
         try:
-            IEventBasic.validateInvariants(data)
+            IEventBasic.validateInvariants(mock)
         except:
             self.fail()
 
     def test_validate_invariants_fail(self):
-        data = MockEvent()
-        data.start = datetime(2009, 1, 2)
-        data.end = datetime(2009, 1, 1)
+        mock = MockEvent()
+        mock.start = datetime(2009, 1, 2)
+        mock.end = datetime(2009, 1, 1)
 
         try:
-            IEventBasic.validateInvariants(data)
+            IEventBasic.validateInvariants(mock)
             self.fail()
         except StartBeforeEnd:
             pass
 
     def test_validate_invariants_edge(self):
-        data = MockEvent()
-        data.start = datetime(2009, 1, 2)
-        data.end = datetime(2009, 1, 2)
+        mock = MockEvent()
+        mock.start = datetime(2009, 1, 2)
+        mock.end = datetime(2009, 1, 2)
 
         try:
-            IEventBasic.validateInvariants(data)
+            IEventBasic.validateInvariants(mock)
         except:
             self.fail()
 

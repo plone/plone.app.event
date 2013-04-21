@@ -207,43 +207,198 @@ def _prepare_range(context, start, end):
     return start, end
 
 
-class CalendarLinkbase(object):
-    """Default adapter to retrieve a base url for a calendar view.
-    In this default implementation we use the @@event_listing view as calendar
-    view.
+# TIMEZONE HANDLING
 
-    For method documentation, see interfaces.py.
+def default_timezone(context=None):
+    """Return the timezone from the portal or user.
+
+    :param context: Optional context. If not given, the current Site is used.
+    :type context: Content object
+    :returns: Timezone identifier.
+    :rtype: string
 
     """
-    adapts(Interface)
-    implements(ICalendarLinkbase)
+    # TODO: test member timezone
+    if not context: context = getSite()
 
-    def __init__(self, context):
-        self.context = context
-        portal = getSite()
-        self.urlpath = getNavigationRootObject(context, portal).absolute_url()
+    membership = getToolByName(context, 'portal_membership', None)
+    if membership and not membership.isAnonymousUser(): # the user has not logged in
+        member = membership.getAuthenticatedMember()
+        member_timezone = member.getProperty('timezone', None)
+        if member_timezone:
+            return pytz.timezone(member_timezone).zone
 
-    def date_events_url(self, date):
-        url = '%s/@@event_listing?mode=day&date=%s' % (self.urlpath, date)
-        return url
+    portal_timezone = None
+    reg = queryUtility(IRegistry, context=context, default=None)
+    if reg:
+        portal_timezone= reg.forInterface(
+                IEventSettings, prefix="plone.app.event").portal_timezone
 
-    def past_events_url(self):
-        """Get a URL to retrieve past events.
-        """
-        url = '%s/@@event_listing?mode=past' % self.urlpath
-        return url
+    # fallback to what plone.event is doing
+    if not portal_timezone:
+        portal_timezone = fallback_default_timezone()
 
-    def next_events_url(self):
-        """Get a URL to retrieve upcoming events.
-        """
-        url = '%s/@@event_listing?mode=future' % self.urlpath
-        return url
+    if portal_timezone in replacement_zones.keys():
+        portal_timezone = replacement_zones[portal_timezone]
+    portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
 
-    def all_events_url(self):
-        """Get a URL to retrieve all events.
-        """
-        url = '%s/@@event_listing?mode=all' % self.urlpath
-        return url
+    return portal_timezone
+
+
+def default_tzinfo(context=None):
+    """Return the default timezone as tzinfo instance.
+
+    :param context: Optional context. If not given, the current Site is used.
+    :type context: Content object
+    :returns: Pytz timezone object.
+    :rtype: Python tzinfo
+
+    """
+    return pytz.timezone(default_timezone(context))
+
+
+def localized_now(context=None):
+    """Return the current datetime localized to the default timezone.
+
+    :param context: Context object.
+    :type context: Content object
+    :returns: Localized current datetime.
+    :rtype: Python datetime
+
+    """
+    if not context: context = getSite()
+    return datetime.now(default_tzinfo(context))
+
+
+def localized_today(context=None):
+    """Return the current date localized to the default timezone.
+
+    :param context: Context object.
+    :type context: Content object
+    :returns: Localized current date.
+    :rtype: Python date
+
+    """
+    now = localized_now(context)
+    return date(now.year, now.month, now.day)
+
+
+# DATETIME HELPERS
+
+def first_weekday():
+    """Returns the number of the first Weekday in a Week, as defined in
+    the registry. 0 is Monday, 6 is Sunday, as expected by Python's datetime.
+
+    PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
+
+    :returns: Index of first weekday (0..Monday, 6..Sunday)
+    :rtype: integer
+
+    """
+    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
+                                                      prefix="plone.app.event")
+    first_wd = controlpanel.first_weekday
+    if not first_wd:
+        return 0
+    else:
+        return int(first_wd)
+
+
+def first_weekday_sun0():
+    """Returns the number of the first Weekday in a Week, as defined in
+    the registry.
+    In this case 0 is Sunday and 6 is Saturday, as expected by Strftime.
+
+    This method exists, because IRegistry utility isn't early available and in
+    some cases we need to pass a first weekday config parameter to another
+    package, which then gets just called.
+
+    """
+    return cal_to_strftime_wkday(first_weekday())
+
+
+def cal_to_strftime_wkday(day):
+    """Convert calendar day numbers to strftime day numbers.
+    Strftime %w interprets 0 as Sunday unlike the calendar:
+    Calendar: 0..Monday, 6..Sunday
+    Strftime: 0..Sunday, 6..Saturday
+
+    :param day: The calendar.Calendar day number.
+    :type day: integer
+    :returns: The strftime day number.
+    :rtype: integer
+
+    """
+    if day==6:
+        return 0
+    else:
+        return day+1
+
+
+def strftime_to_cal_wkday(day):
+    """Convert strftime day numbers to calendar day numbers.
+    Strftime %w interprets 0 as Sunday unlike the calendar:
+    Calendar: 0..Monday, 6..Sunday
+    Strftime: 0..Sunday, 6..Saturday
+
+    :param day: The strftime day number.
+    :type day: integer
+    :returns: The calendar.Calendar day number.
+    :rtype: integer
+
+    """
+    if day==0:
+        return 6
+    else:
+        return day-1
+
+
+def DT(dt):
+    """Return a Zope DateTime instance from a Python datetime instance.
+
+    :param dt: Python datetime instance.
+    :type dt: Python datetime
+    :returns: Zope DateTime
+    :rtype: Zope DateTime
+
+    """
+    tz = default_timezone(getSite())
+    ret = None
+    if isinstance(dt, datetime):
+        zone_id = getattr(dt.tzinfo, 'zone', tz)
+        tz = validated_timezone(zone_id, tz)
+        ret = DateTime(dt.year, dt.month, dt.day,\
+                        dt.hour, dt.minute, dt.second+dt.microsecond/1000000.0,
+                        tz)
+    elif isinstance(dt, date):
+        ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
+    elif isinstance(dt, DateTime):
+        # No timezone validation. DateTime knows how to handle it's zones.
+        ret = dt
+    return ret
+
+
+
+def guess_date_from(datestr, context=None):
+    """Returns a timezone aware date object if an arbitrary ASCII string is
+    formatted in an ISO date format, otherwise None is returned.
+
+    Used for traversing and Occurence ids.
+
+    :param datestr: Date string in an ISO format.
+    :type datestr: string
+    :param context: Context object (for retrieving the timezone).
+    :type context: Content object
+    :returns: Localized date object.
+    :rtype: Python date
+
+    """
+    try:
+        dateobj = datetime.strptime(datestr, ISO_DATE_FORMAT)
+    except ValueError:
+        return
+
+    return pytz.timezone(default_timezone(context)).localize(dateobj)
 
 
 def dt_start_of_day(dt):
@@ -354,234 +509,7 @@ def start_end_from_mode(mode, dt=None, context=None):
     return start, end
 
 
-def default_end_dt():
-    """Return the default end as python datetime for prefilling forms.
-
-    :returns: Default end datetime.
-    :rtype: Python datetime
-
-    """
-    return localized_now() + timedelta(hours=DEFAULT_END_DELTA)
-
-
-def default_end_DT():
-    """Return the default end as Zope DateTime for prefilling forms.
-
-    :returns: Default end DateTime.
-    :rtype: Zope DateTime
-
-    """
-    return DT(default_end_dt())
-
-
-def default_start_dt():
-    """Return the default start as python datetime for prefilling forms.
-
-    :returns: Default start datetime.
-    :rtype: Python datetime
-
-    """
-    return localized_now()
-
-
-def default_start_DT():
-    """Return the default start as a Zope DateTime for prefilling archetypes
-    forms.
-
-    :returns: Default start DateTime.
-    :rtype: Zope DateTime
-
-    """
-    return DT(default_start_dt())
-
-
-def default_timezone(context=None):
-    """Return the timezone from the portal or user.
-
-    :param context: Optional context. If not given, the current Site is used.
-    :type context: Content object
-    :returns: Timezone identifier.
-    :rtype: string
-
-    """
-    # TODO: test member timezone
-    if not context: context = getSite()
-
-    membership = getToolByName(context, 'portal_membership', None)
-    if membership and not membership.isAnonymousUser(): # the user has not logged in
-        member = membership.getAuthenticatedMember()
-        member_timezone = member.getProperty('timezone', None)
-        if member_timezone:
-            return pytz.timezone(member_timezone).zone
-
-    portal_timezone = None
-    reg = queryUtility(IRegistry, context=context, default=None)
-    if reg:
-        portal_timezone= reg.forInterface(
-                IEventSettings, prefix="plone.app.event").portal_timezone
-
-    # fallback to what plone.event is doing
-    if not portal_timezone:
-        portal_timezone = fallback_default_timezone()
-
-    if portal_timezone in replacement_zones.keys():
-        portal_timezone = replacement_zones[portal_timezone]
-    portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
-
-    return portal_timezone
-
-
-def default_tzinfo(context=None):
-    """Return the default timezone as tzinfo instance.
-
-    :param context: Optional context. If not given, the current Site is used.
-    :type context: Content object
-    :returns: Pytz timezone object.
-    :rtype: Python tzinfo
-
-    """
-    return pytz.timezone(default_timezone(context))
-
-
-def first_weekday():
-    """Returns the number of the first Weekday in a Week, as defined in
-    the registry. 0 is Monday, 6 is Sunday, as expected by Python's datetime.
-
-    PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
-
-    :returns: Index of first weekday (0..Monday, 6..Sunday)
-    :rtype: integer
-
-    """
-    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
-                                                      prefix="plone.app.event")
-    first_wd = controlpanel.first_weekday
-    if not first_wd:
-        return 0
-    else:
-        return int(first_wd)
-
-def first_weekday_sun0():
-    """Returns the number of the first Weekday in a Week, as defined in
-    the registry.
-    In this case 0 is Sunday and 6 is Saturday, as expected by Strftime.
-
-    This method exists, because IRegistry utility isn't early available and in
-    some cases we need to pass a first weekday config parameter to another
-    package, which then gets just called.
-
-    """
-    return cal_to_strftime_wkday(first_weekday())
-
-
-def cal_to_strftime_wkday(day):
-    """Convert calendar day numbers to strftime day numbers.
-    Strftime %w interprets 0 as Sunday unlike the calendar:
-    Calendar: 0..Monday, 6..Sunday
-    Strftime: 0..Sunday, 6..Saturday
-
-    :param day: The calendar.Calendar day number.
-    :type day: integer
-    :returns: The strftime day number.
-    :rtype: integer
-
-    """
-    if day==6:
-        return 0
-    else:
-        return day+1
-
-
-def strftime_to_cal_wkday(day):
-    """Convert strftime day numbers to calendar day numbers.
-    Strftime %w interprets 0 as Sunday unlike the calendar:
-    Calendar: 0..Monday, 6..Sunday
-    Strftime: 0..Sunday, 6..Saturday
-
-    :param day: The strftime day number.
-    :type day: integer
-    :returns: The calendar.Calendar day number.
-    :rtype: integer
-
-    """
-    if day==0:
-        return 6
-    else:
-        return day-1
-
-
-def DT(dt):
-    """Return a Zope DateTime instance from a Python datetime instance.
-
-    :param dt: Python datetime instance.
-    :type dt: Python datetime
-    :returns: Zope DateTime
-    :rtype: Zope DateTime
-
-    """
-    tz = default_timezone(getSite())
-    ret = None
-    if isinstance(dt, datetime):
-        zone_id = getattr(dt.tzinfo, 'zone', tz)
-        tz = validated_timezone(zone_id, tz)
-        ret = DateTime(dt.year, dt.month, dt.day,\
-                        dt.hour, dt.minute, dt.second+dt.microsecond/1000000.0,
-                        tz)
-    elif isinstance(dt, date):
-        ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
-    elif isinstance(dt, DateTime):
-        # No timezone validation. DateTime knows how to handle it's zones.
-        ret = dt
-    return ret
-
-
-def localized_now(context=None):
-    """Return the current datetime localized to the default timezone.
-
-    :param context: Context object.
-    :type context: Content object
-    :returns: Localized current datetime.
-    :rtype: Python datetime
-
-    """
-    if not context: context = getSite()
-    return datetime.now(default_tzinfo(context))
-
-
-def localized_today(context=None):
-    """Return the current date localized to the default timezone.
-
-    :param context: Context object.
-    :type context: Content object
-    :returns: Localized current date.
-    :rtype: Python date
-
-    """
-    now = localized_now(context)
-    return date(now.year, now.month, now.day)
-
-
-def guess_date_from(datestr, context=None):
-    """Returns a timezone aware date object if an arbitrary ASCII string is
-    formatted in an ISO date format, otherwise None is returned.
-
-    Used for traversing and Occurence ids.
-
-    :param datestr: Date string in an ISO format.
-    :type datestr: string
-    :param context: Context object (for retrieving the timezone).
-    :type context: Content object
-    :returns: Localized date object.
-    :rtype: Python date
-
-    """
-    try:
-        dateobj = datetime.strptime(datestr, ISO_DATE_FORMAT)
-    except ValueError:
-        return
-
-    return pytz.timezone(default_timezone(context)).localize(dateobj)
-
+# DISPLAY HELPERS
 
 def dates_for_display(occurrence):
     """ Return a dictionary containing pre-calculated information for building
@@ -691,6 +619,66 @@ def date_speller(context, dt):
     return date_dict
 
 
+class CalendarLinkbase(object):
+    """Default adapter to retrieve a base url for a calendar view.
+    In this default implementation we use the @@event_listing view as calendar
+    view.
+
+    For method documentation, see interfaces.py.
+
+    """
+    adapts(Interface)
+    implements(ICalendarLinkbase)
+
+    def __init__(self, context):
+        self.context = context
+        portal = getSite()
+        self.urlpath = getNavigationRootObject(context, portal).absolute_url()
+
+    def date_events_url(self, date):
+        url = '%s/@@event_listing?mode=day&date=%s' % (self.urlpath, date)
+        return url
+
+    def past_events_url(self):
+        """Get a URL to retrieve past events.
+        """
+        url = '%s/@@event_listing?mode=past' % self.urlpath
+        return url
+
+    def next_events_url(self):
+        """Get a URL to retrieve upcoming events.
+        """
+        url = '%s/@@event_listing?mode=future' % self.urlpath
+        return url
+
+    def all_events_url(self):
+        """Get a URL to retrieve all events.
+        """
+        url = '%s/@@event_listing?mode=all' % self.urlpath
+        return url
+
+
+def default_start(context=None):
+    """Return the default start as python datetime for prefilling forms.
+
+    :returns: Default start datetime.
+    :rtype: Python datetime
+
+    """
+    return localized_now(context=context)
+
+
+def default_end(context=None):
+    """Return the default end as python datetime for prefilling forms.
+
+    :returns: Default end datetime.
+    :rtype: Python datetime
+
+    """
+    return localized_now(context=context) + timedelta(hours=DEFAULT_END_DELTA)
+
+
+
 # Workaround for buggy strftime with timezone handling in DateTime.
 # See: https://github.com/plone/plone.app.event/pull/47
 # TODO: should land in CMFPlone or fixed in DateTime.
@@ -754,3 +742,42 @@ def get_occurrences_from_brains(context, brains,
     if limit is not None:
         result = result[:limit]
     return result
+
+
+@deprecate('default_start_dt is deprecated and will be removed in version 1.0.'
+           'Please use default_start() instead.')
+def default_start_dt(context=None):
+    return default_start(context=context)
+
+
+@deprecate('default_end_dt is deprecated and will be removed in version 1.0.'
+           'Please use default_end() instead.')
+def default_end_dt(context=None):
+    return default_end(context=context)
+
+
+@deprecate('default_start_DT is deprecated and will be removed in version 1.0.'
+           'Please use DT(default_start()) instead.')
+def default_start_DT():
+    """Return the default start as a Zope DateTime for prefilling archetypes
+    forms.
+
+    :returns: Default start DateTime.
+    :rtype: Zope DateTime
+
+    """
+    return DT(default_start_dt())
+
+
+@deprecate('default_end_DT is deprecated and will be removed in version 1.0.'
+           'Please use DT(default_end()) instead.')
+def default_end_DT():
+    """Return the default end as Zope DateTime for prefilling forms.
+
+    :returns: Default end DateTime.
+    :rtype: Zope DateTime
+
+    """
+    return DT(default_end_dt())
+
+

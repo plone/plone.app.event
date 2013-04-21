@@ -24,11 +24,9 @@ from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 
 from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
-from plone.app.event.base import (
-    default_start_DT,
-    default_end_DT,
-    default_timezone
-)
+from plone.app.event.base import default_timezone
+from plone.app.event.at.content import default_start
+from plone.app.event.at.content import default_end
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.event.interfaces import IEvent, IEventRecurrence
@@ -431,7 +429,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == default_end_DT,
+        self.assertTrue(field.default_method == default_end,
                         'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
@@ -597,7 +595,7 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == default_start_DT , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.default_method == default_start , 'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
