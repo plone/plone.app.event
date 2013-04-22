@@ -291,7 +291,7 @@ def first_weekday():
 
     PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
 
-    :returns: Index of first weekday (0..Monday, 6..Sunday)
+    :returns: Index of first weekday [0(Monday)..6(Sunday)]
     :rtype: integer
 
     """
@@ -304,46 +304,15 @@ def first_weekday():
         return int(first_wd)
 
 
-def first_weekday_sun0():
-    """Returns the number of the first Weekday in a Week, as defined in
-    the registry.
-    In this case 0 is Sunday and 6 is Saturday, as expected by Strftime.
+def wkday_to_mon0(day):
+    """Converts an integer weekday number to a representation where Monday is 0
+    and Sunday is 6 (the datetime default), from a representation where Sunday
+    is 0, Monday is 1 and Saturday is 6 (the strftime behavior).
 
-    This method exists, because IRegistry utility isn't early available and in
-    some cases we need to pass a first weekday config parameter to another
-    package, which then gets just called.
-
-    """
-    return cal_to_strftime_wkday(first_weekday())
-
-
-def cal_to_strftime_wkday(day):
-    """Convert calendar day numbers to strftime day numbers.
-    Strftime %w interprets 0 as Sunday unlike the calendar:
-    Calendar: 0..Monday, 6..Sunday
-    Strftime: 0..Sunday, 6..Saturday
-
-    :param day: The calendar.Calendar day number.
+    :param day: The weekday number [0(Sunday)..6]
     :type day: integer
-    :returns: The strftime day number.
-    :rtype: integer
 
-    """
-    if day==6:
-        return 0
-    else:
-        return day+1
-
-
-def strftime_to_cal_wkday(day):
-    """Convert strftime day numbers to calendar day numbers.
-    Strftime %w interprets 0 as Sunday unlike the calendar:
-    Calendar: 0..Monday, 6..Sunday
-    Strftime: 0..Sunday, 6..Saturday
-
-    :param day: The strftime day number.
-    :type day: integer
-    :returns: The calendar.Calendar day number.
+    :returns: The weekday number [0(Monday)..6]
     :rtype: integer
 
     """
@@ -351,6 +320,24 @@ def strftime_to_cal_wkday(day):
         return 6
     else:
         return day-1
+
+
+def wkday_to_mon1(day):
+    """Converts an integer weekday number to a representation where Monday is
+    1, Saturday is 6 and Sunday is 0 (the strftime behavior), from a
+    representation where Monday is 0 and Sunday is 6 (the datetime default).
+
+    :param day: The weekday number [0(Monday)..6]
+    :type day: integer
+
+    :returns: The weekday number [0(Sunday)..6]
+    :rtype: integer
+
+    """
+    if day==6:
+        return 0
+    else:
+        return day+1
 
 
 def DT(dt):
@@ -376,7 +363,6 @@ def DT(dt):
         # No timezone validation. DateTime knows how to handle it's zones.
         ret = dt
     return ret
-
 
 
 def guess_date_from(datestr, context=None):
@@ -695,22 +681,22 @@ def ulocalized_time(time, *args, **kwargs):
 
 
 # BBB - Remove with 1.0
-@deprecate('get_portal_events is deprecated and will be removed in version'
+@deprecate('get_portal_events is deprecated and will be removed in version '
            '1.0. Please use get_events instead.')
 def get_portal_events(context, range_start=None, range_end=None, limit=None,
                       sort='start', sort_reverse=False, **kw):
     return get_events(context, start=range_start, end=range_end, limit=limit,
                       sort=sort, sort_reverse=sort_reverse, **kw)
 
-@deprecate('get_occurrences_by_date is deprecated and will be removed in'
-           'version 1.0. Please use construct_calendar and get_events'
+@deprecate('get_occurrences_by_date is deprecated and will be removed in '
+           'version 1.0. Please use construct_calendar and get_events '
            'instead.')
 def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     events = get_events(context, start=range_start, end=range_end,
                         ret_mode=2, expand=True, **kw)
     return construct_calendar(events)
 
-@deprecate('get_occurrences_from_brains is deprecated and will be removed in'
+@deprecate('get_occurrences_from_brains is deprecated and will be removed in '
            'version 1.0. Please use get_events instead.')
 def get_occurrences_from_brains(context, brains,
         range_start=None, range_end=None, limit=None):
@@ -745,19 +731,19 @@ def get_occurrences_from_brains(context, brains,
 
 
 @deprecate('default_start_dt is deprecated and will be removed in version 1.0.'
-           'Please use default_start() instead.')
+           ' Please use default_start() instead.')
 def default_start_dt(context=None):
     return default_start(context=context)
 
 
-@deprecate('default_end_dt is deprecated and will be removed in version 1.0.'
+@deprecate('default_end_dt is deprecated and will be removed in version 1.0. '
            'Please use default_end() instead.')
 def default_end_dt(context=None):
     return default_end(context=context)
 
 
 @deprecate('default_start_DT is deprecated and will be removed in version 1.0.'
-           'Please use DT(default_start()) instead.')
+           ' Please use DT(default_start()) instead.')
 def default_start_DT():
     """Return the default start as a Zope DateTime for prefilling archetypes
     forms.
@@ -769,7 +755,7 @@ def default_start_DT():
     return DT(default_start_dt())
 
 
-@deprecate('default_end_DT is deprecated and will be removed in version 1.0.'
+@deprecate('default_end_DT is deprecated and will be removed in version 1.0. '
            'Please use DT(default_end()) instead.')
 def default_end_DT():
     """Return the default end as Zope DateTime for prefilling forms.
@@ -779,5 +765,23 @@ def default_end_DT():
 
     """
     return DT(default_end_dt())
+
+
+@deprecate('first_weekday_sun0 is deprecated and will be removed in version '
+            '1.0. Please use wkday_to_mon1(first_weekday()) instead.')
+def first_weekday_sun0():
+    return wkday_to_mon1(first_weekday())
+
+
+@deprecate('cal_to_strftime_wkday is deprecated and will be removed in version'
+           ' 1.0. Please use wkday_to_mon1 instead.')
+def cal_to_strftime_wkday(day):
+    return wkday_to_mon1(day)
+
+
+@deprecate('strftime_to_cal_wkday is deprecated and will be removed in version'
+           '1.0. Please use wkday_to_mon0 instead.')
+def strftime_to_cal_wkday(day):
+    return wkday_to_mon0(day)
 
 

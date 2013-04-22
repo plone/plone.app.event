@@ -20,10 +20,14 @@ Changelog
     * get_occurrences_by_date refactored to construct_calendar.
     * Renamings:
         - default_start_dt -> default_start,
-        - default_end_dt -> default_end.
+        - default_end_dt -> default_end,
+        - cal_to_strftime_wkday -> wkday_to_mon1,
+        - strftime_to_cal_wkday -> wkday_to_mon0.
+
     * Remove:
         - default_start_DT,
-        - default_end_DT.
+        - default_end_DT,
+        - first_weekday_sun0.
 
   In ical:
     * Renamed construct_calendar to construct_icalendar to avoid same name as
