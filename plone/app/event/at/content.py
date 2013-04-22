@@ -30,7 +30,8 @@ from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
-from plone.app.event.base import first_weekday_sun0
+from plone.app.event.base import first_weekday
+from plone.app.event.base import wkday_to_mon1
 from plone.event.utils import pydt
 
 
@@ -39,6 +40,10 @@ def default_start():
 
 def default_end():
     return DT(default_end_dt())
+
+def first_weekday_sun0():
+    return wkday_to_mon1(first_weekday())
+
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 

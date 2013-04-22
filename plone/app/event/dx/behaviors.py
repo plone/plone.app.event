@@ -29,7 +29,8 @@ from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import DT
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import dt_end_of_day
-from plone.app.event.base import first_weekday_sun0
+from plone.app.event.base import first_weekday
+from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx import ParameterizedWidgetFactory
 
@@ -43,6 +44,10 @@ from z3c.form.widget import ComputedWidgetAttribute
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
+
+
+def first_weekday_sun0():
+    return wkday_to_mon1(first_weekday())
 
 
 class StartBeforeEnd(Invalid):

@@ -783,5 +783,3 @@ def cal_to_strftime_wkday(day):
            '1.0. Please use wkday_to_mon0 instead.')
 def strftime_to_cal_wkday(day):
     return wkday_to_mon0(day)
-
-

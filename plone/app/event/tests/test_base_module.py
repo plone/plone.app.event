@@ -94,14 +94,14 @@ class TestBaseModule(unittest.TestCase):
         )
 
 
-    def test_cal_to_strftime_wkday(self):
-        from plone.app.event.base import cal_to_strftime_wkday
-        li = [cal_to_strftime_wkday(day) for day in range(0,7)]
+    def test_wkday_to_mon1(self):
+        from plone.app.event.base import wkday_to_mon1
+        li = [wkday_to_mon1(day) for day in range(0,7)]
         self.assertEqual(li, [1, 2, 3, 4, 5, 6, 0])
 
-    def test_strftime_to_cal_wkday(self):
-        from plone.app.event.base import strftime_to_cal_wkday
-        li = [strftime_to_cal_wkday(day) for day in range(0,7)]
+    def test_wkday_to_mon0(self):
+        from plone.app.event.base import wkday_to_mon0
+        li = [wkday_to_mon0(day) for day in range(0,7)]
         self.assertEqual(li, [6, 0, 1, 2, 3, 4, 5])
 
     def test__default_timezone(self):
