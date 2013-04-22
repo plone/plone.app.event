@@ -25,9 +25,10 @@ Changelog
         - strftime_to_cal_wkday -> wkday_to_mon0.
 
     * Remove:
-        - default_start_DT,
-        - default_end_DT,
-        - first_weekday_sun0.
+        - default_start_DT (use DT(default_start()) instead),
+        - default_end_DT (use DT(default_end()) instead),
+        - first_weekday_sun0 (use wkday_to_mon1(first_weekday()) instead),
+        - default_tzinfo (use default_timezone(as_tzinfo=True) instead).
 
   In ical:
     * Renamed construct_calendar to construct_icalendar to avoid same name as

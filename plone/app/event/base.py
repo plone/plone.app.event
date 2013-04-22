@@ -209,13 +209,17 @@ def _prepare_range(context, start, end):
 
 # TIMEZONE HANDLING
 
-def default_timezone(context=None):
+def default_timezone(context=None, as_tzinfo=False):
     """Return the timezone from the portal or user.
 
     :param context: Optional context. If not given, the current Site is used.
     :type context: Content object
-    :returns: Timezone identifier.
-    :rtype: string
+
+    :param as_tzinfo: Return the default timezone as tzinfo object.
+    :type as_tzinfo: boolean
+
+    :returns: Timezone identifier or tzinfo object.
+    :rtype: string or tzinfo object
 
     """
     # TODO: test member timezone
@@ -242,19 +246,10 @@ def default_timezone(context=None):
         portal_timezone = replacement_zones[portal_timezone]
     portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
 
+    if as_tzinfo:
+        return pytz.timezone(portal_timezone)
+
     return portal_timezone
-
-
-def default_tzinfo(context=None):
-    """Return the default timezone as tzinfo instance.
-
-    :param context: Optional context. If not given, the current Site is used.
-    :type context: Content object
-    :returns: Pytz timezone object.
-    :rtype: Python tzinfo
-
-    """
-    return pytz.timezone(default_timezone(context))
 
 
 def localized_now(context=None):
@@ -267,7 +262,7 @@ def localized_now(context=None):
 
     """
     if not context: context = getSite()
-    return datetime.now(default_tzinfo(context))
+    return datetime.now(default_timezone(context=context, as_tzinfo=True))
 
 
 def localized_today(context=None):
@@ -783,3 +778,12 @@ def cal_to_strftime_wkday(day):
            '1.0. Please use wkday_to_mon0 instead.')
 def strftime_to_cal_wkday(day):
     return wkday_to_mon0(day)
+
+
+@deprecate('default_tzinfo is deprecated and will be removed in version '
+           '1.0. Please use default_timezone(context, as_tzinfo=True) '
+           'instead.')
+def default_tzinfo(context=None):
+    return default_timezone(context, as_tzinfo=True)
+
+
