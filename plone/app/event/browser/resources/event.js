@@ -79,12 +79,12 @@
         var event_listing_calendar = $("#event_listing_calendar");
         if ($().dateinput && event_listing_calendar.length > 0) {
 
-            function get_req_param(name){
+            get_req_param = function (name){
                 // http://stackoverflow.com/questions/831030/how-to-get-get-request-parameters-in-javascript
-                if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
+                if(name===(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
                     return decodeURIComponent(name[1]);
                 }
-            }
+            };
 
             // Preselect current date, if exists
             var val = get_req_param('date');
