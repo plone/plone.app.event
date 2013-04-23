@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Don't show plone.app.event:default and
+  plone.app.event.ploneintegration:prepare profiles when creating a Plone site
+  with @@plone-addsite.
+  [thet]
+
 - Remove render_cachekey from portlet_events, since it depends on an
   undocumented internal _data structure, which must contain catalog brains.
   [thet]

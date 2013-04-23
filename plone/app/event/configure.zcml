@@ -48,4 +48,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="plone.app.event"
+      provides="Products.CMFPlone.interfaces.INonInstallable" />
+
 </configure>
