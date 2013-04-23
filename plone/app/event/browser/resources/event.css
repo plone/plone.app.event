@@ -111,6 +111,8 @@
     padding: 0;
 }
 #content .event_listing p { margin:0; }
+.event_listing .horizontal.metadata li:after { content: " \2014 "; }
+.event_listing .horizontal.metadata li:last-child:after { content: ""; }
 
 /* tooltip styling. by default the element to be styled is .tooltip  */
 .pae_calendar_tooltip {
