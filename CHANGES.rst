@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b7 (2013-04024)
+------------------
 
 - Don't show plone.app.event:default and
   plone.app.event.ploneintegration:prepare profiles when creating a Plone site
