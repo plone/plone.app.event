@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b7 (2013-04024)
+1.0b7 (2013-04-24)
 ------------------
 
 - Don't show plone.app.event:default and
