@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Optimize css by using common classes for event_listing and event_view.
+  [thet]
+
+- Add schema.org and hCalendar microdata to event_view and event_listing views.
+  Fixes #2, fixes #57.
+  [thet]
+
 - Remove render_cachekey from portlet_events, since it depends on an
   undocumented internal _data structure, which must contain catalog brains.
   [thet]

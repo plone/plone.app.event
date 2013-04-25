@@ -16,6 +16,89 @@
 
 /* event listing styles */
 
+
+/* BEGIN COMMON EVENT STYLES */
+.hCalendar-hidden {
+    display:none; /* hide hCal fields not useful to human eyes */
+}
+
+article.vevent {
+    background-color: #EAEAEA;
+    border-radius: 1em 1em 1em 1em;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.vevent div.cal_date { 
+    float:left;
+    vertical-align:top;
+    margin: 0 1.5em 0.5em 0;
+    padding:0.7em 0.7em 0.5em;
+    background-color:white;
+    border:none;
+    border-radius:0.5em;
+    box-shadow: 0.5em 0.5em 0.4em black;
+    min-width:4.4em;
+}
+.vevent span.cal_wkday {
+    display:block;
+    font-size:2.3em;
+    font-weight:bold;
+    border-bottom:2px solid black;
+    padding-bottom:0.3em;
+}
+.vevent span.cal_day {
+    font-size:1.7em;
+    display:inline-block;
+    padding-top:0.3em;
+}
+.vevent span.cal_month {
+    font-size:1.3em;
+    line-height:1.3em;
+    display:inline-block;
+}
+
+.vevent div.cal_info { margin-left:8em; }
+article.vevent .documentByLine {
+    background: none repeat scroll 0 0 transparent;
+    color: black !important;
+    font-size: 1em !important;
+    font-weight: bold;
+    padding: 0;
+}
+
+.vevent .horizontal.metadata li:after { content: " \2014 "; }
+.vevent .horizontal.metadata li:last-child:after { content: ""; }
+
+.vevent .timezone {
+    display:block;
+    margin-top:0.5em;
+    padding:0.2em 0;
+    background-color:#ffe;
+    color:#354;
+    width:100%;
+}
+
+.vevent .timerange, .vevent .timezone {
+    font-size:85%;
+    line-height:1em;
+    white-space:nowrap;
+}
+
+.vevent .datedisplay {
+    line-height:1.5em;
+    margin-bottom:0.2em;
+    font-weight:bold;
+    font-size:100%;
+}
+
+.vevent abbr.dtstart {
+    font-weight:bold;
+}
+/* END COMMON EVENT STYLES */
+
+
+/* BEGIN EVENT LISTING STYLES */
 #content .event_listing nav ul {
     margin-left:0;
     list-style-type:none;
@@ -65,55 +148,23 @@
 .event_listing ul.mode_selector li.selected {
     font-weight: bold;
 }
-
-.event_listing article {
-    background-color: #EAEAEA;
-    border-radius: 1em 1em 1em 1em;
-    margin-top: 1em;
-    padding: 1em;
-}
-
-.event_listing div.cal_date { 
-    float:left;
-    vertical-align:top;
-    margin: 0 1.5em 0.5em 0;
-    padding:0.7em 0.7em 0.5em;
-    background-color:white;
-    border:none;
-    border-radius:0.5em;
-    box-shadow: 0.5em 0.5em 0.4em black;
-    min-width:4.4em;
-}
-.event_listing span.cal_wkday {
-    display:block;
-    font-size:2.3em;
-    font-weight:bold;
-    border-bottom:2px solid black;
-    padding-bottom:0.3em;
-}
-.event_listing span.cal_day {
-    font-size:1.7em;
-    display:inline-block;
-    padding-top:0.3em;
-}
-.event_listing span.cal_month {
-    font-size:1.3em;
-    line-height:1.3em;
-    display:inline-block;
-}
-
-.event_listing div.cal_info { margin-left:8em; }
-.event_listing article .documentByLine {
-    background: none repeat scroll 0 0 transparent;
-    color: black !important;
-    font-size: 1em !important;
-    font-weight: bold;
-    padding: 0;
-}
 #content .event_listing p { margin:0; }
-.event_listing .horizontal.metadata li:after { content: " \2014 "; }
-.event_listing .horizontal.metadata li:last-child:after { content: ""; }
+/* END EVENT LISTING STYLES */
 
+
+/* BEGIN EVENT DETAILS STYLES */
+.eventDetails table.listing td {
+    min-width:60%;
+}
+.eventDetails table.listing td p {
+    margin-top:0.5em;
+    margin-bottom:0;
+    line-height:1.2em;
+}
+/* END EVENT DETAILS STYLES */
+
+
+/* BEGIN PORTLET CALENDAR */
 /* tooltip styling. by default the element to be styled is .tooltip  */
 .pae_calendar_tooltip {
     display:none;
@@ -135,10 +186,6 @@
 .pae_calendar_tooltip a:hover { color:blue; }
 .pae_calendar_tooltip a .title { font-weight:bold; }
 
-
-/* 
- * PORTLET CALENDAR STYLES
- */
 .portletCalendar {
     width: 100%;
     margin: 1px 0 1em 0;
@@ -213,47 +260,4 @@
 .ploneCalendar td.cal_next_month {
     opacity:0.4;
 }
-
-
-/* 
- * EVENT VIEW
- */
-.eventDetails .timezone {
-    display:block;
-    margin-top:0.5em;
-    padding:0.2em 0;
-    background-color:#ffe;
-    color:#354;
-    width:100%;
-}
-
-.eventDetails .hCalendar-hidden {
-    display:none; /* hide hCal fields not useful to human eyes */
-}
-
-.eventDetails .timerange, .eventDetails .timezone {
-    font-size:85%;
-    line-height:1em;
-    white-space:nowrap;
-}
-
-.eventDetails .datedisplay {
-    line-height:1.5em;
-    margin-bottom:0.2em;
-    font-weight:bold;
-    font-size:100%;
-}
-
-.eventDetails abbr.dtstart {
-    font-weight:bold;
-}
-
-.eventDetails table.listing td {
-    min-width:60%;
-}
-
-.eventDetails table.listing td p {
-    margin-top:0.5em;
-    margin-bottom:0;
-    line-height:1.2em;
-}
+/* END PORTLET CALENDAR */

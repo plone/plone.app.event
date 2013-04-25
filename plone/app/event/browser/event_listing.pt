@@ -69,25 +69,38 @@
       <div class="visualClear"/>
     </header>
 
-    <section class="cal_group">
+    <section>
     <tal:items repeat="data batch">
-      <article tal:define="startf python:view.date_speller(data.start)">
+      <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent"
+          tal:define="startf python:view.date_speller(data.start)">
+
+        <ul class="hCalendar-hidden">
+          <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">end</li>
+          <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
+        </ul>
+
         <div class="cal_date">
             <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
             <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
             <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
         </div>
+
         <div class="cal_info">
-          <h2><a href="" style=""
-              tal:attributes="href data/url" tal:content="data/title">Title</a></h2>
+          <h2><a href="" itemprop="url" class="url" tal:attributes="href data/url">
+            <span itemprop="summary" class="summary" tal:content="data/title">Title</span>
+          </a></h2>
           <div class="documentByLine">
             <tal:date tal:replace="structure python:view.formated_date(data)"/>
-            <span class="cal_location" tal:condition="data/location" tal:content="data/location" />
+            <span itemprop="location" class="location" tal:condition="data/location" tal:content="data/location" />
           </div>
 
-          <p tal:condition="data/description" tal:content="data/description" />
+          <p itemprop="description" class="description" tal:condition="data/description" tal:content="data/description" />
 
           <ul class="horizontal metadata">
+
+            <ul tal:condition="data/subjects">
+              <li itemprop="eventType" class="category" tal:repeat="data data/subjects" tal:content="data" />
+            </ul>
 
             <li tal:condition="data/event_url">
               <a class="event_url" title=""
