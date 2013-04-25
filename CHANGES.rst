@@ -1,19 +1,23 @@
 Changelog
 =========
 
-1.0b7 (2013-04-24)
-------------------
-
-- Don't show plone.app.event:default and
-  plone.app.event.ploneintegration:prepare profiles when creating a Plone site
-  with @@plone-addsite.
-  [thet]
+1.0dev (unreleased)
+-------------------
 
 - Optimize css by using common classes for event_listing and event_view.
   [thet]
 
 - Add schema.org and hCalendar microdata to event_view and event_listing views.
   Fixes #2, fixes #57.
+  [thet]
+
+
+1.0b7 (2013-04-24)
+------------------
+
+- Don't show plone.app.event:default and
+  plone.app.event.ploneintegration:prepare profiles when creating a Plone site
+  with @@plone-addsite.
   [thet]
 
 - Remove render_cachekey from portlet_events, since it depends on an
