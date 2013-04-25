@@ -19,6 +19,7 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - Sean Upton, seanupton
 - Simone Orsi, simahawk
 - Thomas Desvenain, tdesvenain
+- Timo Stollenwerk, timo
 - Tom Gross, tomgross
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod

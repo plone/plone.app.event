@@ -1,8 +1,13 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b7 (2013-04-24)
+------------------
+
+- Don't show plone.app.event:default and
+  plone.app.event.ploneintegration:prepare profiles when creating a Plone site
+  with @@plone-addsite.
+  [thet]
 
 - Optimize css by using common classes for event_listing and event_view.
   [thet]
