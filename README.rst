@@ -9,55 +9,6 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
-.. note::
-  Please set your timezone in the @@event-settings controlpanel. Otherwise
-  there some weired behavior can occur, like you're apparently unable to set
-  the time for dexterity types not to what you want.  For timezone handling, we
-  use pytz.
-
-
-Installation for Plone 4.2 and 4.3
-----------------------------------
-
-.. note::
-  The current z3c.unconfigure depends on zope.configuration >= 3.8 but Plone
-  4.2.4 uses zope.configuration 3.7.4. To successfully install plone.app.event
-  with it's ploneintegration extra, you have to make a version fix in your
-  buildout. Wether fix z3c.unconfigure to 1.0.1 (recommended and included in
-  this buildout) or fix zope.configuration for example to 4.0.2 (not
-  backwards-compatible).
-
-Just run the buildout.cfg, which is included with plone.app.event. There is
-also a dev.cfg buildout file, which includes the sources of Plone core
-package branches with integration changes for plone.app.event.
-
-Or include the plone.app.event egg::
-
-  eggs +=
-      plone.app.event [ploneintegration,archetypes,dexterity]
-
-Last, instal Plone with the "plone.app.event Plone4 integration" profile or
-depend in Generic Setup in metadata.xml like so::
-
-  <dependency>profile-plone.app.event.ploneintegration:default</dependency>
-
-You can also install optionally or additionally the dexterity profile.
-
-
-.. warning::
-  Upgrading from the old ATEvent type is not tested, so don't rely on this.
-
-Add some events, play with recurrence, whole day events and timezones, try out
-the calendar and event portlets...
-
-
-.. note::
-  A limitation on recurrence is, that unlimited occurrences are not supported
-  at the moment. The number of possible recurrences of an event is limited to
-  1000 at the moment, so indexing - and other operations - doesn't take too
-  long (see: plone.event.recurrence).
-
-
 PLIP implementation
 -------------------
 

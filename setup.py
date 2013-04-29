@@ -8,6 +8,8 @@ setup(name='plone.app.event',
       description="The Plone calendar framework",
       long_description=open("README.rst").read()
                        + "\n" +
+                       open(os.path.join('docs', 'installation.rst')).read()
+                       + "\n" +
                        open(os.path.join('docs', 'contributors.rst')).read()
                        + '\n' +
                        open("CHANGES.rst").read(),
