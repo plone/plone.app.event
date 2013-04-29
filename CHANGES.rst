@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add Event profile definition for ATEvent completly in order to remove it from
+  Products.CMFPlone. ATEvent is installed by ATContentTypes automatically as
+  part of upcoming plone.app.contenttypes merge.
+  [thet]
+
 - Optimize css by using common classes for event_listing and event_view.
   [thet]
 
