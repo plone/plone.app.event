@@ -229,6 +229,54 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
 
+
+    cmf_edit_kws = ('effectiveDay', 'effectiveMo', 'effectiveYear',
+                    'expirationDay', 'expirationMo', 'expirationYear',
+                    'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
+                    'start_date', 'end_date', 'contact_name', 'contact_email',
+                    'contact_phone', 'event_url')
+    security.declarePrivate('cmf_edit')
+    def cmf_edit(
+        self, title=None, description=None, effectiveDay=None,
+        effectiveMo=None, effectiveYear=None, expirationDay=None,
+        expirationMo=None, expirationYear=None, start_date=None,
+        start_time=None, startAMPM=None, end_date=None,
+        stop_time=None, stopAMPM=None, location=None,
+        contact_name=None, contact_email=None, contact_phone=None,
+        event_url=None):
+
+        if effectiveDay and effectiveMo and effectiveYear and start_time:
+            sdate = '%s-%s-%s %s %s' % (effectiveDay, effectiveMo, effectiveYear,
+                                         start_time, startAMPM)
+        elif start_date:
+            if not start_time:
+                start_time = '00:00:00'
+            sdate = '%s %s' % (start_date, start_time)
+        else:
+            sdate = None
+
+        if expirationDay and expirationMo and expirationYear and stop_time:
+            edate = '%s-%s-%s %s %s' % (expirationDay, expirationMo,
+                                        expirationYear, stop_time, stopAMPM)
+        elif end_date:
+            if not stop_time:
+                stop_time = '00:00:00'
+            edate = '%s %s' % (end_date, stop_time)
+        else:
+            edate = None
+
+        if sdate and edate:
+            if edate < sdate:
+                edate = sdate
+            self.setStartDate(sdate)
+            self.setEndDate(edate)
+
+        self.update(
+            title=title, description=description, location=location,
+            contactName=contact_name, contactEmail=contact_email,
+            contactPhone=contact_phone, eventUrl=event_url)
+
+
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
         """Validates start and end date

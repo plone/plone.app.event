@@ -96,6 +96,7 @@ class PAEventAccessorTest(unittest.TestCase):
 
         self.portal.manage_delObjects(['event1'])
 
+
 class PAEventATTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
@@ -254,6 +255,38 @@ class PAEventATTest(unittest.TestCase):
         self.assertTrue(acc.end == dt_2_2)
 
         self.portal.manage_delObjects(['ate1'])
+
+
+class PAEventCMFEditTest(unittest.TestCase):
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.portal = portal
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        set_env_timezone(TZNAME)
+
+    def testEventCreate(self):
+        self.portal.invokeFactory('Event', id='event',
+                                  title='Foo',
+                                  start_date='2003-09-18',
+                                  end_date='2003-09-19')
+        self.assertEqual(self.portal.event.Title(), 'Foo')
+        self.assertTrue(self.portal.event.start().ISO8601() \
+                            .startswith('2003-09-18T00:00:00'))
+        self.assertTrue(self.portal.event.end().ISO8601() \
+                            .startswith('2003-09-19T00:00:00'))
+
+    def testEventEdit(self):
+        self.portal.invokeFactory('Event', id='event')
+        self.portal.event.event_edit(title='Foo',
+                                     start_date='2003-09-18',
+                                     end_date='2003-09-19')
+        self.assertEqual(self.portal.event.Title(), 'Foo')
+        self.assertTrue(self.portal.event.start().ISO8601() \
+                            .startswith('2003-09-18T00:00:00'))
+        self.assertTrue(self.portal.event.end().ISO8601() \
+                            .startswith('2003-09-19T00:00:00'))
 
 
 class PAEventATFieldTest(unittest.TestCase):
