@@ -9,24 +9,19 @@
   <i18n:registerTranslations directory="locales" />
 
   <!-- external dependencies -->
-
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
   <include package="plone.formwidget.datetime" />
   <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
 
-
   <!-- internal dependencies -->
-
-  <!-- pre plone 4.4 integration -->
   <configure zcml:condition="not-have plone-44">
+    <!-- pre plone 4.4 integration -->
     <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
   </configure>
-
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
-
   <include package=".browser" />
   <include package=".portlets" />
   <include package=".ical" />

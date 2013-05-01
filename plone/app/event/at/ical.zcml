@@ -3,19 +3,15 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <!-- configure zcml:condition="not-installed plone.app.collection" -->
-      <!-- if plone.app.collection is not installed, register the adapter for
-           IATTopic (Pre Plone 4.2) -->
-      <adapter factory="..ical.exporter.calendar_from_collection"
-          provides="plone.event.interfaces.IICalendar"
-          for="Products.ATContentTypes.interfaces.IATTopic"
-          />
-      <browser:page
-          for="Products.ATContentTypes.interfaces.IATTopic"
-          name="ics_view"
-          class="..ical.exporter.EventsICal"
-          permission="zope2.View"
-          />
-    <!-- /configure -->
+  <adapter factory="..ical.exporter.calendar_from_collection"
+      provides="plone.event.interfaces.IICalendar"
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      />
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      name="ics_view"
+      class="..ical.exporter.EventsICal"
+      permission="zope2.View"
+      />
 
 </configure>
