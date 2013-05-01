@@ -95,6 +95,7 @@ setup(name='plone.app.event',
           ],
           'test': [
               'plone.app.event [archetypes, dexterity]',
+              'plone.app.collection',
               'plone.app.testing',
               'plone.testing',
               'transaction',
