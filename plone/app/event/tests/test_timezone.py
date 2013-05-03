@@ -1,7 +1,8 @@
 from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.testing import set_timezone, set_env_timezone
+from plone.app.event.testing import set_env_timezone
+from plone.app.event.testing import set_timezone
 from plone.event.utils import default_timezone as os_default_timezone
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility

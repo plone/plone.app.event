@@ -9,8 +9,11 @@ from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
-from plone.event.interfaces import IEvent, IEventRecurrence, IOccurrence
-from plone.event.interfaces import IEventAccessor, IRecurrenceSupport
+from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventRecurrence
+from plone.event.interfaces import IOccurrence
+from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry

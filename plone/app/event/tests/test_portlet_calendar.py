@@ -14,8 +14,10 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
-from zope.component import getUtility, getMultiAdapter
-from zope.component.hooks import setHooks, setSite
+from zope.component import getUtility
+from zope.component import getMultiAdapter
+from zope.component.hooks import setHooks
+from zope.component.hooks import setSite
 
 import unittest2 as unittest
 

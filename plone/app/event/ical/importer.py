@@ -5,7 +5,8 @@
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import is_date, date_to_datetime
+from plone.event.utils import date_to_datetime
+from plone.event.utils import is_date
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent

@@ -18,8 +18,10 @@ from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.event.interfaces import IEvent, IRecurrenceSupport, IOccurrence
+from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IOccurrence
+from plone.event.interfaces import IRecurrenceSupport
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify

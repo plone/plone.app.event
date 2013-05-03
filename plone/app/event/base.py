@@ -11,18 +11,23 @@ from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.event.vocabularies import replacement_zones
 from plone.app.layout.navigation.root import getNavigationRootObject
-from plone.event.interfaces import IEvent, IEventRecurrence
-from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
+from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventRecurrence
+from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import default_timezone as fallback_default_timezone
-from plone.event.utils import is_same_day, is_same_time
+from plone.event.utils import is_same_day
+from plone.event.utils import is_same_time
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.component import adapts
-from zope.component import getUtility, queryUtility
+from zope.component import getUtility
+from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.deprecation import deprecate
-from zope.interface import implements, Interface
+from zope.interface import Interface
+from zope.interface import implements
 
 import pytz
 
