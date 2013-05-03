@@ -1,6 +1,3 @@
-import itertools
-import pytz
-import unittest2 as unittest
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import IATEvent as IATEvent_ATCT
 from Products.ATContentTypes.tests.utils import EmailValidator
@@ -13,25 +10,27 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from datetime import datetime
+from plone.app.event.at.content import default_end
+from plone.app.event.at.content import default_start
+from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
+from plone.app.event.base import default_timezone
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import pydt
+from plone.formwidget.datetime.at import DatetimeWidget
+from plone.formwidget.recurrence.at.widget import RecurrenceValidator
+from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from zope.event import notify
 from zope.interface.verify import verifyObject
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.formwidget.datetime.at import DatetimeWidget
-from plone.formwidget.recurrence.at.widget import RecurrenceWidget
-from plone.formwidget.recurrence.at.widget import RecurrenceValidator
-
-from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
-from plone.app.event.base import default_timezone
-from plone.app.event.at.content import default_start
-from plone.app.event.at.content import default_end
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import set_env_timezone
-from plone.event.interfaces import IEvent, IEventRecurrence
-from plone.event.interfaces import IEventAccessor
-from plone.event.utils import pydt
+import itertools
+import pytz
+import unittest2 as unittest
 
 
 TZNAME = "Europe/Vienna"

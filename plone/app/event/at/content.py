@@ -1,39 +1,35 @@
-from zope.component import adapts
-from zope.interface import implements
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
-
-from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
-
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import View
-from Products.CMFPlone.utils import safe_unicode
+from DateTime import DateTime
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes import ATCTMessageFactory as _
-
-from plone.formwidget.recurrence.at.widget import RecurrenceWidget
-from plone.formwidget.datetime.at import DatetimeWidget
-from plone.uuid.interfaces import IUUID
-
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFPlone.utils import safe_unicode
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence
-from plone.event.interfaces import IEvent
-from plone.event.interfaces import IEventAccessor
-from plone.event.utils import utc
 from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
+from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
+from plone.event.utils import utc
+from plone.formwidget.datetime.at import DatetimeWidget
+from plone.formwidget.recurrence.at.widget import RecurrenceWidget
+from plone.uuid.interfaces import IUUID
+from zope.component import adapts
+from zope.event import notify
+from zope.interface import implements
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 def default_start():

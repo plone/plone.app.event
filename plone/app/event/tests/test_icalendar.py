@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import unittest2 as unittest
 from datetime import datetime
+from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
@@ -8,7 +8,7 @@ from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
+import unittest2 as unittest
 
 
 # TODO:

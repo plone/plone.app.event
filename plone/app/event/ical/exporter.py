@@ -1,19 +1,20 @@
-import icalendar
 from Acquisition import aq_inner
+from Products.ZCatalog.interfaces import ICatalogBrain
 from datetime import datetime
 from datetime import timedelta
-from plone.uuid.interfaces import IUUID
-from zope.interface import implementer
-from zope.interface import implements
-from zope.publisher.browser import BrowserView
+from plone.app.event.base import default_timezone
+from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
 from plone.event.utils import pydt, utc
-from plone.app.event.base import default_timezone
-from plone.app.event.base import get_events
 from plone.event.utils import tzdel
-from Products.ZCatalog.interfaces import ICatalogBrain
+from plone.uuid.interfaces import IUUID
+from zope.interface import implementer
+from zope.interface import implements
+from zope.publisher.browser import BrowserView
+
+import icalendar
 import pytz
 
 

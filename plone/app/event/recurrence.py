@@ -1,20 +1,17 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
+from Products.CMFPlone.utils import safe_unicode
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from plone.app.event.base import guess_date_from
+from plone.event.interfaces import IEventAccessor
+from plone.event.interfaces import IEventRecurrence
+from plone.event.interfaces import IOccurrence
+from plone.event.interfaces import IRecurrenceSupport
+from plone.event.recurrence import recurrence_sequence_ical
+from plone.event.utils import is_same_day
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from Products.CMFPlone.utils import safe_unicode
-
-from plone.event.recurrence import recurrence_sequence_ical
-from plone.event.interfaces import (
-        IEventRecurrence,
-        IEventAccessor,
-        IRecurrenceSupport,
-        IOccurrence
-)
-from plone.event.utils import is_same_day
-from plone.app.event.base import guess_date_from
 
 
 class RecurrenceSupport(object):

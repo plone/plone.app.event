@@ -1,6 +1,9 @@
-import unittest2 as unittest
 from DateTime import DateTime
 from Products.GenericSetup.utils import _getDottedName
+from plone.app.event.portlets import portlet_events
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -12,10 +15,7 @@ from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setHooks, setSite
 
-from plone.app.event.portlets import portlet_events
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.testing import set_timezone
+import unittest2 as unittest
 
 
 class PortletTest(unittest.TestCase):

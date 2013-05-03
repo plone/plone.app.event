@@ -1,12 +1,12 @@
-from zope import schema
-from zope.interface import Interface
-from zope.interface import Attribute
-
-from plone.event.utils import default_timezone as fallback_default_timezone
 from plone.app.event import messageFactory as _
+from plone.event.utils import default_timezone as fallback_default_timezone
+from zope import schema
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
 ISO_DATE_FORMAT = '%Y-%m-%d'
+
 
 class IICalendarImportEnabled(Interface):
     """Marker interface for contexts, where icalendar import is enabled.

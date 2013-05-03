@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest2 as unittest
-from calendar import monthrange
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
+from calendar import monthrange
+from plone.app.event.base import localized_today
+from plone.app.event.portlets import portlet_calendar
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.portlets.interfaces import IPortletAssignment
@@ -14,10 +17,7 @@ from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility, getMultiAdapter
 from zope.component.hooks import setHooks, setSite
 
-from plone.app.event.base import localized_today
-from plone.app.event.portlets import portlet_calendar
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+import unittest2 as unittest
 
 
 class PortletTest(unittest.TestCase):

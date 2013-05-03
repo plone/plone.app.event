@@ -1,12 +1,10 @@
-from zope.publisher.browser import BrowserView
+from plone.app.event import messageFactory as _
+from plone.app.event.base import localized_now
+from plone.app.event.interfaces import IEventSettings
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
-
 from plone.z3cform import layout
-
-from plone.app.event import messageFactory as _
-from plone.app.event.interfaces import IEventSettings
-from plone.app.event.base import localized_now
+from zope.publisher.browser import BrowserView
 
 
 class EventControlPanelEditForm(RegistryEditForm):

@@ -1,6 +1,8 @@
-import unittest2 as unittest
 from Products.CMFCore.utils import getToolByName
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+
+import unittest2 as unittest
+
 
 class TextDXIntegration(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING

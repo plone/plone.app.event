@@ -3,12 +3,13 @@ try:
 except ImportError:
     from Products.Archetypes import atapi
 
+
 packageName = __name__
+
 
 def initialize(context):
     """Register content types through Archetypes with Zope and the CMF.
     """
-
     from Products.CMFCore.utils import ContentInit
     from plone.app.event import ADD_PERMISSION
     from plone.app.event.at import content

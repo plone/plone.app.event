@@ -1,8 +1,3 @@
-import datetime
-import pytz
-import transaction
-import unittest2 as unittest
-import zope.component
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.interfaces import IATEvent
 from plone.app.event.base import get_events
@@ -21,6 +16,13 @@ from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.interfaces.browser import IBrowserView
+
+import datetime
+import pytz
+import transaction
+import unittest2 as unittest
+import zope.component
+
 
 TZNAME = "Europe/Vienna"
 

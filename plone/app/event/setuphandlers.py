@@ -1,5 +1,6 @@
-from zope.interface import implements
 from Products.CMFPlone.interfaces import INonInstallable
+from zope.interface import implements
+
 
 class HiddenProfiles(object):
     implements(INonInstallable)

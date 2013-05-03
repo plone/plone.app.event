@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
-from plone.testing.z2 import Browser
-import pytz
-import unittest2 as unittest
-
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_timezone, set_env_timezone
+from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
+from plone.testing.z2 import Browser
+
+import pytz
+import unittest2 as unittest
 
 
 class ControlpanelTest(unittest.TestCase):

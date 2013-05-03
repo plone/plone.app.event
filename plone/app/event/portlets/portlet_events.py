@@ -1,21 +1,19 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import get_events
+from plone.app.event.base import localized_now
+from plone.app.event.interfaces import ICalendarLinkbase
+from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
-from zope.contentprovider.interfaces import IContentProvider
 from zope.component import getMultiAdapter
+from zope.contentprovider.interfaces import IContentProvider
 from zope.formlib import form
 from zope.interface import implements
-
-from plone.app.event.base import get_events
-from plone.app.event.base import localized_now
-from plone.app.event.interfaces import ICalendarLinkbase
-
-from plone.app.portlets import PloneMessageFactory as _
 
 
 class IEventsPortlet(IPortletDataProvider):

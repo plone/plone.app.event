@@ -1,34 +1,33 @@
-import datetime
-import pytz
-import unittest2 as unittest
 from DateTime import DateTime
-from plone.app.layout.navigation.interfaces import INavigationRoot
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from zope.interface import directlyProvides
-from plone.event.utils import pydt
-from plone.event.interfaces import IEvent
-from plone.event.interfaces import IEventAccessor
-
-from plone.app.event.base import (
-    DEFAULT_END_DELTA,
-    DT,
-    default_end,
-    default_start,
-    default_timezone,
-    get_events,
-    construct_calendar,
-    localized_now,
-    dates_for_display
-)
 from plone.app.event import base
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.base import DEFAULT_END_DELTA
+from plone.app.event.base import DT
+from plone.app.event.base import construct_calendar
+from plone.app.event.base import dates_for_display
+from plone.app.event.base import default_end
+from plone.app.event.base import default_start
+from plone.app.event.base import default_timezone
+from plone.app.event.base import get_events
+from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.layout.navigation.interfaces import INavigationRoot
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.event.interfaces import IEvent
+from plone.event.interfaces import IEventAccessor
+from plone.event.utils import pydt
+from zope.interface import directlyProvides
+
+import datetime
+import pytz
+import unittest2 as unittest
+
 
 class TestBaseModule(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING

@@ -1,10 +1,10 @@
 from Acquisition import aq_parent
 from Products.Five.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
-from plone.event.interfaces import IRecurrenceSupport
 from plone.event.interfaces import IOccurrence
-from zope.contentprovider.interfaces import IContentProvider
+from plone.event.interfaces import IRecurrenceSupport
 from zope.component import getMultiAdapter
+from zope.contentprovider.interfaces import IContentProvider
 
 
 class EventView(BrowserView):

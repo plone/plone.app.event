@@ -1,11 +1,13 @@
+from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 
 import datetime
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-
 import logging
+
+
 logger = logging.getLogger(name="plone.app.event test_events_listing")
+
 
 class TestEventsListingDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING

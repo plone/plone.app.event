@@ -1,21 +1,18 @@
+from Products.CMFPlone.PloneBatch import Batch
+from Products.Five.browser import BrowserView
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
-
-from Products.CMFPlone.PloneBatch import Batch
-from Products.Five.browser import BrowserView
-from zope.component import getMultiAdapter
-from zope.contentprovider.interfaces import IContentProvider
-
+from plone.app.event import messageFactory as _
 from plone.app.event.base import date_speller
 from plone.app.event.base import get_events
-from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
+from plone.app.event.base import start_end_from_mode
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.memoize import view
-
-from plone.app.event import messageFactory as _
+from zope.component import getMultiAdapter
+from zope.contentprovider.interfaces import IContentProvider
 
 
 class EventListing(BrowserView):

@@ -2,45 +2,43 @@
 types.
 
 """
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import safe_unicode
 from datetime import tzinfo, timedelta
 from plone.app.dexterity.behaviors.metadata import ICategorization
+from plone.app.event import messageFactory as _
+from plone.app.event.base import DT
+from plone.app.event.base import default_end as default_end_dt
+from plone.app.event.base import default_start as default_start_dt
+from plone.app.event.base import default_timezone
+from plone.app.event.base import dt_end_of_day
+from plone.app.event.base import dt_start_of_day
+from plone.app.event.base import first_weekday
+from plone.app.event.base import wkday_to_mon1
+from plone.app.event.dx import ParameterizedWidgetFactory
+from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
+from plone.autoform import directives as form
+from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, dt_to_zone
 from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
+from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import safe_unicode
-import pytz
+from z3c.form.widget import ComputedWidgetAttribute
 from zope import schema
 from zope.component import adapts
+from zope.component import provideAdapter
+from zope.event import notify
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant, Invalid
-from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.app.event import messageFactory as _
-from plone.app.event.base import default_timezone
-from plone.app.event.base import default_end as default_end_dt
-from plone.app.event.base import default_start as default_start_dt
-from plone.app.event.base import DT
-from plone.app.event.base import dt_start_of_day
-from plone.app.event.base import dt_end_of_day
-from plone.app.event.base import first_weekday
-from plone.app.event.base import wkday_to_mon1
-from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.event.dx import ParameterizedWidgetFactory
-
-from plone.autoform import directives as form
-from plone.autoform.interfaces import IFormFieldProvider
-from plone.supermodel import model
-
-from zope.component import provideAdapter
-from z3c.form.widget import ComputedWidgetAttribute
+import pytz
 
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform

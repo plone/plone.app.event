@@ -6,7 +6,9 @@ from Products.contentmigration.migrator import InlineFieldActionMigrator
 from Products.contentmigration.walker import CustomQueryWalker
 from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
 from transaction import savepoint
+
 import logging
+
 
 logger = logging.getLogger('plone.app.event.at migration')
 

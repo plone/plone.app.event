@@ -1,32 +1,31 @@
-from calendar import monthrange
-from datetime import date
-from datetime import datetime
-from datetime import timedelta
-
-import pytz
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
 from Products.CMFPlone.utils import safe_callable
-from plone.app.layout.navigation.root import getNavigationRootObject
-from plone.event.interfaces import IEvent, IEventRecurrence
-from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
-from plone.event.utils import default_timezone as fallback_default_timezone
-from plone.event.utils import validated_timezone
-from plone.event.utils import pydt
-from plone.event.utils import is_same_day, is_same_time
-from plone.registry.interfaces import IRegistry
-from zope.component import adapts
-from zope.component import getUtility, queryUtility
-from zope.component.hooks import getSite
-from zope.interface import implements, Interface
-
+from calendar import monthrange
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.event.vocabularies import replacement_zones
-
+from plone.app.layout.navigation.root import getNavigationRootObject
+from plone.event.interfaces import IEvent, IEventRecurrence
+from plone.event.interfaces import IRecurrenceSupport, IEventAccessor
+from plone.event.utils import default_timezone as fallback_default_timezone
+from plone.event.utils import is_same_day, is_same_time
+from plone.event.utils import pydt
+from plone.event.utils import validated_timezone
+from plone.registry.interfaces import IRegistry
+from zope.component import adapts
+from zope.component import getUtility, queryUtility
+from zope.component.hooks import getSite
 from zope.deprecation import deprecate
+from zope.interface import implements, Interface
+
+import pytz
+
 
 DEFAULT_END_DELTA = 1 # hours
 FALLBACK_TIMEZONE = 'UTC'

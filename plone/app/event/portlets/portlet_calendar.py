@@ -1,23 +1,24 @@
-import calendar
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import first_weekday
+from plone.app.event.base import get_events, construct_calendar
+from plone.app.event.base import localized_today
+from plone.app.event.base import wkday_to_mon1
+from plone.app.event.interfaces import ICalendarLinkbase
+from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.formlib import form
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
-from plone.event.interfaces import IEventAccessor
-from plone.app.event.base import first_weekday
-from plone.app.event.base import get_events, construct_calendar
-from plone.app.event.base import localized_today
-from plone.app.event.base import wkday_to_mon1
-from plone.app.event.interfaces import ICalendarLinkbase
+import calendar
 
-from plone.app.portlets import PloneMessageFactory as _
+
 PLMF = MessageFactory('plonelocales')
 
 

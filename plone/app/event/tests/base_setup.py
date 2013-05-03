@@ -1,14 +1,14 @@
-import datetime
-import zope.component
-from plone.app.event.base import (
-    default_timezone,
-    localized_now,
-)
-from plone.registry.interfaces import IRegistry
+from plone.app.event.base import default_timezone
+from plone.app.event.base import localized_now
+from plone.app.event.interfaces import IEventSettings
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-from plone.app.event.interfaces import IEventSettings
+from plone.registry.interfaces import IRegistry
+
+import datetime
 import unittest2 as unittest
+import zope.component
+
 
 class AbstractSampleDataEvents(unittest.TestCase):
     layer = None # Set the plone.app.testing layer in concrete implementation

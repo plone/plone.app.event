@@ -1,9 +1,20 @@
-import pytz
-import unittest2 as unittest
-import zope.interface
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
+from plone.app.event.base import get_events
+from plone.app.event.base import localized_now
+from plone.app.event.dx.behaviors import IEventBasic
+from plone.app.event.dx.behaviors import IEventRecurrence
+from plone.app.event.dx.behaviors import StartBeforeEnd
+from plone.app.event.dx.behaviors import default_end
+from plone.app.event.dx.behaviors import default_start
+from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx.interfaces import IDXEventAttendees
+from plone.app.event.dx.interfaces import IDXEventContact
+from plone.app.event.dx.interfaces import IDXEventLocation
+from plone.app.event.dx.interfaces import IDXEventRecurrence
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.interfaces import IDexterityFTI
@@ -14,24 +25,9 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.app.event.base import get_events
-from plone.app.event.base import localized_now
-from plone.app.event.dx.behaviors import (
-    default_start,
-    default_end,
-    StartBeforeEnd,
-    IEventBasic,
-    IEventRecurrence,
-)
-from plone.app.event.dx.interfaces import (
-    IDXEvent,
-    IDXEventRecurrence,
-    IDXEventLocation,
-    IDXEventAttendees,
-    IDXEventContact
-)
-from plone.app.event.testing import set_env_timezone
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+import pytz
+import unittest2 as unittest
+import zope.interface
 
 
 TZNAME = "Europe/Vienna"
