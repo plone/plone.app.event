@@ -3,8 +3,9 @@ types.
 
 """
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import safe_unicode
-from datetime import tzinfo, timedelta
+from Products.CMFPlone.utils import safe_unicode
+from datetime import timedelta
+from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
 from plone.app.event.base import DT
@@ -35,7 +36,8 @@ from zope.component import provideAdapter
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.interface import implements
-from zope.interface import invariant, Invalid
+from zope.interface import invariant
+from zope.interface import Invalid
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytz
