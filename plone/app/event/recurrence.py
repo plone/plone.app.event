@@ -4,6 +4,7 @@ from ZPublisher.BaseRequest import DefaultPublishTraverse
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from Products.CMFPlone.utils import safe_unicode
 
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.interfaces import (
@@ -132,4 +133,4 @@ class EventOccurrenceAccessor(object):
 
     @property
     def url(self):
-        return self.context.absolute_url()
+        return safe_unicode(self.context.absolute_url())

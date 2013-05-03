@@ -4,8 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Let IEventAccessor adapters set/get all basestring values in unicode.
+  [thet]
+
 - Add and install plone.app.collection in test environment, as we cannot assume
   that it's installed.
+  [thet]
 
 - Re-Add cmf_edit method for ATEvent to ensure better backwards compatibility.
   Move related cmf_edit tests from Products.CMFPlone to plone.app.event.

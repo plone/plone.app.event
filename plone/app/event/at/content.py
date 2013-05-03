@@ -8,6 +8,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
+from Products.CMFPlone.utils import safe_unicode
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
@@ -565,7 +566,7 @@ class EventAccessor(object):
 
     @property
     def url(self):
-        return self.context.absolute_url()
+        return safe_unicode(self.context.absolute_url())
 
     @property
     def created(self):
@@ -582,17 +583,17 @@ class EventAccessor(object):
     # rw properties not in behaviors (yet) # TODO revisit
     @property
     def title(self):
-        return getattr(self.context, 'title', None)
+        return safe_unicode(getattr(self.context, 'title', None))
     @title.setter
     def title(self, value):
-        setattr(self.context, 'title', value)
+        setattr(self.context, 'title', safe_unicode(value))
 
     @property
     def description(self):
-        return self.context.Description()
+        return safe_unicode(self.context.Description())
     @description.setter
     def description(self, value):
-        self.context.setDescription(value)
+        self.context.setDescription(safe_unicode(value))
 
     @property
     def start(self):
@@ -617,24 +618,24 @@ class EventAccessor(object):
 
     @property
     def timezone(self):
-        return self.context.getTimezone()
+        return safe_unicode(self.context.getTimezone())
     @timezone.setter
     def timezone(self, value):
-        self.context.setTimezone(value)
+        self.context.setTimezone(safe_unicode(value))
 
     @property
     def recurrence(self):
-        return self.context.getRecurrence()
+        return safe_unicode(self.context.getRecurrence())
     @recurrence.setter
     def recurrence(self, value):
-        self.context.setRecurrence(value)
+        self.context.setRecurrence(safe_unicode(value))
 
     @property
     def location(self):
-        return self.context.location
+        return safe_unicode(self.context.location)
     @location.setter
     def location(self, value):
-        self.context.setLocation(value)
+        self.context.setLocation(safe_unicode(value))
 
     @property
     def attendees(self):
@@ -646,31 +647,31 @@ class EventAccessor(object):
 
     @property
     def contact_name(self):
-        return self.context.contactName
+        return safe_unicode(self.context.contactName)
     @contact_name.setter
     def contact_name(self, value):
-        self.context.setContactName(value)
+        self.context.setContactName(safe_unicode(value))
 
     @property
     def contact_email(self):
-        return self.context.contactEmail
+        return safe_unicode(self.context.contactEmail)
     @contact_email.setter
     def contact_email(self, value):
-        self.context.setContactEmail(value)
+        self.context.setContactEmail(safe_unicode(value))
 
     @property
     def contact_phone(self):
-        return self.context.contactPhone
+        return safe_unicode(self.context.contactPhone)
     @contact_phone.setter
     def contact_phone(self, value):
-        self.context.setContactPhone(value)
+        self.context.setContactPhone(safe_unicode(value))
 
     @property
     def event_url(self):
-        return self.context.eventUrl
+        return safe_unicode(self.context.eventUrl)
     @event_url.setter
     def event_url(self, value):
-        self.context.setEventUrl(value)
+        self.context.setEventUrl(safe_unicode(value))
 
     @property
     def subjects(self):
@@ -682,7 +683,7 @@ class EventAccessor(object):
 
     @property
     def text(self):
-        return self.context.getText()
+        return safe_unicode(self.context.getText())
     @text.setter
     def text(self, value):
-        self.context.setText(value)
+        self.context.setText(safe_unicode(value))

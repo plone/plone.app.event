@@ -13,6 +13,7 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import safe_unicode
 import pytz
 from zope import schema
 from zope.component import adapts
@@ -461,14 +462,14 @@ class EventAccessor(object):
         bm = self._behavior_map
         if name in bm: # adapt object with behavior and return the attribute
            behavior = bm[name](self.context, None)
-           if behavior: return getattr(behavior, name, None)
+           if behavior: return safe_unicode(getattr(behavior, name, None))
         return None
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
         if name in bm: # set the attributes on behaviors
             behavior = bm[name](self.context, None)
-            if behavior: setattr(behavior, name, value)
+            if behavior: setattr(behavior, name, safe_unicode(value))
 
     def __delattr__(self, name):
         bm = self._behavior_map
@@ -485,7 +486,7 @@ class EventAccessor(object):
 
     @property
     def url(self):
-        return self.context.absolute_url()
+        return safe_unicode(self.context.absolute_url())
 
     @property
     def created(self):
@@ -502,17 +503,17 @@ class EventAccessor(object):
     # rw properties not in behaviors (yet) # TODO revisit
     @property
     def title(self):
-        return getattr(self.context, 'title', None)
+        return safe_unicode(getattr(self.context, 'title', None))
     @title.setter
     def title(self, value):
-        setattr(self.context, 'title', value)
+        setattr(self.context, 'title', safe_unicode(value))
 
     @property
     def description(self):
-        return getattr(self.context, 'description', None)
+        return safe_unicode(getattr(self.context, 'description', None))
     @description.setter
     def description(self, value):
-        setattr(self.context, 'description', value)
+        setattr(self.context, 'description', safe_unicode(value))
 
     @property
     def text(self):
@@ -520,8 +521,8 @@ class EventAccessor(object):
         textvalue = getattr(behavior, 'text', None)
         if textvalue is None:
             return u''
-        return textvalue.output
+        return safe_unicode(textvalue.output)
     @text.setter
     def text(self, value):
         behavior = IEventSummary(self.context)
-        behavior.text = RichTextValue(raw=value)
+        behavior.text = RichTextValue(raw=safe_unicode(value))
