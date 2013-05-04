@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Deprecate upgrade_step_2 to plone.app.event beta 2, which is likely not
+  necessary for any existing plone.app.event installation out there.
+  [thet]
+
 - For the Archetypes based ATEvent migration step, do a transaction.commit()
   before each migration to commit previous changes. This avoids running out of
   space for large migrations.

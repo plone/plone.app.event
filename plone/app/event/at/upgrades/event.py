@@ -6,6 +6,7 @@ from Products.contentmigration.migrator import InlineFieldActionMigrator
 from Products.contentmigration.walker import CustomQueryWalker
 from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
 from transaction import savepoint
+from zope.deprecation import deprecate
 
 import transaction
 import logging
@@ -46,6 +47,9 @@ def upgrade_step_1(context):
     walker.go()
     return walker.getOutput()
 
+@deprecate('upgrade_step_2 is an migration step between beta releases of '
+           'plone.app.event and likely not neccessary for any installation. '
+           'It will be removed with the plone.app.event 1.0 release.')
 def upgrade_step_2(context):
     """Upgrade timezone and recurrence from AnnotationStorage to new storage
     (AttributeStorage).
