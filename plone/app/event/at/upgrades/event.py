@@ -7,6 +7,7 @@ from Products.contentmigration.walker import CustomQueryWalker
 from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
 from transaction import savepoint
 
+import transaction
 import logging
 
 
@@ -26,6 +27,9 @@ class PAEATInlineMigrator(InlineFieldActionMigrator):
     dst_meta_type = 'ATEvent'
 
 def callBefore(oldobj):
+    transaction.commit() # Do a commit before each migration, commiting the
+                         # previous changes to avoid running out of space for
+                         # large migrations.
     if 'portal_factory' in oldobj.getPhysicalPath():
         logger.info('Skipping factory obj: {0}'.format(
             '/'.join(oldobj.getPhysicalPath())))
