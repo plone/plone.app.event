@@ -628,14 +628,14 @@ class EventAccessor(object):
 
     @property
     def location(self):
-        return safe_unicode(self.context.location)
+        return safe_unicode(self.context.getLocation())
     @location.setter
     def location(self, value):
         self.context.setLocation(safe_unicode(value))
 
     @property
     def attendees(self):
-        return self.context.attendees
+        return self.context.getAttendees()
     @attendees.setter
     def attendees(self, value):
         if value:
@@ -643,28 +643,28 @@ class EventAccessor(object):
 
     @property
     def contact_name(self):
-        return safe_unicode(self.context.contactName)
+        return safe_unicode(self.context.getContactName())
     @contact_name.setter
     def contact_name(self, value):
         self.context.setContactName(safe_unicode(value))
 
     @property
     def contact_email(self):
-        return safe_unicode(self.context.contactEmail)
+        return safe_unicode(self.context.getContactEmail())
     @contact_email.setter
     def contact_email(self, value):
         self.context.setContactEmail(safe_unicode(value))
 
     @property
     def contact_phone(self):
-        return safe_unicode(self.context.contactPhone)
+        return safe_unicode(self.context.getContactPhone())
     @contact_phone.setter
     def contact_phone(self, value):
         self.context.setContactPhone(safe_unicode(value))
 
     @property
     def event_url(self):
-        return safe_unicode(self.context.eventUrl)
+        return safe_unicode(self.context.getEventUrl())
     @event_url.setter
     def event_url(self, value):
         self.context.setEventUrl(safe_unicode(value))

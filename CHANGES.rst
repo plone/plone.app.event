@@ -4,6 +4,15 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- In event_view, use the display widget to display the Location. This let's
+  show the correct value when overridden by archetypes.schemaextender.
+  [thet] 
+
+- Let EventAccessor for Archetypes based content type return it's values from
+  property accessors instead properties directly. This let's return the correct
+  value when an property get's overridden by archetypes.schemaextender.
+  [thet]
+
 - Deprecate upgrade_step_2 to plone.app.event beta 2, which is likely not
   necessary for any existing plone.app.event installation out there.
   [thet]
