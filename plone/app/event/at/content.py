@@ -1,6 +1,5 @@
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
-from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
@@ -10,6 +9,7 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Products.CMFPlone.utils import safe_unicode
+from plone.app.event import messageFactory as _
 from plone.app.event.at import atapi
 from plone.app.event.at import packageName
 from plone.app.event.at.interfaces import IATEvent, IATEventRecurrence

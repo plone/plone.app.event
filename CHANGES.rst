@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Use plone.app.event's MessageFactory for ATEvent.
+  [thet]
+
 - In event_view, use the display widget to display the Location. This let's
   show the correct value when overridden by archetypes.schemaextender.
   [thet] 
