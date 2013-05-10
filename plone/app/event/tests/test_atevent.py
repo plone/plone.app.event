@@ -64,37 +64,86 @@ class PAEventAccessorTest(unittest.TestCase):
 
     def test_event_accessor(self):
         utc = pytz.utc
+        vienna = pytz.timezone('Europe/Vienna')
+
         self.portal.invokeFactory('Event', 'event1',
                 description='a description',
-                start=datetime(2011,11,11,11,0, tzinfo=utc),
-                end=datetime(2011,11,11,12,0, tzinfo=utc),
+                startDate=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+                endDate=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
                 timezone='UTC',
                 wholeDay=False)
         e1 = self.portal['event1']
-
-        # setting attributes via the accessor
         acc = IEventAccessor(e1)
-        acc.end = datetime(2011,11,13,10,0, tzinfo=utc)
-        acc.timezone = 'Europe/Vienna'
 
-        vienna = pytz.timezone('Europe/Vienna')
+        # TEST DATES
+        self.assertEqual(acc.start, datetime(2011, 11, 11, 11, 0, tzinfo=utc))
+        self.assertEqual(acc.end, datetime(2011, 11, 11, 12, 0, tzinfo=utc))
 
-        # test description
+        acc.start = datetime(2011, 11, 13, 9, 0)  # tzinfo does not matter,
+        acc.end = datetime(2011, 11, 13, 10, 0)  # it's set by subscription
+                                                # adapter
+
+        # If using EventAccessor's edit method, calling notify isn't needed
+        acc.edit(timezone=u'Europe/Vienna')
+
+        # accessor should return start/end datetimes in the event's timezone
+        self.assertEqual(
+            acc.start,
+            datetime(2011, 11, 13, 9, 0, tzinfo=vienna))
+        self.assertEqual(
+            acc.end,
+            datetime(2011, 11, 13, 10, 0, tzinfo=vienna))
+
+        # start/end dates are stored in UTC zone on the context, but converted
+        # to event's timezone via the attribute getter.
+        self.assertEqual(
+            e1.end(),
+            DateTime('2011/11/13 10:00:00 Europe/Vienna')
+        )
+
+        # timezone should be the same on the event object and accessor
+        self.assertEqual(e1.getTimezone(), acc.timezone)
+
+        # Whole Day Test
+        acc.edit(whole_day=True)
+        self.assertEqual(
+            acc.start,
+            datetime(2011, 11, 13, 0, 0, tzinfo=vienna))
+        self.assertEqual(
+            acc.end,
+            datetime(2011, 11, 13, 23, 59, 59, tzinfo=vienna))
+
+        # TEST DESCRIPTION
         self.assertTrue(acc.description == 'a description')
         acc.description = 'another desc'
         self.assertTrue(acc.description == 'another desc')
 
-        # accessor should return end datetime in the event's timezone
-        self.assertTrue(acc.end == datetime(2011,11,13,11,0, tzinfo=vienna))
+        # TEST OTHER PROPERTIES
+        acc.title = u"An Event"
+        acc.recurrence = u'RRULE:FREQ=DAILY;COUNT=5'
+        acc.location = u"Home"
+        acc.attendees = [u'me', u'you']
+        acc.contact_name = u"Max Mustermann"
+        acc.contact_email = u"test@test.com"
+        acc.contact_phone = u"+1234567890"
+        acc.event_url = u"http://plone.org/"
+        acc.subjects = [u"tag1", u"tag2"]
+        acc.text = u"body text with <b>html</b> formating."
 
-        # start/end dates are stored in UTC zone on the context, but converted
-        # to event's timezone via the attribute getter.
-        self.assertTrue(e1.end() ==
-                DateTime('2011/11/13 11:00:00 Europe/Vienna'))
+        # If not using EventAccessor's edit method, call notify manually
+        notify(ObjectModifiedEvent(acc.context))
 
-        # timezone should be the same on the event object and accessor
-        self.assertTrue(e1.getTimezone() == acc.timezone)
+        self.assertEqual(acc.recurrence, u'RRULE:FREQ=DAILY;COUNT=5')
+        self.assertEqual(acc.location, u'Home')
+        self.assertEqual(acc.attendees, (u'me', u'you'))
+        self.assertEqual(acc.contact_name, u"Max Mustermann")
+        self.assertEqual(acc.contact_email, u'test@test.com')
+        self.assertEqual(acc.contact_phone, u"+1234567890")
+        self.assertEqual(acc.event_url, u"http://plone.org/")
+        self.assertEqual(acc.subjects, (u"tag1", u"tag2"))
+        self.assertEqual(acc.text, u"body text with <b>html</b> formating.")
 
+        # CLEANUP
         self.portal.manage_delObjects(['event1'])
 
 

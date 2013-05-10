@@ -529,7 +529,11 @@ class EventAccessor(object):
     """
     implements(IEventAccessor)
     adapts(IATEvent)
-    event_type = 'Event' # If you use a custom content-type, override this.
+    event_type = 'Event'  # If you use a custom content-type, override this.
+
+    def __init__(self, context):
+        self.context = context
+
 
     # Unified create method via Accessor
     @classmethod
@@ -553,8 +557,8 @@ class EventAccessor(object):
             setattr(self, key, value)
         notify(ObjectModifiedEvent(self.context))
 
-    def __init__(self, context):
-        self.context = context
+
+    # RO PROPERTIES
 
     @property
     def uid(self):
@@ -643,28 +647,28 @@ class EventAccessor(object):
 
     @property
     def contact_name(self):
-        return safe_unicode(self.context.getContactName())
+        return safe_unicode(self.context.contact_name())
     @contact_name.setter
     def contact_name(self, value):
         self.context.setContactName(safe_unicode(value))
 
     @property
     def contact_email(self):
-        return safe_unicode(self.context.getContactEmail())
+        return safe_unicode(self.context.contact_email())
     @contact_email.setter
     def contact_email(self, value):
         self.context.setContactEmail(safe_unicode(value))
 
     @property
     def contact_phone(self):
-        return safe_unicode(self.context.getContactPhone())
+        return safe_unicode(self.context.contact_phone())
     @contact_phone.setter
     def contact_phone(self, value):
         self.context.setContactPhone(safe_unicode(value))
 
     @property
     def event_url(self):
-        return safe_unicode(self.context.getEventUrl())
+        return safe_unicode(self.context.event_url())
     @event_url.setter
     def event_url(self, value):
         self.context.setEventUrl(safe_unicode(value))
