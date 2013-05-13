@@ -9,6 +9,17 @@ from zope.contentprovider.interfaces import IContentProvider
 
 class EventView(BrowserView):
 
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.data = IEventAccessor(context)
+
+    def get_location(self):
+        """Location can be overridden by subclasses to provide a link to a
+        location object instead of an string.
+        """
+        return self.data.location
+
     @property
     def is_occurrence(self):
         return IOccurrence.providedBy(self.context)
@@ -18,11 +29,6 @@ class EventView(BrowserView):
         if self.is_occurrence:
             return aq_parent(self.context).absolute_url()
         return None
-
-    @property
-    def data(self):
-        accessor = IEventAccessor(self.context)
-        return accessor
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
@@ -38,7 +44,7 @@ class EventView(BrowserView):
         of the occurrence list.
 
         :returns: Dictionary with ``events`` and ``tail`` as keys.
-        :rtype: dict 
+        :rtype: dict
 
         """
         occ_dict = dict(events=[], tail=None)

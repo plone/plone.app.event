@@ -65,10 +65,9 @@
         </tr>
         <tr tal:condition="data/location">
           <th i18n:translate="event_where">Where</th>
-          <td itemprop="location" class="location">
-            <metal:field use-macro="python:context.widget('location', mode='view')">
+          <td itemprop="location" class="location"
+              tal:content="view/get_location">
             Location
-            </metal:field>
           </td>
         </tr>
         <tr tal:define="contact_email data/contact_email;
