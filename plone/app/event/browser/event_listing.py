@@ -80,7 +80,7 @@ class EventListing(BrowserView):
 
     @property
     def ical(self):
-        events = self._get_events(ret_mode=2) # get as objects
+        events = self._get_events(ret_mode=2)  # get as objects
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
@@ -96,7 +96,10 @@ class EventListing(BrowserView):
                 (mode and 'mode=%s' % mode,
                  mode and date and '&' or '',
                  date and 'date=%s' % date or '') or ''
-        return '%s/@@event_listing_ical%s' % (self.context.absolute_url(), qstr)
+        return '%s/@@event_listing_ical%s' % (
+            self.context.absolute_url(),
+            qstr
+        )
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
@@ -125,7 +128,8 @@ class EventListing(BrowserView):
             main_msgid = _(u"future_events", default=u"Future events")
 
         elif mode == 'now':
-            main_msgid = _(u"todays_upcoming_events", default=u"Todays upcoming events")
+            main_msgid = _(u"todays_upcoming_events",
+                           default=u"Todays upcoming events")
 
         elif mode == 'today':
             main_msgid = _(u"todays_events", default=u"Todays events")
@@ -165,7 +169,7 @@ class EventListing(BrowserView):
                            default=u"Events in week ${weeknumber}",
                            mapping={'weeknumber': start.isocalendar()[1]})
             sub_msgid = _(u"events_from_until",
-                      default= u"${from} until ${until}.",
+                      default=u"${from} until ${until}.",
                       mapping={
                           'from': "%s, %s. %s %s" % (
                                 start_dict['wkday'],
@@ -192,7 +196,6 @@ class EventListing(BrowserView):
         trans = self.context.translate
         return {'main': main_msgid and trans(main_msgid) or '',
                 'sub': sub_msgid and trans(sub_msgid) or ''}
-
 
     # MODE URLs
     def _date_nav_url(self, mode, datestr=''):
@@ -231,7 +234,6 @@ class EventListing(BrowserView):
     def today_url(self):
         return self._date_nav_url('day')
 
-
     @property
     def prev_day_url(self):
         now = self.date or self.now
@@ -259,7 +261,7 @@ class EventListing(BrowserView):
     @property
     def next_month_url(self):
         now = self.date or self.now
-        last_day = monthrange(now.year, now.month)[1] # (wkday, days)
+        last_day = monthrange(now.year, now.month)[1]  # (wkday, days)
         datestr = (now.replace(day=last_day) +
                    timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
@@ -279,4 +281,3 @@ class EventListingIcal(EventListing):
 
     def __call__(self, *args, **kwargs):
         return self.ical
-
