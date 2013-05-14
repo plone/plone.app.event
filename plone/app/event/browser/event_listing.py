@@ -53,7 +53,6 @@ class EventListing(BrowserView):
         if self.mode == None:
             self.mode = self._date and 'day' or 'future'
 
-    @view.memoize
     @property
     def default_context(self):
         # Try to get the default page
