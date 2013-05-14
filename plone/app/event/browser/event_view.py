@@ -34,12 +34,11 @@ class EventView(BrowserView):
 
         if location and not isinstance(location, basestring) and\
             hasattr(location, 'absolute_url') and\
-            hasattr(location, 'Title') and\
-            hasattr(location, 'Description'):
+            hasattr(location, 'Title'):
             # Then I'm a reference
             location = u'<a href="%s" title="%s">%s</a>' % (
                 location.absolute_url(),
-                location.Description(),
+                self.data.location,
                 location.Title()
             )
         return location
