@@ -38,7 +38,7 @@ class EventView(BrowserView):
             # Then I'm a reference
             location = u'<a href="%s" title="%s">%s</a>' % (
                 location.absolute_url(),
-                self.data.location,
+                self.data.location,  # A meaningful title, e.g. the address
                 location.Title()
             )
         return location
