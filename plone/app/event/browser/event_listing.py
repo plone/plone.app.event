@@ -10,9 +10,19 @@ from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.ical.exporter import construct_icalendar
+from plone.app.layout.navigation.defaultpage import getDefaultPage
+from plone.event.interfaces import IEventAccessor
 from plone.memoize import view
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
+try:
+    from plone.app.collection.interfaces import ICollection
+except ImportError:
+    ICollection = None
+try:
+    from Products.ATContentTypes.interfaces import IATTopic
+except ImportError:
+    IATTopic = None
 
 
 class EventListing(BrowserView):
@@ -43,6 +53,26 @@ class EventListing(BrowserView):
         if self.mode == None:
             self.mode = self._date and 'day' or 'future'
 
+    @view.memoize
+    @property
+    def default_context(self):
+        # Try to get the default page
+        context = self.context
+        default = getDefaultPage(context)
+        if default:
+            context = context[default]
+        return context
+
+    @property
+    def is_collection(self):
+        ctx = self.default_context
+        return ICollection and ICollection.providedBy(ctx) or False
+
+    @property
+    def is_topic(self):
+        ctx = self.default_context
+        return IATTopic and IATTopic.providedBy(ctx) or False
+
     @property
     def date(self):
         dt = None
@@ -71,16 +101,32 @@ class EventListing(BrowserView):
         return get_events(context, start=start, end=end,
                           ret_mode=ret_mode, expand=True, **kw)
 
-    @property
-    def events(self):
-        res = self._get_events()
-        b_start = self.b_start
-        b_size  = self.b_size
-        return Batch(res, size=b_size, start=b_start, orphan=self.orphan)
+    def events(self, ret_mode=3, batch=True):
+        res = []
+        is_col = self.is_collection
+        is_top = self.is_topic
+        if is_col or is_top:
+            ctx = self.default_context
+            if is_col:
+                res = ctx.results(batch=False, sort_on='start', brains=False)
+            else:
+                res = ctx.queryCatalog(
+                    REQUEST=self.request, batch=False, full_objects=True
+                )
+            # TODO: uff, we have to walk through all results...
+            if ret_mode == 3:
+                res = [IEventAccessor(obj) for obj in res]
+        else:
+            res = self._get_events(ret_mode)
+        if batch:
+            b_start = self.b_start
+            b_size  = self.b_size
+            res = Batch(res, size=b_size, start=b_start, orphan=self.orphan)
+        return res
 
     @property
     def ical(self):
-        events = self._get_events(ret_mode=2)  # get as objects
+        events = self.events(ret_mode=2, batch=False)  # get as objects
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')

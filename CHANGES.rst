@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Let the @@event_listing view work on IATTopic and ICollection contexts.
+  [thet]
+
 - In event_view, handle the case that the location field is not of type
   basestring but a reference to another object, for example provided by
   collective.venue.
