@@ -5,6 +5,9 @@ from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
+from plone.app.event.at.interfaces import IATEvent
+from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx.behaviors import IEventLocation
 
 
 class EventView(BrowserView):
@@ -15,10 +18,31 @@ class EventView(BrowserView):
         self.data = IEventAccessor(context)
 
     def get_location(self):
-        """Location can be overridden by subclasses to provide a link to a
-        location object instead of an string.
+        """In case location is not of type basestring, it's propably a
+        reference, which case we handle here.
         """
-        return self.data.location
+        context = self.context
+
+        # Get the original location directly from the context, as in case of
+        # reference, the accessor might return an string representing the
+        # location instead of the referenced object.
+        location = None
+        if IATEvent.providedBy(context):
+            location = context.getLocation()
+        elif IDXEvent.providedBy(context):
+            location = IEventLocation(context).location
+
+        if location and not isinstance(location, basestring) and\
+            hasattr(location, 'absolute_url') and\
+            hasattr(location, 'Title') and\
+            hasattr(location, 'Description'):
+            # Then I'm a reference
+            location = u'<a href="%s" title="%s">%s</a>' % (
+                location.absolute_url(),
+                location.Description(),
+                location.Title()
+            )
+        return location
 
     @property
     def is_occurrence(self):
@@ -51,7 +75,7 @@ class EventView(BrowserView):
         context = self.context
         adapter = IRecurrenceSupport(context, None)
         if adapter is not None:
-            occurrences = adapter.occurrences()[1:] # don't include first
+            occurrences = adapter.occurrences()[1:]  # don't include first
             occ_dict['events'], occ_dict['tail'] = (
                     self._get_occurrences_helper(occurrences)
                 )

@@ -4,12 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Use plone.app.event's MessageFactory for ATEvent.
+- In event_view, handle the case that the location field is not of type
+  basestring but a reference to another object, for example provided by
+  collective.venue.
   [thet]
 
-- In event_view, use the display widget to display the Location. This let's
-  show the correct value when overridden by archetypes.schemaextender.
-  [thet] 
+- Use plone.app.event's MessageFactory for ATEvent.
+  [thet]
 
 - Let EventAccessor for Archetypes based content type return it's values from
   property accessors instead properties directly. This let's return the correct
@@ -86,7 +87,7 @@ Changelog
   In ical:
     * Renamed construct_calendar to construct_icalendar to avoid same name as
       in base.py.
-  
+
   BBB code will be removed with 1.0.
   [thet]
 
