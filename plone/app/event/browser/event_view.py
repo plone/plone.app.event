@@ -7,7 +7,6 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 from plone.app.event.at.interfaces import IATEvent
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.event.dx.behaviors import IEventLocation
 
 
 class EventView(BrowserView):
@@ -30,6 +29,7 @@ class EventView(BrowserView):
         if IATEvent.providedBy(context):
             location = context.getLocation()
         elif IDXEvent.providedBy(context):
+            from plone.app.event.dx.behaviors import IEventLocation
             location = IEventLocation(context).location
 
         if location and not isinstance(location, basestring) and\
