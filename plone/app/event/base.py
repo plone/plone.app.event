@@ -32,7 +32,7 @@ from zope.interface import implements
 import pytz
 
 
-DEFAULT_END_DELTA = 1 # hours
+DEFAULT_END_DELTA = 1  # hours
 FALLBACK_TIMEZONE = 'UTC'
 
 
@@ -107,7 +107,8 @@ def get_events(context, start=None, end=None, limit=None,
     if not expand:
         # Expanded results will be sorted later.
         query['sort_on'] = sort
-        if sort_reverse: query['sort_order'] = 'reverse'
+        if sort_reverse:
+            query['sort_order'] = 'reverse'
 
     if limit:
         query['sort_limit'] = limit
@@ -117,12 +118,13 @@ def get_events(context, start=None, end=None, limit=None,
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
 
-
+    # Helper functions
     def _obj_or_acc(obj, ret_mode):
         if ret_mode == 2:
             return obj
         elif ret_mode == 3:
             return IEventAccessor(obj)
+
     def _get_compare_attr(obj, attr):
         val = getattr(obj, attr, None)
         if safe_callable(val):
@@ -230,7 +232,7 @@ def default_timezone(context=None, as_tzinfo=False):
     if not context: context = getSite()
 
     membership = getToolByName(context, 'portal_membership', None)
-    if membership and not membership.isAnonymousUser(): # the user has not logged in
+    if membership and not membership.isAnonymousUser():  # user not logged in
         member = membership.getAuthenticatedMember()
         member_timezone = member.getProperty('timezone', None)
         if member_timezone:
@@ -239,7 +241,7 @@ def default_timezone(context=None, as_tzinfo=False):
     portal_timezone = None
     reg = queryUtility(IRegistry, context=context, default=None)
     if reg:
-        portal_timezone= reg.forInterface(
+        portal_timezone = reg.forInterface(
                 IEventSettings, prefix="plone.app.event").portal_timezone
 
     # fallback to what plone.event is doing
@@ -315,10 +317,10 @@ def wkday_to_mon0(day):
     :rtype: integer
 
     """
-    if day==0:
+    if day == 0:
         return 6
     else:
-        return day-1
+        return day - 1
 
 
 def wkday_to_mon1(day):
@@ -333,10 +335,10 @@ def wkday_to_mon1(day):
     :rtype: integer
 
     """
-    if day==6:
+    if day == 6:
         return 0
     else:
-        return day+1
+        return day + 1
 
 
 def DT(dt):
@@ -353,9 +355,11 @@ def DT(dt):
     if isinstance(dt, datetime):
         zone_id = getattr(dt.tzinfo, 'zone', tz)
         tz = validated_timezone(zone_id, tz)
-        ret = DateTime(dt.year, dt.month, dt.day,\
-                        dt.hour, dt.minute, dt.second+dt.microsecond/1000000.0,
-                        tz)
+        ret = DateTime(
+            dt.year, dt.month, dt.day,\
+            dt.hour, dt.minute, dt.second + dt.microsecond / 1000000.0,
+            tz
+        )
     elif isinstance(dt, date):
         ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
@@ -400,6 +404,7 @@ def dt_start_of_day(dt):
         # is a date
         dt = datetime.fromordinal(dt.toordinal())
     return dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
 
 def dt_end_of_day(dt):
     """Returns a Python datetime instance set to the end time of the given day
@@ -463,31 +468,31 @@ def start_end_from_mode(mode, dt=None, context=None):
 
     elif mode == '7days':
         start = now
-        end = dt_end_of_day(now+timedelta(days=6))
+        end = dt_end_of_day(now + timedelta(days=6))
 
-    elif mode == 'day' or mode =='today':
-        if not dt: dt = now # show today
+    elif mode == 'day' or mode == 'today':
+        if not dt: dt = now  # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
 
     elif mode == 'week':
-        if not dt: dt = now # show this week
+        if not dt: dt = now  # show this week
         wkd = dt.weekday()
         first = first_weekday()
 
         if first <= wkd:
-            delta = wkd - first # >= 0
+            delta = wkd - first  # >= 0
         if first > wkd:
-            delta = wkd + 7 - first # > 0
+            delta = wkd + 7 - first  # > 0
 
         start = dt_start_of_day(dt - timedelta(days=delta))
         end = dt_end_of_day(start + timedelta(days=6))
 
-    elif mode =='month':
-        if not dt: dt = now # show this month
+    elif mode == 'month':
+        if not dt: dt = now  # show this month
         year = dt.year
         month = dt.month
-        last_day = monthrange(year, month)[1] # (wkday, days)
+        last_day = monthrange(year, month)[1]  # (wkday, days)
         start = dt_start_of_day(datetime(year, month, 1))
         end = dt_end_of_day(datetime(year, month, last_day))
 
@@ -548,19 +553,21 @@ def dates_for_display(occurrence):
     if acc.whole_day:
         start_time = end_time = None
 
-    return dict(# Start
-                start_date=start_date,
-                start_time=start_time,
-                start_iso=acc.start.isoformat(),
-                # End
-                end_date=end_date,
-                end_time=end_time,
-                end_iso=acc.end.isoformat(),
-                # Meta
-                same_day=same_day,
-                same_time=same_time,
-                whole_day=acc.whole_day,
-                url=acc.url)
+    return dict(
+        # Start
+        start_date=start_date,
+        start_time=start_time,
+        start_iso=acc.start.isoformat(),
+        # End
+        end_date=end_date,
+        end_time=end_time,
+        end_iso=acc.end.isoformat(),
+        # Meta
+        same_day=same_day,
+        same_time=same_time,
+        whole_day=acc.whole_day,
+        url=acc.url
+    )
 
 
 def date_speller(context, dt):
@@ -575,31 +582,39 @@ def date_speller(context, dt):
         return '%02d' % num
 
     date_dict = dict(
-        year = dt.year(),
+        year=dt.year(),
 
-        month = util.translate(util.month_msgid(dt.month()),
-                domain=dom, context=context),
+        month=util.translate(
+            util.month_msgid(dt.month()),
+            domain=dom, context=context
+        ),
 
-        month_abbr = util.translate(util.month_msgid(dt.month(),'a'),
-                domain=dom, context=context),
+        month_abbr=util.translate(
+            util.month_msgid(dt.month(), 'a'),
+            domain=dom, context=context
+        ),
 
-        wkday = util.translate(util.day_msgid(dt.dow()),
-                domain=dom, context=context),
+        wkday=util.translate(
+            util.day_msgid(dt.dow()),
+            domain=dom, context=context
+        ),
 
-        wkday_abbr = util.translate(util.day_msgid(dt.dow(),'a'),
-                domain=dom, context=context),
+        wkday_abbr=util.translate(
+            util.day_msgid(dt.dow(), 'a'),
+            domain=dom, context=context
+        ),
 
-        day = dt.day(),
-        day2 = zero_pad(dt.day()),
+        day=dt.day(),
+        day2=zero_pad(dt.day()),
 
-        hour = dt.hour(),
-        hour2 = zero_pad(dt.hour()),
+        hour=dt.hour(),
+        hour2=zero_pad(dt.hour()),
 
-        minute = dt.minute(),
-        minute2 = zero_pad(dt.minute()),
+        minute=dt.minute(),
+        minute2=zero_pad(dt.minute()),
 
-        second = dt.second(),
-        second2 = zero_pad(dt.second())
+        second=dt.second(),
+        second2=zero_pad(dt.second())
     )
     return date_dict
 
@@ -663,15 +678,16 @@ def default_end(context=None):
     return localized_now(context=context) + timedelta(hours=DEFAULT_END_DELTA)
 
 
-
 # Workaround for buggy strftime with timezone handling in DateTime.
 # See: https://github.com/plone/plone.app.event/pull/47
 # TODO: should land in CMFPlone or fixed in DateTime.
 _strftime = lambda v, fmt: pydt(v).strftime(fmt)
 
+
 class PatchedDateTime(DateTime):
     def strftime(self, fmt):
         return _strftime(self, fmt)
+
 
 def ulocalized_time(time, *args, **kwargs):
     """Corrects for DateTime bugs doing wrong thing with timezones"""
@@ -687,6 +703,7 @@ def get_portal_events(context, range_start=None, range_end=None, limit=None,
     return get_events(context, start=range_start, end=range_end, limit=limit,
                       sort=sort, sort_reverse=sort_reverse, **kw)
 
+
 @deprecate('get_occurrences_by_date is deprecated and will be removed in '
            'version 1.0. Please use construct_calendar and get_events '
            'instead.')
@@ -694,6 +711,7 @@ def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
     events = get_events(context, start=range_start, end=range_end,
                         ret_mode=2, expand=True, **kw)
     return construct_calendar(events)
+
 
 @deprecate('get_occurrences_from_brains is deprecated and will be removed in '
            'version 1.0. Please use get_events instead.')
@@ -789,5 +807,3 @@ def strftime_to_cal_wkday(day):
            'instead.')
 def default_tzinfo(context=None):
     return default_timezone(context, as_tzinfo=True)
-
-
