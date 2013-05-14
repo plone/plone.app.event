@@ -19,9 +19,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
     def make_dates(self):
         now      = self.now      = localized_now()
-        past     = self.past     = now - datetime.timedelta(days=2)
-        future   = self.future   = now + datetime.timedelta(days=2)
-        far      = self.far      = now + datetime.timedelta(days=8)
+        past     = self.past     = now - datetime.timedelta(days=10)
+        future   = self.future   = now + datetime.timedelta(days=10)
+        far      = self.far      = now + datetime.timedelta(days=30)
         duration = self.duration = datetime.timedelta(hours=1)
         return (now, past, future, far, duration)
 
@@ -47,7 +47,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=past + duration,
             location=u"Vienna",
             timezone=default_tz,
-            recurrence='RRULE:FREQ=WEEKLY;COUNT=5',
+            recurrence='RRULE:FREQ=DAILY;COUNT=3',
             )
 
         self.now_event = factory(
@@ -58,7 +58,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=now + duration,
             location=u"Vienna",
             timezone=default_tz,
-            recurrence='RRULE:FREQ=DAILY;COUNT=4;INTERVAL=4',
+            recurrence='RRULE:FREQ=DAILY;COUNT=3;INTERVAL=2',
             )
 
         self.future_event = factory(
@@ -71,11 +71,11 @@ class AbstractSampleDataEvents(unittest.TestCase):
             timezone=default_tz)
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
-        self.future_event = factory(
+        self.long_event = factory(
             container=self.portal.sub,
             content_id='long',
             title=u'Long Event',
             start=past,
-            end=future,
+            end=far,
             location=u'Schaftal',
             timezone=default_tz)
