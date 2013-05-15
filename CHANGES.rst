@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Let the IRecurrenceSupport adapter return the event itself, when the event
+  starts before and ends after a given range_start.
+  [thet]
+
 - Let the @@event_listing view work on IATTopic and ICollection contexts.
   [thet]
 

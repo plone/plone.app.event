@@ -13,6 +13,8 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
+import itertools
+
 
 class RecurrenceSupport(object):
     """ IRecurrenceSupport Adapter.
@@ -39,6 +41,13 @@ class RecurrenceSupport(object):
         starts = recurrence_sequence_ical(event.start,
                                           recrule=event.recurrence,
                                           from_=range_start, until=range_end)
+
+        if range_start and\
+            event.start < range_start and\
+            event.end >= range_start and\
+            event.start not in starts:
+            # Include event, which started before range but lasts until it.
+            starts = itertools.chain(starts, [event.start])
 
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
