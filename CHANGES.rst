@@ -5,7 +5,9 @@ Changelog
 -------------------
 
 - Let the IRecurrenceSupport adapter return the event itself, when the event
-  starts before and ends after a given range_start.
+  starts before and ends after a given range_start. Fixes a case, where
+  get_events didn't return a long lasting event for a given timeframe with
+  expand set to True.
   [thet]
 
 - Let the @@event_listing view work on IATTopic and ICollection contexts.
