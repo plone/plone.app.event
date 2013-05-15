@@ -1,3 +1,4 @@
+from plone.app.event.base import localized_today
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -15,34 +16,31 @@ class TestEventsListingDX(AbstractSampleDataEvents):
     def event_factory(self):
         return DXEventAccessor.create
 
-    # TODO: FRAGILE TESTS! test data seems not to be good enough.
-    #       fails with '9 != 8'
-
     def test_get_events_future(self):
         # Default mode is to show all events from now on.
         view = self.portal.restrictedTraverse('@@event_listing')
-        self.assertEqual(len(view._get_events()), 8)
+        self.assertEqual(len(view._get_events()), 5)
 
     def test_get_events_past(self):
         self.request.form.update({'mode': 'past'})
         view = self.portal.restrictedTraverse('@@event_listing')
-        self.assertEqual(len(view._get_events()), 3)
+        self.assertEqual(len(view._get_events()), 4)
 
     def test_get_events_all(self):
         self.request.form.update({'mode': 'all'})
         view = self.portal.restrictedTraverse('@@event_listing')
-        self.assertEqual(len(view._get_events()), 11)
+        self.assertEqual(len(view._get_events()), 8)
 
     def test_get_events_today(self):
-        today = datetime.date.today().isoformat()
+        today = localized_today().isoformat()
         self.request.form.update({'mode': 'day', 'date': today})
         view = self.portal.restrictedTraverse('@@event_listing')
-        self.assertEqual(len(view._get_events()), 1)
+        self.assertEqual(len(view._get_events()), 2)
 
     def test_events_listing_ical(self):
         # Default mode is to show all events from now on.
         view = self.portal.restrictedTraverse('@@event_listing_ical')
-        view() # At least, this should not fail.
-               # Don't know yet how to catch Content-Disposition output
+        view()  # At least, this should not fail.
+                # Don't know yet how to catch Content-Disposition output
         #out = view()
         #self.assertEqual(out.count('BEGIN:VEVENT'), 8)
