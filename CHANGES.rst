@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove font-weight bold for monthdays and font-weight normal for table header
+  in portlet calendar. Set div.portletCalendar with to auto instead of
+  unnecessary 100% + margin. Align with plonetheme.sunburst.
+  [thet]
+
 - Let the IRecurrenceSupport adapter return the event itself, when the event
   starts before and ends after a given range_start. Fixes a case, where
   get_events didn't return a long lasting event for a given timeframe with

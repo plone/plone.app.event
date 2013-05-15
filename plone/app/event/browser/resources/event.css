@@ -165,29 +165,8 @@ article.vevent .documentByLine {
 
 
 /* BEGIN PORTLET CALENDAR */
-/* tooltip styling. by default the element to be styled is .tooltip  */
-.pae_calendar_tooltip {
-    display:none;
-    background-color:white;
-    border:1px solid black;
-    border-radius:0.3em;
-    box-shadow: 0.1em 0.1em 0.1em black;
-    font-size:80%;
-    padding:10px;
-    margin:10px;
-    max-width: 30em;
-    z-index: 10;
-}
-.pae_calendar_tooltip a {
-    color:black;
-    display:block;
-    width:100%;
-}
-.pae_calendar_tooltip a:hover { color:blue; }
-.pae_calendar_tooltip a .title { font-weight:bold; }
-
 .portletCalendar {
-    width: 100%;
+    width: auto;
     margin: 1px 0 1em 0;
 }
 
@@ -216,11 +195,6 @@ article.vevent .documentByLine {
     margin: 0 -.5em;
 }
 
-.ploneCalendar {
-    border-spacing: 0;
-    width: 100%;
-}
-
 .portletCalendar a, .portletCalendar a:focus,
 .portletCalendar a, .portletCalendar a:hover,
 .ploneCalendar a {
@@ -228,11 +202,9 @@ article.vevent .documentByLine {
     border-bottom: none !important;
 }
 
-.ploneCalendar .weekdays th {
-    background-color: #eee;
-    text-align: center;
-    padding: 2px;
-    font-weight: normal;
+.ploneCalendar {
+    border-spacing: 0;
+    width:100%;
 }
 
 .ploneCalendar td {
@@ -243,7 +215,27 @@ article.vevent .documentByLine {
     border: 2px solid #eee;
     background-color: #eee;
 }
-.ploneCalendar td.cal_has_events { font-weight: bold; }
+
+.ploneCalendar .weekdays th {
+    background-color: #eee;
+    text-align: center;
+    padding: 2px;
+}
+
+.ploneCalendar .event {
+    background-color: #eee;
+}
+
+.ploneCalendar .todayevent {
+    background-color: #eee;
+    border: 2px solid #205C90;
+}
+
+.ploneCalendar .todaynoevent {
+    border: 2px solid #205C90;
+}
+
+/* additional to sunburst */
 .ploneCalendar td.today {
     background-color: white;
     border-color: #205C90;
@@ -260,4 +252,26 @@ article.vevent .documentByLine {
 .ploneCalendar td.cal_next_month {
     opacity:0.4;
 }
+
+/* tooltip styling. by default the element to be styled is .tooltip  */
+.pae_calendar_tooltip {
+    display:none;
+    background-color:white;
+    border:1px solid black;
+    border-radius:0.3em;
+    box-shadow: 0.1em 0.1em 0.1em black;
+    font-size:80%;
+    padding:10px;
+    margin:10px;
+    max-width: 30em;
+    z-index: 10;
+}
+.pae_calendar_tooltip a {
+    color:black;
+    display:block;
+    width:100%;
+}
+.pae_calendar_tooltip a:hover { color:blue; }
+.pae_calendar_tooltip a .title { font-weight:bold; }
+
 /* END PORTLET CALENDAR */
