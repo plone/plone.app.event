@@ -4,5 +4,6 @@
   <dependencies>
     <dependency>profile-plone.app.registry:default</dependency>
     <dependency>profile-plone.formwidget.datetime:default</dependency>
+    <dependency>profile-plone.formwidget.recurrence:default</dependency>
   </dependencies>
 </metadata>
