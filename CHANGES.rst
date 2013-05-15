@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add compiled .mo gettext translation files, so that they don't need to be
+  compiled on startup.
+  [thet]
+
 - Remove font-weight bold for monthdays and font-weight normal for table header
   in portlet calendar. Set div.portletCalendar with to auto instead of
   unnecessary 100% + margin. Align with plonetheme.sunburst.
