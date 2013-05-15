@@ -2,9 +2,7 @@
 *.py?
 *.sw?
 *.wpr
-*.mo
 .*
-
 !.gitignore
 bin/
 dev/
