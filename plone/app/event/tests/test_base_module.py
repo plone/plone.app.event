@@ -283,6 +283,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         return DXEventAccessor.create
 
     def test_get_events(self):
+
         # whole range
         res = get_events(self.portal)
         self.assertEqual(len(res), 4)
