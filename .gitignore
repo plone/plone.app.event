@@ -1,4 +1,5 @@
 *.egg-info
+*.mo
 *.py?
 *.sw?
 *.wpr
