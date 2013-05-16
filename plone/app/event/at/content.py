@@ -209,6 +209,9 @@ ATEventSchema['subject'].widget.label = _(u'label_event_type',
 ATEventSchema['subject'].widget.size = 6
 ATEventSchema.changeSchemataForField('subject', 'default')
 
+ATEventSchema.changeSchemataForField('timezone', 'dates')
+ATEventSchema.moveField('timezone', before='effectiveDate')
+
 finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')

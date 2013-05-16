@@ -4,8 +4,8 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Add compiled .mo gettext translation files, so that they don't need to be
-  compiled on startup.
+- Changing the timezone in events is a corner case, so the timezone field is
+  moved to the "dates" schemata an ATEvent.
   [thet]
 
 - Remove font-weight bold for monthdays and font-weight normal for table header
