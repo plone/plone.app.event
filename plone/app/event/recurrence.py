@@ -117,7 +117,8 @@ class EventOccurrenceAccessor(object):
         object.__setattr__(self, '_own_attr', own_attr)
 
     def _get_context(self, name):
-        # TODO: save parent context on self, so it must not be called every time
+        # TODO: save parent context on self, so it must not be called every
+        #       time
         oa = self._own_attr
         if name in oa:
             return self.context
