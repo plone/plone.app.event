@@ -540,6 +540,8 @@ def dates_for_display(occurrence):
         'end_iso'    - end date in iso format
         'same_day'   - event ends on the same day
         'same_time'  - event ends at same time
+        'whole_day'  - whole day events
+        'open_end'   - events without end time
 
 
     The behavior os ulocalized_time() with time_only is odd.
@@ -578,21 +580,25 @@ def dates_for_display(occurrence):
     # set time fields to None for whole day events
     if acc.whole_day:
         start_time = end_time = None
+    if acc.open_end:
+        end_time = None
 
     return dict(
         # Start
         start_date=start_date,
         start_time=start_time,
-        start_iso=acc.start.isoformat(),
+        start_iso=acc.whole_day and acc.start.date().isoformat()\
+                                 or acc.start.isoformat(),
         # End
         end_date=end_date,
         end_time=end_time,
-        end_iso=acc.end.isoformat(),
+        end_iso=acc.whole_day and acc.end.date().isoformat()\
+                               or acc.end.isoformat(),
         # Meta
         same_day=same_day,
         same_time=same_time,
         whole_day=acc.whole_day,
-        url=acc.url
+        open_end=acc.open_end,
     )
 
 

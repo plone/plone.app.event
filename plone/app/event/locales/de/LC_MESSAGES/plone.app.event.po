@@ -509,14 +509,10 @@ msgstr "Zeitzone"
 msgid "label_web"
 msgstr "Web"
 
-#. Default: "Whole Day"
-#: plone/app/event/dx/behaviors.py:71
-msgid "label_whole_day"
-msgstr "Ganzer Tag"
-
 #. Default: "Whole day event"
 #: plone/app/event/at/content.py:75
-msgid "label_whole_day_event"
+#: plone/app/event/dx/behaviors.py:71
+msgid "label_whole_day"
 msgstr "Ganztägiger Termin"
 
 #. Default: "All"

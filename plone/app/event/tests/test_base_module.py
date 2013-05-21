@@ -476,7 +476,7 @@ class TestDatesForDisplayAT(unittest.TestCase):
                  'same_day':   True,
                  'same_time':  False,
                  'whole_day':  False,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False,
                 })
 
     def test_prep_display_wholeday_sameday(self):
@@ -490,14 +490,14 @@ class TestDatesForDisplayAT(unittest.TestCase):
         self.assertEqual(dates_for_display(event),
                 {'start_date': u'Oct 12, 2000',
                  'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'start_iso':  u'2000-10-12',
                  'end_date':   u'Oct 12, 2000',
                  'end_time':   None,
-                 'end_iso':    u'2000-10-12T23:59:59+02:00',
+                 'end_iso':    u'2000-10-12',
                  'same_day':   True,
                  'same_time':  False,
                  'whole_day':  True,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False
                 })
 
     def test_prep_display_wholeday_differentdays(self):
@@ -511,14 +511,14 @@ class TestDatesForDisplayAT(unittest.TestCase):
         self.assertEqual(dates_for_display(event),
                 {'start_date': u'Oct 12, 2000',
                  'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'start_iso':  u'2000-10-12',
                  'end_date':   u'Oct 13, 2000',
                  'end_time':   None,
-                 'end_iso':    u'2000-10-13T23:59:59+02:00',
+                 'end_iso':    u'2000-10-13',
                  'same_day':   False,
                  'same_time':  False,
                  'whole_day':  True,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False,
                 })
 
 
@@ -546,7 +546,7 @@ class TestDatesForDisplayDX(unittest.TestCase):
                  'same_day':   True,
                  'same_time':  False,
                  'whole_day':  False,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False,
                 })
 
     def test_prep_display_wholeday_sameday(self):
@@ -560,14 +560,14 @@ class TestDatesForDisplayDX(unittest.TestCase):
         self.assertEqual(dates_for_display(event),
                 {'start_date': u'Oct 12, 2000',
                  'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'start_iso':  u'2000-10-12',
                  'end_date':   u'Oct 12, 2000',
                  'end_time':   None,
-                 'end_iso':    u'2000-10-12T23:59:59+02:00',
+                 'end_iso':    u'2000-10-12',
                  'same_day':   True,
                  'same_time':  False,
                  'whole_day':  True,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False,
                 })
 
     def test_prep_display_wholeday_differentdays(self):
@@ -581,12 +581,12 @@ class TestDatesForDisplayDX(unittest.TestCase):
         self.assertEqual(dates_for_display(event),
                 {'start_date': u'Oct 12, 2000',
                  'start_time': None,
-                 'start_iso':  u'2000-10-12T00:00:00+02:00',
+                 'start_iso':  u'2000-10-12',
                  'end_date':   u'Oct 13, 2000',
                  'end_time':   None,
-                 'end_iso':    u'2000-10-13T23:59:59+02:00',
+                 'end_iso':    u'2000-10-13',
                  'same_day':   False,
                  'same_time':  False,
                  'whole_day':  True,
-                 'url': 'http://nohost/plone/event'
+                 'open_end':   False,
                 })

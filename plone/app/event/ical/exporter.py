@@ -206,6 +206,12 @@ class ICalendarEventComponent(object):
 
         if event.whole_day:
             ical.add('dtstart', event.start.date())
+            # RFC5545, 3.6.1
+            # For cases where a "VEVENT" calendar component
+            # specifies a "DTSTART" property with a DATE value type but no
+            # "DTEND" nor "DURATION" property, the event's duration is taken to
+            # be one day.
+            # 
             # RFC5545 doesn't define clearly, if all-day events should have
             # a end date on the same date or one day after the start day at
             # 0:00. Most icalendar libraries use the latter method.
@@ -220,6 +226,13 @@ class ICalendarEventComponent(object):
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
             ical.add('dtend', event.end.date() + timedelta(days=1))
+        elif event.open_end:
+            # RFC5545, 3.6.1
+            # For cases where a "VEVENT" calendar component
+            # specifies a "DTSTART" property with a DATE-TIME value type but no
+            # "DTEND" property, the event ends on the same calendar date and
+            # time of day specified by the "DTSTART" property.
+            ical.add('dtstart', event.start)
         else:
             ical.add('dtstart', event.start)
             ical.add('dtend', event.end)

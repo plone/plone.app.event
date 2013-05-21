@@ -506,15 +506,11 @@ msgstr "Fuseau horaire"
 msgid "label_web"
 msgstr ""
 
-#. Default: "Whole Day"
+#. Default: "Whole day event"
+#: plone/app/event/at/content.py:75
 #: plone/app/event/dx/behaviors.py:71
 msgid "label_whole_day"
 msgstr "Journée entière"
-
-#. Default: "Whole day event"
-#: plone/app/event/at/content.py:75
-msgid "label_whole_day_event"
-msgstr ""
 
 #. Default: "All"
 #: plone/app/event/browser/event_listing.pt:26

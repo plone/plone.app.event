@@ -4,6 +4,13 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add open_end option for Dexterity behaviors and Archetypes type.
+  [thet]
+
+- For whole_day events, let dates_for_display return the iso-date
+  representation from date and not datetime instances.
+  [thet]
+
 - Remove support of microseconds and default to a resolution of one second for
   all datetime getter/setter and conversions. Microseconds exactness is not
   needed and dateutil does not support microseconds which results in unexpected

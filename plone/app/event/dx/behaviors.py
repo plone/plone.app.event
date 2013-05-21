@@ -80,6 +80,12 @@ class IEventBasic(model.Schema):
         required = False
         )
 
+    open_end = schema.Bool(
+        title = _(u'label_open_end', default=u'Open end event'),
+        description=_(u'help_open_end', default=u"This event is open ended."),
+        required = False
+        )
+
     timezone = schema.Choice(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
@@ -278,6 +284,13 @@ class EventBasic(object):
         self.context.whole_day = value
 
     @property
+    def open_end(self):
+        return getattr(self.context, 'open_end', False)
+    @open_end.setter
+    def open_end(self, value):
+        self.context.open_end = value
+
+    @property
     def duration(self):
         return self.context.end - self.context.start
 
@@ -355,6 +368,7 @@ def data_postprocessing(obj, event):
     # Adapt for whole day
     if behavior.whole_day:
         start = dt_start_of_day(start)
+    if behavior.open_end or behavior.whole_day:
         end = dt_end_of_day(end)
 
     # Save back
@@ -421,7 +435,8 @@ class EventAccessor(object):
     # Unified create method via Accessor
     @classmethod
     def create(cls, container, content_id, title, description=None,
-               start=None, end=None, timezone=None, whole_day=None, **kwargs):
+               start=None, end=None, timezone=None,
+               whole_day=None, open_end=None, **kwargs):
         container.invokeFactory(cls.event_type,
                                 id=content_id,
                                 title=title,
@@ -429,6 +444,7 @@ class EventAccessor(object):
                                 start=start,
                                 end=end,
                                 whole_day=whole_day,
+                                open_end=open_end,
                                 timezone=timezone)
         content = container[content_id]
         acc = IEventAccessor(content)
@@ -447,6 +463,7 @@ class EventAccessor(object):
             start=IEventBasic,
             end=IEventBasic,
             whole_day=IEventBasic,
+            open_end=IEventBasic,
             timezone=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,

@@ -36,17 +36,18 @@ def ical_import(container, ics_resource, event_type):
             duration = _get_prop('DURATION', item)
             if duration:
                 end = start + duration
-            else:
-                end = start
+            # else: whole day or open end
 
         timezone = getattr(getattr(start, 'tzinfo', None), 'zone', None) or\
                 base.default_timezone(container)
 
         whole_day = False
-        if is_date(start) and is_date(end):
+        open_end = False
+        if is_date(start) and (is_date(end) or end is None):
             # All day / whole day events
             # End must be same type as start (RFC5545, 3.8.2.2)
             whole_day = True
+            if end is None: end = start
             if start < end:
                 # RFC5545 doesn't define clearly, if all day events should have
                 # a end date one day after the start day at 0:00.
@@ -55,6 +56,10 @@ def ical_import(container, ics_resource, event_type):
                 end = end - datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
+        elif isinstance(start, datetime) and end is None:
+            # Open end event, see RFC 5545, 3.6.1
+            open_end = True
+            end = base.dt_end_of_day(date_to_datetime(start))
         assert(isinstance(start, datetime.datetime))
         assert(isinstance(end, datetime.datetime))
 
@@ -98,6 +103,7 @@ def ical_import(container, ics_resource, event_type):
         event.end = end
         event.timezone = timezone
         event.whole_day = whole_day
+        event.open_end = open_end
         event.location = location
         event.event_url = url
         event.recurrence = rrule

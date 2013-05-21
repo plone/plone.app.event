@@ -77,12 +77,24 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
 
     atapi.BooleanField('wholeDay',
+        required=False,
         default=False,
         write_permission=ModifyPortalContent,
         languageIndependent=True,
         widget=atapi.BooleanWidget(
-            label=_(u'label_whole_day_event', u'Whole day event'),
+            label=_(u'label_whole_day', default=u'Whole day event'),
             description=_(u'help_whole_day', default=u"Event lasts whole day"),
+            ),
+        ),
+
+    atapi.BooleanField('openEnd',
+        required=False,
+        default=False,
+        write_permission=ModifyPortalContent,
+        widget=atapi.BooleanWidget(
+            label=_(u'label_open_end', default=u"Open end event"),
+            description=_(u'help_open_end',
+                default=u"This event is open ended."),
             ),
         ),
 
@@ -467,9 +479,8 @@ def data_postprocessing(obj, event):
     isn't known, so we have to convert those timezone-naive dates into
     timezone-aware ones afterwards.
 
-    For whole day events, set start time to 0:00:00 and end time toZone
-    23:59:59.
-
+    For whole day events, set start time to 0:00:00 and end time to 23:59:59.
+    For open end events, set end time to 23:59:59.
     """
 
     if not IEvent.providedBy(obj):
@@ -512,8 +523,10 @@ def data_postprocessing(obj, event):
     start = make_DT(start, timezone)
     end = make_DT(end, timezone)
 
-    if obj.getWholeDay():
+    whole_day = obj.getWholeDay()
+    if whole_day:
         start = DateTime('%s 0:00:00 %s' % (start.Date(), timezone))
+    if obj.getOpenEnd() or whole_day:
         end = DateTime('%s 23:59:59 %s' % (end.Date(), timezone))
 
     start_field.set(obj, start.toZone('UTC'))
@@ -539,7 +552,8 @@ class EventAccessor(object):
     # Unified create method via Accessor
     @classmethod
     def create(cls, container, content_id, title, description=None,
-               start=None, end=None, timezone=None, whole_day=None, **kwargs):
+               start=None, end=None, timezone=None, whole_day=None,
+               open_end=None, **kwargs):
         container.invokeFactory(cls.event_type,
                                 id=content_id,
                                 title=title,
@@ -547,6 +561,7 @@ class EventAccessor(object):
                                 startDate=start,
                                 endDate=end,
                                 wholeDay=whole_day,
+                                open_end=open_end,
                                 timezone=timezone)
         content = container[content_id]
         acc = IEventAccessor(content)
@@ -616,6 +631,13 @@ class EventAccessor(object):
     @whole_day.setter
     def whole_day(self, value):
         self.context.setWholeDay(value)
+
+    @property
+    def open_end(self):
+        return self.context.getOpenEnd()
+    @open_end.setter
+    def open_end(self, value):
+        self.context.setOpenEnd(value)
 
     @property
     def timezone(self):

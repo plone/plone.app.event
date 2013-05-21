@@ -507,14 +507,10 @@ msgstr "Fuso orario"
 msgid "label_web"
 msgstr ""
 
-#. Default: "Whole Day"
-#: plone/app/event/dx/behaviors.py:71
-msgid "label_whole_day"
-msgstr "Evento nell'intera giornata"
-
 #. Default: "Whole day event"
 #: plone/app/event/at/content.py:75
-msgid "label_whole_day_event"
+#: plone/app/event/dx/behaviors.py:71
+msgid "label_whole_day"
 msgstr "Evento di tutta la giornata"
 
 #. Default: "All"
