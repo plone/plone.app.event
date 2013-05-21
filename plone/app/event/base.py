@@ -100,7 +100,7 @@ def get_events(context, start=None, end=None, limit=None,
         # The minimum end date of events is the date from which we search.
         query['end'] = {'query': start, 'range': 'min'}
     if end:
-        # All events until range_end:
+        # All events until end date:
         # The maximum start date must be the date until we search.
         query['start'] = {'query': end, 'range': 'max'}
 
