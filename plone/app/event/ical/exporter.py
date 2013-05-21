@@ -38,19 +38,23 @@ def construct_icalendar(context, events):
     cal.add('version', VERSION)
 
     cal_title = context.Title()
-    if cal_title: cal.add('x-wr-calname', cal_title)
+    if cal_title:
+        cal.add('x-wr-calname', cal_title)
+
     cal_desc = context.Description()
-    if cal_desc: cal.add('x-wr-caldesc', cal_desc)
+    if cal_desc:
+        cal.add('x-wr-caldesc', cal_desc)
 
     uuid = IUUID(context, None)
-    if uuid: # portal object does not have UID
+    if uuid:  # portal object does not have UID
         cal.add('x-wr-relcalid', uuid)
 
     cal_tz = default_timezone(context)
-    if cal_tz: cal.add('x-wr-timezone', cal_tz)
+    if cal_tz:
+        cal.add('x-wr-timezone', cal_tz)
 
     tzmap = {}
-    if not hasattr(events, '__getslice__'): # LazyMap doesn't have __iter__
+    if not hasattr(events, '__getslice__'):  # LazyMap doesn't have __iter__
         events = [events]
     for event in events:
         if ICatalogBrain.providedBy(event):
@@ -59,8 +63,8 @@ def construct_icalendar(context, events):
         tz = acc.timezone
         # TODO: the standard wants each recurrence to have a valid timezone
         # definition. sounds decent, but not realizable.
-        if not acc.whole_day: # whole day events are exported as dates without
-                              # timezone information
+        if not acc.whole_day:  # whole day events are exported as dates without
+                               # timezone information
             tzmap = add_to_zones_map(tzmap, tz, acc.start)
             tzmap = add_to_zones_map(tzmap, tz, acc.end)
         cal.add_component(IICalendarEventComponent(event).to_ical())
@@ -82,8 +86,8 @@ def construct_icalendar(context, events):
             cal_tz_sub.add('tzoffsetfrom', tzinfo['tzoffsetfrom'])
             cal_tz_sub.add('tzoffsetto', tzinfo['tzoffsetto'])
             # TODO: add rrule
-            #tzi.add('rrule', {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
-
+            # tzi.add('rrule',
+            #         {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
             cal_tz.add_component(cal_tz_sub)
         cal.add_component(cal_tz)
 
@@ -94,10 +98,11 @@ def add_to_zones_map(tzmap, tzid, dt):
     if tzid.lower() == 'utc' or not isinstance(dt, datetime):
         # no need to define UTC nor timezones for date objects.
         return tzmap
-    null = datetime(1,1,1)
+    null = datetime(1, 1, 1)
     tz = pytz.timezone(tzid)
     transitions = getattr(tz, '_utc_transition_times', None)
-    if not transitions: return tzmap # we need transition definitions
+    if not transitions:
+        return tzmap  # we need transition definitions
     dtzl = tzdel(utc(dt))
 
     # get transition time, which is the dtstart of timezone.
@@ -107,7 +112,8 @@ def add_to_zones_map(tzmap, tzid, dt):
     #     datetime, which wouldn't create a match within the max-function. this
     #     way we get the maximum transition time which is smaller than the
     #     given datetime.
-    transition = max(transitions, key=lambda item:item<=dtzl and item or null)
+    transition = max(transitions,
+                     key=lambda item: item <= dtzl and item or null)
 
     # get previous transition to calculate tzoffsetfrom
     idx = transitions.index(transition)
@@ -115,9 +121,9 @@ def add_to_zones_map(tzmap, tzid, dt):
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):
-        if dt is null: return null # dummy time, edge case
-                                   # (dt at beginning of all transitions,
-                                   # see above.)
+        if dt is null: return null  # dummy time, edge case
+                                    # (dt at beginning of all transitions,
+                                    # see above.)
         return pytz.utc.localize(dt).astimezone(tz) # naive to utc and localize
     transition = localize(tz, transition)
     dtstart = tzdel(transition) # timezone dtstart must be in local time
@@ -204,14 +210,14 @@ class ICalendarEventComponent(object):
             # a end date on the same date or one day after the start day at
             # 0:00. Most icalendar libraries use the latter method.
             # Internally, whole_day events end on the same day one second
-            # before midnight. Using the RFC5545 preferred method for 
+            # before midnight. Using the RFC5545 preferred method for
             # plone.app.event seems not appropriate, since we would have to fix
             # the date to end a day before for displaying.
             # For exporting, we let whole_day events end on the next day at
             # midnight.
             # See:
             # http://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
-            # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/ 
+            # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
             ical.add('dtend', event.end.date() + timedelta(days=1))
         else:

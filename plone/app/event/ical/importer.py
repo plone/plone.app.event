@@ -47,12 +47,12 @@ def ical_import(container, ics_resource, event_type):
             # All day / whole day events
             # End must be same type as start (RFC5545, 3.8.2.2)
             whole_day = True
-            if start<end:
+            if start < end:
                 # RFC5545 doesn't define clearly, if all day events should have
                 # a end date one day after the start day at 0:00.
                 # Internally, we handle all day events with start=0:00,
                 # end=:23:59:59, so we substract one day here.
-                end = end-datetime.timedelta(days=1)
+                end = end - datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
         assert(isinstance(start, datetime.datetime))
@@ -116,7 +116,7 @@ def ical_import(container, ics_resource, event_type):
             # Rename with new id from title, if processForm didn't do it.
             chooser = INameChooser(container)
             new_id = chooser.chooseName(title, content)
-            transaction.savepoint(optimistic=True) # Commit before renaming
+            transaction.savepoint(optimistic=True)  # Commit before renaming
             content.aq_parent.manage_renameObject(content_id, new_id)
         else:
             transaction.savepoint(optimistic=True)
@@ -130,34 +130,38 @@ from zope.interface import Interface
 from zope import schema
 from plone.app.event import messageFactory as _
 from plone.namedfile.field import NamedFile
+
+
 class IIcalendarImportSettings(Interface):
 
     event_type = schema.Choice(
-        title = _(u'Event Type'),
-        vocabulary = 'plone.app.event.EventTypes',
-        required = True
+        title=_(u'Event Type'),
+        vocabulary='plone.app.event.EventTypes',
+        required=True
     )
 
     ical_url = schema.URI(
-        title = _(u'Icalendar URL'),
-        required = False
+        title=_(u'Icalendar URL'),
+        required=False
     )
 
     ical_file = NamedFile(
-        title = _(u"Icalendar File"),
-        required = False
+        title=_(u"Icalendar File"),
+        required=False
     )
 
     # TODO: to implement
     #sync_strategy = schema.Choice(
-    #    title = _(u"Synchronization Strategy"),
-    #    vocabulary = 'plone.app.event.SynchronizationStrategies',
-    #    required = True
+    #    title=_(u"Synchronization Strategy"),
+    #    vocabulary='plone.app.event.SynchronizationStrategies',
+    #    required=True
     #)
 
 
 from zope.annotation.interfaces import IAnnotations
 from persistent.dict import PersistentDict
+
+
 class AnnotationAdapter(object):
     """Abstract Base Class for an annotation storage.
     """
@@ -184,6 +188,8 @@ class AnnotationAdapter(object):
 from zope.component import adapts
 from zope.interface import implements
 #from plone.folder.interfaces import IFolder
+
+
 class IcalendarImportSettings(AnnotationAdapter):
     """Annotation Adapter for IIcalendarImportSettings.
     """
@@ -200,6 +206,8 @@ class IcalendarImportSettings(AnnotationAdapter):
 from Products.Five.browser import BrowserView
 from plone.folder.interfaces import IFolder
 from plone.app.event.interfaces import IICalendarImportEnabled
+
+
 class IcalendarImportTool(BrowserView):
 
     @property
@@ -219,6 +227,8 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import form, field
 from zope.interface import alsoProvides, noLongerProvides
+
+
 class IcalendarImportSettingsForm(form.Form):
 
     fields = field.Fields(IIcalendarImportSettings)
@@ -273,6 +283,8 @@ class IcalendarImportSettingsForm(form.Form):
 
 
 from plone.z3cform.layout import FormWrapper
+
+
 class IcalendarImportSettingsFormView(FormWrapper):
     form = IcalendarImportSettingsForm
 
@@ -282,7 +294,6 @@ class IcalendarImportSettingsFormView(FormWrapper):
         alsoProvides(self.context, IICalendarImportEnabled)
         self.context.reindexObject(idxs=('object_provides'))
         self.request.response.redirect(self.context.absolute_url())
-
 
     def disable(self):
         """Disable icalendar import on this context.
