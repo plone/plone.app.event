@@ -3,7 +3,6 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 
-import datetime
 import logging
 
 
@@ -15,6 +14,9 @@ class TestEventsListingDX(AbstractSampleDataEvents):
 
     def event_factory(self):
         return DXEventAccessor.create
+
+    # TODO: mock base functions localized_now and start_end_from_mode to get
+    # reproducable results. Currently, tests fail if we catch a leap second.
 
     def test_get_events_future(self):
         # Default mode is to show all events from now on.
