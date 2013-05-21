@@ -17,7 +17,7 @@ import unittest2 as unittest
 import zope.interface
 
 
-# For Schema upgrade test, copy the ATEventSchema and add timezone and 
+# For Schema upgrade test, copy the ATEventSchema and add timezone and
 # recurrence field with AnnotationStorage
 MockSchema = ATEventSchema.copy()
 MockSchema.addField(
@@ -54,30 +54,35 @@ class PAEventATMigrationTest(unittest.TestCase):
         portal = self.layer['portal']
         self.portal = portal
         setRoles(portal, TEST_USER_ID, ['Manager'])
-        self._dummy_1 = mkDummyInContext(MockATEvent_1, oid='dummy_1',
-                                       context=self.portal,
-                                       schema=ATContentTypeSchema)
-        self._dummy_1.title = 'Foo'
-        self._dummy_1.reindexObject()
-
-        self._dummy_2 = mkDummyInContext(MockATEvent_2, oid='dummy_2',
-                                       context=self.portal,
-                                       schema=MockSchema)
-        self._dummy_2.title = 'Baz'
-        self._dummy_2.setStartDate(DateTime())
-        self._dummy_2.setEndDate(DateTime())
-        self._dummy_2.setTimezone("Europe/Vienna")
-        self._dummy_2.setRecurrence("RRULE:FREQ=DAILY;COUNT=3")
-        self._dummy_2.reindexObject()
 
     def test_upgrade_step_1(self):
+        _dummy_1 = mkDummyInContext(MockATEvent_1, oid='dummy_1',
+                                    context=self.portal,
+                                    schema=ATContentTypeSchema)
+        _dummy_1.title = 'Foo'
+        _dummy_1.reindexObject()
+
+        event = self.portal['dummy_1']
+        self.assertTrue(not IEvent.providedBy(event))
+        del event
+
         upgrade_step_1(self.portal)
+
         event = self.portal['dummy_1']
         self.assertTrue(IEvent.providedBy(event))
         self.assertEqual('', event.recurrence)
         self.assertEqual('Foo', event.Title())
 
     def test_upgrade_step_2(self):
+        _dummy_2 = mkDummyInContext(MockATEvent_2, oid='dummy_2',
+                                    context=self.portal,
+                                    schema=MockSchema)
+        _dummy_2.title = 'Baz'
+        _dummy_2.setStartDate(DateTime())
+        _dummy_2.setEndDate(DateTime())
+        _dummy_2.setTimezone("Europe/Vienna")
+        _dummy_2.setRecurrence("RRULE:FREQ=DAILY;COUNT=3")
+        _dummy_2.reindexObject()
 
         event = self.portal['dummy_2']
 
