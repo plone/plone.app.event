@@ -24,7 +24,7 @@ class TestEventsListingDX(AbstractSampleDataEvents):
     def test_get_events_past(self):
         self.request.form.update({'mode': 'past'})
         view = self.portal.restrictedTraverse('@@event_listing')
-        self.assertEqual(len(view._get_events()), 4)
+        self.assertEqual(len(view._get_events()), 5)
 
     def test_get_events_all(self):
         self.request.form.update({'mode': 'all'})

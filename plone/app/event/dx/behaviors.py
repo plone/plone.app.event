@@ -291,7 +291,9 @@ class EventBasic(object):
         # form, we have to save it with a fake zone first and replace it with
         # the target zone afterwards. So, it's not timezone naive and can be
         # compared to timezone aware Dates.
-        return dt.replace(tzinfo=FakeZone()) # return with fake zone
+
+        # return with fake zone and without microseconds
+        return dt.replace(microsecond=0, tzinfo=FakeZone())
 
 
 class EventRecurrence(object):
@@ -341,7 +343,7 @@ def data_postprocessing(obj, event):
             # the target timezone.
             dt = dt.astimezone(tz)
 
-        return dt
+        return dt.replace(microsecond=0)
 
     behavior = IEventBasic(obj)
     tz = pytz.timezone(behavior.timezone)

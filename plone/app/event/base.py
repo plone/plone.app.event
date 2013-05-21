@@ -268,7 +268,8 @@ def localized_now(context=None):
 
     """
     if not context: context = getSite()
-    return datetime.now(default_timezone(context=context, as_tzinfo=True))
+    tzinfo = default_timezone(context=context, as_tzinfo=True)
+    return datetime.now(tzinfo).replace(microsecond=0)
 
 
 def localized_today(context=None):
@@ -341,30 +342,54 @@ def wkday_to_mon1(day):
         return day + 1
 
 
-def DT(dt):
+def DT(dt, exact=False):
     """Return a Zope DateTime instance from a Python datetime instance.
 
-    :param dt: Python datetime instance.
-    :type dt: Python datetime
+    :param dt: Python datetime, Python date, Zope DateTime instance or string.
+    :param exact: If True, the resolution goes down to microseconds. If False,
+                  the resolution are seconds. Defaul is False.
+    :type exact: Boolean
     :returns: Zope DateTime
     :rtype: Zope DateTime
 
     """
+
+    def _adjust_DT(DT, exact):
+        if exact:
+            ret = DT
+        else:
+            ret = DateTime(
+                DT.year(),
+                DT.month(),
+                DT.day(),
+                DT.hour(),
+                DT.minute(),
+                int(DT.second()),
+                DT.timezone()
+            )
+        return ret
+
     tz = default_timezone(getSite())
     ret = None
     if isinstance(dt, datetime):
         zone_id = getattr(dt.tzinfo, 'zone', tz)
         tz = validated_timezone(zone_id, tz)
+        second = dt.second
+        if exact:
+            second += dt.microsecond / 1000000.0
         ret = DateTime(
-            dt.year, dt.month, dt.day,\
-            dt.hour, dt.minute, dt.second + dt.microsecond / 1000000.0,
+            dt.year, dt.month, dt.day,
+            dt.hour, dt.minute, second,
             tz
         )
     elif isinstance(dt, date):
         ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
         # No timezone validation. DateTime knows how to handle it's zones.
-        ret = dt
+        ret = _adjust_DT(dt, exact=exact)
+    else:
+        # Try to convert by DateTime itself
+        ret = _adjust_DT(DateTime(dt), exact=exact)
     return ret
 
 
@@ -387,7 +412,8 @@ def guess_date_from(datestr, context=None):
     except ValueError:
         return
 
-    return pytz.timezone(default_timezone(context)).localize(dateobj)
+    ret = pytz.timezone(default_timezone(context)).localize(dateobj)
+    return ret
 
 
 def dt_start_of_day(dt):

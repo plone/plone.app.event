@@ -84,23 +84,56 @@ class TestBaseModule(unittest.TestCase):
             DateTime('2011/11/11 11:00:00 UTC')
         )
 
-        # Testing conversion of datetime with microseconds
+        # Conversion from string
+        self.assertEqual(
+            DT('2011/11/11 11:00:00 Europe/Vienna'),
+            DateTime('2011/11/11 11:00:00 Europe/Vienna')
+        )
+
+        ## TEST WITH/WITHOUT MICROSECONDS
+
+        # From Python datetime
+
         tz = pytz.timezone('Europe/Vienna')
+
+        # exact=False
         self.assertEqual(
             DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
-               tzinfo=tz)),
+               tzinfo=tz), exact=False),
+            DateTime('2012/12/12 10:10:10 Europe/Vienna')
+        )
+
+        # exact=True
+        self.assertEqual(
+            DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
+               tzinfo=tz), exact=True),
             DateTime('2012/12/12 10:10:10.123456 Europe/Vienna')
         )
 
+        # From Zope DateTime
+
+        # Exact=False
+        self.assertEqual(
+            DT(DateTime(2012, 12, 12, 10, 10, 10.123456, 'Europe/Vienna'),
+               exact=False),
+            DateTime('2012/12/12 10:10:10 Europe/Vienna')
+        )
+
+        # Exact=True
+        self.assertEqual(
+            DT(DateTime(2012, 12, 12, 10, 10, 10.123456, 'Europe/Vienna'),
+               exact=True),
+            DateTime('2012/12/12 10:10:10.123456 Europe/Vienna')
+        )
 
     def test_wkday_to_mon1(self):
         from plone.app.event.base import wkday_to_mon1
-        li = [wkday_to_mon1(day) for day in range(0,7)]
+        li = [wkday_to_mon1(day) for day in range(0, 7)]
         self.assertEqual(li, [1, 2, 3, 4, 5, 6, 0])
 
     def test_wkday_to_mon0(self):
         from plone.app.event.base import wkday_to_mon0
-        li = [wkday_to_mon0(day) for day in range(0,7)]
+        li = [wkday_to_mon0(day) for day in range(0, 7)]
         self.assertEqual(li, [6, 0, 1, 2, 3, 4, 5])
 
     def test__default_timezone(self):

@@ -11,7 +11,7 @@ import zope.component
 
 
 class AbstractSampleDataEvents(unittest.TestCase):
-    layer = None # Set the plone.app.testing layer in concrete implementation
+    layer = None  # Set the plone.app.testing layer in concrete implementation
 
     def event_factory(self):
         # Return the IEventAccessor.create event factory.

@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove support of microseconds and default to a resolution of one second for
+  all datetime getter/setter and conversions. Microseconds exactness is not
+  needed and dateutil does not support microseconds which results in unexpected
+  results in comparisons.
+  [thet]
+
 - Changing the timezone in events is a corner case, so the timezone field is
   moved to the "dates" schemata an ATEvent.
   [thet]

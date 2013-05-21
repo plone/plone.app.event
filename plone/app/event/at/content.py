@@ -339,30 +339,28 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         return dt.toZone(timezone)
 
     def _dt_setter(self, fieldtoset, value, **kwargs):
-        # Always set the date in UTC, saving the timezone in another field.
-        # But since the timezone value isn't known at the time of saving the
-        # form, we have to save it timezone-naive first and let
-        # timezone_handler convert it to the target zone afterwards.
-
+        """Always set the date in UTC, saving the timezone in another field.
+        But since the timezone value isn't known at the time of saving the
+        form, we have to save it timezone-naive first and let
+        timezone_handler convert it to the target zone afterwards.
+        """
         # Note: The name of the first parameter shouldn't be field, because
         # it's already in kwargs in some case.
 
-        if not isinstance(value, DateTime): value = DateTime(value)
+        if not isinstance(value, DateTime):
+            value = DT(value)
 
-        # Get microseconds from seconds, which is a floating value. Round it
-        # up, to bypass precision errors.
-        micro = int(round(value.second()%1 * 1000000))
-
-        value = DateTime('%04d-%02d-%02dT%02d:%02d:%02d%s' % (
-                    value.year(),
-                    value.month(),
-                    value.day(),
-                    value.hour(),
-                    value.minute(),
-                    value.second(),
-                    micro and '.%s' % micro or ''
-                    )
-                )
+        # This way, we set DateTime timezoneNaive
+        value = DateTime(
+            '%04d-%02d-%02dT%02d:%02d:%02d' % (
+                value.year(),
+                value.month(),
+                value.day(),
+                value.hour(),
+                value.minute(),
+                int(value.second())  # No microseconds
+            )
+        )
         self.getField(fieldtoset).set(self, value, **kwargs)
 
     security.declareProtected('View', 'start')
@@ -390,7 +388,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         :rtype: Python datetime
 
         """
-        return pydt(self.start())
+        return pydt(self.start(), exact=False)
 
     security.declareProtected(View, 'end_date')
     @property
@@ -404,7 +402,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         :rtype: Python datetime
 
         """
-        return pydt(self.end())
+        return pydt(self.end(), exact=False)
 
     security.declareProtected(View, 'duration')
     @property
@@ -508,7 +506,7 @@ def data_postprocessing(obj, event):
             value.day(),
             value.hour(),
             value.minute(),
-            value.second(),
+            int(value.second()),  # No microseconds
             timezone)
 
     start = make_DT(start, timezone)
