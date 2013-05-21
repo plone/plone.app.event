@@ -85,9 +85,11 @@ class Renderer(base.Renderer):
         # strftime %w interprets 0 as Sunday unlike the calendar.
         strftime_wkdays = [wkday_to_mon1(day)
                 for day in self.cal.iterweekdays()]
-        self.weekdays = [PLMF(self._ts.day_msgid(day, format='s'),
-                              default=self._ts.weekday_english(day, format='a'))
-                         for day in strftime_wkdays]
+        self.weekdays = [
+            PLMF(self._ts.day_msgid(day, format='s'),
+                 default=self._ts.weekday_english(day, format='a'))
+            for day in strftime_wkdays
+        ]
 
     def year_month_display(self):
         """ Return the year and month to display in the calendar.
@@ -116,17 +118,17 @@ class Renderer(base.Renderer):
         return year, month
 
     def get_previous_month(self, year, month):
-        if month==0 or month==1:
+        if month == 0 or month == 1:
             month, year = 12, year - 1
         else:
-            month-=1
+            month -= 1
         return (year, month)
 
     def get_next_month(self, year, month):
-        if month==12:
+        if month == 12:
             month, year = 1, year + 1
         else:
-            month+=1
+            month += 1
         return (year, month)
 
     def date_events_url(self, date):
@@ -175,7 +177,7 @@ class Renderer(base.Renderer):
                     # TODO: make 24/12 hr format configurable
                     base = u'<a href="%s"><span class="title">%s</span>'\
                            u'%s%s%s</a>'
-                    events_string +=  base % (
+                    events_string += base % (
                         accessor.url,
                         accessor.title,
                         not whole_day and u' %s' % time or u'',
@@ -204,6 +206,7 @@ class AddForm(base.AddForm):
     def create(self, data):
         return Assignment(state=data.get('state', None),
                           search_base=data.get('search_base', None))
+
 
 class EditForm(base.EditForm):
     form_fields = form.Fields(ICalendarPortlet)
