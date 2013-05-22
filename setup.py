@@ -98,6 +98,7 @@ setup(name='plone.app.event',
               'z3c.unconfigure',
           ],
           'test': [
+              'mock',
               'plone.app.event [archetypes, dexterity]',
               'plone.app.collection',
               'plone.app.testing',
