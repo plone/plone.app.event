@@ -2,13 +2,6 @@
 
     var end_start_delta;
 
-    function wholeDayHandler(e) {
-        if (e.target.checked) {
-            $('.datetimewidget-time').fadeOut();
-        } else {
-            $('.datetimewidget-time').fadeIn();
-        }
-    }
 
     function updateEndDate() {
         var start_date = $('#startDate').data('dateinput').getValue();
@@ -51,10 +44,64 @@
         end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
     }
 
+
+    function set_whole_day(target, fade) {
+        var widget = $('.datetimewidget-time');
+        if (target.checked===true) {
+            if (fade===true) { widget.fadeOut(); }
+            else { widget.hide(); }
+        } else {
+            if (fade===true) { widget.fadeIn(); }
+            else { widget.show(); }
+        }
+    }
+
+    function show_hide_widget(widget, hide, fade) {
+        if (hide===true) {
+            if (fade===true) { widget.fadeOut(); }
+            else { widget.hide(); }
+        } else {
+            if (fade===true) { widget.fadeIn(); }
+            else { widget.show(); }
+        }
+    }
+
+    function a_or_b(a, b) {
+        var ret = undefined;
+        if (a.length>0) {
+            ret = a;
+        } else {
+            ret = b;
+        }
+        return ret;
+    }
+
     $(document).ready(function() {
 
         // EDIT FORM
-        $('#wholeDay').bind('change', wholeDayHandler);
+
+        // WHOLE DAY INIT
+        var jq_whole_day_1 = $('#event-base-edit input#wholeDay');
+        var jq_whole_day_2 = $('#formfield-form-widgets-IEventBasic-whole_day input');
+        if (jq_whole_day_1.length>0) {
+            jq_whole_day_1.bind('change', function (e) { set_whole_day(e.target, true)});
+            set_whole_day(jq_whole_day_1.get(0), fade=false);
+        }
+        if (jq_whole_day_2.length>0) {
+            jq_whole_day_2.bind('change', function (e) { set_whole_day(e.target, true)});
+            set_whole_day(jq_whole_day_2.get(0), fade=false);
+        }
+
+
+        var jq_open_end = a_or_b($('#event-base-edit input#openEnd'), $('#formfield-form-widgets-IEventBasic-open_end input'));
+        var jq_end_date = a_or_b($('#archetypes-fieldname-endDate'), $('#formfield-form-widgets-IEventBasic-end'));
+        if (jq_open_end.length>0) {
+            jq_open_end.bind('change', function (e) { show_hide_widget(jq_end_date, e.target.checked, true)});
+            show_hide_widget(jq_end_date, jq_open_end.get(0).checked, fade=false);
+        }
+
+
+
         /*$('[id^=startDate]').bind('focus', initDelta);
         $('[id^=endDate]').bind('focus', initDelta);
         $('#startDate').each(function(){
