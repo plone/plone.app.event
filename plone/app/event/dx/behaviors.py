@@ -368,6 +368,8 @@ def data_postprocessing(obj, event):
     # Adapt for whole day
     if behavior.whole_day:
         start = dt_start_of_day(start)
+    if behavior.open_end:
+        end = start  # Open end events end on same day
     if behavior.open_end or behavior.whole_day:
         end = dt_end_of_day(end)
 

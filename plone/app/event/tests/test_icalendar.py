@@ -79,8 +79,10 @@ class ICalendarExportTest(unittest.TestCase):
         portal.events.invokeFactory('plone.app.event.dx.event',
             id='standardtime', title='Standard Time',
             start=datetime(2013,12,24,12,0),
-            end=datetime(2013,12,24,13,0),
-            timezone='Europe/Vienna')
+            end=datetime(2013,12,29,12,0),
+            open_end=True,
+            timezone='Europe/Vienna'
+            )
 
         portal.invokeFactory("Collection",
                              "collection",
@@ -158,7 +160,6 @@ class ICalendarExportTest(unittest.TestCase):
             'BEGIN:VEVENT',
             'SUMMARY:Standard Time',
             'DTSTART;TZID=Europe/Vienna;VALUE=DATE-TIME:20131224T120000',
-            'DTEND;TZID=Europe/Vienna;VALUE=DATE-TIME:20131224T130000',
             'URL:http://nohost/plone/events/standardtime',
             'END:VEVENT',
             'BEGIN:VTIMEZONE',

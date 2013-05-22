@@ -159,10 +159,20 @@ class TestDXIntegration(unittest.TestCase):
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(IEventBasic(e1).start == dt_2)
 
+        # Test open_end events
+        # For open_end events, setting the end date has no effect
+        IEventAccessor(e1).edit(
+            timezone=tzname_1,
+            open_end=True,
+            end=datetime(2012, 11, 11, 10, 10, 0),
+        )
+        notify(ObjectModifiedEvent(e1))
+        self.assertTrue(IEventBasic(e1).start == dt_1)
+        self.assertTrue(IEventBasic(e1).end == dt_1_2)
+
         # Likewise with whole_day events. If values were converted, the days
         # would drift apart.
         IEventAccessor(e1).whole_day = True
-        IEventAccessor(e1).timezone = tzname_1
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(IEventBasic(e1).start == dt_1_1)
         self.assertTrue(IEventBasic(e1).end == dt_1_2)

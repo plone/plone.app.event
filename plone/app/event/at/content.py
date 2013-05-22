@@ -524,9 +524,12 @@ def data_postprocessing(obj, event):
     end = make_DT(end, timezone)
 
     whole_day = obj.getWholeDay()
+    open_end = obj.getOpenEnd()
     if whole_day:
         start = DateTime('%s 0:00:00 %s' % (start.Date(), timezone))
-    if obj.getOpenEnd() or whole_day:
+    if open_end:
+        end = start  # Open end events end on same day
+    if open_end or whole_day:
         end = DateTime('%s 23:59:59 %s' % (end.Date(), timezone))
 
     start_field.set(obj, start.toZone('UTC'))

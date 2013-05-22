@@ -104,8 +104,17 @@ class PAEventAccessorTest(unittest.TestCase):
         # timezone should be the same on the event object and accessor
         self.assertEqual(e1.getTimezone(), acc.timezone)
 
+        # Open End Test
+        acc.edit(open_end=True)
+        self.assertEqual(
+            acc.start,
+            datetime(2011, 11, 13, 9, 0, tzinfo=vienna))
+        self.assertEqual(
+            acc.end,
+            datetime(2011, 11, 13, 23, 59, 59, tzinfo=vienna))
+
         # Whole Day Test
-        acc.edit(whole_day=True)
+        acc.edit(whole_day=True, open_end=False)
         self.assertEqual(
             acc.start,
             datetime(2011, 11, 13, 0, 0, tzinfo=vienna))
@@ -875,6 +884,58 @@ class PAEventATFieldTest(unittest.TestCase):
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == ('True', 'False'), 'Value is %s' % str(tuple(vocab)))
 
+    def test_openEndField(self):
+        field = self.obj.getField('openEnd')
+
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (('True', 'Yes', 'yes'), ('False', 'No', 'no')),
+                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.enforceVocabulary == 0,
+                        'Value is %s' % field.enforceVocabulary)
+        self.assertTrue(field.multiValued == 0,
+                        'Value is %s' % field.multiValued)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getOpenEnd',
+                        'Value is %s' % field.accessor)
+        self.assertTrue(field.mutator == 'setOpenEnd',
+                        'Value is %s' % field.mutator)
+        self.assertTrue(field.read_permission == View,
+                        'Value is %s' % field.read_permission)
+        self.assertTrue(field.write_permission == ModifyPortalContent,
+                        'Value is %s' % field.write_permission)
+        self.assertTrue(field.generateMode == 'veVc',
+                        'Value is %s' % field.generateMode)
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
+                        'Value is %s' % type(field.storage))
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
+                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertEqual(field.validators, EmptyValidator)
+        self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
+                        'Value is %s' % id(field.widget))
+        vocab = field.Vocabulary(self.obj)
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
+                        'Value is %s' % type(vocab))
+        self.assertTrue(tuple(vocab) == ('True', 'False'), 'Value is %s' % str(tuple(vocab)))
+
+    def test_openEnd_handler(self):
+        event_id = self.portal.invokeFactory('Event',
+                id="event",
+                startDate='2000/10/12 06:00:00',
+                endDate='2000/10/14 18:00:00',
+                timezone=TZNAME,
+                openEnd=True)
+        event = self.portal[event_id]
+        self.assertTrue(event.getOpenEnd())
+        self.assertEqual(event.start().Time(), '06:00:00')
+        self.assertEqual(event.end().Date(), '2000/10/12')
+        self.assertEqual(event.end().Time(), '23:59:59')
+
+        self.portal.manage_delObjects(['event'])
 
     def test_wholeday_handler(self):
         event_id = self.portal.invokeFactory('Event',
