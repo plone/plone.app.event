@@ -37,6 +37,9 @@
         }
     }
 
+
+    // TODO: fix above
+    
     function initDelta(e) {
         var start_datetime = getDateTime('#archetypes-fieldname-startDate');
         var end_datetime = getDateTime('#archetypes-fieldname-endDate');
@@ -84,7 +87,6 @@
             jq_open_end.bind('change', function (e) { show_hide_widget(jq_end_date, e.target.checked, true)});
             show_hide_widget(jq_end_date, jq_open_end.get(0).checked, fade=false);
         }
-
 
 
         /*$('[id^=startDate]').bind('focus', initDelta);
