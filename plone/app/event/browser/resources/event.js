@@ -45,17 +45,6 @@
     }
 
 
-    function set_whole_day(target, fade) {
-        var widget = $('.datetimewidget-time');
-        if (target.checked===true) {
-            if (fade===true) { widget.fadeOut(); }
-            else { widget.hide(); }
-        } else {
-            if (fade===true) { widget.fadeIn(); }
-            else { widget.show(); }
-        }
-    }
-
     function show_hide_widget(widget, hide, fade) {
         if (hide===true) {
             if (fade===true) { widget.fadeOut(); }
@@ -81,18 +70,14 @@
         // EDIT FORM
 
         // WHOLE DAY INIT
-        var jq_whole_day_1 = $('#event-base-edit input#wholeDay');
-        var jq_whole_day_2 = $('#formfield-form-widgets-IEventBasic-whole_day input');
-        if (jq_whole_day_1.length>0) {
-            jq_whole_day_1.bind('change', function (e) { set_whole_day(e.target, true)});
-            set_whole_day(jq_whole_day_1.get(0), fade=false);
-        }
-        if (jq_whole_day_2.length>0) {
-            jq_whole_day_2.bind('change', function (e) { set_whole_day(e.target, true)});
-            set_whole_day(jq_whole_day_2.get(0), fade=false);
+        var jq_whole_day = a_or_b($('#event-base-edit input#wholeDay'), $('#formfield-form-widgets-IEventBasic-whole_day input'));
+        var jq_datetime = $('.datetimewidget-time'); 
+        if (jq_whole_day.length>0) {
+            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_datetime, e.target.checked, true)});
+            show_hide_widget(jq_datetime, jq_whole_day.get(0).checked, fade=false);
         }
 
-
+        // OPEN END INIT
         var jq_open_end = a_or_b($('#event-base-edit input#openEnd'), $('#formfield-form-widgets-IEventBasic-open_end input'));
         var jq_end_date = a_or_b($('#archetypes-fieldname-endDate'), $('#formfield-form-widgets-IEventBasic-end'));
         if (jq_open_end.length>0) {
