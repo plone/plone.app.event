@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- More compact layout for AT and DX edit forms.
+  [thet]
+
 - Add open_end option for Dexterity behaviors and Archetypes type.
   [thet]
 
@@ -18,7 +21,7 @@ Changelog
   [thet]
 
 - Changing the timezone in events is a corner case, so the timezone field is
-  moved to the "dates" schemata an ATEvent.
+  moved to the "dates" schemata for AT and DX.
   [thet]
 
 - Remove font-weight bold for monthdays and font-weight normal for table header

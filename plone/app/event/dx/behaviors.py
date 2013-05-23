@@ -58,8 +58,9 @@ class StartBeforeEnd(Invalid):
 
 class IEventBasic(model.Schema):
     """ Basic event schema.
-
     """
+    model.fieldset('dates', fields=['timezone'])
+
     start = schema.Datetime(
         title = _(u'label_start', default=u'Event start date'),
         description = _(u'help_start',
@@ -86,6 +87,7 @@ class IEventBasic(model.Schema):
         required = False
         )
 
+    # TODO: form.order_before(timezone="IPublication.effective")
     timezone = schema.Choice(
         title = _(u'label_timezone', default=u'Timezone'),
         description = _(u'help_timezone', default=u'Timezone of the event'),
