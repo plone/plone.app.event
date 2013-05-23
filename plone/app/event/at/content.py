@@ -1,5 +1,6 @@
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
+from Products.Archetypes.interfaces import IObjectPostValidation
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import registerATCT
@@ -288,46 +289,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             contactName=contact_name, contactEmail=contact_email,
             contactPhone=contact_phone, eventUrl=event_url)
 
-
-    security.declareProtected(View, 'post_validate')
-    def post_validate(self, REQUEST=None, errors=None):
-        """Validates start and end date
-
-        End date must be after start date
-        """
-
-        if 'startDate' in errors or 'endDate' in errors:
-            # No point in validating bad input
-            return
-
-        rstartDate = REQUEST.get('startDate', None)
-        rendDate = REQUEST.get('endDate', None)
-
-        if rendDate:
-            try:
-                end = DateTime(rendDate)
-            except:
-                errors['endDate'] = _(u'error_invalid_end_date',
-                                      default=u'End date is not valid.')
-        else:
-            end = self.end()
-        if rstartDate:
-            try:
-                start = DateTime(rstartDate)
-            except:
-                errors['startDate'] = _(u'error_invalid_start_date',
-                                        default=u'Start date is not valid.')
-        else:
-            start = self.start()
-
-        if 'startDate' in errors or 'endDate' in errors:
-            # No point in validating bad input
-            return
-
-        if start > end:
-            errors['endDate'] = _(u'error_end_must_be_after_start_date',
-                              default=u'End date must be after start date.')
-
     ###
     # Timezone / start / end getter / setter
     def setTimezone(self, value, **kwargs):
@@ -470,6 +431,55 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
 
 registerATCT(ATEvent, packageName)
+
+
+class StartEndDateValidator(object):
+    """Checks whether startDate is before endDate. In case the event is
+    openEnded this check is skipped.
+    """
+    implements(IObjectPostValidation)
+    adapts(IATEvent)
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self, request):
+        openEnd = request.get('openEnd', False)
+        if openEnd:
+            # In case the event has an open end, enddate is set automatically
+            # later and we need not check it
+            return None
+
+        rstartDate = request.get('startDate', None)
+        rendDate = request.get('endDate', None)
+
+        errors = {}
+        if rendDate:
+            try:
+                end = DateTime(rendDate)
+            except:
+                errors['endDate'] = _(u'error_invalid_end_date',
+                                      default=u'End date is not valid.')
+        else:
+            end = self.context.end()
+        if rstartDate:
+            try:
+                start = DateTime(rstartDate)
+            except:
+                errors['startDate'] = _(u'error_invalid_start_date',
+                                        default=u'Start date is not valid.')
+        else:
+            start = self.context.start()
+
+        if 'startDate' in errors or 'endDate' in errors:
+            # No point in validating bad input
+            return
+
+        if start > end:
+            errors['endDate'] = _(u'error_end_must_be_after_start_date',
+                              default=u'End date must be after start date.')
+
+        return errors and errors or None
 
 
 ## Event handlers

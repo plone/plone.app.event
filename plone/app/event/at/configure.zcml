@@ -11,6 +11,9 @@
 
     <adapter factory=".content.EventAccessor" />
 
+    <subscriber provides="Products.Archetypes.interfaces.IObjectPostValidation"
+                factory=".content.StartEndDateValidator" />
+
     <subscriber for=".interfaces.IATEvent
                      zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                 handler=".content.data_postprocessing" />

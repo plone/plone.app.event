@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Change the AT validation code to an subsciption adapter. This allows reliable
+  validation for types derived from ATEvent, which wasn't the case with the
+  post_validate method.
+  [thet]
+
 - More compact layout for AT and DX edit forms.
   [thet]
 
