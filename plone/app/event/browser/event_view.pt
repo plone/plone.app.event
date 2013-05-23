@@ -128,15 +128,6 @@
 
   <tal:txt replace="structure data/text" />
 
-  <p tal:condition="data/event_url|nothing">
-    <a class="url"
-         href="event_url"
-         i18n:translate="event_more_information"
-         class="eventUrl"
-         tal:attributes="href data/event_url">
-       More information about this event&hellip;</a>
-  </p>
-
   <span class="visualClear" />
 
 </tal:def>
