@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix OccurrenceTraverser to fallback to plone.app.imaging's ImageTraverser, if
+  present and thus support image fields on plone.app.event based types.
+  [thet]
+
 - Change the AT validation code to an subsciption adapter. This allows reliable
   validation for types derived from ATEvent, which wasn't the case with the
   post_validate method.

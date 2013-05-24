@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
-from ZPublisher.BaseRequest import DefaultPublishTraverse
 from plone.app.event.base import guess_date_from
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
@@ -12,6 +11,13 @@ from plone.event.utils import is_same_day
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
+
+try:
+    from plone.app.imaging.traverse import ImageTraverser as\
+            DefaultPublishTraverse
+except ImportError:
+    from ZPublisher.BaseRequest import DefaultPublishTraverse
+
 
 import itertools
 
@@ -78,8 +84,6 @@ class OccurrenceTraverser(DefaultPublishTraverse):
     implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
-        # TODO: here is something odd....
-        #       called every time, when an attribute is traversed/accessed?
         dateobj = guess_date_from(name, self.context)
         if dateobj:
             occurrence = IRecurrenceSupport(self.context).occurrences(
@@ -87,11 +91,12 @@ class OccurrenceTraverser(DefaultPublishTraverse):
             occ_acc = IEventAccessor(occurrence)
             if is_same_day(dateobj, occ_acc.start):
                 return occurrence
-        return self.fallback(name)
+        # No self.fallback to avoid circular call from ImageTraverser
+        return super(OccurrenceTraverser, self).publishTraverse(request, name)
+    #    return self.fallback(request, name)
 
-    def fallback(self, name):
-        return super(OccurrenceTraverser, self).publishTraverse(
-            self.request, name)
+    #def fallback(self, request, name):
+    #    return super(OccurrenceTraverser, self).publishTraverse(request, name)
 
 
 class Occurrence(SimpleItem):
