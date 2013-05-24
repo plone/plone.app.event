@@ -93,10 +93,6 @@ class OccurrenceTraverser(DefaultPublishTraverse):
                 return occurrence
         # No self.fallback to avoid circular call from ImageTraverser
         return super(OccurrenceTraverser, self).publishTraverse(request, name)
-    #    return self.fallback(request, name)
-
-    #def fallback(self, request, name):
-    #    return super(OccurrenceTraverser, self).publishTraverse(request, name)
 
 
 class Occurrence(SimpleItem):
