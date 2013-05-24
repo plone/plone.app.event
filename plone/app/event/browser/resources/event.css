@@ -67,8 +67,19 @@ article.vevent .documentByLine {
     padding: 0;
 }
 
+/* horizontal event metadata */
+#content .vevent ul.metadata { margin: 0.8em 0; }
+#content .vevent ul.horizontal { padding: 0; }
+#content .vevent ul.horizontal li {
+    display: inline-block;
+    line-height: 1.5em;
+    list-style-image: none;
+    list-style-type: none;
+}
 .vevent .horizontal.metadata li:after { content: " \2014 "; }
 .vevent .horizontal.metadata li:last-child:after { content: ""; }
+.vevent .horizontal.metadata .category span:after { content: ","; }
+.vevent .horizontal.metadata .category span:last-child:after { content: ""; }
 
 .vevent .timezone {
     display:block;
