@@ -12,7 +12,7 @@ on installed packages.
 Installation
 ------------
 
-See the installation documentation at: `docs/installation.rst`.
+See the installation documentation at: docs/installation.rst.
 
 PLIP implementation
 -------------------
