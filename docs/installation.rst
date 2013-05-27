@@ -11,6 +11,7 @@ and no subpackage, as they are loaded automatically::
     <include package="plone.app.event"/>
 
 .. note::
+
   After installation, please set your timezone in the @@event-settings
   controlpanel. Otherwise there some weired behavior can occur, like you're
   apparently unable to set the time for dexterity types not to what you want.
@@ -37,11 +38,20 @@ once to re-register portlets, re-adding the DateRecurringIndex for start and
 end indices and so on.
 
 .. note::
-  Run the "ploneintegration" profile only once (or after whole site-profiles
-  are re-applied). Otherwise you have to clear and rebuild the index every
-  time, because the start and end indices are removed and re-added
+
+  plone.app.event depends on plone.app.portlets>=2.4.0. This version allows the
+  calendar portlet to do AJAX calls without KSS via standard jQuery. For Plone
+  < 4.3 you have to fix the plone.app.portlets version in your buildout like
+  so::
+
+    [buildout]
+    versions = versions
+
+    [versions]
+    plone.app.portlets = 2.4.3
 
 .. note::
+
   Currently the package ``z3c.unconfigure`` depends on ``zope.configuration >=
   3.8`` but Plone 4.2.4 uses zope.configuration 3.7.4. To successfully install
   plone.app.event with it's ploneintegration extra, you have to make a version
@@ -49,11 +59,18 @@ end indices and so on.
   included in this buildout) or fix zope.configuration for example to 4.0.2
   (not backwards-compatible).
 
+.. note::
+
+  Run the "ploneintegration" profile only once (or after whole site-profiles
+  are re-applied). Otherwise you have to clear and rebuild the index every
+  time, because the start and end indices are removed and re-added
+
 
 Upgrading from Products.ATContentType to plone.app.event
 --------------------------------------------------------
 
 .. warning::
+
   Content upgrades from the old ATEvent type are experimental, so don't rely
   on this.
 
