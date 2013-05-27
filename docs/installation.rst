@@ -39,10 +39,10 @@ end indices and so on.
 
 .. note::
 
-  plone.app.event depends on plone.app.portlets>=2.4.0. This version allows the
-  calendar portlet to do AJAX calls without KSS via standard jQuery. For Plone
-  < 4.3 you have to fix the plone.app.portlets version in your buildout like
-  so::
+  plone.app.event depends on ``plone.app.portlets>=2.4.0``. This version allows
+  the calendar portlet to do AJAX calls without KSS via standard jQuery. For
+  Plone < 4.3 you have to fix the plone.app.portlets version in your buildout
+  like so::
 
     [buildout]
     versions = versions
