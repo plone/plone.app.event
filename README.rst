@@ -9,6 +9,11 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
+Installation
+------------
+
+See the installation documentation at: :doc:`docs/installation.rst`.
+
 PLIP implementation
 -------------------
 
