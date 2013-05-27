@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b8 (2013-05-27)
+------------------
 
 - Fix OccurrenceTraverser to fallback to plone.app.imaging's ImageTraverser, if
   present and thus support image fields on plone.app.event based types.
