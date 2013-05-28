@@ -254,6 +254,14 @@ class EventListing(BrowserView):
         return self._date_nav_url('all')
 
     @property
+    def mode_future_url(self):
+        return self._date_nav_url('future')
+
+    @property
+    def mode_past_url(self):
+        return self._date_nav_url('past')
+
+    @property
     def mode_day_url(self):
         now = self.date or self.now
         return self._date_nav_url('day', now.date().isoformat())

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-22 00:08+0000\n"
+"POT-Creation-Date: 2013-05-28 12:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgid "contact_attendees"
 msgstr ""
 
 #. Default: "Contact Name"
-#: plone/app/event/browser/event_listing.pt:122
+#: plone/app/event/browser/event_listing.pt:125
 #: plone/app/event/browser/event_view.pt:76
 msgid "contact_name"
 msgstr ""
@@ -148,23 +148,18 @@ msgid "contact_phone"
 msgstr ""
 
 #. Default: "End date must be after start date."
-#: plone/app/event/at/content.py:328
+#: plone/app/event/at/content.py:479
 msgid "error_end_must_be_after_start_date"
 msgstr ""
 
 #. Default: "End date is not valid."
-#: plone/app/event/at/content.py:310
+#: plone/app/event/at/content.py:461
 msgid "error_invalid_end_date"
 msgstr ""
 
 #. Default: "Start date is not valid."
-#: plone/app/event/at/content.py:318
+#: plone/app/event/at/content.py:469
 msgid "error_invalid_start_date"
-msgstr ""
-
-#. Default: "More information about this event…"
-#: plone/app/event/browser/event_view.pt:130
-msgid "event_more_information"
 msgstr ""
 
 #. Default: "Web"
@@ -232,12 +227,12 @@ msgid "exception_start_before_end"
 msgstr ""
 
 #. Default: "The start date must be before the                                             end date."
-#: plone/app/event/dx/behaviors.py:99
+#: plone/app/event/dx/behaviors.py:101
 msgid "exception_start_before_end_text"
 msgstr ""
 
 #. Default: "Visit external website"
-#: plone/app/event/browser/event_listing.pt:110
+#: plone/app/event/browser/event_listing.pt:113
 #: plone/app/event/browser/event_view.pt:107
 msgid "external_website"
 msgstr ""
@@ -253,7 +248,7 @@ msgid "heading_add_to_calendar"
 msgstr ""
 
 #. Default: "List of attendees"
-#: plone/app/event/dx/behaviors.py:166
+#: plone/app/event/dx/behaviors.py:168
 msgid "help_attendees"
 msgstr ""
 
@@ -263,53 +258,53 @@ msgid "help_available_timezones"
 msgstr ""
 
 #. Default: "Email address to contact about this event."
-#: plone/app/event/dx/behaviors.py:187
+#: plone/app/event/dx/behaviors.py:189
 msgid "help_contact_email"
 msgstr ""
 
 #. Default: "Name of a person to contact about this event."
-#: plone/app/event/dx/behaviors.py:179
+#: plone/app/event/dx/behaviors.py:181
 msgid "help_contact_name"
 msgstr ""
 
 #. Default: "Phone number to contact about this event."
-#: plone/app/event/dx/behaviors.py:194
+#: plone/app/event/dx/behaviors.py:196
 msgid "help_contact_phone"
 msgstr ""
 
 #. Default: "Date and Time, when the event ends."
-#: plone/app/event/at/content.py:72
-#: plone/app/event/dx/behaviors.py:72
+#: plone/app/event/at/content.py:73
+#: plone/app/event/dx/behaviors.py:73
 msgid "help_end"
 msgstr ""
 
-#: plone/app/event/at/content.py:207
-#: plone/app/event/dx/behaviors.py:213
+#: plone/app/event/at/content.py:208
+#: plone/app/event/dx/behaviors.py:215
 msgid "help_event_announcement"
 msgstr ""
 
-#: plone/app/event/at/content.py:145
+#: plone/app/event/at/content.py:146
 msgid "help_event_attendees"
 msgstr ""
 
-#: plone/app/event/at/content.py:168
+#: plone/app/event/at/content.py:169
 msgid "help_event_contact_email"
 msgstr ""
 
-#: plone/app/event/at/content.py:156
+#: plone/app/event/at/content.py:157
 msgid "help_event_contact_name"
 msgstr ""
 
-#: plone/app/event/at/content.py:180
+#: plone/app/event/at/content.py:181
 msgid "help_event_contact_phone"
 msgstr ""
 
-#: plone/app/event/at/content.py:135
+#: plone/app/event/at/content.py:136
 msgid "help_event_location"
 msgstr ""
 
 #. Default: "Enter recurrence rules, one per line."
-#: plone/app/event/at/content.py:121
+#: plone/app/event/at/content.py:122
 msgid "help_event_recurrence"
 msgstr ""
 
@@ -319,13 +314,13 @@ msgid "help_event_settings"
 msgstr ""
 
 #. Default: "Select the Timezone, where this event happens."
-#: plone/app/event/at/content.py:110
+#: plone/app/event/at/content.py:111
 msgid "help_event_timezone"
 msgstr ""
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
-#: plone/app/event/at/content.py:192
-#: plone/app/event/dx/behaviors.py:201
+#: plone/app/event/at/content.py:193
+#: plone/app/event/dx/behaviors.py:203
 msgid "help_event_url"
 msgstr ""
 
@@ -350,13 +345,13 @@ msgid "help_ical_import_enable"
 msgstr ""
 
 #. Default: "Location of the event"
-#: plone/app/event/dx/behaviors.py:156
+#: plone/app/event/dx/behaviors.py:158
 msgid "help_location"
 msgstr ""
 
 #. Default: "This event is open ended."
-#: plone/app/event/at/content.py:96
-#: plone/app/event/dx/behaviors.py:85
+#: plone/app/event/at/content.py:97
+#: plone/app/event/dx/behaviors.py:86
 msgid "help_open_end"
 msgstr ""
 
@@ -366,86 +361,89 @@ msgid "help_portal_timezone"
 msgstr ""
 
 #. Default: "RFC5545 compatible recurrence definition"
-#: plone/app/event/dx/behaviors.py:134
+#: plone/app/event/dx/behaviors.py:136
 msgid "help_recurrence"
 msgstr ""
 
 #. Default: "Date and Time, when the event begins."
-#: plone/app/event/at/content.py:56
-#: plone/app/event/dx/behaviors.py:65
+#: plone/app/event/at/content.py:57
+#: plone/app/event/dx/behaviors.py:66
 msgid "help_start"
 msgstr ""
 
 #. Default: "Timezone of the event"
-#: plone/app/event/dx/behaviors.py:91
+#: plone/app/event/dx/behaviors.py:93
 msgid "help_timezone"
 msgstr ""
 
 #. Default: "Event lasts whole day"
-#: plone/app/event/at/content.py:86
-#: plone/app/event/dx/behaviors.py:79
+#: plone/app/event/at/content.py:87
+#: plone/app/event/dx/behaviors.py:80
 msgid "help_whole_day"
 msgstr ""
 
 #. Default: "iCal"
-#: plone/app/event/browser/event_listing.pt:45
+#: plone/app/event/browser/event_listing.pt:48
 #: plone/app/event/browser/event_view.pt:121
 msgid "label_add_to_ical"
 msgstr ""
 
 #. Default: "Attendees"
-#: plone/app/event/dx/behaviors.py:165
+#: plone/app/event/dx/behaviors.py:167
 msgid "label_attendees"
 msgstr ""
 
-#. Default: "Email"
-#: plone/app/event/at/content.py:167
-#: plone/app/event/browser/event_listing.pt:120
-#: plone/app/event/dx/behaviors.py:186
+#. Default: "Contact E-mail"
+#: plone/app/event/at/content.py:168
+#: plone/app/event/dx/behaviors.py:188
 msgid "label_contact_email"
 msgstr ""
 
 #. Default: "Contact Name"
-#: plone/app/event/at/content.py:155
-#: plone/app/event/dx/behaviors.py:178
+#: plone/app/event/at/content.py:156
+#: plone/app/event/dx/behaviors.py:180
 msgid "label_contact_name"
 msgstr ""
 
 #. Default: "Contact Phone"
-#: plone/app/event/at/content.py:179
-#: plone/app/event/browser/event_listing.pt:132
-#: plone/app/event/dx/behaviors.py:193
+#: plone/app/event/at/content.py:180
+#: plone/app/event/dx/behaviors.py:195
 msgid "label_contact_phone"
 msgstr ""
 
+#. Default: "Email"
+#: plone/app/event/browser/event_listing.pt:123
+msgid "label_email"
+msgstr ""
+
 #. Default: "Event end date"
-#: plone/app/event/dx/behaviors.py:71
+#: plone/app/event/dx/behaviors.py:72
 msgid "label_end"
 msgstr ""
 
 #. Default: "Event body text"
-#: plone/app/event/at/content.py:206
-#: plone/app/event/dx/behaviors.py:212
+#: plone/app/event/at/content.py:207
+#: plone/app/event/dx/behaviors.py:214
 msgid "label_event_announcement"
 msgstr ""
 
 #. Default: "Attendees"
-#: plone/app/event/at/content.py:144
+#: plone/app/event/at/content.py:145
 msgid "label_event_attendees"
 msgstr ""
 
 #. Default: "Event Ends"
-#: plone/app/event/at/content.py:71
+#: plone/app/event/at/content.py:72
 msgid "label_event_end"
 msgstr ""
 
 #. Default: "Event Location"
-#: plone/app/event/at/content.py:134
+#: plone/app/event/at/content.py:135
 msgid "label_event_location"
 msgstr ""
 
 #. Default: "Event Recurrence"
-#: plone/app/event/at/content.py:120
+#: plone/app/event/at/content.py:121
 msgid "label_event_recurrence"
 msgstr ""
 
@@ -455,24 +453,23 @@ msgid "label_event_settings"
 msgstr ""
 
 #. Default: "Event Starts"
-#: plone/app/event/at/content.py:55
+#: plone/app/event/at/content.py:56
 msgid "label_event_start"
 msgstr ""
 
 #. Default: "Timezone"
-#: plone/app/event/at/content.py:109
+#: plone/app/event/at/content.py:110
 msgid "label_event_timezone"
 msgstr ""
 
 #. Default: "Event Type(s)"
-#: plone/app/event/at/content.py:219
+#: plone/app/event/at/content.py:220
 msgid "label_event_type"
 msgstr ""
 
-#. Default: "Web"
-#: plone/app/event/at/content.py:191
-#: plone/app/event/browser/event_listing.pt:110
-#: plone/app/event/dx/behaviors.py:200
+#. Default: "Event URL"
+#: plone/app/event/at/content.py:192
+#: plone/app/event/dx/behaviors.py:202
 msgid "label_event_url"
 msgstr ""
 
@@ -482,40 +479,44 @@ msgid "label_first_weekday"
 msgstr ""
 
 #. Default: "Location"
-#: plone/app/event/dx/behaviors.py:155
+#: plone/app/event/dx/behaviors.py:157
 msgid "label_location"
 msgstr ""
 
 #. Default: "Open end event"
-#: plone/app/event/at/content.py:95
-#: plone/app/event/dx/behaviors.py:84
+#: plone/app/event/at/content.py:96
+#: plone/app/event/dx/behaviors.py:85
 msgid "label_open_end"
 msgstr ""
 
+#: plone/app/event/browser/event_listing.pt:135
+msgid "label_phone"
+msgstr ""
+
 #. Default: "Recurrence"
-#: plone/app/event/dx/behaviors.py:133
+#: plone/app/event/dx/behaviors.py:135
 msgid "label_recurrence"
 msgstr ""
 
 #. Default: "Event start date"
-#: plone/app/event/dx/behaviors.py:64
+#: plone/app/event/dx/behaviors.py:65
 msgid "label_start"
 msgstr ""
 
 #. Default: "Timezone"
-#: plone/app/event/dx/behaviors.py:90
+#: plone/app/event/dx/behaviors.py:92
 msgid "label_timezone"
 msgstr ""
 
-#. Default: "Whole Day"
-#: plone/app/event/at/content.py:85
-#: plone/app/event/dx/behaviors.py:78
-msgid "label_whole_day"
+#. Default: "Web"
+#: plone/app/event/browser/event_listing.pt:113
+msgid "label_web"
 msgstr ""
 
-#. Default: "All"
-#: plone/app/event/browser/event_listing.pt:27
-msgid "mode_all_link"
+#. Default: "Whole Day"
+#: plone/app/event/at/content.py:86
+#: plone/app/event/dx/behaviors.py:79
+msgid "label_whole_day"
 msgstr ""
 
 #. Default: "Day"
@@ -523,9 +524,19 @@ msgstr ""
 msgid "mode_day_link"
 msgstr ""
 
+#. Default: "Upcoming"
+#: plone/app/event/browser/event_listing.pt:27
+msgid "mode_future_link"
+msgstr ""
+
 #. Default: "Month"
 #: plone/app/event/browser/event_listing.pt:30
 msgid "mode_month_link"
+msgstr ""
+
+#. Default: "Past"
+#: plone/app/event/browser/event_listing.pt:39
+msgid "mode_past_link"
 msgstr ""
 
 #. Default: "Week"
@@ -534,17 +545,17 @@ msgid "mode_week_link"
 msgstr ""
 
 #. Default: "Next Day"
-#: plone/app/event/browser/event_listing.pt:68
+#: plone/app/event/browser/event_listing.pt:71
 msgid "next_day_link"
 msgstr ""
 
 #. Default: "Next Month"
-#: plone/app/event/browser/event_listing.pt:54
+#: plone/app/event/browser/event_listing.pt:57
 msgid "next_month_link"
 msgstr ""
 
 #. Default: "Next Week"
-#: plone/app/event/browser/event_listing.pt:61
+#: plone/app/event/browser/event_listing.pt:64
 msgid "next_week_link"
 msgstr ""
 
@@ -566,17 +577,17 @@ msgid "portlet_label_search_base"
 msgstr ""
 
 #. Default: "Previous Day"
-#: plone/app/event/browser/event_listing.pt:66
+#: plone/app/event/browser/event_listing.pt:69
 msgid "prev_day_link"
 msgstr ""
 
 #. Default: "Previous Month"
-#: plone/app/event/browser/event_listing.pt:52
+#: plone/app/event/browser/event_listing.pt:55
 msgid "prev_month_link"
 msgstr ""
 
 #. Default: "Previous Week"
-#: plone/app/event/browser/event_listing.pt:59
+#: plone/app/event/browser/event_listing.pt:62
 msgid "prev_week_link"
 msgstr ""
 
@@ -586,17 +597,17 @@ msgid "summary_event_details"
 msgstr ""
 
 #. Default: "This Month"
-#: plone/app/event/browser/event_listing.pt:53
+#: plone/app/event/browser/event_listing.pt:56
 msgid "this_month_link"
 msgstr ""
 
 #. Default: "This Week"
-#: plone/app/event/browser/event_listing.pt:60
+#: plone/app/event/browser/event_listing.pt:63
 msgid "this_week_link"
 msgstr ""
 
 #. Default: "Download this event in iCal format"
-#: plone/app/event/browser/event_listing.pt:40
+#: plone/app/event/browser/event_listing.pt:43
 #: plone/app/event/browser/event_view.pt:115
 msgid "title_add_to_ical"
 msgstr ""
@@ -617,7 +628,7 @@ msgid "title_ical_import_enable"
 msgstr ""
 
 #. Default: "Today"
-#: plone/app/event/browser/event_listing.pt:67
+#: plone/app/event/browser/event_listing.pt:70
 msgid "today_link"
 msgstr ""
 

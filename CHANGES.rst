@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Change default listing mode in event_listing and replace "All" witth seperate
+  "Future" and "Past" buttons.
+  [thet]
+
+
 1.0b8 (2013-05-27)
 ------------------
 

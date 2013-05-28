@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.0b8'
+version = '1.0dev'
 
 
 setup(name='plone.app.event',
