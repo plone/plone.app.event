@@ -47,7 +47,8 @@ class TestBaseModule(unittest.TestCase):
             localized_now())
 
     def test_default_start(self):
-        self.assertEqualDatetime(default_start(), localized_now())
+        now = localized_now().replace(minute=0, second=0, microsecond=0)
+        self.assertEqualDatetime(default_start(), now)
 
     def test_DT(self):
         # Python datetime with valid zone. Zope converts it to GMT+1...

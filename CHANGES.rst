@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- For default_start, return a datetime with minute, second and microsecond set
+  to 0.
+  [thet]
+
 - Don't overload ATEvent's subject widget label and help texts but use AT and
   DX standard label_tags and help_tags messages.
   [thet]

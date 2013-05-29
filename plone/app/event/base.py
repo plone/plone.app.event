@@ -697,7 +697,8 @@ def default_start(context=None):
     :rtype: Python datetime
 
     """
-    return localized_now(context=context)
+    now = localized_now(context=context)
+    return now.replace(minute=0, second=0, microsecond=0)
 
 
 def default_end(context=None):
