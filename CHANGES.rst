@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Don't overload ATEvent's subject widget label and help texts but use AT and
+  DX standard label_tags and help_tags messages.
+  [thet]
+
 - Fix compact layout and don't float the recurrence widget.
   [thet]
 

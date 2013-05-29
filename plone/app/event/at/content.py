@@ -217,8 +217,6 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 # Repurpose the subject field for the event type
 ATEventSchema.moveField('subject', before='eventUrl')
 ATEventSchema['subject'].write_permission = ModifyPortalContent
-ATEventSchema['subject'].widget.label = _(u'label_event_type',
-                                          default=u'Event Type(s)')
 ATEventSchema['subject'].widget.size = 6
 ATEventSchema.changeSchemataForField('subject', 'default')
 
