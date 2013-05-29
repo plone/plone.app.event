@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-28 12:17+0000\n"
+"POT-Creation-Date: 2013-05-29 10:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,17 +148,17 @@ msgid "contact_phone"
 msgstr "Kontakttelefon"
 
 #. Default: "End date must be after start date."
-#: plone/app/event/at/content.py:479
+#: plone/app/event/at/content.py:477
 msgid "error_end_must_be_after_start_date"
 msgstr "Enddatum muss nach dem Startdatum liegen."
 
 #. Default: "End date is not valid."
-#: plone/app/event/at/content.py:461
+#: plone/app/event/at/content.py:459
 msgid "error_invalid_end_date"
 msgstr "Ungültiges Enddatum."
 
 #. Default: "Start date is not valid."
-#: plone/app/event/at/content.py:469
+#: plone/app/event/at/content.py:467
 msgid "error_invalid_start_date"
 msgstr "Ungültiges Anfangsdatum."
 
@@ -466,11 +466,6 @@ msgstr "Terminanfang"
 #: plone/app/event/at/content.py:110
 msgid "label_event_timezone"
 msgstr "Zeitzone"
-
-#. Default: "Event Type(s)"
-#: plone/app/event/at/content.py:220
-msgid "label_event_type"
-msgstr "Termin Artikeltypen"
 
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:192
