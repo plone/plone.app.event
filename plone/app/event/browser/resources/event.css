@@ -295,13 +295,12 @@ article.vevent .documentByLine {
 #formfield-form-widgets-IEventBasic-end,
 #formfield-form-widgets-IEventBasic-whole_day,
 #formfield-form-widgets-IEventBasic-open_end,
-#formfield-form-widgets-IEventRecurrence-recurrence,
 /* AT fields */
 #archetypes-fieldname-startDate,
 #archetypes-fieldname-endDate,
 #archetypes-fieldname-wholeDay,
 #archetypes-fieldname-openEnd,
-#archetypes-fieldname-recurrence {
+ {
     clear:none;
     float:left;
     margin-right: 2em;
@@ -311,7 +310,7 @@ article.vevent .documentByLine {
 #archetypes-fieldname-wholeDay {
     clear:left;
 }
-#formfield-form-widgets-IEventLocation-location,
-#archetypes-fieldname-location {
+#formfield-form-widgets-IEventRecurrence-recurrence,
+#archetypes-fieldname-recurrence {
     clear:left;
 }
