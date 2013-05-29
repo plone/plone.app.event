@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix compact layout and don't float the recurrence widget.
+  [thet]
+
 - Change default listing mode in event_listing and replace "All" witth seperate
   "Future" and "Past" buttons.
   [thet]
