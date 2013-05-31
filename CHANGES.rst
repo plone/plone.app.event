@@ -20,10 +20,10 @@ Changelog
   DX standard label_tags and help_tags messages.
   [thet]
 
-- Fix compact layout and don't float the recurrence widget.
+- Fix compact event edit form layouts and don't float the recurrence widget.
   [thet]
 
-- Change default listing mode in event_listing and replace "All" witth seperate
+- Change default listing mode in event_listing and replace "All" with seperate
   "Future" and "Past" buttons.
   [thet]
 
