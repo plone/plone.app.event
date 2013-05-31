@@ -17,7 +17,6 @@ setup(name='plone.app.event',
                        open(os.path.join('docs', 'contributors.rst')).read()
                        + '\n' +
                        open("CHANGES.rst").read(),
-      # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
@@ -45,6 +44,7 @@ setup(name='plone.app.event',
           'Zope2',
           'collective.elephantvocabulary',
           'icalendar',
+          'persistent',
           'plone.app.imaging',
           'plone.app.layout',
           'plone.app.portlets>=2.4.0',
@@ -63,6 +63,7 @@ setup(name='plone.app.event',
           'pytz',
           'transaction',
           'z3c.form',
+          'zope.annotation',
           'zope.component',
           'zope.container',
           'zope.contentprovider',

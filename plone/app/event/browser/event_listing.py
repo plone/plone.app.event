@@ -4,6 +4,7 @@ from calendar import monthrange
 from datetime import date
 from datetime import timedelta
 from plone.app.event import messageFactory as _
+from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import date_speller
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
@@ -11,10 +12,19 @@ from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
+from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.memoize import view
+from plone.z3cform.layout import wrap_form
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
+from zope import schema
+from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
+from zope.interface import Interface
+from zope.interface import implements
 try:
     from plone.app.collection.interfaces import ICollection
 except ImportError:
@@ -31,6 +41,7 @@ class EventListing(BrowserView):
         super(EventListing, self).__init__(context, request)
 
         self.now = now = localized_now(context)
+        settings = IEventListingSettings(self.context)
 
         # Batch parameter
         req = self.request.form
@@ -39,7 +50,11 @@ class EventListing(BrowserView):
         self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
         self.mode    = 'mode'    in req and req['mode']         or None
         self._date   = 'date'    in req and req['date']         or None
-        self._all    = 'all'     in req and True                or False
+        self.tags    = 'tags'    in req and req['tags']         or None
+        self.searchable_text = 'SearchableText' in req and\
+                req['SearchableTexttags'] or None
+
+        self._all = 'all' in req and True or not settings.current_folder_only
 
         day   = 'day'   in req and int(req['day'])   or None
         month = 'month' in req and int(req['month']) or None
@@ -96,6 +111,12 @@ class EventListing(BrowserView):
         #kw['b_start'] = self.b_start
         #kw['b_size']  = self.b_size
 
+        if self.tags:
+            kw['Subject'] = self.tags
+
+        if self.searchable_text:
+            kw['SearchableText'] = self.searchable_text
+
         start, end = self._start_end
         return get_events(context, start=start, end=end,
                           ret_mode=ret_mode, expand=True, **kw)
@@ -114,7 +135,8 @@ class EventListing(BrowserView):
                 )
             # TODO: uff, we have to walk through all results...
             if ret_mode == 3:
-                res = [IEventAccessor(obj) for obj in res]
+                res = [IEventAccessor(obj) for obj in res
+                       if IEvent.providedBy(obj)]
         else:
             res = self._get_events(ret_mode)
         if batch:
@@ -331,6 +353,53 @@ class EventListing(BrowserView):
 
 
 class EventListingIcal(EventListing):
-
     def __call__(self, *args, **kwargs):
         return self.ical
+
+
+class IEventListingSettings(Interface):
+
+    current_folder_only = schema.Bool(
+        title=_('label_current_folder', default=u'Current folder'),
+        description=_('help_current_folder',
+                      default=u'Search events in current folder only.'),
+        default=False
+    )
+
+
+class EventListingSettings(AnnotationAdapter):
+    """Annotation Adapter for IEventListingSettings
+    """
+    implements(IEventListingSettings)
+    adapts(Interface)
+    ANNOTATION_KEY = "plone.app.event-event_listing-settings"
+
+
+class EventListingSettingsForm(form.Form):
+    fields = field.Fields(IEventListingSettings)
+    ignoreContext = False
+
+    def getContent(self):
+        data = {}
+        settings = IEventListingSettings(self.context)
+        data['current_folder_only'] = settings.current_folder_only
+        return data
+
+    def form_next(self):
+        self.request.response.redirect(self.context.absolute_url())
+
+    @button.buttonAndHandler(u'Save')
+    def handleSave(self, action):
+        data, errors = self.extractData()
+        if errors:
+            return False
+        settings = IEventListingSettings(self.context)
+        settings.current_folder_only = data['current_folder_only']
+        self.form_next()
+
+    @button.buttonAndHandler(u'Cancel')
+    def handleCancel(self, action):
+        self.form_next()
+
+
+EventListingSettingsFormView = wrap_form(EventListingSettingsForm)

@@ -164,35 +164,9 @@ class IIcalendarImportSettings(Interface):
     #)
 
 
-from zope.annotation.interfaces import IAnnotations
-from persistent.dict import PersistentDict
-
-
-class AnnotationAdapter(object):
-    """Abstract Base Class for an annotation storage.
-    """
-    ANNOTATION_KEY = None
-
-    def __init__(self, context):
-        self.context = context
-        annotations = IAnnotations(context)
-        self._data = annotations.get(self.ANNOTATION_KEY, None)
-        if self._data is None:
-            self._data = PersistentDict()
-            annotations[self.ANNOTATION_KEY] = self._data
-
-    def __setattr__(self, name, value):
-        if name in ('context', '_data'):
-            self.__dict__[name] = value
-        else:
-            self._data[name] = value
-
-    def __getattr__(self, name):
-        return self._data.get(name, None)
-
-
 from zope.component import adapts
 from zope.interface import implements
+from plone.app.event.base import AnnotationAdapter
 #from plone.folder.interfaces import IFolder
 
 
@@ -240,6 +214,7 @@ class IcalendarImportSettingsForm(form.Form):
     fields = field.Fields(IIcalendarImportSettings)
     ignoreContext = False
 
+    #TODO: needed?
     def updateWidgets(self):
         super(IcalendarImportSettingsForm, self).updateWidgets()
 

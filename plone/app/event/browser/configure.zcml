@@ -33,6 +33,14 @@
         class=".event_listing.EventListingIcal"
         permission="zope2.View"
         />
+    <adapter factory=".event_listing.EventListingSettings"/>
+    <browser:page
+        name="event_listing_settings"
+        for="*"
+        permission="zope2.View"
+        class=".event_listing.EventListingSettingsFormView"
+        />
+
 
     <!-- Event view -->
     <browser:page

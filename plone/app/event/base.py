@@ -6,6 +6,7 @@ from calendar import monthrange
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
@@ -21,6 +22,7 @@ from plone.event.utils import is_same_time
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
+from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component import getUtility
 from zope.component import queryUtility
@@ -28,6 +30,7 @@ from zope.component.hooks import getSite
 from zope.deprecation import deprecate
 from zope.interface import Interface
 from zope.interface import implements
+
 
 import pytz
 
@@ -709,6 +712,38 @@ def default_end(context=None):
 
     """
     return localized_now(context=context) + timedelta(hours=DEFAULT_END_DELTA)
+
+
+# Base AnnotationAdapter
+# TODO: Better fits to CMFPlone. (Taken from CMFPlone's new syndication tool)
+
+class AnnotationAdapter(object):
+    """Abstract Base Class for an annotation storage.
+
+    If the annotation wasn't set, it won't be created until the first attempt
+    to set a property on this adapter.
+    So, the context doesn't get polluted with annotations by accident.
+
+    """
+    ANNOTATION_KEY = None
+
+    def __init__(self, context):
+        self.context = context
+        annotations = IAnnotations(context)
+        self._data = annotations.get(self.ANNOTATION_KEY, None)
+
+    def __setattr__(self, name, value):
+        if name in ('context', '_data'):
+            self.__dict__[name] = value
+        else:
+            if self._data is None:
+                self._data = PersistentDict()
+                annotations = IAnnotations(self.context)
+                annotations[self.ANNOTATION_KEY] = self._data
+            self._data[name] = value
+
+    def __getattr__(self, name):
+        return self._data and self._data.get(name, None) or None
 
 
 # Workaround for buggy strftime with timezone handling in DateTime.

@@ -4,6 +4,14 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add a event listing settings form, which allows configuration of the event
+  listing view via annotations on the context.
+  [thet]
+
+- For the event listing view, accept SearchableText and tags request parameters
+  for filtering the result set.
+  [thet]
+
 - For default_start, return a datetime with minute, second and microsecond set
   to 0.
   [thet]
