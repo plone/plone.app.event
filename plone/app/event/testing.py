@@ -16,8 +16,10 @@ def set_timezone(tz):
     settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
     settings.portal_timezone = tz
 
+
 def set_env_timezone(tz):
     os.environ['TZ'] = tz
+
 
 def os_zone():
     return 'TZ' in os.environ.keys() and os.environ['TZ'] or None
@@ -44,7 +46,6 @@ class PAEventLayer(PloneSandboxLayer):
             os.environ['TZ'] = self.ostz
         elif 'TZ' in os.environ:
             del os.environ['TZ']
-
 
 PAEvent_FIXTURE = PAEventLayer()
 PAEvent_INTEGRATION_TESTING = IntegrationTesting(
@@ -108,16 +109,15 @@ class PAEventATDXLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event.dx, context=configurationContext)
 
         import plone.app.collection
-        self.loadZCML(package=plone.app.collection, context=configurationContext)
+        self.loadZCML(package=plone.app.collection,
+                      context=configurationContext)
         z2.installProduct(app, 'plone.app.collection')
-
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.at:default')
         self.applyProfile(portal, 'plone.app.event.dx:default')
         self.applyProfile(portal, 'plone.app.collection:default')
         set_timezone(tz='UTC')
-
 
 PAEventATDX_FIXTURE = PAEventATDXLayer()
 PAEventATDX_INTEGRATION_TESTING = IntegrationTesting(
