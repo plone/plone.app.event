@@ -220,9 +220,9 @@ class TestBaseModule(unittest.TestCase):
 
         # WEEK
         #
-        def ret_0(): return 0 # Monday
-        def ret_1(): return 1 # Tuesday
-        def ret_6(): return 6 # Sunday
+        def ret_0(): return 0  # Monday
+        def ret_1(): return 1  # Tuesday
+        def ret_6(): return 6  # Sunday
         orig_first_weekday = base.first_weekday # prepare patched first_weekday
 
         base.first_weekday = ret_0
@@ -261,6 +261,42 @@ class TestBaseModule(unittest.TestCase):
                         end.hour==23 and end.minute==59 and end.second==59)
 
 
+from zope.annotation.interfaces import IAnnotations
+from plone.app.event.base import AnnotationAdapter
+class TestAnnotationAdapter(unittest.TestCase):
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+
+    def test_date_events_url(self):
+        # Normally called via adapter lookup from it's interface. but for
+        # testing, we don't register the adapter, but use it directlyProvides
+        an = AnnotationAdapter(self.portal)
+
+        # ANNOTATION_KEY of abstract class not set - an._data is None
+        self.assertEqual(an._data, None)
+
+        # ANNOTATION_KEY set, but no attribute set yet - an._data still None
+        an.ANNOTATION_KEY = 'testing_annotation'
+        an._data = IAnnotations(self.portal).get(an.ANNOTATION_KEY, None)
+
+        # Test attribute access, an._data still None
+        self.assertEqual(an.foo, None)
+        self.assertEqual(an._data, None)
+
+        # Test attribute set, an._data will set. First, Test with None, which
+        # also should set the annotation on the context.
+        # am._data will be set then.
+        an.bar = None
+        self.assertEqual(an.bar, None)
+        self.assertTrue(an._data is not None)
+
+        # Set with something else than None
+        an.foo = '123'
+        self.assertEqual(an.foo, '123')
+
+
 class TestCalendarLinkbase(unittest.TestCase):
     # TODO: test overriding of ICalendarLinkbase
     layer = PAEvent_INTEGRATION_TESTING
@@ -296,7 +332,8 @@ class TestCalendarLinkbase(unittest.TestCase):
         self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
         lb = ICalendarLinkbase(self.portal.mynewsite)
 
-        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=day&date=2012-12-07'
+        url = 'http://nohost/plone/mynewsite/'\
+              '@@event_listing?mode=day&date=2012-12-07'
         self.failUnless(lb.date_events_url('2012-12-07') == url)
 
         url = 'http://nohost/plone/mynewsite/@@event_listing?mode=all'

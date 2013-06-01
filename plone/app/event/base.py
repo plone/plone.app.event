@@ -733,7 +733,7 @@ class AnnotationAdapter(object):
         self._data = annotations.get(self.ANNOTATION_KEY, None)
 
     def __setattr__(self, name, value):
-        if name in ('context', '_data'):
+        if name in ('context', '_data', 'ANNOTATION_KEY'):
             self.__dict__[name] = value
         else:
             if self._data is None:
