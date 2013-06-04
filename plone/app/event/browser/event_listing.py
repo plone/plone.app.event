@@ -41,7 +41,7 @@ class EventListing(BrowserView):
         super(EventListing, self).__init__(context, request)
 
         self.now = now = localized_now(context)
-        settings = IEventListingSettings(self.context)
+        self.settings = IEventListingSettings(self.context)
 
         # Batch parameter
         req = self.request.form
@@ -53,8 +53,7 @@ class EventListing(BrowserView):
         self.tags    = 'tags'    in req and req['tags']         or None
         self.searchable_text = 'SearchableText' in req and\
                 req['SearchableText'] or None
-
-        self._all = 'all' in req and True or not settings.current_folder_only
+        self.path    = 'path'    in req and req['path']         or None
 
         day   = 'day'   in req and int(req['day'])   or None
         month = 'month' in req and int(req['month']) or None
@@ -106,7 +105,9 @@ class EventListing(BrowserView):
     def _get_events(self, ret_mode=3):
         context = self.context
         kw = {}
-        if not self._all:
+        if self.path:
+            kw['path'] = self.path
+        elif self.settings.current_folder_only:
             kw['path'] = '/'.join(context.getPhysicalPath())
         #kw['b_start'] = self.b_start
         #kw['b_size']  = self.b_size
