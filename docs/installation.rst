@@ -59,12 +59,6 @@ end indices and so on.
   included in this buildout) or fix zope.configuration for example to 4.0.2
   (not backwards-compatible).
 
-.. note::
-
-  Run the "ploneintegration" profile only once (or after whole site-profiles
-  are re-applied). Otherwise you have to clear and rebuild the index every
-  time, because the start and end indices are removed and re-added
-
 
 Upgrading from Products.ATContentType to plone.app.event
 --------------------------------------------------------

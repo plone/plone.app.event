@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Create an Python based import step to properly set up the portal catalog.
+  This avoids clearing the index after importing a catalog.xml. This import
+  steps obsoletes the ploneintegration catalog.xml import step also.
+  [thet]
+
 - Add a event listing settings form, which allows configuration of the event
   listing view via annotations on the context.
   [thet]

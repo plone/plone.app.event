@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step
+    id="plone.app.event-catalog"
+    handler="plone.app.event.setuphandlers.catalog_setup"
+    title="plone.app.event catalog setup"
+    version="1.0">
+    <dependency step="plone-final"/>
+  </import-step>
+</import-steps>
