@@ -52,7 +52,7 @@ class EventListing(BrowserView):
         self._date   = 'date'    in req and req['date']         or None
         self.tags    = 'tags'    in req and req['tags']         or None
         self.searchable_text = 'SearchableText' in req and\
-                req['SearchableTexttags'] or None
+                req['SearchableText'] or None
 
         self._all = 'all' in req and True or not settings.current_folder_only
 
@@ -112,7 +112,7 @@ class EventListing(BrowserView):
         #kw['b_size']  = self.b_size
 
         if self.tags:
-            kw['Subject'] = self.tags
+            kw['Subject'] = {'query': self.tags, 'operator': 'and'}
 
         if self.searchable_text:
             kw['SearchableText'] = self.searchable_text
