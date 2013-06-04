@@ -46,7 +46,7 @@ def catalog_setup(context):
 
     class extra(object):
         recurdef = 'recurrence'
-        until = None
+        until = ''
 
     idxobj = catalog.Indexes
     for name in idxs:
