@@ -2,6 +2,8 @@ from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.event.base import guess_date_from
+from plone.app.imaging.scaling import ImageScaling
+from plone.app.imaging.traverse import ImageTraverser
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
@@ -142,3 +144,28 @@ class EventOccurrenceAccessor(object):
     @property
     def url(self):
         return safe_unicode(self.context.absolute_url())
+
+
+# TODO: The following view and traverser might only work for Archetypes based
+# objects, since plone.app.imaging seems only to register these for Archetypes.
+# So, the TODO is to make the view and traverser a factory, returning a
+# dexterity or archetypes view/traverser depending on the parent context's type
+# or handle these cases somehow different.
+
+
+class ImageScalingOccurrence(ImageScaling):
+    """ImageScaling view for occurrences, which rebinds to the parent context.
+    """
+    def __init__(self, context, request):
+        # Rebind me to the parent context.
+        context = aq_parent(context)
+        super(ImageScalingOccurrence, self).__init__(context, request)
+
+
+class ImageTraverserOccurrence(ImageTraverser):
+    """ImageTraverser for Occurrences, wich rebinds to the parent context.
+    """
+    def __init__(self, context, request):
+        # Rebind me to the parent context.
+        context = aq_parent(context)
+        super(ImageTraverser, self).__init__(context, request)

@@ -1,9 +1,11 @@
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
 
   <adapter factory=".recurrence.RecurrenceSupport" />
-  
+
   <adapter factory=".recurrence.EventOccurrenceAccessor" />
-  
+
   <adapter
       for="plone.event.interfaces.IEvent
            zope.publisher.interfaces.browser.IBrowserRequest"
@@ -11,5 +13,18 @@
       factory=".recurrence.OccurrenceTraverser"
       permission="zope.Public"
       />
+
+  <!-- plone.app.imaging specific view and traverser for IOccurrence -->
+  <browser:page
+      for="plone.event.interfaces.IOccurrence"
+      name="images"
+      class=".recurrence.ImageScalingOccurrence"
+      allowed_interface="plone.app.imaging.interfaces.IImageScaling"
+      permission="zope2.View" />
+
+  <adapter
+      for="plone.event.interfaces.IOccurrence
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".recurrence.ImageTraverserOccurrence" />
 
 </configure>

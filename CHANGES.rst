@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add an ImageTraverser and a ImageScaling view for IOccurrence objects. Thus,
+  Occurrence objects (which are traversed to from IEvent objects and created on
+  the fly) can display and scale images, as like the IEvent object itself.
+  Please note, that currently this is only implemented for Archetypes.
+  [thet]
+
 - Create an Python based import step to properly set up the portal catalog.
   This avoids clearing the index after importing a catalog.xml. This import
   steps obsoletes the ploneintegration catalog.xml import step also.
