@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- In event_listing views in "past" or "all" modes, do a reverse sort on the
+  results, starting with newest events.
+  [thet]
+
 - Add an ImageTraverser and a ImageScaling view for IOccurrence objects. Thus,
   Occurrence objects (which are traversed to from IEvent objects and created on
   the fly) can display and scale images, as like the IEvent object itself.

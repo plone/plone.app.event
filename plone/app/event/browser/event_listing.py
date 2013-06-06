@@ -119,7 +119,13 @@ class EventListing(BrowserView):
             kw['SearchableText'] = self.searchable_text
 
         start, end = self._start_end
+
+        sort = 'start'
+        sort_reverse = False
+        if self.mode in ('past', 'all'):
+            sort_reverse = True
         return get_events(context, start=start, end=end,
+                          sort=sort, sort_reverse=sort_reverse,
                           ret_mode=ret_mode, expand=True, **kw)
 
     def events(self, ret_mode=3, batch=True):
