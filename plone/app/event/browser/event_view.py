@@ -1,12 +1,13 @@
 from Acquisition import aq_parent
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
+from plone.app.event.at.interfaces import IATEvent
+from plone.app.event.dx.interfaces import IDXEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from plone.app.event.at.interfaces import IATEvent
-from plone.app.event.dx.interfaces import IDXEvent
 
 
 class EventView(BrowserView):
@@ -36,10 +37,10 @@ class EventView(BrowserView):
             hasattr(location, 'absolute_url') and\
             hasattr(location, 'Title'):
             # Then I'm a reference
-            location = u'<a href="%s" title="%s">%s</a>' % (
+            location = '<a href="%s" title="%s">%s</a>' % (
                 location.absolute_url(),
                 self.data.location,  # A meaningful title, e.g. the address
-                location.Title()
+                safe_unicode(location.Title()),  # Force to be unicode
             )
         return location
 

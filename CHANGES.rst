@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fixed unicode issue in event_view with non-ascii location strings and
+  of referenced locations via collective.venue.
+  [thet]
+
 - In event_listing views in "past" or "all" modes, do a reverse sort on the
   results, starting with newest events.
   [thet]
