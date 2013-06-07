@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- As like in event_view, handle the case in event_listing that the location
+  field is not of type basestring but a reference to another object, for
+  example provided by collective.venue.
+  [thet]
+
 - Fixed unicode issue in event_view with non-ascii location strings and
   of referenced locations via collective.venue.
   [thet]

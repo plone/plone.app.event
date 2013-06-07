@@ -10,6 +10,7 @@ from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
+from plone.app.event.browser.event_view import get_location
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.event.interfaces import IEvent
@@ -174,6 +175,9 @@ class EventListing(BrowserView):
             self.context.absolute_url(),
             qstr
         )
+
+    def get_location(self, event):
+        return get_location(event.context, event)
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),

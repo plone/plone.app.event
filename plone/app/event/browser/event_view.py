@@ -10,6 +10,35 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
 
+def get_location(context, data):
+    """In case location is not of type basestring, it's propably a
+    reference, which case we handle here.
+    """
+    # Get the original location directly from the context, as in case of
+    # reference, the accessor might return an string representing the
+    # location instead of the referenced object.
+    location = None
+    if IOccurrence.providedBy(context):
+        # Get location from real object
+        context = aq_parent(context)
+    if IATEvent.providedBy(context):
+        location = context.getLocation()
+    elif IDXEvent.providedBy(context):
+        from plone.app.event.dx.behaviors import IEventLocation
+        location = IEventLocation(context).location
+
+    if location and not isinstance(location, basestring) and\
+        hasattr(location, 'absolute_url') and\
+        hasattr(location, 'Title'):
+        # Then I'm a reference
+        location = '<a href="%s" title="%s">%s</a>' % (
+            location.absolute_url(),
+            data.location,  # A meaningful title, e.g. the address
+            safe_unicode(location.Title()),  # Force to be unicode
+        )
+    return location
+
+
 class EventView(BrowserView):
 
     def __init__(self, context, request):
@@ -17,32 +46,9 @@ class EventView(BrowserView):
         self.request = request
         self.data = IEventAccessor(context)
 
+    @property
     def get_location(self):
-        """In case location is not of type basestring, it's propably a
-        reference, which case we handle here.
-        """
-        context = self.context
-
-        # Get the original location directly from the context, as in case of
-        # reference, the accessor might return an string representing the
-        # location instead of the referenced object.
-        location = None
-        if IATEvent.providedBy(context):
-            location = context.getLocation()
-        elif IDXEvent.providedBy(context):
-            from plone.app.event.dx.behaviors import IEventLocation
-            location = IEventLocation(context).location
-
-        if location and not isinstance(location, basestring) and\
-            hasattr(location, 'absolute_url') and\
-            hasattr(location, 'Title'):
-            # Then I'm a reference
-            location = '<a href="%s" title="%s">%s</a>' % (
-                location.absolute_url(),
-                self.data.location,  # A meaningful title, e.g. the address
-                safe_unicode(location.Title()),  # Force to be unicode
-            )
-        return location
+        return get_location(self.context, self.data)
 
     @property
     def is_occurrence(self):
