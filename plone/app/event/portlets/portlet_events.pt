@@ -40,7 +40,7 @@
     </tal:events>
 
     <dd class="portletFooter"
-        tal:define="prev_link view/past_url"
+        tal:define="prev_link view/prev_url"
         tal:condition="prev_link">
         <a href=""
             tal:attributes="href prev_link"
