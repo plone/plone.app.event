@@ -10,13 +10,14 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
 
-def get_location(context, data):
+def get_location(context):
     """In case location is not of type basestring, it's propably a
     reference, which case we handle here.
     """
     # Get the original location directly from the context, as in case of
     # reference, the accessor might return an string representing the
     # location instead of the referenced object.
+    data = IEventAccessor(context)
     location = None
     if IOccurrence.providedBy(context):
         # Get location from real object
@@ -48,7 +49,7 @@ class EventView(BrowserView):
 
     @property
     def get_location(self):
-        return get_location(self.context, self.data)
+        return get_location(self.context)
 
     @property
     def is_occurrence(self):

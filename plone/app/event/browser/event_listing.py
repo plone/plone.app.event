@@ -176,8 +176,8 @@ class EventListing(BrowserView):
             qstr
         )
 
-    def get_location(self, event):
-        return get_location(event.context, event)
+    def get_location(self, event_accessor):
+        return get_location(event_accessor.context)
 
     def formated_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
