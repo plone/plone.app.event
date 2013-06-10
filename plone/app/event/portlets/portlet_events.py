@@ -1,8 +1,8 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -34,7 +34,12 @@ class IEventsPortlet(IPortletDataProvider):
     search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(u'portlet_help_search_base',
-                      default=u'Select events search base folder'),
+                      default=u'Select search base folder to search for '
+                              u'events. This folder will also be used to call '
+                              u'the event listing view on. If empty, the '
+                              u'whole site will be searched and the event '
+                              u'listing view will be called on the site '
+                              u'root.'),
         required=False,
         source=SearchableTextSourceBinder({'is_folderish': True},
                                            default_query='path:'),
@@ -64,12 +69,17 @@ class Renderer(base.Renderer):
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
 
-        self.calendar_linkbase = ICalendarLinkbase(self.context)
-        self.calendar_linkbase.urlpath = '%s%s' % (
-                self.calendar_linkbase.urlpath, self.data.search_base)
-        #BBB
-        self.prev_events_link = self.calendar_linkbase.past_events_url
-        self.all_events_link = self.calendar_linkbase.next_events_url
+        context = aq_inner(self.context)
+
+        sb = self.data.search_base
+        site_url = find_site(context, as_url=True)
+        calendar_url = '%s%s' % (site_url, sb and sb or '/event_listing')
+        self.next_url = '%s?mode=future' % calendar_url
+        self.prev_url = '%s?mode=past' % calendar_url
+
+        #BBB TODO: remove with 1.0
+        self.prev_events_link = self.prev_url
+        self.all_events_link = self.next_url
 
         portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
         self.portal = portal_state.portal()

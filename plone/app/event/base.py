@@ -1,13 +1,15 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_callable
 from calendar import monthrange
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from persistent.dict import PersistentDict
-from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.event.vocabularies import replacement_zones
@@ -23,13 +25,11 @@ from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
-from zope.component import adapts
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.component.hooks import getSite
+from zope.component.interfaces import ISite
 from zope.deprecation import deprecate
-from zope.interface import Interface
-from zope.interface import implements
 
 
 import pytz
@@ -654,45 +654,6 @@ def date_speller(context, dt):
     return date_dict
 
 
-class CalendarLinkbase(object):
-    """Default adapter to retrieve a base url for a calendar view.
-    In this default implementation we use the @@event_listing view as calendar
-    view.
-
-    For method documentation, see interfaces.py.
-
-    """
-    adapts(Interface)
-    implements(ICalendarLinkbase)
-
-    def __init__(self, context):
-        self.context = context
-        portal = getSite()
-        self.urlpath = getNavigationRootObject(context, portal).absolute_url()
-
-    def date_events_url(self, date):
-        url = '%s/@@event_listing?mode=day&date=%s' % (self.urlpath, date)
-        return url
-
-    def past_events_url(self):
-        """Get a URL to retrieve past events.
-        """
-        url = '%s/@@event_listing?mode=past' % self.urlpath
-        return url
-
-    def next_events_url(self):
-        """Get a URL to retrieve upcoming events.
-        """
-        url = '%s/@@event_listing?mode=future' % self.urlpath
-        return url
-
-    def all_events_url(self):
-        """Get a URL to retrieve all events.
-        """
-        url = '%s/@@event_listing?mode=all' % self.urlpath
-        return url
-
-
 def default_start(context=None):
     """Return the default start as python datetime for prefilling forms.
 
@@ -714,7 +675,7 @@ def default_end(context=None):
     return localized_now(context=context) + timedelta(hours=DEFAULT_END_DELTA)
 
 
-# Base AnnotationAdapter
+# General utils
 # TODO: Better fits to CMFPlone. (Taken from CMFPlone's new syndication tool)
 
 class AnnotationAdapter(object):
@@ -744,6 +705,52 @@ class AnnotationAdapter(object):
 
     def __getattr__(self, name):
         return self._data and self._data.get(name, None) or None
+
+
+def find_context(context, viewname=None, iface=None,
+                 as_url=False, append_view=True):
+    """Find the next context with a given view name or ISite up in the content
+    tree, starting from the given context. This might not be the
+    IPloneSiteRoot, but another subsite.
+
+    :param context: The context to start the search from.
+    :param viewname: (optional) The name of a view which a context should have
+                     configured as defaultView.
+    :param iface: (optional) The interface, the context to search for should
+                  implement. Defaults to zope.component.interfaces.ISite.
+    :param as_url: (optional) Return the URL of the context found.
+    :param append_view: (optional) In case of a given viewname and called with
+                        as_url, append the viewname to the url, if the context
+                        hasn't configured it as defaultView. Otherwise ignore
+                        this parameter.
+    :returns: A context, which implements ISite from zope.component.
+    """
+    context = aq_inner(context)
+    ret = None
+    if viewname and context.defaultView() == viewname\
+       or ISite.providedBy(context):
+        ret = context
+    else:
+        ret = find_context(aq_parent(context), viewname)
+    if as_url:
+        url = ret.absolute_url()
+        if viewname and append_view and ret.defaultView() != viewname:
+            url = '%s/%s' % (url, viewname)
+        return url
+    return ret
+
+
+def find_site(context, as_url=False):
+    return find_context(context, iface=ISite, as_url=as_url)
+
+
+def find_ploneroot(context, as_url=False):
+    return find_context(context, iface=IPloneSiteRoot, as_url=as_url)
+
+
+def find_event_listing(context, as_url=False):
+    return find_context(context, viewname='event_listing', iface=ISite,
+                        as_url=as_url, append_view=True)
 
 
 # Workaround for buggy strftime with timezone handling in DateTime.

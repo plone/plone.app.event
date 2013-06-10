@@ -1,11 +1,11 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import find_site
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
 from plone.app.event.base import wkday_to_mon1
-from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -37,7 +37,12 @@ class ICalendarPortlet(IPortletDataProvider):
     search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(u'portlet_help_search_base',
-                      default=u'Select events search base folder'),
+                      default=u'Select search base folder to search for '
+                              u'events. This folder will also be used to call '
+                              u'the event listing view on. If empty, the '
+                              u'whole site will be searched and the event '
+                              u'listing view will be called on the site '
+                              u'root.'),
         required=False,
         source=SearchableTextSourceBinder({'is_folderish': True},
                                            default_query='path:'),
@@ -64,9 +69,8 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
 
         sb = self.data.search_base
-        self.calendar_linkbase = ICalendarLinkbase(context)
-        self.calendar_linkbase.urlpath = '%s%s' % (
-                self.calendar_linkbase.urlpath, sb and sb or '')
+        site_url = find_site(context, as_url=True)
+        self.calendar_url = '%s%s' % (site_url, sb and sb or '/event_listing')
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (
@@ -132,7 +136,7 @@ class Renderer(base.Renderer):
         return (year, month)
 
     def date_events_url(self, date):
-        return self.calendar_linkbase.date_events_url(date)
+        return '%s?mode=day&date=%s' % (self.calendar_url, date)
 
     @property
     def cal_data(self):

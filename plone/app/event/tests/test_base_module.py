@@ -269,7 +269,7 @@ class TestAnnotationAdapter(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
 
-    def test_date_events_url(self):
+    def test_annotation_adapter(self):
         # Normally called via adapter lookup from it's interface. but for
         # testing, we don't register the adapter, but use it directlyProvides
         an = AnnotationAdapter(self.portal)

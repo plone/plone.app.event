@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove ICalendarLinkbase adapter, which provided URLs to a calendar view.
+  Instead, for event and calendar portlet links, the searchbase setting path
+  is used to link to it or as fallback to call event_listing on ISite root.
+  [thet]
+
 - As like in event_view, handle the case in event_listing that the location
   field is not of type basestring but a reference to another object, for
   example provided by collective.venue.
