@@ -8,7 +8,6 @@
 
   <span tal:replace="date_dict/start_date" />
   <tal:notwholeday condition="not:date_dict/whole_day">
-    &mdash;
     <abbr class="dtstart" tal:attributes="title date_dict/start_iso">
       <span class="explain" tal:content="date_dict/start_time">Start Time</span>
     </abbr>
