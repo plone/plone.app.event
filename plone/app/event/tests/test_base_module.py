@@ -8,20 +8,23 @@ from plone.app.event.base import dates_for_display
 from plone.app.event.base import default_end
 from plone.app.event.base import default_start
 from plone.app.event.base import default_timezone
+from plone.app.event.base import find_context
+from plone.app.event.base import find_event_listing
+from plone.app.event.base import find_ploneroot
+from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from plone.app.event.interfaces import ICalendarLinkbase
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
+from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
 
 import datetime
@@ -297,53 +300,62 @@ class TestAnnotationAdapter(unittest.TestCase):
         self.assertEqual(an.foo, '123')
 
 
-class TestCalendarLinkbase(unittest.TestCase):
-    # TODO: test overriding of ICalendarLinkbase
+class TestFindContext(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
+        self.portal = portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-    def test_date_events_url(self):
-        lb = ICalendarLinkbase(self.portal)
-        url = 'http://nohost/plone/@@event_listing?mode=day&date=2012-12-07'
-        self.assertEqual(lb.date_events_url('2012-12-07'), url)
+        portal.invokeFactory('Folder', 'newsite')
+        portal.newsite.invokeFactory('Folder', 'subfolder')
+        portal.invokeFactory('Folder', 'subfolder2')
+        portal.subfolder2.invokeFactory('Folder', 'subfolder3')
 
-    def test_all_events_url(self):
-        lb = ICalendarLinkbase(self.portal)
-        url = 'http://nohost/plone/@@event_listing?mode=all'
-        self.failUnless(lb.all_events_url() == url)
+        directlyProvides(portal.newsite, ISite)
+        self.failUnless(ISite.providedBy(portal.newsite))
 
-    def test_next_events_url(self):
-        lb = ICalendarLinkbase(self.portal)
-        url = 'http://nohost/plone/@@event_listing?mode=future'
-        self.failUnless(lb.next_events_url() == url)
+    def test_find_ploneroot(self):
+        p1 = find_ploneroot(self.portal.newsite.subfolder)
+        p2 = find_ploneroot(self.portal.subfolder2)
+        self.assertEqual(p1, self.portal)
+        self.assertEqual(p1, p2)
 
-    def test_past_events_url(self):
-        lb = ICalendarLinkbase(self.portal)
-        url = 'http://nohost/plone/@@event_listing?mode=past'
-        self.failUnless(lb.past_events_url() == url)
+        self.assertEqual(
+            find_ploneroot(self.portal.newsite.subfolder, as_url=True),
+            'http://nohost/plone'
+        )
 
-    def test_events_url_with_navigation_root(self):
-        # ensure support of INavigationRoot features dosen't break #9246 #9668
-        self.portal.invokeFactory('Folder', 'mynewsite')
-        directlyProvides(self.portal.mynewsite, INavigationRoot)
-        self.failUnless(INavigationRoot.providedBy(self.portal.mynewsite))
-        lb = ICalendarLinkbase(self.portal.mynewsite)
+    def test_find_site(self):
+        self.assertEqual(
+            find_site(self.portal.newsite.subfolder),
+            self.portal.newsite
+        )
 
-        url = 'http://nohost/plone/mynewsite/'\
-              '@@event_listing?mode=day&date=2012-12-07'
-        self.failUnless(lb.date_events_url('2012-12-07') == url)
+        self.assertEqual(
+            find_site(self.portal.newsite.subfolder, as_url=True),
+            'http://nohost/plone/newsite'
+        )
 
-        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=all'
-        self.failUnless(lb.all_events_url() == url)
+    def test_find_event_listing(self):
+        self.portal.subfolder2.setLayout('event_listing')
+        self.assertEqual(
+            find_event_listing(self.portal.subfolder2.subfolder3),
+            self.portal.subfolder2
+        )
+        self.assertEqual(
+            find_event_listing(self.portal.subfolder2.subfolder3, as_url=True),
+            'http://nohost/plone/subfolder2'
+        )
 
-        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=future'
-        self.failUnless(lb.next_events_url() == url)
-
-        url = 'http://nohost/plone/mynewsite/@@event_listing?mode=past'
-        self.failUnless(lb.past_events_url() == url)
+        self.assertEqual(
+            find_context(
+                self.portal.subfolder2.subfolder3,
+                viewname='foo',
+                as_url=True,
+                append_view=True),
+            'http://nohost/plone/foo'
+        )
 
 
 class TestGetEventsDX(AbstractSampleDataEvents):

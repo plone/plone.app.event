@@ -709,29 +709,32 @@ class AnnotationAdapter(object):
 
 def find_context(context, viewname=None, iface=None,
                  as_url=False, append_view=True):
-    """Find the next context with a given view name or ISite up in the content
-    tree, starting from the given context. This might not be the
+    """Find the next context with a given view name or interface, up in the
+    content tree, starting from the given context. This might not be the
     IPloneSiteRoot, but another subsite.
 
     :param context: The context to start the search from.
     :param viewname: (optional) The name of a view which a context should have
                      configured as defaultView.
     :param iface: (optional) The interface, the context to search for should
-                  implement. Defaults to zope.component.interfaces.ISite.
+                  implement.
     :param as_url: (optional) Return the URL of the context found.
     :param append_view: (optional) In case of a given viewname and called with
                         as_url, append the viewname to the url, if the context
                         hasn't configured it as defaultView. Otherwise ignore
                         this parameter.
-    :returns: A context, which implements ISite from zope.component.
+    :returns: A context with the given view name, inteface or ISite root.
     """
     context = aq_inner(context)
     ret = None
     if viewname and context.defaultView() == viewname\
-       or ISite.providedBy(context):
+       or iface and iface.providedBy(context)\
+       or IPloneSiteRoot.providedBy(context):
+        # Search for viewname or interface but stop at IPloneSiteRoot
         ret = context
     else:
-        ret = find_context(aq_parent(context), viewname)
+        ret = find_context(aq_parent(context), viewname=viewname, iface=iface,
+                           as_url=False, append_view=False)
     if as_url:
         url = ret.absolute_url()
         if viewname and append_view and ret.defaultView() != viewname:
