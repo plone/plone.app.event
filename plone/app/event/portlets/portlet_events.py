@@ -35,8 +35,8 @@ class IEventsPortlet(IPortletDataProvider):
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(u'portlet_help_search_base',
                       default=u'Select search base folder to search for '
-                              u'events. This folder will also be used to call '
-                              u'the event listing view on. If empty, the '
+                              u'events. This folder will also be used to link '
+                              u'to in calendar searches. If empty, the '
                               u'whole site will be searched and the event '
                               u'listing view will be called on the site '
                               u'root.'),

@@ -136,8 +136,8 @@ class RendererTest(unittest.TestCase):
         rd = r.render()
         self.assertTrue('e1' not in rd and 'e2' in rd)
 
-        # test link from base.CalendarLinkbase.date_events_url
-        self.assertTrue('@@event_listing?mode=day&amp;date=' in rd)
+        # link to calendar view in rendering
+        self.assertTrue('?mode=day&amp;date=' in rd)
 
         self.portal.manage_delObjects(['e1', 'eventfolder'])
 

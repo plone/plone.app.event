@@ -172,5 +172,5 @@ class RendererTest(unittest.TestCase):
     def test_events_listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
         rd = r.render()
-        self.assertTrue('@@event_listing?mode=future' in rd)
-        self.assertTrue('@@event_listing?mode=past' in rd)
+        self.assertTrue('?mode=future' in rd)
+        self.assertTrue('?mode=past' in rd)
