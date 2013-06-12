@@ -14,10 +14,9 @@ def get_location(context):
     """In case location is not of type basestring, it's propably a
     reference, which case we handle here.
     """
-    # Get the original location directly from the context, as in case of
+    # Get the original location directly from the context, as in case of a
     # reference, the accessor might return an string representing the
     # location instead of the referenced object.
-    data = IEventAccessor(context)
     location = None
     if IOccurrence.providedBy(context):
         # Get location from real object
@@ -32,6 +31,7 @@ def get_location(context):
         hasattr(location, 'absolute_url') and\
         hasattr(location, 'Title'):
         # Then I'm a reference
+        data = IEventAccessor(context)
         location = '<a href="%s" title="%s">%s</a>' % (
             location.absolute_url(),
             data.location,  # A meaningful title, e.g. the address
