@@ -499,8 +499,6 @@ def data_postprocessing(obj, event):
     start_field = obj.getField('startDate')
     end_field = obj.getField('endDate')
 
-    print "    AKEvent BEFORE: %s - %s, %s" % (start_field.get(obj), end_field.get(obj), timezone)
-
     # The previous_timezone is set, when the timezone has changed to another
     # value. In this case we need to convert the UTC dt values to the
     # previous_timezone, so that we get the datetime values, as the user
@@ -545,7 +543,6 @@ def data_postprocessing(obj, event):
     start_field.set(obj, start.toZone('UTC'))
     end_field.set(obj, end.toZone('UTC'))
 
-    print "    AKEvent AFTER: %s - %s, %s" % (obj.start_date, obj.end_date, obj.getTimezone())
     obj.reindexObject()
 
 
