@@ -63,10 +63,10 @@
             </div>
           </td>
         </tr>
-        <tr tal:condition="data/location">
+        <tr tal:define="location view/get_location" tal:condition="location">
           <th i18n:translate="event_where">Where</th>
           <td itemprop="location" class="location"
-              tal:content="structure view/get_location">
+              tal:content="structure location">
             Location
           </td>
         </tr>

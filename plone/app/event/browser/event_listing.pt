@@ -98,7 +98,10 @@
           </a></h2>
           <div class="documentByLine">
             <tal:date tal:replace="structure python:view.formated_date(data)"/><!-- rm white space
-            --><div itemprop="location" class="location" tal:condition="data/location" tal:content="structure python:view.get_location(data)" />
+            --><div itemprop="location" class="location"
+                tal:define="location python:view.get_location(data)"
+                tal:condition="data/location"
+                tal:content="structure location"/>
           </div>
 
           <p itemprop="description" class="description" tal:condition="data/description" tal:content="data/description" />
