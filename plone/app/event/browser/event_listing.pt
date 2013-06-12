@@ -100,7 +100,7 @@
             <tal:date tal:replace="structure python:view.formated_date(data)"/><!-- rm white space
             --><div itemprop="location" class="location"
                 tal:define="location python:view.get_location(data)"
-                tal:condition="data/location"
+                tal:condition="location"
                 tal:content="structure location"/>
           </div>
 
