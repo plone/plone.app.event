@@ -6,6 +6,7 @@ from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
 from plone.app.event.base import wkday_to_mon1
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -44,7 +45,8 @@ class ICalendarPortlet(IPortletDataProvider):
                               u'listing view will be called on the site '
                               u'root.'),
         required=False,
-        source=SearchableTextSourceBinder({'is_folderish': True}),
+        source=SearchableTextSourceBinder({'is_folderish': True},
+                                           default_query='path:'),
     )
 
 
@@ -205,6 +207,8 @@ class AddForm(base.AddForm):
     form_fields = form.Fields(ICalendarPortlet)
     label = _(u"Add Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")
+    form_fields = form.Fields(ICalendarPortlet)
+    form_fields['search_base'].custom_widget = UberSelectionWidget
 
     def create(self, data):
         return Assignment(state=data.get('state', None),
@@ -215,3 +219,5 @@ class EditForm(base.EditForm):
     form_fields = form.Fields(ICalendarPortlet)
     label = _(u"Edit Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")
+    form_fields = form.Fields(ICalendarPortlet)
+    form_fields['search_base'].custom_widget = UberSelectionWidget

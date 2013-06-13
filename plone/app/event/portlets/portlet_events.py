@@ -3,6 +3,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
@@ -117,13 +118,18 @@ class AddForm(base.AddForm):
     form_fields = form.Fields(IEventsPortlet)
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
+    form_fields = form.Fields(IEventsPortlet)
+    form_fields['search_base'].custom_widget = UberSelectionWidget
 
     def create(self, data):
         return Assignment(count=data.get('count', 5),
                           state=data.get('state', None),
                           search_base=data.get('search_base', 5))
 
+
 class EditForm(base.EditForm):
     form_fields = form.Fields(IEventsPortlet)
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
+    form_fields = form.Fields(IEventsPortlet)
+    form_fields['search_base'].custom_widget = UberSelectionWidget

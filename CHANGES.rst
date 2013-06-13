@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- For the event and calendar portlets, use UberSelectionWidget to select the
+  search base path to make this field actually usable.
+  [thet]
+
 - Remove ICalendarLinkbase adapter, which provided URLs to a calendar view.
   Instead, for event and calendar portlet links, the searchbase setting path
   is used to link to it or as fallback to call event_listing on ISite root.
