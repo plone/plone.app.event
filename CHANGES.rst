@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Let plone.app.event.base.get_events always do a query with a sort definition,
+  even if we are in exand mode and do a sort afterwards again. We need this to
+  get stable results when having a sort_limit applied. Fixes an issue where the
+  events_portlet did show the next events with an offset of some days.
+  [thet]
+
 - For the event and calendar portlets, use UberSelectionWidget to select the
   search base path to make this field actually usable.
   [thet]

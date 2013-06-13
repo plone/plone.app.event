@@ -107,11 +107,13 @@ def get_events(context, start=None, end=None, limit=None,
         # The maximum start date must be the date until we search.
         query['start'] = {'query': end, 'range': 'max'}
 
-    if not expand:
-        # Expanded results will be sorted later.
-        query['sort_on'] = sort
-        if sort_reverse:
-            query['sort_order'] = 'reverse'
+    # Sorting
+    # In expand mode we sort after calculation of recurrences again. But we
+    # need to leave this sorting here in place, since no sort definition could
+    # lead to arbitrary results when limiting with sort_limit.
+    query['sort_on'] = sort
+    if sort_reverse:
+        query['sort_order'] = 'reverse'
 
     if limit:
         query['sort_limit'] = limit
