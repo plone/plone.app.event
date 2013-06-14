@@ -97,11 +97,11 @@
             <span itemprop="summary" class="summary" tal:content="data/title">Title</span>
           </a></h2>
           <div class="documentByLine">
-            <tal:date tal:replace="structure python:view.formated_date(data)"/><!-- rm white space
-            --><div itemprop="location" class="location"
+            <tal:date tal:replace="structure python:view.formated_date(data)"/>
+            <div itemprop="location" class="location"
                 tal:define="location python:view.get_location(data)"
                 tal:condition="location"
-                tal:content="structure location"/>
+                tal:content="structure location">location</div>
           </div>
 
           <p itemprop="description" class="description" tal:condition="data/description" tal:content="data/description" />
