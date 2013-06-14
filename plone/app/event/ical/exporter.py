@@ -235,11 +235,7 @@ class ICalendarEventComponent(object):
             ical.add('dtstart', event.start)
         else:
             ical.add('dtstart', event.start)
-            if event.end:
-                # Gracefully ignore missing event.end dates.
-                # event.end shouldn't be None but might be in some weird
-                # products.
-                ical.add('dtend', event.end)
+            ical.add('dtend', event.end)
 
         if event.recurrence:
             for recdef in event.recurrence.split():
@@ -253,8 +249,15 @@ class ICalendarEventComponent(object):
                     # TODO: should better already be localized by event object
                     tzid = event.timezone
                     # get list of datetime values from ical string
-                    dtlist = factory.from_ical(val, timezone=tzid)
-
+                    try:
+                        dtlist = factory.from_ical(val, timezone=tzid)
+                    except ValueError:
+                        # TODO: caused by a bug in plone.formwidget.recurrence,
+                        # where the recurrencewidget or plone.event fails with
+                        # COUNT=1 and a extra RDATE.
+                        # TODO: REMOVE this workaround, once this failure is
+                        # fixed in recurrence widget.
+                        continue
                     ical.add(prop, dtlist)
 
         if event.location: ical.add('location', event.location)
