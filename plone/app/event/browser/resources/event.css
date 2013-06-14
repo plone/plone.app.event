@@ -162,7 +162,6 @@ article.vevent .documentByLine {
 #content .event_listing p { margin:0; }
 
 .event_listing div.location { display: inline-block; }
-.event_listing div.location:before { content: ", "; }
 /* END EVENT LISTING STYLES */
 
 
