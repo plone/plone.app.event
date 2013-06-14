@@ -3,6 +3,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.event.browser.event_view import get_location
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
@@ -112,6 +113,9 @@ class Renderer(base.Renderer):
         provider = getMultiAdapter((self.context, self.request, self),
                 IContentProvider, name='formated_date')
         return provider(event)
+
+    def get_location(self, event):
+        return get_location(event)
 
 
 class AddForm(base.AddForm):

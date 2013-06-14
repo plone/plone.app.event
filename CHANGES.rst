@@ -19,9 +19,9 @@ Changelog
   is used to link to it or as fallback to call event_listing on ISite root.
   [thet]
 
-- As like in event_view, handle the case in event_listing that the location
-  field is not of type basestring but a reference to another object, for
-  example provided by collective.venue.
+- As like in event_view, use the get_location function for supporting location
+  references in event_listing and portlet_events. collective.venue provides
+  such a location reference field.
   [thet]
 
 - Fixed unicode issue in event_view with non-ascii location strings and

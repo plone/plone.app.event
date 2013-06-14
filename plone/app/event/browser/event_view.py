@@ -32,7 +32,7 @@ def get_location(context):
         hasattr(location, 'Title'):
         # Then I'm a reference
         data = IEventAccessor(context)
-        location = '<a href="%s" title="%s">%s</a>' % (
+        location = '<a class="pae_location_ref" href="%s" title="%s">%s</a>' % (
             location.absolute_url(),
             data.location,  # A meaningful title, e.g. the address
             safe_unicode(location.Title()),  # Force to be unicode
