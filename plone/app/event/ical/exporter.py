@@ -235,7 +235,11 @@ class ICalendarEventComponent(object):
             ical.add('dtstart', event.start)
         else:
             ical.add('dtstart', event.start)
-            ical.add('dtend', event.end)
+            if event.end:
+                # Gracefully ignore missing event.end dates.
+                # event.end shouldn't be None but might be in some weird
+                # products.
+                ical.add('dtend', event.end)
 
         if event.recurrence:
             for recdef in event.recurrence.split():
