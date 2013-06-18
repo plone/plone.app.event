@@ -20,8 +20,9 @@ Changelog
   [thet]
 
 - As like in event_view, use the get_location function for supporting location
-  references in event_listing and portlet_events. collective.venue provides
-  such a location reference field.
+  references in event_listing and portlet_events. Implement get_location just
+  as a simple wrapper - handling of references must be provided by external
+  packages, like collective.venue.
   [thet]
 
 - Fixed unicode issue in event_view with non-ascii location strings and

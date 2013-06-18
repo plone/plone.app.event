@@ -1,8 +1,5 @@
 from Acquisition import aq_parent
-from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
-from plone.app.event.at.interfaces import IATEvent
-from plone.app.event.dx.interfaces import IDXEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
@@ -11,33 +8,12 @@ from zope.contentprovider.interfaces import IContentProvider
 
 
 def get_location(context):
-    """In case location is not of type basestring, it's propably a
-    reference, which case we handle here.
+    """Return the location.
+    This method can be used to be overwritten by external packages, for example
+    to provide a reference to a Location object as done by collective.venue.
     """
-    # Get the original location directly from the context, as in case of a
-    # reference, the accessor might return an string representing the
-    # location instead of the referenced object.
-    location = None
-    if IOccurrence.providedBy(context):
-        # Get location from real object
-        context = aq_parent(context)
-    if IATEvent.providedBy(context):
-        location = context.getLocation()
-    elif IDXEvent.providedBy(context):
-        from plone.app.event.dx.behaviors import IEventLocation
-        location = IEventLocation(context).location
-
-    if location and not isinstance(location, basestring) and\
-        hasattr(location, 'absolute_url') and\
-        hasattr(location, 'Title'):
-        # Then I'm a reference
-        data = IEventAccessor(context)
-        location = '<a class="pae_location_ref" href="%s" title="%s">%s</a>' % (
-            location.absolute_url(),
-            data.location,  # A meaningful title, e.g. the address
-            safe_unicode(location.Title()),  # Force to be unicode
-        )
-    return location
+    data = IEventAccessor(context)
+    return data.location
 
 
 class EventView(BrowserView):
