@@ -50,8 +50,8 @@ class TestDXIntegration(unittest.TestCase):
         data = MockEvent()
         data.context = MockEvent()
         default_value = default_start(data)
-        today = localized_now()
-        delta = default_value - today
+        now = localized_now().replace(minute=0, second=0, microsecond=0)
+        delta = default_value - now
         self.assertEquals(0, delta.seconds)
 
     def test_end_default(self):
