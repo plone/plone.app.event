@@ -150,7 +150,6 @@ class TestOccurrences(unittest.TestCase):
         self.assertTrue(len(res) == 9)
 
         res = get_events(self.portal, start=self.now, ret_mode=3, expand=True)
-        import pdb; pdb.set_trace()
         self.assertTrue(len(res) == 9)
 
         res = get_events(self.portal, ret_mode=3, expand=True, limit=5)
