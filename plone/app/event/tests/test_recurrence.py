@@ -1,12 +1,12 @@
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.interfaces import IATEvent
 from plone.app.event.base import get_events
-from plone.app.event.base import localized_now
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.recurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
@@ -115,7 +115,7 @@ class TestOccurrences(unittest.TestCase):
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
         settings.portal_timezone = TZNAME
 
-        now = localized_now()
+        now = patched_now()
 
         yesterday = now - datetime.timedelta(days=1)
 
@@ -150,6 +150,7 @@ class TestOccurrences(unittest.TestCase):
         self.assertTrue(len(res) == 9)
 
         res = get_events(self.portal, start=self.now, ret_mode=3, expand=True)
+        import pdb; pdb.set_trace()
         self.assertTrue(len(res) == 9)
 
         res = get_events(self.portal, ret_mode=3, expand=True, limit=5)
