@@ -167,5 +167,7 @@ class ImageTraverserOccurrence(ImageTraverser):
     """
     def __init__(self, context, request):
         # Rebind me to the parent context.
+        # TODO: this breaks the event_view on IOccurrence.
+        # TODO: revisit and fix
         context = aq_parent(context)
         super(ImageTraverser, self).__init__(context, request)

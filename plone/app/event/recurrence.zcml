@@ -14,17 +14,17 @@
       permission="zope.Public"
       />
 
+  <!-- DEACTIVATED UNTIL FIXED -->
   <!-- plone.app.imaging specific view and traverser for IOccurrence -->
-  <browser:page
+  <!-- browser:page
       for="plone.event.interfaces.IOccurrence"
       name="images"
       class=".recurrence.ImageScalingOccurrence"
       allowed_interface="plone.app.imaging.interfaces.IImageScaling"
-      permission="zope2.View" />
-
-  <adapter
+      permission="zope2.View" /-->
+  <!-- adapter
       for="plone.event.interfaces.IOccurrence
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory=".recurrence.ImageTraverserOccurrence" />
+      factory=".recurrence.ImageTraverserOccurrence" /-->
 
 </configure>
