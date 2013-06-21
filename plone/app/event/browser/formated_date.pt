@@ -17,7 +17,8 @@
       <span class="explain">
         <span tal:replace="date_dict/start_date">Start Date</span>
         <tal:notwholeday condition="not:whole_day">
-          <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
+          <tal:word
+              i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
           <span tal:replace="date_dict/start_time">Start Time</span>
         </tal:notwholeday>
       </span>
@@ -29,7 +30,8 @@
       <span class="explain">
         <span tal:replace="date_dict/end_date">End Date</span>
         <tal:notwholeday condition="not:whole_day">
-          <tal:word i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
+          <tal:word
+              i18n:translate="event_when_differentday_optional_word_between_date_and_time" />
           <span tal:replace="date_dict/end_time">End Time</span>
         </tal:notwholeday>
       </span>
@@ -40,33 +42,37 @@
     <tal:wholeday condition="whole_day">
       <span tal:replace="date_dict/start_date" i18n:translate="" />
     </tal:wholeday>
-    <tal:open_end condition="python:open_end and not whole_day" i18n:translate="event_when_sameday_openend">
-      <span class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date</span>
-      <div class="timerange">
-          from
-        <abbr class="dtstart"
-            tal:attributes="title date_dict/start_iso"
-            i18n:name="starttime">
-          <span class="explain" tal:content="date_dict/start_time">Start Time</span>
-        </abbr>
-      </div>
+    <tal:open_end
+        condition="python:open_end and not whole_day"
+        i18n:translate="event_when_sameday_openend">
+      <span class="datedisplay"
+          tal:content="date_dict/start_date"
+          i18n:name="date">Start Date</span>
+      from
+      <abbr class="dtstart"
+          tal:attributes="title date_dict/start_iso"
+          i18n:name="starttime"
+          tal:content="date_dict/start_time">Start Time
+      </abbr>
     </tal:open_end>
-    <tal:normal condition="python:not (whole_day or open_end)" i18n:translate="event_when_sameday">
-      <span class="datedisplay" tal:content="date_dict/start_date" i18n:name="date">Start Date</span>
-      <div class="timerange">
-          from
-        <abbr class="dtstart"
-            tal:attributes="title date_dict/start_iso"
-            i18n:name="starttime">
-          <span class="explain" tal:content="date_dict/start_time">Start Time</span>
-        </abbr>
-        <span class="timespan">to</span>
-        <abbr class="dtend"
-            tal:attributes="title date_dict/end_iso"
-            i18n:name="endtime">
-          <span class="explain" tal:content="date_dict/end_time">End Time</span>
-        </abbr>
-      </div>
+    <tal:normal
+        condition="python:not (whole_day or open_end)"
+        i18n:translate="event_when_sameday">
+      <span class="datedisplay"
+          tal:content="date_dict/start_date"
+          i18n:name="date">Start Date</span>
+      from
+      <abbr class="dtstart"
+          tal:attributes="title date_dict/start_iso"
+          i18n:name="starttime"
+          tal:content="date_dict/start_time">Start Time
+      </abbr>
+      to
+      <abbr class="dtend"
+          tal:attributes="title date_dict/end_iso"
+          i18n:name="endtime"
+          tal:content="date_dict/end_time">End Time
+      </abbr>
     </tal:normal>
   </tal:sameday>
 
