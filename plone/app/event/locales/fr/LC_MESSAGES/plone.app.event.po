@@ -156,7 +156,6 @@ msgstr "La date de fin doit être après la date de début."
 
 #. Default: "Invalid start or end date"
 #: plone/app/event/dx/behaviors.py:55
-#, fuzzy
 msgid "error_invalid_date"
 msgstr "La date de début ou la date de fin n'est pas valide."
 
@@ -339,7 +338,6 @@ msgstr "Adresse internet (URL) d'une page disposant des informations sur l'évé
 #. Default: "Event lasts whole day."
 #: plone/app/event/at/content.py:100
 #: plone/app/event/dx/behaviors.py:93
-#, fuzzy
 msgid "help_event_whole_day"
 msgstr "Cocher si l'événement dure toute la journée"
 
@@ -423,7 +421,6 @@ msgstr "Date de fin"
 #. Default: "Location"
 #: plone/app/event/at/content.py:166
 #: plone/app/event/dx/behaviors.py:192
-#, fuzzy
 msgid "label_event_location"
 msgstr "Lieu de l'événement"
 

@@ -155,7 +155,6 @@ msgstr "Data de término deve ser após a data de início."
 
 #. Default: "Invalid start or end date"
 #: plone/app/event/dx/behaviors.py:55
-#, fuzzy
 msgid "error_invalid_date"
 msgstr "A data de início ou término é inválida"
 
@@ -309,7 +308,6 @@ msgstr ""
 #. Default: "Define the event recurrence rule."
 #: plone/app/event/at/content.py:151
 #: plone/app/event/dx/behaviors.py:168
-#, fuzzy
 msgid "help_event_recurrence"
 msgstr "Recorrência"
 
@@ -339,7 +337,6 @@ msgstr "Endereço web com mais informações sobre este evento. Adicione http://
 #. Default: "Event lasts whole day."
 #: plone/app/event/at/content.py:100
 #: plone/app/event/dx/behaviors.py:93
-#, fuzzy
 msgid "help_event_whole_day"
 msgstr "Evento acontece durante o dia todo"
 
@@ -423,7 +420,6 @@ msgstr "Término do evento"
 #. Default: "Location"
 #: plone/app/event/at/content.py:166
 #: plone/app/event/dx/behaviors.py:192
-#, fuzzy
 msgid "label_event_location"
 msgstr "Localização"
 
@@ -436,7 +432,6 @@ msgstr ""
 #. Default: "Recurrence"
 #: plone/app/event/at/content.py:147
 #: plone/app/event/dx/behaviors.py:164
-#, fuzzy
 msgid "label_event_recurrence"
 msgstr "Recorrência do evento"
 
