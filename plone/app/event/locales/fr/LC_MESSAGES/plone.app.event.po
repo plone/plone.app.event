@@ -372,7 +372,6 @@ msgstr ""
 #. Default: "Contact E-mail"
 #: plone/app/event/at/content.py:168
 #: plone/app/event/dx/behaviors.py:188
-#, fuzzy
 msgid "label_event_contact_email"
 msgstr "Email du contact"
 
@@ -443,7 +442,6 @@ msgstr "Fuseau horaire"
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:192
 #: plone/app/event/dx/behaviors.py:202
-#, fuzzy
 msgid "label_event_url"
 msgstr "URL de l'événement"
 
@@ -475,7 +473,6 @@ msgstr ""
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:86
 #: plone/app/event/dx/behaviors.py:79
-#, fuzzy
 msgid "label_event_whole_day"
 msgstr "Journée entière"
 

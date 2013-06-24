@@ -438,7 +438,6 @@ msgstr "Fuso orario"
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:192
 #: plone/app/event/dx/behaviors.py:202
-#, fuzzy
 msgid "label_event_url"
 msgstr "URL dell'evento"
 
@@ -465,7 +464,6 @@ msgstr ""
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:86
 #: plone/app/event/dx/behaviors.py:79
-#, fuzzy
 msgid "label_event_whole_day"
 msgstr "Evento di tutta la giornata"
 

@@ -179,7 +179,6 @@ msgstr "Wann"
 
 #. Default: "${startdate} <span class=\"timespan\">to</span> ${enddate}"
 #: plone/app/event/browser/formated_date.pt:27
-#, fuzzy
 msgid "event_when_differentday"
 msgstr "${startdate} bis ${enddate}"
 
@@ -189,13 +188,11 @@ msgstr "um"
 
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formated_date.pt:71
-#, fuzzy
 msgid "event_when_sameday"
 msgstr "${date} von ${starttime} bis ${endtime}"
 
 #. Default: "${date} from ${starttime}"
 #: plone/app/event/browser/formated_date.pt:52
-#, fuzzy
 msgid "event_when_sameday_openend"
 msgstr "${date} ab ${starttime}"
 
@@ -206,7 +203,6 @@ msgstr "Wo"
 
 #. Default: "${from} until ${until}."
 #: plone/app/event/browser/event_listing.py:217
-#, fuzzy
 msgid "events_from_until"
 msgstr "Termine vom ${from} bis ${until}"
 
@@ -217,7 +213,6 @@ msgstr "Termine im ${month} ${year}"
 
 #. Default: "Events in week ${weeknumber}"
 #: plone/app/event/browser/event_listing.py:246
-#, fuzzy
 msgid "events_in_week"
 msgstr "Termine in der ${weeknumber}. Woche"
 
@@ -421,7 +416,7 @@ msgstr "Ort"
 #. Default: "Event Recurrence"
 #: plone/app/event/at/content.py:121
 msgid "label_event_recurrence"
-msgstr "Wiederholungsregel"
+msgstr "Wiederholung"
 
 #. Default: "Event settings"
 #: plone/app/event/browser/controlpanel.py:14
@@ -441,7 +436,6 @@ msgstr "Zeitzone"
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:192
 #: plone/app/event/dx/behaviors.py:202
-#, fuzzy
 msgid "label_event_url"
 msgstr "Website"
 
@@ -468,7 +462,6 @@ msgstr "Web URL"
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:86
 #: plone/app/event/dx/behaviors.py:79
-#, fuzzy
 msgid "label_event_whole_day"
 msgstr "Ganzer Tag"
 
@@ -520,7 +513,6 @@ msgstr "Vergangene Termine"
 #. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
 #: plone/app/event/portlets/portlet_calendar.py:40
 #: plone/app/event/portlets/portlet_events.py:38
-#, fuzzy
 msgid "portlet_help_search_base"
 msgstr "Den Ordner auswählen, in dem Termine für dieses Portlet gesucht werden."
 

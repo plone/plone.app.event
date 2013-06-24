@@ -188,7 +188,6 @@ msgstr ""
 
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formated_date.pt:71
-#, fuzzy
 msgid "event_when_sameday"
 msgstr "${date} <div class=\"timerange\"> de ${starttime} <span class=\"timespan\">até</span> ${endtime} </div>"
 
@@ -204,7 +203,6 @@ msgstr "Onde"
 
 #. Default: "${from} until ${until}."
 #: plone/app/event/browser/event_listing.py:217
-#, fuzzy
 msgid "events_from_until"
 msgstr "Eventos entre ${from} e ${until}"
 
@@ -215,7 +213,6 @@ msgstr "Eventos em ${month} de ${year}"
 
 #. Default: "Events in week ${weeknumber}"
 #: plone/app/event/browser/event_listing.py:246
-#, fuzzy
 msgid "events_in_week"
 msgstr "Eventos na semana ${weeknumber}"
 
@@ -369,7 +366,6 @@ msgstr "iCal"
 #. Default: "Contact E-mail"
 #: plone/app/event/at/content.py:168
 #: plone/app/event/dx/behaviors.py:188
-#, fuzzy
 msgid "label_event_contact_email"
 msgstr "E-mail de contato"
 
@@ -439,7 +435,6 @@ msgstr "Fuso horário"
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:192
 #: plone/app/event/dx/behaviors.py:202
-#, fuzzy
 msgid "label_event_url"
 msgstr "URL do evento"
 
@@ -517,7 +512,6 @@ msgstr "Eventos anteriores"
 #. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
 #: plone/app/event/portlets/portlet_calendar.py:40
 #: plone/app/event/portlets/portlet_events.py:38
-#, fuzzy
 msgid "portlet_help_search_base"
 msgstr "Selecione a pasta base para busca de eventos"
 
