@@ -224,7 +224,7 @@ msgstr ""
 
 #. Default: "The start or end date is invalid"
 #: plone/app/event/dx/behaviors.py:55
-msgid "exception_start_before_end"
+msgid "error_invalid_date"
 msgstr "La date de début ou la date de fin n'est pas valide."
 
 #. Default: "The start date must be before the                                             end date."
