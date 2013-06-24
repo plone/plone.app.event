@@ -53,13 +53,18 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         default_method=default_start,
         languageIndependent=True,
         widget=DatetimeWidget(
-            label=_(u'label_event_start', default=u'Event Starts'),
-            description=_(u'help_start',
-                          default=u"Date and Time, when the event begins."),
+            label=_(
+                u'label_event_start',
+                default=u'Event Starts'
+            ),
+            description=_(
+                u'help_event_start',
+                default=u"Date and Time, when the event begins."
+            ),
             with_time=1,
             first_day=first_weekday_sun0,
-            ),
         ),
+    ),
 
     atapi.DateTimeField('endDate',
         required=True,
@@ -69,13 +74,18 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         default_method=default_end,
         languageIndependent=True,
         widget=DatetimeWidget(
-            label=_(u'label_event_end', default=u'Event Ends'),
-            description=_(u'help_end',
-                          default=u"Date and Time, when the event ends."),
+            label=_(
+                u'label_event_end',
+                default=u'Event Ends'
+            ),
+            description=_(
+                u'help_event_end',
+                default=u"Date and Time, when the event ends."
+            ),
             with_time=1,
             first_day=first_weekday_sun0,
-            ),
         ),
+    ),
 
     atapi.BooleanField('wholeDay',
         required=False,
@@ -83,21 +93,32 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         languageIndependent=True,
         widget=atapi.BooleanWidget(
-            label=_(u'label_whole_day', default=u'Whole day event'),
-            description=_(u'help_whole_day', default=u"Event lasts whole day"),
+            label=_(
+                u'label_event_whole_day',
+                default=u'Whole Day'
+            ),
+            description=_(
+                u'help_event_whole_day',
+                default=u"Event lasts whole day."
             ),
         ),
+    ),
 
     atapi.BooleanField('openEnd',
         required=False,
         default=False,
         write_permission=ModifyPortalContent,
         widget=atapi.BooleanWidget(
-            label=_(u'label_open_end', default=u"Open end event"),
-            description=_(u'help_open_end',
-                default=u"This event is open ended."),
+            label=_(
+                u'label_event_open_end',
+                default=u"Open End"
+            ),
+            description=_(
+                u'help_event_open_end',
+                default=u"This event is open ended."
             ),
         ),
+    ),
 
     atapi.StringField('timezone',
         required=True,
@@ -107,45 +128,67 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         enforceVocabulary=True,
         default_method=default_timezone,
         widget=atapi.SelectionWidget(
-            label=_(u'label_event_timezone', default=u"Timezone"),
-            description=_(u'help_event_timezone',
-                default=u"Select the Timezone, where this event happens."),
+            label=_(
+                u'label_event_timezone',
+                default=u"Timezone"
+            ),
+            description=_(
+                u'help_event_timezone',
+                default=u"Select the Timezone, where this event happens."
             ),
         ),
+    ),
 
     atapi.StringField('recurrence',
         languageIndependent=True,
         write_permission=ModifyPortalContent,
         validators=('isRecurrence',),
         widget=RecurrenceWidget(
-            label=_(u'label_event_recurrence', default=u'Event Recurrence'),
-            description=_(u'help_event_recurrence',
-                default='Enter recurrence rules, one per line.'),
+            label=_(
+                u'label_event_recurrence',
+                default=u'Recurrence'
+            ),
+            description=_(
+                u'help_event_recurrence',
+                default='Define the event recurrence rule.'
+            ),
             startFieldYear='startDate-year',
             startFieldMonth='startDate-month',
             startFieldDay='startDate-day',
             first_day=first_weekday_sun0,
-            ),
         ),
+    ),
 
     atapi.StringField('location',
         searchable=True,
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
-            label=_(u'label_event_location', default=u'Event Location'),
-            description=_(u'help_event_location', default=u""),
+            label=_(
+                u'label_event_location',
+                default=u'Location'
+            ),
+            description=_(
+                u'help_event_location',
+                default=u"Location of the event."
             ),
         ),
+    ),
 
     atapi.LinesField('attendees',
         languageIndependent=True,
         searchable=True,
         write_permission=ModifyPortalContent,
         widget=atapi.LinesWidget(
-            label=_(u'label_event_attendees', default=u'Attendees'),
-            description=_(u'help_event_attendees', default=u''),
+            label=_(
+                u'label_event_attendees',
+                default=u'Attendees'
+            ),
+            description=_(
+                u'help_event_attendees',
+                default=u'List of attendees.'
             ),
         ),
+    ),
 
     atapi.StringField('contactName',
         required=False,
@@ -153,10 +196,16 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         accessor='contact_name',
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
-            label=_(u'label_contact_name', default=u'Contact Name'),
-            description=_(u'help_event_contact_name', default=u''),
+            label=_(
+                u'label_event_contact_name',
+                default=u'Contact Name'
+            ),
+            description=_(
+                u'help_event_contact_name',
+                default=u'Name of a person to contact about this event.'
             ),
         ),
+    ),
 
     atapi.StringField('contactEmail',
         required=False,
@@ -165,8 +214,14 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         validators=('isEmail',),
         widget=atapi.StringWidget(
-            label=_(u'label_contact_email', default=u'Contact E-mail'),
-            description=_(u'help_event_contact_email', default=u''),
+            label=_(
+                u'label_event_contact_email',
+                default=u'Contact E-mail'
+            ),
+            description=_(
+                u'help_event_contact_email',
+                default=u'Email address to contact about this event.'
+            ),
         ),
     ),
 
@@ -177,10 +232,16 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         validators=(),
         widget=atapi.StringWidget(
-            label=_(u'label_contact_phone', default=u'Contact Phone'),
-            description=_(u'help_event_contact_phone', default=u'')
+            label=_(
+                u'label_event_contact_phone',
+                default=u'Contact Phone'
+            ),
+            description=_(
+                u'help_event_contact_phone',
+                default=u'Phone number to contact about this event.'
             ),
         ),
+    ),
 
     atapi.StringField('eventUrl',
         required=False,
@@ -189,12 +250,17 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         write_permission=ModifyPortalContent,
         validators=('isURL',),
         widget=atapi.StringWidget(
-            label=_(u'label_event_url', default=u'Event URL'),
-            description=_(u'help_event_url',
+            label=_(
+                u'label_event_url',
+                default=u'Event URL'
+            ),
+            description=_(
+                u'help_event_url',
                 default=u"Web address with more info about the event. "
-                        u"Add http:// for external links."),
+                        u"Add http:// for external links."
             ),
         ),
+    ),
 
     atapi.TextField('text',
         required=False,
@@ -204,14 +270,20 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         validators=('isTidyHtmlWithCleanup',),
         default_output_type='text/x-html-safe',
         widget=atapi.RichWidget(
-            label=_(u'label_event_announcement', default=u'Event body text'),
-            description=_(u'help_event_announcement', default=u''),
+            label=_(
+                u'label_event_announcement',
+                default=u'Event body text'
+            ),
+            description=_(
+                u'help_event_announcement',
+                default=u''
+            ),
             rows=25,
             allow_file_upload=zconf.ATDocument.allow_document_upload
-            ),
         ),
+    ),
 
-    ), marshall=atapi.RFC822Marshaller())
+), marshall=atapi.RFC822Marshaller())
 
 
 # Repurpose the subject field for the event type

@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Use same field and error message strings for ATEvent and DX behaviors.
+  [thet]
+
 - Let plone.app.event.base.get_events always do a query with a sort definition,
   even if we are in exand mode and do a sort afterwards again. We need this to
   get stable results when having a sort_limit applied. Fixes an issue where the

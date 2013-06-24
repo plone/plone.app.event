@@ -250,30 +250,10 @@ msgstr "Eventos futuros"
 msgid "heading_add_to_calendar"
 msgstr "Adicionar evento ao calendário"
 
-#. Default: "List of attendees"
-#: plone/app/event/dx/behaviors.py:168
-msgid "help_attendees"
-msgstr "Lista de participantes"
-
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: plone/app/event/interfaces.py:31
 msgid "help_available_timezones"
 msgstr "Os fusos horários que estarão disponíveis no portal. Pode ser configurado para usuários e eventos"
-
-#. Default: "Email address to contact about this event."
-#: plone/app/event/dx/behaviors.py:189
-msgid "help_contact_email"
-msgstr "E-mail de contato sobre este evento."
-
-#. Default: "Name of a person to contact about this event."
-#: plone/app/event/dx/behaviors.py:181
-msgid "help_contact_name"
-msgstr "Nome da pessoa de contato para este evento."
-
-#. Default: "Phone number to contact about this event."
-#: plone/app/event/dx/behaviors.py:196
-msgid "help_contact_phone"
-msgstr "Número de telefone de contato para este evento."
 
 #. Default: "Search events in current folder only."
 #: plone/app/event/browser/event_listing.py:375
@@ -283,7 +263,7 @@ msgstr ""
 #. Default: "Date and Time, when the event ends."
 #: plone/app/event/at/content.py:73
 #: plone/app/event/dx/behaviors.py:73
-msgid "help_end"
+msgid "help_event_end"
 msgstr "Data e hora do término do evento."
 
 #: plone/app/event/at/content.py:208
@@ -293,19 +273,19 @@ msgstr ""
 
 #: plone/app/event/at/content.py:146
 msgid "help_event_attendees"
-msgstr ""
+msgstr "Lista de participantes"
 
 #: plone/app/event/at/content.py:169
 msgid "help_event_contact_email"
-msgstr ""
+msgstr "E-mail de contato sobre este evento."
 
 #: plone/app/event/at/content.py:157
 msgid "help_event_contact_name"
-msgstr ""
+msgstr "Nome da pessoa de contato para este evento."
 
 #: plone/app/event/at/content.py:181
 msgid "help_event_contact_phone"
-msgstr ""
+msgstr "Número de telefone de contato para este evento."
 
 #. Default: "Settings for the event listing view."
 #: plone/app/event/profiles/default/actions.xml
@@ -314,12 +294,12 @@ msgstr ""
 
 #: plone/app/event/at/content.py:136
 msgid "help_event_location"
-msgstr ""
+msgstr "Local do evento"
 
 #. Default: "Enter recurrence rules, one per line."
 #: plone/app/event/at/content.py:122
 msgid "help_event_recurrence"
-msgstr "Informe as recorrências, uma por linha."
+msgstr "Recorrência"
 
 #. Default: "Event related settings like timezone, etc."
 #: plone/app/event/browser/controlpanel.py:15
@@ -357,15 +337,10 @@ msgstr ""
 msgid "help_ical_import_enable"
 msgstr ""
 
-#. Default: "Location of the event"
-#: plone/app/event/dx/behaviors.py:158
-msgid "help_location"
-msgstr "Local do evento"
-
 #. Default: "This event is open ended."
 #: plone/app/event/at/content.py:97
 #: plone/app/event/dx/behaviors.py:86
-msgid "help_open_end"
+msgid "help_event_open_end"
 msgstr ""
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
@@ -373,26 +348,16 @@ msgstr ""
 msgid "help_portal_timezone"
 msgstr "Configuração de fuso horário do portal. Usuários podem definir seu próprio fuso horário, caso a lista de fusos horários esteja definida. "
 
-#. Default: "RFC5545 compatible recurrence definition"
-#: plone/app/event/dx/behaviors.py:136
-msgid "help_recurrence"
-msgstr "Definição de recorrência compatível com RFC5545"
-
 #. Default: "Date and Time, when the event begins."
 #: plone/app/event/at/content.py:57
 #: plone/app/event/dx/behaviors.py:66
-msgid "help_start"
+msgid "help_event_start"
 msgstr "Data e hora de início do evento."
-
-#. Default: "Timezone of the event"
-#: plone/app/event/dx/behaviors.py:93
-msgid "help_timezone"
-msgstr "Fuso horário deste evento"
 
 #. Default: "Event lasts whole day"
 #: plone/app/event/at/content.py:87
 #: plone/app/event/dx/behaviors.py:80
-msgid "help_whole_day"
+msgid "help_event_whole_day"
 msgstr "Evento acontece durante o dia todo"
 
 #. Default: "iCal"
@@ -401,28 +366,23 @@ msgstr "Evento acontece durante o dia todo"
 msgid "label_add_to_ical"
 msgstr "iCal"
 
-#. Default: "Attendees"
-#: plone/app/event/dx/behaviors.py:167
-msgid "label_attendees"
-msgstr "Participantes"
-
 #. Default: "Contact E-mail"
 #: plone/app/event/at/content.py:168
 #: plone/app/event/dx/behaviors.py:188
 #, fuzzy
-msgid "label_contact_email"
+msgid "label_event_contact_email"
 msgstr "E-mail de contato"
 
 #. Default: "Contact Name"
 #: plone/app/event/at/content.py:156
 #: plone/app/event/dx/behaviors.py:180
-msgid "label_contact_name"
+msgid "label_event_contact_name"
 msgstr "Nome do contato"
 
 #. Default: "Contact Phone"
 #: plone/app/event/at/content.py:180
 #: plone/app/event/dx/behaviors.py:195
-msgid "label_contact_phone"
+msgid "label_event_contact_phone"
 msgstr "Telefone de contato"
 
 #. Default: "Current folder"
@@ -434,11 +394,6 @@ msgstr ""
 #: plone/app/event/browser/event_listing.pt:126
 msgid "label_email"
 msgstr ""
-
-#. Default: "Event end date"
-#: plone/app/event/dx/behaviors.py:72
-msgid "label_end"
-msgstr "Data de término do evento"
 
 #. Default: "Event body text"
 #: plone/app/event/at/content.py:207
@@ -459,7 +414,7 @@ msgstr "Término do evento"
 #. Default: "Event Location"
 #: plone/app/event/at/content.py:135
 msgid "label_event_location"
-msgstr "Local do evento"
+msgstr "Localização"
 
 #. Default: "Event Recurrence"
 #: plone/app/event/at/content.py:121
@@ -493,35 +448,15 @@ msgstr "URL do evento"
 msgid "label_first_weekday"
 msgstr "Primeiro dia da semana"
 
-#. Default: "Location"
-#: plone/app/event/dx/behaviors.py:157
-msgid "label_location"
-msgstr "Localização"
-
 #. Default: "Open end event"
 #: plone/app/event/at/content.py:96
 #: plone/app/event/dx/behaviors.py:85
-msgid "label_open_end"
+msgid "label_event_open_end"
 msgstr ""
 
 #: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
 msgstr ""
-
-#. Default: "Recurrence"
-#: plone/app/event/dx/behaviors.py:135
-msgid "label_recurrence"
-msgstr "Recorrência"
-
-#. Default: "Event start date"
-#: plone/app/event/dx/behaviors.py:65
-msgid "label_start"
-msgstr "Data de início do evento"
-
-#. Default: "Timezone"
-#: plone/app/event/dx/behaviors.py:92
-msgid "label_timezone"
-msgstr "Fuso horário"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_listing.pt:116
@@ -531,7 +466,7 @@ msgstr ""
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:86
 #: plone/app/event/dx/behaviors.py:79
-msgid "label_whole_day"
+msgid "label_event_whole_day"
 msgstr ""
 
 #. Default: "Day"

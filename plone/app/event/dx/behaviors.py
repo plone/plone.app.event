@@ -52,8 +52,8 @@ def first_weekday_sun0():
 
 
 class StartBeforeEnd(Invalid):
-    __doc__ = _("exception_start_before_end",
-                default=u"The start or end date is invalid")
+    __doc__ = _("error_end_must_be_after_start_date",
+                default=u"End date must be after start date.")
 
 
 class IEventBasic(model.Schema):
@@ -62,45 +62,74 @@ class IEventBasic(model.Schema):
     model.fieldset('dates', fields=['timezone'])
 
     start = schema.Datetime(
-        title = _(u'label_start', default=u'Event start date'),
-        description = _(u'help_start',
-                        default=u'Date and Time, when the event begins.'),
+        title = _(
+            u'label_event_start',
+            default=u'Event Starts'
+        ),
+        description = _(
+            u'help_event_start',
+            default=u'Date and Time, when the event begins.'
+        ),
         required = True
-        )
+    )
 
     end = schema.Datetime(
-        title = _(u'label_end', default=u'Event end date'),
-        description = _(u'help_end',
-                        default=u'Date and Time, when the event ends.'),
+        title = _(
+            u'label_event_end',
+            default=u'Event Ends'
+        ),
+        description = _(
+            u'help_event_end',
+            default=u'Date and Time, when the event ends.'
+        ),
         required = True
-        )
+    )
 
     whole_day = schema.Bool(
-        title = _(u'label_whole_day', default=u'Whole Day'),
-        description = _(u'help_whole_day', default=u'Event lasts whole day'),
+        title = _(
+            u'label_event_whole_day',
+            default=u'Whole Day'
+        ),
+        description = _(
+            u'help_event_whole_day',
+            default=u'Event lasts whole day.'
+        ),
         required = False
-        )
+    )
 
     open_end = schema.Bool(
-        title = _(u'label_open_end', default=u'Open end event'),
-        description=_(u'help_open_end', default=u"This event is open ended."),
+        title = _(
+            u'label_event_open_end',
+            default=u'Open End'
+        ),
+        description=_(
+            u'help_event_open_end',
+            default=u"This event is open ended."
+        ),
         required = False
-        )
+    )
 
     # TODO: form.order_before(timezone="IPublication.effective")
     timezone = schema.Choice(
-        title = _(u'label_timezone', default=u'Timezone'),
-        description = _(u'help_timezone', default=u'Timezone of the event'),
+        title = _(
+            u'label_event_timezone',
+            default=u'Timezone'
+        ),
+        description = _(
+            u'help_event_timezone',
+            default=u'Select the Timezone, where this event happens.'
+        ),
         required = True,
         vocabulary="plone.app.event.AvailableTimezones"
-        )
+    )
 
     @invariant
     def validate_start_end(data):
         if data.start > data.end:
-            raise StartBeforeEnd(_("exception_start_before_end_text",
-                                   default=u"The start date must be before the\
-                                             end date."))
+            raise StartBeforeEnd(
+                _("error_end_must_be_after_start_date",
+                  default=u"End date must be after start date.")
+            )
 
 # Adding a parametirized widget
 # (this will be simpler in future versions of plone.autoform)
@@ -132,10 +161,16 @@ class IEventRecurrence(model.Schema):
 
     """
     recurrence = schema.Text(
-        title = _(u'label_recurrence', default=u'Recurrence'),
-        description = _(u'help_recurrence',
-                        default=u'RFC5545 compatible recurrence definition'),
-        required = False)
+        title = _(
+            u'label_event_recurrence',
+            default=u'Recurrence'
+        ),
+        description = _(
+            u'help_event_recurrence',
+            default=u'Define the event recurrence rule.'
+        ),
+        required = False
+    )
 
 # Please note: If a new behavior, made out of IEventBasic and IRecurrence is
 # created then a new ParameterizedWidgetFactory has to be used and the
@@ -154,22 +189,34 @@ class IEventLocation(model.Schema):
     """ Event Location Schema.
     """
     location = schema.TextLine(
-        title = _(u'label_location', default=u'Location'),
-        description = _(u'help_location', default=u'Location of the event'),
+        title = _(
+            u'label_event_location',
+            default=u'Location'
+        ),
+        description = _(
+            u'help_event_location',
+            default=u'Location of the event.'
+        ),
         required = False
-        )
+    )
 
 
 class IEventAttendees(model.Schema):
     """ Event Attendees Schema.
     """
     attendees = schema.Tuple(
-        title = _(u'label_attendees', default=u'Attendees'),
-        description = _(u'help_attendees', default=u'List of attendees'),
+        title = _(
+            u'label_event_attendees',
+            default=u'Attendees'
+        ),
+        description = _(
+            u'help_event_attendees',
+            default=u'List of attendees.'
+        ),
         value_type = schema.TextLine(),
         required = False,
         missing_value = (),
-        )
+    )
     form.widget(attendees = TextLinesFieldWidget)
 
 
@@ -177,44 +224,69 @@ class IEventContact(model.Schema):
     """ Event Contact Schema.
     """
     contact_name = schema.TextLine(
-        title = _(u'label_contact_name', default=u'Contact Name'),
-        description = _(u'help_contact_name',
-                        default=u'Name of a person to contact about this '
-                                u'event.'),
+        title = _(
+            u'label_event_contact_name',
+            default=u'Contact Name'
+        ),
+        description = _(
+            u'help_event_contact_name',
+            default=u'Name of a person to contact about this event.'
+        ),
         required = False
-        )
+    )
 
     contact_email = schema.TextLine(
-        title = _(u'label_contact_email', default=u'Contact E-mail'),
-        description = _(u'help_contact_email',
-                        default=u'Email address to contact about this event.'),
+        title = _(
+            u'label_event_contact_email',
+            default=u'Contact E-mail'
+        ),
+        description = _(
+            u'help_event_contact_email',
+            default=u'Email address to contact about this event.'
+        ),
         required = False
-        )
+    )
 
     contact_phone = schema.TextLine(
-        title = _(u'label_contact_phone', default=u'Contact Phone'),
-        description = _(u'help_contact_phone',
-                        default=u'Phone number to contact about this event.'),
+        title = _(
+            u'label_event_contact_phone',
+            default=u'Contact Phone'
+        ),
+        description = _(
+            u'help_event_contact_phone',
+            default=u'Phone number to contact about this event.'
+        ),
         required = False
-        )
+    )
 
     event_url = schema.TextLine(
-        title = _(u'label_event_url', default=u'Event URL'),
-        description = _(u'help_event_url',
-                        default=u'Web address with more info about the event. '
-                        u'Add http:// for external links.'),
+        title = _(
+            u'label_event_url',
+            default=u'Event URL'
+        ),
+        description = _(
+            u'help_event_url',
+            default=u'Web address with more info about the event. '
+                    u'Add http:// for external links.'
+        ),
         required = False
-        )
+    )
 
 
 class IEventSummary(model.Schema):
     """Event summary (body text) schema."""
 
     text = RichText(
-        title=_(u'label_event_announcement', default=u'Event body text'),
-        description=_(u'help_event_announcement', default=u''),
+        title=_(
+            u'label_event_announcement',
+            default=u'Event body text'
+        ),
+        description=_(
+            u'help_event_announcement',
+            default=u''
+        ),
         required=False,
-        )
+    )
 
 
 # Mark these interfaces as form field providers

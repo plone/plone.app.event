@@ -247,11 +247,6 @@ msgstr ""
 msgid "heading_add_to_calendar"
 msgstr ""
 
-#. Default: "List of attendees"
-#: plone/app/event/dx/behaviors.py:168
-msgid "help_attendees"
-msgstr ""
-
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: plone/app/event/interfaces.py:31
 msgid "help_available_timezones"
@@ -262,16 +257,6 @@ msgstr ""
 msgid "help_contact_email"
 msgstr ""
 
-#. Default: "Name of a person to contact about this event."
-#: plone/app/event/dx/behaviors.py:181
-msgid "help_contact_name"
-msgstr ""
-
-#. Default: "Phone number to contact about this event."
-#: plone/app/event/dx/behaviors.py:196
-msgid "help_contact_phone"
-msgstr ""
-
 #. Default: "Search events in current folder only."
 #: plone/app/event/browser/event_listing.py:375
 msgid "help_current_folder"
@@ -280,7 +265,7 @@ msgstr ""
 #. Default: "Date and Time, when the event ends."
 #: plone/app/event/at/content.py:73
 #: plone/app/event/dx/behaviors.py:73
-msgid "help_end"
+msgid "help_event_end"
 msgstr ""
 
 #: plone/app/event/at/content.py:208
@@ -354,15 +339,10 @@ msgstr ""
 msgid "help_ical_import_enable"
 msgstr ""
 
-#. Default: "Location of the event"
-#: plone/app/event/dx/behaviors.py:158
-msgid "help_location"
-msgstr ""
-
 #. Default: "This event is open ended."
 #: plone/app/event/at/content.py:97
 #: plone/app/event/dx/behaviors.py:86
-msgid "help_open_end"
+msgid "help_event_open_end"
 msgstr ""
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
@@ -370,15 +350,10 @@ msgstr ""
 msgid "help_portal_timezone"
 msgstr ""
 
-#. Default: "RFC5545 compatible recurrence definition"
-#: plone/app/event/dx/behaviors.py:136
-msgid "help_recurrence"
-msgstr ""
-
 #. Default: "Date and Time, when the event begins."
 #: plone/app/event/at/content.py:57
 #: plone/app/event/dx/behaviors.py:66
-msgid "help_start"
+msgid "help_event_start"
 msgstr ""
 
 #. Default: "Timezone of the event"
@@ -389,18 +364,13 @@ msgstr ""
 #. Default: "Event lasts whole day"
 #: plone/app/event/at/content.py:87
 #: plone/app/event/dx/behaviors.py:80
-msgid "help_whole_day"
+msgid "help_event_whole_day"
 msgstr ""
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
 #: plone/app/event/browser/event_view.pt:121
 msgid "label_add_to_ical"
-msgstr ""
-
-#. Default: "Attendees"
-#: plone/app/event/dx/behaviors.py:167
-msgid "label_attendees"
 msgstr ""
 
 #. Default: "Contact E-mail"
@@ -412,13 +382,13 @@ msgstr ""
 #. Default: "Contact Name"
 #: plone/app/event/at/content.py:156
 #: plone/app/event/dx/behaviors.py:180
-msgid "label_contact_name"
+msgid "label_event_contact_name"
 msgstr ""
 
 #. Default: "Contact Phone"
 #: plone/app/event/at/content.py:180
 #: plone/app/event/dx/behaviors.py:195
-msgid "label_contact_phone"
+msgid "label_event_contact_phone"
 msgstr ""
 
 #. Default: "Current folder"
@@ -429,11 +399,6 @@ msgstr ""
 #. Default: "Email"
 #: plone/app/event/browser/event_listing.pt:126
 msgid "label_email"
-msgstr ""
-
-#. Default: "Event end date"
-#: plone/app/event/dx/behaviors.py:72
-msgid "label_end"
 msgstr ""
 
 #. Default: "Event body text"
@@ -488,29 +453,14 @@ msgstr ""
 msgid "label_first_weekday"
 msgstr ""
 
-#. Default: "Location"
-#: plone/app/event/dx/behaviors.py:157
-msgid "label_location"
-msgstr ""
-
 #. Default: "Open end event"
 #: plone/app/event/at/content.py:96
 #: plone/app/event/dx/behaviors.py:85
-msgid "label_open_end"
+msgid "label_event_open_end"
 msgstr ""
 
 #: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
-msgstr ""
-
-#. Default: "Recurrence"
-#: plone/app/event/dx/behaviors.py:135
-msgid "label_recurrence"
-msgstr ""
-
-#. Default: "Event start date"
-#: plone/app/event/dx/behaviors.py:65
-msgid "label_start"
 msgstr ""
 
 #. Default: "Timezone"
@@ -526,7 +476,7 @@ msgstr ""
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:86
 #: plone/app/event/dx/behaviors.py:79
-msgid "label_whole_day"
+msgid "label_event_whole_day"
 msgstr ""
 
 #. Default: "Day"
