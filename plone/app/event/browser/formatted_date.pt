@@ -23,7 +23,7 @@
         </tal:notwholeday>
       </span>
     </abbr>
-    <span class="timespan">to</span>
+    to
     <abbr class="dtend"
         i18n:name="enddate"
         tal:attributes="title date_dict/end_iso">
