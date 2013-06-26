@@ -179,9 +179,9 @@ class EventListing(BrowserView):
     def get_location(self, event_accessor):
         return get_location(event_accessor.context)
 
-    def formated_date(self, occ):
+    def formatted_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formated_date')
+                IContentProvider, name='formatted_date')
         return provider(occ.context)
 
     def date_speller(self, date):

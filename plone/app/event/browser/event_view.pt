@@ -34,7 +34,7 @@
           <td tal:define="start_tzname data/timezone;
                           start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                           start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
-            <tal:date replace="structure python:view.formated_date(context)" />
+            <tal:date replace="structure python:view.formatted_date(context)" />
             <span class="timezone" tal:condition="start_tzname">
              (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
             </span>
@@ -52,12 +52,12 @@
               <span i18n:translate="">More occurrences of this event:</span>
               <ul>
                 <li tal:repeat="occ events">
-                  <tal:date replace="structure python:view.formated_date(occ)" />
+                  <tal:date replace="structure python:view.formatted_date(occ)" />
                 </li>
                 <li tal:define="tail next_occurrences/tail"
                     tal:condition="tail">
                     ⋮<br />
-                    <tal:date replace="structure python:view.formated_date(tail)" />
+                    <tal:date replace="structure python:view.formatted_date(tail)" />
                 </li>
               </ul>
             </div>

@@ -14,7 +14,7 @@ plone.app.event API
     at/interfaces.rst
     browser/controlpanel.rst
     browser/event_view.rst
-    browser/formated_date.rst
+    browser/formatted_date.rst
     browser/occurrence.rst
     dx/behaviors.rst
     dx/interfaces.rst

@@ -99,7 +99,7 @@ class TestDXIntegration(unittest.TestCase):
                 whole_day=False)
         e1 = self.portal['event1']
         view = e1.restrictedTraverse('@@event_view')
-        self.assertTrue(view.formated_date(e1) is not None)
+        self.assertTrue(view.formatted_date(e1) is not None)
         self.assertTrue(view.next_occurrences is not None)
 
         self.portal.manage_delObjects(['event1'])

@@ -3,8 +3,8 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import dates_for_display
 
 
-class FormatedDateProvider(Explicit):
-    template = ViewPageTemplateFile(u'formated_date.pt')
+class FormattedDateProvider(Explicit):
+    template = ViewPageTemplateFile(u'formatted_date.pt')
 
     def __init__(self, context, request, view):
         self.__parent__ = view
@@ -12,11 +12,11 @@ class FormatedDateProvider(Explicit):
         self.request = request
 
     def __call__(self, occ):
-        """Return a formated date string.
+        """Return a formatted date string.
 
         :param occ: An event or occurrence.
         :type occ: IEvent or IOccurrence
-        :returns: Formated date string for display.
+        :returns: Formatted date string for display.
         :rtype: string
 
         """
@@ -24,5 +24,5 @@ class FormatedDateProvider(Explicit):
         return self.template(self)
 
 
-class FormatedStartDateProvider(FormatedDateProvider):
-    template = ViewPageTemplateFile(u'formated_start_date.pt')
+class FormattedStartDateProvider(FormattedDateProvider):
+    template = ViewPageTemplateFile(u'formatted_start_date.pt')

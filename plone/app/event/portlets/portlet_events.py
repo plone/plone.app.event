@@ -109,9 +109,9 @@ class Renderer(base.Renderer):
         return get_events(context, start=localized_now(context),
                           ret_mode=3, expand=True, limit=data.count, **kw)
 
-    def formated_date(self, event):
+    def formatted_date(self, event):
         provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formated_date')
+                IContentProvider, name='formatted_date')
         return provider(event)
 
     def get_location(self, event):

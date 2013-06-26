@@ -608,7 +608,7 @@ def dates_for_display(occurrence):
 
 
 def date_speller(context, dt):
-    """Return a dictionary with localized and readably formated date parts.
+    """Return a dictionary with localized and readably formatted date parts.
 
     """
     dt = DT(dt)

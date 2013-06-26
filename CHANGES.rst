@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Rename the formated_date and formated_start_date content providers to
+  have the correct spelling of "formatted". Doing this change now while this
+  package's adoption is not too wide spread.
+  [thet]
+
 - Use same field and error message strings for ATEvent and DX behaviors.
   [thet]
 

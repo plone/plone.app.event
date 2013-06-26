@@ -64,12 +64,31 @@
         />
 
     <adapter
+        name="formatted_date"
+        provides="zope.contentprovider.interfaces.IContentProvider"
+        for="zope.interface.Interface
+             zope.publisher.interfaces.browser.IBrowserRequest
+             zope.publisher.interfaces.browser.IBrowserView"
+        factory=".formatted_date.FormattedDateProvider"
+        />
+
+    <adapter
+        name="formatted_date"
+        provides="zope.contentprovider.interfaces.IContentProvider"
+        for="zope.interface.Interface
+             zope.publisher.interfaces.browser.IBrowserRequest
+             plone.portlets.interfaces.IPortletRenderer"
+        factory=".formatted_date.FormattedStartDateProvider"
+        />
+
+    <!-- TODO: BBB - Remove with 1.0 -->
+    <adapter
         name="formated_date"
         provides="zope.contentprovider.interfaces.IContentProvider"
         for="zope.interface.Interface
              zope.publisher.interfaces.browser.IBrowserRequest
              zope.publisher.interfaces.browser.IBrowserView"
-        factory=".formated_date.FormatedDateProvider"
+        factory=".formatted_date.FormattedDateProvider"
         />
 
     <adapter
@@ -78,7 +97,7 @@
         for="zope.interface.Interface
              zope.publisher.interfaces.browser.IBrowserRequest
              plone.portlets.interfaces.IPortletRenderer"
-        factory=".formated_date.FormatedStartDateProvider"
+        factory=".formatted_date.FormattedStartDateProvider"
         />
 
 </configure>

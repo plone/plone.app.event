@@ -37,9 +37,9 @@ class EventView(BrowserView):
             return aq_parent(self.context).absolute_url()
         return None
 
-    def formated_date(self, occ):
+    def formatted_date(self, occ):
         provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formated_date')
+                IContentProvider, name='formatted_date')
         return provider(occ)
 
     @property
