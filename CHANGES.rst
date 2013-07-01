@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- In the ATEvent migration step, call ObjectModifiedEvent for each migrated
+  event to call off the data_postprocessing method, which assures correct time
+  values in respect to timezones. Please note, the timezone must be set
+  correctly before!
+  [thet]
+
 - Fix OccurrenceTraverser to fallback to plone.app.imaging's ImageTraverser
   only for Archetypes based objects. For Dexterity content, image scales are
   accessed only via the @@images view and not by traversing to a image scale

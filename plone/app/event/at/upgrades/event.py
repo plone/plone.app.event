@@ -2,11 +2,12 @@ from Products.ATContentTypes.interfaces.event import IATEvent
 from Products.Archetypes.annotations import getAnnotation
 from Products.CMFCore.utils import getToolByName
 from Products.contentmigration.archetypes import ATItemMigrator
-from Products.contentmigration.migrator import InlineFieldActionMigrator
 from Products.contentmigration.walker import CustomQueryWalker
 from plone.app.event.at.interfaces import IATEvent as IATEvent_PAE
 from transaction import savepoint
 from zope.deprecation import deprecate
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 import transaction
 import logging
@@ -21,11 +22,14 @@ class PAEATMigrator(ATItemMigrator):
     dst_portal_type = 'Event'
     dst_meta_type = 'ATEvent'
 
-class PAEATInlineMigrator(InlineFieldActionMigrator):
-    src_portal_type = 'Event'
-    src_meta_type = 'ATEvent'
-    dst_portal_type = 'Event'
-    dst_meta_type = 'ATEvent'
+    def migrate_schema(self):
+        """Migrate old ATEvent schema to plone.app.event's ATEvent.
+        """
+        # TODO: assure - if possible - that timezone is set correctly.
+        # Call ObjectModifiedEvent to do data_postprocessing on each event
+        # object.
+        notify(ObjectModifiedEvent(self.new))
+
 
 def callBefore(oldobj):
     transaction.commit() # Do a commit before each migration, commiting the
@@ -37,6 +41,7 @@ def callBefore(oldobj):
         return False
     return True
 
+
 def upgrade_step_1(context):
     portal = getToolByName(context, 'portal_url').getPortalObject()
     walker = CustomQueryWalker(
@@ -46,6 +51,7 @@ def upgrade_step_1(context):
     savepoint(optimistic=True)
     walker.go()
     return walker.getOutput()
+
 
 @deprecate('upgrade_step_2 is an migration step between beta releases of '
            'plone.app.event and likely not neccessary for any installation. '
