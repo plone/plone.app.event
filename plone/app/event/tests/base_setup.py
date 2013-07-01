@@ -58,7 +58,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             location=u"Vienna",
             timezone=default_tz,
             recurrence='RRULE:FREQ=DAILY;COUNT=3',
-            )
+            ).context
 
         self.now_event = factory(
             container=self.portal,
@@ -69,7 +69,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             location=u"Vienna",
             timezone=default_tz,
             recurrence='RRULE:FREQ=DAILY;COUNT=3;INTERVAL=2',
-            )
+            ).context
 
         self.future_event = factory(
             container=self.portal,
@@ -78,7 +78,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=future,
             end=future + duration,
             location=u'Graz',
-            timezone=default_tz)
+            timezone=default_tz).context
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
         self.long_event = factory(
@@ -88,5 +88,5 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=past,
             end=far,
             location=u'Schaftal',
-            timezone=default_tz)
+            timezone=default_tz).context
 
