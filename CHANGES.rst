@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix OccurrenceTraverser to fallback to plone.app.imaging's ImageTraverser
+  only for Archetypes based objects. For Dexterity content, image scales are
+  accessed only via the @@images view and not by traversing to a image scale
+  name. Fixes #78 and fixes #79.
+  [thet]
+
 - Rename the formated_date and formated_start_date content providers to
   have the correct spelling of "formatted". Doing this change now while this
   package's adoption is not too wide spread.

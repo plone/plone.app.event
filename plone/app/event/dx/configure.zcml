@@ -21,6 +21,11 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".behaviors.data_postprocessing" />
 
+    <adapter
+        factory=".traverser.OccurrenceTraverser"
+        permission="zope.Public"
+        />
+
     <adapter factory=".behaviors.EventAccessor" />
 
     <adapter name="start" factory=".behaviors.start_indexer" />

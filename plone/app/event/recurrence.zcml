@@ -3,16 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <adapter factory=".recurrence.RecurrenceSupport" />
-
   <adapter factory=".recurrence.EventOccurrenceAccessor" />
-
-  <adapter
-      for="plone.event.interfaces.IEvent
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".recurrence.OccurrenceTraverser"
-      permission="zope.Public"
-      />
 
   <!-- DEACTIVATED UNTIL FIXED -->
   <!-- plone.app.imaging specific view and traverser for IOccurrence -->

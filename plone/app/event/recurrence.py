@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
-from plone.app.event.base import guess_date_from
 from plone.app.imaging.scaling import ImageScaling
 from plone.app.imaging.traverse import ImageTraverser
 from plone.event.interfaces import IEventAccessor
@@ -9,16 +8,8 @@ from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.recurrence import recurrence_sequence_ical
-from plone.event.utils import is_same_day
 from zope.component import adapts
 from zope.interface import implements
-from zope.publisher.interfaces.browser import IBrowserPublisher
-
-try:
-    from plone.app.imaging.traverse import ImageTraverser as\
-            DefaultPublishTraverse
-except ImportError:
-    from ZPublisher.BaseRequest import DefaultPublishTraverse
 
 
 import itertools
@@ -80,21 +71,6 @@ class RecurrenceSupport(object):
 
         events = map(get_obj, starts)
         return events
-
-
-class OccurrenceTraverser(DefaultPublishTraverse):
-    implements(IBrowserPublisher)
-
-    def publishTraverse(self, request, name):
-        dateobj = guess_date_from(name, self.context)
-        if dateobj:
-            occurrence = IRecurrenceSupport(self.context).occurrences(
-                range_start=dateobj)[0]
-            occ_acc = IEventAccessor(occurrence)
-            if is_same_day(dateobj, occ_acc.start):
-                return occurrence
-        # No self.fallback to avoid circular call from ImageTraverser
-        return super(OccurrenceTraverser, self).publishTraverse(request, name)
 
 
 class Occurrence(SimpleItem):

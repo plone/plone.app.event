@@ -21,6 +21,11 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".content.data_postprocessing" />
 
+    <adapter
+        factory=".traverser.OccurrenceTraverser"
+        permission="zope.Public"
+        />
+
     <genericsetup:registerProfile
         name="default"
         title="plone.app.event.at"
