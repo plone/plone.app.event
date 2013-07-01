@@ -5,6 +5,11 @@
   <adapter factory=".recurrence.RecurrenceSupport" />
   <adapter factory=".recurrence.EventOccurrenceAccessor" />
 
+  <adapter
+      factory=".recurrence.OccurrenceTraverser"
+      permission="zope.Public"
+      />
+
   <!-- DEACTIVATED UNTIL FIXED -->
   <!-- plone.app.imaging specific view and traverser for IOccurrence -->
   <!-- browser:page
