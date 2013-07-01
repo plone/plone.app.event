@@ -19,6 +19,13 @@ from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.interfaces.browser import IBrowserView
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from zope.publisher.interfaces.browser import IBrowserPublisher
+
 
 import datetime
 import pytz
@@ -29,78 +36,82 @@ import zope.component
 
 TZNAME = "Europe/Vienna"
 
+from plone.app.event.dx.traverser import OccurrenceTraverser as\
+        OccurrenceTraverserDX
+from plone.app.event.at.traverser import OccurrenceTraverser as\
+        OccurrenceTraverserAT
 
-class TestTraversal(unittest.TestCase):
 
-    layer = PAEventAT_INTEGRATION_TESTING
+class TestTraversalDX(AbstractSampleDataEvents):
+    """Test OccurrenceTraverser with DX objects.
+    """
+    layer = PAEventDX_INTEGRATION_TESTING
 
-    def setUp(self):
-        self.portal = self.layer['portal']
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = "Australia/Brisbane"
+    def event_factory(self):
+        return DXEventAccessor.create
 
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory(type_name='Event', id='at',
-                                  title='Event1')
-        self.at = self.portal['at']
-        self.at_traverser = OccurrenceTraverser(self.at, self.layer['request'])
+    @property
+    def traverser(self):
+        return OccurrenceTraverserDX(self.now_event, self.request)
 
     def test_no_occurrence(self):
         self.assertRaises(
             AttributeError,
-            self.at_traverser.publishTraverse,
-            self.layer['request'], 'foo')
+            self.traverser.publishTraverse,
+            self.request, 'foo')
 
     def test_default_views(self):
-        view = self.at_traverser.publishTraverse(
-            self.layer['request'], 'event_view')
+        view = self.traverser.publishTraverse(self.request, 'event_view')
         self.assertTrue(IBrowserView.providedBy(view))
 
     def test_occurrence(self):
-        self.at.setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
+        # start date of self.now_event = 2013-05-05, 10:00.
+        # recurrence rule = 'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=2'
 
-        # does not match occurrence date
-        qdate = datetime.date.today() + datetime.timedelta(days=4)
+        # Try to traverse to inexistent occurrence
         self.assertRaises(
             AttributeError,
-            self.at_traverser.publishTraverse,
-            self.layer['request'], str(qdate))
+            self.traverser.publishTraverse,
+            self.request, '2000-01-01')
 
-        qdatedt = pydt(self.at.start() + 7)
-        item = self.at_traverser.publishTraverse(self.layer['request'],
-                                                 str(qdatedt.date()))
+        # Traverse to existent occurrence
+        item = self.traverser.publishTraverse(self.request, '2013-05-07')
         self.assertTrue(IOccurrence.providedBy(item))
-        self.assertTrue(IATEvent.providedBy(item.aq_parent))
+        self.assertEqual(type(self.now_event), type(item.aq_parent))
 
     def test_occurrence_accessor(self):
-        start = datetime.datetime.today()
-        end = datetime.datetime.today()
+        start = self.now
+        end = self.future
         occ = Occurrence('ignored', start, end)
-        occ = occ.__of__(self.portal['at'])
-        data = IEventAccessor(occ)
-        self.assertNotEqual(data.start,
-                            tzdel(self.portal['at'].start_date))
-        self.assertEqual(start, data.start)
-        self.assertEqual(data.url, 'http://nohost/plone/at/ignored')
-
-
-class TestTraversalBrowser(TestTraversal):
+        occ = occ.__of__(self.now_event)
+        acc_occ = IEventAccessor(occ)
+        acc_ctx = IEventAccessor(self.now_event)
+        self.assertEqual(acc_occ.start, acc_ctx.start)
+        self.assertEqual(acc_occ.url, 'http://nohost/plone/now/ignored')
 
     def test_traverse_occurrence(self):
-        self.at.setRecurrence('RRULE:FREQ=WEEKLY;COUNT=10')
         transaction.commit()
-
-        qdatedt = pydt(self.at.start() + 7)
-        url = '/'.join([self.portal['at'].absolute_url(),
-                        str(qdatedt.date())])
-
-        browser = Browser(self.layer['app'])
-        browser.addHeader('Authorization', 'Basic %s:%s' % (
-            TEST_USER_ID, TEST_USER_PASSWORD))
+        browser = Browser(self.app)
+        browser.addHeader(
+            'Authorization', 'Basic %s:%s' % (TEST_USER_ID, TEST_USER_PASSWORD)
+        )
+        url = '/'.join([self.now_event.absolute_url(), '2013-05-07'])
         browser.open(url)
-        self.assertTrue(
-            self.portal['at'].title.encode('ascii') in browser.contents)
+        title = self.now_event.title.encode('ascii')
+        self.assertTrue(title in browser.contents)
+
+
+class TestTraversalAT(TestTraversalDX):
+    """Test OccurrenceTraverser with AT objects.
+    """
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def event_factory(self):
+        return ATEventAccessor.create
+
+    @property
+    def traverser(self):
+        return OccurrenceTraverserAT(self.now_event, self.request)
 
 
 class TestOccurrences(unittest.TestCase):
