@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix ATEvent's StartEndDateValidator subsciption adapter to correctly return
+  error dicts.
+  [thet]
+
 - In the ATEvent migration step, call ObjectModifiedEvent for each migrated
   event to call off the data_postprocessing method, which assures correct time
   values in respect to timezones. Please note, the timezone must be set

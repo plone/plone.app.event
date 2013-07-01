@@ -55,6 +55,13 @@ OBJ_DATA = {
     'text': "lorem ipsum"}
 
 
+class FakeRequest:
+
+    def __init__(self):
+        self.other = {}
+        self.form = {}
+
+
 class PAEventAccessorTest(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
 
@@ -195,15 +202,25 @@ class PAEventATTest(unittest.TestCase):
         self.assertTrue(verifyObject(IATEvent_ATCT, self.obj))
 
     def test_validation(self):
-        req = {'startDate':'2010-10-30'}
-        err = {'endDate':None}
-        errors = err.copy()
-        self.obj.post_validate(req, errors)
+        req = FakeRequest()
+
+        # Also return any given errors
+        req.form.update({'startDate': '2010-10-30'})
+        err = {'endDate': None}
+        errors = self.obj.validate(req, err)
         self.assertEqual(errors, err)
-        req = {'startDate':'2x10-10-30'}
-        errors = {}
-        self.obj.post_validate(req, errors)
+
+        # Bad input
+        req.form.update({'startDate': '2x10-10-30'})
+        req.form.update({'endDate': 'bla'})
+        errors = self.obj.validate(req, errors=None)
         self.assertTrue('startDate' in errors)
+        self.assertTrue('endDate' in errors)
+
+        # Start date must be before end date
+        req.form.update({'startDate': '2010-10-30', 'endDate': '2010-10-01'})
+        errors = self.obj.validate(req, errors=None)
+        self.assertTrue('endDate' in errors)
 
     def test_edit(self):
         new = self.obj

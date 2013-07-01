@@ -514,24 +514,11 @@ class StartEndDateValidator(object):
         self.context = context
 
     def __call__(self, request):
-        openEnd = request.get('openEnd', False)
-        if openEnd:
-            # In case the event has an open end, enddate is set automatically
-            # later and we need not check it
-            return None
-
-        rstartDate = request.get('startDate', None)
-        rendDate = request.get('endDate', None)
+        rstartDate = request.form.get('startDate', None)
+        rendDate = request.form.get('endDate', None)
 
         errors = {}
-        if rendDate:
-            try:
-                end = DateTime(rendDate)
-            except:
-                errors['endDate'] = _(u'error_invalid_end_date',
-                                      default=u'End date is not valid.')
-        else:
-            end = self.context.end()
+
         if rstartDate:
             try:
                 start = DateTime(rstartDate)
@@ -541,9 +528,24 @@ class StartEndDateValidator(object):
         else:
             start = self.context.start()
 
+        openEnd = request.form.get('openEnd', False)
+        if openEnd:
+            # In case the event has an open end, enddate is set automatically
+            # later and we need not check it
+            return errors
+
+        if rendDate:
+            try:
+                end = DateTime(rendDate)
+            except:
+                errors['endDate'] = _(u'error_invalid_end_date',
+                                      default=u'End date is not valid.')
+        else:
+            end = self.context.end()
+
         if 'startDate' in errors or 'endDate' in errors:
             # No point in validating bad input
-            return
+            return errors
 
         if start > end:
             errors['endDate'] = _(u'error_end_must_be_after_start_date',
