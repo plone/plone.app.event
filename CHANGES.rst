@@ -9,11 +9,11 @@ Changelog
   package's adoption is not too wide spread.
   [thet]
 
-- Use same field and error message strings for ATEvent and DX behaviors.
+- Use same i18n field and error message strings for ATEvent and DX behaviors.
   [thet]
 
 - Let plone.app.event.base.get_events always do a query with a sort definition,
-  even if we are in exand mode and do a sort afterwards again. We need this to
+  even if we are in expand mode and do a sort afterwards again. We need this to
   get stable results when having a sort_limit applied. Fixes an issue where the
   events_portlet did show the next events with an offset of some days.
   [thet]
