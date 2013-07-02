@@ -4,7 +4,7 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Fix ATEvent's StartEndDateValidator subsciption adapter to correctly return
+- Fix ATEvent's StartEndDateValidator subscription adapter to correctly return
   error dicts.
   [thet]
 
