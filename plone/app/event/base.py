@@ -684,7 +684,7 @@ def default_end(context=None):
     :rtype: Python datetime
 
     """
-    return localized_now(context=context) + timedelta(hours=DEFAULT_END_DELTA)
+    return default_start(context=context) + timedelta(hours=DEFAULT_END_DELTA)
 
 
 # General utils

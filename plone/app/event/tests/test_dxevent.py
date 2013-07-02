@@ -58,8 +58,7 @@ class TestDXIntegration(unittest.TestCase):
         data = MockEvent()
         data.context = MockEvent()
         default_value = default_end(data)
-        today = localized_now()
-        delta = default_value - today
+        delta = default_value - default_start(data)
         self.assertEquals(3600, delta.seconds)
 
     def test_fti(self):

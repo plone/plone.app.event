@@ -80,8 +80,8 @@ Changelog
   for filtering the result set.
   [thet]
 
-- For default_start, return a datetime with minute, second and microsecond set
-  to 0.
+- For default_start and default_end, return a datetime with minute, second and
+  microsecond set to 0.
   [thet]
 
 - Don't overload ATEvent's subject widget label and help texts but use AT and

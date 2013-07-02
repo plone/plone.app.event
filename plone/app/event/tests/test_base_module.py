@@ -47,7 +47,7 @@ class TestBaseModule(unittest.TestCase):
     def test_default_end(self):
         self.assertEqualDatetime(
             default_end() - datetime.timedelta(hours=DEFAULT_END_DELTA),
-            localized_now())
+            default_start())
 
     def test_default_start(self):
         now = localized_now().replace(minute=0, second=0, microsecond=0)
