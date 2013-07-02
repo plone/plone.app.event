@@ -68,10 +68,10 @@ def get_events(context, start=None, end=None, limit=None,
                                           wrapper objects.
     :type ret_mode: integer [1|2|3]
 
-    :param expand: Expand the results to all occurrences (withing the
-                   timeframe, if given.). With this option set to True, the
-                   resultset also includes the event's recurrence occurrences.
-                   The result is sorted by the start date.
+    :param expand: Expand the results to all occurrences (within a timeframe,
+                   if given). With this option set to True, the resultset also
+                   includes the event's recurrence occurrences and is sorted by
+                   the start date.
                    Only available in ret_mode 2 (objects) and 3 (accessors).
     :type expand: boolean
 
@@ -169,26 +169,36 @@ def get_events(context, start=None, end=None, limit=None,
 def construct_calendar(events):
     """Return a dictionary with dates in a given timeframe as keys and the
     actual occurrences for that date for building calendars.
+    Long lasting events will occur on every day until their end.
 
     :param events: List of IEvent and/or IOccurrence objects, to construct a
                    calendar data structure from.
     :type events: list
 
-    :returns: Dictionary with dates keys and occurrences as values.
+    :returns: Dictionary with isoformat date strings as keys and event
+              occurrences as values.
     :rtype: dict
 
     """
-    events_by_date = {}
+    cal = {}
+    def _add_to_cal(cal_data, event, date):
+        date_str = date.isoformat()
+        if date_str not in cal_data:
+            cal_data[date_str] = [event]
+        else:
+            cal_data[date_str].append(event)
+        return cal_data
+
     for event in events:
         acc = IEventAccessor(event)
-        start_str = datetime.strftime(acc.start, '%Y-%m-%d')
-        # TODO: add span_events parameter to include dates btw. start
-        # and end also. for events lasting longer than a day...
-        if start_str not in events_by_date:
-            events_by_date[start_str] = [event]
-        else:
-            events_by_date[start_str].append(event)
-    return events_by_date
+        start_date = acc.start.date()
+        end_date = acc.end.date()
+        days = (end_date - start_date).days  # day span between start and end
+        _add_to_cal(cal, event, start_date)  # initial
+        for add_day in range(days):
+            # long lasting events
+            _add_to_cal(cal, event, start_date+timedelta(add_day+1))
+    return cal
 
 
 def _prepare_range(context, start, end):

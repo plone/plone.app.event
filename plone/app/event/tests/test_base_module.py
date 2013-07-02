@@ -472,11 +472,12 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=2, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
-        # Should be more than one, but we can't exactly say how much. This
-        # depends on the date, the test is run. E.g. on last day of month, only
-        # long, past and now without recurrences are returned, others are in
-        # next month.
-        self.assertTrue(len(cal.keys()) > 1)
+        num = 0
+        for val in cal.values():
+            num += len(val)
+        # The long_event occurs on every day in the resulting calendar data
+        # structure.
+        self.assertEqual(num, 48)
 
 
 class TestGetEventsATPydt(TestGetEventsDX):
@@ -494,10 +495,10 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
 
     def make_dates(self):
         def_tz = default_timezone()
-        now      = self.now      = DateTime(2012, 9,10,10,10, 0, def_tz)
-        past     = self.past     = DateTime(2012, 9, 1,10,10, 0, def_tz)
-        future   = self.future   = DateTime(2012, 9,20,10,10, 0, def_tz)
-        far      = self.far      = DateTime(2012, 9,22,10,10, 0, def_tz)
+        now      = self.now      = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
+        past     = self.past     = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
+        future   = self.future   = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
+        far      = self.far      = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
         duration = self.duration = 0.1
         return (now, past, future, far, duration)
 

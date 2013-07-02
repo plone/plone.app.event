@@ -141,7 +141,7 @@ class Renderer(base.Renderer):
 
     @property
     def cal_data(self):
-        """ Calendar iterator over weeks and days of the month to display.
+        """Calendar iterator over weeks and days of the month to display.
         """
         context = aq_inner(self.context)
         today = localized_today(context)

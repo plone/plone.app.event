@@ -141,6 +141,20 @@ class RendererTest(unittest.TestCase):
 
         self.portal.manage_delObjects(['e1', 'eventfolder'])
 
+    def test_long_event(self):
+        start = DateTime('Europe/Vienna')
+        end = DateTime('Europe/Vienna') + 2
+        self.portal.invokeFactory('Event', 'e1',
+                                  startDate=start, endDate=end)
+        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(
+            state=('published', )))
+        r.update()
+        rd = r.render()
+        self.assertEqual(rd.count('http://nohost/plone/e1'), 3)
+        self.portal.manage_delObjects(['e1'])
+
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
         portlet = self.renderer(assignment=portlet_calendar.Assignment())

@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- For events lasting longer than the day they start, include them in the
+  construct_calendar data structure on each day they occur. Fixes #76.
+  [thet]
+
 - Fix ATEvent's StartEndDateValidator subscription adapter to correctly return
   error dicts.
   [thet]
