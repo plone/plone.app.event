@@ -4,6 +4,8 @@ Changelog
 1.0rc1 (2013-07-03)
 -------------------
 
+Please note, the next release will have all deprections removed.
+
 - For events lasting longer than the day they start, include them in the
   construct_calendar data structure on each day they occur. Fixes #76.
   [thet]
