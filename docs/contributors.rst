@@ -4,14 +4,17 @@ Contributors
 Contributors, please add you name here! By doing this, you also state, that you
 have signed the Plone Contributors Agreement [1][2]. Thanks!
 
-- Johannes Raggam, thet (Author and PLIP implementation)
+- Johannes Raggam, thet (Main author and PLIP implementation)
 - Andreas Jung, zopyx
+- David Glick, davisagli
+- Érico Andrei, ericof
 - Franklin Kingma, kingel
 - Georg Bernhard, gogo
 - Giacomo Spettoli, giacomos
 - JeanMichel FRANCOIS, toutpt
 - Jens Klein, jensens
 - Lennart Regebro, regebro
+- Nathan Van Gheem, vangheem
 - Philip Bauer, pbauer
 - Robert Niederreiter, rnixx
 - Rok Garbas, garbas

@@ -35,13 +35,43 @@ The objects can be accessed like so::
     assert(isinstance(acc.timezone, string)==True)
     assert(isinstance(acc.recurrence, string)==True)
 
-Set properties of the object via the accessor::
+Set properties of the object via the accessor. Don't forget to throw
+ObjectModifiedEvent after setting properties to call an event subscriber which
+does some timezone related post calculations::
 
+    from zope.event import notify
+    from zope.lifecycleevent import ObjectModifiedEvent
     tz = pytz.timezone('Europe/Vienna')
-    acc.start = datetime(2012,12,12, 10,10, tzinfo=tz)
+    acc.start = datetime(2012, 12, 12, 10, 10, tzinfo=tz)
     acc.timezone = 'Europe/London'
+    notify(ObjectModifiedEvent(obj))
 
-TODO: test the above! Are getters/setters properly called?
+You can also use the accessor edit method, which also throws the
+ObjectModifiedEvent event for you::
+
+    acc.edit(end=datetime(2012, 12, 12, 20, 0, tzinfo=tz))
+
+For creating events, you can use the accessor's create method, which again
+returns an accessor. E.g. if you want to create the Dexterity based event
+type::
+
+    from plone.app.event.dx.behaviors import EventAccessor
+    acc = EventAccessor.create(
+        container=app.plone,
+        content_id=u'new_event'
+        title=u'New Event'
+        start=datetime(2013, 7, 1, 10, 0, tzinfo=tz),
+        end=datetime(2013, 7, 1, 12, 0, tzinfo=tz),
+        timezone='Europe/Vienna'
+    )
+    acc.location = u"Graz, Austria"
+
+Access the content object from an accessor like so::
+
+    obj = acc.context
+    from plone.event.interfaces import IEvent
+    assert(not IEvent.providedBy(acc))
+    assert(IEvent.providedBy(obj))
 
 
 Getting occurrences from IEventRecurrence implementing objects
@@ -83,6 +113,7 @@ ask for the ```IEvent``` interface in the ```object_provides``` index::
     from plone.event.interfaces import IEvent
     assert(IEvent.providedBy(obj)==True)
 
+
 Custom event objects based on plone.app.event
 ---------------------------------------------
 
@@ -96,7 +127,6 @@ If you cannot use the above two methods, you can still implement the
 
 In any case you might need to provide an ```IEventAccessor``` adapter. For more
 information, see below.
-
 
 
 Dexterity behaviors

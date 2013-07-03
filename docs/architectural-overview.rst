@@ -5,9 +5,8 @@ Architectural Overview
 Design goals
 ------------
 
-The current event type is in need of a major overhaul. The intention of this
-PLIP is to provide a new event engine by a major refactoring and
-reimplementation:
+The development of plone.app.event was done with following design goals in
+mind:
 
   [a] Encapsulation and independence: All event related code should reside in a
   seperate package (splitted into other packages, where appropriate). Plone
@@ -21,8 +20,8 @@ reimplementation:
   [c] Standards compliancy: the iCalendar / RFC5545 standard is wonderful
   flexible, so plone.app.event should provide support for it by allowing ical
   exports. This is also available for the current ATContentType based
-  implementation, but plone.app.event aims to improve it. Sometime it might
-  also support iCalendar import and Plone could also act as a caldav server.
+  implementation, but plone.app.event aims to improve it. A future goal is to
+  support CalDAV also.
 
   [d] Recurring events support based on the RFC5545 standard.
 
@@ -30,7 +29,7 @@ reimplementation:
 
   [f] Features like whole-day-events.
 
-  [g] Timezone support. 
+  [g] Timezone support.
 
 Encapsulation and independence: plone.app.event provides the Archetypes based
 type and the Dexterity behaviors via two other subpackages in that package: at
@@ -57,8 +56,14 @@ wished. User timezones are planned. Whole day events get their starttime set to
 (excluding any scientific events...).
 
 
+Packages
+========
+
+
 plone.app.event
 ---------------
+
+Github: https://github.com/plone/plone.app.event
 
 The "at" submodule provides the Archetypes based ATEvent content type as a
 drop-in replacement of the ATContentType based ATEvent. Ical, recurrence and
@@ -84,14 +89,10 @@ controlpanel can be dropped, since we do not need CMFCalendar any more). The
 settings are stored in plone.registry.
 The event view is generic to ATEvent and DX based event types.
 
-The ical.py module provides adapters to build icalendar export files. The
-icalendar export view "ics_view" is also in there.
+The ical submodule provides adapters and views for export and import to and
+from icalendar resources.
 
-There is also a "locales" directory which holds locale files. Well, this one
-might should go into plone.app.locales, but on the other hand - it's best
-placed in here in order to follow one of plone.app.event's design principles:
-"everything related in one package, minimum dependencies to plone.app.event
-from external packages."
+The locales directory which holds locale files.
 
 In the portlets subpackage there are portlet_calendar (a complete rewrite) and
 portlet_events, both from plone.app.portlets, where only BBB imports exist, so
@@ -103,11 +104,15 @@ The tests are all ported to plone.app.testing.
 plone.event
 -----------
 
-Date/time related utilities, recurrence calculations.
+Github: https://github.com/plone/plone.event
+
+Date/time related utilities, recurrence calculations based on python-dateutil.
 
 
 plone.formwidget.datetime
 -------------------------
+
+Github: https://github.com/plone/plone.formwidget.datetime
 
 Derived from collective.z3cform.datetimewidget and archetypes.datetimewidget
 (which itself was derived from the former). It is splitted into "at" and
@@ -116,6 +121,8 @@ Derived from collective.z3cform.datetimewidget and archetypes.datetimewidget
 
 plone.formwidget.recurrence
 ---------------------------
+
+Github: https://github.com/plone/plone.formwidget.recurrence
 
 Recurrence widget based on jquery.recurrenceinput.js. Supports complex
 recurrence rules with exclusion and inclusion dates, automatically updated
@@ -128,28 +135,47 @@ string.
 Products.DateRecurringIndex
 ---------------------------
 
+Github: https://github.com/collective/Products.DateRecurringIndex
+
 A drop-in replacement for Zope's DateIndex with support for recurring events.
 Each recurrence get's an index entry.
-
-
-plone.eventindex
-----------------
-
-A possible alternative to Products.DateRecurringindex, which supports late
-indexing and which does not have problems with unlimited occurrences.
 
 
 icalendar
 ---------
 
+Github: https://github.com/collective/icalendar
+
 icalendar parser/generator framework.
 
 
-Branches of core packages for plone.app.event
----------------------------------------------
+Other, external packages
+========================
 
-* Products.ATContentTypes
-* Products.CMFPlone
-* Products.PloneTestCase
-* plone.app.portlets
-* plone.app.testing
+plone.app.eventindex
+--------------------
+
+Github: https://github.com/regebro/plone.app.eventindex
+
+A possible alternative to Products.DateRecurringindex, which supports late
+indexing and which does not have problems with unlimited occurrences. This
+eventindex is currently not used by plone.app.event.
+
+
+Python-dateutil
+---------------
+
+Documentation: http://labix.org/python-dateutil
+Repository: https://launchpad.net/dateutil
+
+Useful extensions to the standard Python datetime features. plone.app.event
+uses it mainly for recurrence calculations.
+
+
+Pytz
+----
+
+Documentation: http://pytz.sourceforge.net/
+Pypi page: https://pypi.python.org/pypi/pytz/
+
+World timezone definitions, modern and historical. Based on the Olson database.
