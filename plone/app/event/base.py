@@ -166,7 +166,7 @@ def get_events(context, start=None, end=None, limit=None,
     return result
 
 
-def construct_calendar(events):
+def construct_calendar(events, start=None, end=None):
     """Return a dictionary with dates in a given timeframe as keys and the
     actual occurrences for that date for building calendars.
     Long lasting events will occur on every day until their end.
@@ -175,11 +175,26 @@ def construct_calendar(events):
                    calendar data structure from.
     :type events: list
 
+    :param start: An optional start range date.
+    :type start: Python datetime or date
+
+    :param end: An optional start range date.
+    :type end: Python datetime or date
+
     :returns: Dictionary with isoformat date strings as keys and event
               occurrences as values.
     :rtype: dict
 
     """
+    if start:
+        if isinstance(start, datetime):
+            start = start.date()
+        assert isinstance(start, date)
+    if end:
+        if isinstance(end, datetime):
+            end = end.date()
+        assert isinstance(end, date)
+
     cal = {}
     def _add_to_cal(cal_data, event, date):
         date_str = date.isoformat()
@@ -193,11 +208,21 @@ def construct_calendar(events):
         acc = IEventAccessor(event)
         start_date = acc.start.date()
         end_date = acc.end.date()
-        days = (end_date - start_date).days  # day span between start and end
-        _add_to_cal(cal, event, start_date)  # initial
-        for add_day in range(days):
-            # long lasting events
-            _add_to_cal(cal, event, start_date+timedelta(add_day+1))
+
+        # day span between start and end + 1 for the initial date
+        range_days = (end_date - start_date).days + 1
+        for add_day in range(range_days):
+            next_start_date = start_date + timedelta(add_day)  # initial = 0
+
+            # avoid long loops
+            if start and end_date<start:
+                break  # if the date is completly outside the range
+            if start and next_start_date<=start:
+                continue  # if start is outside but end reaches into range
+            if end and next_start_date>end:
+                break  # if date is outside range
+
+            _add_to_cal(cal, event, next_start_date)
     return cal
 
 

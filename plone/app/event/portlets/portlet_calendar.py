@@ -158,9 +158,11 @@ class Renderer(base.Renderer):
         if data.state:
             query_kw['review_state'] = data.state
 
-        events = get_events(context, start=monthdates[0], end=monthdates[-1],
+        start = monthdates[0]
+        end = monthdates[-1]
+        events = get_events(context, start=start, end=end,
                             ret_mode=2, expand=True, **query_kw)
-        cal_dict = construct_calendar(events)
+        cal_dict = construct_calendar(events, start=start, end=end)
 
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
         caldata = [[]]

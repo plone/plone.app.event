@@ -472,12 +472,52 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=2, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
-        num = 0
-        for val in cal.values():
-            num += len(val)
+
+        def _num_events(values):
+            num = 0
+            for val in values:
+                num += len(val)
+            return num
+
         # The long_event occurs on every day in the resulting calendar data
         # structure.
-        self.assertEqual(num, 48)
+        self.assertEqual(_num_events(cal.values()), 48)
+
+        # Test with range
+        #
+
+        # Completly outside range and start, end given as datetime
+        cal = construct_calendar(
+                res,
+                start=datetime.datetime(2000, 1, 1, 10, 0),
+                end=datetime.datetime(2000, 1, 2, 10, 0))
+        self.assertEqual(_num_events(cal.values()), 0)
+
+        # Within range
+        cal = construct_calendar(
+                res,
+                start=datetime.date(2013, 5, 1),
+                end=datetime.date(2013, 5, 31))
+        self.assertEqual(_num_events(cal.values()), 34)
+
+        # invalid start
+        def _invalid_start():
+            return construct_calendar(
+                res,
+                start='invalid',
+                end=datetime.datetime(2000, 1, 2, 10, 0)
+            )
+
+        self.assertRaises(AssertionError, _invalid_start)
+
+        # invalid end
+        def _invalid_end():
+            return construct_calendar(
+                res,
+                start=datetime.datetime(2000, 1, 1, 10, 0),
+                end='invalid'
+            )
+        self.assertRaises(AssertionError, _invalid_end)
 
 
 class TestGetEventsATPydt(TestGetEventsDX):
