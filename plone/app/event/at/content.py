@@ -318,7 +318,8 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
                     'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
                     'start_date', 'end_date', 'contact_name', 'contact_email',
                     'contact_phone', 'event_url')
-    security.declarePrivate('cmf_edit')
+
+    @security.private
     def cmf_edit(
         self, title=None, description=None, effectiveDay=None,
         effectiveMo=None, effectiveYear=None, expirationDay=None,
@@ -375,12 +376,14 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             self.previous_timezone = tz
         self.getField('timezone').set(self, value, **kwargs)
 
+    @security.private
     def _dt_getter(self, field):
         # Always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
         return dt.toZone(timezone)
 
+    @security.private
     def _dt_setter(self, fieldtoset, value, **kwargs):
         """Always set the date in UTC, saving the timezone in another field.
         But since the timezone value isn't known at the time of saving the
@@ -406,24 +409,24 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         )
         self.getField(fieldtoset).set(self, value, **kwargs)
 
-    security.declareProtected('View', 'start')
+    @security.protected('View')
     def start(self):
         return self._dt_getter('startDate')
 
-    security.declareProtected('View', 'end')
+    @security.protected('View')
     def end(self):
         return self._dt_getter('endDate')
 
-    security.declareProtected(ModifyPortalContent, 'setStartDate')
+    @security.protected('ModifyPortalContent')
     def setStartDate(self, value, **kwargs):
         self._dt_setter('startDate', value, **kwargs)
 
-    security.declareProtected(ModifyPortalContent, 'setEndDate')
+    @security.protected('ModifyPortalContent')
     def setEndDate(self, value, **kwargs):
         self._dt_setter('endDate', value, **kwargs)
 
-    security.declareProtected(View, 'start_date')
     @property
+    @security.protected('View')
     def start_date(self):
         """ Return start date as Python datetime.
 
@@ -433,8 +436,8 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         """
         return pydt(self.start(), exact=False)
 
-    security.declareProtected(View, 'end_date')
     @property
+    @security.protected('View')
     def end_date(self):
         """ Return end date as Python datetime.
 
@@ -447,8 +450,8 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         """
         return pydt(self.end(), exact=False)
 
-    security.declareProtected(View, 'duration')
     @property
+    @security.protected('View')
     def duration(self):
         """ Return duration of the event as Python timedelta.
 
@@ -461,7 +464,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     # TODO: Why is this needed?
     #
-    security.declareProtected(ModifyPortalContent, 'update')
+    @security.protected('ModifyPortalContent')
     def update(self, event=None, **kwargs):
         # Clashes with BaseObject.update, so
         # we handle gracefully
