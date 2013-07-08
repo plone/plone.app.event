@@ -29,7 +29,6 @@ from zope.component import getUtility
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
-from zope.deprecation import deprecate
 
 
 import pytz
@@ -243,7 +242,7 @@ def _prepare_range(context, start, end):
     :rtype: tuple
 
     """
-    tz = default_tzinfo(context)
+    tz = default_timezone(context, as_tzinfo=True)
     start = pydt(start, missing_zone=tz)
     if not isinstance(end, datetime) and isinstance(end, date):
         # set range_end to the next day, time will be 0:00
@@ -808,117 +807,3 @@ def ulocalized_time(time, *args, **kwargs):
     """Corrects for DateTime bugs doing wrong thing with timezones"""
     wrapped_time = PatchedDateTime(time)
     return orig_ulocalized_time(wrapped_time, *args, **kwargs)
-
-
-# BBB - Remove with 1.0
-@deprecate('get_portal_events is deprecated and will be removed in version '
-           '1.0. Please use get_events instead.')
-def get_portal_events(context, range_start=None, range_end=None, limit=None,
-                      sort='start', sort_reverse=False, **kw):
-    return get_events(context, start=range_start, end=range_end, limit=limit,
-                      sort=sort, sort_reverse=sort_reverse, **kw)
-
-
-@deprecate('get_occurrences_by_date is deprecated and will be removed in '
-           'version 1.0. Please use construct_calendar and get_events '
-           'instead.')
-def get_occurrences_by_date(context, range_start=None, range_end=None, **kw):
-    events = get_events(context, start=range_start, end=range_end,
-                        ret_mode=2, expand=True, **kw)
-    return construct_calendar(events)
-
-
-@deprecate('get_occurrences_from_brains is deprecated and will be removed in '
-           'version 1.0. Please use get_events instead.')
-def get_occurrences_from_brains(context, brains,
-        range_start=None, range_end=None, limit=None):
-    """Returns a flat list of EventAccessor objects from a given result of a
-    catalog query. The list is sorted by the occurrence start date.
-
-    :param context: [required] A context object.
-    :type context: Content object
-    :param brains: [required] Catalog brains from a previous search.
-    :param range_start: Date, from which on events should be searched.
-    :type range_start: Python datetime.
-    :param range_end: Date, until which events should be searched.
-    :type range_end: Python datetime
-    :param limit: Number of items to be returned.
-    :type limit: integer
-    :returns: List of occurrence objects.
-    :rtype: Occurrence objects
-
-    """
-    result = []
-    for brain in brains:
-        obj = brain.getObject()
-        occurrences = [
-            IEventAccessor(occ) for occ in
-            IRecurrenceSupport(obj).occurrences(range_start, range_end)
-        ]
-        result += occurrences
-    result.sort(key=lambda x: x.start)
-    if limit is not None:
-        result = result[:limit]
-    return result
-
-
-@deprecate('default_start_dt is deprecated and will be removed in version 1.0.'
-           ' Please use default_start() instead.')
-def default_start_dt(context=None):
-    return default_start(context=context)
-
-
-@deprecate('default_end_dt is deprecated and will be removed in version 1.0. '
-           'Please use default_end() instead.')
-def default_end_dt(context=None):
-    return default_end(context=context)
-
-
-@deprecate('default_start_DT is deprecated and will be removed in version 1.0.'
-           ' Please use DT(default_start()) instead.')
-def default_start_DT():
-    """Return the default start as a Zope DateTime for prefilling archetypes
-    forms.
-
-    :returns: Default start DateTime.
-    :rtype: Zope DateTime
-
-    """
-    return DT(default_start_dt())
-
-
-@deprecate('default_end_DT is deprecated and will be removed in version 1.0. '
-           'Please use DT(default_end()) instead.')
-def default_end_DT():
-    """Return the default end as Zope DateTime for prefilling forms.
-
-    :returns: Default end DateTime.
-    :rtype: Zope DateTime
-
-    """
-    return DT(default_end_dt())
-
-
-@deprecate('first_weekday_sun0 is deprecated and will be removed in version '
-            '1.0. Please use wkday_to_mon1(first_weekday()) instead.')
-def first_weekday_sun0():
-    return wkday_to_mon1(first_weekday())
-
-
-@deprecate('cal_to_strftime_wkday is deprecated and will be removed in version'
-           ' 1.0. Please use wkday_to_mon1 instead.')
-def cal_to_strftime_wkday(day):
-    return wkday_to_mon1(day)
-
-
-@deprecate('strftime_to_cal_wkday is deprecated and will be removed in version'
-           '1.0. Please use wkday_to_mon0 instead.')
-def strftime_to_cal_wkday(day):
-    return wkday_to_mon0(day)
-
-
-@deprecate('default_tzinfo is deprecated and will be removed in version '
-           '1.0. Please use default_timezone(context, as_tzinfo=True) '
-           'instead.')
-def default_tzinfo(context=None):
-    return default_timezone(context, as_tzinfo=True)

@@ -79,10 +79,6 @@ class Renderer(base.Renderer):
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
 
-        #BBB TODO: remove with 1.0
-        self.prev_events_link = self.prev_url
-        self.all_events_link = self.next_url
-
         portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
         self.portal = portal_state.portal()
 

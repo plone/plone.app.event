@@ -16,17 +16,4 @@
 
   </genericsetup:upgradeSteps>
 
-  <genericsetup:upgradeSteps
-    source="2"
-    destination="3"
-    profile="plone.app.event.at:default">
-
-    <genericsetup:upgradeStep
-      title="Upgrade to plone.app.event beta2"
-      description="Migrate pre plone.app.event beta2 ATEvent to current implementation (field storage, etc.)"
-      handler=".event.upgrade_step_2"
-      />
-
-  </genericsetup:upgradeSteps>
-
 </configure>
