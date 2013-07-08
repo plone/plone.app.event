@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- In z3c.form based Dexterity forms, use plone.autoform form hints for widget
+  parameters and remove the ParameterizedWidgetFactory. plone.autoform 1.4
+  supports widget parameter form hints.
+  [thet]
+
+
 1.0rc1 (2013-07-03)
 -------------------
 

@@ -87,7 +87,7 @@ setup(name='plone.app.event',
           'dexterity': [
               'plone.app.dexterity',
               'plone.app.textfield',
-              'plone.autoform',
+              'plone.autoform>=1.4',
               'plone.behavior',
               'plone.dexterity',
               'plone.formwidget.datetime [z3cform]',

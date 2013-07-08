@@ -16,7 +16,6 @@ from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
-from plone.app.event.dx import ParameterizedWidgetFactory
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
@@ -24,8 +23,9 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, dt_to_zone
-from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
-from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
+from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
+from plone.indexer import indexer
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
@@ -59,6 +59,8 @@ class StartBeforeEnd(Invalid):
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
+    form.widget('start', DatetimeFieldWidget, first_day=first_weekday_sun0)
+    form.widget('end', DatetimeFieldWidget, first_day=first_weekday_sun0)
     model.fieldset('dates', fields=['timezone'])
 
     start = schema.Datetime(
@@ -131,14 +133,6 @@ class IEventBasic(model.Schema):
                   default=u"End date must be after start date.")
             )
 
-# Adding a parametirized widget
-# (this will be simpler in future versions of plone.autoform)
-IEventBasic.setTaggedValue('plone.autoform.widgets',
-    {'start': ParameterizedWidgetFactory(DatetimeWidget,
-        first_day=first_weekday_sun0),
-     'end': ParameterizedWidgetFactory(DatetimeWidget,
-        first_day=first_weekday_sun0),
-    })
 
 def default_start(data):
     return default_start_dt(data.context)
@@ -158,8 +152,15 @@ provideAdapter(ComputedWidgetAttribute(
 
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
-
     """
+    # Please note: If you create a new behavior with superclasses IEventBasic
+    # and IRecurrence, then you have to reconfigure the dotted path value of
+    # the start_field parameter for the RecurrenceFieldWidget to the new
+    # behavior name, like: IMyNewBehaviorName.start.
+    form.widget('recurrence', RecurrenceFieldWidget,
+        start_field='IEventBasic.start',
+        first_day=first_weekday_sun0
+    )
     recurrence = schema.Text(
         title = _(
             u'label_event_recurrence',
@@ -171,18 +172,6 @@ class IEventRecurrence(model.Schema):
         ),
         required = False
     )
-
-# Please note: If a new behavior, made out of IEventBasic and IRecurrence is
-# created then a new ParameterizedWidgetFactory has to be used and the
-# start_field parameter must be set to the name of the new behavior.
-
-# Adding a parametirized widget
-# (this will be simpler in future versions of plone.autoform)
-IEventRecurrence.setTaggedValue('plone.autoform.widgets',
-    {'recurrence': ParameterizedWidgetFactory(RecurrenceWidget,
-        start_field='IEventBasic.start',
-        first_day=first_weekday_sun0
-    )})
 
 
 class IEventLocation(model.Schema):
