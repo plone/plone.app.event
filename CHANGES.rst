@@ -7,7 +7,8 @@ Changelog
 - For the recurrence behavior In z3c.form based Dexterity forms, use the
   RecurrenceField instead of a plain Text field. This ensures that the
   recurrence widget is used even for plain z3c.form forms without form schema
-  hints.
+  hints. This change is forward-compatible and should not break any existing
+  installations.
   [thet]
 
 - In z3c.form based Dexterity forms, use plone.autoform form hints for widget
