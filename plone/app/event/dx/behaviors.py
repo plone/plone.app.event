@@ -24,8 +24,8 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import tzdel, utc, dt_to_zone
 from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
+from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
-from plone.indexer import indexer
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
@@ -34,10 +34,10 @@ from zope import schema
 from zope.component import adapts
 from zope.component import provideAdapter
 from zope.event import notify
+from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import invariant
-from zope.interface import Invalid
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytz
@@ -161,7 +161,7 @@ class IEventRecurrence(model.Schema):
         start_field='IEventBasic.start',
         first_day=first_weekday_sun0
     )
-    recurrence = schema.Text(
+    recurrence = RecurrenceField(
         title = _(
             u'label_event_recurrence',
             default=u'Recurrence'
