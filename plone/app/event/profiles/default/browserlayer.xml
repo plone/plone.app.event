@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<layers>
+  <layer
+      name="plone.app.event"
+      interface="plone.app.event.interfaces.IBrowserLayer" />
+</layers>

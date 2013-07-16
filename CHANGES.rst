@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Introduce a BrowserLayer and register all views for it. Avoids view
+  registration conflicts with other packages.
+  [thet]
+
 - Remove deprecations.
   [thet]
 

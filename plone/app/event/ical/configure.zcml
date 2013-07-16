@@ -46,6 +46,7 @@
         name="ics_view"
         class=".exporter.EventsICal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -53,6 +54,7 @@
         name="ics_view"
         class=".exporter.EventsICal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -60,6 +62,7 @@
         name="ics_view"
         class=".exporter.EventsICal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -67,6 +70,7 @@
         name="ics_view"
         class=".exporter.EventsICal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -75,6 +79,7 @@
         class=".exporter.EventsICal"
         permission="zope2.View"
         zcml:condition="installed plone.app.collection"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <!-- Ical import -->
@@ -87,6 +92,7 @@
         allowed_attributes="enable
                             disable"
         permission="cmf.ManagePortal"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -97,6 +103,7 @@
                             available
                             available_disabled"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
 </configure>

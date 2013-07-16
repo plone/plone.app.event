@@ -7,6 +7,11 @@ from zope.interface import Interface
 ISO_DATE_FORMAT = '%Y-%m-%d'
 
 
+class IBrowserLayer(Interface):
+    """plone.app.event specific browser layer.
+    """
+
+
 class IICalendarImportEnabled(Interface):
     """Marker interface for contexts, where icalendar import is enabled.
     """

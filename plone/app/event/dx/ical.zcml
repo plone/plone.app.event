@@ -13,6 +13,7 @@
         name="ics_view"
         class="..ical.exporter.EventsICal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
 </configure>

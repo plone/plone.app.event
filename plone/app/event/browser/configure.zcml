@@ -7,6 +7,7 @@
         name="plone.app.event"
         directory="resources"
         permission="zope.Public"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <!-- Control panel -->
@@ -16,6 +17,7 @@
         class=".controlpanel.EventControlPanel"
         template="controlpanel.pt"
         permission="cmf.ManagePortal"
+        layer="..interfaces.IBrowserLayer"
         />
 
 
@@ -26,12 +28,14 @@
         class=".event_listing.EventListing"
         template="event_listing.pt"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
     <browser:page
         for="*"
         name="event_listing_ical"
         class=".event_listing.EventListingIcal"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
     <adapter factory=".event_listing.EventListingSettings"/>
     <browser:page
@@ -39,6 +43,7 @@
         for="*"
         permission="zope2.View"
         class=".event_listing.EventListingSettingsFormView"
+        layer="..interfaces.IBrowserLayer"
         />
 
 
@@ -49,6 +54,7 @@
         class=".event_view.EventView"
         template="event_view.pt"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <browser:page
@@ -57,10 +63,12 @@
         class=".event_view.EventView"
         template="event_view.pt"
         permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
         />
     <browser:defaultView
         for="plone.event.interfaces.IOccurrence"
         name="index_html"
+        layer="..interfaces.IBrowserLayer"
         />
 
     <adapter
