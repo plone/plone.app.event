@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove dependency on "persistent" to not use that one over the ZODB bundled
+  package. "persistent" will become available as seperate package with ZODB 4.
+  [thet]
+
 - Introduce a BrowserLayer and register all views for it. Avoids view
   registration conflicts with other packages.
   [thet]
