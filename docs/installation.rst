@@ -25,8 +25,8 @@ and no subpackage, as they are loaded automatically::
   ``plone.event.recurrence``.
 
 
-Using plone.app.event before Plone 5.0
---------------------------------------
+Installing plone.app.event for Plone 4.2 or Plone 4.3
+-----------------------------------------------------
 
 If you want to install plone.app.event before Plone 5.0 (where it's included in
 core), also depend on the ploneintegration extra: 'plone.app.event [archetypes,
