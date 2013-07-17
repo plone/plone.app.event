@@ -361,6 +361,7 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
     ###
     # Timezone / start / end getter / setter
+    security.declareProtected(ModifyPortalContent, 'setTimezone')
     def setTimezone(self, value, **kwargs):
         tz = self.getField('timezone').get(self)
         if tz:
@@ -375,12 +376,14 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
             self.previous_timezone = tz
         self.getField('timezone').set(self, value, **kwargs)
 
+    security.declarePrivate('_dt_getter')
     def _dt_getter(self, field):
         # Always get the date in event's timezone
         timezone = self.getField('timezone').get(self)
         dt = self.getField(field).get(self)
         return dt.toZone(timezone)
 
+    security.declarePrivate('_dt_setter')
     def _dt_setter(self, fieldtoset, value, **kwargs):
         """Always set the date in UTC, saving the timezone in another field.
         But since the timezone value isn't known at the time of saving the

@@ -29,9 +29,6 @@ Changelog
 - Declare mimimum dependency on plone.event 1.0rc1.
   [thet]
 
-- Use more elegant decorators for security protections of methods for ATEvent.
-  [thet]
-
 
 1.0rc1 (2013-07-03)
 -------------------
