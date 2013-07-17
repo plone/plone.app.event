@@ -14,6 +14,7 @@ from plone.app.event.dx.interfaces import IDXEventContact
 from plone.app.event.dx.interfaces import IDXEventLocation
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -44,6 +45,8 @@ class TestDXIntegration(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        set_browserlayer(self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
     def test_start_defaults(self):

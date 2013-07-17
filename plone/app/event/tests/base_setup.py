@@ -2,6 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 from plone.app.event.base import default_timezone
 from plone.app.event.interfaces import IEventSettings
+from plone.app.event.testing import set_browserlayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
@@ -39,6 +40,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         self.portal = self.layer['portal']
         self.app = self.layer['app']
         self.request = self.layer['request']
+        set_browserlayer(self.request)
 
         reg = zope.component.getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")

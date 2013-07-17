@@ -6,6 +6,7 @@ from plone.app.event.recurrence import Occurrence
 from plone.app.event.recurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_browserlayer
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
@@ -121,6 +122,8 @@ class TestOccurrences(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
+
+        set_browserlayer(self.request)
 
         reg = zope.component.getUtility(IRegistry)
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")

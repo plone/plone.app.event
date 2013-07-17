@@ -1,4 +1,5 @@
 from Products.DateRecurringIndex.testing import DRI_FIXTURE
+from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -6,8 +7,12 @@ from plone.app.testing import PloneSandboxLayer
 from plone.registry.interfaces import IRegistry
 from plone.testing import z2
 from zope.component import getUtility
+from zope.interface import alsoProvides
 
 import os
+
+def set_browserlayer(request):
+    alsoProvides(request, IBrowserLayer)
 
 
 def set_timezone(tz):

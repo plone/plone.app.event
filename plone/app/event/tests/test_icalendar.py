@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from plone.app.event.testing import PAEventATDX_INTEGRATION_TESTING
+from plone.app.event.testing import set_browserlayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
@@ -35,6 +36,8 @@ class ICalendarExportTest(unittest.TestCase):
         self.request = self.layer['request']
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
+
+        set_browserlayer(self.request)
 
         portal.invokeFactory('Folder',
                 id='events', title=u"Events",
