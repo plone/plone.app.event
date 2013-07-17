@@ -11,7 +11,13 @@ from zope.interface import alsoProvides
 
 import os
 
+
 def set_browserlayer(request):
+    """Set the BrowserLayer for the request.
+
+    We have to set the browserlayer manually, since importing the profile alone
+    doesn't do it in tests.
+    """
     alsoProvides(request, IBrowserLayer)
 
 
