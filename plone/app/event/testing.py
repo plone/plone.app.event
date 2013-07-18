@@ -119,15 +119,10 @@ class PAEventATDXLayer(PloneSandboxLayer):
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx, context=configurationContext)
 
-        import plone.app.collection
-        self.loadZCML(package=plone.app.collection,
-                      context=configurationContext)
-        z2.installProduct(app, 'plone.app.collection')
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.at:default')
         self.applyProfile(portal, 'plone.app.event.dx:default')
-        self.applyProfile(portal, 'plone.app.collection:default')
         set_timezone(tz='UTC')
 
 PAEventATDX_FIXTURE = PAEventATDXLayer()
