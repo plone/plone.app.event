@@ -6,7 +6,7 @@ from Products.CMFPlone.utils import safe_unicode
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
-from plone.event.utils import is_date
+from plone.event.utils import is_date, is_datetime
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -56,12 +56,12 @@ def ical_import(container, ics_resource, event_type):
                 end = end - datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
-        elif isinstance(start, datetime) and end is None:
+        elif is_datetime(start) and end is None:
             # Open end event, see RFC 5545, 3.6.1
             open_end = True
             end = base.dt_end_of_day(date_to_datetime(start))
-        assert(isinstance(start, datetime.datetime))
-        assert(isinstance(end, datetime.datetime))
+        assert(is_datetime(start))
+        assert(is_datetime(end))
 
         title = _get_prop('SUMMARY', item)
         description = _get_prop('DESCRIPTION', item)
