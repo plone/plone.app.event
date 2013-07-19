@@ -4,29 +4,8 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-- Buildout infrastructure update.
-  [thet]
-
-- Fix icalendar importer to support multiple-line EXDATE/RDATE definitions.
-  [thet]
-
-- Fix runtime error in icalendar importer.
-  [thet]
-
-- For the setup's tests extra, depend on plone.app.testing <= 4.2.2 until the
-  Dexterity and Archetypes tests are split up and the tests don't have a hard
-  dependency on Archetypes.
-  [thet]
-
-- Remove dependency on "persistent" to not use that one over the ZODB bundled
-  package. "persistent" will become available as seperate package with ZODB 4.
-  [thet]
-
 - Introduce a BrowserLayer and register all views for it. Avoids view
   registration conflicts with other packages.
-  [thet]
-
-- Remove deprecations.
   [thet]
 
 - For the recurrence behavior In z3c.form based Dexterity forms, use the
@@ -44,7 +23,28 @@ Changelog
 - Update french translations.
   [toutpt]
 
+- Fix icalendar importer to support multiple-line EXDATE/RDATE definitions.
+  [thet]
+
+- Fix runtime error in icalendar importer.
+  [thet]
+
+- For the setup's tests extra, depend on plone.app.testing <= 4.2.2 until the
+  Dexterity and Archetypes tests are split up and the tests don't have a hard
+  dependency on Archetypes.
+  [thet]
+
+- Remove dependency on "persistent" to not use that one over the ZODB bundled
+  package. "persistent" will become available as seperate package with ZODB 4.
+  [thet]
+
 - Declare mimimum dependency on plone.event 1.0rc1.
+  [thet]
+
+- Buildout infrastructure update.
+  [thet]
+
+- Remove deprecations.
   [thet]
 
 
