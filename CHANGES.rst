@@ -4,6 +4,12 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix icalendar importer to support multiple-line EXDATE/RDATE definitions.
+  [thet]
+
+- Fix runtime error in icalendar importer.
+  [thet]
+
 - Remove dependency on "persistent" to not use that one over the ZODB bundled
   package. "persistent" will become available as seperate package with ZODB 4.
   [thet]
