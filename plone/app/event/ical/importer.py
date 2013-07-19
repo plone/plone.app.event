@@ -7,6 +7,7 @@ from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
 from plone.event.utils import is_date
+from plone.event.utils import is_datetime
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -27,6 +28,34 @@ def ical_import(container, ics_resource, event_type):
         if prop in item:
             ret = safe_unicode(item.decoded(prop))
         return ret
+
+    def _from_list(ical, prop):
+        """For EXDATE and RDATE recurrence component properties, the dates can
+        be defined within one EXDATE/RDATE line or for each date an individual
+        line.
+        In the latter case, icalendar creates a list.
+        This method handles this case.
+
+        TODO: component property parameters like TZID are not used here.
+        """
+        val = prop in ical and ical[prop] or []
+        if not isinstance(val, list):
+            val = [val]
+        #ret = ''
+        #for item in val:
+        #    ret = ret and '%s\n' % ret or ret  # insert linebreak
+        #    ret = '%s%s:%s' % (ret, prop, item.to_ical())
+        #return ret
+
+        # Zip multiple lines into one, since jquery.recurrenceinput.js does
+        # not support multiple lines here
+        # https://github.com/collective/jquery.recurrenceinput.js/issues/15
+        ret = ''
+        for item in val:
+            ret = ret and '%s,' % ret or ret  # insert linebreak
+            ret = '%s%s' % (ret, item.to_ical())
+        return ret and '%s:%s' % (prop, ret) or None
+
 
     count = 0
     for item in events:
@@ -56,12 +85,12 @@ def ical_import(container, ics_resource, event_type):
                 end = end - datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
-        elif isinstance(start, datetime) and end is None:
+        elif is_datetime(start) and end is None:
             # Open end event, see RFC 5545, 3.6.1
             open_end = True
             end = base.dt_end_of_day(date_to_datetime(start))
-        assert(isinstance(start, datetime.datetime))
-        assert(isinstance(end, datetime.datetime))
+        assert(is_datetime(start))
+        assert(is_datetime(end))
 
         title = _get_prop('SUMMARY', item)
         description = _get_prop('DESCRIPTION', item)
@@ -71,12 +100,14 @@ def ical_import(container, ics_resource, event_type):
 
         rrule = _get_prop('RRULE', item)
         rrule = rrule and 'RRULE:%s' % rrule.to_ical() or ''
-        rdate = _get_prop('RDATE', item)
-        rrule = rdate and '%s\nRDATE:%s' % (rrule, rdate.to_ical()) or ''
-        exdate = _get_prop('EXDATE', item)
-        rrule = exdate and '%s\nEXDATE:%s' % (rrule, exdate.to_ical()) or ''
+        rdates =  _from_list(item, 'RDATE')
+        exdates =  _from_list(item, 'EXDATE')
+        rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])
 
+        # TODO: attendee-lists are not decoded properly and contain only
+        # vCalAddress values
         attendees = _get_prop('ATTENDEE', item)
+
         contact = _get_prop('CONTACT', item)
         categories = _get_prop('CATEGORIES', item)
         if hasattr(categories, '__iter__'):

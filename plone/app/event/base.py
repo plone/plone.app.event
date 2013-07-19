@@ -19,6 +19,8 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import default_timezone as fallback_default_timezone
+from plone.event.utils import is_date
+from plone.event.utils import is_datetime
 from plone.event.utils import is_same_day
 from plone.event.utils import is_same_time
 from plone.event.utils import pydt
@@ -186,13 +188,13 @@ def construct_calendar(events, start=None, end=None):
 
     """
     if start:
-        if isinstance(start, datetime):
+        if is_datetime(start):
             start = start.date()
-        assert isinstance(start, date)
+        assert is_date(start)
     if end:
-        if isinstance(end, datetime):
+        if is_datetime(end):
             end = end.date()
-        assert isinstance(end, date)
+        assert is_date(end)
 
     cal = {}
     def _add_to_cal(cal_data, event, date):
@@ -244,7 +246,7 @@ def _prepare_range(context, start, end):
     """
     tz = default_timezone(context, as_tzinfo=True)
     start = pydt(start, missing_zone=tz)
-    if not isinstance(end, datetime) and isinstance(end, date):
+    if is_date(end):
         # set range_end to the next day, time will be 0:00
         # so the whole previous day is also used for search
         end = end + timedelta(days=1)
@@ -410,7 +412,7 @@ def DT(dt, exact=False):
 
     tz = default_timezone(getSite())
     ret = None
-    if isinstance(dt, datetime):
+    if is_datetime(dt):
         zone_id = getattr(dt.tzinfo, 'zone', tz)
         tz = validated_timezone(zone_id, tz)
         second = dt.second
@@ -421,7 +423,7 @@ def DT(dt, exact=False):
             dt.hour, dt.minute, second,
             tz
         )
-    elif isinstance(dt, date):
+    elif is_date(dt):
         ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
         # No timezone validation. DateTime knows how to handle it's zones.

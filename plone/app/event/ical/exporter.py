@@ -7,8 +7,10 @@ from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
-from plone.event.utils import pydt, utc
+from plone.event.utils import is_datetime
+from plone.event.utils import pydt
 from plone.event.utils import tzdel
+from plone.event.utils import utc
 from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
@@ -95,7 +97,7 @@ def construct_icalendar(context, events):
 
 
 def add_to_zones_map(tzmap, tzid, dt):
-    if tzid.lower() == 'utc' or not isinstance(dt, datetime):
+    if tzid.lower() == 'utc' or not is_datetime(dt):
         # no need to define UTC nor timezones for date objects.
         return tzmap
     null = datetime(1, 1, 1)
