@@ -39,7 +39,7 @@ def ical_import(container, ics_resource, event_type):
         """
         val = prop in ical and ical[prop] or []
         if not isinstance(val, list):
-            val = list(val)
+            val = [val]
         #ret = ''
         #for item in val:
         #    ret = ret and '%s\n' % ret or ret  # insert linebreak
@@ -103,7 +103,10 @@ def ical_import(container, ics_resource, event_type):
         exdates =  _from_list(item, 'EXDATE')
         rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])
 
+        # TODO: attendee-lists are not decoded properly and contain only
+        # vCalAddress values
         attendees = _get_prop('ATTENDEE', item)
+
         contact = _get_prop('CONTACT', item)
         categories = _get_prop('CATEGORIES', item)
         if hasattr(categories, '__iter__'):
