@@ -9,10 +9,17 @@ The ATContentType and dexterity features are automatically enabled depending
 on installed packages.
 
 
+Compatibility
+-------------
+
+plone.app.event is tested with latest Plone 4.2 and Plone 4.3.
+
+
 Installation
 ------------
 
 See the installation documentation at: docs/installation.rst.
+
 
 PLIP implementation
 -------------------

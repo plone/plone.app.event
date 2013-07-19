@@ -10,6 +10,11 @@ Changelog
 - Fix runtime error in icalendar importer.
   [thet]
 
+- For the setup's tests extra, depend on plone.app.testing <= 4.2.2 until the
+  Dexterity and Archetypes tests are split up and the tests don't have a hard
+  dependency on Archetypes.
+  [thet]
+
 - Remove dependency on "persistent" to not use that one over the ZODB bundled
   package. "persistent" will become available as seperate package with ZODB 4.
   [thet]
