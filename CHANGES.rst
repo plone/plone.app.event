@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Buildout infrastructure update.
+  [thet]
+
 - Fix icalendar importer to support multiple-line EXDATE/RDATE definitions.
   [thet]
 
