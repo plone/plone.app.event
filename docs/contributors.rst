@@ -9,6 +9,7 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - David Glick, davisagli
 - Érico Andrei, ericof
 - Franklin Kingma, kingel
+- Gauthier Bastien, gbastien
 - Georg Bernhard, gogo
 - Giacomo Spettoli, giacomos
 - JeanMichel FRANCOIS, toutpt
@@ -26,7 +27,6 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - Tom Gross, tomgross
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod
-
 
 Find out who contributed:
 $ git shortlog -s -e

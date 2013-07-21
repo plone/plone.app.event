@@ -27,7 +27,7 @@ Changelog
   [thet]
 
 - Fix runtime error in icalendar importer.
-  [thet]
+  [gbastien]
 
 - For the setup's tests extra, depend on plone.app.testing <= 4.2.2 until the
   Dexterity and Archetypes tests are split up and the tests don't have a hard
