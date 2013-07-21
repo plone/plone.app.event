@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0rc2 (2013-07-19)
+1.0rc2 (2013-07-21)
 -------------------
 
 - Introduce a BrowserLayer and register all views for it. Avoids view
