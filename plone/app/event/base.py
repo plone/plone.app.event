@@ -289,6 +289,8 @@ def default_timezone(context=None, as_tzinfo=False):
     if not portal_timezone:
         portal_timezone = fallback_default_timezone()
 
+    # Change any ambiguous timezone abbreviations to their most common
+    # non-ambigious timezone name.
     if portal_timezone in replacement_zones.keys():
         portal_timezone = replacement_zones[portal_timezone]
     portal_timezone = validated_timezone(portal_timezone, FALLBACK_TIMEZONE)
