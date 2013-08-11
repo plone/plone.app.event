@@ -122,7 +122,7 @@ article.vevent .documentByLine {
 }
 #content .event_listing nav ul li:last-of-type { margin-right:0; }
 
-.event_listing ul.sub_nav,
+.event_listing nav > ul,
 .event_listing nav {
     background-color: #DDDDDD;
     min-height:2em;
