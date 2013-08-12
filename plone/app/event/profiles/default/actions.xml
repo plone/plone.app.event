@@ -8,7 +8,7 @@
    <property name="description" i18n:translate="help_ical_import">Import Events from icalendar files.</property>
    <property name="url_expr">string:${object_url}/@@ical_import_settings</property>
    <property name="icon_expr"></property>
-   <property name="available_expr">object/@@ical_import_tool/enabled</property>
+   <property name="available_expr">object/@@ical_import_tool/enabled|nothing</property>
    <property name="permissions">
     <element value="Manage properties"/>
    </property>
@@ -32,7 +32,7 @@
    <property name="title" i18n:translate="title_ical_import_enable">Enable icalendar import</property>
    <property name="description" i18n:translate="help_ical_import_enable">Click to enable the icalendar import feature on this context.</property>
    <property name="url_expr">string:$object_url/@@ical_import_settings/enable</property>
-   <property name="available_expr">object/@@ical_import_tool/available_disabled</property>
+   <property name="available_expr">object/@@ical_import_tool/available_disabled|nothing</property>
    <property name="permissions">
     <element value="Manage properties" />
    </property>
@@ -45,7 +45,7 @@
    <property name="title" i18n:translate="title_ical_import_disable">Disable icalendar import</property>
    <property name="description" i18n:translate="help_ical_import_disable">Click to disable the icalendar import feature on this context.</property>
    <property name="url_expr">string:$object_url/@@ical_import_settings/disable</property>
-   <property name="available_expr">object/@@ical_import_tool/enabled</property>
+   <property name="available_expr">object/@@ical_import_tool/enabled|nothing</property>
    <property name="permissions">
     <element value="Manage properties" />
    </property>
