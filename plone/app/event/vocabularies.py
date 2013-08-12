@@ -13,6 +13,12 @@ import pytz
 import random
 
 
+# Map for ambiguous timezone abbreviations to their most common non-ambigious
+# timezone name. E.g CST is ambiguous and is used for U.S./Canada Central
+# Standard Time, Australian Central Standard Time, China Standard Time.
+# TODO: incomplete map.
+# TODO: do we need this at all or shouldn't we just fail with ambiguous
+#       timezones?
 replacement_zones = {
     'CET': 'Europe/Vienna',   # Central European Time
     'MET': 'Europe/Vienna',   # Middle European Time
