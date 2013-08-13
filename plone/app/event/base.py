@@ -149,7 +149,7 @@ def get_events(context, start=None, end=None, limit=None,
                 occurrences = [_obj_or_acc(occ, ret_mode) for occ in
                                IRecurrenceSupport(obj).occurrences(start, end)]
             else:
-                occurrences = [obj]
+                occurrences = [_obj_or_acc(obj, ret_mode)]
             exp_result += occurrences
         if sort:
             # support AT and DX without wrapped by IEventAccessor (mainly for
