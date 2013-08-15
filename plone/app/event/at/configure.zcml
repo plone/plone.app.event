@@ -6,6 +6,7 @@
 
     <five:registerPackage package="." initialize=".initialize" />
 
+    <include package="Products.ATContentTypes" />
     <include file="ical.zcml" />
     <include package=".upgrades" />
 

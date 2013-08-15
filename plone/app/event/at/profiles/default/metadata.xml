@@ -2,6 +2,7 @@
 <metadata>
   <version>4</version>
   <dependencies>
+  	<dependency>profile-Products.ATContentTypes:default</dependency>
     <dependency>profile-plone.app.event:default</dependency>
   </dependencies>
 </metadata>

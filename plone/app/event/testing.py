@@ -74,6 +74,7 @@ class PAEventATLayer(PloneSandboxLayer):
         import plone.app.event.at
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
 
+        z2.installProduct(app, 'Products.ATContentTypes')
         z2.installProduct(app, 'plone.app.event.at')
 
     def setUpPloneSite(self, portal):
@@ -114,11 +115,11 @@ class PAEventATDXLayer(PloneSandboxLayer):
         # Load ZCML
         import plone.app.event.at
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
+        z2.installProduct(app, 'Products.ATContentTypes')
         z2.installProduct(app, 'plone.app.event.at')
 
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx, context=configurationContext)
-
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event.at:default')

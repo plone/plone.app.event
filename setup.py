@@ -101,11 +101,7 @@ setup(name='plone.app.event',
           'test': [
               'mock',
               'plone.app.event [archetypes, dexterity, ploneintegration]',
-              # Until a seperated Archetypes/Dexterity test environment, we
-              # have to depend on a plone.app.testing version with Archetypes
-              # support.
-              # TODO: remove when fixed.
-              'plone.app.testing<=4.2.2',
+              'plone.app.testing',
               'plone.testing',
               'transaction',
               'zope.event',

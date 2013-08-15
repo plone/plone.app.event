@@ -41,7 +41,7 @@ class ICalendarExportTest(unittest.TestCase):
 
         portal.invokeFactory('Folder',
                 id='events', title=u"Events",
-                Description=u"The portal's Events")
+                description=u"The portal's Events")
 
         portal.events.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
