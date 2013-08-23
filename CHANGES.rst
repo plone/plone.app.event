@@ -1,13 +1,14 @@
 Changelog
 =========
 
-1.0dev0 (unreleased)
+1.0rc3 (2013-08-23)
 -------------------
 
 - Fix get_events with ret_mode=3, expand=True, without recurrence
   It was returning full object instead of IEventAccesor instances.
   This also fix event portlet with norecurrent events.
   [toutpt]
+
 
 1.0rc2 (2013-07-21)
 -------------------
