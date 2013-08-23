@@ -282,8 +282,13 @@ def default_timezone(context=None, as_tzinfo=False):
     portal_timezone = None
     reg = queryUtility(IRegistry, context=context, default=None)
     if reg:
-        portal_timezone = reg.forInterface(
-                IEventSettings, prefix="plone.app.event").portal_timezone
+        try:
+            portal_timezone = reg.forInterface(
+                    IEventSettings, prefix="plone.app.event").portal_timezone
+        except KeyError:
+            # plone.registry warns that registry settings can not be
+            # available or valid
+            pass
 
     # fallback to what plone.event is doing
     if not portal_timezone:
