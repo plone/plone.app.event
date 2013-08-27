@@ -277,7 +277,8 @@ def default_timezone(context=None, as_tzinfo=False):
         member = membership.getAuthenticatedMember()
         member_timezone = member.getProperty('timezone', None)
         if member_timezone:
-            return pytz.timezone(member_timezone).zone
+            info = pytz.timezone(member_timezone)
+            return info if as_tzinfo else info.zone
 
     portal_timezone = None
     reg = queryUtility(IRegistry, context=context, default=None)
