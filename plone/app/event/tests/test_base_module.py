@@ -301,7 +301,7 @@ class TestAnnotationAdapter(unittest.TestCase):
 
 
 class TestFindContext(unittest.TestCase):
-    layer = PAEvent_INTEGRATION_TESTING
+    layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = portal = self.layer['portal']

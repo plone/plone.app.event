@@ -100,6 +100,7 @@ setup(name='plone.app.event',
           ],
           'test': [
               'mock',
+              'plone.app.contenttypes',
               'plone.app.event [archetypes, dexterity, ploneintegration]',
               'plone.app.testing',
               'plone.testing',
