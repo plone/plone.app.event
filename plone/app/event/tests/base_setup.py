@@ -1,7 +1,11 @@
 from datetime import datetime
 from datetime import timedelta
+from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.base import default_timezone
+from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.interfaces import IEventSettings
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -70,7 +74,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=now + duration,
             location=u"Vienna",
             timezone=default_tz,
-            recurrence='RRULE:FREQ=DAILY;COUNT=3;INTERVAL=2',
+            recurrence="""RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1
+RDATE:20130509T000000
+EXDATE:20130506T000000,20140404T000000""",
             ).context
 
         self.future_event = factory(
@@ -90,5 +96,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=past,
             end=far,
             location=u'Schaftal',
-            timezone=default_tz).context
-
+            timezone=default_tz,
+            contact_name='Auto Testdriver',
+            contact_email='testdriver@plone.org',
+            contact_phone='+123456789',
+            event_url='http://plone.org',
+            subjects=['plone', 'testing']).context
