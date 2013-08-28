@@ -11,6 +11,12 @@ from zope.interface import alsoProvides
 
 import os
 
+try:
+    from plone.app.upgrade import v50
+    PLONE5 = 1
+except ImportError:
+    PLONE5 = 0
+
 
 def set_browserlayer(request):
     """Set the BrowserLayer for the request.
@@ -74,9 +80,15 @@ class PAEventATLayer(PloneSandboxLayer):
         import plone.app.event.at
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
 
+        z2.installProduct(app, 'Products.ATContentTypes')
         z2.installProduct(app, 'plone.app.event.at')
 
     def setUpPloneSite(self, portal):
+
+        if PLONE5:
+            # Install Products.ATContentTypes profile only for versions, where
+            # it's available
+            self.applyProfile(portal, 'Products.ATContentTypes:default')
         self.applyProfile(portal, 'plone.app.event.at:default')
         set_timezone(tz='UTC')
 
@@ -93,10 +105,15 @@ class PAEventDXLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         self.ostz = os_zone()
         # Load ZCML
+        import plone.app.contenttypes
+        self.loadZCML(package=plone.app.contenttypes,
+                      context=configurationContext)
         import plone.app.event.dx
-        self.loadZCML(package=plone.app.event.dx, context=configurationContext)
+        self.loadZCML(package=plone.app.event.dx,
+                      context=configurationContext)
 
     def setUpPloneSite(self, portal):
+        self.applyProfile(portal, 'plone.app.contenttypes:default')
         self.applyProfile(portal, 'plone.app.event.dx:default')
         set_timezone(tz='UTC')
 
@@ -104,28 +121,3 @@ PAEventDX_FIXTURE = PAEventDXLayer()
 PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventDX_FIXTURE,),
     name="PAEventDX:Integration")
-
-
-class PAEventATDXLayer(PloneSandboxLayer):
-    defaultBases = (PAEvent_FIXTURE, )
-
-    def setUpZope(self, app, configurationContext):
-        self.ostz = os_zone()
-        # Load ZCML
-        import plone.app.event.at
-        self.loadZCML(package=plone.app.event.at, context=configurationContext)
-        z2.installProduct(app, 'plone.app.event.at')
-
-        import plone.app.event.dx
-        self.loadZCML(package=plone.app.event.dx, context=configurationContext)
-
-
-    def setUpPloneSite(self, portal):
-        self.applyProfile(portal, 'plone.app.event.at:default')
-        self.applyProfile(portal, 'plone.app.event.dx:default')
-        set_timezone(tz='UTC')
-
-PAEventATDX_FIXTURE = PAEventATDXLayer()
-PAEventATDX_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(PAEventATDX_FIXTURE,),
-    name="PAEventATDX:Integration")
