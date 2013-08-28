@@ -2,7 +2,6 @@
 <metadata>
   <version>2</version>
   <dependencies>
-  	<dependency>profile-plone.app.contenttypes:default</dependency>
     <dependency>profile-plone.app.event:default</dependency>
   </dependencies>
 </metadata>

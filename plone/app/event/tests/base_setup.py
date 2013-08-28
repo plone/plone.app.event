@@ -1,18 +1,14 @@
 from datetime import datetime
 from datetime import timedelta
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
-from plone.app.event.base import default_timezone
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from plone.app.event.interfaces import IEventSettings
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
+from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
 
 import unittest2 as unittest
-import zope.component
+import pytz
+
+TEST_TIMEZONE = 'Europe/Vienna'
 
 
 def patched_now(context=None):
@@ -20,8 +16,9 @@ def patched_now(context=None):
     """
     if not context:
         context = None
-    tzinfo = default_timezone(context=context, as_tzinfo=True)
-    now = datetime(2013, 5, 5, 10, 0, 0, tzinfo=tzinfo).replace(microsecond=0)
+    tzinfo = pytz.timezone(TEST_TIMEZONE)
+    now = datetime(2013, 5, 5, 10, 0, 0).replace(microsecond=0)
+    now = tzinfo.localize(now)  # set tzinfo with correct DST offset
     return now
 
 
@@ -33,10 +30,11 @@ class AbstractSampleDataEvents(unittest.TestCase):
         raise NotImplementedError
 
     def make_dates(self):
+        tz = pytz.timezone(TEST_TIMEZONE)
         now      = self.now      = patched_now()
-        past     = self.past     = now - timedelta(days=10)
-        future   = self.future   = now + timedelta(days=10)
-        far      = self.far      = now + timedelta(days=30)
+        past     = self.past     = tz.normalize(now - timedelta(days=10))
+        future   = self.future   = tz.normalize(now + timedelta(days=10))
+        far      = self.far      = tz.normalize(now + timedelta(days=30))
         duration = self.duration = timedelta(hours=1)
         return (now, past, future, far, duration)
 
@@ -45,11 +43,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         self.app = self.layer['app']
         self.request = self.layer['request']
         set_browserlayer(self.request)
-
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        default_tz = default_timezone()
-        settings.portal_timezone = default_tz
+        set_timezone(TEST_TIMEZONE)
 
         now, past, future, far, duration = self.make_dates()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
@@ -62,7 +56,8 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=past,
             end=past + duration,
             location=u"Vienna",
-            timezone=default_tz,
+            whole_day=True,
+            timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=DAILY;COUNT=3',
             ).context
 
@@ -73,11 +68,15 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=now,
             end=now + duration,
             location=u"Vienna",
-            timezone=default_tz,
+            timezone=TEST_TIMEZONE,
             recurrence="""RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1
 RDATE:20130509T000000
 EXDATE:20130506T000000,20140404T000000""",
-            ).context
+            contact_name='Auto Testdriver',
+            contact_email='testdriver@plone.org',
+            contact_phone='+123456789',
+            event_url='http://plone.org',
+            subjects=['plone', 'testing']).context
 
         self.future_event = factory(
             container=self.portal,
@@ -86,7 +85,7 @@ EXDATE:20130506T000000,20140404T000000""",
             start=future,
             end=future + duration,
             location=u'Graz',
-            timezone=default_tz).context
+            timezone=TEST_TIMEZONE).context
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
         self.long_event = factory(
@@ -96,9 +95,4 @@ EXDATE:20130506T000000,20140404T000000""",
             start=past,
             end=far,
             location=u'Schaftal',
-            timezone=default_tz,
-            contact_name='Auto Testdriver',
-            contact_email='testdriver@plone.org',
-            contact_phone='+123456789',
-            event_url='http://plone.org',
-            subjects=['plone', 'testing']).context
+            timezone=TEST_TIMEZONE).context
