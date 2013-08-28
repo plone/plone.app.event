@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Don't fail, if timezone isn't set.
+  [gforcada]
+
+
 1.0rc3 (2013-08-23)
 -------------------
 

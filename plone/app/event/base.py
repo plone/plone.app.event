@@ -270,7 +270,8 @@ def default_timezone(context=None, as_tzinfo=False):
 
     """
     # TODO: test member timezone
-    if not context: context = getSite()
+    if not context:
+        context = getSite()
 
     membership = getToolByName(context, 'portal_membership', None)
     if membership and not membership.isAnonymousUser():  # user not logged in
@@ -283,13 +284,11 @@ def default_timezone(context=None, as_tzinfo=False):
     portal_timezone = None
     reg = queryUtility(IRegistry, context=context, default=None)
     if reg:
-        try:
-            portal_timezone = reg.forInterface(
-                    IEventSettings, prefix="plone.app.event").portal_timezone
-        except KeyError:
-            # plone.registry warns that registry settings can not be
-            # available or valid
-            pass
+        portal_timezone = reg.forInterface(
+            IEventSettings,
+            prefix="plone.app.event",
+            check=False  # Don't fail, if portal_timezone isn't set.
+        ).portal_timezone
 
     # fallback to what plone.event is doing
     if not portal_timezone:
