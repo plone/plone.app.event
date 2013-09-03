@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Switch off linkintegrity checks during upgrade from atct to pae.at.
+  [jensens]  
+
 - Don't fail, if timezone isn't set.
   [gforcada]
 
