@@ -12,6 +12,7 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
+from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import setHooks
@@ -75,6 +76,21 @@ class PortletTest(unittest.TestCase):
 
         renderer = getMultiAdapter((context, self.request, view, manager, assignment), IPortletRenderer)
         self.failUnless(isinstance(renderer, portlet_events.Renderer))
+
+    def test_disable_dasboard_breaks_event_portlet(self):
+        # Bug #8230: disabling the dashboard breaks the event portlet
+        self.portal.manage_permission('Portlets: Manage own portlets',
+                roles=['Manager'], acquire=0)
+
+        portlet = getUtility(IPortletType, name='portlets.Events')
+        mapping = self.portal.restrictedTraverse('++contextportlets++plone.leftcolumn')
+        addview = mapping.restrictedTraverse('+/' + portlet.addview)
+        try:
+            addview()
+        except Unauthorized:
+            self.fail()
+
+
 
 
 class RendererTest(unittest.TestCase):
