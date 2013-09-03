@@ -4,6 +4,9 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Switch off linkintegrity checks during upgrade from atct to pae.at.
+  [jensens]  
+
 - Remove event and calendar portlet assignments on plone.rightcolumn.
   Integrators should do assignments themselfes, as they are likely different
   from the standard assignment.
