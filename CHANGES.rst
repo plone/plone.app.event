@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove event and calendar portlet assignments on plone.rightcolumn.
+  Integrators should do assignments themselfes, as they are likely different
+  from the standard assignment.
+  [thet]
+
 - Don't fail, if timezone isn't set.
   [gforcada]
 

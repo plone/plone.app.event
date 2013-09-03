@@ -25,6 +25,7 @@
    <for interface="plone.app.portlets.interfaces.IDashboard" />
  </portlet>
 
+ <!-- EXAMPLE ASSIGNMENTS
  <assignment
      manager="plone.rightcolumn"
      category="context"
@@ -39,5 +40,6 @@
      type="portlets.Events"
      name="events"
      />
+  -->
 
 </portlets>
