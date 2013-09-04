@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Support the @@images view for IOccurrence objects by using a factory, which
+  returns a AT or DX specific view depending on the Occurrence's parent. 
+  [thet]
+
 - Switch off linkintegrity checks during upgrade from atct to pae.at.
   [jensens]  
 
@@ -91,12 +95,6 @@ Please note, the next release will have all deprections removed.
   correctly before!
   [thet]
 
-- Fix OccurrenceTraverser to fallback to plone.app.imaging's ImageTraverser
-  only for Archetypes based objects. For Dexterity content, image scales are
-  accessed only via the @@images view and not by traversing to a image scale
-  name. Fixes #78 and fixes #79.
-  [thet]
-
 - Rename the formated_date and formated_start_date content providers to
   have the correct spelling of "formatted". Doing this change now while this
   package's adoption is not too wide spread.
@@ -132,12 +130,6 @@ Please note, the next release will have all deprections removed.
 
 - In event_listing views in "past" or "all" modes, do a reverse sort on the
   results, starting with newest events.
-  [thet]
-
-- Add an ImageTraverser and a ImageScaling view for IOccurrence objects. Thus,
-  Occurrence objects (which are traversed to from IEvent objects and created on
-  the fly) can display and scale images, as like the IEvent object itself.
-  Please note, that currently this is only implemented for Archetypes.
   [thet]
 
 - Create an Python based import step to properly set up the portal catalog.

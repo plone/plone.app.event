@@ -2,8 +2,6 @@ from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.event.base import guess_date_from
-from plone.app.imaging.scaling import ImageScaling
-from plone.app.imaging.traverse import ImageTraverser
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
@@ -23,8 +21,7 @@ import itertools
 
 
 class RecurrenceSupport(object):
-    """ IRecurrenceSupport Adapter.
-
+    """IRecurrenceSupport Adapter.
     """
     implements(IRecurrenceSupport)
     adapts(IEventRecurrence)
@@ -33,7 +30,7 @@ class RecurrenceSupport(object):
         self.context = context
 
     def occurrences(self, range_start=None, range_end=None):
-        """ Return all occurrences of an event, possibly within a start and end
+        """Return all occurrences of an event, possibly within a start and end
         limit.
 
         Please note: Events beginning before range_start but ending afterwards
@@ -41,7 +38,6 @@ class RecurrenceSupport(object):
 
         TODO: test with event start = 21st feb, event end = start+36h,
         recurring for 10 days, range_start = 1st mar, range_end = last Mark
-
         """
         event = IEventAccessor(self.context)
         starts = recurrence_sequence_ical(event.start,
@@ -49,9 +45,9 @@ class RecurrenceSupport(object):
                                           from_=range_start, until=range_end)
 
         if range_start and\
-            event.start < range_start and\
-            event.end >= range_start and\
-            event.start not in starts:
+                event.start < range_start and\
+                event.end >= range_start and\
+                event.start not in starts:
             # Include event, which started before range but lasts until it.
             starts = itertools.chain(starts, [event.start])
 
@@ -113,8 +109,7 @@ class Occurrence(SimpleItem):
 
 
 class EventOccurrenceAccessor(object):
-    """ Generic event accessor adapter implementation for Occurrence objects.
-
+    """Generic event accessor adapter implementation for Occurrence objects.
     """
     implements(IEventAccessor)
     adapts(IOccurrence)
@@ -152,28 +147,42 @@ class EventOccurrenceAccessor(object):
         return safe_unicode(self.context.absolute_url())
 
 
-# TODO: The following view and traverser might only work for Archetypes based
-# objects, since plone.app.imaging seems only to register these for Archetypes.
-# So, the TODO is to make the view and traverser a factory, returning a
-# dexterity or archetypes view/traverser depending on the parent context's type
-# or handle these cases somehow different.
+from plone.app.imaging.scaling import ImageScaling as ATImageScaling
+from plone.namedfile.scaling import ImageScale as DXImageScaling
+from zope.interface import Interface
+from Products.Five.browser import BrowserView
+try:
+    from plone.app.event.at.interfaces import IATEvent
+except ImportError:
+    class IATEvent(Interface):
+        pass
+try:
+    from plone.app.event.dx.interfaces import IDXEvent
+except ImportError:
+    class IDXEvent(Interface):
+        pass
 
 
-class ImageScalingOccurrence(ImageScaling):
-    """ImageScaling view for occurrences, which rebinds to the parent context.
+class ImageScalingFactory(BrowserView):
+    """Factory for ImageScaling view for occurrences.
+    Delegates to AT or DX specific view and rebinds to the parent context.
     """
-    def __init__(self, context, request):
-        # Rebind me to the parent context.
-        context = aq_parent(context)
-        super(ImageScalingOccurrence, self).__init__(context, request)
+    def __new__(cls, context, request):
+        parent = aq_parent(context)
+        if IATEvent.providedBy(parent):
+            return ATImageScaling(parent, request)
+        elif IDXEvent.providedBy(parent):
+            return DXImageScaling(parent, request)
+        return None
 
 
-class ImageTraverserOccurrence(ImageTraverser):
-    """ImageTraverser for Occurrences, wich rebinds to the parent context.
-    """
-    def __init__(self, context, request):
-        # Rebind me to the parent context.
-        # TODO: this breaks the event_view on IOccurrence.
-        # TODO: revisit and fix
-        context = aq_parent(context)
-        super(ImageTraverser, self).__init__(context, request)
+#from plone.app.imaging.traverse import ImageTraverser
+#class ImageTraverserOccurrence(ImageTraverser):
+#    """ImageTraverser for Occurrences, wich rebinds to the parent context.
+#    """
+#    def __init__(self, context, request):
+#        # Rebind me to the parent context.
+#        # TODO: this breaks the event_view on IOccurrence.
+#        # TODO: revisit and fix
+#        context = aq_parent(context)
+#        super(ImageTraverser, self).__init__(context, request)

@@ -10,15 +10,16 @@
       permission="zope.Public"
       />
 
-  <!-- DEACTIVATED UNTIL FIXED -->
-  <!-- plone.app.imaging specific view and traverser for IOccurrence -->
-  <!-- browser:page
+  <!-- @@images view factory for occurrences -->
+  <browser:page
       for="plone.event.interfaces.IOccurrence"
       name="images"
-      class=".recurrence.ImageScalingOccurrence"
-      allowed_interface="plone.app.imaging.interfaces.IImageScaling"
-      permission="zope2.View" /-->
-  <!-- adapter
+      class=".recurrence.ImageScalingFactory"
+      permission="zope2.View" />
+
+  <!-- DEACTIVATED UNTIL FIXED -->
+  <!-- plone.app.imaging specific view and traverser for IOccurrence -->
+  <!--adapter
       for="plone.event.interfaces.IOccurrence
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".recurrence.ImageTraverserOccurrence" /-->
