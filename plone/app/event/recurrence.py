@@ -1,23 +1,37 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
 from plone.app.event.base import guess_date_from
+from plone.app.imaging.scaling import ImageScaling as ATImageScaling
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import is_same_day
+from plone.namedfile.scaling import ImageScale as DXImageScaling
 from zope.component import adapts
+from zope.interface import Interface
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserRequest
+import itertools
+
 try:
     from repoze.zope2.publishtraverse import DefaultPublishTraverse
 except ImportError:
     from ZPublisher.BaseRequest import DefaultPublishTraverse
 
-
-import itertools
+try:
+    from plone.app.event.at.interfaces import IATEvent
+except ImportError:
+    class IATEvent(Interface):
+        pass
+try:
+    from plone.app.event.dx.interfaces import IDXEvent
+except ImportError:
+    class IDXEvent(Interface):
+        pass
 
 
 class RecurrenceSupport(object):
@@ -147,23 +161,7 @@ class EventOccurrenceAccessor(object):
         return safe_unicode(self.context.absolute_url())
 
 
-from plone.app.imaging.scaling import ImageScaling as ATImageScaling
-from plone.namedfile.scaling import ImageScale as DXImageScaling
-from zope.interface import Interface
-from Products.Five.browser import BrowserView
-try:
-    from plone.app.event.at.interfaces import IATEvent
-except ImportError:
-    class IATEvent(Interface):
-        pass
-try:
-    from plone.app.event.dx.interfaces import IDXEvent
-except ImportError:
-    class IDXEvent(Interface):
-        pass
-
-
-class ImageScalingFactory(BrowserView):
+class ImageScalingViewFactory(BrowserView):
     """Factory for ImageScaling view for occurrences.
     Delegates to AT or DX specific view and rebinds to the parent context.
     """
@@ -174,15 +172,3 @@ class ImageScalingFactory(BrowserView):
         elif IDXEvent.providedBy(parent):
             return DXImageScaling(parent, request)
         return None
-
-
-#from plone.app.imaging.traverse import ImageTraverser
-#class ImageTraverserOccurrence(ImageTraverser):
-#    """ImageTraverser for Occurrences, wich rebinds to the parent context.
-#    """
-#    def __init__(self, context, request):
-#        # Rebind me to the parent context.
-#        # TODO: this breaks the event_view on IOccurrence.
-#        # TODO: revisit and fix
-#        context = aq_parent(context)
-#        super(ImageTraverser, self).__init__(context, request)

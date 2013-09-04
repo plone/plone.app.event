@@ -14,14 +14,7 @@
   <browser:page
       for="plone.event.interfaces.IOccurrence"
       name="images"
-      class=".recurrence.ImageScalingFactory"
+      class=".recurrence.ImageScalingViewFactory"
       permission="zope2.View" />
-
-  <!-- DEACTIVATED UNTIL FIXED -->
-  <!-- plone.app.imaging specific view and traverser for IOccurrence -->
-  <!--adapter
-      for="plone.event.interfaces.IOccurrence
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      factory=".recurrence.ImageTraverserOccurrence" /-->
 
 </configure>
