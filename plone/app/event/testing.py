@@ -1,4 +1,3 @@
-from Products.DateRecurringIndex.testing import DRI_FIXTURE
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
 from plone.app.testing import IntegrationTesting
@@ -43,11 +42,14 @@ def os_zone():
 
 
 class PAEventLayer(PloneSandboxLayer):
-    defaultBases = (DRI_FIXTURE, PLONE_FIXTURE,)
+    defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
         # store original TZ, for the case it's overwritten
         self.ostz = os_zone()
+
+        # Install products that use an old-style initialize() function
+        z2.installProduct(app, 'Products.DateRecurringIndex')
 
         # Load ZCML
         import plone.app.event
@@ -58,11 +60,15 @@ class PAEventLayer(PloneSandboxLayer):
         set_timezone(tz='UTC')
 
     def tearDownZope(self, app):
+        # Uninstall old-style Products
+        z2.uninstallProduct(app, 'Products.DateRecurringIndex')
+
         # reset OS TZ
         if self.ostz:
             os.environ['TZ'] = self.ostz
         elif 'TZ' in os.environ:
             del os.environ['TZ']
+
 
 PAEvent_FIXTURE = PAEventLayer()
 PAEvent_INTEGRATION_TESTING = IntegrationTesting(

@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- In test-setup, explicitly install DateRecurringIndex instead of extending
+  it's test layer fixture. This should finally fix #81, where other tests
+  couldn't be run when not extending the DRI or PAE test fixture layers.
+  [thet]
+
 - Support the @@images view for IOccurrence objects by using a factory, which
   returns a AT or DX specific view depending on the Occurrence's parent. 
   [thet]
