@@ -466,12 +466,12 @@ def end_indexer(obj):
 @indexer(IDXEvent)
 def searchable_text_indexer(obj):
     acc = IEventAccessor(obj)
-    text = ''
-    text += '%s\n' % acc.title
-    text += '%s\n' % acc.description
+    text = u''
+    text += u'%s\n' % acc.title
+    text += u'%s\n' % acc.description
     behavior = IEventSummary(obj, None)
     if behavior is None or behavior.text is None:
-        return text
+        return text.encode('utf-8')
     output = behavior.text.output
     transforms = getToolByName(obj, 'portal_transforms')
     body_plain = transforms.convertTo(
@@ -479,8 +479,8 @@ def searchable_text_indexer(obj):
         output,
         mimetype='text/html',
         ).getData().strip()
-    text += body_plain
-    return text.strip()
+    text += body_plain.decode('utf-8')
+    return text.strip().encode('utf-8')
 
 
 # Object adapters

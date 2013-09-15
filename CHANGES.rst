@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Indexer adapter for SearchableText: fixed encoding inconsistencies.  Always
+  return utf-8 encoded string while using unicode internally.
+  [seanupton]
+
 - In test-setup, explicitly install DateRecurringIndex instead of extending
   it's test layer fixture. This should finally fix #81, where other tests
   couldn't be run when not extending the DRI or PAE test fixture layers.
