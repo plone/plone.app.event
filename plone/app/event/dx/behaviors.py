@@ -479,7 +479,9 @@ def searchable_text_indexer(obj):
         output,
         mimetype='text/html',
         ).getData().strip()
-    text += body_plain.decode('utf-8')
+    if isinstance(body_plain, str):
+        body_plain = body_plain.decode('utf-8')
+    text += body_plain
     return text.strip().encode('utf-8')
 
 
