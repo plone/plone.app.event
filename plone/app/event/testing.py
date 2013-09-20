@@ -1,3 +1,4 @@
+from Products.CMFPlone.utils import getFSVersionTuple
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
 from plone.app.testing import IntegrationTesting
@@ -10,11 +11,8 @@ from zope.interface import alsoProvides
 
 import os
 
-try:
-    from plone.app.upgrade import v50
-    PLONE5 = 1
-except ImportError:
-    PLONE5 = 0
+
+PLONE5 = getFSVersionTuple()[0] >= 5
 
 
 def set_browserlayer(request):
