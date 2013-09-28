@@ -1,14 +1,26 @@
 Installation
 ============
 
-Depend on 'plone.app.event [dexterity]' or 'plone.app.event [archetypes]' or
-both in your setup.py or buildout configuration.
+Depend on one (or both) of these setuptools dependencies::
 
-You don't have to depend on plone.app.event in your configure.zcml, but if you
-want to do so to make things explicit, just include the plone.app.event package
-and no subpackage, as they are loaded automatically::
+    'plone.app.event [dexterity]'
 
-    <include package="plone.app.event"/>
+or::
+
+    'plone.app.event [archetypes]'
+
+The plone.app.event zcml dependency should be loaded automatically by
+z3c.autoinclude.
+
+Then install plone.app.event via the controlpanel or by depending on one or
+both of these GenericSetup profiles::
+
+    plone.app.event.at:default
+
+or::
+
+    plone.app.event.dx:default
+
 
 .. note::
 
@@ -29,12 +41,19 @@ Installing plone.app.event for Plone 4.2 or Plone 4.3
 -----------------------------------------------------
 
 If you want to install plone.app.event before Plone 5.0 (where it's included in
-core), also depend on the ploneintegration extra: 'plone.app.event [archetypes,
-ploneintegration]' (again, and/or 'dexterity') and on 'z3c.unconfigure'.
+core), also depend on the ploneintegration extra::
 
-Then run the plone.app.event.ploneintegration:default profile to
-re-register portlets, re-adding the DateRecurringIndex for start and end
-indices and so on.
+    'plone.app.event [dexterity, ploneintegration]'
+
+or::
+
+    'plone.app.event [archetypes, ploneintegration]'
+
+
+Then run this profile along with the dx or at profile (described above)::
+
+    plone.app.event.ploneintegration:default
+
 
 .. note::
 
@@ -47,7 +66,7 @@ indices and so on.
     versions = versions
 
     [versions]
-    plone.app.portlets = 2.4.3
+    plone.app.portlets = 2.4.5
 
 .. note::
 
@@ -64,12 +83,17 @@ Upgrading from Products.ATContentType to plone.app.event
 
 .. warning::
 
-  Content upgrades from the old ATEvent type are experimental, so don't rely
-  on this.
+  Please backup before upgrading and check the upgraded contents for validity!
 
 If you want to upgrade Products.ATContentTypes based ATEvents to
 plone.app.event ones, there is an upgrade step for that: "Upgrades old AT
 events to plone.app.events" (Metadata version 1 to 2).
 
-Please note, that this feature is still experimental. Report any upgrade issues
-from old ATEvent types here: https://github.com/plone/plone.app.event/issues
+
+Bug reports
+-----------
+
+Please report any bugs, issues or feature requests:
+https://github.com/plone/plone.app.event/issues
+
+And better yet, help out with pull-requests!

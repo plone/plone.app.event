@@ -4,6 +4,17 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Don't install ATEvent with the ploneintegration profile. This allows the
+  integration with plone.app.contenttypes for Plone < 5 without installing
+  ATEvent too. Also, merge the steps from the now obsolte
+  ploneintegration:prepare profile into the default one.
+  Please eventually update your metadata.xml files to also depend on the
+  plone.app.event.at:default profile.
+  Please note: The goal is to completly remove the ploneintegration profile.
+  The only reason of it's existance is that portlets cannot be registered for a
+  specific browser layer.
+  [thet]
+
 - Indexer adapter for SearchableText: fixed encoding inconsistencies.  Always
   return utf-8 encoded string while using unicode internally.
   [seanupton]
@@ -14,11 +25,11 @@ Changelog
   [thet]
 
 - Support the @@images view for IOccurrence objects by using a factory, which
-  returns a AT or DX specific view depending on the Occurrence's parent. 
+  returns a AT or DX specific view depending on the Occurrence's parent.
   [thet]
 
 - Switch off linkintegrity checks during upgrade from atct to pae.at.
-  [jensens]  
+  [jensens]
 
 - Remove event and calendar portlet assignments on plone.rightcolumn.
   Integrators should do assignments themselfes, as they are likely different

@@ -15,13 +15,4 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <genericsetup:registerProfile
-      name="prepare"
-      directory="profiles/prepare"
-      title="plone.app.event Plone4 integration preparation"
-      description="Preparation of Integration of plone.app.event into pre Plone 4.4 release. Will be automatically applied by the default profile."
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
 </configure>
