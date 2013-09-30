@@ -27,7 +27,8 @@ class ICalendarPortlet(IPortletDataProvider):
     """A portlet displaying a calendar
     """
 
-    state = schema.Tuple(title=_(u"Workflow state"),
+    state = schema.Tuple(
+        title=_(u"Workflow state"),
         description=_(u"Items in which workflow state to show."),
         default=None,
         required=False,
@@ -37,16 +38,18 @@ class ICalendarPortlet(IPortletDataProvider):
 
     search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
-        description=_(u'portlet_help_search_base',
-                      default=u'Select search base folder to search for '
-                              u'events. This folder will also be used to link '
-                              u'to in calendar searches. If empty, the '
-                              u'whole site will be searched and the event '
-                              u'listing view will be called on the site '
-                              u'root.'),
+        description=_(
+            u'portlet_help_search_base',
+            default=u'Select search base folder to search for events. This '
+                    u'folder will also be used to link to in calendar '
+                    u'searches. If empty, the whole site will be searched and '
+                    u'the event listing view will be called on the site root.'
+        ),
         required=False,
-        source=SearchableTextSourceBinder({'is_folderish': True},
-                                           default_query='path:'),
+        source=SearchableTextSourceBinder(
+            {'is_folderish': True},
+            default_query='path:'
+        ),
     )
 
 
@@ -84,12 +87,15 @@ class Renderer(base.Renderer):
 
         self.cal = calendar.Calendar(first_weekday())
         self._ts = getToolByName(context, 'translation_service')
-        self.month_name = PLMF(self._ts.month_msgid(month),
-                              default=self._ts.month_english(month))
+        self.month_name = PLMF(
+            self._ts.month_msgid(month),
+            default=self._ts.month_english(month)
+        )
 
         # strftime %w interprets 0 as Sunday unlike the calendar.
-        strftime_wkdays = [wkday_to_mon1(day)
-                for day in self.cal.iterweekdays()]
+        strftime_wkdays = [
+            wkday_to_mon1(day) for day in self.cal.iterweekdays()
+        ]
         self.weekdays = [
             PLMF(self._ts.day_msgid(day, format='s'),
                  default=self._ts.weekday_english(day, format='a'))

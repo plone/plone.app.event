@@ -19,13 +19,15 @@ import zope.interface
 # recurrence field with AnnotationStorage
 MockSchema = ATEventSchema.copy()
 MockSchema.addField(
-    atapi.StringField('timezone',
+    atapi.StringField(
+        'timezone',
         storage=atapi.AnnotationStorage(),
         widget=atapi.StringWidget(),
     )
 )
 MockSchema.addField(
-    atapi.StringField('recurrence',
+    atapi.StringField(
+        'recurrence',
         storage=atapi.AnnotationStorage(),
         widget=atapi.StringWidget(),
     )

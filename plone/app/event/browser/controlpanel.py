@@ -12,8 +12,10 @@ class EventControlPanelEditForm(RegistryEditForm):
     schema_prefix = 'plone.app.event'
 
     label = _(u"label_event_settings", default=u"Event settings")
-    description = _(u"help_event_settings",
-            default=u"Event related settings like timezone, etc.")
+    description = _(
+        u"help_event_settings",
+        default=u"Event related settings like timezone, etc."
+    )
 
 
 class EventControlPanel(BrowserView):

@@ -47,25 +47,25 @@ class EventListing(BrowserView):
         # Batch parameter
         req = self.request.form
         self.b_start = 'b_start' in req and int(req['b_start']) or 0
-        self.b_size  = 'b_size'  in req and int(req['b_size'])  or 10
-        self.orphan  = 'orphan'  in req and int(req['orphan'])  or 1
-        self.mode    = 'mode'    in req and req['mode']         or None
-        self._date   = 'date'    in req and req['date']         or None
-        self.tags    = 'tags'    in req and req['tags']         or None
+        self.b_size = 'b_size' in req and int(req['b_size']) or 10
+        self.orphan = 'orphan' in req and int(req['orphan']) or 1
+        self.mode = 'mode' in req and req['mode'] or None
+        self._date = 'date' in req and req['date'] or None
+        self.tags = 'tags' in req and req['tags'] or None
         self.searchable_text = 'SearchableText' in req and\
-                req['SearchableText'] or None
-        self.path    = 'path'    in req and req['path']         or None
+            req['SearchableText'] or None
+        self.path = 'path' in req and req['path'] or None
 
-        day   = 'day'   in req and int(req['day'])   or None
+        day = 'day' in req and int(req['day']) or None
         month = 'month' in req and int(req['month']) or None
-        year  = 'year'  in req and int(req['year'])  or None
+        year = 'year' in req and int(req['year']) or None
 
         if not self._date and day or month or year:
             self._date = date(year or now.year,
                               month or now.month,
                               day or now.day).isoformat()
 
-        if self.mode == None:
+        if self.mode is None:
             self.mode = self._date and 'day' or 'future'
 
     @property
@@ -149,7 +149,7 @@ class EventListing(BrowserView):
             res = self._get_events(ret_mode)
         if batch:
             b_start = self.b_start
-            b_size  = self.b_size
+            b_size = self.b_size
             res = Batch(res, size=b_size, start=b_start, orphan=self.orphan)
         return res
 
@@ -159,18 +159,21 @@ class EventListing(BrowserView):
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        self.request.RESPONSE.setHeader('Content-Disposition',
-            'attachment; filename="%s"' % name)
+        self.request.RESPONSE.setHeader(
+            'Content-Disposition',
+            'attachment; filename="%s"' % name
+        )
         self.request.RESPONSE.write(cal.to_ical())
 
     @property
     def ical_url(self):
         date = self.date
         mode = self.mode
-        qstr = (date or mode) and '?%s%s%s' %\
-                (mode and 'mode=%s' % mode,
-                 mode and date and '&' or '',
-                 date and 'date=%s' % date or '') or ''
+        qstr = (date or mode) and '?%s%s%s' % (
+            mode and 'mode=%s' % mode,
+            mode and date and '&' or '',
+            date and 'date=%s' % date or ''
+        ) or ''
         return '%s/@@event_listing_ical%s' % (
             self.context.absolute_url(),
             qstr
@@ -180,8 +183,10 @@ class EventListing(BrowserView):
         return get_location(event_accessor.context)
 
     def formatted_date(self, occ):
-        provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formatted_date')
+        provider = getMultiAdapter(
+            (self.context, self.request, self),
+            IContentProvider, name='formatted_date'
+        )
         return provider(occ.context)
 
     def date_speller(self, date):
@@ -214,62 +219,71 @@ class EventListing(BrowserView):
 
         elif mode == '7days':
             main_msgid = _(u"7days_events", default=u"Events in next 7 days.")
-            sub_msgid = _(u"events_from_until",
-                      default=u"${from} until ${until}.",
-                      mapping={
-                          'from': "%s, %s. %s %s" % (
-                                start_dict['wkday'],
-                                start.day,
-                                start_dict['month'],
-                                start.year),
-                          'until': "%s, %s. %s %s" % (
-                                end_dict['wkday'],
-                                end.day,
-                                end_dict['month'],
-                                end.year),
-                        }
-                    )
+            sub_msgid = _(
+                u"events_from_until",
+                default=u"${from} until ${until}.",
+                mapping={
+                    'from': "%s, %s. %s %s" % (
+                        start_dict['wkday'],
+                        start.day,
+                        start_dict['month'],
+                        start.year
+                    ),
+                    'until': "%s, %s. %s %s" % (
+                        end_dict['wkday'],
+                        end.day,
+                        end_dict['month'],
+                        end.year
+                    ),
+                }
+            )
 
         elif mode == 'day':
-            main_msgid = _(u"events_on_day",
-                      default=u"Events on ${day}",
-                      mapping={
-                          'day': "%s, %s. %s %s" % (
-                                start_dict['wkday'],
-                                start.day,
-                                start_dict['month'],
-                                start.year),
-                        }
-                    )
+            main_msgid = _(
+                u"events_on_day",
+                default=u"Events on ${day}",
+                mapping={
+                    'day': "%s, %s. %s %s" % (
+                        start_dict['wkday'],
+                        start.day,
+                        start_dict['month'],
+                        start.year
+                    ),
+                }
+            )
 
         elif mode == 'week':
             main_msgid = _(u"events_in_week",
                            default=u"Events in week ${weeknumber}",
                            mapping={'weeknumber': start.isocalendar()[1]})
-            sub_msgid = _(u"events_from_until",
-                      default=u"${from} until ${until}.",
-                      mapping={
-                          'from': "%s, %s. %s %s" % (
-                                start_dict['wkday'],
-                                start.day,
-                                start_dict['month'],
-                                start.year),
-                          'until': "%s, %s. %s %s" % (
-                                end_dict['wkday'],
-                                end.day,
-                                end_dict['month'],
-                                end.year),
-                        }
-                    )
+            sub_msgid = _(
+                u"events_from_until",
+                default=u"${from} until ${until}.",
+                mapping={
+                    'from': "%s, %s. %s %s" % (
+                        start_dict['wkday'],
+                        start.day,
+                        start_dict['month'],
+                        start.year
+                    ),
+                    'until': "%s, %s. %s %s" % (
+                        end_dict['wkday'],
+                        end.day,
+                        end_dict['month'],
+                        end.year
+                    ),
+                }
+            )
 
         elif mode == 'month':
-            main_msgid = _(u"events_in_month",
-                      default=u"Events in ${month} ${year}",
-                      mapping={
-                          'month': start_dict['month'],
-                          'year': start.year,
-                        }
-                    )
+            main_msgid = _(
+                u"events_in_month",
+                default=u"Events in ${month} ${year}",
+                mapping={
+                    'month': start_dict['month'],
+                    'year': start.year,
+                }
+            )
 
         trans = self.context.translate
         return {'main': main_msgid and trans(main_msgid) or '',
@@ -278,9 +292,10 @@ class EventListing(BrowserView):
     # MODE URLs
     def _date_nav_url(self, mode, datestr=''):
         return '%s?mode=%s%s' % (
-                self.request.getURL(),
-                mode,
-                datestr and '&date=%s' % datestr or '')
+            self.request.getURL(),
+            mode,
+            datestr and '&date=%s' % datestr or ''
+        )
 
     @property
     def mode_all_url(self):

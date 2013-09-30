@@ -36,8 +36,10 @@ from zope.lifecycleevent import ObjectModifiedEvent
 def default_start():
     return DT(default_start_dt())
 
+
 def default_end():
     return DT(default_end_dt())
+
 
 def first_weekday_sun0():
     return wkday_to_mon1(first_weekday())
@@ -45,7 +47,8 @@ def first_weekday_sun0():
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
 
-    atapi.DateTimeField('startDate',
+    atapi.DateTimeField(
+        'startDate',
         required=True,
         searchable=False,
         accessor='start',
@@ -66,7 +69,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.DateTimeField('endDate',
+    atapi.DateTimeField(
+        'endDate',
         required=True,
         searchable=False,
         accessor='end',
@@ -87,7 +91,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.BooleanField('wholeDay',
+    atapi.BooleanField(
+        'wholeDay',
         required=False,
         default=False,
         write_permission=ModifyPortalContent,
@@ -104,7 +109,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.BooleanField('openEnd',
+    atapi.BooleanField(
+        'openEnd',
         required=False,
         default=False,
         write_permission=ModifyPortalContent,
@@ -120,7 +126,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('timezone',
+    atapi.StringField(
+        'timezone',
         required=True,
         searchable=False,
         languageIndependent=True,
@@ -139,7 +146,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('recurrence',
+    atapi.StringField(
+        'recurrence',
         languageIndependent=True,
         write_permission=ModifyPortalContent,
         validators=('isRecurrence',),
@@ -159,7 +167,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('location',
+    atapi.StringField(
+        'location',
         searchable=True,
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
@@ -174,7 +183,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.LinesField('attendees',
+    atapi.LinesField(
+        'attendees',
         languageIndependent=True,
         searchable=True,
         write_permission=ModifyPortalContent,
@@ -190,7 +200,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('contactName',
+    atapi.StringField(
+        'contactName',
         required=False,
         searchable=True,
         accessor='contact_name',
@@ -207,7 +218,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('contactEmail',
+    atapi.StringField(
+        'contactEmail',
         required=False,
         searchable=True,
         accessor='contact_email',
@@ -225,7 +237,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('contactPhone',
+    atapi.StringField(
+        'contactPhone',
         required=False,
         searchable=True,
         accessor='contact_phone',
@@ -243,7 +256,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.StringField('eventUrl',
+    atapi.StringField(
+        'eventUrl',
         required=False,
         searchable=True,
         accessor='event_url',
@@ -262,7 +276,8 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-    atapi.TextField('text',
+    atapi.TextField(
+        'text',
         required=False,
         searchable=True,
         primary=True,
@@ -304,14 +319,12 @@ ATEventSchema.moveField('location', before='attendees')
 class ATEvent(ATCTContent, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the
     calendar.
-
     """
     implements(IATEvent, IATEventRecurrence)
 
     schema = ATEventSchema
     security = ClassSecurityInfo()
     portal_type = archetype_name = 'Event'
-
 
     cmf_edit_kws = ('effectiveDay', 'effectiveMo', 'effectiveYear',
                     'expirationDay', 'expirationMo', 'expirationYear',
@@ -329,8 +342,10 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         event_url=None):
 
         if effectiveDay and effectiveMo and effectiveYear and start_time:
-            sdate = '%s-%s-%s %s %s' % (effectiveDay, effectiveMo, effectiveYear,
-                                         start_time, startAMPM)
+            sdate = '%s-%s-%s %s %s' % (
+                effectiveDay, effectiveMo, effectiveYear,
+                start_time, startAMPM
+            )
         elif start_date:
             if not start_time:
                 start_time = '00:00:00'
@@ -432,7 +447,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
         :returns: Start of the event.
         :rtype: Python datetime
-
         """
         return pydt(self.start(), exact=False)
 
@@ -446,7 +460,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
         :returns: End of the event.
         :rtype: Python datetime
-
         """
         return pydt(self.end(), exact=False)
 
@@ -457,7 +470,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
 
         :returns: Duration of the event.
         :rtype: Python timedelta
-
         """
         return self.end_date - self.start_date
 
@@ -477,12 +489,12 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         ATCTContent.update(self, **info)
 
     def __cmp__(self, other):
-        """Compare method
+        """Compare method.
 
         If other is based on ATEvent, compare start, duration and title.
         #If other is a number, compare duration and number
         If other is a DateTime instance, compare start date with date
-        In all other cases there is no specific order
+        In all other cases there is no specific order.
         """
         # TODO: maybe also include location to compate two events.
 
@@ -582,7 +594,8 @@ def data_postprocessing(obj, event):
     # entered them. However, this value might be always set, even when creating
     # an event, since ObjectModifiedEvent is called several times when editing.
     prev_tz = getattr(obj, 'previous_timezone', None)
-    if prev_tz: delattr(obj, 'previous_timezone')
+    if prev_tz:
+        delattr(obj, 'previous_timezone')
 
     def _fix_zone(dt, tz):
         if not dt.timezoneNaive():
@@ -628,7 +641,6 @@ def data_postprocessing(obj, event):
 class EventAccessor(object):
     """ Generic event accessor adapter implementation for Archetypes content
         objects.
-
     """
     implements(IEventAccessor)
     adapts(IATEvent)
@@ -636,7 +648,6 @@ class EventAccessor(object):
 
     def __init__(self, context):
         self.context = context
-
 
     # Unified create method via Accessor
     @classmethod

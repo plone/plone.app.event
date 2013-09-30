@@ -56,7 +56,6 @@ def ical_import(container, ics_resource, event_type):
             ret = '%s%s' % (ret, item.to_ical())
         return ret and '%s:%s' % (prop, ret) or None
 
-
     count = 0
     for item in events:
         start = _get_prop('DTSTART', item)
@@ -68,7 +67,7 @@ def ical_import(container, ics_resource, event_type):
             # else: whole day or open end
 
         timezone = getattr(getattr(start, 'tzinfo', None), 'zone', None) or\
-                base.default_timezone(container)
+            base.default_timezone(container)
 
         whole_day = False
         open_end = False
@@ -76,7 +75,8 @@ def ical_import(container, ics_resource, event_type):
             # All day / whole day events
             # End must be same type as start (RFC5545, 3.8.2.2)
             whole_day = True
-            if end is None: end = start
+            if end is None:
+                end = start
             if start < end:
                 # RFC5545 doesn't define clearly, if all day events should have
                 # a end date one day after the start day at 0:00.
@@ -100,8 +100,8 @@ def ical_import(container, ics_resource, event_type):
 
         rrule = _get_prop('RRULE', item)
         rrule = rrule and 'RRULE:%s' % rrule.to_ical() or ''
-        rdates =  _from_list(item, 'RDATE')
-        exdates =  _from_list(item, 'EXDATE')
+        rdates = _from_list(item, 'RDATE')
+        exdates = _from_list(item, 'EXDATE')
         rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])
 
         # TODO: attendee-lists are not decoded properly and contain only
@@ -113,9 +113,9 @@ def ical_import(container, ics_resource, event_type):
         if hasattr(categories, '__iter__'):
             categories = [safe_unicode(it) for it in categories]
 
-        # for sync
-        created = _get_prop('CREATED', item)
-        modified = _get_prop('LAST-MODIFIED', item)
+        ## for sync
+        #created = _get_prop('CREATED', item)
+        #modified = _get_prop('LAST-MODIFIED', item)
 
         # TODO: better use plone.api, from which some of the code here is
         # copied

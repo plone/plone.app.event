@@ -17,7 +17,6 @@ import pytz
 import unittest2 as unittest
 
 
-
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE
@@ -26,11 +25,14 @@ def make_response(request):
     """ create a fake response and set up logging of output """
     headers = {}
     output = []
+
     class Response:
         def setHeader(self, header, value):
             headers[header] = value
+
         def write(self, msg):
             output.append(msg)
+
     request.RESPONSE = Response()
     return headers, output, request
 
@@ -44,8 +46,10 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
     def checkOrder(self, text, *order):
         for item in order:
             position = text.find(item)
-            self.failUnless(position >= 0,
-                'menu item "%s" missing or out of order' % item)
+            self.failUnless(
+                position >= 0,
+                'menu item "%s" missing or out of order' % item
+            )
             text = text[position:]
 
     def test_event_ical(self):
@@ -56,7 +60,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
 
-        self.checkOrder(icalstr,
+        self.checkOrder(
+            icalstr,
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//Plone.org//NONSGML plone.app.event//EN',
@@ -73,7 +78,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
             'CATEGORIES:plone',
             'CATEGORIES:testing',
-            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',
+            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, '
+            'http://plone',  # continuation of line above
             ' .org',  # line longer than max length spec by icalendar
             'CREATED;VALUE=DATE-TIME:',
             'LAST-MODIFIED;VALUE=DATE-TIME:',
@@ -101,9 +107,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
 
-        import pdb; pdb.set_trace()
-
-        self.checkOrder(icalstr,
+        self.checkOrder(
+            icalstr,
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//Plone.org//NONSGML plone.app.event//EN',
@@ -145,7 +150,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
             'CATEGORIES:plone',
             'CATEGORIES:testing',
-            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',
+            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, '
+            'http://plone',  # continuation of line above
             ' .org',
             'CREATED;VALUE=DATE-TIME:',
             'LAST-MODIFIED;VALUE=DATE-TIME:',
@@ -245,7 +251,8 @@ class TestIcalImportDX(unittest.TestCase):
         )
         self.assertEqual(
             e2.recurrence,
-            u'RRULE:FREQ=DAILY;COUNT=100\nEXDATE:19960402T010000Z,19960403T010000Z,19960404T010000Z'
+            u'RRULE:FREQ=DAILY;COUNT=100\nEXDATE:19960402T010000Z,'
+            u'19960403T010000Z,19960404T010000Z'
         )
 
         e3 = IEventAccessor(self.impfolder.e3)
@@ -259,7 +266,9 @@ class TestIcalImportDX(unittest.TestCase):
         )
         self.assertEqual(
             e3.recurrence,
-            u'RRULE:FREQ=WEEKLY;UNTIL=20120703T080000Z;BYDAY=TU\nEXDATE:20120529T100000,20120403T100000,20120410T100000,20120501T100000,20120417T100000'
+            u'RRULE:FREQ=WEEKLY;UNTIL=20120703T080000Z;BYDAY=TU\n'
+            u'EXDATE:20120529T100000,20120403T100000,20120410T100000,'
+            u'20120501T100000,20120417T100000'
         )
 
         e4 = IEventAccessor(self.impfolder.e4)

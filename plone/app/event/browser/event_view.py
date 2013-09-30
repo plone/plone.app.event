@@ -38,8 +38,10 @@ class EventView(BrowserView):
         return None
 
     def formatted_date(self, occ):
-        provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formatted_date')
+        provider = getMultiAdapter(
+            (self.context, self.request, self),
+            IContentProvider, name='formatted_date'
+        )
         return provider(occ)
 
     @property
@@ -60,8 +62,8 @@ class EventView(BrowserView):
         if adapter is not None:
             occurrences = adapter.occurrences()[1:]  # don't include first
             occ_dict['events'], occ_dict['tail'] = (
-                    self._get_occurrences_helper(occurrences)
-                )
+                self._get_occurrences_helper(occurrences)
+            )
         return occ_dict
 
     def _get_occurrences_helper(self, occ_list, limit=7):

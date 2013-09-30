@@ -20,31 +20,37 @@ from zope.interface import implements
 
 class IEventsPortlet(IPortletDataProvider):
 
-    count = schema.Int(title=_(u'Number of items to display'),
+    count = schema.Int(
+        title=_(u'Number of items to display'),
         description=_(u'How many items to list.'),
         required=True,
-        default=5)
+        default=5
+    )
 
-    state = schema.Tuple(title=_(u"Workflow state"),
+    state = schema.Tuple(
+        title=_(u"Workflow state"),
         description=_(u"Items in which workflow state to show."),
         default=None,
         required=False,
         value_type=schema.Choice(
-            vocabulary="plone.app.vocabularies.WorkflowStates")
+            vocabulary="plone.app.vocabularies.WorkflowStates"
         )
+    )
 
     search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
-        description=_(u'portlet_help_search_base',
-                      default=u'Select search base folder to search for '
-                              u'events. This folder will also be used to link '
-                              u'to in calendar searches. If empty, the '
-                              u'whole site will be searched and the event '
-                              u'listing view will be called on the site '
-                              u'root.'),
+        description=_(
+            u'portlet_help_search_base',
+            default=u'Select search base folder to search for events. This '
+                    u'folder will also be used to link to in calendar '
+                    u'searches. If empty, the whole site will be searched and '
+                    u'the event listing view will be called on the site root.'
+        ),
         required=False,
-        source=SearchableTextSourceBinder({'is_folderish': True},
-                                           default_query='path:'),
+        source=SearchableTextSourceBinder(
+            {'is_folderish': True},
+            default_query='path:'
+        ),
     )
 
 
@@ -79,7 +85,10 @@ class Renderer(base.Renderer):
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
 
-        portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
+        portal_state = getMultiAdapter(
+            (self.context, self.request),
+            name='plone_portal_state'
+        )
         self.portal = portal_state.portal()
 
     def render(self):
@@ -106,8 +115,10 @@ class Renderer(base.Renderer):
                           ret_mode=3, expand=True, limit=data.count, **kw)
 
     def formatted_date(self, event):
-        provider = getMultiAdapter((self.context, self.request, self),
-                IContentProvider, name='formatted_date')
+        provider = getMultiAdapter(
+            (self.context, self.request, self),
+            IContentProvider, name='formatted_date'
+        )
         return provider(event)
 
     def get_location(self, event):

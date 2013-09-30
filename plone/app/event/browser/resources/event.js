@@ -59,7 +59,7 @@
     }
 
     function a_or_b(a, b) {
-        var ret = undefined;
+        var ret;
         if (a.length>0) {
             ret = a;
         } else {
@@ -76,7 +76,7 @@
         var jq_whole_day = a_or_b($('form[name="edit_form"] input#wholeDay'), $('#formfield-form-widgets-IEventBasic-whole_day input'));
         var jq_datetime = $('.datetimewidget-time'); 
         if (jq_whole_day.length>0) {
-            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_datetime, e.target.checked, true)});
+            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_datetime, e.target.checked, true); });
             show_hide_widget(jq_datetime, jq_whole_day.get(0).checked, fade=false);
         }
 
@@ -84,7 +84,7 @@
         var jq_open_end = a_or_b($('form[name="edit_form"] input#openEnd'), $('#formfield-form-widgets-IEventBasic-open_end input'));
         var jq_end_date = a_or_b($('#archetypes-fieldname-endDate'), $('#formfield-form-widgets-IEventBasic-end'));
         if (jq_open_end.length>0) {
-            jq_open_end.bind('change', function (e) { show_hide_widget(jq_end_date, e.target.checked, true)});
+            jq_open_end.bind('change', function (e) { show_hide_widget(jq_end_date, e.target.checked, true); });
             show_hide_widget(jq_end_date, jq_open_end.get(0).checked, fade=false);
         }
 

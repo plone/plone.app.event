@@ -139,9 +139,9 @@ def get_events(context, start=None, end=None, limit=None,
             val = pydt(val)
         return val
 
-    if ret_mode in (2, 3) and expand == False:
+    if ret_mode in (2, 3) and expand is False:
         result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
-    elif ret_mode in (2, 3) and expand == True:
+    elif ret_mode in (2, 3) and expand is True:
         exp_result = []
         for it in result:
             obj = it.getObject()
@@ -548,12 +548,14 @@ def start_end_from_mode(mode, dt=None, context=None):
         end = dt_end_of_day(now + timedelta(days=6))
 
     elif mode == 'day' or mode == 'today':
-        if not dt: dt = now  # show today
+        if not dt:
+            dt = now  # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
 
     elif mode == 'week':
-        if not dt: dt = now  # show this week
+        if not dt:
+            dt = now  # show this week
         wkd = dt.weekday()
         first = first_weekday()
 
@@ -639,17 +641,22 @@ def dates_for_display(occurrence):
     if acc.open_end:
         end_time = None
 
+    start_iso = acc.whole_day and acc.start.date().isoformat()\
+        or acc.start.isoformat()
+    end_iso = acc.whole_day and acc.end.date().isoformat()\
+        or acc.end.isoformat()
+
     return dict(
         # Start
         start_date=start_date,
         start_time=start_time,
-        start_iso=acc.whole_day and acc.start.date().isoformat()\
-                                 or acc.start.isoformat(),
+        start_iso=start_iso,
+
         # End
         end_date=end_date,
         end_time=end_time,
-        end_iso=acc.whole_day and acc.end.date().isoformat()\
-                               or acc.end.isoformat(),
+        end_iso=end_iso,
+
         # Meta
         same_day=same_day,
         same_time=same_time,

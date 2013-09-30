@@ -1,6 +1,4 @@
-""" Behaviors to enable calendarish event extension to dexterity content
-types.
-
+"""Behaviors to enable calendarish event extension to dexterity content types.
 """
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -64,43 +62,43 @@ class IEventBasic(model.Schema):
     model.fieldset('dates', fields=['timezone'])
 
     start = schema.Datetime(
-        title = _(
+        title=_(
             u'label_event_start',
             default=u'Event Starts'
         ),
-        description = _(
+        description=_(
             u'help_event_start',
             default=u'Date and Time, when the event begins.'
         ),
-        required = True
+        required=True
     )
 
     end = schema.Datetime(
-        title = _(
+        title=_(
             u'label_event_end',
             default=u'Event Ends'
         ),
-        description = _(
+        description=_(
             u'help_event_end',
             default=u'Date and Time, when the event ends.'
         ),
-        required = True
+        required=True
     )
 
     whole_day = schema.Bool(
-        title = _(
+        title=_(
             u'label_event_whole_day',
             default=u'Whole Day'
         ),
-        description = _(
+        description=_(
             u'help_event_whole_day',
             default=u'Event lasts whole day.'
         ),
-        required = False
+        required=False
     )
 
     open_end = schema.Bool(
-        title = _(
+        title=_(
             u'label_event_open_end',
             default=u'Open End'
         ),
@@ -108,20 +106,20 @@ class IEventBasic(model.Schema):
             u'help_event_open_end',
             default=u"This event is open ended."
         ),
-        required = False
+        required=False
     )
 
     # TODO: form.order_before(timezone="IPublication.effective")
     timezone = schema.Choice(
-        title = _(
+        title=_(
             u'label_event_timezone',
             default=u'Timezone'
         ),
-        description = _(
+        description=_(
             u'help_event_timezone',
             default=u'Select the Timezone, where this event happens.'
         ),
-        required = True,
+        required=True,
         vocabulary="plone.app.event.AvailableTimezones"
     )
 
@@ -139,10 +137,12 @@ def default_start(data):
 provideAdapter(ComputedWidgetAttribute(
     default_start, field=IEventBasic['start']), name='default')
 
+
 def default_end(data):
     return default_end_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
     default_end, field=IEventBasic['end']), name='default')
+
 
 def default_tz(data):
     return default_timezone()
@@ -157,20 +157,22 @@ class IEventRecurrence(model.Schema):
     # and IRecurrence, then you have to reconfigure the dotted path value of
     # the start_field parameter for the RecurrenceFieldWidget to the new
     # behavior name, like: IMyNewBehaviorName.start.
-    form.widget('recurrence', RecurrenceFieldWidget,
+    form.widget(
+        'recurrence',
+        RecurrenceFieldWidget,
         start_field='IEventBasic.start',
         first_day=first_weekday_sun0
     )
     recurrence = RecurrenceField(
-        title = _(
+        title=_(
             u'label_event_recurrence',
             default=u'Recurrence'
         ),
-        description = _(
+        description=_(
             u'help_event_recurrence',
             default=u'Define the event recurrence rule.'
         ),
-        required = False
+        required=False
     )
 
 
@@ -178,15 +180,15 @@ class IEventLocation(model.Schema):
     """ Event Location Schema.
     """
     location = schema.TextLine(
-        title = _(
+        title=_(
             u'label_event_location',
             default=u'Location'
         ),
-        description = _(
+        description=_(
             u'help_event_location',
             default=u'Location of the event.'
         ),
-        required = False
+        required=False
     )
 
 
@@ -194,71 +196,71 @@ class IEventAttendees(model.Schema):
     """ Event Attendees Schema.
     """
     attendees = schema.Tuple(
-        title = _(
+        title=_(
             u'label_event_attendees',
             default=u'Attendees'
         ),
-        description = _(
+        description=_(
             u'help_event_attendees',
             default=u'List of attendees.'
         ),
-        value_type = schema.TextLine(),
-        required = False,
-        missing_value = (),
+        value_type=schema.TextLine(),
+        required=False,
+        missing_value=(),
     )
-    form.widget(attendees = TextLinesFieldWidget)
+    form.widget(attendees=TextLinesFieldWidget)
 
 
 class IEventContact(model.Schema):
     """ Event Contact Schema.
     """
     contact_name = schema.TextLine(
-        title = _(
+        title=_(
             u'label_event_contact_name',
             default=u'Contact Name'
         ),
-        description = _(
+        description=_(
             u'help_event_contact_name',
             default=u'Name of a person to contact about this event.'
         ),
-        required = False
+        required=False
     )
 
     contact_email = schema.TextLine(
-        title = _(
+        title=_(
             u'label_event_contact_email',
             default=u'Contact E-mail'
         ),
-        description = _(
+        description=_(
             u'help_event_contact_email',
             default=u'Email address to contact about this event.'
         ),
-        required = False
+        required=False
     )
 
     contact_phone = schema.TextLine(
-        title = _(
+        title=_(
             u'label_event_contact_phone',
             default=u'Contact Phone'
         ),
-        description = _(
+        description=_(
             u'help_event_contact_phone',
             default=u'Phone number to contact about this event.'
         ),
-        required = False
+        required=False
     )
 
     event_url = schema.TextLine(
-        title = _(
+        title=_(
             u'label_event_url',
             default=u'Event URL'
         ),
-        description = _(
+        description=_(
             u'help_event_url',
             default=u'Web address with more info about the event. '
                     u'Add http:// for external links.'
         ),
-        required = False
+        required=False
     )
 
 
@@ -454,6 +456,7 @@ def start_indexer(obj):
         return None
     return DT(event.start)
 
+
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
@@ -461,6 +464,7 @@ def end_indexer(obj):
     if event.end is None:
         return None
     return DT(event.end)
+
 
 # Body text indexing
 @indexer(IDXEvent)
@@ -487,7 +491,6 @@ def searchable_text_indexer(obj):
 
 # Object adapters
 
-
 class EventAccessor(object):
     """ Generic event accessor adapter implementation for Dexterity content
         objects.
@@ -496,8 +499,8 @@ class EventAccessor(object):
 
     implements(IEventAccessor)
     adapts(IDXEvent)
-    event_type = 'plone.app.event.dx.event' # If you use a custom content-type,
-                                            # override this.
+    event_type = 'plone.app.event.dx.event'  # If you use a custom type,
+                                             # override this.
 
     # Unified create method via Accessor
     @classmethod
@@ -546,23 +549,25 @@ class EventAccessor(object):
 
     def __getattr__(self, name):
         bm = self._behavior_map
-        if name in bm: # adapt object with behavior and return the attribute
-           behavior = bm[name](self.context, None)
-           if behavior: return safe_unicode(getattr(behavior, name, None))
+        if name in bm:  # adapt object with behavior and return the attribute
+            behavior = bm[name](self.context, None)
+            if behavior:
+                return safe_unicode(getattr(behavior, name, None))
         return None
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
-        if name in bm: # set the attributes on behaviors
+        if name in bm:  # set the attributes on behaviors
             behavior = bm[name](self.context, None)
-            if behavior: setattr(behavior, name, safe_unicode(value))
+            if behavior:
+                setattr(behavior, name, safe_unicode(value))
 
     def __delattr__(self, name):
         bm = self._behavior_map
         if name in bm:
-           behavior = bm[name](self.context, None)
-           if behavior: delattr(behavior, name)
-
+            behavior = bm[name](self.context, None)
+            if behavior:
+                delattr(behavior, name)
 
     # ro properties
 

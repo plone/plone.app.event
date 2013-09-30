@@ -123,22 +123,25 @@ def add_to_zones_map(tzmap, tzid, dt):
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):
-        if dt is null: return null  # dummy time, edge case
-                                    # (dt at beginning of all transitions,
-                                    # see above.)
-        return pytz.utc.localize(dt).astimezone(tz) # naive to utc and localize
+        if dt is null:
+            # dummy time, edge case
+            # (dt at beginning of all transitions, see above.)
+            return null
+        return pytz.utc.localize(dt).astimezone(tz)  # naive to utc + localize
     transition = localize(tz, transition)
-    dtstart = tzdel(transition) # timezone dtstart must be in local time
+    dtstart = tzdel(transition)  # timezone dtstart must be in local time
     prev_transition = localize(tz, prev_transition)
 
-    if tzid not in tzmap: tzmap[tzid] = {} # initial
-    if dtstart in tzmap[tzid]: return tzmap # already there
+    if tzid not in tzmap:
+        tzmap[tzid] = {}  # initial
+    if dtstart in tzmap[tzid]:
+        return tzmap  # already there
     tzmap[tzid][dtstart] = {
-            'dst': transition.dst() > timedelta(0),
-            'name': transition.tzname(),
-            'tzoffsetfrom': prev_transition.utcoffset(),
-            'tzoffsetto': transition.utcoffset(),
-            # TODO: recurrence rule
+        'dst': transition.dst() > timedelta(0),
+        'name': transition.tzname(),
+        'tzoffsetfrom': prev_transition.utcoffset(),
+        'tzoffsetto': transition.utcoffset(),
+        # TODO: recurrence rule
     }
     return tzmap
 
@@ -204,7 +207,8 @@ class ICalendarEventComponent(object):
 
         ical.add('summary', event.title)
 
-        if event.description: ical.add('description', event.description)
+        if event.description:
+            ical.add('description', event.description)
 
         if event.whole_day:
             ical.add('dtstart', event.start.date())
@@ -213,7 +217,7 @@ class ICalendarEventComponent(object):
             # specifies a "DTSTART" property with a DATE value type but no
             # "DTEND" nor "DURATION" property, the event's duration is taken to
             # be one day.
-            # 
+            #
             # RFC5545 doesn't define clearly, if all-day events should have
             # a end date on the same date or one day after the start day at
             # 0:00. Most icalendar libraries use the latter method.
@@ -224,7 +228,8 @@ class ICalendarEventComponent(object):
             # For exporting, we let whole_day events end on the next day at
             # midnight.
             # See:
-            # http://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
+            # http://stackoverflow.com/questions/1716237/single-day-all-day
+            # -appointments-in-ics-files
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
             ical.add('dtend', event.end.date() + timedelta(days=1))
@@ -262,7 +267,8 @@ class ICalendarEventComponent(object):
                         continue
                     ical.add(prop, dtlist)
 
-        if event.location: ical.add('location', event.location)
+        if event.location:
+            ical.add('location', event.location)
 
         # TODO: revisit and implement attendee export according to RFC
         if event.attendees:
@@ -303,6 +309,8 @@ class EventsICal(BrowserView):
     def __call__(self):
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        self.request.RESPONSE.setHeader('Content-Disposition',
-            'attachment; filename="%s"' % name)
+        self.request.RESPONSE.setHeader(
+            'Content-Disposition',
+            'attachment; filename="%s"' % name
+        )
         self.request.RESPONSE.write(self.get_ical_string())
