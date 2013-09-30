@@ -39,6 +39,22 @@ def os_zone():
     return 'TZ' in os.environ.keys() and os.environ['TZ'] or None
 
 
+def make_fake_response(request):
+    """Create a fake response and set up logging of output."""
+    headers = {}
+    output = []
+
+    class Response:
+        def setHeader(self, header, value):
+            headers[header] = value
+
+        def write(self, msg):
+            output.append(msg)
+
+    request.RESPONSE = Response()
+    return headers, output, request
+
+
 class PAEventLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
 

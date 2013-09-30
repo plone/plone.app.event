@@ -3,6 +3,7 @@ from plone.app.event.base import localized_today
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
 
@@ -52,11 +53,13 @@ class TestEventsListingDX(AbstractSampleDataEvents):
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_events_listing_ical(self):
         # Default mode is to show all events from now on.
+        headers, output, request = make_fake_response(self.request)
         view = self.portal.restrictedTraverse('@@event_listing_ical')
-        view()  # At least, this should not fail.
-                # Don't know yet how to catch Content-Disposition output
-        #out = view()
-        #self.assertEqual(out.count('BEGIN:VEVENT'), 8)
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.assertTrue('Long Event' in icalstr)
 
 
 class TestEventsListingAT(TestEventsListingDX):
