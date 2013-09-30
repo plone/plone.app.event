@@ -41,9 +41,9 @@ OBJ_DATA = {
     'location': 'my location',
     'subject': 'Meeting',
     'eventUrl': 'http://example.org/',
-    'startDate': DateTime(TZNAME), # Initialize with timezone, even if
-    'endDate': DateTime(TZNAME)+1, # it wouldn't be needed here.
-                                            # It's needed for test comparsion.
+    'startDate': DateTime(TZNAME),  # Initialize with timezone, even if
+    'endDate': DateTime(TZNAME)+1,  # it wouldn't be needed here.
+                                    # It's needed for test comparsion.
     'timezone': TZNAME,
     'contactName': 'John Doe',
     'contactPhone': '+1212356789',
@@ -73,12 +73,15 @@ class PAEventAccessorTest(unittest.TestCase):
         utc = pytz.utc
         vienna = pytz.timezone('Europe/Vienna')
 
-        self.portal.invokeFactory('Event', 'event1',
-                description='a description',
-                startDate=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
-                endDate=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-                timezone='UTC',
-                wholeDay=False)
+        self.portal.invokeFactory(
+            'Event',
+            'event1',
+            description='a description',
+            startDate=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+            endDate=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
+            timezone='UTC',
+            wholeDay=False
+        )
         e1 = self.portal['event1']
         acc = IEventAccessor(e1)
 
@@ -251,23 +254,23 @@ class PAEventATTest(unittest.TestCase):
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')
 
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day30, title='event')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day30, title='event')
         self.assertEqual(cmp(e1, e2), 0)
 
         # start date
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day30, endDate=day31, title='event')
-        self.assertEqual(cmp(e1, e2), -1) # e1 < e2
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day30, endDate=day31, title='event')
+        self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         # duration
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day31, title='event')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day31, title='event')
         self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         # title
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day30, title='evenz')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day30, title='evenz')
         self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         self.portal.manage_delObjects(['event2'])
@@ -283,11 +286,14 @@ class PAEventATTest(unittest.TestCase):
         # the test_dxevent.TestDXIntegration.test_data_postprocessing test.
 
         # Addressing bug #62
-        self.portal.invokeFactory('Event', 'ate1',
-                startDate=DateTime(2012,10,19,0,30),
-                endDate=DateTime(2012,10,19,1,30),
-                timezone="Europe/Vienna",
-                wholeDay=False)
+        self.portal.invokeFactory(
+            'Event',
+            'ate1',
+            startDate=DateTime(2012, 10, 19, 0, 30),
+            endDate=DateTime(2012, 10, 19, 1, 30),
+            timezone="Europe/Vienna",
+            wholeDay=False
+        )
         e1 = self.portal['ate1']
         e1.reindexObject()
 
@@ -296,15 +302,15 @@ class PAEventATTest(unittest.TestCase):
         # Prepare reference objects
         tzname_1 = "Europe/Vienna"
         tz_1 = pytz.timezone(tzname_1)
-        dt_1 = tz_1.localize(datetime(2012,10,19,0,30))
-        dt_1_1 = tz_1.localize(datetime(2012,10,19,0,0))
-        dt_1_2 = tz_1.localize(datetime(2012,10,19,23,59,59))
+        dt_1 = tz_1.localize(datetime(2012, 10, 19, 0, 30))
+        dt_1_1 = tz_1.localize(datetime(2012, 10, 19, 0, 0))
+        dt_1_2 = tz_1.localize(datetime(2012, 10, 19, 23, 59, 59))
 
         tzname_2 = "Hongkong"
         tz_2 = pytz.timezone(tzname_2)
-        dt_2 = tz_2.localize(datetime(2012,10,19,0,30))
-        dt_2_1 = tz_2.localize(datetime(2012,10,19,0,0))
-        dt_2_2 = tz_2.localize(datetime(2012,10,19,23,59,59))
+        dt_2 = tz_2.localize(datetime(2012, 10, 19, 0, 30))
+        dt_2_1 = tz_2.localize(datetime(2012, 10, 19, 0, 0))
+        dt_2_2 = tz_2.localize(datetime(2012, 10, 19, 23, 59, 59))
 
         # See, if start isn't moved by timezone offset.
         self.assertTrue(acc.start == dt_1)
@@ -348,9 +354,9 @@ class PAEventCMFEditTest(unittest.TestCase):
                                   start_date='2003-09-18',
                                   end_date='2003-09-19')
         self.assertEqual(self.portal.event.Title(), 'Foo')
-        self.assertTrue(self.portal.event.start().ISO8601() \
+        self.assertTrue(self.portal.event.start().ISO8601()
                             .startswith('2003-09-18T00:00:00'))
-        self.assertTrue(self.portal.event.end().ISO8601() \
+        self.assertTrue(self.portal.event.end().ISO8601()
                             .startswith('2003-09-19T00:00:00'))
 
     def testEventEdit(self):
@@ -359,9 +365,9 @@ class PAEventCMFEditTest(unittest.TestCase):
                                      start_date='2003-09-18',
                                      end_date='2003-09-19')
         self.assertEqual(self.portal.event.Title(), 'Foo')
-        self.assertTrue(self.portal.event.start().ISO8601() \
+        self.assertTrue(self.portal.event.start().ISO8601()
                             .startswith('2003-09-18T00:00:00'))
-        self.assertTrue(self.portal.event.end().ISO8601() \
+        self.assertTrue(self.portal.event.end().ISO8601()
                             .startswith('2003-09-19T00:00:00'))
 
 
@@ -380,15 +386,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == (),
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getAttendees',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setAttendees',
@@ -404,8 +413,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
@@ -417,16 +428,20 @@ class PAEventATFieldTest(unittest.TestCase):
         field = self.obj.getField('contactEmail')
 
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.required == 0,
+                        'Value is %s' % field.required)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'contact_email',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactEmail',
@@ -442,8 +457,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
@@ -458,15 +475,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'contact_name',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactName',
@@ -482,8 +502,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
@@ -498,15 +520,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'contact_phone',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactPhone',
@@ -522,8 +547,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
@@ -537,17 +564,20 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.default is None,
+                        'Value is %s' % str(field.default))
         self.assertTrue(field.default_method == default_end,
                         'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.searchable is False,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'end',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setEndDate',
@@ -563,8 +593,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, DatetimeWidget),
@@ -579,15 +611,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'event_url',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setEventUrl',
@@ -603,8 +638,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertEqual(field.validators, URLValidator)
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
@@ -618,15 +655,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getLocation',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setLocation',
@@ -641,8 +681,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
@@ -657,15 +699,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable is False,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getRecurrence',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setRecurrence',
@@ -681,8 +726,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
 
         # flatten nested tuples
         valis = list(itertools.chain(*field.validators))
@@ -703,16 +750,20 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == default_start , 'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default is None,
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == default_start,
+                        'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable is False,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'start',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setStartDate',
@@ -728,8 +779,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, DatetimeWidget),
@@ -743,13 +796,16 @@ class PAEventATFieldTest(unittest.TestCase):
         field = self.obj.getField('subject')
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(str(field.default)))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == (),
+                        'Value is %s' % str(str(field.default)))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 1,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 1,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'Subject',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setSubject',
@@ -765,8 +821,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.MetadataStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
@@ -777,15 +835,18 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setText',
@@ -801,8 +862,11 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.RichWidget),
@@ -824,19 +888,22 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.default == '',
+                        'Value is %s' % str(field.default))
         self.assertTrue(field.default_method == default_timezone,
                         'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.searchable == 0,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.vocabulary_factory ==
                         u'plone.app.event.AvailableTimezones')
-        self.assertTrue(field.enforceVocabulary == True,
+        self.assertTrue(field.enforceVocabulary is True,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getTimezone',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setTimezone',
@@ -851,8 +918,10 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.SelectionWidget),
@@ -868,15 +937,21 @@ class PAEventATFieldTest(unittest.TestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (('True', 'Yes', 'yes'), ('False', 'No', 'no')),
-                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.default is False,
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0,
+                        'Value is %s' % field.searchable)
+        self.assertTrue(
+            field.vocabulary == (('True', 'Yes', 'yes'),
+                                 ('False', 'No', 'no')),
+            'Value is %s' % str(field.vocabulary)
+        )
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getWholeDay',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setWholeDay',
@@ -891,30 +966,41 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == ('True', 'False'), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(
+            tuple(vocab) == ('True', 'False'),
+            'Value is %s' % str(tuple(vocab))
+        )
 
     def test_openEndField(self):
         field = self.obj.getField('openEnd')
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.assertTrue(field.vocabulary == (('True', 'Yes', 'yes'), ('False', 'No', 'no')),
-                        'Value is %s' % str(field.vocabulary))
+        self.assertTrue(field.default is False,
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0,
+                        'Value is %s' % field.searchable)
+        self.assertTrue(
+            field.vocabulary == (('True', 'Yes', 'yes'),
+                                 ('False', 'No', 'no')),
+            'Value is %s' % str(field.vocabulary)
+        )
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0,
+                        'Value is %s' % field.isMetadata)
         self.assertTrue(field.accessor == 'getOpenEnd',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setOpenEnd',
@@ -929,23 +1015,30 @@ class PAEventATFieldTest(unittest.TestCase):
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage')
+        )
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
-        self.assertTrue(tuple(vocab) == ('True', 'False'), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(
+            tuple(vocab) == ('True', 'False'),
+            'Value is %s' % str(tuple(vocab))
+        )
 
     def test_openEnd_handler(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/14 18:00:00',
-                timezone=TZNAME,
-                openEnd=True)
+        event_id = self.portal.invokeFactory(
+            'Event',
+            id="event",
+            startDate='2000/10/12 06:00:00',
+            endDate='2000/10/14 18:00:00',
+            timezone=TZNAME,
+            openEnd=True
+        )
         event = self.portal[event_id]
         self.assertTrue(event.getOpenEnd())
         self.assertEqual(event.start().Time(), '06:00:00')
@@ -955,12 +1048,14 @@ class PAEventATFieldTest(unittest.TestCase):
         self.portal.manage_delObjects(['event'])
 
     def test_wholeday_handler(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/13 18:00:00',
-                timezone=TZNAME,
-                wholeDay=True)
+        event_id = self.portal.invokeFactory(
+            'Event',
+            id="event",
+            startDate='2000/10/12 06:00:00',
+            endDate='2000/10/13 18:00:00',
+            timezone=TZNAME,
+            wholeDay=True
+        )
         event = self.portal[event_id]
         self.assertTrue(event.getWholeDay())
         self.assertEqual(event.start().Time(), '00:00:00')
@@ -969,11 +1064,13 @@ class PAEventATFieldTest(unittest.TestCase):
         self.portal.manage_delObjects(['event'])
 
     def test_wholeday_handler_notwholeday(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/13 18:00:00',
-                timezone=TZNAME)
+        event_id = self.portal.invokeFactory(
+            'Event',
+            id="event",
+            startDate='2000/10/12 06:00:00',
+            endDate='2000/10/13 18:00:00',
+            timezone=TZNAME
+        )
         event = self.portal[event_id]
         self.assertFalse(event.getWholeDay())
         self.assertEqual(event.start().Time(), '06:00:00')
@@ -982,11 +1079,13 @@ class PAEventATFieldTest(unittest.TestCase):
         self.portal.manage_delObjects(['event'])
 
     def test_timezone_handler(self):
-        event_id = self.portal.invokeFactory('Event',
-                id="event",
-                startDate='2000/10/12 06:00:00',
-                endDate='2000/10/13 18:00:00',
-                timezone=TZNAME)
+        event_id = self.portal.invokeFactory(
+            'Event',
+            id="event",
+            startDate='2000/10/12 06:00:00',
+            endDate='2000/10/13 18:00:00',
+            timezone=TZNAME
+        )
         event = self.portal[event_id]
         self.assertEqual(event.start().Time(), '06:00:00')
         self.assertEqual(event.end().Time(), '18:00:00')

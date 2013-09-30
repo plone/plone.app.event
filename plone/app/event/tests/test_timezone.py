@@ -30,8 +30,14 @@ class TimezoneTest(unittest.TestCase):
         settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
 
         # initially, all zones are available in AvailableTimezones
-        all_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.Timezones')(self.portal)
-        avail_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.AvailableTimezones')(self.portal)
+        all_zones_vocab = getUtility(
+            IVocabularyFactory,
+            'plone.app.event.Timezones'
+        )(self.portal)
+        avail_zones_vocab = getUtility(
+            IVocabularyFactory,
+            'plone.app.event.AvailableTimezones'
+        )(self.portal)
         self.assertTrue(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
 
         # let's limit it to the first 10 zones of all_zones
@@ -41,9 +47,13 @@ class TimezoneTest(unittest.TestCase):
         # the AvailableTimezones vocabulary must instantiated again, to reflect
         # those changes
         del avail_zones_vocab
-        avail_zones_vocab = getUtility(IVocabularyFactory, 'plone.app.event.AvailableTimezones')(self.portal)
+        avail_zones_vocab = getUtility(
+            IVocabularyFactory,
+            'plone.app.event.AvailableTimezones'
+        )(self.portal)
 
-        # the length of the avail_zones_vocab is still the same as all_zones_vocab
+        # the length of the avail_zones_vocab is still the same as
+        # all_zones_vocab
         self.assertTrue(len(all_zones_vocab) == len(avail_zones_vocab) != 0)
         # but when iterating over every item, the length equals the
         # available_timezones setting.

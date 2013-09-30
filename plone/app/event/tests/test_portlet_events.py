@@ -40,9 +40,11 @@ class PortletTest(unittest.TestCase):
         portlet = getUtility(IPortletType, name='portlets.Events')
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEquals(['plone.app.portlets.interfaces.IColumn',
-          'plone.app.portlets.interfaces.IDashboard'],
-          registered_interfaces)
+        self.assertEquals(
+            ['plone.app.portlets.interfaces.IColumn',
+             'plone.app.portlets.interfaces.IDashboard'],
+            registered_interfaces
+        )
 
     def testInterfaces(self):
         portlet = portlet_events.Assignment()
@@ -51,7 +53,9 @@ class PortletTest(unittest.TestCase):
 
     def testInvokeAddview(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
-        mapping = self.portal.restrictedTraverse('++contextportlets++plone.leftcolumn')
+        mapping = self.portal.restrictedTraverse(
+            '++contextportlets++plone.leftcolumn'
+        )
         for m in mapping.keys():
             del mapping[m]
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
@@ -59,7 +63,9 @@ class PortletTest(unittest.TestCase):
         addview.createAndAdd(data={})
 
         self.assertEquals(len(mapping), 1)
-        self.failUnless(isinstance(mapping.values()[0], portlet_events.Assignment))
+        self.failUnless(
+            isinstance(mapping.values()[0], portlet_events.Assignment)
+        )
 
     def testInvokeEditView(self):
         mapping = PortletAssignmentMapping()
@@ -71,26 +77,34 @@ class PortletTest(unittest.TestCase):
     def testRenderer(self):
         context = self.portal
         view = context.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn', context=self.portal)
+        manager = getUtility(
+            IPortletManager, name='plone.leftcolumn', context=self.portal
+        )
         assignment = portlet_events.Assignment(count=5)
 
-        renderer = getMultiAdapter((context, self.request, view, manager, assignment), IPortletRenderer)
+        renderer = getMultiAdapter(
+            (context, self.request, view, manager, assignment),
+            IPortletRenderer
+        )
         self.failUnless(isinstance(renderer, portlet_events.Renderer))
 
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
-        self.portal.manage_permission('Portlets: Manage own portlets',
-                roles=['Manager'], acquire=0)
+        self.portal.manage_permission(
+            'Portlets: Manage own portlets',
+            roles=['Manager'],
+            acquire=0
+        )
 
         portlet = getUtility(IPortletType, name='portlets.Events')
-        mapping = self.portal.restrictedTraverse('++contextportlets++plone.leftcolumn')
+        mapping = self.portal.restrictedTraverse(
+            '++contextportlets++plone.leftcolumn'
+        )
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
         try:
             addview()
         except Unauthorized:
             self.fail()
-
-
 
 
 class RendererTest(unittest.TestCase):
@@ -110,16 +124,26 @@ class RendererTest(unittest.TestCase):
         # test_prev_events_link and test_prev_events_link_and_navigation_root
 
         # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(['Event'], ['simple_publication_workflow'])
+        self.portal.portal_workflow.setChainForPortalTypes(
+            ['Event'], ['simple_publication_workflow']
+        )
 
-    def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
+    def renderer(self, context=None, request=None, view=None, manager=None,
+                 assignment=None):
         context = context or self.portal
         request = request or self.request
         view = view or context.restrictedTraverse('@@plone')
-        manager = manager or getUtility(IPortletManager, name='plone.leftcolumn', context=self.portal)
-        assignment = assignment or portlet_events.Assignment(template='portlet_recent', macro='portlet')
+        manager = manager or getUtility(
+            IPortletManager, name='plone.leftcolumn', context=self.portal
+        )
+        assignment = assignment or portlet_events.Assignment(
+            template='portlet_recent', macro='portlet'
+        )
 
-        return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
+        return getMultiAdapter(
+            (context, request, view, manager, assignment),
+            IPortletRenderer
+        )
 
     def test_events(self):
         start = DateTime('Australia/Brisbane') + 2
@@ -180,8 +204,10 @@ class RendererTest(unittest.TestCase):
         # link to the event and not an occurrence.
         self.assertTrue('http://nohost/plone/e1"' in rd)
         # Occurrences should link to the Occurrence.
-        self.assertTrue('http://nohost/plone/e1/%s-%02d-%02d' %
-                (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd)
+        self.assertTrue(
+            'http://nohost/plone/e1/%s-%02d-%02d' %
+            (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd
+        )
 
         self.portal.manage_delObjects(['e1', 'e2'])
 

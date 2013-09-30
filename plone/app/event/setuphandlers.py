@@ -39,10 +39,12 @@ def catalog_setup(context):
     do not need to reindex those indexes after every reinstall.
 
     See these discussions for more info about index clearing with catalog.xml:
-        http://plone.293351.n2.nabble.com/How-to-import-catalog-xml-without-emptying-the-indexes-td2302709.html
+        http://plone.293351.n2.nabble.com/How-to-import-catalog-xml-without-
+        emptying-the-indexes-td2302709.html
         https://mail.zope.org/pipermail/zope-cmf/2007-March/025664.html
     """
-    if isNotThisProfile(context, 'plone.app.event-default.txt'): return
+    if isNotThisProfile(context, 'plone.app.event-default.txt'):
+        return
 
     site = context.getSite()
     catalog = getToolByName(site, 'portal_catalog')

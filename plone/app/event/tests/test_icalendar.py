@@ -101,6 +101,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
 
+        import pdb; pdb.set_trace()
+
         self.checkOrder(icalstr,
             'BEGIN:VCALENDAR',
             'VERSION:2.0',

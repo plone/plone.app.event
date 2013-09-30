@@ -20,10 +20,10 @@ import random
 # TODO: do we need this at all or shouldn't we just fail with ambiguous
 #       timezones?
 replacement_zones = {
-    'CET': 'Europe/Vienna',   # Central European Time
-    'MET': 'Europe/Vienna',   # Middle European Time
-    'EET': 'Europe/Helsinki', # East European Time
-    'WET': 'Europe/Lisbon',   # West European Time
+    'CET': 'Europe/Vienna',    # Central European Time
+    'MET': 'Europe/Vienna',    # Middle European Time
+    'EET': 'Europe/Helsinki',  # East European Time
+    'WET': 'Europe/Lisbon',    # West European Time
 }
 
 
@@ -84,14 +84,15 @@ def Weekdays(context):
     translate = getToolByName(getSite(), 'translation_service').translate
 
     domain = 'plonelocales'
-    items =[(translate(u'weekday_mon', domain=domain, default=u'Monday'),0),
-            (translate(u'weekday_tue', domain=domain, default=u'Tuesday'),1),
-            (translate(u'weekday_wed', domain=domain, default=u'Wednesday'),2),
-            (translate(u'weekday_thu', domain=domain, default=u'Thursday'),3),
-            (translate(u'weekday_fri', domain=domain, default=u'Friday'),4),
-            (translate(u'weekday_sat', domain=domain, default=u'Saturday'),5),
-            (translate(u'weekday_sun', domain=domain, default=u'Sunday'),6),
-           ]
+    items = [
+        (translate(u'weekday_mon', domain=domain, default=u'Monday'), 0),
+        (translate(u'weekday_tue', domain=domain, default=u'Tuesday'), 1),
+        (translate(u'weekday_wed', domain=domain, default=u'Wednesday'), 2),
+        (translate(u'weekday_thu', domain=domain, default=u'Thursday'), 3),
+        (translate(u'weekday_fri', domain=domain, default=u'Friday'), 4),
+        (translate(u'weekday_sat', domain=domain, default=u'Saturday'), 5),
+        (translate(u'weekday_sun', domain=domain, default=u'Sunday'), 6),
+    ]
 
     items = [SimpleTerm(i[1], i[1], i[0]) for i in items]
     return SimpleVocabulary(items)

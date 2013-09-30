@@ -1,9 +1,7 @@
 from OFS.SimpleItem import SimpleItem
-from plone.app.event.at.interfaces import IATEvent
 from plone.app.event.base import get_events
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
-from plone.app.event.recurrence import OccurrenceTraverser
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
@@ -15,17 +13,13 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
-from plone.event.utils import pydt
-from plone.event.utils import tzdel
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.interfaces.browser import IBrowserView
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from zope.publisher.interfaces.browser import IBrowserPublisher
 
 
 import datetime
@@ -38,9 +32,9 @@ import zope.component
 TZNAME = "Europe/Vienna"
 
 from plone.app.event.dx.traverser import OccurrenceTraverser as\
-        OccurrenceTraverserDX
+    OccurrenceTraverserDX
 from plone.app.event.at.traverser import OccurrenceTraverser as\
-        OccurrenceTraverserAT
+    OccurrenceTraverserAT
 
 
 class TestTraversalDX(AbstractSampleDataEvents):

@@ -20,7 +20,6 @@ class ControlpanelTest(unittest.TestCase):
         set_env_timezone('UTC')
         set_timezone('UTC')
 
-
     def test_current_datetime_in_controlpanel(self):
         """Oskar Öhman is a successful CEO of his startup company specialized
         in Toys. He's a sharp thinker and an even sharper HTML programmer (he
@@ -42,8 +41,10 @@ class ControlpanelTest(unittest.TestCase):
         """and logs in:
         """
 
-        browser.addHeader('Authorization', 'Basic %s:%s'\
-                % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD))
+        browser.addHeader(
+            'Authorization', 'Basic %s:%s'
+            % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
+        )
         browser.open(portal_url)
 
         """He is very happy of what he sees. He creates a new event for this

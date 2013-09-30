@@ -41,9 +41,12 @@ class PortletTest(unittest.TestCase):
         portlet = getUtility(IPortletType, name='portlets.Calendar')
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEquals(['plone.app.portlets.interfaces.IColumn',
-          'plone.app.portlets.interfaces.IDashboard'],
-          registered_interfaces)
+        self.assertEquals([
+            'plone.app.portlets.interfaces.IColumn',
+            'plone.app.portlets.interfaces.IDashboard'
+            ],
+            registered_interfaces
+        )
 
     def testInterfaces(self):
         portlet = portlet_calendar.Assignment()
@@ -52,7 +55,9 @@ class PortletTest(unittest.TestCase):
 
     def testInvokeAddview(self):
         portlet = getUtility(IPortletType, name='portlets.Calendar')
-        mapping = self.portal.restrictedTraverse('++contextportlets++plone.leftcolumn')
+        mapping = self.portal.restrictedTraverse(
+            '++contextportlets++plone.leftcolumn'
+        )
         for m in mapping.keys():
             del mapping[m]
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
@@ -60,15 +65,24 @@ class PortletTest(unittest.TestCase):
         addview.createAndAdd(data={})
 
         self.assertEquals(len(mapping), 1)
-        self.failUnless(isinstance(mapping.values()[0], portlet_calendar.Assignment))
+        self.failUnless(
+            isinstance(mapping.values()[0], portlet_calendar.Assignment)
+        )
 
     def testRenderer(self):
         context = self.portal
         view = context.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.rightcolumn', context=self.portal)
+        manager = getUtility(
+            IPortletManager,
+            name='plone.rightcolumn',
+            context=self.portal
+        )
         assignment = portlet_calendar.Assignment()
 
-        renderer = getMultiAdapter((context, self.request, view, manager, assignment), IPortletRenderer)
+        renderer = getMultiAdapter(
+            (context, self.request, view, manager, assignment),
+            IPortletRenderer
+        )
         self.failUnless(isinstance(renderer, portlet_calendar.Renderer))
 
 
@@ -85,16 +99,25 @@ class RendererTest(unittest.TestCase):
         setSite(portal)
 
         # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(['Event'], ['simple_publication_workflow'])
+        self.portal.portal_workflow.setChainForPortalTypes(
+            ['Event'], ['simple_publication_workflow']
+        )
 
-    def renderer(self, context=None, request=None, view=None, manager=None, assignment=None):
+    def renderer(self, context=None, request=None, view=None, manager=None,
+                 assignment=None):
         context = context or self.portal
         request = request or self.request
         view = view or context.restrictedTraverse('@@plone')
-        manager = manager or getUtility(IPortletManager, name='plone.rightcolumn', context=self.portal)
+        manager = manager or getUtility(
+            IPortletManager,
+            name='plone.rightcolumn',
+            context=self.portal
+        )
         assignment = assignment or portlet_calendar.Assignment()
 
-        return getMultiAdapter((context, request, view, manager, assignment), IPortletRenderer)
+        return getMultiAdapter(
+            (context, request, view, manager, assignment), IPortletRenderer
+        )
 
     def test_portlet_config(self):
         start = DateTime('Europe/Vienna')
@@ -163,7 +186,7 @@ class RendererTest(unittest.TestCase):
 
         # Now let's add a new event on the first day of the current month
         year, month = portlet.year_month_display()
-        day = monthrange(year, month)[1] # (wkday, days)
+        day = monthrange(year, month)[1]  # (wkday, days)
         last_day_month = DateTime('%s/%s/%s' % (year, month, day))
         hour = 1 / 24.0
         # Event starts at 23:00 and ends at 23:30
@@ -174,7 +197,9 @@ class RendererTest(unittest.TestCase):
         # Try to render the calendar portlet again, it must be different Now
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
-        self.assertNotEqual(html, portlet.render(), "Cache key wasn't invalidated")
+        self.assertNotEqual(
+            html, portlet.render(), "Cache key wasn't invalidated"
+        )
 
         self.portal.manage_delObjects(['e1'])
 

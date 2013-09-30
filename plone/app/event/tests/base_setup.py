@@ -31,10 +31,10 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
     def make_dates(self):
         tz = pytz.timezone(TEST_TIMEZONE)
-        now      = self.now      = patched_now()
-        past     = self.past     = tz.normalize(now - timedelta(days=10))
-        future   = self.future   = tz.normalize(now + timedelta(days=10))
-        far      = self.far      = tz.normalize(now + timedelta(days=30))
+        now = self.now = patched_now()
+        past = self.past = tz.normalize(now - timedelta(days=10))
+        future = self.future = tz.normalize(now + timedelta(days=10))
+        far = self.far = tz.normalize(now + timedelta(days=30))
         duration = self.duration = timedelta(hours=1)
         return (now, past, future, far, duration)
 

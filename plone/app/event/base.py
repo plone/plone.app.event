@@ -197,6 +197,7 @@ def construct_calendar(events, start=None, end=None):
         assert is_date(end)
 
     cal = {}
+
     def _add_to_cal(cal_data, event, date):
         date_str = date.isoformat()
         if date_str not in cal_data:
@@ -216,11 +217,11 @@ def construct_calendar(events, start=None, end=None):
             next_start_date = start_date + timedelta(add_day)  # initial = 0
 
             # avoid long loops
-            if start and end_date<start:
+            if start and end_date < start:
                 break  # if the date is completly outside the range
-            if start and next_start_date<=start:
+            if start and next_start_date <= start:
                 continue  # if start is outside but end reaches into range
-            if end and next_start_date>end:
+            if end and next_start_date > end:
                 break  # if date is outside range
 
             _add_to_cal(cal, event, next_start_date)
@@ -315,7 +316,8 @@ def localized_now(context=None):
     :rtype: Python datetime
 
     """
-    if not context: context = getSite()
+    if not context:
+        context = getSite()
     tzinfo = default_timezone(context=context, as_tzinfo=True)
     return datetime.now(tzinfo).replace(microsecond=0)
 
@@ -520,7 +522,8 @@ def start_end_from_mode(mode, dt=None, context=None):
     :type dt: Python datetime
 
     """
-    if not context: context = getSite()
+    if not context:
+        context = getSite()
     now = localized_now(context)
     start = end = None
 
@@ -563,7 +566,8 @@ def start_end_from_mode(mode, dt=None, context=None):
         end = dt_end_of_day(start + timedelta(days=6))
 
     elif mode == 'month':
-        if not dt: dt = now  # show this month
+        if not dt:
+            dt = now  # show this month
         year = dt.year
         month = dt.month
         last_day = monthrange(year, month)[1]  # (wkday, days)
@@ -614,13 +618,17 @@ def dates_for_display(occurrence):
     DT_start = DT(acc.start)
     DT_end = DT(acc.end)
     start_date = ulocalized_time(
-            DT_start, long_format=False, time_only=None, context=occurrence)
+        DT_start, long_format=False, time_only=None, context=occurrence
+    )
     start_time = ulocalized_time(
-            DT_start, long_format=False, time_only=True, context=occurrence)
+        DT_start, long_format=False, time_only=True, context=occurrence
+    )
     end_date = ulocalized_time(
-            DT_end, long_format=False, time_only=None, context=occurrence)
+        DT_end, long_format=False, time_only=None, context=occurrence
+    )
     end_time = ulocalized_time(
-            DT_end, long_format=False, time_only=True, context=occurrence)
+        DT_end, long_format=False, time_only=True, context=occurrence
+    )
 
     same_day = is_same_day(acc.start, acc.end)
     same_time = is_same_time(acc.start, acc.end)

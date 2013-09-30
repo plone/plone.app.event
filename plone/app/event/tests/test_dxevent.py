@@ -79,11 +79,14 @@ class TestDXIntegration(unittest.TestCase):
         self.failUnless(IDXEventContact.providedBy(new_object))
 
     def test_adding(self):
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2011, 11, 11, 11, 0),
-                end=datetime(2011, 11, 11, 12, 0),
-                timezone=TZNAME,
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
         e1 = self.portal['event1']
         self.failUnless(IDXEvent.providedBy(e1))
         self.failUnless(IDXEventRecurrence.providedBy(e1))
@@ -94,11 +97,14 @@ class TestDXIntegration(unittest.TestCase):
         self.portal.manage_delObjects(['event1'])
 
     def test_view(self):
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2011, 11, 11, 11, 0),
-                end=datetime(2011, 11, 11, 12, 0),
-                timezone=TZNAME,
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
         e1 = self.portal['event1']
         view = e1.restrictedTraverse('@@event_view')
         self.assertTrue(view.formatted_date(e1) is not None)
@@ -107,11 +113,14 @@ class TestDXIntegration(unittest.TestCase):
         self.portal.manage_delObjects(['event1'])
 
     def test_start_end_dates_indexed(self):
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2011, 11, 11, 11, 0),
-                end=datetime(2011, 11, 11, 12, 0),
-                timezone=TZNAME,
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
         e1 = self.portal['event1']
         e1.reindexObject()
 
@@ -120,20 +129,27 @@ class TestDXIntegration(unittest.TestCase):
         )
         self.assertEquals(1, len(result))
         # result returns Zope's DateTime
-        self.assertEquals(result[0].start,
-                DateTime('2011/11/11 11:00:00 %s' % TZNAME))
-        self.assertEquals(result[0].end,
-                DateTime('2011/11/11 12:00:00 %s' % TZNAME))
+        self.assertEquals(
+            result[0].start,
+            DateTime('2011/11/11 11:00:00 %s' % TZNAME)
+        )
+        self.assertEquals(
+            result[0].end,
+            DateTime('2011/11/11 12:00:00 %s' % TZNAME)
+        )
 
         self.portal.manage_delObjects(['event1'])
 
     def test_data_postprocessing(self):
         # Addressing bug #62
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2012, 10, 19, 0, 30),
-                end=datetime(2012, 10, 19, 1, 30),
-                timezone="Europe/Vienna",
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2012, 10, 19, 0, 30),
+            end=datetime(2012, 10, 19, 1, 30),
+            timezone="Europe/Vienna",
+            whole_day=False
+        )
         e1 = self.portal['event1']
         e1.reindexObject()
 
@@ -188,11 +204,14 @@ class TestDXIntegration(unittest.TestCase):
 
     def test_recurrence_indexing(self):
         utc = pytz.utc
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
-                end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-                timezone='UTC',
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
+            timezone='UTC',
+            whole_day=False
+        )
         e1 = self.portal['event1']
         e1rec = IEventRecurrence(e1)
         e1rec.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
@@ -203,19 +222,24 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(e1.recurrence == e1rec.recurrence)
 
         # test, if the occurrences are indexed by DRI
-        result = get_events(e1,
-            start=datetime(2011, 11, 12, 11, 0, tzinfo=utc))
+        result = get_events(
+            e1,
+            start=datetime(2011, 11, 12, 11, 0, tzinfo=utc)
+        )
         self.assertTrue(len(result) == 1)
 
         self.portal.manage_delObjects(['event1'])
 
     def test_event_accessor(self):
         utc = pytz.utc
-        self.portal.invokeFactory('plone.app.event.dx.event', 'event1',
-                start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
-                end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-                timezone='UTC',
-                whole_day=False)
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
+            timezone='UTC',
+            whole_day=False
+        )
         e1 = self.portal['event1']
 
         # setting attributes via the accessor
@@ -233,8 +257,9 @@ class TestDXIntegration(unittest.TestCase):
 
         # accessing the end property via the behavior adapter, returns the
         # value converted to the event's timezone
-        self.assertTrue(IEventBasic(e1).end ==
-                datetime(2011, 11, 13, 11, 0, tzinfo=tz))
+        self.assertTrue(
+            IEventBasic(e1).end == datetime(2011, 11, 13, 11, 0, tzinfo=tz)
+        )
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
