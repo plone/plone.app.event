@@ -5,6 +5,7 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.ical.importer import ical_import
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -20,21 +21,6 @@ import unittest2 as unittest
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE
-
-def make_response(request):
-    """ create a fake response and set up logging of output """
-    headers = {}
-    output = []
-
-    class Response:
-        def setHeader(self, header, value):
-            headers[header] = value
-
-        def write(self, msg):
-            output.append(msg)
-
-    request.RESPONSE = Response()
-    return headers, output, request
 
 
 class ICalendarExportTestDX(AbstractSampleDataEvents):
@@ -53,7 +39,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             text = text[position:]
 
     def test_event_ical(self):
-        headers, output, request = make_response(self.request)
+        headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter((self.now_event, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
@@ -100,7 +86,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'END:VCALENDAR')
 
     def test_portal_ical(self):
-        headers, output, request = make_response(self.request)
+        headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter((self.portal, request), name='ics_view')
         view()
         self.assertEqual(len(headers), 2)
