@@ -12,10 +12,10 @@ setup(
     version=version,
     description="The Plone calendar framework",
     long_description="%s%s%s%s" % (
-        open("README.rst").read() + "\n" +
-        open(os.path.join('docs', 'installation.rst')).read() + "\n" +
-        open(os.path.join('docs', 'contributors.rst')).read() + '\n' +
-        open("CHANGES.rst").read()
+        open("README.rst").read() + "\n",
+        open(os.path.join('docs', 'installation.rst')).read() + "\n",
+        open(os.path.join('docs', 'contributors.rst')).read() + '\n',
+        open("CHANGES.rst").read(),
     ),
     classifiers=[
         "Framework :: Plone",
