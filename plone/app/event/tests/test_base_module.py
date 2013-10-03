@@ -499,7 +499,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertEqual(len(res), 1)
 
     def test_get_event_limit(self):
-        """ more events to test possibly limit failure when past
+        """ two more events to test possibly limit failure when past
             recurring events and now/near future non-recurring events are
             limited with catalogs "sort_limit"
         """
@@ -513,7 +513,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             location=u"Dornbirn",
             timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
-            ).context
+        )
         factory(
             container=self.portal,
             content_id='tomorrow',
@@ -523,7 +523,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
             timezone=TEST_TIMEZONE,
-            ).context
+        )
 
         limit = get_events(self.portal, start=self.now, expand=True,
             ret_mode=3, limit=3)
