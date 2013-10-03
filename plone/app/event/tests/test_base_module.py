@@ -19,7 +19,8 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents,\
+    TEST_TIMEZONE
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
@@ -497,6 +498,40 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal, path=path)
         self.assertEqual(len(res), 1)
 
+    def test_get_event_limit(self):
+        """ more events to test possibly limit failure when past
+            recurring events and now/near future non-recurring events are
+            limited with catalogs "sort_limit"
+        """
+        factory = self.event_factory()
+        factory(
+            container=self.portal,
+            content_id='past_recur1',
+            title=u'Past Event recurring 1',
+            start=self.past,
+            end=self.past + self.duration,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+            recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
+            ).context
+        factory(
+            container=self.portal,
+            content_id='tomorrow',
+            title=u'Past Event recurring 1',
+            start=self.tomorrow,
+            end=self.tomorrow + self.duration,
+            open_end=True,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+            ).context
+
+        limit = get_events(self.portal, start=self.now, expand=True,
+            ret_mode=3, limit=3)
+        all = get_events(self.portal, start=self.now, expand=True, ret_mode=3)
+        self.assertEqual([e.url for e in limit], [e.url for e in all[:3]])
+
+        self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
+
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=2, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
@@ -567,6 +602,7 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
     def make_dates(self):
         def_tz = default_timezone()
         now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
+        tomorrow = self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
         past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
         future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
         far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
