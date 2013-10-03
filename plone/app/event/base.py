@@ -116,9 +116,6 @@ def get_events(context, start=None, end=None, limit=None,
     if sort_reverse:
         query['sort_order'] = 'reverse'
 
-    if limit:
-        query['sort_limit'] = limit
-
     query.update(kw)
 
     cat = getToolByName(context, 'portal_catalog')
