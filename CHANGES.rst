@@ -4,21 +4,16 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Remove "ploneintegration" from setuptools extra section and GenericSetup
+  profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
+  instead and to use plone.app.portlets 2.5a1! This change makes it easier for
+  Plone to integrate plone.app.event.
+  [thet]
+
 - Fix wrong result set with "limit" applied in get_events. Limiting can just
   happen after all occurrences are picked up in the result set, otherwise
   sorting can mess it up.
   [petschki]
-
-- Don't install ATEvent with the ploneintegration profile. This allows the
-  integration with plone.app.contenttypes for Plone < 5 without installing
-  ATEvent too. Also, merge the steps from the now obsolte
-  ploneintegration:prepare profile into the default one.
-  Please eventually update your metadata.xml files to also depend on the
-  plone.app.event.at:default profile.
-  Please note: The goal is to completly remove the ploneintegration profile.
-  The only reason of it's existance is that portlets cannot be registered for a
-  specific browser layer.
-  [thet]
 
 - Indexer adapter for SearchableText: fixed encoding inconsistencies.  Always
   return utf-8 encoded string while using unicode internally.

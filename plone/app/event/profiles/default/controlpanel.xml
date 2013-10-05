@@ -5,6 +5,14 @@
     i18n:domain="plone.app.event"
     purge="False">
 
+    <!-- Hide old calendar calendar settings -->
+    <configlet
+        title="Calendar"
+        action_id="CalendarSettings"
+        visible="False"
+        />
+
+    <!-- Register new calendar settings -->
     <configlet
         title="Event Settings"
         action_id="plone.app.event.eventsettings"

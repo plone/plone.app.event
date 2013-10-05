@@ -40,42 +40,20 @@ or::
 Installing plone.app.event for Plone 4.2 or Plone 4.3
 -----------------------------------------------------
 
-If you want to install plone.app.event before Plone 5.0 (where it's included in
-core), also depend on the ploneintegration extra::
-
-    'plone.app.event [dexterity, ploneintegration]'
-
-or::
-
-    'plone.app.event [archetypes, ploneintegration]'
-
-
-Then run this profile along with the dx or at profile (described above)::
-
-    plone.app.event.ploneintegration:default
-
-
 .. note::
 
-  plone.app.event depends on ``plone.app.portlets>=2.4.0``. This version allows
-  the calendar portlet to do AJAX calls without KSS via standard jQuery. For
-  Plone < 4.3 you have to fix the plone.app.portlets version in your buildout
-  like so::
+  plone.app.event depends on ``plone.app.portlets>=2.5a1``. This version has
+  the calendar and event portlet removed, which are now in plone.app.event
+  itself. Also, it allows the calendar portlet to do AJAX calls without KSS via
+  standard jQuery. For Plone < 5.0 you have to fix the plone.app.portlets
+  version in your buildout like so::
 
     [buildout]
     versions = versions
 
     [versions]
-    plone.app.portlets = 2.4.5
+    plone.app.portlets = 2.5a1
 
-.. note::
-
-  Currently the package ``z3c.unconfigure`` depends on ``zope.configuration >=
-  3.8`` but Plone still uses zope.configuration 3.7.4. To successfully install
-  plone.app.event with it's ploneintegration extra, you have to make a version
-  fix in your buildout. Wether fix z3c.unconfigure to 1.0.1 (recommended and
-  included in this buildout) or fix zope.configuration for example to 4.0.2
-  (not backwards-compatible).
 
 
 Upgrading from Products.ATContentType to plone.app.event
