@@ -116,8 +116,7 @@ def get_events(context, start=None, end=None, limit=None,
     if sort_reverse:
         query['sort_order'] = 'reverse'
 
-    if limit:
-        query['sort_limit'] = limit
+    # No sort_limit here! See below.
 
     query.update(kw)
 
@@ -160,8 +159,10 @@ def get_events(context, start=None, end=None, limit=None,
         result = exp_result
 
     if limit:
-        # Expanded events as well as catalog search results (which might not
-        # exactly be limited by the query) must be limited again.
+        # Limiting the result set can only happen here, after possibly exanding
+        # the result set with it's occurrences.
+        # Otherwise we might get wrong results - see :
+        # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_limit
         result = result[:limit]
 
     return result

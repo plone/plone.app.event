@@ -19,7 +19,8 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents,\
+    TEST_TIMEZONE
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
@@ -497,6 +498,60 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal, path=path)
         self.assertEqual(len(res), 1)
 
+    def test_get_event_limit(self):
+        """Test pull-request #93.
+        The limit on the query has to be removed, because:
+
+            - In the index, for each occurrence an index entry is created with
+              reference to the originating event object (not an occurrence
+              object - such doesn't exist).
+
+            - The event object's start and end dates are the very first
+              occurrence. Every other occurence is not stored anywhere but
+              created on the fly from a recurrence rule.
+
+            - Sorting on start sorts on the very first occurrence - this is
+              where the problem originates.
+
+        When doing a range search for events from now on and sorting for the
+        start date, an event in the past might be sorted before tomorrow's
+        event even if the next occurrence is somewhere in the future.
+
+        Now, when limiting the result set with the catalog's sort_limit before
+        expanding the recurrence to occurrences, tomorrow's event might fall
+        out and the past event might be in. So limiting the result set can only
+        be done after expanding the occurrences. Then we really have the
+        correct order.
+        """
+        factory = self.event_factory()
+        factory(
+            container=self.portal,
+            content_id='past_recur1',
+            title=u'Past Event recurring 1',
+            start=self.past,
+            end=self.past + self.duration,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+            recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
+        )
+        factory(
+            container=self.portal,
+            content_id='tomorrow',
+            title=u'Tomorrow event',
+            start=self.tomorrow,
+            end=self.tomorrow + self.duration,
+            open_end=True,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+        )
+
+        limit = get_events(self.portal, start=self.now, expand=True,
+                           ret_mode=3, limit=3)
+        all_ = get_events(self.portal, start=self.now, expand=True, ret_mode=3)
+        self.assertEqual([e.url for e in limit], [e.url for e in all_[:3]])
+
+        self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
+
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=2, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
@@ -567,6 +622,7 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
     def make_dates(self):
         def_tz = default_timezone()
         now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
+        tomorrow = self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
         past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
         future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
         far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)

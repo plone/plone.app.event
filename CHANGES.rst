@@ -4,6 +4,11 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix wrong result set with "limit" applied in get_events. Limiting can just
+  happen after all occurrences are picked up in the result set, otherwise
+  sorting can mess it up.
+  [petschki]
+
 - Don't install ATEvent with the ploneintegration profile. This allows the
   integration with plone.app.contenttypes for Plone < 5 without installing
   ATEvent too. Also, merge the steps from the now obsolte
