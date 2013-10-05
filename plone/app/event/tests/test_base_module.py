@@ -499,9 +499,29 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertEqual(len(res), 1)
 
     def test_get_event_limit(self):
-        """ two more events to test possibly limit failure when past
-            recurring events and now/near future non-recurring events are
-            limited with catalogs "sort_limit"
+        """Test pull-request #93.
+        The limit on the query has to be removed, because:
+
+            - In the index, for each occurrence an index entry is created with
+              reference to the originating event object (not an occurrence
+              object - such doesn't exist).
+
+            - The event object's start and end dates are the very first
+              occurrence. Every other occurence is not stored anywhere but
+              created on the fly from a recurrence rule.
+
+            - Sorting on start sorts on the very first occurrence - this is
+              where the problem originates.
+
+        When doing a range search for events from now on and sorting for the
+        start date, an event in the past might be sorted before tomorrow's
+        event even if the next occurrence is somewhere in the future.
+
+        Now, when limiting the result set with the catalog's sort_limit before
+        expanding the recurrence to occurrences, tomorrow's event might fall
+        out and the past event might be in. So limiting the result set can only
+        be done after expanding the occurrences. Then we really have the
+        correct order.
         """
         factory = self.event_factory()
         factory(
@@ -517,7 +537,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         factory(
             container=self.portal,
             content_id='tomorrow',
-            title=u'Past Event recurring 1',
+            title=u'Tomorrow event',
             start=self.tomorrow,
             end=self.tomorrow + self.duration,
             open_end=True,
@@ -526,9 +546,9 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         )
 
         limit = get_events(self.portal, start=self.now, expand=True,
-            ret_mode=3, limit=3)
-        all = get_events(self.portal, start=self.now, expand=True, ret_mode=3)
-        self.assertEqual([e.url for e in limit], [e.url for e in all[:3]])
+                           ret_mode=3, limit=3)
+        all_ = get_events(self.portal, start=self.now, expand=True, ret_mode=3)
+        self.assertEqual([e.url for e in limit], [e.url for e in all_[:3]])
 
         self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
 
