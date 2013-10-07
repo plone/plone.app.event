@@ -4,10 +4,10 @@ Developer documentation
 The IEvent interface
 --------------------
 
-All event types should implement the ```IEvent``` interface from
-```plone.event.interfaces```, in order that some functionality of
+All event types should implement the ``IEvent`` interface from
+``plone.event.interfaces``, in order that some functionality of
 plone.app.event can be used. For example, catalog searches for event objects
-ask for the ```IEvent``` interface in the ```object_provides``` index::
+ask for the ``IEvent`` interface in the ``object_provides`` index::
 
     from plone.event.interfaces import IEvent
     assert(IEvent.providedBy(obj)==True)
@@ -19,7 +19,7 @@ Custom event content types
 Extending the Archetypes based plone.app.event.at.content.ATEvent class
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For Archetypes, derive from ```plone.app.event.at.content.ATEvent```.
+For Archetypes, derive from ``plone.app.event.at.content.ATEvent``.
 
 Here is an example from `collective.folderishtypes
 <https://github.com/collective/collective.folderishtypes/blob/master/collective/folderishtypes/content/folderish_event.py>`_::
@@ -44,11 +44,11 @@ Register this type in the FTI via Generic Setup as usual.
 Using Dexterity behaviors to build new content types with IEvent support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For Dexterity use the ```plone.app.event.dx.behaviors.IEventBasic``` and
+For Dexterity use the ``plone.app.event.dx.behaviors.IEventBasic`` and
 optionally any other event related behavior from there.
 
 You can just enable the behaviors you want to use for your custom content type
-in the FTI via GenericSetup or through the web. This ```types/Event.xml```
+in the FTI via GenericSetup or through the web. This ``types/Event.xml``
 GenericSetup FTI configuration snippet from `plone.app.contenttypes
 <https://github.com/plone/plone.app.contenttypes/blob/paevent/plone/app/contenttypes/profiles/default/types/Event.xml>`_
 shows an example. The only behavior, which is definitely needed is the
@@ -109,9 +109,9 @@ None of the above
 ~~~~~~~~~~~~~~~~~
 
 If you cannot use the above two methods, you can still implement the
-```plone.event.interfaces.IEvent``` interface.
+``plone.event.interfaces.IEvent`` interface.
 
-In any case you might need to provide an ```IEventAccessor``` adapter. For more
+In any case you might need to provide an ``IEventAccessor`` adapter. For more
 information, see below.
 
 
@@ -146,21 +146,21 @@ event objects.
 The interface definition can be found in plone.event.interfaces.IEventAccessor.
 Default accessors:
 
-- For IEvent (```plone.event.interfaces.IEvent```) implementing objects:
-  ```plone.event.adapters.EventAccessor```.
+- For IEvent (``plone.event.interfaces.IEvent``) implementing objects:
+  ``plone.event.adapters.EventAccessor``.
 
-- For IATEvent (```plone.app.event.at.interfaces.IATEvent```):
-  ```plone.app.event.at.content.EventAccessor```.
+- For IATEvent (``plone.app.event.at.interfaces.IATEvent``):
+  ``plone.app.event.at.content.EventAccessor``.
 
-- For IDXEvent (```plone.app.event.dx.interfaces.IDXEvent```):
-  ```plone.app.event.dx.behaviors.EventAccessor```.
+- For IDXEvent (``plone.app.event.dx.interfaces.IDXEvent``):
+  ``plone.app.event.dx.behaviors.EventAccessor``.
 
-- For IOccurrence (```plone.event.interfaces.IOccurrence```):
-  ```plone.app.event.recurrence.EventAccessor```.
+- For IOccurrence (``plone.event.interfaces.IOccurrence``):
+  ``plone.app.event.recurrence.EventAccessor``.
 
 
-Event objects implement the ```IEvent``` interface from
-```plone.event.interfaces```.
+Event objects implement the ``IEvent`` interface from
+``plone.event.interfaces``.
 
 The objects can be accessed like so::
 
@@ -213,7 +213,7 @@ Getting occurrences from IEventRecurrence implementing objects
 --------------------------------------------------------------
 
 Events with recurrence support should implement the IEventRecurrence
-(```plone.event.interfaces.IEventRecurrence```) interface.
+(``plone.event.interfaces.IEventRecurrence``) interface.
 
 An IRecurrenceSupport implementing adapter allows the calculation of all
 occurrences::
