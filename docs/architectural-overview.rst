@@ -1,7 +1,6 @@
 Architectural Overview
 ======================
 
-
 Design goals
 ------------
 
@@ -17,11 +16,11 @@ mind:
   ATEvent content type (factored out from ATContentTypes) and also Dexterity
   behaviors, which can be used in Dexterity types.
 
-  [c] Standards compliancy: the iCalendar / RFC5545 standard is wonderful
-  flexible, so plone.app.event should provide support for it by allowing ical
-  exports. This is also available for the current ATContentType based
-  implementation, but plone.app.event aims to improve it. A future goal is to
-  support CalDAV also.
+  [c] Standards compliancy: the iCalendar / `RFC5545
+  <http://tools.ietf.org/html/rfc5545>`_ standard is wonderful flexible, so
+  plone.app.event should provide support for it by allowing ical exports. This
+  is also available for the current ATContentType based implementation, but
+  plone.app.event aims to improve it. A future goal is to support CalDAV also.
 
   [d] Recurring events support based on the RFC5545 standard.
 
@@ -37,31 +36,32 @@ and dx. Based on installed features (Products.ATContentTypes or
 plone.dexterity, respectively), eather of those subpackages are included via
 the zcml:condition statement. The calendar and event portlets were moved from
 plone.app.portlets into plone.app.event, where they belong semantically - thus
-improving encapsulation and independence. The calendar portlet was completly
-refactored. The functionality of the CalendarTool (portal_calendar) was
-reimplenented. Important settings from the calendar-controlpanel are now
-available in the event configlet. Since the calendar portlet was the only
-consumer of the CalendarTool, the CalendarTool, the calendar controlpanel and
-the dependency to Products.CMFCalendar can be dropped. The new
-plone.formwidget.datetime implements archetypes and z3cform based widgets, so
-the old datetime widget can be dropped. Python-dateutil provides recurrence
-calculations based on the RFC5545 standard - plone.formwidget.recurrence
-provides a awidget for recurrence and Products.DateRecurringIndex an
-appropriate index as a drop-in replacement for Zope's DateIndex. The iCalendar
-package was improved and is now used for plone.app.event to provide icalendar
-serialization. The timezone support is based on the pytz package. Plone has to
-define a portal timezone now and every event can define another timezone, if
-wished. User timezones are planned. Whole day events get their starttime set to
+improving encapsulation and independence and reducing interwoven dependencies.
+The calendar portlet was completly refactored. The functionality of the
+CalendarTool (portal_calendar) was reimplenented. Important settings from the
+calendar-controlpanel are now available in the event configlet. Since the
+calendar portlet was the only consumer of the CalendarTool, the CalendarTool,
+the calendar controlpanel and the dependency to Products.CMFCalendar can be
+dropped. The new plone.formwidget.datetime implements archetypes and z3cform
+based widgets, so the old datetime widget can be dropped. Python-dateutil
+provides recurrence calculations based on the RFC5545 standard -
+plone.formwidget.recurrence provides a awidget for recurrence and
+Products.DateRecurringIndex an appropriate index as a drop-in replacement for
+Zope's DateIndex. The iCalendar package was improved and is now used for
+plone.app.event to provide icalendar serialization. The timezone support is
+based on the pytz package. Plone now haves a portal timezone, User timezones
+and every event can define another timezone, if wished. User timezones are
+planned. Whole day events get their starttime set to
 0:00 and endtime set to 23:59:59 - thats should be feasable in most cases
-(excluding any scientific events...).
+  (excluding any scientific events...).
 
 
 Packages
-========
+--------
 
 
 plone.app.event
----------------
+~~~~~~~~~~~~~~~
 
 Github: https://github.com/plone/plone.app.event
 
@@ -102,7 +102,7 @@ The tests are all ported to plone.app.testing.
 
 
 plone.event
------------
+~~~~~~~~~~~
 
 Github: https://github.com/plone/plone.event
 
@@ -110,7 +110,7 @@ Date/time related utilities, recurrence calculations based on python-dateutil.
 
 
 plone.formwidget.datetime
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Github: https://github.com/plone/plone.formwidget.datetime
 
@@ -120,7 +120,7 @@ Derived from collective.z3cform.datetimewidget and archetypes.datetimewidget
 
 
 plone.formwidget.recurrence
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Github: https://github.com/plone/plone.formwidget.recurrence
 
@@ -133,7 +133,7 @@ string.
 
 
 Products.DateRecurringIndex
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Github: https://github.com/collective/Products.DateRecurringIndex
 
@@ -142,7 +142,7 @@ Each recurrence get's an index entry.
 
 
 icalendar
----------
+~~~~~~~~~
 
 Github: https://github.com/collective/icalendar
 
@@ -150,10 +150,10 @@ icalendar parser/generator framework.
 
 
 Other, external packages
-========================
+------------------------
 
 plone.app.eventindex
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 Github: https://github.com/regebro/plone.app.eventindex
 
@@ -163,7 +163,7 @@ eventindex is currently not used by plone.app.event.
 
 
 Python-dateutil
----------------
+~~~~~~~~~~~~~~~
 
 Documentation: http://labix.org/python-dateutil
 Repository: https://launchpad.net/dateutil
@@ -173,7 +173,7 @@ uses it mainly for recurrence calculations.
 
 
 Pytz
-----
+~~~~
 
 Documentation: http://pytz.sourceforge.net/
 Pypi page: https://pypi.python.org/pypi/pytz/

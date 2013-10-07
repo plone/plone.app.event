@@ -1,8 +1,30 @@
-Contributors
+Contributing
 ============
 
+Contributions
+-------------
+
+Please report any bugs, issues or feature requests here:
+https://github.com/plone/plone.app.event/issues.
+
+And better yet, help out with documentation and pull-requests!
+
+.. note::
+
+    To accept your pull requests, we need you need to have Plone contributors
+    agreement signed and sent-in. For more information, see:
+    `http://plone.org/foundation/contributors-agreement/contributors-agreement-explained`_.
+
+
+Contributors
+------------
+
 Contributors, please add you name here! By doing this, you also state, that you
-have signed the Plone Contributors Agreement [1][2]. Thanks!
+have signed the `Plone Contributors Agreement
+<http://plone.org/foundation/contributors-agreement/contributors-agreement-explained>`_.
+Download it from `plone.org
+<http://plone.org/foundation/contributors-agreement/agreement.pdf/view>`_.
+Thanks!
 
 - Johannes Raggam, thet (Main author and PLIP implementation)
 - Andreas Jung, zopyx
@@ -28,15 +50,13 @@ have signed the Plone Contributors Agreement [1][2]. Thanks!
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod
 
-Find out who contributed:
-$ git shortlog -s -e
+Find out who contributed::
 
-[1] http://plone.org/foundation/contributors-agreement/contributors-agreement-explained
-[2] http://plone.org/foundation/contributors-agreement/agreement.pdf/view
+    $ git shortlog -s -e
 
 
 Sponsors
-========
+--------
 
-- Hochschülerinnen- und Hochschülerschaft an der TU Graz
-  https://htu.tugraz.at/
+- Hochschülerinnen- und `Hochschülerschaft an der TU Graz
+  <https://htu.tugraz.at/>`_.

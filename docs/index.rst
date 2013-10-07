@@ -31,8 +31,8 @@ plone.app.event - a calendar framework for Plone
       ATEvent content type (factdateored out from ATContentTypes) and also
       Dexterity behaviors, which can be used in Dexterity types.
 
-    - Standards compliancy: We support the icalendar standard (RFC5545)
-      including recurrence.
+    - Standards compliancy: We support the icalendar standard (`RFC5545
+      <http://tools.ietf.org/html/rfc5545>`_) including recurrence.
 
     - Recurring events based on the RFC5545 standard.
 
@@ -44,9 +44,9 @@ Documentation
     :maxdepth: 2
 
     installation.rst
+    architectural-overview.rst
     development.rst
     designchoices.rst
-    architectural-overview.rst
     contributors.rst
 
 
@@ -56,3 +56,12 @@ API documentation
 .. toctree::
 
     api/index.rst
+
+
+Legal
++++++
+
+.. toctree::
+
+    LICENSE-copyright.rst
+    LICENSE-GPL.rst

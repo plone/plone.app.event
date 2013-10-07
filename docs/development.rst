@@ -1,8 +1,143 @@
 Developer documentation
 =======================
 
+The IEvent interface
+--------------------
+
+All event types should implement the ```IEvent``` interface from
+```plone.event.interfaces```, in order that some functionality of
+plone.app.event can be used. For example, catalog searches for event objects
+ask for the ```IEvent``` interface in the ```object_provides``` index::
+
+    from plone.event.interfaces import IEvent
+    assert(IEvent.providedBy(obj)==True)
+
+
+Custom event content types
+--------------------------
+
+Extending the Archetypes based plone.app.event.at.content.ATEvent class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Archetypes, derive from ```plone.app.event.at.content.ATEvent```.
+
+Here is an example from `collective.folderishtypes
+<https://github.com/collective/collective.folderishtypes/blob/master/collective/folderishtypes/content/folderish_event.py>`_::
+
+    from Products.Archetypes import atapi
+    from plone.app.event.at import content as event
+
+    type_schema = event.ATEventSchema.copy()  # Add your custom fields here
+    # Move location back to main schemata
+    type_schema.changeSchemataForField('location', 'default')
+    type_schema.moveField('location', before='attendees')
+
+    class CustomEvent(event.ATEvent):
+        portal_type = 'Custom Event'
+        _at_rename_after_creation = True
+        schema = type_schema
+    atapi.registerType(CustomEvent, PROJECTNAME)
+
+Register this type in the FTI via Generic Setup as usual.
+
+
+Using Dexterity behaviors to build new content types with IEvent support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Dexterity use the ```plone.app.event.dx.behaviors.IEventBasic``` and
+optionally any other event related behavior from there.
+
+You can just enable the behaviors you want to use for your custom content type
+in the FTI via GenericSetup or through the web. This ```types/Event.xml```
+GenericSetup FTI configuration snippet from `plone.app.contenttypes
+<https://github.com/plone/plone.app.contenttypes/blob/paevent/plone/app/contenttypes/profiles/default/types/Event.xml>`_
+shows an example. The only behavior, which is definitely needed is the
+IEventBasic behavior. All other are optional::
+
+    <property name="behaviors">
+        <element value="plone.app.event.dx.behaviors.IEventBasic"/>
+        <element value="plone.app.event.dx.behaviors.IEventRecurrence"/>
+        <element value="plone.app.event.dx.behaviors.IEventLocation"/>
+        <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
+        <element value="plone.app.event.dx.behaviors.IEventContact"/>
+        <element value="plone.app.event.dx.behaviors.IEventSummary"/>
+        <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
+        <element value="plone.app.content.interfaces.INameFromTitle"/>
+        <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
+        <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
+        <element value="plone.app.relationfield.behavior.IRelatedItems"/>
+        <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
+    </property>
+
+
+Of course, it's also possible to create a new behavior which derives from
+plone.app.event's one, like so. Please note, you have to re-configure your
+widgets again::
+
+    from plone.app.event.dx.behaviors import IEventBasic
+    from plone.app.event.dx.behaviors import IEventLocation
+    from plone.app.event.dx.behaviors import IEventRecurrence
+    from plone.app.event.dx.behaviors import first_weekday_sun0
+    from plone.autoform import directives as form
+    from plone.autoform.interfaces import IFormFieldProvider
+    from zope.interface import alsoProvides
+
+
+    class IEvent(IEventBasic, IEventRecurrence, IEventLocation):
+        """Custom Event behavior."""
+        form.widget('start', first_day=first_weekday_sun0)
+        form.widget('end', first_day=first_weekday_sun0)
+        form.widget('recurrence',
+                    start_field='IEvent.start',
+                    first_day=first_weekday_sun0)
+    alsoProvides(IEvent, IFormFieldProvider)
+
+
+Then register the behavior in ZCML::
+
+    <plone:behavior
+        title="Event"
+        description="A Event"
+        provides=".behaviors.IEvent"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+And register it in your FTI via GenericSetup as usual.
+
+
+None of the above
+~~~~~~~~~~~~~~~~~
+
+If you cannot use the above two methods, you can still implement the
+```plone.event.interfaces.IEvent``` interface.
+
+In any case you might need to provide an ```IEventAccessor``` adapter. For more
+information, see below.
+
+
+Getting and setting properties
+------------------------------
+
+For Dexterity based types: Accessing properties behavior interface adaption
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To use the functionality provided by the behaviors, get the behavior adapter
+first. For example, for setting or getting attributes of an event object, do::
+
+    from plone.app.event.dx.behaviors import IEventBasic
+    event = IEventBasic(obj)
+    event.start = datetime(2011,11,11,11,00)
+    event.end = datetime(2011,11,11,12,00)
+    event.timezone = 'CET'
+
+    import transaction
+    transaction.commit()
+
+Alternatively, use the more convenient IEventAccessor pattern described below.
+
+
 Accessing event objects via an unified accessor object
-------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To make it easier to support Archetypes and Dexterity based objects, an
 adapter for content objects is provided, which allows unified interaction with
@@ -101,45 +236,3 @@ get_events function like so::
     from plone.app.event.base import get_events, localized_now
     occ = get_events(context, start=localized_now(), ret_mode=2, expand=True)
 
-
-The IEvent interface
---------------------
-
-All event types should implement the ```IEvent``` interface from
-```plone.event.interfaces```, in order that some functionality of
-plone.app.event can be used. For example, catalog searches for event objects
-ask for the ```IEvent``` interface in the ```object_provides``` index::
-
-    from plone.event.interfaces import IEvent
-    assert(IEvent.providedBy(obj)==True)
-
-
-Custom event objects based on plone.app.event
----------------------------------------------
-
-For archetypes, derive from ```plone.app.event.at.content.ATEvent```.
-
-For Dexterity use the ```plone.app.event.dx.behaviors.IEventBasic``` and any
-other event related behavior you might need from there.
-
-If you cannot use the above two methods, you can still implement the
-```plone.event.interfaces.IEvent``` interface.
-
-In any case you might need to provide an ```IEventAccessor``` adapter. For more
-information, see below.
-
-
-Dexterity behaviors
--------------------
-
-To use the functionality provided by the behaviors, get the behavior adapter
-first. For example, for setting or getting attributes of an event object, do::
-
-    from plone.app.event.dx.behaviors import IEventBasic
-    event = IEventBasic(obj)
-    event.start = datetime(2011,11,11,11,00)
-    event.end = datetime(2011,11,11,12,00)
-    event.timezone = 'CET'
-
-    import transaction
-    transaction.commit()

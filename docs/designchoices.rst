@@ -16,3 +16,10 @@ Development design choices
 - Whole day events last from 0:00 until 23:59:59 on the same day.
 
 - Open end events end on the same day at 23:59:59.
+
+- For recurring events, we do not support unlimited occurrences. The number of
+  possible recurrences of an event is limited to 1000 occurrences. This way,
+  indexing and other operations doesn't take too long.  The maximum number of
+  occurrences is set via the ``MAXCOUNT`` constant in
+  ``plone.event.recurrence``.
+
