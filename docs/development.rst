@@ -71,19 +71,22 @@ IEventBasic behavior. All other are optional::
 
 
 Of course, it's also possible to create a new behavior which derives from
-plone.app.event's one, like so. Please note, you have to re-configure your
-widgets again::
+plone.app.event's one, like so::
 
     from plone.app.event.dx.behaviors import IEventBasic
     from plone.app.event.dx.behaviors import IEventLocation
     from plone.app.event.dx.behaviors import IEventRecurrence
     from plone.app.event.dx.behaviors import first_weekday_sun0
+    from plone.app.event.dx.interfaces import IDXEvent
+    from plone.app.event.dx.interfaces import IDXEventLocation
+    from plone.app.event.dx.interfaces import IDXEventRecurrence
     from plone.autoform import directives as form
     from plone.autoform.interfaces import IFormFieldProvider
     from zope.interface import alsoProvides
 
 
-    class IEvent(IEventBasic, IEventRecurrence, IEventLocation):
+    class IEvent(IEventBasic, IEventRecurrence, IEventLocation,
+                 IDXEvent, IDXEventLocation, IDXEventRecurrence):
         """Custom Event behavior."""
         form.widget('start', first_day=first_weekday_sun0)
         form.widget('end', first_day=first_weekday_sun0)
@@ -91,6 +94,25 @@ widgets again::
                     start_field='IEvent.start',
                     first_day=first_weekday_sun0)
     alsoProvides(IEvent, IFormFieldProvider)
+
+.. note::
+
+  If you don't register the behavior with a factory and a marker interface like
+  it's done in plone.app.event, the behavior is the marker interface itself
+  (see plone.app.dexterity's `documentation on behavior marker interfaces
+  <https://developer.plone.org/reference_manuals/external/plone.app.dexterity/behaviors/providing-marker-interfaces.html>`_).
+  In this case, the behavior should also derive from the marker interfaces
+  defined in ``plone.app.event.dx.interfaces`` in order to let it use all of
+  plone.app.event's functionality (indexers, adapters and the like).
+
+.. note::
+
+  You have to reconfigure the start, end and recurrence fields' widgets again.
+  The widgets for the ``start`` and ``end`` fields have to be configured with
+  the ``first_day`` parameter while the ``recurrence`` field widget has to be
+  configured with the ``first_day`` and ``start_field`` parameters. Even if the
+  ``start`` field is derived from another behavior, in this case the
+  dotted-path includes the new behavior: ``IEvent.start``.
 
 
 Then register the behavior in ZCML::
