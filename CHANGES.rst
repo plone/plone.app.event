@@ -14,9 +14,9 @@ Changelog
   Plone to integrate plone.app.event.
   [thet]
 
-- Fix wrong result set with "limit" applied in get_events. Limiting can just
-  happen after all occurrences are picked up in the result set, otherwise
-  sorting can mess it up.
+- Fix wrong result set with "limit" applied in get_events. Limiting for
+  occurrence-expanded events can just happen after all occurrences are picked
+  up in the result set, otherwise sorting can mess it up.
   [petschki]
 
 - Indexer adapter for SearchableText: fixed encoding inconsistencies.  Always

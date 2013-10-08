@@ -116,7 +116,9 @@ def get_events(context, start=None, end=None, limit=None,
     if sort_reverse:
         query['sort_order'] = 'reverse'
 
-    # No sort_limit here! See below.
+    if expand is False and limit:
+        # No sort_limit for expanded events to avoid wrong results! See below.
+        query['sort_limit'] = limit
 
     query.update(kw)
 
