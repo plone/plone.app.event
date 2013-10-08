@@ -4,6 +4,20 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+.. note::
+
+    The ``ploneintegration`` setuptools extra and GenericSetup profile have
+    been removed for this version. This makes an integration into Plone and
+    ``plone.app.contenttypes`` easier. Please remove them also in your setup
+    and be sure to depend on ``plone.app.portlets>=2.5a1``!
+
+- Fix event_listing view on Collections to expand events. Fixes #91, Fixes #90.
+  [thet]
+
+- Don't show the event_listing_settings view in the object actions for
+  event_listings on Collections or Topics, as it doesn't make sense there.
+  [thet]
+
 - Fix case, where the events, which started before a queried timerange and
   lasts into the timerange were not included in the list of event occurrences.
   [thet]
