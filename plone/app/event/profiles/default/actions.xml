@@ -8,7 +8,7 @@
    <property name="description" i18n:translate="help_event_listing_settings">Settings for the event listing view.</property>
    <property name="url_expr">string:${object_url}/@@event_listing_settings</property>
    <property name="icon_expr"></property>
-   <property name="available_expr">python:object.defaultView()=='event_listing'</property>
+   <property name="available_expr">python:object.defaultView()=='event_listing' and object.portal_type not in ('Collection', 'Topic')</property>
    <property name="permissions">
     <element value="Manage properties"/>
    </property>
