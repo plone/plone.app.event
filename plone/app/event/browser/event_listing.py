@@ -14,6 +14,7 @@ from plone.app.event.base import start_end_from_mode
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
+from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.z3cform.layout import wrap_form
 from z3c.form import button
@@ -136,11 +137,18 @@ class EventListing(BrowserView):
             ctx = self.default_context
             if is_col:
                 res = ctx.results(batch=False, sort_on='start', brains=True)
+                query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
             else:
                 res = ctx.queryCatalog(
                     REQUEST=self.request, batch=False, full_objects=False
                 )
-            res = expand_events(res, ret_mode, sort='start')
+                query = ctx.buildQuery()
+            # get start and end values from the query to ensure limited listing
+            # XXX: do we have to take care about datetime range queries?
+            start = query.get('start', {}).get('query')
+            end = query.get('end', {}).get('query')
+            res = expand_events(res, ret_mode, sort='start', start=start,
+                                end=end)
         else:
             res = self._get_events(ret_mode)
         if batch:
