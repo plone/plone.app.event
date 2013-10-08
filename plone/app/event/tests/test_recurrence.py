@@ -194,15 +194,18 @@ class TestRecurrenceSupport(unittest.TestCase):
 
     layer = PAEvent_INTEGRATION_TESTING
 
-    def test_recurrence(self):
-        tz = pytz.timezone('Europe/Vienna')
+    def setUp(self):
+        self.tz = tz = pytz.timezone('Europe/Vienna')
         duration = datetime.timedelta(days=4)
         data = MockEvent()
         data.start = datetime.datetime(2011, 11, 11, 11, 00, tzinfo=tz)
         data.end = data.start + duration
         data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
         zope.interface.alsoProvides(data, IEvent, IEventRecurrence)
-        result = IRecurrenceSupport(data).occurrences()
+        self.data = data
+
+    def test_recurrence_occurrences(self):
+        result = IRecurrenceSupport(self.data).occurrences()
 
         self.assertEqual(4, len(result))
 
@@ -212,6 +215,40 @@ class TestRecurrenceSupport(unittest.TestCase):
         # Subsequent ones are IOccurrence objects
         self.assertTrue(IOccurrence.providedBy(result[1]))
 
+    def test_recurrence_occurrences_with_range_start_1(self):
+        # Test with range
+        rs = datetime.datetime(2011, 11, 15, 11, 0, tzinfo=self.tz)
+        result = IRecurrenceSupport(self.data).occurrences(range_start=rs)
 
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+        self.assertEqual(4, len(result))
+
+        # First occurrence is an IEvent object
+        self.assertTrue(IEvent.providedBy(result[0]))
+
+        # Subsequent ones are IOccurrence objects
+        self.assertTrue(IOccurrence.providedBy(result[1]))
+
+    def test_recurrence_occurrences_with_range_start_2(self):
+        # Test with range
+        rs = datetime.datetime(2011, 11, 16, 11, 0, tzinfo=self.tz)
+        result = IRecurrenceSupport(self.data).occurrences(range_start=rs)
+
+        self.assertEqual(3, len(result))
+
+        # Only IOccurrence objects in the result set
+        self.assertTrue(IOccurrence.providedBy(result[0]))
+
+    def test_recurrence_occurrences_with_range_start_and_end(self):
+        # Test with range
+        rs = datetime.datetime(2011, 11, 11, 11, 0, tzinfo=self.tz)
+        re = datetime.datetime(2011, 11, 12, 11, 0, tzinfo=self.tz)
+        result = IRecurrenceSupport(self.data).occurrences(range_start=rs,
+                                                           range_end=re)
+
+        self.assertEqual(2, len(result))
+
+        # First occurrence is an IEvent object
+        self.assertTrue(IEvent.providedBy(result[0]))
+
+        # Subsequent ones are IOccurrence objects
+        self.assertTrue(IOccurrence.providedBy(result[1]))

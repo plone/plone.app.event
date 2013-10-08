@@ -4,6 +4,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Fix case, where the events, which started before a queried timerange and
+  lasts into the timerange were not included in the list of event occurrences.
+  [thet]
+
 - Remove "ploneintegration" from setuptools extra section and GenericSetup
   profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for

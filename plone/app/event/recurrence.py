@@ -54,21 +54,16 @@ class RecurrenceSupport(object):
         recurring for 10 days, range_start = 1st mar, range_end = last Mark
         """
         event = IEventAccessor(self.context)
-        starts = recurrence_sequence_ical(event.start,
-                                          recrule=event.recurrence,
-                                          from_=range_start, until=range_end)
-
-        if range_start and\
-                event.start < range_start and\
-                event.end >= range_start and\
-                event.start not in starts:
-            # Include event, which started before range but lasts until it.
-            starts = itertools.chain(starts, [event.start])
 
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
         # event starts before range_start but ends afterwards.
         duration = event.duration
+
+        starts = recurrence_sequence_ical(event.start,
+                                          recrule=event.recurrence,
+                                          from_=range_start, until=range_end,
+                                          duration=duration)
 
         # XXX potentially occurrence won't need to be wrapped anymore
         # but doing it for backwards compatibility as views/templates
@@ -86,7 +81,10 @@ class RecurrenceSupport(object):
                 start=start,
                 end=start + duration).__of__(self.context)
 
+        # TODO: check performuance.
+        # Here, the generator is converted to a list.
         events = map(get_obj, starts)
+
         return events
 
 
