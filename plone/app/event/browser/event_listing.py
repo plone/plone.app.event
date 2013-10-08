@@ -3,6 +3,7 @@ from Products.Five.browser import BrowserView
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event import messageFactory as _
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import date_speller
@@ -136,15 +137,19 @@ class EventListing(BrowserView):
         if is_col or is_top:
             ctx = self.default_context
             if is_col:
-                res = ctx.results(batch=False, sort_on='start', brains=False)
+                res = ctx.results(batch=False, sort_on='start', brains=True)
             else:
                 res = ctx.queryCatalog(
-                    REQUEST=self.request, batch=False, full_objects=True
+                    REQUEST=self.request, batch=False, full_objects=False
                 )
-            # TODO: uff, we have to walk through all results...
-            if ret_mode == 3:
-                res = [IEventAccessor(obj) for obj in res
-                       if IEvent.providedBy(obj)]
+            _res = []
+            for obj in res:
+                # TODO: uff, those loops!
+                obj = obj.getObject()  # we're brains...
+                if not IEvent.providedBy(obj): continue
+                if ret_mode == 3: obj = IEventAccessor(obj)
+                _res.append(obj)
+            res = _res
         else:
             res = self._get_events(ret_mode)
         if batch:
