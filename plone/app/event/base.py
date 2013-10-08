@@ -76,15 +76,15 @@ def get_events(context, start=None, end=None, limit=None,
                    Only available in ret_mode 2 (objects) and 3 (accessors).
     :type expand: boolean
 
-    :param sort: Catalog index id to sort on. Not available with expand=True.
+    :param sort: Catalog index id to sort on.
     :type sort: string
 
     :param sort_reverse: Change the order of the sorting.
     :type sort_reverse: boolean
 
     :returns: Portal events, matching the search criteria.
-    :rtype: catalog brains
-
+    :rtype: catalog brains, event objects or IEventAccessor object wrapper,
+            depending on ret_mode.
     """
     start, end = _prepare_range(context, start, end)
 
@@ -125,40 +125,12 @@ def get_events(context, start=None, end=None, limit=None,
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
 
-    # Helper functions
-    def _obj_or_acc(obj, ret_mode):
-        if ret_mode == 2:
-            return obj
-        elif ret_mode == 3:
-            return IEventAccessor(obj)
-
-    def _get_compare_attr(obj, attr):
-        val = getattr(obj, attr, None)
-        if safe_callable(val):
-            val = val()
-        if isinstance(val, DateTime):
-            val = pydt(val)
-        return val
-
-    if ret_mode in (2, 3) and expand is False:
-        result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
-    elif ret_mode in (2, 3) and expand is True:
-        exp_result = []
-        for it in result:
-            obj = it.getObject()
-            if IEventRecurrence.providedBy(obj):
-                occurrences = [_obj_or_acc(occ, ret_mode) for occ in
-                               IRecurrenceSupport(obj).occurrences(start, end)]
-            else:
-                occurrences = [_obj_or_acc(obj, ret_mode)]
-            exp_result += occurrences
-        if sort:
-            # support AT and DX without wrapped by IEventAccessor (mainly for
-            # sorting after "start" or "end").
-            exp_result.sort(key=lambda x: _get_compare_attr(x, sort))
-        if sort_reverse:
-            exp_result.reverse()
-        result = exp_result
+    if ret_mode in (2, 3):
+        if expand is False:
+            result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
+        else:
+            result = expand_events(result, ret_mode, start, end, sort,
+                                   sort_reverse)
 
     if limit:
         # Limiting the result set can only happen here, after possibly exanding
@@ -168,6 +140,79 @@ def get_events(context, start=None, end=None, limit=None,
         result = result[:limit]
 
     return result
+
+
+def expand_events(events, ret_mode,
+                  start=None, end=None,
+                  sort=None, sort_reverse=None):
+    """Expand to the recurrence occurrences of a given set of events.
+
+    :param events: IEvent based objects or IEventAccessor object wrapper.
+
+    :param ret_mode: Return type of search results. These options are
+                     available:
+                         * 2 (objects): Return results as IEvent and/or
+                                        IOccurrence objects.
+                         * 3 (accessors): Return results as IEventAccessor
+                                          wrapper objects.
+                     Option "1" (brains) is not supported.
+    :type ret_mode: integer [2|3]
+
+    :param start: Date, from which on events should be expanded.
+    :type start: Python datetime.
+
+    :param end: Date, until which events should be expanded.
+    :type end: Python datetime
+
+    :param sort: Object or IEventAccessor Attribute to sort on.
+    :type sort: string
+
+    :param sort_reverse: Change the order of the sorting.
+    :type sort_reverse: boolean
+    """
+    assert(ret_mode is not 1)
+
+    exp_result = []
+    for it in events:
+        obj = hasattr(it, 'getObject') and it.getObject() or it
+        if IEventRecurrence.providedBy(obj):
+            occurrences = [_obj_or_acc(occ, ret_mode) for occ in
+                           IRecurrenceSupport(obj).occurrences(start, end)]
+        elif IEvent.providedBy(obj):
+            occurrences = [_obj_or_acc(obj, ret_mode)]
+        else:
+            # No IEvent based object. Could come from a collection.
+            continue
+        exp_result += occurrences
+    if sort:
+        exp_result.sort(key=lambda x: _get_compare_attr(x, sort))
+    if sort_reverse:
+        exp_result.reverse()
+    return exp_result
+
+
+def _obj_or_acc(obj, ret_mode):
+    """Return the content object or an IEventAccessor wrapper, depending on
+    ret_mode. ret_mode 2 returns objects, ret_mode 3 returns IEventAccessor
+    object wrapper. ret_mode 1 is not supported.
+    """
+    assert(ret_mode is not 1)
+    if ret_mode == 2:
+        return obj
+    elif ret_mode == 3:
+        return IEventAccessor(obj)
+
+
+def _get_compare_attr(obj, attr):
+    """Return an compare attribute, supporting AT, DX and IEventAccessor
+    objects.
+    """
+    val = getattr(obj, attr, None)
+    if safe_callable(val):
+        val = val()
+    if isinstance(val, DateTime):
+        val = pydt(val)
+    return val
 
 
 def construct_calendar(events, start=None, end=None):

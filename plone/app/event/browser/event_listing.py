@@ -3,10 +3,10 @@ from Products.Five.browser import BrowserView
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
-from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event import messageFactory as _
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import date_speller
+from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
@@ -14,8 +14,6 @@ from plone.app.event.base import start_end_from_mode
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
-from plone.event.interfaces import IEvent
-from plone.event.interfaces import IEventAccessor
 from plone.memoize import view
 from plone.z3cform.layout import wrap_form
 from z3c.form import button
@@ -142,14 +140,7 @@ class EventListing(BrowserView):
                 res = ctx.queryCatalog(
                     REQUEST=self.request, batch=False, full_objects=False
                 )
-            _res = []
-            for obj in res:
-                # TODO: uff, those loops!
-                obj = obj.getObject()  # we're brains...
-                if not IEvent.providedBy(obj): continue
-                if ret_mode == 3: obj = IEventAccessor(obj)
-                _res.append(obj)
-            res = _res
+            res = expand_events(res, ret_mode, sort='start')
         else:
             res = self._get_events(ret_mode)
         if batch:
