@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.0rc1'
+version = '1.0dev'
 
 
 setup(
@@ -46,7 +46,7 @@ setup(
         'icalendar',
         'plone.app.imaging',
         'plone.app.layout',
-        'plone.app.portlets>=2.5a1',
+        'plone.app.portlets>=2.4.0',
         'plone.app.registry',
         'plone.app.vocabularies',
         'plone.browserlayer',
@@ -94,10 +94,14 @@ setup(
             'plone.indexer',
             'plone.supermodel',
         ],
+        'ploneintegration': [
+            'plone.app.event [archetypes]',
+            'z3c.unconfigure',
+        ],
         'test': [
             'mock',
             'plone.app.contenttypes',
-            'plone.app.event [archetypes, dexterity]',
+            'plone.app.event [archetypes, dexterity, ploneintegration]',
             'plone.app.testing',
             'plone.testing',
             'transaction',

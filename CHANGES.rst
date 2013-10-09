@@ -6,10 +6,8 @@ Changelog
 
 .. note::
 
-    The ``ploneintegration`` setuptools extra and GenericSetup profile have
-    been removed for this version. This makes an integration into Plone and
-    ``plone.app.contenttypes`` easier. Please remove them also in your setup
-    and be sure to depend on ``plone.app.portlets>=2.5a1``!
+    The ``ploneintegration`` setuptools extra and GenericSetup profiles are
+    deprecated an will be removed with plone.app.event 1.1.
 
 - Fix event_listing view on Collections to expand events. Fixes #91, Fixes #90.
   [thet]
@@ -20,12 +18,6 @@ Changelog
 
 - Fix case, where the events, which started before a queried timerange and
   lasts into the timerange were not included in the list of event occurrences.
-  [thet]
-
-- Remove "ploneintegration" from setuptools extra section and GenericSetup
-  profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
-  instead and to use plone.app.portlets 2.5a1! This change makes it easier for
-  Plone to integrate plone.app.event.
   [thet]
 
 - Fix wrong result set with "limit" applied in get_events. Limiting for
