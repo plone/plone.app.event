@@ -1,6 +1,23 @@
 Changelog
 =========
 
+1.1dev (unreleased)
+-------------------
+
+.. note::
+
+    The ``ploneintegration`` setuptools extra and GenericSetup profile have
+    been removed for this version. This makes an integration into Plone and
+    ``plone.app.contenttypes`` easier. Please remove them also in your setup
+    and be sure to depend on ``plone.app.portlets>=2.5a1``!
+
+- Remove "ploneintegration" from setuptools extra section and GenericSetup
+  profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
+  instead and to use plone.app.portlets 2.5a1! This change makes it easier for
+  Plone to integrate plone.app.event.
+  [thet]
+
+
 1.0dev (unreleased)
 -------------------
 
