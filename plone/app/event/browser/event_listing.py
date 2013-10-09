@@ -143,10 +143,10 @@ class EventListing(BrowserView):
                     REQUEST=self.request, batch=False, full_objects=False
                 )
                 query = ctx.buildQuery()
-            # get start and end values from the query to ensure limited listing
-            # XXX: do we have to take care about datetime range queries?
-            start = query.get('start', {}).get('query')
-            end = query.get('end', {}).get('query')
+            # get start and end values from the query to ensure limited
+            # listing for occurrences
+            start, end = self._expand_events_start_end(query.get('start'),
+                                                       query.get('end'))
             res = expand_events(res, ret_mode, sort='start', start=start,
                                 end=end)
         else:
@@ -381,6 +381,32 @@ class EventListing(BrowserView):
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
 
+    # COLLECTION daterange start/end determination
+    def _expand_events_start_end(self, start, end):
+        # make sane start and end values for expand_events from
+        # Collection/Topic start/end criterions.
+        # if end/min is given, it overrides start/min settings to make sure,
+        # ongoing events are shown in the listing!
+        # XXX: This actually fits most needs, but not all. Maybe someone
+        # wants to come up with some edgecases!
+        se = dict(start=None, end=None)
+        if start:
+            q = start.get('query')
+            r = start.get('range')
+            if r == "min":
+                se["start"] = q
+            elif r == "max":
+                se["end"] = q
+            elif r in ("minmax", "min:max"):
+                list(q).sort()
+                se["start"] = q[0]
+                se["end"] = q[1]
+        if end:
+            q = end.get('query')
+            r = end.get('range')
+            if r == "min":
+                se["start"] = q
+        return se["start"], se["end"]
 
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):
