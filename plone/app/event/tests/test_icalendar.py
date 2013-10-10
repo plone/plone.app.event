@@ -32,7 +32,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
     def checkOrder(self, text, *order):
         for item in order:
             position = text.find(item)
-            self.failUnless(
+            self.assertTrue(
                 position >= 0,
                 'menu item "%s" missing or out of order' % item
             )

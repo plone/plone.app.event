@@ -341,7 +341,7 @@ class TestFindContext(unittest.TestCase):
         portal.subfolder2.invokeFactory('Folder', 'subfolder3')
 
         directlyProvides(portal.newsite, ISite)
-        self.failUnless(ISite.providedBy(portal.newsite))
+        self.assertTrue(ISite.providedBy(portal.newsite))
 
     def test_find_ploneroot(self):
         p1 = find_ploneroot(self.portal.newsite.subfolder)
