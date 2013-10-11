@@ -81,7 +81,8 @@
         title="Event Summary"
         description="Summary/body text extension for Events."
         provides=".behaviors.IEventSummary"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventSummary"
+        marker=".behaviors.IEventSummary"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
