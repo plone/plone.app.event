@@ -2,12 +2,13 @@ from plone.app.event import messageFactory as _
 from plone.event.utils import default_timezone as fallback_default_timezone
 from zope import schema
 from zope.interface import Interface
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
 ISO_DATE_FORMAT = '%Y-%m-%d'
 
 
-class IBrowserLayer(Interface):
+class IBrowserLayer(IDefaultBrowserLayer):
     """plone.app.event specific browser layer.
     """
 
