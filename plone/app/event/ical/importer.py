@@ -3,6 +3,7 @@
 #  - cleanup,
 #  - tests
 from Products.CMFPlone.utils import safe_unicode
+from plone import api
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
@@ -23,6 +24,10 @@ def ical_import(container, ics_resource, event_type):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk('VEVENT')
 
+    pc = api.portal.get_tool(name="portal_catalog")
+    existing_events = pc.searchResults(
+        path={'query': container.absolute_url_path(), 'depth': 1}
+    )
     def _get_prop(prop, item):
         ret = None
         if prop in item:
@@ -123,13 +128,21 @@ def ical_import(container, ics_resource, event_type):
 
         event_uid = _get_prop('UID', item)
 
-        # TODO: if AT had the same attrs like IDXEventBase, we could set
-        # everything within this invokeFactory call.
-        container.invokeFactory(event_type,
-                                id=content_id,
-                                title=title,
-                                description=description)
-        content = container[content_id]
+        update = bool([i for i in existing_events if i.event_uid == event_uid])
+
+        if update:
+            content = [
+                i.getObject() for i in existing_events
+                if i.event_uid == event_uid
+            ][0]
+        else:
+            # TODO: if AT had the same attrs like IDXEventBase, we could set
+            # everything within this invokeFactory call.
+            container.invokeFactory(event_type,
+                                    id=content_id,
+                                    title=title,
+                                    description=description)
+            content = container[content_id]
 
         event = IEventAccessor(content)
         event.start = start

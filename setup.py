@@ -44,6 +44,7 @@ setup(
         'Zope2',
         'collective.elephantvocabulary',
         'icalendar',
+        'plone.api',
         'plone.app.imaging',
         'plone.app.layout',
         'plone.app.portlets>=2.4.0',
