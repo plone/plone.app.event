@@ -34,6 +34,7 @@
     <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
     <element value="plone.app.event.dx.behaviors.IEventContact"/>
     <element value="plone.app.event.dx.behaviors.IEventSummary"/>
+    <element value="plone.app.event.dx.behaviors.IEventUID"/>
     <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
     <element value="plone.app.content.interfaces.INameFromTitle"/>
     <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>

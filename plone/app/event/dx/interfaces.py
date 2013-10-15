@@ -26,3 +26,8 @@ class IDXEventAttendees(Interface):
 class IDXEventContact(Interface):
     """ Marker interface for Dexterity events with contact information.
     """
+
+
+class IDXEventUID(Interface):
+    """ Marker interface for Dexterity events with UID, for ical sync.
+    """

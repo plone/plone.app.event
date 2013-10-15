@@ -121,6 +121,8 @@ def ical_import(container, ics_resource, event_type):
         # copied
         content_id = str(random.randint(0, 99999999))
 
+        event_uid = _get_prop('UID', item)
+
         # TODO: if AT had the same attrs like IDXEventBase, we could set
         # everything within this invokeFactory call.
         container.invokeFactory(event_type,
@@ -141,6 +143,7 @@ def ical_import(container, ics_resource, event_type):
         event.attendees = attendees
         event.contact_name = contact
         event.subjects = categories
+        event.event_uid = event_uid
         notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code

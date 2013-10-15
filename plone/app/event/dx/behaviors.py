@@ -264,6 +264,13 @@ class IEventContact(model.Schema):
     )
 
 
+class IEventUID(model.Schema):
+    """ Event UID Schema.
+    """
+    event_uid = schema.TextLine(required=False)
+    form.mode(event_uid='hidden')
+
+
 class IEventSummary(model.Schema):
     """Event summary (body text) schema."""
 
@@ -286,6 +293,7 @@ alsoProvides(IEventRecurrence, IFormFieldProvider)
 alsoProvides(IEventLocation, IFormFieldProvider)
 alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
+alsoProvides(IEventUID, IFormFieldProvider)
 alsoProvides(IEventSummary, IFormFieldProvider)
 
 
@@ -466,6 +474,15 @@ def end_indexer(obj):
     return DT(event.end)
 
 
+# UID indexer
+@indexer(IDXEvent)
+def event_uid_indexer(obj):
+    event = IEventUID(obj)
+    if event.event_uid is None:
+        return ""
+    return event.event_uid
+
+
 # Body text indexing
 @indexer(IDXEvent)
 def searchable_text_indexer(obj):
@@ -542,6 +559,7 @@ class EventAccessor(object):
             contact_email=IEventContact,
             contact_phone=IEventContact,
             event_url=IEventContact,
+            event_uid=IEventUID,
             subjects=ICategorization,
             text=IEventSummary,
         )

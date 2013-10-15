@@ -31,6 +31,7 @@
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
     <adapter name="SearchableText" factory=".behaviors.searchable_text_indexer" />
+    <adapter name="event_uid" factory=".behaviors.event_uid_indexer" />
 
     <plone:behavior
         title="Event Basic"
@@ -75,6 +76,15 @@
         factory="plone.behavior.AnnotationStorage"
         for="plone.dexterity.interfaces.IDexterityContent"
         marker=".interfaces.IDXEventContact"
+        />
+
+    <plone:behavior
+        title="Event UID"
+        description="UID extension for Events."
+        provides=".behaviors.IEventUID"
+        factory="plone.behavior.AnnotationStorage"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".interfaces.IDXEventUID"
         />
 
     <plone:behavior
