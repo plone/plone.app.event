@@ -276,6 +276,14 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
+    atapi.StringField(
+        'eventUid',
+        accessor='event_uri',
+        write_permission=ModifyPortalContent,
+        widget=atapi.StringWidget(
+            visible={'edit':'invisible', 'view':'invisible'}),
+    ),
+
     atapi.TextField(
         'text',
         required=False,
@@ -795,6 +803,13 @@ class EventAccessor(object):
     @event_url.setter
     def event_url(self, value):
         self.context.setEventUrl(safe_unicode(value))
+
+    @property
+    def event_uid(self):
+        return self.context.event_uid()
+    @event_uid.setter
+    def event_uid(self, value):
+        self.context.setEventUid(value)
 
     @property
     def subjects(self):
