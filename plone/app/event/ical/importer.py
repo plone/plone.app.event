@@ -128,13 +128,11 @@ def ical_import(container, ics_resource, event_type):
 
         event_uid = _get_prop('UID', item)
 
-        update = bool([i for i in existing_events if i.event_uid == event_uid])
+        existing_event = [
+            i for i in existing_events if i.event_uid == event_uid]
 
-        if update:
-            content = [
-                i.getObject() for i in existing_events
-                if i.event_uid == event_uid
-            ][0]
+        if existing_event:
+            content = existing_event[0].getObject()
         else:
             # TODO: if AT had the same attrs like IDXEventBase, we could set
             # everything within this invokeFactory call.
