@@ -650,9 +650,11 @@ def dates_for_display(occurrence):
     Setting time_only=False should return the date part only and *not*
     the time
 
+    NOTE: these tests are not run, but serve as documentation.
+    TODO: remove.
     >>> from DateTime import DateTime
     >>> start = DateTime(2010,3,16,14,40)
-    >>> from zope.componen.hooks import getSite
+    >>> from zope.component.hooks import getSite
     >>> site = getSite()
     >>> ulocalized_time(start, False,  time_only=True, context=site)
     u'14:40'
