@@ -106,10 +106,10 @@ def ical_import(container, ics_resource, event_type):
 
         # TODO: attendee-lists are not decoded properly and contain only
         # vCalAddress values
-        attendees = _get_prop('ATTENDEE', item)
+        attendees = item.get('ATTENDEE', ())
 
         contact = _get_prop('CONTACT', item)
-        categories = _get_prop('CATEGORIES', item)
+        categories = item.get('CATEGORIES', ())
         if hasattr(categories, '__iter__'):
             categories = [safe_unicode(it) for it in categories]
 

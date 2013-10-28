@@ -312,6 +312,7 @@ class TestDXEventUnittest(unittest.TestCase):
         mock = MockEvent()
         mock.start = datetime(2009, 1, 2)
         mock.end = datetime(2009, 1, 1)
+        mock.open_end = False
 
         try:
             IEventBasic.validateInvariants(mock)
@@ -323,6 +324,18 @@ class TestDXEventUnittest(unittest.TestCase):
         mock = MockEvent()
         mock.start = datetime(2009, 1, 2)
         mock.end = datetime(2009, 1, 2)
+        mock.open_end = False
+
+        try:
+            IEventBasic.validateInvariants(mock)
+        except:
+            self.fail()
+
+    def test_validate_invariants_openend(self):
+        mock = MockEvent()
+        mock.start = datetime(2009, 1, 2)
+        mock.end = datetime(2009, 1, 1)
+        mock.open_end = True
 
         try:
             IEventBasic.validateInvariants(mock)
