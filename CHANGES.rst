@@ -9,6 +9,14 @@ Changelog
     The ``ploneintegration`` setuptools extra and GenericSetup profiles are
     deprecated an will be removed with plone.app.event 1.1.
 
+- Don't validate end dates for open ended events, so open ended events in the
+  future can be saved via the form. Fixes #97
+  [gyst]
+
+- Ical importer: Fix default value for imported attendees and categories.
+  Return an empty tuple instead of None so that the edit form can be rendered.
+  [cillianderoiste]
+
 - Fix event_listing view on Collections to expand events. Fixes #91, Fixes #90.
   [thet]
 
