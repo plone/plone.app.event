@@ -9,6 +9,11 @@ Changelog
     The ``ploneintegration`` setuptools extra and GenericSetup profiles are
     deprecated an will be removed with plone.app.event 1.1.
 
+- In portlet calendar and events, don't use the search_base directly to
+  constuct calendar urls. The search base always starts from the Plone site
+  root, which led to wrong urls in Lineage subsites.
+  [thet]
+
 - Don't validate end dates for open ended events, so open ended events in the
   future can be saved via the form. Fixes #97
   [gyst]
