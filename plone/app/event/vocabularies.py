@@ -27,19 +27,20 @@ replacement_zones = {
 }
 
 
-def Timezones(context):
-    """ Vocabulary for all timezones.
-
+def Timezones(context, query=None):
+    """Vocabulary for all timezones.
     """
     rpl_keys = replacement_zones.keys()
-    tz_list = [it for it in pytz.all_timezones if it not in rpl_keys]
-    return SimpleVocabulary.fromValues(tz_list)
-
+    tz_list = [SimpleTerm(value=it, title=it)
+               for it in pytz.all_timezones if it not in rpl_keys and (
+                   query is None
+                   or query.lower() in it.lower())]
+    return SimpleVocabulary(tz_list)
 directlyProvides(Timezones, IVocabularyFactory)
 
 
-def AvailableTimezones(context):
-    """ Vocabulary for available timezones, as set by in the controlpanel.
+def AvailableTimezones(context, query=None):
+    """Vocabulary for available timezones, as set by in the controlpanel.
 
     This vocabulary is based on collective.elephantvocabulary. The reason is,
     that if timezones are used in events or in user's settings and later
@@ -48,29 +49,26 @@ def AvailableTimezones(context):
 
     Note: after setting available_timezones, this vocabulary must be
     reinstantiated to reflect the changes.
-
     """
     # TODO: if the portal_timezone is not in available_timezones, also put it
     #       in AvailableTimezone vocab.
     tzvocab = getUtility(IVocabularyFactory,
-                         'plone.app.event.Timezones')(context)
+                         'plone.app.event.Timezones')(context, query)
     return wrap_vocabulary(
         tzvocab,
         visible_terms_from_registry='plone.app.event.available_timezones'
     )(context)
-
 directlyProvides(AvailableTimezones, IVocabularyFactory)
 
 
 def Weekdays(context):
-    """ Vocabulary for Weekdays.
+    """Vocabulary for Weekdays.
 
     PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
 
         Note: Context is here a RecordProxy and cannot be used to get the site
               root. zope.i18n.translate seems not to respect the portal
               language.
-
     """
 
     # TODO: revisit, use zope.i18n
@@ -96,13 +94,12 @@ def Weekdays(context):
 
     items = [SimpleTerm(i[1], i[1], i[0]) for i in items]
     return SimpleVocabulary(items)
-
 directlyProvides(Weekdays, IVocabularyFactory)
 
 
 @forever.memoize
 def EventTypes(context):
-    """ Vocabulary for available event types.
+    """Vocabulary for available event types.
 
     Insane stuff: All types are created temporary and checked if the provide
     the IEvent interface. At least, this function is cached forever the Zope
@@ -140,7 +137,7 @@ directlyProvides(EventTypes, IVocabularyFactory)
 
 
 def SynchronizationStrategies(context):
-    """ Vocabulary for icalendar synchronization strategies.
+    """Vocabulary for icalendar synchronization strategies.
     """
     # TODO: translate
     items = ['none', 'keep_newer', 'keep_mine', 'keep_theirs']

@@ -17,14 +17,14 @@ Changelog
   Plone to integrate plone.app.event.
   [thet]
 
+- Allow query parameters for timezone vocabularies for filtering. Create the
+  "Timezones" vocabulary from SimpleTerm objects with a value and title set
+  for better support with plone.app.widgets AjaxSelectWidget.
+  [thet]
+
 
 1.0dev (unreleased)
 -------------------
-
-.. note::
-
-    The ``ploneintegration`` setuptools extra and GenericSetup profiles are
-    deprecated an will be removed with plone.app.event 1.1.
 
 - Fix event_listing view on Collections to expand events. Fixes #91, Fixes #90.
   [thet]
