@@ -7,6 +7,7 @@ from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
+from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
@@ -244,7 +245,7 @@ class ICalendarEventComponent(object):
             ical.add('dtstart', event.start)
             ical.add('dtend', event.end)
 
-        if event.recurrence:
+        if event.recurrence and not IOccurrence.providedBy(self.context):
             for recdef in event.recurrence.split():
                 prop, val = recdef.split(':')
                 if prop == 'RRULE':

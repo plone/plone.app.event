@@ -12,6 +12,10 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Don't include the recurrence definition when doing icalendar exports of
+  individual occurrences. Fixes: #61.
+  [thet]
+
 - Restore Javascript based edit-form functionality to set end dates depending
   on start dates with the same delta of days as initialized, as developed by
   vincentfretin back at plone.app.event's birth.

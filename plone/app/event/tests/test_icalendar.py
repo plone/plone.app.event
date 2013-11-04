@@ -12,6 +12,8 @@ from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from zope.component import getMultiAdapter
+from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
+from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 
 import os
 import pytz
@@ -28,6 +30,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
 
     def event_factory(self):
         return DXEventAccessor.create
+
+    def traverser(self, context, request):
+        return OccTravDX(context, request)
 
     def checkOrder(self, text, *order):
         for item in order:
@@ -84,6 +89,22 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'END:DAYLIGHT',
             'END:VTIMEZONE',
             'END:VCALENDAR')
+
+    def test_event_occurrence_ical(self):
+        """An event occurrence should not conain recurrence definitions from
+        it's parent.
+        """
+        headers, output, request = make_fake_response(self.request)
+        occ = self.traverser(self.now_event, request).publishTraverse(
+            request, '2013-05-07'
+        )
+        view = getMultiAdapter((occ, request), name='ics_view')
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.assertTrue('Now Event' in icalstr)
+        self.assertTrue('RRULE' not in icalstr)
 
     def test_portal_ical(self):
         headers, output, request = make_fake_response(self.request)
@@ -176,6 +197,9 @@ class ICalendarExportTestAT(ICalendarExportTestDX):
 
     def event_factory(self):
         return ATEventAccessor.create
+
+    def traverser(self, context, request):
+        return OccTravDX(context, request)
 
 
 class TestIcalImportDX(unittest.TestCase):
