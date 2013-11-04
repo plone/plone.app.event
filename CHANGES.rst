@@ -12,6 +12,11 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Restore Javascript based edit-form functionality to set end dates depending
+  on start dates with the same delta of days as initialized, as developed by
+  vincentfretin back at plone.app.event's birth.
+  [thet]
+
 - Deprecate the plone.app.event.dx.event type and plone.app.event.dx:default
   profile.  Please create your own type based on plone.app.event's Dexterity
   behaviors or use the "Event" type from plone.app.contenttypes. The
