@@ -9,6 +9,22 @@ Changelog
     The ``ploneintegration`` setuptools extra and GenericSetup profiles are
     deprecated an will be removed with plone.app.event 1.1.
 
+    The plone.app.event.dx.event type and plone.app.event.dx:default profile
+    are deprecated and will be removed in a future version of plone.app.event.
+
+- Deprecate the plone.app.event.dx.event type and plone.app.event.dx:default
+  profile.  Please create your own type based on plone.app.event's Dexterity
+  behaviors or use the "Event" type from plone.app.contenttypes. The
+  plone.app.event:default profile is sufficient also for Dexterity-only based
+  installations.
+  [thet]
+
+- Remove the behaviors plone.app.relationfield.behavior.IRelatedItems adn
+  plone.app.versioningbehavior.behaviors.IVersionable from the Dexterity
+  example type. We don't depend on these packages and won't introduce an
+  explicit dependency on it.
+  [thet]
+
 - In portlet calendar and events, don't use the search_base directly to
   constuct calendar urls. The search base always starts from the Plone site
   root, which led to wrong urls in Lineage subsites.
