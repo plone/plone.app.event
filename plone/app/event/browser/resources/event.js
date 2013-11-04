@@ -1,8 +1,6 @@
 (function($, plone) {
 
-    if (plone.paevent === undefined) {
-        plone.paevent = {};
-    }
+    plone.paevent = plone.paevent || {};
     plone.paevent.end_start_delta = 1/24;  // Delta in days
 
     function initDelta(e) {
