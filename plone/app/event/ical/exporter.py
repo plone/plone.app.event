@@ -162,7 +162,7 @@ def calendar_from_container(context):
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
-    result = get_events(context, path=path)
+    result = get_events(context, ret_mode=1, expand=False, path=path)
     return construct_icalendar(context, result)
 
 
