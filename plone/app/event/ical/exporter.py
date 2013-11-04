@@ -34,7 +34,6 @@ def construct_icalendar(context, events):
 
     :param events: The list of event objects, which are included in this
                    calendar.
-
     """
     cal = icalendar.Calendar()
     cal.add('prodid', PRODID)
@@ -151,7 +150,6 @@ def add_to_zones_map(tzmap, tzid, dt):
 def calendar_from_event(context):
     """Event adapter. Returns an icalendar.Calendar object from an Event
     context.
-
     """
     context = aq_inner(context)
     return construct_icalendar(context, context)
@@ -161,7 +159,6 @@ def calendar_from_event(context):
 def calendar_from_container(context):
     """Container adapter. Returns an icalendar.Calendar object from a
     Containerish context like a Folder.
-
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
@@ -173,7 +170,6 @@ def calendar_from_container(context):
 def calendar_from_collection(context):
     """Container/Event adapter. Returns an icalendar.Calendar object from a
     Collection.
-
     """
     context = aq_inner(context)
     result = get_events(context)
@@ -182,7 +178,6 @@ def calendar_from_collection(context):
 
 class ICalendarEventComponent(object):
     """Returns an icalendar object of the event.
-
     """
     implements(IICalendarEventComponent)
 
@@ -191,9 +186,7 @@ class ICalendarEventComponent(object):
         self.event = IEventAccessor(context)
 
     def to_ical(self):
-
         ical = icalendar.Event()
-
         event = self.event
 
         # TODO: event.text
@@ -300,7 +293,6 @@ class ICalendarEventComponent(object):
 
 class EventsICal(BrowserView):
     """Returns events in iCal format.
-
     """
 
     def get_ical_string(self):
