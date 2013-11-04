@@ -91,7 +91,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'END:VCALENDAR')
 
     def test_event_occurrence_ical(self):
-        """An event occurrence should not conain recurrence definitions from
+        """A event occurrence should not conain recurrence definitions from
         it's parent.
         """
         headers, output, request = make_fake_response(self.request)
@@ -113,6 +113,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
+
+        # No occurrences in export. Otherwise count would be 8.
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
 
         self.checkOrder(
             icalstr,
@@ -190,6 +193,38 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'END:DAYLIGHT',
             'END:VTIMEZONE',
             'END:VCALENDAR')
+
+    def test_event_listing_ical_portal(self):
+        """Test event_listing ical export. It should contain all events from
+        the listing, except Occurrences. For occurrences, their original events
+        are exported.
+        """
+        headers, output, request = make_fake_response(self.request)
+        view = getMultiAdapter((self.portal, request), name='event_listing_ical')
+        view.mode = 'all'
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        # No occurrences in export. Otherwise count would be 8.
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
+
+    def test_event_listing_ical_portal__specific_date(self):
+        """Test event_listing ical export for a specific date. The date is when
+        a occurrence happens. It shouldn't contain the occurrence but the
+        original event and the long lasting event.
+        """
+        headers, output, request = make_fake_response(self.request)
+        view = getMultiAdapter((self.portal, request), name='event_listing_ical')
+        view.mode = 'day'
+        view._date = '2013-04-27'
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 2)
+        self.assertTrue('Past Event' in icalstr)
+        self.assertTrue('Long Event' in icalstr)
 
 
 class ICalendarExportTestAT(ICalendarExportTestDX):

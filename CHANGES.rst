@@ -12,6 +12,10 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Don't include occurrences in icalendar exports of event_listing, but include
+  the original event with it's recurrence rule. Fixes #103.
+  [thet]
+
 - Don't include the recurrence definition when doing icalendar exports of
   individual occurrences. Fixes: #61.
   [thet]
