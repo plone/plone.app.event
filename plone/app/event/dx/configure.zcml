@@ -79,15 +79,6 @@
         />
 
     <plone:behavior
-        title="Event UID"
-        description="UID extension for Events."
-        provides=".behaviors.IEventUID"
-        factory="plone.behavior.AnnotationStorage"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventUID"
-        />
-
-    <plone:behavior
         title="Event Summary"
         description="Summary/body text extension for Events."
         provides=".behaviors.IEventSummary"

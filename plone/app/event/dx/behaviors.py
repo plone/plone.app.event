@@ -15,7 +15,6 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.event.dx.interfaces import IDXEventUID
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.autoform import directives as form
@@ -33,6 +32,7 @@ from zope import schema
 from zope.component import adapts
 from zope.component import provideAdapter
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -123,6 +123,10 @@ class IEventBasic(model.Schema):
         required=True,
         vocabulary="plone.app.event.AvailableTimezones"
     )
+
+    # icalendar event uid
+    event_uid = schema.TextLine(required=False)
+    form.mode(event_uid='hidden')
 
     @invariant
     def validate_start_end(data):
@@ -267,13 +271,6 @@ class IEventContact(model.Schema):
     )
 
 
-class IEventUID(model.Schema):
-    """Event UID Schema.
-    """
-    event_uid = schema.TextLine(required=False)
-    form.mode(event_uid='hidden')
-
-
 class IEventSummary(model.Schema):
     """Event summary (body text) schema."""
 
@@ -296,7 +293,6 @@ alsoProvides(IEventRecurrence, IFormFieldProvider)
 alsoProvides(IEventLocation, IFormFieldProvider)
 alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
-alsoProvides(IEventUID, IFormFieldProvider)
 alsoProvides(IEventSummary, IFormFieldProvider)
 
 
@@ -367,6 +363,13 @@ class EventBasic(object):
         self.context.open_end = value
 
     @property
+    def event_uid(self):
+        return getattr(self.context, 'event_uid', None)
+    @event_uid.setter
+    def event_uid(self, value):
+        self.context.event_uid = value
+
+    @property
     def duration(self):
         return self.context.end - self.context.start
 
@@ -435,9 +438,8 @@ def data_postprocessing(obj, event):
         return dt.replace(microsecond=0)
 
     behavior = IEventBasic(obj)
-    tz = pytz.timezone(behavior.timezone)
-
     # Fix zones
+    tz = pytz.timezone(behavior.timezone)
     start = _fix_zone(obj.start, tz)
     end = _fix_zone(obj.end, tz)
 
@@ -452,6 +454,16 @@ def data_postprocessing(obj, event):
     # Save back
     obj.start = utc(start)
     obj.end = utc(end)
+
+    if not behavior.event_uid:
+        # event_uid has to be set for icalendar data exchange.
+        uid = IUUID(obj)
+        request = getRequest()
+        domain = request.get('HTTP_HOST')
+        behavior.event_uid = '%s%s' % (
+            uid,
+            domain and '@%s' % domain or ''
+        )
 
     # Reindex
     obj.reindexObject()
@@ -478,12 +490,12 @@ def end_indexer(obj):
 
 
 # icalendar event UID indexer
-@indexer(IDXEventUID)
+@indexer(IDXEvent)
 def event_uid_indexer(obj):
-    event = IEventUID(obj, None)
-    if event and event.event_uid:
-        return event.event_uid
-    return None
+    event = IEventBasic(obj)
+    if not event.event_uid:
+        return None
+    return event.event_uid
 
 
 # Body text indexing
@@ -555,6 +567,7 @@ class EventAccessor(object):
             whole_day=IEventBasic,
             open_end=IEventBasic,
             timezone=IEventBasic,
+            event_uid=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,
             attendees=IEventAttendees,
@@ -562,7 +575,6 @@ class EventAccessor(object):
             contact_email=IEventContact,
             contact_phone=IEventContact,
             event_url=IEventContact,
-            event_uid=IEventUID,
             subjects=ICategorization,
             text=IEventSummary,
         )
