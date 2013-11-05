@@ -97,6 +97,9 @@ class PAEventATLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         self.ostz = os_zone()
         # Load ZCML
+        import plone.app.collection
+        self.loadZCML(package=plone.app.collection,
+                      context=configurationContext)
         import plone.app.event.at
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
 
@@ -109,6 +112,7 @@ class PAEventATLayer(PloneSandboxLayer):
             # Install Products.ATContentTypes profile only for versions, where
             # it's available
             self.applyProfile(portal, 'Products.ATContentTypes:default')
+        self.applyProfile(portal, 'plone.app.collection:default')
         self.applyProfile(portal, 'plone.app.event.at:default')
         set_timezone(tz='UTC')
 
