@@ -164,6 +164,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             startFieldMonth='startDate-month',
             startFieldDay='startDate-day',
             first_day=first_weekday_sun0,
+            show_repeat_forever=False
         ),
     ),
 

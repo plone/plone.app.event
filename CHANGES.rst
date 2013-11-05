@@ -12,6 +12,9 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Don't show the repeat forever button in the recurrence widget.
+  [thet]
+
 - Fix icalendar export for collections and Archetype topics. Fixes #104.
   [thet]
 
