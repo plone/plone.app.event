@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0.rcdev (unreleased)
+----------------------
 
 .. note::
 
