@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Products.ZCatalog.interfaces import ICatalogBrain
 from datetime import datetime
 from datetime import timedelta
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
@@ -59,7 +60,8 @@ def construct_icalendar(context, events):
     if not hasattr(events, '__getslice__'):  # LazyMap doesn't have __iter__
         events = [events]
     for event in events:
-        if ICatalogBrain.providedBy(event):
+        if ICatalogBrain.providedBy(event) or\
+                IContentListingObject.providedBy(event):
             event = event.getObject()
         acc = IEventAccessor(event)
         tz = acc.timezone
@@ -172,7 +174,9 @@ def calendar_from_collection(context):
     Collection.
     """
     context = aq_inner(context)
-    result = get_events(context)
+    # The keyword argument brains=False was added to plone.app.contenttypes
+    # after 1.0
+    result = context.results(batch=False, sort_on='start')
     return construct_icalendar(context, result)
 
 

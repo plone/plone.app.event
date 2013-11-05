@@ -3,9 +3,10 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-  <adapter factory="..ical.exporter.calendar_from_collection"
-      provides="plone.event.interfaces.IICalendar"
+  <adapter
       for="Products.ATContentTypes.interfaces.IATTopic"
+      provides="plone.event.interfaces.IICalendar"
+      factory=".ical.calendar_from_topic"
       />
   <browser:page
       for="Products.ATContentTypes.interfaces.IATTopic"

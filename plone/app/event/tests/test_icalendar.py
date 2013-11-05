@@ -226,6 +226,20 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertTrue('Past Event' in icalstr)
         self.assertTrue('Long Event' in icalstr)
 
+    def test_collection_ical(self):
+        """Test basic icalendar export from ATTopics.
+        """
+        headers, output, request = make_fake_response(self.request)
+        view = getMultiAdapter(
+            (self.portal.collection, request),
+            name='ics_view'
+        )
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
+
 
 class ICalendarExportTestAT(ICalendarExportTestDX):
     layer = PAEventAT_INTEGRATION_TESTING

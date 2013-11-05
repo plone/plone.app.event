@@ -45,6 +45,13 @@
         zcml:condition="installed plone.app.collection"
         />
 
+    <adapter
+        for="plone.app.contenttypes.interfaces.ICollection"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_collection"
+        zcml:condition="installed plone.app.contenttypes"
+        />
+
     <!-- ICal Browser Views -->
     <browser:page
         for="plone.event.interfaces.IEvent"
@@ -84,6 +91,15 @@
         class=".exporter.EventsICal"
         permission="zope2.View"
         zcml:condition="installed plone.app.collection"
+        layer="..interfaces.IBrowserLayer"
+        />
+
+    <browser:page
+        for="plone.app.contenttypes.interfaces.ICollection"
+        name="ics_view"
+        class=".exporter.EventsICal"
+        permission="zope2.View"
+        zcml:condition="installed plone.app.contenttypes"
         layer="..interfaces.IBrowserLayer"
         />
 
