@@ -1,11 +1,11 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.event.base import find_site
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
 from plone.app.event.base import wkday_to_mon1
+from plone.app.event.portlets import get_calendar_url
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
@@ -72,9 +72,7 @@ class Renderer(base.Renderer):
     def update(self):
         context = aq_inner(self.context)
 
-        sb = self.data.search_base
-        site_url = find_site(context, as_url=True)
-        self.calendar_url = '%s%s' % (site_url, sb and sb or '/event_listing')
+        self.calendar_url = get_calendar_url(context, self.data.search_base)
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (
@@ -202,9 +200,10 @@ class Renderer(base.Renderer):
                  'day': dat.day,
                  'prev_month': dat.month < month,
                  'next_month': dat.month > month,
-                 'today': dat.year == today.year and\
-                          dat.month == today.month and\
-                          dat.day == today.day,
+                 'today':
+                    dat.year == today.year and
+                    dat.month == today.month and
+                    dat.day == today.day,
                  'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
                  'events_string': events_string,
                  'events': date_events})

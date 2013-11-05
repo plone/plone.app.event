@@ -2,11 +2,13 @@ from Acquisition import aq_inner
 from Products.ZCatalog.interfaces import ICatalogBrain
 from datetime import datetime
 from datetime import timedelta
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
+from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
@@ -33,7 +35,6 @@ def construct_icalendar(context, events):
 
     :param events: The list of event objects, which are included in this
                    calendar.
-
     """
     cal = icalendar.Calendar()
     cal.add('prodid', PRODID)
@@ -59,7 +60,8 @@ def construct_icalendar(context, events):
     if not hasattr(events, '__getslice__'):  # LazyMap doesn't have __iter__
         events = [events]
     for event in events:
-        if ICatalogBrain.providedBy(event):
+        if ICatalogBrain.providedBy(event) or\
+                IContentListingObject.providedBy(event):
             event = event.getObject()
         acc = IEventAccessor(event)
         tz = acc.timezone
@@ -150,7 +152,6 @@ def add_to_zones_map(tzmap, tzid, dt):
 def calendar_from_event(context):
     """Event adapter. Returns an icalendar.Calendar object from an Event
     context.
-
     """
     context = aq_inner(context)
     return construct_icalendar(context, context)
@@ -160,11 +161,10 @@ def calendar_from_event(context):
 def calendar_from_container(context):
     """Container adapter. Returns an icalendar.Calendar object from a
     Containerish context like a Folder.
-
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
-    result = get_events(context, path=path)
+    result = get_events(context, ret_mode=1, expand=False, path=path)
     return construct_icalendar(context, result)
 
 
@@ -172,16 +172,16 @@ def calendar_from_container(context):
 def calendar_from_collection(context):
     """Container/Event adapter. Returns an icalendar.Calendar object from a
     Collection.
-
     """
     context = aq_inner(context)
-    result = get_events(context)
+    # The keyword argument brains=False was added to plone.app.contenttypes
+    # after 1.0
+    result = context.results(batch=False, sort_on='start')
     return construct_icalendar(context, result)
 
 
 class ICalendarEventComponent(object):
     """Returns an icalendar object of the event.
-
     """
     implements(IICalendarEventComponent)
 
@@ -190,9 +190,7 @@ class ICalendarEventComponent(object):
         self.event = IEventAccessor(context)
 
     def to_ical(self):
-
         ical = icalendar.Event()
-
         event = self.event
 
         # TODO: event.text
@@ -244,7 +242,7 @@ class ICalendarEventComponent(object):
             ical.add('dtstart', event.start)
             ical.add('dtend', event.end)
 
-        if event.recurrence:
+        if event.recurrence and not IOccurrence.providedBy(self.context):
             for recdef in event.recurrence.split():
                 prop, val = recdef.split(':')
                 if prop == 'RRULE':
@@ -299,7 +297,6 @@ class ICalendarEventComponent(object):
 
 class EventsICal(BrowserView):
     """Returns events in iCal format.
-
     """
 
     def get_ical_string(self):

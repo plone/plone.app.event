@@ -162,7 +162,8 @@ class IEventRecurrence(model.Schema):
         'recurrence',
         RecurrenceFieldWidget,
         start_field='IEventBasic.start',
-        first_day=first_weekday_sun0
+        first_day=first_weekday_sun0,
+        show_repeat_forever=False
     )
     recurrence = RecurrenceField(
         title=_(

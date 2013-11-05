@@ -22,14 +22,19 @@ or::
 
 The zcml dependency is be loaded automatically by z3c.autoinclude.
 
-Then install plone.app.event via the controlpanel or by depending on one or
-both of these GenericSetup profiles in metadata.xml::
+Then install plone.app.event via the controlpanel or by depending on the
+following GenericSetup profile in metadata.xml::
+
+    plone.app.event:default
+
+For Archetypes, use this one::
 
     plone.app.event.at:default
 
-or::
-
-    plone.app.event.dx:default
+Don't use the ``plone.app.event.dx:default`` profile, which will be removed in
+future versions of plone.app.event. Please create your own type based on
+plone.app.event's Dexterity behaviors (Through the web or via a GenericSetup
+profile), or install plone.app.contenttypes for ready-to-use Dexterity types.
 
 
 Plone 4.2 and 4.3 installation

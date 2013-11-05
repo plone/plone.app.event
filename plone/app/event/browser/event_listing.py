@@ -103,7 +103,7 @@ class EventListing(BrowserView):
         return start, end
 
     @view.memoize
-    def _get_events(self, ret_mode=3):
+    def _get_events(self, ret_mode=3, expand=True):
         context = self.context
         kw = {}
         if self.path:
@@ -127,9 +127,9 @@ class EventListing(BrowserView):
             sort_reverse = True
         return get_events(context, start=start, end=end,
                           sort=sort, sort_reverse=sort_reverse,
-                          ret_mode=ret_mode, expand=True, **kw)
+                          ret_mode=ret_mode, expand=expand, **kw)
 
-    def events(self, ret_mode=3, batch=True):
+    def events(self, ret_mode=3, expand=True, batch=True):
         res = []
         is_col = self.is_collection
         is_top = self.is_topic
@@ -139,18 +139,17 @@ class EventListing(BrowserView):
                 res = ctx.results(batch=False, sort_on='start', brains=True)
                 query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
             else:
-                res = ctx.queryCatalog(
-                    REQUEST=self.request, batch=False, full_objects=False
-                )
+                res = ctx.queryCatalog(batch=False, full_objects=False)
                 query = ctx.buildQuery()
-            # get start and end values from the query to ensure limited
-            # listing for occurrences
-            start, end = self._expand_events_start_end(query.get('start'),
-                                                       query.get('end'))
-            res = expand_events(res, ret_mode, sort='start', start=start,
-                                end=end)
+            if expand:
+                # get start and end values from the query to ensure limited
+                # listing for occurrences
+                start, end = self._expand_events_start_end(query.get('start'),
+                                                           query.get('end'))
+                res = expand_events(res, ret_mode, sort='start', start=start,
+                                    end=end)
         else:
-            res = self._get_events(ret_mode)
+            res = self._get_events(ret_mode, expand=expand)
         if batch:
             b_start = self.b_start
             b_size = self.b_size
@@ -159,7 +158,10 @@ class EventListing(BrowserView):
 
     @property
     def ical(self):
-        events = self.events(ret_mode=2, batch=False)  # get as objects
+        # Get as objects.
+        # Don't include occurrences to avoid having them along with their
+        # original events and it's recurrence definition in icalendar exports.
+        events = self.events(ret_mode=2, expand=False, batch=False)
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
@@ -407,6 +409,7 @@ class EventListing(BrowserView):
             if r == "min":
                 se["start"] = q
         return se["start"], se["end"]
+
 
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):

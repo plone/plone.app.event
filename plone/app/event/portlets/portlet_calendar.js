@@ -38,4 +38,4 @@
         rebind_portlet_calendar();
     });
 
-})(jQuery);
+}(jQuery));

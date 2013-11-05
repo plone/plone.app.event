@@ -153,11 +153,17 @@ class RendererTest(unittest.TestCase):
         rd = r.render()
         self.assertTrue('e1' in rd and 'e2' in rd)
 
+        # No search base gives calendar urls with event_listing part
+        self.assertTrue('event_listing?mode=day' in rd)
+
         r = self.renderer(assignment=portlet_calendar.Assignment(
             search_base="/eventfolder"))
         r.update()
         rd = r.render()
         self.assertTrue('e1' not in rd and 'e2' in rd)
+
+        # A given search base gives calendar urls without event_listing part
+        self.assertTrue('event_listing?mode=day' not in rd)
 
         # link to calendar view in rendering
         self.assertTrue('?mode=day&amp;date=' in rd)

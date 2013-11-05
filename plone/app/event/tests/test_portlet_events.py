@@ -171,9 +171,15 @@ class RendererTest(unittest.TestCase):
         portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
         self.assertEqual(2, len(portlet.events))
 
+        # No search base gives calendar urls with event_listing part
+        self.assertTrue('event_listing' in portlet.render())
+
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base="/eventfolder"))
         self.assertEqual(1, len(portlet.events))
+
+        # A given search base gives calendar urls without event_listing part
+        self.assertTrue('event_listing' not in portlet.render())
 
         # TODO: better create objects at setup and use thest in these tests
         self.portal.manage_delObjects(['e1', 'eventfolder'])
