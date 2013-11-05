@@ -104,6 +104,7 @@ class PAEventATLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event.at, context=configurationContext)
 
         z2.installProduct(app, 'Products.ATContentTypes')
+        z2.installProduct(app, 'plone.app.collection')
         z2.installProduct(app, 'plone.app.event.at')
 
     def setUpPloneSite(self, portal):
