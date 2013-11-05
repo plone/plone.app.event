@@ -139,9 +139,7 @@ class EventListing(BrowserView):
                 res = ctx.results(batch=False, sort_on='start', brains=True)
                 query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
             else:
-                res = ctx.queryCatalog(
-                    REQUEST=self.request, batch=False, full_objects=False
-                )
+                res = ctx.queryCatalog(batch=False, full_objects=False)
                 query = ctx.buildQuery()
             if expand:
                 # get start and end values from the query to ensure limited
@@ -411,6 +409,7 @@ class EventListing(BrowserView):
             if r == "min":
                 se["start"] = q
         return se["start"], se["end"]
+
 
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):
