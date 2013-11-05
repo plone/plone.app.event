@@ -10,7 +10,7 @@
       name="default"
       directory="profiles/default"
       title="plone.app.event Plone4 integration"
-      description="Integration of plone.app.event into pre Plone 4.4 release."
+      description="Integration of plone.app.event into pre Plone 5.0 release."
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />

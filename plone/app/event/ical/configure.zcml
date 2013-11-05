@@ -5,39 +5,51 @@
     i18n_domain="plone.app.event">
 
     <adapter
-        factory=".exporter.ICalendarEventComponent"
         for="plone.event.interfaces.IEvent"
+        factory=".exporter.ICalendarEventComponent"
         />
 
     <adapter
+        for="plone.event.interfaces.IOccurrence"
         factory=".exporter.ICalendarEventComponent"
-        for="plone.event.interfaces.IOccurrence"
         />
 
-    <adapter factory=".exporter.calendar_from_event"
-        provides="plone.event.interfaces.IICalendar"
+    <adapter
         for="plone.event.interfaces.IEvent"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_event"
         />
 
-    <adapter factory=".exporter.calendar_from_event"
-        provides="plone.event.interfaces.IICalendar"
+    <adapter
         for="plone.event.interfaces.IOccurrence"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_event"
         />
 
-    <adapter factory=".exporter.calendar_from_container"
-        provides="plone.event.interfaces.IICalendar"
+    <adapter
         for="Products.CMFCore.interfaces.ISiteRoot"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_container"
         />
 
-    <adapter factory=".exporter.calendar_from_container"
-        provides="plone.event.interfaces.IICalendar"
+    <adapter
         for="plone.folder.interfaces.IFolder"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_container"
         />
 
-    <adapter factory=".exporter.calendar_from_collection"
-        provides="plone.event.interfaces.IICalendar"
+    <adapter
         for="plone.app.collection.interfaces.ICollection"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_collection"
         zcml:condition="installed plone.app.collection"
+        />
+
+    <adapter
+        for="plone.app.contenttypes.interfaces.ICollection"
+        provides="plone.event.interfaces.IICalendar"
+        factory=".exporter.calendar_from_collection"
+        zcml:condition="installed plone.app.contenttypes"
         />
 
     <!-- ICal Browser Views -->
@@ -79,6 +91,15 @@
         class=".exporter.EventsICal"
         permission="zope2.View"
         zcml:condition="installed plone.app.collection"
+        layer="..interfaces.IBrowserLayer"
+        />
+
+    <browser:page
+        for="plone.app.contenttypes.interfaces.ICollection"
+        name="ics_view"
+        class=".exporter.EventsICal"
+        permission="zope2.View"
+        zcml:condition="installed plone.app.contenttypes"
         layer="..interfaces.IBrowserLayer"
         />
 

@@ -9,6 +9,54 @@ Changelog
     The ``ploneintegration`` setuptools extra and GenericSetup profiles are
     deprecated an will be removed with plone.app.event 1.1.
 
+    The plone.app.event.dx.event type and plone.app.event.dx:default profile
+    are deprecated and will be removed in a future version of plone.app.event.
+
+- Don't show the repeat forever button in the recurrence widget.
+  [thet]
+
+- Fix icalendar export for collections and Archetype topics. Fixes #104.
+  [thet]
+
+- Don't include occurrences in icalendar exports of event_listing, but include
+  the original event with it's recurrence rule. Fixes #103.
+  [thet]
+
+- Don't include the recurrence definition when doing icalendar exports of
+  individual occurrences. Fixes: #61.
+  [thet]
+
+- Restore Javascript based edit-form functionality to set end dates depending
+  on start dates with the same delta of days as initialized, as developed by
+  vincentfretin back at plone.app.event's birth.
+  [thet]
+
+- Deprecate the plone.app.event.dx.event type and plone.app.event.dx:default
+  profile.  Please create your own type based on plone.app.event's Dexterity
+  behaviors or use the "Event" type from plone.app.contenttypes. The
+  plone.app.event:default profile is sufficient also for Dexterity-only based
+  installations.
+  [thet]
+
+- Remove the behaviors plone.app.relationfield.behavior.IRelatedItems adn
+  plone.app.versioningbehavior.behaviors.IVersionable from the Dexterity
+  example type. We don't depend on these packages and won't introduce an
+  explicit dependency on it.
+  [thet]
+
+- In portlet calendar and events, don't use the search_base directly to
+  constuct calendar urls. The search base always starts from the Plone site
+  root, which led to wrong urls in Lineage subsites.
+  [thet]
+
+- Don't validate end dates for open ended events, so open ended events in the
+  future can be saved via the form. Fixes #97
+  [gyst]
+
+- Ical importer: Fix default value for imported attendees and categories.
+  Return an empty tuple instead of None so that the edit form can be rendered.
+  [cillianderoiste]
+
 - Fix event_listing view on Collections to expand events. Fixes #91, Fixes #90.
   [thet]
 

@@ -164,6 +164,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             startFieldMonth='startDate-month',
             startFieldDay='startDate-day',
             first_day=first_weekday_sun0,
+            show_repeat_forever=False
         ),
     ),
 
@@ -481,7 +482,6 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         """
         return self.end_date - self.start_date
 
-
     # TODO: Why is this needed?
     #
     security.declareProtected(ModifyPortalContent, 'update')
@@ -571,8 +571,10 @@ class StartEndDateValidator(object):
             return errors
 
         if start > end:
-            errors['endDate'] = _(u'error_end_must_be_after_start_date',
-                              default=u'End date must be after start date.')
+            errors['endDate'] = _(
+                u'error_end_must_be_after_start_date',
+                default=u'End date must be after start date.'
+            )
 
         return errors and errors or None
 

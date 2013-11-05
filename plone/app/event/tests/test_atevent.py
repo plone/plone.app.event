@@ -225,6 +225,12 @@ class PAEventATTest(unittest.TestCase):
         errors = self.obj.validate(req, errors=None)
         self.assertTrue('endDate' in errors)
 
+        # ... except if open_end=True
+        req.form.update({'startDate': '2010-10-30', 'endDate': '2010-10-01',
+                         'openEnd': True})
+        errors = self.obj.validate(req, errors=None)
+        self.assertEqual(errors, {})
+
     def test_edit(self):
         new = self.obj
         self._edit_atevent(new)

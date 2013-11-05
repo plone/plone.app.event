@@ -18,7 +18,7 @@
 
   <!-- internal dependencies -->
   <configure zcml:condition="not-have plone-44">
-    <!-- pre plone 4.4 integration -->
+    <!-- pre plone 5.0 integration -->
     <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
   </configure>
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />

@@ -125,7 +125,8 @@ class IEventBasic(model.Schema):
 
     @invariant
     def validate_start_end(data):
-        if data.start > data.end:
+        # data_postprocessing sets end=start if open_end
+        if data.start > data.end and not data.open_end:
             raise StartBeforeEnd(
                 _("error_end_must_be_after_start_date",
                   default=u"End date must be after start date.")
@@ -161,7 +162,8 @@ class IEventRecurrence(model.Schema):
         'recurrence',
         RecurrenceFieldWidget,
         start_field='IEventBasic.start',
-        first_day=first_weekday_sun0
+        first_day=first_weekday_sun0,
+        show_repeat_forever=False
     )
     recurrence = RecurrenceField(
         title=_(
