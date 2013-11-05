@@ -15,6 +15,7 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx.interfaces import IDXEventUID
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.autoform import directives as form
@@ -477,12 +478,12 @@ def end_indexer(obj):
 
 
 # icalendar event UID indexer
-@indexer(IDXEvent)
+@indexer(IDXEventUID)
 def event_uid_indexer(obj):
-    event = IEventUID(obj)
-    if event.event_uid is None:
-        return ""
-    return event.event_uid
+    event = IEventUID(obj, None)
+    if event and event.event_uid:
+        return event.event_uid
+    return None
 
 
 # Body text indexing
