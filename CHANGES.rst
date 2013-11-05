@@ -11,6 +11,12 @@ Changelog
     ``plone.app.contenttypes`` easier. Please remove them also in your setup
     and be sure to depend on ``plone.app.portlets>=2.5a1``!
 
+.. note::
+
+    The plone.app.event.dx.event type and plone.app.event.dx:default profile
+    are deprecated and will be removed in a future version of plone.app.event.
+
+
 - Remove "ploneintegration" from setuptools extra section and GenericSetup
   profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
@@ -25,9 +31,6 @@ Changelog
 
 1.0dev (unreleased)
 -------------------
-
-    The plone.app.event.dx.event type and plone.app.event.dx:default profile
-    are deprecated and will be removed in a future version of plone.app.event.
 
 - Don't show the repeat forever button in the recurrence widget.
   [thet]
