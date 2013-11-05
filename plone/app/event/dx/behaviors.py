@@ -265,7 +265,7 @@ class IEventContact(model.Schema):
 
 
 class IEventUID(model.Schema):
-    """ Event UID Schema.
+    """Event UID Schema.
     """
     event_uid = schema.TextLine(required=False)
     form.mode(event_uid='hidden')
@@ -474,7 +474,7 @@ def end_indexer(obj):
     return DT(event.end)
 
 
-# UID indexer
+# icalendar event UID indexer
 @indexer(IDXEvent)
 def event_uid_indexer(obj):
     event = IEventUID(obj)

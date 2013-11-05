@@ -281,7 +281,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
         accessor='event_uri',
         write_permission=ModifyPortalContent,
         widget=atapi.StringWidget(
-            visible={'edit':'invisible', 'view':'invisible'}),
+            visible={'edit': 'invisible', 'view': 'invisible'}),
     ),
 
     atapi.TextField(
