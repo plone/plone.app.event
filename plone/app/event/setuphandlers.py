@@ -41,7 +41,9 @@ def catalog_setup(context):
 
     site = context.getSite()
     catalog = getToolByName(site, 'portal_catalog')
-    idxs = ['start', 'end']
+    date_idxs = ['start', 'end']
+    field_idxs = ['event_uid']
+    idxs = date_idxs + field_idxs
 
     class extra(object):
         recurdef = 'recurrence'
@@ -55,9 +57,13 @@ def catalog_setup(context):
                 catalog.delIndex(name)
                 logger.info('Old catalog DateIndex %s deleted.' % name)
         if name not in idxobj:
-            # create new DateRecurringIndex
-            catalog.addIndex(name, 'DateRecurringIndex', extra=extra())
-            logger.info('Catalog DateRecurringIndex %s created.' % name)
+            if name in date_idxs:
+                # create new DateRecurringIndex
+                catalog.addIndex(name, 'DateRecurringIndex', extra=extra())
+                logger.info('Catalog DateRecurringIndex %s created.' % name)
+            elif name in field_idxs:
+                catalog.addIndex(name, 'FieldIndex')
+                logger.info('Catalog FieldIndex %s created.' % name)
         try:
             catalog.addColumn(name)
             logger.info('Catalog metadata column %s created.' % name)

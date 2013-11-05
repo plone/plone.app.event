@@ -29,6 +29,7 @@ from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.uuid.interfaces import IUUID
 from zope.component import adapts
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -275,6 +276,13 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                         u"Add http:// for external links."
             ),
         ),
+    ),
+
+    atapi.StringField(
+        'eventUid',
+        write_permission=ModifyPortalContent,
+        widget=atapi.StringWidget(
+            visible={'edit': 'invisible', 'view': 'invisible'}),
     ),
 
     atapi.TextField(
@@ -635,6 +643,16 @@ def data_postprocessing(obj, event):
     start_field.set(obj, start.toZone('UTC'))
     end_field.set(obj, end.toZone('UTC'))
 
+    if not obj.getEventUid():
+        # event_uid has to be set for icalendar data exchange.
+        uid = IUUID(obj)
+        request = getRequest()
+        domain = request.get('HTTP_HOST')
+        obj.setEventUid('%s%s' % (
+            uid,
+            domain and '@%s' % domain or ''
+        ))
+
     obj.reindexObject()
 
 
@@ -797,6 +815,13 @@ class EventAccessor(object):
     @event_url.setter
     def event_url(self, value):
         self.context.setEventUrl(safe_unicode(value))
+
+    @property
+    def event_uid(self):
+        return self.context.getEventUid()
+    @event_uid.setter
+    def event_uid(self, value):
+        self.context.setEventUid(value)
 
     @property
     def subjects(self):

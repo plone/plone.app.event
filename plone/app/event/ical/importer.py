@@ -3,6 +3,7 @@
 #  - cleanup,
 #  - tests
 from Products.CMFPlone.utils import safe_unicode
+from Products.CMFCore.utils import getToolByName
 from plone.app.event import base
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
@@ -22,6 +23,15 @@ import urllib2
 def ical_import(container, ics_resource, event_type):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk('VEVENT')
+
+    cat = getToolByName(container, 'portal_catalog')
+    container_path = container.absolute_url_path()
+
+    def _get_by_event_uid(uid):
+        return cat.searchResults(
+            event_uid=uid,
+            path={'query': container_path, 'depth': 1}
+        )
 
     def _get_prop(prop, item):
         ret = None
@@ -117,17 +127,25 @@ def ical_import(container, ics_resource, event_type):
         #created = _get_prop('CREATED', item)
         #modified = _get_prop('LAST-MODIFIED', item)
 
-        # TODO: better use plone.api, from which some of the code here is
-        # copied
-        content_id = str(random.randint(0, 99999999))
+        # TODO: better use plone.api for content creation, from which some of
+        # the code here is copied
 
-        # TODO: if AT had the same attrs like IDXEventBase, we could set
-        # everything within this invokeFactory call.
-        container.invokeFactory(event_type,
-                                id=content_id,
-                                title=title,
-                                description=description)
-        content = container[content_id]
+        new_content_id = None
+        existing_event = None
+        event_uid = _get_prop('UID', item)
+        if event_uid:
+            existing_event = _get_by_event_uid(event_uid)
+        if existing_event:
+            content = existing_event[0].getObject()
+        else:
+            # TODO: if AT had the same attrs like IDXEventBase, we could set
+            # everything within this invokeFactory call.
+            new_content_id = str(random.randint(0, 99999999))
+            container.invokeFactory(event_type,
+                                    id=new_content_id,
+                                    title=title,
+                                    description=description)
+            content = container[new_content_id]
 
         event = IEventAccessor(content)
         event.start = start
@@ -141,6 +159,7 @@ def ical_import(container, ics_resource, event_type):
         event.attendees = attendees
         event.contact_name = contact
         event.subjects = categories
+        event.event_uid = event_uid
         notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code
@@ -149,12 +168,12 @@ def ical_import(container, ics_resource, event_type):
             # rename-after-creation and such
             content.processForm()
 
-        if content_id in container:
+        if new_content_id and new_content_id in container:
             # Rename with new id from title, if processForm didn't do it.
             chooser = INameChooser(container)
             new_id = chooser.chooseName(title, content)
             transaction.savepoint(optimistic=True)  # Commit before renaming
-            content.aq_parent.manage_renameObject(content_id, new_id)
+            content.aq_parent.manage_renameObject(new_content_id, new_id)
         else:
             transaction.savepoint(optimistic=True)
 

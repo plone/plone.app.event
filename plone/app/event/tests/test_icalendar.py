@@ -298,6 +298,10 @@ class TestIcalImportDX(unittest.TestCase):
             e1.open_end,
             False
         )
+        self.assertEqual(
+            e1.event_uid,
+            u'48f1a7ad64e847568d860cd092344970',
+        )
 
         e2 = IEventAccessor(self.impfolder.e2)
         self.assertEqual(

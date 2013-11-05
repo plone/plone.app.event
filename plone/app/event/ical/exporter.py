@@ -200,7 +200,13 @@ class ICalendarEventComponent(object):
         ical.add('created', utc(pydt(event.created)))
         ical.add('last-modified', utc(pydt(event.last_modified)))
 
-        ical.add('uid', event.uid)
+        if event.event_uid:
+            # Re-Use existing icalendar event UID
+            ical.add('uid', event.event_uid)
+        else:
+            # Else, use plone.uuid
+            ical.add('uid', event.uid)
+
         ical.add('url', event.url)
 
         ical.add('summary', event.title)

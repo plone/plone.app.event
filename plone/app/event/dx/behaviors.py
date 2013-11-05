@@ -32,6 +32,7 @@ from zope import schema
 from zope.component import adapts
 from zope.component import provideAdapter
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -122,6 +123,10 @@ class IEventBasic(model.Schema):
         required=True,
         vocabulary="plone.app.event.AvailableTimezones"
     )
+
+    # icalendar event uid
+    event_uid = schema.TextLine(required=False)
+    form.mode(event_uid='hidden')
 
     @invariant
     def validate_start_end(data):
@@ -358,6 +363,13 @@ class EventBasic(object):
         self.context.open_end = value
 
     @property
+    def event_uid(self):
+        return getattr(self.context, 'event_uid', None)
+    @event_uid.setter
+    def event_uid(self, value):
+        self.context.event_uid = value
+
+    @property
     def duration(self):
         return self.context.end - self.context.start
 
@@ -426,9 +438,8 @@ def data_postprocessing(obj, event):
         return dt.replace(microsecond=0)
 
     behavior = IEventBasic(obj)
-    tz = pytz.timezone(behavior.timezone)
-
     # Fix zones
+    tz = pytz.timezone(behavior.timezone)
     start = _fix_zone(obj.start, tz)
     end = _fix_zone(obj.end, tz)
 
@@ -443,6 +454,16 @@ def data_postprocessing(obj, event):
     # Save back
     obj.start = utc(start)
     obj.end = utc(end)
+
+    if not behavior.event_uid:
+        # event_uid has to be set for icalendar data exchange.
+        uid = IUUID(obj)
+        request = getRequest()
+        domain = request.get('HTTP_HOST')
+        behavior.event_uid = '%s%s' % (
+            uid,
+            domain and '@%s' % domain or ''
+        )
 
     # Reindex
     obj.reindexObject()
@@ -466,6 +487,15 @@ def end_indexer(obj):
     if event.end is None:
         return None
     return DT(event.end)
+
+
+# icalendar event UID indexer
+@indexer(IDXEvent)
+def event_uid_indexer(obj):
+    event = IEventBasic(obj)
+    if not event.event_uid:
+        return None
+    return event.event_uid
 
 
 # Body text indexing
@@ -537,6 +567,7 @@ class EventAccessor(object):
             whole_day=IEventBasic,
             open_end=IEventBasic,
             timezone=IEventBasic,
+            event_uid=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,
             attendees=IEventAttendees,

@@ -32,6 +32,10 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
+- Add event_uid field to ATEvent and IEventBasic and an index, which is used
+  for icalendar data exchange and synchronisation.
+  [cillianderoiste, thet]
+
 - Don't show the repeat forever button in the recurrence widget.
   [thet]
 
