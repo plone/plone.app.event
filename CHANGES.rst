@@ -12,8 +12,10 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
-- Add event_uid field to ATEvent and IEventBasic and an index, which is used
-  for icalendar data exchange and synchronisation.
+
+- Implement icalendar import/export synchronisation and add event_uid field to
+  ATEvent and IEventBasic and an event_uid index, following RFC5545, chapter
+  "3.8.4.7. Unique Identifier".
   [cillianderoiste, thet]
 
 - Don't show the repeat forever button in the recurrence widget.
