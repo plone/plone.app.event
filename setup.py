@@ -44,6 +44,7 @@ setup(
         'Zope2',
         'collective.elephantvocabulary',
         'icalendar',
+        'plone.app.contentlisting',
         'plone.app.imaging',
         'plone.app.layout',
         'plone.app.portlets>=2.5a1',
@@ -96,6 +97,7 @@ setup(
         ],
         'test': [
             'mock',
+            'plone.app.collection',
             'plone.app.contenttypes',
             'plone.app.event [archetypes, dexterity]',
             'plone.app.testing',
