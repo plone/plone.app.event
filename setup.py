@@ -51,7 +51,7 @@ setup(
         'plone.app.registry',
         'plone.app.vocabularies',
         'plone.browserlayer',
-        'plone.event>=1.0rc1',
+        'plone.event>=1.0',
         'plone.formwidget.datetime',
         'plone.formwidget.recurrence',
         'plone.formwidget.namedfile',
