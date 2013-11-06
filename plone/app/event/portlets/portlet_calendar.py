@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
@@ -165,7 +166,8 @@ class Renderer(base.Renderer):
         start = monthdates[0]
         end = monthdates[-1]
         events = get_events(context, start=start, end=end,
-                            ret_mode=2, expand=True, **query_kw)
+                            ret_mode=RET_MODE_OBJECTS,
+                            expand=True, **query_kw)
         cal_dict = construct_calendar(events, start=start, end=end)
 
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]

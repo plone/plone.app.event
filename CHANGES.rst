@@ -18,7 +18,7 @@ Changelog
 - Implement icalendar import/export synchronisation and add sync_uid index and
   sync_uid fields for ATEvent and IEventBasic. This follows RFC5545, chapter
   "3.8.4.7. Unique Identifier". The sync_uid index can also be used for any
-  other synchronisation tasks, where an external universally unique Identifier
+  other synchronisation tasks, where an external universally unique identifier
   is used.
   [cillianderoiste, thet]
 

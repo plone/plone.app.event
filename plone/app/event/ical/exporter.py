@@ -3,6 +3,7 @@ from Products.ZCatalog.interfaces import ICatalogBrain
 from datetime import datetime
 from datetime import timedelta
 from plone.app.contentlisting.interfaces import IContentListingObject
+from plone.app.event.base import RET_MODE_BRAINS
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
@@ -163,7 +164,8 @@ def calendar_from_container(context):
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
-    result = get_events(context, ret_mode=1, expand=False, path=path)
+    result = get_events(context, ret_mode=RET_MODE_BRAINS,
+                        expand=False, path=path)
     return construct_icalendar(context, result)
 
 
