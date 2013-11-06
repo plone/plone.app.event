@@ -13,14 +13,14 @@ And better yet, help out with documentation and pull-requests!
 
     To accept your pull requests, we need you need to have Plone contributors
     agreement signed and sent-in. For more information, see:
-    `http://plone.org/foundation/contributors-agreement/contributors-agreement-explained`_.
+    ` Contributor's Agreement for Plone Explained <http://plone.org/foundation/contributors-agreement/contributors-agreement-explained>`_.
 
 
 Contributors
 ------------
 
 Contributors, please add you name here! By doing this, you also state, that you
-have signed the `Plone Contributors Agreement
+have signed the `Contributor's Agreement for Plone Explained
 <http://plone.org/foundation/contributors-agreement/contributors-agreement-explained>`_.
 Download it from `plone.org
 <http://plone.org/foundation/contributors-agreement/agreement.pdf/view>`_.
