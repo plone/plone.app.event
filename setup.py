@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.0.rcdev'
+version = '1.0'
 
 
 setup(
