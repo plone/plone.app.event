@@ -12,6 +12,8 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Implement synchronisation strategies for icalendar import.
+  [thet]
 
 - Implement icalendar import/export synchronisation and add sync_uid index and
   sync_uid fields for ATEvent and IEventBasic. This follows RFC5545, chapter

@@ -1,5 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
+from plone.app.event import base
 from plone.event.interfaces import IEvent
 from plone.memoize import forever
 from zope.component import getUtility
@@ -13,25 +14,11 @@ import pytz
 import random
 
 
-# Map for ambiguous timezone abbreviations to their most common non-ambigious
-# timezone name. E.g CST is ambiguous and is used for U.S./Canada Central
-# Standard Time, Australian Central Standard Time, China Standard Time.
-# TODO: incomplete map.
-# TODO: do we need this at all or shouldn't we just fail with ambiguous
-#       timezones?
-replacement_zones = {
-    'CET': 'Europe/Vienna',    # Central European Time
-    'MET': 'Europe/Vienna',    # Middle European Time
-    'EET': 'Europe/Helsinki',  # East European Time
-    'WET': 'Europe/Lisbon',    # West European Time
-}
-
-
 def Timezones(context):
     """ Vocabulary for all timezones.
 
     """
-    rpl_keys = replacement_zones.keys()
+    rpl_keys = base.replacement_zones.keys()
     tz_list = [it for it in pytz.all_timezones if it not in rpl_keys]
     return SimpleVocabulary.fromValues(tz_list)
 
@@ -142,7 +129,23 @@ directlyProvides(EventTypes, IVocabularyFactory)
 def SynchronizationStrategies(context):
     """ Vocabulary for icalendar synchronization strategies.
     """
-    # TODO: translate
-    items = ['none', 'keep_newer', 'keep_mine', 'keep_theirs']
-    return SimpleVocabulary.fromValues(items)
+    translate = getToolByName(getSite(), 'translation_service').translate
+    domain = 'plone.app.event'
+
+    items = [
+        (translate(
+            'sync_keep_newer', domain=domain, default="Keep newer"
+        ), base.SYNC_KEEP_NEWER),
+        (translate(
+            'sync_keep_local', domain=domain, default="Keep local"
+        ), base.SYNC_KEEP_MINE),
+        (translate(
+            'sync_keep_external', domain=domain, default="Keep external"
+        ), base.SYNC_KEEP_THEIRS),
+        (translate(
+            'sync_none', domain=domain, default="No Syncing"
+        ), base.SYNC_NONE),
+    ]
+    items = [SimpleTerm(title=i[0], value=i[1]) for i in items]
+    return SimpleVocabulary(items)
 directlyProvides(SynchronizationStrategies, IVocabularyFactory)

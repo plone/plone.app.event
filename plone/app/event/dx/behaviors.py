@@ -20,7 +20,10 @@ from plone.app.textfield.value import RichTextValue
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import tzdel, utc, dt_to_zone
+from plone.event.utils import dt_to_zone
+from plone.event.utils import pydt
+from plone.event.utils import tzdel
+from plone.event.utils import utc
 from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
@@ -524,11 +527,9 @@ def searchable_text_indexer(obj):
 # Object adapters
 
 class EventAccessor(object):
-    """ Generic event accessor adapter implementation for Dexterity content
-        objects.
-
+    """Generic event accessor adapter implementation for Dexterity content
+       objects.
     """
-
     implements(IEventAccessor)
     adapts(IDXEvent)
     event_type = 'plone.app.event.dx.event'  # If you use a custom type,
@@ -590,6 +591,9 @@ class EventAccessor(object):
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
+        if name in ['title', 'description', 'last_modified', 'text']:
+            # custom setters for these attributes
+            object.__setattr__(self, name, value)
         if name in bm:  # set the attributes on behaviors
             behavior = bm[name](self.context, None)
             if behavior:
@@ -617,10 +621,6 @@ class EventAccessor(object):
         return utc(self.context.creation_date)
 
     @property
-    def last_modified(self):
-        return utc(self.context.modification_date)
-
-    @property
     def duration(self):
         return self.end - self.start
 
@@ -638,6 +638,15 @@ class EventAccessor(object):
     @description.setter
     def description(self, value):
         setattr(self.context, 'description', safe_unicode(value))
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+    @last_modified.setter
+    def last_modified(self, value):
+        tz = default_timezone(self.context, as_tzinfo=True)
+        mod = DT(pydt(value, missing_zone=tz))
+        setattr(self.context, 'modification_date', mod)
 
     @property
     def text(self):
