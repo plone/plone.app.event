@@ -10,7 +10,6 @@ from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
 from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
-from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.uuid.interfaces import IUUID
@@ -196,9 +195,9 @@ class ICalendarEventComponent(object):
         # TODO: event.text
 
         # must be in utc
-        ical.add('dtstamp', utc(pydt(datetime.now())))
-        ical.add('created', utc(pydt(event.created)))
-        ical.add('last-modified', utc(pydt(event.last_modified)))
+        ical.add('dtstamp', utc(datetime.now()))
+        ical.add('created', utc(event.created))
+        ical.add('last-modified', utc(event.last_modified))
 
         if event.sync_uid:
             # Re-Use existing icalendar event UID
