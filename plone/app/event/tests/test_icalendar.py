@@ -23,6 +23,7 @@ import unittest2 as unittest
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE
+# TODO ical import browser tests
 
 
 class ICalendarExportTestDX(AbstractSampleDataEvents):
@@ -253,6 +254,7 @@ class ICalendarExportTestAT(ICalendarExportTestDX):
 
 class TestIcalImportDX(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
+    event_type = 'plone.app.event.dx.event'
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -266,7 +268,7 @@ class TestIcalImportDX(unittest.TestCase):
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
-        res = ical_import(self.impfolder, icsfile, 'plone.app.event.dx.event')
+        res = ical_import(self.impfolder, icsfile, self.event_type)
 
         self.assertEqual(res['count'], 5)
 
@@ -370,4 +372,7 @@ class TestIcalImportDX(unittest.TestCase):
             True
         )
 
-    # TODO ical import browser tests
+
+class TestIcalImportAT(TestIcalImportDX):
+    layer = PAEventAT_INTEGRATION_TESTING
+    event_type = 'Event'
