@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0.1 (2013-11-07)
+------------------
+
+- Fix ical import form import error. Translation string wasn't properly
+  formatted. Also be forgiving about missing LAST-MODIFIED properties from ical
+  files.
+  [thet]
+
 1.0 (2013-11-06)
 ----------------
 

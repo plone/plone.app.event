@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-06 13:40+0000\n"
+"POT-Creation-Date: 2013-11-06 23:52+0000\n"
 "PO-Revision-Date: 2011-12-06 23:00+0200\n"
 "Last-Translator: JeanMichel FRANCOIS <toutpt@gmail.com>\n"
 "Language-Team: Plone fr <plone-fr@lists.plone.org>\n"
@@ -374,7 +374,7 @@ msgstr ""
 msgid "ical_import_file_title"
 msgstr ""
 
-#. Default: "%s events imported from %s"
+#. Default: "${num} events imported from ${filename}"
 #: plone/app/event/ical/importer.py:352
 msgid "ical_import_imported"
 msgstr ""

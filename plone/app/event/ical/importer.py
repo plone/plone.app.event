@@ -159,9 +159,9 @@ def ical_import(container, ics_resource, event_type,
             exist_event = existing_event[0].getObject()
             acc = IEventAccessor(exist_event)
 
-            if sync_strategy == base.SYNC_KEEP_NEWER\
-                    and acc.last_modified >= ext_modified:
-                # Update only, if newer
+            if sync_strategy == base.SYNC_KEEP_NEWER and\
+                    (not ext_modified or acc.last_modified >= ext_modified):
+                # Update only, if newer, if ext_modified exists
                 continue
 
             # Else: update
@@ -350,9 +350,9 @@ class IcalendarImportSettingsForm(form.Form):
 
             IStatusMessage(self.request).addStatusMessage(
                 _('ical_import_imported',
-                  default=u"%s events imported from %s") %
-                (count, ical_import_from), 'info'
-            )
+                  default=u"${num} events imported from ${filename}",
+                  mapping={'num': count, 'filename': ical_import_from}),
+                'info')
 
         else:
             IStatusMessage(self.request).addStatusMessage(
