@@ -15,8 +15,7 @@ import random
 
 
 def Timezones(context):
-    """ Vocabulary for all timezones.
-
+    """Vocabulary for all timezones.
     """
     rpl_keys = base.replacement_zones.keys()
     tz_list = [it for it in pytz.all_timezones if it not in rpl_keys]
@@ -26,7 +25,7 @@ directlyProvides(Timezones, IVocabularyFactory)
 
 
 def AvailableTimezones(context):
-    """ Vocabulary for available timezones, as set by in the controlpanel.
+    """Vocabulary for available timezones, as set by in the controlpanel.
 
     This vocabulary is based on collective.elephantvocabulary. The reason is,
     that if timezones are used in events or in user's settings and later
@@ -35,7 +34,6 @@ def AvailableTimezones(context):
 
     Note: after setting available_timezones, this vocabulary must be
     reinstantiated to reflect the changes.
-
     """
     # TODO: if the portal_timezone is not in available_timezones, also put it
     #       in AvailableTimezone vocab.
@@ -50,14 +48,13 @@ directlyProvides(AvailableTimezones, IVocabularyFactory)
 
 
 def Weekdays(context):
-    """ Vocabulary for Weekdays.
+    """Vocabulary for Weekdays.
 
     PLEASE NOTE: strftime %w interprets 0 as Sunday unlike the calendar module!
 
         Note: Context is here a RecordProxy and cannot be used to get the site
               root. zope.i18n.translate seems not to respect the portal
               language.
-
     """
 
     # TODO: revisit, use zope.i18n
@@ -89,7 +86,7 @@ directlyProvides(Weekdays, IVocabularyFactory)
 
 @forever.memoize
 def EventTypes(context):
-    """ Vocabulary for available event types.
+    """Vocabulary for available event types.
 
     Insane stuff: All types are created temporary and checked if the provide
     the IEvent interface. At least, this function is cached forever the Zope
@@ -127,7 +124,16 @@ directlyProvides(EventTypes, IVocabularyFactory)
 
 
 def SynchronizationStrategies(context):
-    """ Vocabulary for icalendar synchronization strategies.
+    """Vocabulary for icalendar synchronization strategies.
+
+    SYNC_KEEP_NEWER:  Import, if the imported event is modified after the
+                      existing one.
+    SYNC_KEEP_MINE:   On conflicts, just do nothing.
+    SYNC_KEEP_THEIRS: On conflicts, update the existing event with the external
+                      one.
+    SYNC_NONE:        Don't synchronize but import events and create new ones,
+                      even if they already exist. For each one, create a new
+                      sync_uid.
     """
     translate = getToolByName(getSite(), 'translation_service').translate
     domain = 'plone.app.event'
@@ -137,10 +143,10 @@ def SynchronizationStrategies(context):
             'sync_keep_newer', domain=domain, default="Keep newer"
         ), base.SYNC_KEEP_NEWER),
         (translate(
-            'sync_keep_local', domain=domain, default="Keep local"
+            'sync_keep_mine', domain=domain, default="Keep mine"
         ), base.SYNC_KEEP_MINE),
         (translate(
-            'sync_keep_external', domain=domain, default="Keep external"
+            'sync_keep_theirs', domain=domain, default="Keep theirs"
         ), base.SYNC_KEEP_THEIRS),
         (translate(
             'sync_none', domain=domain, default="No Syncing"

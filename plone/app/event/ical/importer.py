@@ -2,17 +2,33 @@
 #  - implement sync strategies,
 #  - cleanup,
 #  - tests
-from Products.CMFPlone.utils import safe_unicode
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
 from plone.app.event import base
+from plone.app.event import messageFactory as _
+from plone.app.event.base import AnnotationAdapter
+from plone.app.event.interfaces import IICalendarImportEnabled
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
 from plone.event.utils import is_date
 from plone.event.utils import is_datetime
 from plone.event.utils import utc
+from plone.folder.interfaces import IFolder
+from plone.namedfile.field import NamedFile
+from plone.z3cform.layout import FormWrapper
+from z3c.form import button
+from z3c.form import form, field
+from zope import schema
+from zope.component import adapts
 from zope.container.interfaces import INameChooser
 from zope.event import notify
+from zope.interface import Interface
+from zope.interface import alsoProvides, noLongerProvides
+from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
+#from plone.folder.interfaces import IFolder
 
 import datetime
 import icalendar
@@ -204,42 +220,53 @@ def ical_import(container, ics_resource, event_type,
     return {'count': count}
 
 
-from zope.interface import Interface
-from zope import schema
-from plone.app.event import messageFactory as _
-from plone.namedfile.field import NamedFile
-
-
 class IIcalendarImportSettings(Interface):
 
     event_type = schema.Choice(
-        title=_(u'Event Type'),
+        title=_('ical_import_event_type_title', default=u'Event Type'),
+        description=_(
+            'ical_import_event_type_desc',
+            default=u"Content type of the event, which is created when "
+                    u"importing icalendar resources."),
         vocabulary='plone.app.event.EventTypes',
         required=True
     )
 
     ical_url = schema.URI(
-        title=_(u'Icalendar URL'),
+        title=_('ical_import_url_title', default=u'Icalendar URL'),
+        description=_(
+            'ical_import_url_desc',
+            default=u"URL to an external icalendar resource file."),
         required=False
     )
 
     ical_file = NamedFile(
-        title=_(u"Icalendar File"),
+        title=_('ical_import_file_title', default=u"Icalendar File"),
+        description=_(
+            'ical_import_file_desc',
+            default=u"Icalendar resource file, if no URL is given."),
         required=False
     )
 
     sync_strategy = schema.Choice(
-        title=_(u"Synchronization Strategy"),
+        title=_(
+            'ical_import_sync_strategy_title',
+            default=u"Synchronization Strategy"
+        ),
+        description=_(
+            'ical_import_sync_strategy_desc',
+            default=u"""Defines how to synchronize:
+1) "Keep newer": Import, if the imported event is modified after the existing
+   one.
+2) "Keep mine": On conflicts, just do nothing.
+3) "Keep theirs": On conflicts, update the existing event with the external
+   one.
+4) "No Syncing": Don't synchronize but import events and create new ones, even
+    if they already exist. For each one, create a new sync_uid."""),
         vocabulary='plone.app.event.SynchronizationStrategies',
         required=True,
         default=base.SYNC_KEEP_NEWER
     )
-
-
-from zope.component import adapts
-from zope.interface import implements
-from plone.app.event.base import AnnotationAdapter
-#from plone.folder.interfaces import IFolder
 
 
 class IcalendarImportSettings(AnnotationAdapter):
@@ -247,42 +274,13 @@ class IcalendarImportSettings(AnnotationAdapter):
     """
     implements(IIcalendarImportSettings)
     adapts(Interface)
-
     #adapts(IFolder) ## ?? TODO: when adapting this in z3c.form, why is a
                      ## ATFolder not adaptable to this adapter, when it
                      ## implements IFolder?
-
     ANNOTATION_KEY = "icalendar_import_settings"
 
 
-from Products.Five.browser import BrowserView
-from plone.folder.interfaces import IFolder
-from plone.app.event.interfaces import IICalendarImportEnabled
-
-
-class IcalendarImportTool(BrowserView):
-
-    @property
-    def available(self):
-        return IFolder.providedBy(self.context)
-
-    @property
-    def available_disabled(self):
-        return self.available and not self.enabled
-
-    @property
-    def enabled(self):
-        return IICalendarImportEnabled.providedBy(self.context)
-
-
-from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import button
-from z3c.form import form, field
-from zope.interface import alsoProvides, noLongerProvides
-
-
 class IcalendarImportSettingsForm(form.Form):
-
     fields = field.Fields(IIcalendarImportSettings)
     ignoreContext = False
 
@@ -298,38 +296,70 @@ class IcalendarImportSettingsForm(form.Form):
         data['sync_strategy'] = settings.sync_strategy
         return data
 
-    @button.buttonAndHandler(u'Save and Import')
+    def save_data(self, data):
+        settings = IIcalendarImportSettings(self.context)
+        settings.ical_url = data['ical_url']
+        settings.event_type = data['event_type']
+        settings.sync_strategy = data['sync_strategy']
+
+    @button.buttonAndHandler(u'Save')
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
             return False
 
-        settings = IIcalendarImportSettings(self.context)
-
-        ical_file = data['ical_file']
-        if ical_file:
-            # File upload is not saved in settings
-            ical_resource = ical_file.data
-            ical_import_from = ical_file.filename
-        else:
-            ical_url = settings.ical_url = data['ical_url']
-            ical_resource = urllib2.urlopen(ical_url, 'rb').read()
-            ical_import_from = ical_url
-        event_type = settings.event_type = data['event_type']
-        sync_strategy = settings.sync_strategy = data['sync_strategy']
-
-        import_metadata = ical_import(
-            self.context,
-            ics_resource=ical_resource,
-            event_type=event_type,
-            sync_strategy=sync_strategy
-        )
-
-        count = import_metadata['count']
+        self.save_data(data)
 
         IStatusMessage(self.request).addStatusMessage(
-            "%s events imported from %s" % (count, ical_import_from),
-            'info')
+            _('msg_ical_import_settings_saved',
+              default=u"Ical import settings saved."), 'info'
+        )
+        self.request.response.redirect(self.context.absolute_url())
+
+    @button.buttonAndHandler(u'Save and Import')
+    def handleSaveImport(self, action):
+        data, errors = self.extractData()
+        if errors:
+            return False
+
+        self.save_data(data)
+
+        ical_file = data['ical_file']
+        ical_url = data['ical_url']
+        event_type = data['event_type']
+        sync_strategy = data['sync_strategy']
+
+        if ical_file or ical_url:
+
+            if ical_file:
+                # File upload is not saved in settings
+                ical_resource = ical_file.data
+                ical_import_from = ical_file.filename
+            else:
+                ical_resource = urllib2.urlopen(ical_url, 'rb').read()
+                ical_import_from = ical_url
+
+            import_metadata = ical_import(
+                self.context,
+                ics_resource=ical_resource,
+                event_type=event_type,
+                sync_strategy=sync_strategy
+            )
+
+            count = import_metadata['count']
+
+            IStatusMessage(self.request).addStatusMessage(
+                _('ical_import_imported',
+                  default=u"%s events imported from %s") %
+                (count, ical_import_from), 'info'
+            )
+
+        else:
+            IStatusMessage(self.request).addStatusMessage(
+                _('ical_import_no_ics',
+                  default=u"Please provide either a icalendar ics file or a "
+                          u"URL to a file."), 'error')
+
         self.request.response.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(u'Cancel')
@@ -337,7 +367,19 @@ class IcalendarImportSettingsForm(form.Form):
         self.request.response.redirect(self.context.absolute_url())
 
 
-from plone.z3cform.layout import FormWrapper
+class IcalendarImportTool(BrowserView):
+
+    @property
+    def available(self):
+        return IFolder.providedBy(self.context)
+
+    @property
+    def available_disabled(self):
+        return self.available and not self.enabled
+
+    @property
+    def enabled(self):
+        return IICalendarImportEnabled.providedBy(self.context)
 
 
 class IcalendarImportSettingsFormView(FormWrapper):
