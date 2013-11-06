@@ -645,7 +645,7 @@ def data_postprocessing(obj, event):
     end_field.set(obj, end.toZone('UTC'))
 
     if not obj.getEventUid():
-        # event_uid has to be set for icalendar data exchange.
+        # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
         request = getRequest()
         domain = request.get('HTTP_HOST')
@@ -659,11 +659,11 @@ def data_postprocessing(obj, event):
 
 # icalendar event UID indexer
 @indexer(IATEvent)
-def event_uid_indexer(obj):
-    event_uid = obj.getEventUid()
-    if not event_uid:
+def sync_uid_indexer(obj):
+    sync_uid = obj.getEventUid()
+    if not sync_uid:
         return None
-    return event_uid
+    return sync_uid
 
 
 ## Object adapters
@@ -827,10 +827,10 @@ class EventAccessor(object):
         self.context.setEventUrl(safe_unicode(value))
 
     @property
-    def event_uid(self):
+    def sync_uid(self):
         return self.context.getEventUid()
-    @event_uid.setter
-    def event_uid(self, value):
+    @sync_uid.setter
+    def sync_uid(self, value):
         self.context.setEventUid(value)
 
     @property

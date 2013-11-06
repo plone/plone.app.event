@@ -42,7 +42,7 @@ def catalog_setup(context):
     site = context.getSite()
     catalog = getToolByName(site, 'portal_catalog')
     date_idxs = ['start', 'end']
-    field_idxs = ['event_uid']
+    field_idxs = ['sync_uid']
     idxs = date_idxs + field_idxs
 
     class extra(object):

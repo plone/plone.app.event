@@ -27,9 +27,9 @@ def ical_import(container, ics_resource, event_type):
     cat = getToolByName(container, 'portal_catalog')
     container_path = container.absolute_url_path()
 
-    def _get_by_event_uid(uid):
+    def _get_by_sync_uid(uid):
         return cat.searchResults(
-            event_uid=uid,
+            sync_uid=uid,
             path={'query': container_path, 'depth': 1}
         )
 
@@ -132,9 +132,9 @@ def ical_import(container, ics_resource, event_type):
 
         new_content_id = None
         existing_event = None
-        event_uid = _get_prop('UID', item)
-        if event_uid:
-            existing_event = _get_by_event_uid(event_uid)
+        sync_uid = _get_prop('UID', item)
+        if sync_uid:
+            existing_event = _get_by_sync_uid(sync_uid)
         if existing_event:
             content = existing_event[0].getObject()
         else:
@@ -159,7 +159,7 @@ def ical_import(container, ics_resource, event_type):
         event.attendees = attendees
         event.contact_name = contact
         event.subjects = categories
-        event.event_uid = event_uid
+        event.sync_uid = sync_uid
         notify(ObjectModifiedEvent(content))
 
         # Archetypes specific code

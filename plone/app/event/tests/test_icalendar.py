@@ -301,7 +301,7 @@ class TestIcalImportDX(unittest.TestCase):
             False
         )
         self.assertEqual(
-            e1.event_uid,
+            e1.sync_uid,
             u'48f1a7ad64e847568d860cd092344970',
         )
 

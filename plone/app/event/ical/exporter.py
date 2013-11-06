@@ -200,9 +200,9 @@ class ICalendarEventComponent(object):
         ical.add('created', utc(pydt(event.created)))
         ical.add('last-modified', utc(pydt(event.last_modified)))
 
-        if event.event_uid:
+        if event.sync_uid:
             # Re-Use existing icalendar event UID
-            ical.add('uid', event.event_uid)
+            ical.add('uid', event.sync_uid)
         else:
             # Else, use plone.uuid
             ical.add('uid', event.uid)
