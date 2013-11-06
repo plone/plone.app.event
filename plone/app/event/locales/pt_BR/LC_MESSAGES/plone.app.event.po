@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-06 13:34+0000\n"
+"POT-Creation-Date: 2013-11-06 13:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,7 +173,6 @@ msgstr "Quando"
 
 #. Default: "${startdate} to ${enddate}"
 #: plone/app/event/browser/formatted_date.pt:27
-#, fuzzy
 msgid "event_when_differentday"
 msgstr "${startdate} <span class=\"timespan\">até</span> ${enddate}"
 
@@ -598,6 +597,26 @@ msgstr "Semana anterior"
 #: plone/app/event/browser/event_view.pt:24
 msgid "summary_event_details"
 msgstr "Detalhes do evento"
+
+#. Default: "Keep mine"
+#: plone/app/event/vocabularies.py:141
+msgid "sync_keep_mine"
+msgstr ""
+
+#. Default: "Keep newer"
+#: plone/app/event/vocabularies.py:140
+msgid "sync_keep_newer"
+msgstr ""
+
+#. Default: "Keep theirs"
+#: plone/app/event/vocabularies.py:142
+msgid "sync_keep_theirs"
+msgstr ""
+
+#. Default: "No Syncing"
+#: plone/app/event/vocabularies.py:143
+msgid "sync_none"
+msgstr ""
 
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56

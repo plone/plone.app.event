@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-06 13:34+0000\n"
+"POT-Creation-Date: 2013-11-06 13:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -385,7 +385,6 @@ msgstr "Bitte geben sie entweder eine icalendar .ics Datei oder eine URL zu eine
 
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
 #: plone/app/event/ical/importer.py:256
-#, fuzzy
 msgid "ical_import_sync_strategy_desc"
 msgstr "Legt fest, wie die Synchronisation durchgeführt wird: 1) 'Neuere Importieren': Importe den Termin, falls dieser ein späteres Änderungsdatum als der existierende Termin hat. 2) 'Eigene behalten': Bei Konflikten, behalte den existierenden Termin. 3) 'Externe behalten': Bei Konflikten, aktualisiere den existierenden Termin mit den importierten Termin. 4) 'Keine Synchronisation': Führe keine Synchronisation durch, sondern lege neue Termine für jeden importierten Termin an und vergib für jeden importierten Termin eine neue Synchronisation ID (sync_uid)."
 
@@ -598,6 +597,26 @@ msgstr "Vorherige Woche"
 #: plone/app/event/browser/event_view.pt:24
 msgid "summary_event_details"
 msgstr "Termindetails"
+
+#. Default: "Keep mine"
+#: plone/app/event/vocabularies.py:141
+msgid "sync_keep_mine"
+msgstr "Eigene behalten"
+
+#. Default: "Keep newer"
+#: plone/app/event/vocabularies.py:140
+msgid "sync_keep_newer"
+msgstr "Neuere Importieren"
+
+#. Default: "Keep theirs"
+#: plone/app/event/vocabularies.py:142
+msgid "sync_keep_theirs"
+msgstr "Externe behalten"
+
+#. Default: "No Syncing"
+#: plone/app/event/vocabularies.py:143
+msgid "sync_none"
+msgstr "Keine Synchronisation"
 
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56

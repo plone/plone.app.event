@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
 from plone.app.event import base
+from plone.app.event import messageFactory as _
 from plone.event.interfaces import IEvent
 from plone.memoize import forever
 from zope.component import getUtility
@@ -135,22 +136,11 @@ def SynchronizationStrategies(context):
                       even if they already exist. For each one, create a new
                       sync_uid.
     """
-    translate = getToolByName(getSite(), 'translation_service').translate
-    domain = 'plone.app.event'
-
     items = [
-        (translate(
-            'sync_keep_newer', domain=domain, default="Keep newer"
-        ), base.SYNC_KEEP_NEWER),
-        (translate(
-            'sync_keep_mine', domain=domain, default="Keep mine"
-        ), base.SYNC_KEEP_MINE),
-        (translate(
-            'sync_keep_theirs', domain=domain, default="Keep theirs"
-        ), base.SYNC_KEEP_THEIRS),
-        (translate(
-            'sync_none', domain=domain, default="No Syncing"
-        ), base.SYNC_NONE),
+        (_('sync_keep_newer', default="Keep newer"), base.SYNC_KEEP_NEWER),
+        (_('sync_keep_mine', default="Keep mine"), base.SYNC_KEEP_MINE),
+        (_('sync_keep_theirs', default="Keep theirs"), base.SYNC_KEEP_THEIRS),
+        (_('sync_none', default="No Syncing"), base.SYNC_NONE),
     ]
     items = [SimpleTerm(title=i[0], value=i[1]) for i in items]
     return SimpleVocabulary(items)
