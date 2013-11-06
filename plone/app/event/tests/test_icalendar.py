@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from plone.app.event import base
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.ical.importer import ical_import
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
@@ -12,8 +15,6 @@ from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from zope.component import getMultiAdapter
-from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
-from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 
 import os
 import pytz
@@ -23,6 +24,7 @@ import unittest2 as unittest
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE
+# TODO ical import browser tests
 
 
 class ICalendarExportTestDX(AbstractSampleDataEvents):
@@ -200,7 +202,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         are exported.
         """
         headers, output, request = make_fake_response(self.request)
-        view = getMultiAdapter((self.portal, request), name='event_listing_ical')
+        view = getMultiAdapter(
+            (self.portal, request), name='event_listing_ical'
+        )
         view.mode = 'all'
         view()
         self.assertEqual(len(headers), 2)
@@ -215,7 +219,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         original event and the long lasting event.
         """
         headers, output, request = make_fake_response(self.request)
-        view = getMultiAdapter((self.portal, request), name='event_listing_ical')
+        view = getMultiAdapter(
+            (self.portal, request), name='event_listing_ical'
+        )
         view.mode = 'day'
         view._date = '2013-04-27'
         view()
@@ -248,27 +254,29 @@ class ICalendarExportTestAT(ICalendarExportTestDX):
         return ATEventAccessor.create
 
     def traverser(self, context, request):
-        return OccTravDX(context, request)
+        return OccTravAT(context, request)
 
 
 class TestIcalImportDX(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
+    event_type = 'plone.app.event.dx.event'
 
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory('Folder', 'impfolder')
-        self.impfolder = self.portal.impfolder
 
     def test_import_from_ics(self):
         # Ical import unit test.
+        self.portal.invokeFactory('Folder', 'impfolder')
+        impfolder = self.portal.impfolder
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
-        res = ical_import(self.impfolder, icsfile, 'plone.app.event.dx.event')
+        res = ical_import(impfolder, icsfile, self.event_type)
 
         self.assertEqual(res['count'], 5)
+        self.assertEqual(len(impfolder.contentIds()), 5)
 
         at = pytz.timezone('Europe/Vienna')
         utc = pytz.utc
@@ -277,7 +285,7 @@ class TestIcalImportDX(unittest.TestCase):
 
         # TODO: test for attendees. see note in
         # plone.app.event.ical.importer.ical_import
-        e1 = IEventAccessor(self.impfolder.e1)
+        e1 = IEventAccessor(impfolder.e1)
         self.assertEqual(
             e1.start,
             pydt(datetime(2013, 7, 19, 12, 0, tzinfo=at))
@@ -299,11 +307,11 @@ class TestIcalImportDX(unittest.TestCase):
             False
         )
         self.assertEqual(
-            e1.event_uid,
+            e1.sync_uid,
             u'48f1a7ad64e847568d860cd092344970',
         )
 
-        e2 = IEventAccessor(self.impfolder.e2)
+        e2 = IEventAccessor(impfolder.e2)
         self.assertEqual(
             e2.start,
             pydt(datetime(1996, 4, 1, 1, 0, tzinfo=utc))
@@ -318,7 +326,7 @@ class TestIcalImportDX(unittest.TestCase):
             u'19960403T010000Z,19960404T010000Z'
         )
 
-        e3 = IEventAccessor(self.impfolder.e3)
+        e3 = IEventAccessor(impfolder.e3)
         self.assertEqual(
             e3.start,
             pydt(datetime(2012, 3, 27, 10, 0, tzinfo=at))
@@ -334,7 +342,7 @@ class TestIcalImportDX(unittest.TestCase):
             u'20120501T100000,20120417T100000'
         )
 
-        e4 = IEventAccessor(self.impfolder.e4)
+        e4 = IEventAccessor(impfolder.e4)
         self.assertEqual(
             e4.start,
             pydt(datetime(2013, 4, 4, 0, 0, tzinfo=utc))
@@ -352,7 +360,7 @@ class TestIcalImportDX(unittest.TestCase):
             False
         )
 
-        e5 = IEventAccessor(self.impfolder.e5)
+        e5 = IEventAccessor(impfolder.e5)
         self.assertEqual(
             e5.start,
             pydt(datetime(2013, 4, 2, 12, 0, tzinfo=utc))
@@ -370,4 +378,172 @@ class TestIcalImportDX(unittest.TestCase):
             True
         )
 
-    # TODO ical import browser tests
+        self.portal.manage_delObjects(['impfolder'])
+
+    def test_import_from_ics__no_sync(self):
+        """SYNC_NONE and importing the same file again should create new event
+        objects and give them each a new sync_uid.
+        """
+        self.portal.invokeFactory('Folder', 'impfolder')
+        impfolder = self.portal.impfolder
+
+        directory = os.path.dirname(__file__)
+        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+
+        res = ical_import(impfolder, icsfile, self.event_type)
+        self.assertEqual(res['count'], 5)
+        suid1 = IEventAccessor(impfolder.e1).sync_uid
+
+        res = ical_import(impfolder, icsfile, self.event_type,
+                          sync_strategy=base.SYNC_NONE)
+        self.assertEqual(res['count'], 5)
+        suid2 = IEventAccessor(impfolder['e1-1']).sync_uid
+
+        self.assertEqual(len(impfolder.contentIds()), 10)
+        self.assertNotEqual(suid1, suid2)
+
+        self.portal.manage_delObjects(['impfolder'])
+
+    def test_import_from_ics__sync_keep_mine(self):
+        """SYNC_KEEP_MINE and importing the same file again should do nothing.
+        """
+        self.portal.invokeFactory('Folder', 'impfolder')
+        impfolder = self.portal.impfolder
+
+        directory = os.path.dirname(__file__)
+        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+
+        res = ical_import(impfolder, icsfile, self.event_type)
+        self.assertEqual(res['count'], 5)
+
+        e1a = IEventAccessor(impfolder.e1)
+        mod1 = e1a.last_modified
+        suid1 = e1a.sync_uid
+
+        res = ical_import(impfolder, icsfile, self.event_type,
+                          sync_strategy=base.SYNC_KEEP_MINE)
+        self.assertEqual(res['count'], 0)
+        e1a = IEventAccessor(impfolder.e1)
+        mod2 = e1a.last_modified
+        suid2 = e1a.sync_uid
+
+        self.assertEqual(len(impfolder.contentIds()), 5)
+
+        self.assertEqual(mod1, mod2)
+        self.assertEqual(suid1, suid2)
+
+        self.portal.manage_delObjects(['impfolder'])
+
+    def test_import_from_ics__sync_keep_newer(self):
+        """SYNC_KEEP_NEWER and importing the same file again should update only
+        newer.
+        """
+        self.portal.invokeFactory('Folder', 'impfolder')
+        impfolder = self.portal.impfolder
+
+        directory = os.path.dirname(__file__)
+        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+        icsfile2 = open(os.path.join(directory, 'icaltest2.ics'), 'rb').read()
+
+        res = ical_import(impfolder, icsfile, self.event_type)
+        self.assertEqual(res['count'], 5)
+
+        e1a = IEventAccessor(impfolder.e1)
+        mod1 = e1a.last_modified
+        suid1 = e1a.sync_uid
+        title1 = e1a.title
+        desc1 = e1a.description
+        start1 = e1a.start
+        end1 = e1a.end
+
+        res = ical_import(impfolder, icsfile2, self.event_type,
+                          sync_strategy=base.SYNC_KEEP_NEWER)
+        self.assertEqual(res['count'], 1)
+        e1a = IEventAccessor(impfolder.e1)
+        mod2 = e1a.last_modified
+        suid2 = e1a.sync_uid
+        title2 = e1a.title
+        desc2 = e1a.description
+        start2 = e1a.start
+        end2 = e1a.end
+
+        self.assertEqual(len(impfolder.contentIds()), 5)
+
+        self.assertTrue(mod1 < mod2)
+        self.assertEqual(suid1, suid2)
+        self.assertNotEqual(title1, title2)
+        self.assertNotEqual(desc1, desc2)
+        self.assertTrue(start1 < start2)
+        self.assertTrue(end1 < end2)
+
+        self.portal.manage_delObjects(['impfolder'])
+
+    def test_import_from_ics__sync_keep_theirs(self):
+        """SYNC_KEEP_THEIRS and importing the same file again should update
+        all.
+        """
+        self.portal.invokeFactory('Folder', 'impfolder')
+        impfolder = self.portal.impfolder
+
+        directory = os.path.dirname(__file__)
+        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+        icsfile2 = open(os.path.join(directory, 'icaltest2.ics'), 'rb').read()
+
+        res = ical_import(impfolder, icsfile, self.event_type)
+        self.assertEqual(res['count'], 5)
+
+        e1a = IEventAccessor(impfolder.e1)
+        mod11 = e1a.last_modified
+        suid11 = e1a.sync_uid
+        title11 = e1a.title
+        desc11 = e1a.description
+        start11 = e1a.start
+        end11 = e1a.end
+
+        e2a = IEventAccessor(impfolder.e2)
+        suid21 = e2a.sync_uid
+        title21 = e2a.title
+        desc21 = e2a.description
+        start21 = e2a.start
+        end21 = e2a.end
+
+        res = ical_import(impfolder, icsfile2, self.event_type,
+                          sync_strategy=base.SYNC_KEEP_THEIRS)
+        self.assertEqual(res['count'], 5)
+
+        e1a = IEventAccessor(impfolder.e1)
+        mod12 = e1a.last_modified
+        suid12 = e1a.sync_uid
+        title12 = e1a.title
+        desc12 = e1a.description
+        start12 = e1a.start
+        end12 = e1a.end
+
+        e2a = IEventAccessor(impfolder.e2)
+        suid22 = e2a.sync_uid
+        title22 = e2a.title
+        desc22 = e2a.description
+        start22 = e2a.start
+        end22 = e2a.end
+
+        self.assertEqual(len(impfolder.contentIds()), 5)
+
+        self.assertTrue(mod11 < mod12)
+        self.assertEqual(suid11, suid12)
+        self.assertNotEqual(title11, title12)
+        self.assertNotEqual(desc11, desc12)
+        self.assertTrue(start11 < start12)
+        self.assertTrue(end11 < end12)
+
+        self.assertEqual(suid21, suid22)
+        self.assertNotEqual(title21, title22)
+        self.assertNotEqual(desc21, desc22)
+        self.assertTrue(start21 < start22)
+        self.assertTrue(end21 < end22)
+
+        self.portal.manage_delObjects(['impfolder'])
+
+
+class TestIcalImportAT(TestIcalImportDX):
+    layer = PAEventAT_INTEGRATION_TESTING
+    event_type = 'Event'

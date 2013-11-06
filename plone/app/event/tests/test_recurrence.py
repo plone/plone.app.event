@@ -1,10 +1,15 @@
 from OFS.SimpleItem import SimpleItem
+from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
+from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
@@ -16,10 +21,6 @@ from plone.event.interfaces import IRecurrenceSupport
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
 from zope.publisher.interfaces.browser import IBrowserView
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 
 
 import datetime
@@ -154,13 +155,16 @@ class TestOccurrences(unittest.TestCase):
         self.interval = self.portal['interval']
 
     def test_get_occurrences(self):
-        res = get_events(self.portal, ret_mode=3, expand=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         expand=True)
         self.assertTrue(len(res) == 9)
 
-        res = get_events(self.portal, start=self.now, ret_mode=3, expand=True)
+        res = get_events(self.portal, start=self.now,
+                         ret_mode=RET_MODE_ACCESSORS, expand=True)
         self.assertTrue(len(res) == 9)
 
-        res = get_events(self.portal, ret_mode=3, expand=True, limit=5)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         expand=True, limit=5)
         self.assertTrue(len(res) == 5)
         self.assertTrue(IEventAccessor.providedBy(res[0]))
 

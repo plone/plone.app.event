@@ -4,6 +4,8 @@ from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import DEFAULT_END_DELTA
 from plone.app.event.base import DT
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import construct_calendar
 from plone.app.event.base import dates_for_display
 from plone.app.event.base import default_end
@@ -418,42 +420,42 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertEqual(len(res), 2)
 
         # Return objects
-        res = get_events(self.portal, ret_mode=2)
+        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS)
         self.assertTrue(IEvent.providedBy(res[0]))
 
         # Return IEventAccessor
-        res = get_events(self.portal, ret_mode=3)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS)
         self.assertTrue(IEventAccessor.providedBy(res[0]))
         # Test sorting
         self.assertTrue(res[0].start < res[-1].start)
 
         # Test reversed sorting
-        res = get_events(self.portal, ret_mode=3, sort_reverse=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort_reverse=True)
         self.assertTrue(res[0].start > res[-1].start)
 
         # Test sort_on
-        res = get_events(self.portal, ret_mode=3, sort="start")
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="start")
         self.assertEqual(
             [it.title for it in res][2:],
             [u'Now Event', u'Future Event']
         )
-        res = get_events(self.portal, ret_mode=3, sort="end")
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="end")
         self.assertEqual(
             [it.title for it in res],
             [u'Past Event', u'Now Event', u'Future Event', u'Long Event']
         )
 
         # Test expansion
-        res = get_events(self.portal, ret_mode=2, expand=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
         self.assertEqual(len(res), 8)
 
-        res = get_events(self.portal, ret_mode=3, expand=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, expand=True)
         self.assertEqual(len(res), 8)
         # Test sorting
         self.assertTrue(res[0].start < res[-1].start)
 
-        res = get_events(self.portal, ret_mode=3, expand=True,
-                         sort_reverse=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         expand=True, sort_reverse=True)
         # Test sorting
         self.assertTrue(res[0].start > res[-1].start)
 
@@ -546,14 +548,15 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         )
 
         limit = get_events(self.portal, start=self.now, expand=True,
-                           ret_mode=3, limit=3)
-        all_ = get_events(self.portal, start=self.now, expand=True, ret_mode=3)
+                           ret_mode=RET_MODE_ACCESSORS, limit=3)
+        all_ = get_events(self.portal, start=self.now, expand=True,
+                          ret_mode=RET_MODE_ACCESSORS)
         self.assertEqual([e.url for e in limit], [e.url for e in all_[:3]])
 
         self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
 
     def test_construct_calendar(self):
-        res = get_events(self.portal, ret_mode=2, expand=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
 
         def _num_events(values):

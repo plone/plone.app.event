@@ -20,7 +20,10 @@ from plone.app.textfield.value import RichTextValue
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import tzdel, utc, dt_to_zone
+from plone.event.utils import dt_to_zone
+from plone.event.utils import pydt
+from plone.event.utils import tzdel
+from plone.event.utils import utc
 from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
@@ -125,8 +128,8 @@ class IEventBasic(model.Schema):
     )
 
     # icalendar event uid
-    event_uid = schema.TextLine(required=False)
-    form.mode(event_uid='hidden')
+    sync_uid = schema.TextLine(required=False)
+    form.mode(sync_uid='hidden')
 
     @invariant
     def validate_start_end(data):
@@ -363,11 +366,11 @@ class EventBasic(object):
         self.context.open_end = value
 
     @property
-    def event_uid(self):
-        return getattr(self.context, 'event_uid', None)
-    @event_uid.setter
-    def event_uid(self, value):
-        self.context.event_uid = value
+    def sync_uid(self):
+        return getattr(self.context, 'sync_uid', None)
+    @sync_uid.setter
+    def sync_uid(self, value):
+        self.context.sync_uid = value
 
     @property
     def duration(self):
@@ -455,12 +458,12 @@ def data_postprocessing(obj, event):
     obj.start = utc(start)
     obj.end = utc(end)
 
-    if not behavior.event_uid:
-        # event_uid has to be set for icalendar data exchange.
+    if not behavior.sync_uid:
+        # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
         request = getRequest()
         domain = request.get('HTTP_HOST')
-        behavior.event_uid = '%s%s' % (
+        behavior.sync_uid = '%s%s' % (
             uid,
             domain and '@%s' % domain or ''
         )
@@ -491,11 +494,11 @@ def end_indexer(obj):
 
 # icalendar event UID indexer
 @indexer(IDXEvent)
-def event_uid_indexer(obj):
+def sync_uid_indexer(obj):
     event = IEventBasic(obj)
-    if not event.event_uid:
+    if not event.sync_uid:
         return None
-    return event.event_uid
+    return event.sync_uid
 
 
 # Body text indexing
@@ -524,11 +527,9 @@ def searchable_text_indexer(obj):
 # Object adapters
 
 class EventAccessor(object):
-    """ Generic event accessor adapter implementation for Dexterity content
-        objects.
-
+    """Generic event accessor adapter implementation for Dexterity content
+       objects.
     """
-
     implements(IEventAccessor)
     adapts(IDXEvent)
     event_type = 'plone.app.event.dx.event'  # If you use a custom type,
@@ -567,7 +568,7 @@ class EventAccessor(object):
             whole_day=IEventBasic,
             open_end=IEventBasic,
             timezone=IEventBasic,
-            event_uid=IEventBasic,
+            sync_uid=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,
             attendees=IEventAttendees,
@@ -590,6 +591,9 @@ class EventAccessor(object):
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
+        if name in ['title', 'description', 'last_modified', 'text']:
+            # custom setters for these attributes
+            object.__setattr__(self, name, value)
         if name in bm:  # set the attributes on behaviors
             behavior = bm[name](self.context, None)
             if behavior:
@@ -617,10 +621,6 @@ class EventAccessor(object):
         return utc(self.context.creation_date)
 
     @property
-    def last_modified(self):
-        return utc(self.context.modification_date)
-
-    @property
     def duration(self):
         return self.end - self.start
 
@@ -638,6 +638,15 @@ class EventAccessor(object):
     @description.setter
     def description(self, value):
         setattr(self.context, 'description', safe_unicode(value))
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+    @last_modified.setter
+    def last_modified(self, value):
+        tz = default_timezone(self.context, as_tzinfo=True)
+        mod = DT(pydt(value, missing_zone=tz))
+        setattr(self.context, 'modification_date', mod)
 
     @property
     def text(self):

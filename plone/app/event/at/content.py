@@ -26,6 +26,7 @@ from plone.event.utils import pydt
 from plone.event.utils import utc
 from plone.formwidget.datetime.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
+from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
 from zope.component import adapts
 from zope.event import notify
@@ -644,7 +645,7 @@ def data_postprocessing(obj, event):
     end_field.set(obj, end.toZone('UTC'))
 
     if not obj.getEventUid():
-        # event_uid has to be set for icalendar data exchange.
+        # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
         request = getRequest()
         domain = request.get('HTTP_HOST')
@@ -654,6 +655,15 @@ def data_postprocessing(obj, event):
         ))
 
     obj.reindexObject()
+
+
+# icalendar event UID indexer
+@indexer(IATEvent)
+def sync_uid_indexer(obj):
+    sync_uid = obj.getEventUid()
+    if not sync_uid:
+        return None
+    return sync_uid
 
 
 ## Object adapters
@@ -709,10 +719,6 @@ class EventAccessor(object):
         return utc(self.context.creation_date)
 
     @property
-    def last_modified(self):
-        return utc(self.context.modification_date)
-
-    @property
     def duration(self):
         return self.end - self.start
 
@@ -730,6 +736,15 @@ class EventAccessor(object):
     @description.setter
     def description(self, value):
         self.context.setDescription(safe_unicode(value))
+
+    @property
+    def last_modified(self):
+        return utc(self.context.modification_date)
+    @last_modified.setter
+    def last_modified(self, value):
+        tz = default_timezone(self.context, as_tzinfo=True)
+        mod = DT(pydt(value, missing_zone=tz))
+        setattr(self.context, 'modification_date', mod)
 
     @property
     def start(self):
@@ -817,10 +832,10 @@ class EventAccessor(object):
         self.context.setEventUrl(safe_unicode(value))
 
     @property
-    def event_uid(self):
+    def sync_uid(self):
         return self.context.getEventUid()
-    @event_uid.setter
-    def event_uid(self, value):
+    @sync_uid.setter
+    def sync_uid(self, value):
         self.context.setEventUid(value)
 
     @property

@@ -3,6 +3,7 @@ from Products.ZCatalog.interfaces import ICatalogBrain
 from datetime import datetime
 from datetime import timedelta
 from plone.app.contentlisting.interfaces import IContentListingObject
+from plone.app.event.base import RET_MODE_BRAINS
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_events
 from plone.event.interfaces import IEventAccessor
@@ -10,7 +11,6 @@ from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
 from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
-from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.uuid.interfaces import IUUID
@@ -164,7 +164,8 @@ def calendar_from_container(context):
     """
     context = aq_inner(context)
     path = '/'.join(context.getPhysicalPath())
-    result = get_events(context, ret_mode=1, expand=False, path=path)
+    result = get_events(context, ret_mode=RET_MODE_BRAINS,
+                        expand=False, path=path)
     return construct_icalendar(context, result)
 
 
@@ -196,13 +197,13 @@ class ICalendarEventComponent(object):
         # TODO: event.text
 
         # must be in utc
-        ical.add('dtstamp', utc(pydt(datetime.now())))
-        ical.add('created', utc(pydt(event.created)))
-        ical.add('last-modified', utc(pydt(event.last_modified)))
+        ical.add('dtstamp', utc(datetime.now()))
+        ical.add('created', utc(event.created))
+        ical.add('last-modified', utc(event.last_modified))
 
-        if event.event_uid:
+        if event.sync_uid:
             # Re-Use existing icalendar event UID
-            ical.add('uid', event.event_uid)
+            ical.add('uid', event.sync_uid)
         else:
             # Else, use plone.uuid
             ical.add('uid', event.uid)

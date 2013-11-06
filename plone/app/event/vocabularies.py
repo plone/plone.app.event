@@ -1,5 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
+from plone.app.event import base
+from plone.app.event import messageFactory as _
 from plone.event.interfaces import IEvent
 from plone.memoize import forever
 from zope.component import getUtility
@@ -13,24 +15,10 @@ import pytz
 import random
 
 
-# Map for ambiguous timezone abbreviations to their most common non-ambigious
-# timezone name. E.g CST is ambiguous and is used for U.S./Canada Central
-# Standard Time, Australian Central Standard Time, China Standard Time.
-# TODO: incomplete map.
-# TODO: do we need this at all or shouldn't we just fail with ambiguous
-#       timezones?
-replacement_zones = {
-    'CET': 'Europe/Vienna',    # Central European Time
-    'MET': 'Europe/Vienna',    # Middle European Time
-    'EET': 'Europe/Helsinki',  # East European Time
-    'WET': 'Europe/Lisbon',    # West European Time
-}
-
-
 def Timezones(context, query=None):
     """Vocabulary for all timezones.
     """
-    rpl_keys = replacement_zones.keys()
+    rpl_keys = base.replacement_zones.keys()
     tz_list = [SimpleTerm(value=it, title=it)
                for it in pytz.all_timezones if it not in rpl_keys and (
                    query is None
@@ -138,8 +126,22 @@ directlyProvides(EventTypes, IVocabularyFactory)
 
 def SynchronizationStrategies(context):
     """Vocabulary for icalendar synchronization strategies.
+
+    SYNC_KEEP_NEWER:  Import, if the imported event is modified after the
+                      existing one.
+    SYNC_KEEP_MINE:   On conflicts, just do nothing.
+    SYNC_KEEP_THEIRS: On conflicts, update the existing event with the external
+                      one.
+    SYNC_NONE:        Don't synchronize but import events and create new ones,
+                      even if they already exist. For each one, create a new
+                      sync_uid.
     """
-    # TODO: translate
-    items = ['none', 'keep_newer', 'keep_mine', 'keep_theirs']
-    return SimpleVocabulary.fromValues(items)
+    items = [
+        (_('sync_keep_newer', default="Keep newer"), base.SYNC_KEEP_NEWER),
+        (_('sync_keep_mine', default="Keep mine"), base.SYNC_KEEP_MINE),
+        (_('sync_keep_theirs', default="Keep theirs"), base.SYNC_KEEP_THEIRS),
+        (_('sync_none', default="No Syncing"), base.SYNC_NONE),
+    ]
+    items = [SimpleTerm(title=i[0], value=i[1]) for i in items]
+    return SimpleVocabulary(items)
 directlyProvides(SynchronizationStrategies, IVocabularyFactory)

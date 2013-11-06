@@ -5,6 +5,8 @@ from datetime import date
 from datetime import timedelta
 from plone.app.event import messageFactory as _
 from plone.app.event.base import AnnotationAdapter
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import date_speller
 from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
@@ -26,6 +28,7 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import Interface
 from zope.interface import implements
+
 try:
     from plone.app.collection.interfaces import ICollection
 except ImportError:
@@ -103,7 +106,7 @@ class EventListing(BrowserView):
         return start, end
 
     @view.memoize
-    def _get_events(self, ret_mode=3, expand=True):
+    def _get_events(self, ret_mode=RET_MODE_ACCESSORS, expand=True):
         context = self.context
         kw = {}
         if self.path:
@@ -129,7 +132,7 @@ class EventListing(BrowserView):
                           sort=sort, sort_reverse=sort_reverse,
                           ret_mode=ret_mode, expand=expand, **kw)
 
-    def events(self, ret_mode=3, expand=True, batch=True):
+    def events(self, ret_mode=RET_MODE_ACCESSORS, expand=True, batch=True):
         res = []
         is_col = self.is_collection
         is_top = self.is_topic
@@ -161,7 +164,8 @@ class EventListing(BrowserView):
         # Get as objects.
         # Don't include occurrences to avoid having them along with their
         # original events and it's recurrence definition in icalendar exports.
-        events = self.events(ret_mode=2, expand=False, batch=False)
+        events = self.events(ret_mode=RET_MODE_OBJECTS, expand=False,
+                             batch=False)
         cal = construct_icalendar(self.context, events)
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')

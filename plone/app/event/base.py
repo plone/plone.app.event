@@ -12,7 +12,6 @@ from datetime import timedelta
 from persistent.dict import PersistentDict
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
-from plone.app.event.vocabularies import replacement_zones
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -39,11 +38,35 @@ import pytz
 DEFAULT_END_DELTA = 1  # hours
 FALLBACK_TIMEZONE = 'UTC'
 
+# Sync strategies
+SYNC_NONE = 0
+SYNC_KEEP_NEWER = 1
+SYNC_KEEP_MINE = 2
+SYNC_KEEP_THEIRS = 3
+
+# Return modes for get_events
+RET_MODE_BRAINS = 1
+RET_MODE_OBJECTS = 2
+RET_MODE_ACCESSORS = 3
+
+# Map for ambiguous timezone abbreviations to their most common non-ambigious
+# timezone name. E.g CST is ambiguous and is used for U.S./Canada Central
+# Standard Time, Australian Central Standard Time, China Standard Time.
+# TODO: incomplete map.
+# TODO: do we need this at all or shouldn't we just fail with ambiguous
+#       timezones?
+replacement_zones = {
+    'CET': 'Europe/Vienna',    # Central European Time
+    'MET': 'Europe/Vienna',    # Middle European Time
+    'EET': 'Europe/Helsinki',  # East European Time
+    'WET': 'Europe/Lisbon',    # West European Time
+}
+
 
 # RETRIEVE EVENTS
 
 def get_events(context, start=None, end=None, limit=None,
-               ret_mode=1, expand=False,
+               ret_mode=RET_MODE_BRAINS, expand=False,
                sort='start', sort_reverse=False, **kw):
     """Return all events as catalog brains, possibly within a given
     timeframe.
@@ -125,7 +148,7 @@ def get_events(context, start=None, end=None, limit=None,
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
 
-    if ret_mode in (2, 3):
+    if ret_mode in (RET_MODE_OBJECTS, RET_MODE_ACCESSORS):
         if expand is False:
             result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
         else:
@@ -170,7 +193,7 @@ def expand_events(events, ret_mode,
     :param sort_reverse: Change the order of the sorting.
     :type sort_reverse: boolean
     """
-    assert(ret_mode is not 1)
+    assert(ret_mode is not RET_MODE_BRAINS)
 
     exp_result = []
     for it in events:
@@ -196,10 +219,10 @@ def _obj_or_acc(obj, ret_mode):
     ret_mode. ret_mode 2 returns objects, ret_mode 3 returns IEventAccessor
     object wrapper. ret_mode 1 is not supported.
     """
-    assert(ret_mode is not 1)
-    if ret_mode == 2:
+    assert(ret_mode is not RET_MODE_BRAINS)
+    if ret_mode == RET_MODE_OBJECTS:
         return obj
-    elif ret_mode == 3:
+    elif ret_mode == RET_MODE_ACCESSORS:
         return IEventAccessor(obj)
 
 

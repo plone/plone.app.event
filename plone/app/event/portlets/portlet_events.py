@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.browser.event_view import get_location
@@ -110,7 +111,8 @@ class Renderer(base.Renderer):
             kw['review_state'] = data.state
 
         return get_events(context, start=localized_now(context),
-                          ret_mode=3, expand=True, limit=data.count, **kw)
+                          ret_mode=RET_MODE_ACCESSORS,
+                          expand=True, limit=data.count, **kw)
 
     def formatted_date(self, event):
         provider = getMultiAdapter(
