@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.1dev (unreleased)
--------------------
+1.1.dev (unreleased)
+--------------------
 
 .. note::
 
@@ -17,20 +17,20 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
 
 
+- Allow query parameters for timezone vocabularies for filtering. Create the
+  "Timezones" vocabulary from SimpleTerm objects with a value and title set
+  for better support with plone.app.widgets AjaxSelectWidget.
+  [thet]
+
 - Remove "ploneintegration" from setuptools extra section and GenericSetup
   profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
   Plone to integrate plone.app.event.
   [thet]
 
-- Allow query parameters for timezone vocabularies for filtering. Create the
-  "Timezones" vocabulary from SimpleTerm objects with a value and title set
-  for better support with plone.app.widgets AjaxSelectWidget.
-  [thet]
 
-
-1.0.rcdev (unreleased)
-----------------------
+1.0 (2013-11-06)
+----------------
 
 - Implement synchronisation strategies for icalendar import.
   [thet]
