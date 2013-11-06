@@ -22,6 +22,8 @@
                      zope.lifecycleevent.interfaces.IObjectCreatedEvent"
                 handler=".content.data_postprocessing" />
 
+    <adapter name="event_uid" factory=".content.event_uid_indexer" />
+
     <adapter
         factory=".traverser.OccurrenceTraverser"
         permission="zope.Public"

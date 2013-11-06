@@ -26,6 +26,7 @@ from plone.event.utils import pydt
 from plone.event.utils import utc
 from plone.formwidget.datetime.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
+from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
 from zope.component import adapts
 from zope.event import notify
@@ -654,6 +655,15 @@ def data_postprocessing(obj, event):
         ))
 
     obj.reindexObject()
+
+
+# icalendar event UID indexer
+@indexer(IATEvent)
+def event_uid_indexer(obj):
+    event_uid = obj.getEventUid()
+    if not event_uid:
+        return None
+    return event_uid
 
 
 ## Object adapters
