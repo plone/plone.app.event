@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-06 13:40+0000\n"
+"POT-Creation-Date: 2013-11-06 23:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -373,10 +373,11 @@ msgstr "Lokale icalendar Datei, wenn keine URL angegeben ist."
 msgid "ical_import_file_title"
 msgstr "Icalendar Datei"
 
-#. Default: "%s events imported from %s"
+#. Default: "${num} events imported from ${filename}"
 #: plone/app/event/ical/importer.py:352
+#, fuzzy
 msgid "ical_import_imported"
-msgstr "%s Termine von %s importiert."
+msgstr "${num} Termine von ${filename} importiert."
 
 #. Default: "Please provide either a icalendar ics file or a URL to a file."
 #: plone/app/event/ical/importer.py:359
