@@ -392,12 +392,16 @@ class TestIcalImportDX(unittest.TestCase):
 
         res = ical_import(impfolder, icsfile, self.event_type)
         self.assertEqual(res['count'], 5)
-        suid1 = IEventAccessor(impfolder.e1).sync_uid
+
+        e11 = impfolder['e1']
+        suid1 = IEventAccessor(e11).sync_uid
 
         res = ical_import(impfolder, icsfile, self.event_type,
                           sync_strategy=base.SYNC_NONE)
         self.assertEqual(res['count'], 5)
-        suid2 = IEventAccessor(impfolder['e1-1']).sync_uid
+
+        e12 = impfolder['e1-1']
+        suid2 = IEventAccessor(e12).sync_uid
 
         self.assertEqual(len(impfolder.contentIds()), 10)
         self.assertNotEqual(suid1, suid2)

@@ -43,10 +43,10 @@ def ical_import(container, ics_resource, event_type,
     events = cal.walk('VEVENT')
 
     cat = getToolByName(container, 'portal_catalog')
-    container_path = container.absolute_url_path()
+    container_path = '/'.join(container.getPhysicalPath())
 
     def _get_by_sync_uid(uid):
-        return cat.searchResults(
+        return cat(
             sync_uid=uid,
             path={'query': container_path, 'depth': 1}
         )
@@ -146,6 +146,7 @@ def ical_import(container, ics_resource, event_type,
         # TODO: better use plone.api for content creation, from which some of
         # the code here is copied
 
+        content = None
         new_content_id = None
         existing_event = None
         sync_uid = _get_prop('UID', item)
@@ -175,6 +176,8 @@ def ical_import(container, ics_resource, event_type,
                                     title=title,
                                     description=description)
             content = container[new_content_id]
+
+        assert(content)  # At this point, a content must be available.
 
         event = IEventAccessor(content)
         event.title = title
@@ -343,7 +346,7 @@ class IcalendarImportSettingsForm(form.Form):
                 self.context,
                 ics_resource=ical_resource,
                 event_type=event_type,
-                sync_strategy=sync_strategy
+                sync_strategy=sync_strategy,
             )
 
             count = import_metadata['count']

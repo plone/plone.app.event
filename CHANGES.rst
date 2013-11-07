@@ -29,6 +29,19 @@ Changelog
   [thet]
 
 
+1.0.2 (2013-11-07)
+------------------
+
+- Fix the path for catalog search in ical importer. This fixes an issue, where
+  no existing events could be found when importing a ical file again in virtual
+  hosting environments. Also, search for any existing events, not only what the
+  user is allowed to see.
+  [thet]
+
+- Fix Plone 4.2 buildout and test environment.
+  [thet]
+
+
 1.0.1 (2013-11-07)
 ------------------
 
