@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.testing import set_browserlayer
@@ -48,6 +49,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
         now, past, future, far, duration = self.make_dates()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        workflow = getToolByName(self.portal, 'portal_workflow')
 
         factory = self.event_factory()
         self.past_event = factory(
@@ -61,6 +63,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=DAILY;COUNT=3',
             ).context
+        workflow.doActionFor(self.past_event, 'publish')
 
         self.now_event = factory(
             container=self.portal,
@@ -78,6 +81,7 @@ EXDATE:20130506T000000,20140404T000000""",
             contact_phone='+123456789',
             event_url='http://plone.org',
             subjects=['plone', 'testing']).context
+        workflow.doActionFor(self.now_event, 'publish')
 
         self.future_event = factory(
             container=self.portal,
@@ -87,6 +91,7 @@ EXDATE:20130506T000000,20140404T000000""",
             end=future + duration,
             location=u'Graz',
             timezone=TEST_TIMEZONE).context
+        workflow.doActionFor(self.future_event, 'publish')
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
         self.long_event = factory(
@@ -97,6 +102,7 @@ EXDATE:20130506T000000,20140404T000000""",
             end=far,
             location=u'Schaftal',
             timezone=TEST_TIMEZONE).context
+        workflow.doActionFor(self.long_event, 'publish')
 
         # For AT based tests, this is a plone.app.collection ICollection type
         # For DX based tests, it's a plone.app.contenttypes ICollection type
