@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.2.dev( unreleased)
+----------------------
+
+- Fix Plone 4.2 buildout and test environment.
+  [thet]
+
 1.0.1 (2013-11-07)
 ------------------
 
