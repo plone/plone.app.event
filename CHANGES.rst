@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0.2.dev( unreleased)
-----------------------
+1.0.2 (2013-11-07)
+------------------
 
 - Fix the path for catalog search in ical importer. This fixes an issue, where
   no existing events could be found when importing a ical file again in virtual
