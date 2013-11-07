@@ -44,10 +44,10 @@ def ical_import(container, ics_resource, event_type,
     events = cal.walk('VEVENT')
 
     cat = getToolByName(container, 'portal_catalog')
-    container_path = container.absolute_url_path()
+    container_path = '/'.join(container.getPhysicalPath())
 
     def _get_by_sync_uid(uid):
-        return cat.searchResults(
+        return cat(
             sync_uid=uid,
             path={'query': container_path, 'depth': 1}
         )

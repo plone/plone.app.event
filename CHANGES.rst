@@ -4,6 +4,12 @@ Changelog
 1.0.2.dev( unreleased)
 ----------------------
 
+- Fix the path for catalog search in ical importer. This fixes an issue, where
+  no existing events could be found when importing a ical file again in virtual
+  hosting environments. Also, search for any existing events, not only what the
+  user is allowed to see.
+  [thet]
+
 - Add a workflow transition selection field to the icalendar import form.
   [thet]
 
