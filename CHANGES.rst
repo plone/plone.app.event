@@ -10,9 +10,6 @@ Changelog
   user is allowed to see.
   [thet]
 
-- Add a workflow transition selection field to the icalendar import form.
-  [thet]
-
 - Fix Plone 4.2 buildout and test environment.
   [thet]
 

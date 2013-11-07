@@ -38,8 +38,7 @@ import urllib2
 
 
 def ical_import(container, ics_resource, event_type,
-                sync_strategy=base.SYNC_KEEP_NEWER,
-                workflow_trans=None):
+                sync_strategy=base.SYNC_KEEP_NEWER):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk('VEVENT')
 
@@ -215,11 +214,6 @@ def ical_import(container, ics_resource, event_type,
         else:
             transaction.savepoint(optimistic=True)
 
-        if workflow_trans:
-            # Let it crash! if a WorkflowException occurrs.
-            workflow = getToolByName(container, 'portal_workflow')
-            workflow.doActionFor(content, workflow_trans)
-
         # Do this at the end, otherwise it's overwritten
         if ext_modified:
             event.last_modified = ext_modified
@@ -239,16 +233,6 @@ class IIcalendarImportSettings(Interface):
                     u"importing icalendar resources."),
         vocabulary='plone.app.event.EventTypes',
         required=True
-    )
-
-    workflow_trans = schema.Choice(
-        title=_('ical_import_workflow_trans_title', default=u'Workflow'),
-        description=_(
-            'ical_import_workflow_trans_desc',
-            default=u"Workflow transition to apply for newly imported "
-                    u"contents."),
-        vocabulary='plone.app.vocabularies.WorkflowTransitions',
-        required=False
     )
 
     ical_url = schema.URI(
@@ -313,7 +297,6 @@ class IcalendarImportSettingsForm(form.Form):
         data['event_type'] = settings.event_type
         data['ical_url'] = settings.ical_url
         data['sync_strategy'] = settings.sync_strategy
-        data['workflow_trans'] = settings.workflow_trans
         return data
 
     def save_data(self, data):
@@ -321,7 +304,6 @@ class IcalendarImportSettingsForm(form.Form):
         settings.ical_url = data['ical_url']
         settings.event_type = data['event_type']
         settings.sync_strategy = data['sync_strategy']
-        settings.workflow_trans = data['workflow_trans']
 
     @button.buttonAndHandler(u'Save')
     def handleSave(self, action):
@@ -349,7 +331,6 @@ class IcalendarImportSettingsForm(form.Form):
         ical_url = data['ical_url']
         event_type = data['event_type']
         sync_strategy = data['sync_strategy']
-        workflow_trans = data['workflow_trans']
 
         if ical_file or ical_url:
 
@@ -366,7 +347,6 @@ class IcalendarImportSettingsForm(form.Form):
                 ics_resource=ical_resource,
                 event_type=event_type,
                 sync_strategy=sync_strategy,
-                workflow_trans=workflow_trans
             )
 
             count = import_metadata['count']
