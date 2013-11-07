@@ -4,6 +4,9 @@ Changelog
 1.0.2.dev( unreleased)
 ----------------------
 
+- Add a workflow transition selection field to the icalendar import form.
+  [thet]
+
 - Fix Plone 4.2 buildout and test environment.
   [thet]
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from plone.app.event import base
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
@@ -383,6 +384,7 @@ class TestIcalImportDX(unittest.TestCase):
     def test_import_from_ics__no_sync(self):
         """SYNC_NONE and importing the same file again should create new event
         objects and give them each a new sync_uid.
+        Also test workflow transition for imported content.
         """
         self.portal.invokeFactory('Folder', 'impfolder')
         impfolder = self.portal.impfolder
@@ -392,15 +394,27 @@ class TestIcalImportDX(unittest.TestCase):
 
         res = ical_import(impfolder, icsfile, self.event_type)
         self.assertEqual(res['count'], 5)
-        suid1 = IEventAccessor(impfolder.e1).sync_uid
+
+        e11 = impfolder['e1']
+        suid1 = IEventAccessor(e11).sync_uid
 
         res = ical_import(impfolder, icsfile, self.event_type,
-                          sync_strategy=base.SYNC_NONE)
+                          sync_strategy=base.SYNC_NONE,
+                          workflow_trans='publish')
         self.assertEqual(res['count'], 5)
-        suid2 = IEventAccessor(impfolder['e1-1']).sync_uid
+
+        e12 = impfolder['e1-1']
+        suid2 = IEventAccessor(e12).sync_uid
 
         self.assertEqual(len(impfolder.contentIds()), 10)
         self.assertNotEqual(suid1, suid2)
+
+        # Test workflow
+        self.assertEqual(len(impfolder.contentIds()), 10)
+
+        wft = getToolByName(self.portal, 'portal_workflow')
+        self.assertEqual(wft.getInfoFor(e11, 'review_state'), 'private')
+        self.assertEqual(wft.getInfoFor(e12, 'review_state'), 'published')
 
         self.portal.manage_delObjects(['impfolder'])
 
