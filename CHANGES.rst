@@ -12,6 +12,10 @@ Changelog
 
 - Fix Plone 4.2 buildout and test environment.
   [thet]
+  
+- Fix UnicodeDecodeError with special characters in body text. Fixes #108
+  [zwork][agitator]
+  
 
 1.0.1 (2013-11-07)
 ------------------
