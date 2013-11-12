@@ -17,6 +17,9 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Set the first_weekday setting based on the site's locale when the default
+  profile is activated.
+  [davisagli]
 
 - Allow query parameters for timezone vocabularies for filtering. Create the
   "Timezones" vocabulary from SimpleTerm objects with a value and title set
