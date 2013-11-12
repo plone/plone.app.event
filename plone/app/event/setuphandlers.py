@@ -75,6 +75,12 @@ def catalog_setup(site):
 def first_weekday_setup(site):
     """Set the first day of the week based on the portal's locale.
     """
+    reg = getUtility(IRegistry)
+    settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+    if settings.first_weekday is not None:
+        # don't overwrite if it's already set
+        return
+
     # find the locale implied by the portal's language
     language = site.Language()
     parts = (language.split('-') + [None, None])[:3]
@@ -85,8 +91,6 @@ def first_weekday_setup(site):
     if gregorian_calendar is not None:
         first = wkday_to_mon0(gregorian_calendar.week.get('firstDay', 7))
     # save setting
-    reg = getUtility(IRegistry)
-    settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
     settings.first_weekday = first
 
 

@@ -53,6 +53,5 @@ class IEventSettings(Interface):
             u'help_first_weekday',
             default=u'First day in the Week.'),
         required=True,
-        default='0',
         vocabulary="plone.app.event.Weekdays"
     )

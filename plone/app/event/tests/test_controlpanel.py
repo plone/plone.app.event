@@ -95,3 +95,26 @@ class ControlpanelTest(unittest.TestCase):
         # display_offset is -03:00 or -04:00, depending on STD or DST
         display_offset = datetime.now(pytz.timezone(tz)).isoformat()[-6:]
         self.assertTrue(display_offset in browser.contents)
+
+    def test_first_weekday(self):
+        # Make sure the first weekday was set when the profile was run.
+        first_weekday = self.portal.portal_registry['plone.app.event.first_weekday']
+        self.assertEqual(first_weekday, 6)
+
+        # Change the site language. Re-running the import step should not change the setting.
+        portal = self.portal
+        old_language = portal.language
+        portal.language = 'de'
+        from plone.app.event.setuphandlers import first_weekday_setup
+        first_weekday_setup(portal)
+        first_weekday = self.portal.portal_registry['plone.app.event.first_weekday']
+        self.assertEqual(first_weekday, 6)
+
+        # But if we remove the setting, re-running the step should set it based on the language.
+        self.portal.portal_registry['plone.app.event.first_weekday'] = None
+        first_weekday_setup(portal)
+        first_weekday = self.portal.portal_registry['plone.app.event.first_weekday']
+        self.assertEqual(first_weekday, 0)
+
+        # Restore the site language.
+        portal.language = old_language
