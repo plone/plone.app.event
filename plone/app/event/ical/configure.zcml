@@ -112,7 +112,7 @@
         class=".importer.IcalendarImportSettingsFormView"
         allowed_attributes="enable
                             disable"
-        permission="cmf.ManagePortal"
+        permission="cmf.AddPortalContent"
         layer="..interfaces.IBrowserLayer"
         />
 
