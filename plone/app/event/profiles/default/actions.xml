@@ -21,7 +21,7 @@
    <property name="icon_expr"></property>
    <property name="available_expr">object/@@ical_import_tool/enabled|nothing</property>
    <property name="permissions">
-    <element value="Manage properties"/>
+    <element value="cmf.AddPortalContent"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -34,7 +34,7 @@
    <property name="url_expr">string:$object_url/@@ical_import_settings/enable</property>
    <property name="available_expr">object/@@ical_import_tool/available_disabled|nothing</property>
    <property name="permissions">
-    <element value="Manage properties" />
+    <element value="cmf.AddPortalContent" />
    </property>
    <property name="visible">True</property>
   </object>
@@ -44,7 +44,7 @@
    <property name="url_expr">string:$object_url/@@ical_import_settings/disable</property>
    <property name="available_expr">object/@@ical_import_tool/enabled|nothing</property>
    <property name="permissions">
-    <element value="Manage properties" />
+    <element value="cmf.AddPortalContent" />
    </property>
    <property name="visible">True</property>
   </object>

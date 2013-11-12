@@ -515,7 +515,7 @@ def searchable_text_indexer(obj):
     transforms = getToolByName(obj, 'portal_transforms')
     body_plain = transforms.convertTo(
         'text/plain',
-        output,
+        output.encode('utf8'),
         mimetype='text/html',
         ).getData().strip()
     if isinstance(body_plain, str):
