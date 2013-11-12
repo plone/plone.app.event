@@ -1,6 +1,7 @@
 Changelog
 =========
 
+
 1.0.3.dev (unreleased)
 ----------------------
 
@@ -31,6 +32,7 @@ Changelog
   formatted. Also be forgiving about missing LAST-MODIFIED properties from ical
   files.
   [thet]
+
 
 1.0 (2013-11-06)
 ----------------
