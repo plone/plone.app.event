@@ -434,11 +434,11 @@ class ATEvent(ATCTContent, HistoryAwareMixin):
         )
         self.getField(fieldtoset).set(self, value, **kwargs)
 
-    security.declareProtected('View', 'start')
+    security.declareProtected(View, 'start')
     def start(self):
         return self._dt_getter('startDate')
 
-    security.declareProtected('View', 'end')
+    security.declareProtected(View, 'end')
     def end(self):
         return self._dt_getter('endDate')
 
