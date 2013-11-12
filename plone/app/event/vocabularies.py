@@ -15,17 +15,19 @@ import pytz
 import random
 
 
-def Timezones(context):
+def Timezones(context, query=None):
     """Vocabulary for all timezones.
     """
     rpl_keys = base.replacement_zones.keys()
-    tz_list = [it for it in pytz.all_timezones if it not in rpl_keys]
-    return SimpleVocabulary.fromValues(tz_list)
-
+    tz_list = [SimpleTerm(value=it, title=it)
+               for it in pytz.all_timezones if it not in rpl_keys and (
+                   query is None
+                   or query.lower() in it.lower())]
+    return SimpleVocabulary(tz_list)
 directlyProvides(Timezones, IVocabularyFactory)
 
 
-def AvailableTimezones(context):
+def AvailableTimezones(context, query=None):
     """Vocabulary for available timezones, as set by in the controlpanel.
 
     This vocabulary is based on collective.elephantvocabulary. The reason is,
@@ -39,12 +41,11 @@ def AvailableTimezones(context):
     # TODO: if the portal_timezone is not in available_timezones, also put it
     #       in AvailableTimezone vocab.
     tzvocab = getUtility(IVocabularyFactory,
-                         'plone.app.event.Timezones')(context)
+                         'plone.app.event.Timezones')(context, query)
     return wrap_vocabulary(
         tzvocab,
         visible_terms_from_registry='plone.app.event.available_timezones'
     )(context)
-
 directlyProvides(AvailableTimezones, IVocabularyFactory)
 
 
@@ -81,7 +82,6 @@ def Weekdays(context):
 
     items = [SimpleTerm(i[1], i[1], i[0]) for i in items]
     return SimpleVocabulary(items)
-
 directlyProvides(Weekdays, IVocabularyFactory)
 
 

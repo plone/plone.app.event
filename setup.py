@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.0.2'
+version = '1.1.dev'
 
 
 setup(
@@ -45,9 +45,8 @@ setup(
         'collective.elephantvocabulary',
         'icalendar',
         'plone.app.contentlisting',
-        'plone.app.imaging',
         'plone.app.layout',
-        'plone.app.portlets>=2.4.0',
+        'plone.app.portlets>=2.5a1',
         'plone.app.registry',
         'plone.app.vocabularies',
         'plone.browserlayer',
@@ -80,6 +79,7 @@ setup(
             'AccessControl',
             'Products.ATContentTypes',
             'Products.Archetypes',
+            'plone.app.imaging',
             'Products.contentmigration',
             'plone.formwidget.datetime [archetypes]',
             'plone.formwidget.recurrence [archetypes]',
@@ -95,15 +95,11 @@ setup(
             'plone.indexer',
             'plone.supermodel',
         ],
-        'ploneintegration': [
-            'plone.app.event [archetypes]',
-            'z3c.unconfigure',
-        ],
         'test': [
             'mock',
             'plone.app.collection',
             'plone.app.contenttypes',
-            'plone.app.event [archetypes, dexterity, ploneintegration]',
+            'plone.app.event [archetypes, dexterity]',
             'plone.app.testing',
             'plone.testing',
             'transaction',

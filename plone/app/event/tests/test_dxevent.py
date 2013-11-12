@@ -55,14 +55,14 @@ class TestDXIntegration(unittest.TestCase):
         default_value = default_start(data)
         now = localized_now().replace(minute=0, second=0, microsecond=0)
         delta = default_value - now
-        self.assertEquals(0, delta.seconds)
+        self.assertEqual(0, delta.seconds)
 
     def test_end_default(self):
         data = MockEvent()
         data.context = MockEvent()
         default_value = default_end(data)
         delta = default_value - default_start(data)
-        self.assertEquals(3600, delta.seconds)
+        self.assertEqual(3600, delta.seconds)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='plone.app.event.dx.event')
@@ -72,11 +72,11 @@ class TestDXIntegration(unittest.TestCase):
         fti = queryUtility(IDexterityFTI, name='plone.app.event.dx.event')
         factory = fti.factory
         new_object = createObject(factory)
-        self.failUnless(IDXEvent.providedBy(new_object))
-        self.failUnless(IDXEventRecurrence.providedBy(new_object))
-        self.failUnless(IDXEventLocation.providedBy(new_object))
-        self.failUnless(IDXEventAttendees.providedBy(new_object))
-        self.failUnless(IDXEventContact.providedBy(new_object))
+        self.assertTrue(IDXEvent.providedBy(new_object))
+        self.assertTrue(IDXEventRecurrence.providedBy(new_object))
+        self.assertTrue(IDXEventLocation.providedBy(new_object))
+        self.assertTrue(IDXEventAttendees.providedBy(new_object))
+        self.assertTrue(IDXEventContact.providedBy(new_object))
 
     def test_adding(self):
         self.portal.invokeFactory(
@@ -88,11 +88,11 @@ class TestDXIntegration(unittest.TestCase):
             whole_day=False
         )
         e1 = self.portal['event1']
-        self.failUnless(IDXEvent.providedBy(e1))
-        self.failUnless(IDXEventRecurrence.providedBy(e1))
-        self.failUnless(IDXEventLocation.providedBy(e1))
-        self.failUnless(IDXEventAttendees.providedBy(e1))
-        self.failUnless(IDXEventContact.providedBy(e1))
+        self.assertTrue(IDXEvent.providedBy(e1))
+        self.assertTrue(IDXEventRecurrence.providedBy(e1))
+        self.assertTrue(IDXEventLocation.providedBy(e1))
+        self.assertTrue(IDXEventAttendees.providedBy(e1))
+        self.assertTrue(IDXEventContact.providedBy(e1))
 
         self.portal.manage_delObjects(['event1'])
 
@@ -127,13 +127,13 @@ class TestDXIntegration(unittest.TestCase):
         result = self.portal.portal_catalog(
             path='/'.join(e1.getPhysicalPath())
         )
-        self.assertEquals(1, len(result))
+        self.assertEqual(1, len(result))
         # result returns Zope's DateTime
-        self.assertEquals(
+        self.assertEqual(
             result[0].start,
             DateTime('2011/11/11 11:00:00 %s' % TZNAME)
         )
-        self.assertEquals(
+        self.assertEqual(
             result[0].end,
             DateTime('2011/11/11 12:00:00 %s' % TZNAME)
         )

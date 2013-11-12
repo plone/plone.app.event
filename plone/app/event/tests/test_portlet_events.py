@@ -34,13 +34,13 @@ class PortletTest(unittest.TestCase):
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
-        self.assertEquals(portlet.addview, 'portlets.Events')
+        self.assertEqual(portlet.addview, 'portlets.Events')
 
     def testRegisteredInterfaces(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEquals(
+        self.assertEqual(
             ['plone.app.portlets.interfaces.IColumn',
              'plone.app.portlets.interfaces.IDashboard'],
             registered_interfaces
@@ -48,8 +48,8 @@ class PortletTest(unittest.TestCase):
 
     def testInterfaces(self):
         portlet = portlet_events.Assignment()
-        self.failUnless(IPortletAssignment.providedBy(portlet))
-        self.failUnless(IPortletDataProvider.providedBy(portlet.data))
+        self.assertTrue(IPortletAssignment.providedBy(portlet))
+        self.assertTrue(IPortletDataProvider.providedBy(portlet.data))
 
     def testInvokeAddview(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
@@ -62,8 +62,8 @@ class PortletTest(unittest.TestCase):
 
         addview.createAndAdd(data={})
 
-        self.assertEquals(len(mapping), 1)
-        self.failUnless(
+        self.assertEqual(len(mapping), 1)
+        self.assertTrue(
             isinstance(mapping.values()[0], portlet_events.Assignment)
         )
 
@@ -72,7 +72,7 @@ class PortletTest(unittest.TestCase):
 
         mapping['foo'] = portlet_events.Assignment(count=5)
         editview = getMultiAdapter((mapping['foo'], self.request), name='edit')
-        self.failUnless(isinstance(editview, portlet_events.EditForm))
+        self.assertTrue(isinstance(editview, portlet_events.EditForm))
 
     def testRenderer(self):
         context = self.portal
@@ -86,7 +86,7 @@ class PortletTest(unittest.TestCase):
             (context, self.request, view, manager, assignment),
             IPortletRenderer
         )
-        self.failUnless(isinstance(renderer, portlet_events.Renderer))
+        self.assertTrue(isinstance(renderer, portlet_events.Renderer))
 
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
@@ -158,25 +158,25 @@ class RendererTest(unittest.TestCase):
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
-        self.assertEquals(0, len(portlet.events))
+        self.assertEqual(0, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
-        self.assertEquals(1, len(portlet.events))
+        self.assertEqual(1, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
-        self.assertEquals(2, len(portlet.events))
+        self.assertEqual(2, len(portlet.events))
 
         portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEquals(2, len(portlet.events))
+        self.assertEqual(2, len(portlet.events))
 
         # No search base gives calendar urls with event_listing part
         self.assertTrue('event_listing' in portlet.render())
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base="/eventfolder"))
-        self.assertEquals(1, len(portlet.events))
+        self.assertEqual(1, len(portlet.events))
 
         # A given search base gives calendar urls without event_listing part
         self.assertTrue('event_listing' not in portlet.render())

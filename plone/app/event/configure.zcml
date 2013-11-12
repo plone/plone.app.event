@@ -17,10 +17,6 @@
   <include package="plone.app.registry" />
 
   <!-- internal dependencies -->
-  <configure zcml:condition="not-have plone-44">
-    <!-- pre plone 5.0 integration -->
-    <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />
-  </configure>
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
   <include package=".browser" />
@@ -37,6 +33,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+
+  <genericsetup:importStep
+      name="plone.app.event-catalog"
+      handler="plone.app.event.setuphandlers.setup_misc"
+      title="plone.app.event misc"
+      description="catalog and first_weekday setup">
+    <depends name="plone-final"/>
+  </genericsetup:importStep>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"

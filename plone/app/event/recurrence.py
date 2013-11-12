@@ -3,7 +3,6 @@ from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from plone.app.event.base import guess_date_from
-from plone.app.imaging.scaling import ImageScaling as ATImageScaling
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
@@ -32,6 +31,11 @@ try:
 except ImportError:
     class IDXEvent(Interface):
         pass
+
+try:
+    from plone.app.imaging.scaling import ImageScaling as ATImageScaling
+except ImportError:
+    pass
 
 
 class RecurrenceSupport(object):

@@ -367,6 +367,9 @@ class PAEventCMFEditTest(unittest.TestCase):
 
     def testEventEdit(self):
         self.portal.invokeFactory('Event', id='event')
+        if not getattr(self.portal.event, 'event_edit', None):
+            # event_edit script is removed in Plone 5
+            return
         self.portal.event.event_edit(title='Foo',
                                      start_date='2003-09-18',
                                      end_date='2003-09-19')
