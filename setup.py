@@ -51,7 +51,6 @@ setup(
         'plone.app.vocabularies',
         'plone.browserlayer',
         'plone.event>=1.0',
-        'plone.formwidget.datetime',
         'plone.formwidget.recurrence',
         'plone.formwidget.namedfile',
         'plone.memoize',
@@ -81,7 +80,6 @@ setup(
             'Products.Archetypes',
             'plone.app.imaging',
             'Products.contentmigration',
-            'plone.formwidget.datetime [archetypes]',
             'plone.formwidget.recurrence [archetypes]',
         ],
         'dexterity': [
@@ -90,7 +88,6 @@ setup(
             'plone.autoform>=1.4',
             'plone.behavior',
             'plone.dexterity',
-            'plone.formwidget.datetime [z3cform]',
             'plone.formwidget.recurrence [z3cform]',
             'plone.indexer',
             'plone.supermodel',

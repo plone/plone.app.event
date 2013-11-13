@@ -12,7 +12,6 @@
   <include package="plone.browserlayer" /> 
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
-  <include package="plone.formwidget.datetime" />
   <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
 

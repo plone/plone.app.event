@@ -24,7 +24,6 @@ from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
@@ -61,8 +60,6 @@ class StartBeforeEnd(Invalid):
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
-    form.widget('start', DatetimeFieldWidget, first_day=first_weekday_sun0)
-    form.widget('end', DatetimeFieldWidget, first_day=first_weekday_sun0)
     model.fieldset('dates', fields=['timezone'])
 
     start = schema.Datetime(
@@ -157,6 +154,32 @@ def default_tz(data):
     return default_timezone()
 provideAdapter(ComputedWidgetAttribute(
     default_tz, field=IEventBasic['timezone']), name='default')
+
+
+
+from z3c.form.interfaces import IFieldWidget
+from plone.app.widgets.interfaces import IWidgetsLayer
+from z3c.form.util import getSpecification
+from zope.component import adapter
+from zope.interface import implementer
+from z3c.form.widget import FieldWidget
+from plone.app.widgets.dx import DatetimeWidget
+
+
+@adapter(getSpecification(IEventBasic['start']), IWidgetsLayer)
+@implementer(IFieldWidget)
+def StartFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.pattern_options['first_day'] = first_weekday_sun0()
+    return widget
+
+
+@adapter(getSpecification(IEventBasic['end']), IWidgetsLayer)
+@implementer(IFieldWidget)
+def EndFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.pattern_options['first_day'] = first_weekday_sun0()
+    return widget
 
 
 class IEventRecurrence(model.Schema):

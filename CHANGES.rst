@@ -17,6 +17,9 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Remove dependency on plone.formwidget.datetime and use plone.app.widgets
+  instead.
+  [thet]
 
 - Allow query parameters for timezone vocabularies for filtering. Create the
   "Timezones" vocabulary from SimpleTerm objects with a value and title set

@@ -24,7 +24,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from plone.event.utils import utc
-from plone.formwidget.datetime.at import DatetimeWidget
+from plone.app.widgets.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
@@ -66,8 +66,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                 u'help_event_start',
                 default=u"Date and Time, when the event begins."
             ),
-            with_time=1,
-            first_day=first_weekday_sun0,
+            pattern_options={'first_day': first_weekday_sun0},
         ),
     ),
 
@@ -88,8 +87,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                 u'help_event_end',
                 default=u"Date and Time, when the event ends."
             ),
-            with_time=1,
-            first_day=first_weekday_sun0,
+            pattern_options={'first_day': first_weekday_sun0},
         ),
     ),
 
