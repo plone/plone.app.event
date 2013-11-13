@@ -18,6 +18,9 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
 
 
+- plone.app.widgets compatibility
+  [garbas]
+
 - Allow query parameters for timezone vocabularies for filtering. Create the
   "Timezones" vocabulary from SimpleTerm objects with a value and title set
   for better support with plone.app.widgets AjaxSelectWidget.
