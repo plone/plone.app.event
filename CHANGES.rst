@@ -5,6 +5,10 @@ Changelog
 1.0.3.dev (unreleased)
 ----------------------
 
+- plone.app.widgets compatibility.
+  [garbas]
+
+
 - Allow ical import for users with cmf.AddPortalContent permission.
   [thet]
 

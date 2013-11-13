@@ -17,6 +17,7 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
+from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
@@ -24,20 +25,25 @@ from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.formwidget.datetime.z3cform.widget import DatetimeFieldWidget
+from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
+from z3c.form.interfaces import IFieldWidget
+from z3c.form.util import getSpecification
 from z3c.form.widget import ComputedWidgetAttribute
+from z3c.form.widget import FieldWidget
 from zope import schema
+from zope.component import adapter
 from zope.component import adapts
 from zope.component import provideAdapter
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import Invalid
 from zope.interface import alsoProvides
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import invariant
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -61,8 +67,6 @@ class StartBeforeEnd(Invalid):
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
-    form.widget('start', DatetimeFieldWidget, first_day=first_weekday_sun0)
-    form.widget('end', DatetimeFieldWidget, first_day=first_weekday_sun0)
     model.fieldset('dates', fields=['timezone'])
 
     start = schema.Datetime(
@@ -140,6 +144,20 @@ class IEventBasic(model.Schema):
                   default=u"End date must be after start date.")
             )
 
+@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def StartDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.first_day = first_weekday_sun0
+    return widget
+
+
+@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def EndDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.first_day = first_weekday_sun0
+    return widget
 
 def default_start(data):
     return default_start_dt(data.context)
