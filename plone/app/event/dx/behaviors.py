@@ -170,7 +170,8 @@ from plone.app.widgets.dx import DatetimeWidget
 @implementer(IFieldWidget)
 def StartFieldWidget(field, request):
     widget = FieldWidget(field, DatetimeWidget(request))
-    widget.pattern_options['first_day'] = first_weekday_sun0()
+    widget.pattern_options.setdefault('date', {})
+    widget.pattern_options['date']['firstDay'] = first_weekday_sun0()
     return widget
 
 
@@ -178,7 +179,8 @@ def StartFieldWidget(field, request):
 @implementer(IFieldWidget)
 def EndFieldWidget(field, request):
     widget = FieldWidget(field, DatetimeWidget(request))
-    widget.pattern_options['first_day'] = first_weekday_sun0()
+    widget.pattern_options.setdefault('date', {})
+    widget.pattern_options['date']['firstDay'] = first_weekday_sun0()
     return widget
 
 
