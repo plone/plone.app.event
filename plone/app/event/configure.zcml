@@ -34,6 +34,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:importStep
+      name="plone.app.event-catalog"
+      handler="plone.app.event.setuphandlers.setup_misc"
+      title="plone.app.event misc"
+      description="catalog and first_weekday setup">
+    <depends name="plone-final"/>
+  </genericsetup:importStep>
+
   <utility
       factory=".setuphandlers.HiddenProfiles"
       name="plone.app.event"

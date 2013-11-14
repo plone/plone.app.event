@@ -1,6 +1,11 @@
+from plone.app.event.base import wkday_to_mon0
+from plone.app.event.interfaces import IEventSettings
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
+from zope.component import getUtility
+from zope.i18n.locales import locales
 from zope.interface import implements
 import logging
 
@@ -25,7 +30,7 @@ class HiddenProfiles(object):
         return [u'plone.app.event.dx:default', ]
 
 
-def catalog_setup(context):
+def catalog_setup(site):
     """Setup plone.app.event's indices in the catalog.
 
     Doing it here instead of in profiles/default/catalog.xml means we
@@ -36,10 +41,6 @@ def catalog_setup(context):
         emptying-the-indexes-td2302709.html
         https://mail.zope.org/pipermail/zope-cmf/2007-March/025664.html
     """
-    if isNotThisProfile(context, 'plone.app.event-default.txt'):
-        return
-
-    site = context.getSite()
     catalog = getToolByName(site, 'portal_catalog')
     date_idxs = ['start', 'end']
     field_idxs = ['sync_uid']
@@ -69,3 +70,35 @@ def catalog_setup(context):
             logger.info('Catalog metadata column %s created.' % name)
         except CatalogError:
             logger.info('Catalog metadata column %s already exists.' % name)
+
+
+def first_weekday_setup(site):
+    """Set the first day of the week based on the portal's locale.
+    """
+    reg = getUtility(IRegistry)
+    settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
+    if settings.first_weekday is not None:
+        # don't overwrite if it's already set
+        return
+
+    # find the locale implied by the portal's language
+    language = site.Language()
+    parts = (language.split('-') + [None, None])[:3]
+    locale = locales.getLocale(*parts)
+    # look up first day of week
+    gregorian_calendar = locale.dates.calendars.get(u'gregorian', None)
+    first = 6
+    if gregorian_calendar is not None:
+        first = wkday_to_mon0(gregorian_calendar.week.get('firstDay', 7))
+    # save setting
+    settings.first_weekday = first
+
+
+def setup_misc(context):
+    if isNotThisProfile(context, 'plone.app.event-default.txt'):
+        return
+
+    portal = context.getSite()
+
+    catalog_setup(portal)
+    first_weekday_setup(portal)

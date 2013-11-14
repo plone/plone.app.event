@@ -23,6 +23,10 @@ Changelog
 - plone.app.widgets compatibility
   [garbas]
 
+- Set the first_weekday setting based on the site's locale when the default
+  profile is activated.
+  [davisagli]
+
 - Allow query parameters for timezone vocabularies for filtering. Create the
   "Timezones" vocabulary from SimpleTerm objects with a value and title set
   for better support with plone.app.widgets AjaxSelectWidget.
