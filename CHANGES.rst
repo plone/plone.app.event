@@ -17,6 +17,8 @@ Changelog
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
 
+- Don't fail, if first_weekday isn't set in registry.
+  [thet]
 
 - plone.app.widgets compatibility
   [garbas]
@@ -41,7 +43,7 @@ Changelog
 
 - Fix UnicodeDecodeError with special characters in body text. Fixes #108
   [zwork][agitator]
- 
+
 
 1.0.2 (2013-11-07)
 ------------------
@@ -54,7 +56,7 @@ Changelog
 
 - Fix Plone 4.2 buildout and test environment.
   [thet]
-   
+
 
 
 1.0.1 (2013-11-07)
