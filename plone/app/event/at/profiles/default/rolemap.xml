@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+    <permission name="Add portal events" acquire="True">
+      <role name="Site Administrator"/>
+    </permission>
+    <permission name="Change portal events" acquire="True">
+      <role name="Site Administrator"/>
+    </permission>
+  </permissions>
+</rolemap>
