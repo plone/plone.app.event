@@ -30,7 +30,7 @@ class IEventSettings(Interface):
                     u"their own timezone, if available timezones are "
                     u"defined."),
         required=True,
-        default=fallback_default_timezone(),
+        default=None,
         vocabulary="plone.app.event.Timezones"
     )
 
@@ -53,5 +53,6 @@ class IEventSettings(Interface):
             u'help_first_weekday',
             default=u'First day in the Week.'),
         required=True,
+        default=None,
         vocabulary="plone.app.event.Weekdays"
     )
