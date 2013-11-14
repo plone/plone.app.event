@@ -6,6 +6,7 @@ from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
 from zope.component import getUtility
 from zope.i18n.locales import locales
+from zope.i18n.locales import LoadLocaleError
 from zope.interface import implements
 import logging
 
@@ -81,15 +82,19 @@ def first_weekday_setup(site):
         # don't overwrite if it's already set
         return
 
-    # find the locale implied by the portal's language
-    language = site.Language()
-    parts = (language.split('-') + [None, None])[:3]
-    locale = locales.getLocale(*parts)
-    # look up first day of week
-    gregorian_calendar = locale.dates.calendars.get(u'gregorian', None)
     first = 6
-    if gregorian_calendar is not None:
-        first = wkday_to_mon0(gregorian_calendar.week.get('firstDay', 7))
+    try:
+        # find the locale implied by the portal's language
+        language = site.Language()
+        parts = (language.split('-') + [None, None])[:3]
+        locale = locales.getLocale(*parts)
+        # look up first day of week
+        gregorian_calendar = locale.dates.calendars.get(u'gregorian', None)
+        if gregorian_calendar is not None:
+            first = wkday_to_mon0(gregorian_calendar.week.get('firstDay', 7))
+    except LoadLocaleError:
+        # If we cannot get the locale, just Sunday as first weekday
+        pass
     # save setting
     settings.first_weekday = first
 
