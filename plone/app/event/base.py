@@ -418,9 +418,14 @@ def first_weekday():
     :rtype: integer
 
     """
-    controlpanel = getUtility(IRegistry).forInterface(IEventSettings,
-                                                      prefix="plone.app.event")
-    first_wd = controlpanel.first_weekday
+    try:
+        controlpanel = getUtility(IRegistry).forInterface(
+            IEventSettings, prefix="plone.app.event"
+        )
+        first_wd = controlpanel.first_weekday
+    except KeyError:
+        first_wd = None
+
     if not first_wd:
         return 0
     else:
