@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.0.3.dev (unreleased)
-----------------------
+1.0.3 (2013-11-19)
+------------------
 
 - Remove unnecessary data parameter on urllib2.urlopen, which caused a 404
   error on some icalendar imports from external resources (E.g. Google).
