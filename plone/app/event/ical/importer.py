@@ -205,14 +205,15 @@ def ical_import(container, ics_resource, event_type,
             # rename-after-creation and such
             content.processForm()
 
+        # Use commits instead of savepoints to avoid "FileStorageError:
+        # description too long" on large imports.
+        transaction.get().commit()  # Commit before rename
+
         if new_content_id and new_content_id in container:
             # Rename with new id from title, if processForm didn't do it.
             chooser = INameChooser(container)
             new_id = chooser.chooseName(title, content)
-            transaction.savepoint(optimistic=True)  # Commit before renaming
             content.aq_parent.manage_renameObject(new_content_id, new_id)
-        else:
-            transaction.savepoint(optimistic=True)
 
         # Do this at the end, otherwise it's overwritten
         if ext_modified:

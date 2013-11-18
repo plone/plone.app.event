@@ -5,6 +5,10 @@ Changelog
 1.0.3.dev (unreleased)
 ----------------------
 
+- Avoid "FileStorageError: description too long" on large icalendar imports by
+  doing a transaction commit instead of a savepoint.
+  [thet]
+
 - Protect ical imports with the newly created plone.app.event.ImportIcal
   permission.
   [thet]
