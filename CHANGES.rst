@@ -5,12 +5,12 @@ Changelog
 1.0.3.dev (unreleased)
 ----------------------
 
+- Protect ical imports with the newly created plone.app.event.ImportIcal
+  permission.
+  [thet]
+
 - plone.app.widgets compatibility.
   [garbas]
-
-
-- Allow ical import for users with cmf.AddPortalContent permission.
-  [thet]
 
 - Fix UnicodeDecodeError with special characters in body text. Fixes #108
   [zwork][agitator]

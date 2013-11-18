@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+    <permission name="plone.app.event: Import Ical" acquire="True">
+      <role name="Manager" />
+      <role name="Site Administrator" />
+      <role name="Editor"/>
+      <role name="Owner"/>
+    </permission>
+  </permissions>
+</rolemap>

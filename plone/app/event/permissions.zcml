@@ -1,0 +1,8 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <permission
+      id="plone.app.event.ImportIcal"
+      title="plone.app.event: Import Ical"
+      />
+
+</configure>

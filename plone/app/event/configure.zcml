@@ -17,6 +17,7 @@
   <include package="plone.app.registry" />
 
   <!-- internal dependencies -->
+  <include file="permissions.zcml" />
   <configure zcml:condition="not-have plone-44">
     <!-- pre plone 5.0 integration -->
     <include zcml:condition="installed z3c.unconfigure" package=".ploneintegration" />

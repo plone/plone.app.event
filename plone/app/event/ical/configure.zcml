@@ -112,7 +112,7 @@
         class=".importer.IcalendarImportSettingsFormView"
         allowed_attributes="enable
                             disable"
-        permission="cmf.AddPortalContent"
+        permission="plone.app.event.ImportIcal"
         layer="..interfaces.IBrowserLayer"
         />
 
