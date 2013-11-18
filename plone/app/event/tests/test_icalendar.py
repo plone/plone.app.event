@@ -268,8 +268,8 @@ class TestIcalImportDX(unittest.TestCase):
 
     def test_import_from_ics(self):
         # Ical import unit test.
-        self.portal.invokeFactory('Folder', 'impfolder')
-        impfolder = self.portal.impfolder
+        self.portal.invokeFactory('Folder', 'impfolder1')
+        impfolder = self.portal.impfolder1
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
@@ -378,14 +378,12 @@ class TestIcalImportDX(unittest.TestCase):
             True
         )
 
-        self.portal.manage_delObjects(['impfolder'])
-
     def test_import_from_ics__no_sync(self):
         """SYNC_NONE and importing the same file again should create new event
         objects and give them each a new sync_uid.
         """
-        self.portal.invokeFactory('Folder', 'impfolder')
-        impfolder = self.portal.impfolder
+        self.portal.invokeFactory('Folder', 'impfolder2')
+        impfolder = self.portal.impfolder2
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
@@ -406,13 +404,11 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(len(impfolder.contentIds()), 10)
         self.assertNotEqual(suid1, suid2)
 
-        self.portal.manage_delObjects(['impfolder'])
-
     def test_import_from_ics__sync_keep_mine(self):
         """SYNC_KEEP_MINE and importing the same file again should do nothing.
         """
-        self.portal.invokeFactory('Folder', 'impfolder')
-        impfolder = self.portal.impfolder
+        self.portal.invokeFactory('Folder', 'impfolder3')
+        impfolder = self.portal.impfolder3
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
@@ -436,14 +432,12 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(mod1, mod2)
         self.assertEqual(suid1, suid2)
 
-        self.portal.manage_delObjects(['impfolder'])
-
     def test_import_from_ics__sync_keep_newer(self):
         """SYNC_KEEP_NEWER and importing the same file again should update only
         newer.
         """
-        self.portal.invokeFactory('Folder', 'impfolder')
-        impfolder = self.portal.impfolder
+        self.portal.invokeFactory('Folder', 'impfolder4')
+        impfolder = self.portal.impfolder4
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
@@ -480,14 +474,12 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertTrue(start1 < start2)
         self.assertTrue(end1 < end2)
 
-        self.portal.manage_delObjects(['impfolder'])
-
     def test_import_from_ics__sync_keep_theirs(self):
         """SYNC_KEEP_THEIRS and importing the same file again should update
         all.
         """
-        self.portal.invokeFactory('Folder', 'impfolder')
-        impfolder = self.portal.impfolder
+        self.portal.invokeFactory('Folder', 'impfolder5')
+        impfolder = self.portal.impfolder5
 
         directory = os.path.dirname(__file__)
         icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
@@ -544,8 +536,6 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertNotEqual(desc21, desc22)
         self.assertTrue(start21 < start22)
         self.assertTrue(end21 < end22)
-
-        self.portal.manage_delObjects(['impfolder'])
 
 
 class TestIcalImportAT(TestIcalImportDX):
