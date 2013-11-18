@@ -60,16 +60,7 @@ Then run this profile along with the dx or at profile (described above)::
   plone.app.event depends on ``plone.app.portlets>=2.4.0``. This version allows
   the calendar portlet to do AJAX calls without KSS via standard jQuery. For
   Plone < 4.3 you have to fix the plone.app.portlets version in your buildout
-  like so::
-
-    [buildout]
-    versions = versions
-
-    [versions]
-    plone.app.portlets = 2.4.6
-
-
-.. note::
+  to a recent 2.4 version (see below).
 
   Currently the package ``z3c.unconfigure`` depends on ``zope.configuration >=
   3.8`` but Plone still uses zope.configuration 3.7.4. To successfully install
@@ -77,6 +68,15 @@ Then run this profile along with the dx or at profile (described above)::
   fix in your buildout. Wether fix z3c.unconfigure to 1.0.1 (recommended and
   included in this buildout) or fix zope.configuration for example to 4.0.2
   (not backwards-compatible).
+
+  The following shows an example buildout version fix::
+
+    [buildout]
+    versions = versions
+
+    [versions]
+    plone.app.portlets = 2.4.6
+    z3c.unconfigure = 1.0.1
 
 
 .. note::
