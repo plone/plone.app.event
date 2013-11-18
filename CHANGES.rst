@@ -5,6 +5,10 @@ Changelog
 1.0.3.dev (unreleased)
 ----------------------
 
+- Remove unnecessary data parameter on urllib2.urlopen, which caused a 404
+  error on some icalendar imports from external resources (E.g. Google).
+  [thet]
+
 - Avoid "FileStorageError: description too long" on large icalendar imports by
   doing a transaction commit instead of a savepoint.
   [thet]

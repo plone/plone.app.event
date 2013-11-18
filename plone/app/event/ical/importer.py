@@ -340,7 +340,7 @@ class IcalendarImportSettingsForm(form.Form):
                 ical_resource = ical_file.data
                 ical_import_from = ical_file.filename
             else:
-                ical_resource = urllib2.urlopen(ical_url, 'rb').read()
+                ical_resource = urllib2.urlopen(ical_url).read()
                 ical_import_from = ical_url
 
             import_metadata = ical_import(
