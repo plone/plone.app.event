@@ -17,6 +17,7 @@
   <include package="plone.app.registry" />
 
   <!-- internal dependencies -->
+  <include file="permissions.zcml" />
   <include zcml:condition="installed Products.ATContentTypes" package=".at" />
   <include zcml:condition="installed plone.dexterity" package=".dx" />
   <include package=".browser" />

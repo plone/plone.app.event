@@ -45,11 +45,23 @@ Changelog
   [thet]
 
 
-1.0.3.dev (unreleased)
-----------------------
+1.0.3 (2013-11-19)
+------------------
 
-- Allow ical import for users with cmf.AddPortalContent permission.
+- Remove unnecessary data parameter on urllib2.urlopen, which caused a 404
+  error on some icalendar imports from external resources (E.g. Google).
   [thet]
+
+- Avoid "FileStorageError: description too long" on large icalendar imports by
+  doing a transaction commit instead of a savepoint.
+  [thet]
+
+- Protect ical imports with the newly created plone.app.event.ImportIcal
+  permission.
+  [thet]
+
+- plone.app.widgets compatibility.
+  [garbas]
 
 - Fix UnicodeDecodeError with special characters in body text. Fixes #108
   [zwork][agitator]
@@ -66,7 +78,6 @@ Changelog
 
 - Fix Plone 4.2 buildout and test environment.
   [thet]
-
 
 
 1.0.1 (2013-11-07)
