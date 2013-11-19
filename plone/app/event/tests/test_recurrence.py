@@ -157,15 +157,15 @@ class TestOccurrences(unittest.TestCase):
     def test_get_occurrences(self):
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
                          expand=True)
-        self.assertTrue(len(res) == 9)
+        self.assertEqual(len(res), 9)
 
         res = get_events(self.portal, start=self.now,
                          ret_mode=RET_MODE_ACCESSORS, expand=True)
-        self.assertTrue(len(res) == 9)
+        self.assertEqual(len(res), 9)
 
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
                          expand=True, limit=5)
-        self.assertTrue(len(res) == 5)
+        self.assertEqual(len(res), 5)
         self.assertTrue(IEventAccessor.providedBy(res[0]))
 
     def test_eventview_occurrences(self):
