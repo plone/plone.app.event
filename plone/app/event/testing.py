@@ -1,6 +1,7 @@
 from Products.CMFPlone.utils import getFSVersionTuple
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
+from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
@@ -123,6 +124,10 @@ PAEventAT_FIXTURE = PAEventATLayer()
 PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventAT_FIXTURE,),
     name="PAEventAT:Integration")
+# Functional testing needed for tests, with explicit transaction commits.
+PAEventAT_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(PAEventAT_FIXTURE,),
+    name="PAEventAT:Functional")
 
 
 class PAEventDXLayer(PloneSandboxLayer):
@@ -161,3 +166,7 @@ PAEventDX_FIXTURE = PAEventDXLayer()
 PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventDX_FIXTURE,),
     name="PAEventDX:Integration")
+# Functional testing needed for tests, with explicit transaction commits.
+PAEventDX_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(PAEventDX_FIXTURE,),
+    name="PAEventDX:Functional")
