@@ -7,7 +7,9 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.ical.importer import ical_import
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.testing import TEST_USER_ID
@@ -258,7 +260,7 @@ class ICalendarExportTestAT(ICalendarExportTestDX):
 
 
 class TestIcalImportDX(unittest.TestCase):
-    layer = PAEventDX_INTEGRATION_TESTING
+    layer = PAEventDX_FUNCTIONAL_TESTING
     event_type = 'plone.app.event.dx.event'
 
     def setUp(self):
@@ -539,5 +541,5 @@ class TestIcalImportDX(unittest.TestCase):
 
 
 class TestIcalImportAT(TestIcalImportDX):
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventAT_FUNCTIONAL_TESTING
     event_type = 'Event'
