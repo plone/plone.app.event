@@ -25,7 +25,6 @@ from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
@@ -144,20 +143,6 @@ class IEventBasic(model.Schema):
                   default=u"End date must be after start date.")
             )
 
-@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def StartDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.first_day = first_weekday_sun0
-    return widget
-
-
-@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def EndDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.first_day = first_weekday_sun0
-    return widget
 
 def default_start(data):
     return default_start_dt(data.context)

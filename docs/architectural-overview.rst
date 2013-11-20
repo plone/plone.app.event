@@ -42,7 +42,7 @@ CalendarTool (portal_calendar) was reimplenented. Important settings from the
 calendar-controlpanel are now available in the event configlet. Since the
 calendar portlet was the only consumer of the CalendarTool, the CalendarTool,
 the calendar controlpanel and the dependency to Products.CMFCalendar can be
-dropped. The new plone.formwidget.datetime implements archetypes and z3cform
+dropped. The new plone.app.widgets package implements archetypes and z3cform
 based widgets, so the old datetime widget can be dropped. Python-dateutil
 provides recurrence calculations based on the RFC5545 standard -
 plone.formwidget.recurrence provides a awidget for recurrence and

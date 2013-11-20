@@ -23,7 +23,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.utils import pydt
-from plone.formwidget.datetime.at import DatetimeWidget
+from plone.app.widgets.at import DatetimeWidget
 from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from zope.event import notify

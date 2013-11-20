@@ -18,13 +18,12 @@ from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
-from plone.app.event.base import first_weekday
-from plone.app.event.base import wkday_to_mon1
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from plone.event.utils import utc
-from plone.formwidget.datetime.at import DatetimeWidget
+from plone.app.widgets.at import DatetimeWidget
+from plone.app.widgets.utils import first_weekday
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.uuid.interfaces import IUUID
@@ -41,10 +40,6 @@ def default_start():
 
 def default_end():
     return DT(default_end_dt())
-
-
-def first_weekday_sun0():
-    return wkday_to_mon1(first_weekday())
 
 
 ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
@@ -66,8 +61,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                 u'help_event_start',
                 default=u"Date and Time, when the event begins."
             ),
-            with_time=1,
-            first_day=first_weekday_sun0,
+            pattern_options={'date': {'firstDay': first_weekday}},
         ),
     ),
 
@@ -88,8 +82,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                 u'help_event_end',
                 default=u"Date and Time, when the event ends."
             ),
-            with_time=1,
-            first_day=first_weekday_sun0,
+            pattern_options={'date': {'firstDay': first_weekday}},
         ),
     ),
 
@@ -165,7 +158,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
             startFieldYear='startDate-year',
             startFieldMonth='startDate-month',
             startFieldDay='startDate-day',
-            first_day=first_weekday_sun0,
+            first_day=first_weekday,
             show_repeat_forever=False
         ),
     ),
