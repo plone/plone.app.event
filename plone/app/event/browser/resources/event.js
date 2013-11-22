@@ -1,3 +1,8 @@
+if (typeof(plone) === 'undefined') {
+    // Make sure, plone global exists
+    var plone = {};
+}
+
 (function($, plone) {
 
     plone.paevent = plone.paevent || {};
