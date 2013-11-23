@@ -45,6 +45,14 @@ Changelog
   [thet]
 
 
+1.0.4 (2013-11-23)
+------------------
+
+- Register event.js Javascript as "cookable" to allow merging with other files
+  and provide the "plone" global if it wasn't already defined.
+  [thet]
+
+
 1.0.3 (2013-11-19)
 ------------------
 
