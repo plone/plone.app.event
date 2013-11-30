@@ -214,9 +214,11 @@ def sort_by_next_start(context, brains, start, sort_reverse):
     for brain in brains:
         # brain.start metadata reflects first occurrence.
         # instead, get all occurrence start/end from raw index
-        _allstarts = catalog.getIndexDataForRID(brain.getRID())['start']
-        _allends = catalog.getIndexDataForRID(brain.getRID())['end']
+        idx = catalog.getIndexDataForRID(brain.getRID())
+        _allstarts = sorted(idx['start'])
+        _allends = sorted(idx['end'])
         # assuming (start, end) pairs belong together
+        #assert(len(_allstarts) == len(_allends))
         _all = itertools.izip(_allstarts, _allends)
         # discard past occurrences, catch edge case of ongoing occurrence
         _future = [s for (s, e) in _all if s >= _start or e >= _start]
