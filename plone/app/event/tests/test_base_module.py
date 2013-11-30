@@ -659,10 +659,10 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                              start=self.now,
                              ret_mode=RET_MODE_ACCESSORS))
         expect = [(u'Long Event', '2013-04-25 10:00:00'),
+                  (u'Now Event', '2013-05-05 10:00:00'),
                   # Past Recur next occurrence: '2013-05-09 10:00:00'
                   # Past Recur brain.start: '2013-04-25 10:00:00'
                   (u'Past Recur', '2013-04-25 10:00:00'),
-                  (u'Now Event', '2013-05-05 10:00:00'),
                   (u'Tomorrow event', '2013-05-06 10:00:00'),
                   (u'Future Event', '2013-05-15 10:00:00')]
         self.assertEqual(res, expect, diff(res, expect))
