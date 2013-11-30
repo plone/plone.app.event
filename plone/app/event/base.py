@@ -1,3 +1,4 @@
+import itertools
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
@@ -210,16 +211,14 @@ def sort_by_next_start(context, brains, start, sort_reverse):
         # brain.start metadata is only the first occurrence.
         # instead, get all occurrences from raw index
         _allstarts = catalog.getIndexDataForRID(brain.getRID())['start']
-        _future_starts = [x for x in _allstarts if x >= _start]
         _allends = catalog.getIndexDataForRID(brain.getRID())['end']
-        _future_ends = [x for x in _allends if x >= _start]
-        if not (_future_starts or _future_ends):
+        # assuming (start, end) pairs belong together
+        _all = itertools.izip(_allstarts, _allends)
+        # discard past occurrences, catch edge case of ongoing occurrence
+        _future = [s for (s, e) in _all if s >= _start or e >= _start]
+        if not _future:
             continue
-        if _future_starts:
-            _next = min(_future_starts)
-        else:
-            # past event which ends in the future
-            _next = max(_allstarts)
+        _next = min(_future)  # can be in past if end is in future
         items.append((_next, brain))  # key on next start
 
     # sort brains by next start, discard sort key
