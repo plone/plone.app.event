@@ -208,7 +208,7 @@ class TestBaseModule(unittest.TestCase):
         self.assertTrue(
             isinstance(start, datetime.datetime) and
             isinstance(end, datetime.datetime) and
-            end == dt_end_of_day(start+datetime.timedelta(days=6))
+            end == dt_end_of_day(start + datetime.timedelta(days=6))
         )
 
         # TODAY
@@ -430,11 +430,13 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertTrue(res[0].start < res[-1].start)
 
         # Test reversed sorting
-        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort_reverse=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         sort_reverse=True)
         self.assertTrue(res[0].start > res[-1].start)
 
         # Test sort_on
-        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="start")
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         sort="start")
         self.assertEqual(
             [it.title for it in res][2:],
             [u'Now Event', u'Future Event']
@@ -625,7 +627,7 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
     def make_dates(self):
         def_tz = default_timezone()
         now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
-        tomorrow = self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
+        self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
         past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
         future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
         far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
