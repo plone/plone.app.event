@@ -23,6 +23,7 @@ from plone.event.utils import is_datetime
 from plone.event.utils import is_same_day
 from plone.event.utils import is_same_time
 from plone.event.utils import pydt
+from plone.event.utils import dt2int
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
@@ -139,14 +140,23 @@ def get_events(context, start=None, end=None, limit=None,
     if sort_reverse:
         query['sort_order'] = 'reverse'
 
-    if expand is False and limit:
-        # No sort_limit for expanded events to avoid wrong results! See below.
-        query['sort_limit'] = limit
+    # cannot limit before resorting or expansion, see below
 
     query.update(kw)
 
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
+
+    # unfiltered catalog results are sorted correctly on brain.start
+    # filtering on start needs a resort, see docstring below and
+    # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_sort
+    if start and sort == 'start':
+        result = sort_by_next_start(context, result, start, sort_reverse)
+
+    # Limiting a start-sorted result set is possible here
+    # and provides an important optimization BEFORE costly expansion
+    if sort == 'start' and limit:
+        result = result[:limit]
 
     if ret_mode in (RET_MODE_OBJECTS, RET_MODE_ACCESSORS):
         if expand is False:
@@ -155,14 +165,68 @@ def get_events(context, start=None, end=None, limit=None,
             result = expand_events(result, ret_mode, start, end, sort,
                                    sort_reverse)
 
+    # Limiting a non-start-sorted result set can only happen here
     if limit:
-        # Limiting the result set can only happen here, after possibly exanding
-        # the result set with it's occurrences.
-        # Otherwise we might get wrong results - see :
-        # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_limit
         result = result[:limit]
 
     return result
+
+
+def sort_by_next_start(context, brains, start, sort_reverse):
+    """#114 sorting bug is fallout from a Products.DateRecurringIndex
+    limitation. The index contains a set of start and end dates
+    represented as integer: that allows valid slicing of searches.
+    However the returned brains have a .start attribute which is
+    the start DateTime of the *first* occurrence of an event.
+
+    This results in mis-sorting of search results if the next occurrence
+    of event B is after the next occurrence of event A, but the first
+    occurrence of event B is *before* the first occurrence of event A.
+    The catalog results sort that as B<A instead of A<B.
+
+    This method works around that issue by extracting all occurrence
+    starts from the index, and then sorting on the actual next start.
+
+    :param context: [required] A context object.
+    :type context: Content object
+
+    :param brains: [required] catalog brains
+    :type brains: catalog brains
+
+    :param start: [required] Date, from which on events should be searched.
+    :type start: Python datetime.
+
+    :param sort_reverse: Change the order of the sorting.
+    :type sort_reverse: boolean
+
+    :returns: catalog brains
+    :rtype: catalog brains
+
+    """
+    _start = dt2int(start)
+    catalog = getToolByName(context, 'portal_catalog')
+    items = []  # (start:int, plandate:brain) pairs
+    for brain in brains:
+        # brain.start metadata is only the first occurrence.
+        # instead, get all occurrences from raw index
+        _allstarts = catalog.getIndexDataForRID(brain.getRID())['start']
+        _future_starts = [x for x in _allstarts if x >= _start]
+        _allends = catalog.getIndexDataForRID(brain.getRID())['end']
+        _future_ends = [x for x in _allends if x >= _start]
+        if not (_future_starts or _future_ends):
+            continue
+        if _future_starts:
+            _next = min(_future_starts)
+        else:
+            # past event which ends in the future
+            _next = max(_allstarts)
+        items.append((_next, brain))  # key on next start
+
+    # sort brains by next start, discard sort key
+    data = [x[1] for x in sorted(items, key=lambda x: x[0])]
+    if sort_reverse:
+        data.reverse()
+    return data
 
 
 def expand_events(events, ret_mode,
