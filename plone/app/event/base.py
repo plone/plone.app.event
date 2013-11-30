@@ -188,6 +188,10 @@ def sort_by_next_start(context, brains, start, sort_reverse):
     This method works around that issue by extracting all occurrence
     starts from the index, and then sorting on the actual next start.
 
+    For ongoing events which have an occurrence starting in the past
+    but ending in the future, the past start of that ongoing occurrence
+    is selected, so this will show up right at the start of the result.
+
     :param context: [required] A context object.
     :type context: Content object
 
@@ -204,12 +208,12 @@ def sort_by_next_start(context, brains, start, sort_reverse):
     :rtype: catalog brains
 
     """
-    _start = dt2int(start)
+    _start = dt2int(start)  # index contains longint sets
     catalog = getToolByName(context, 'portal_catalog')
-    items = []  # (start:int, plandate:brain) pairs
+    items = []  # (start:int, occurrence:brain) pairs
     for brain in brains:
-        # brain.start metadata is only the first occurrence.
-        # instead, get all occurrences from raw index
+        # brain.start metadata reflects first occurrence.
+        # instead, get all occurrence start/end from raw index
         _allstarts = catalog.getIndexDataForRID(brain.getRID())['start']
         _allends = catalog.getIndexDataForRID(brain.getRID())['end']
         # assuming (start, end) pairs belong together
