@@ -465,7 +465,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal,
                          start=self.now,
                          end=self.now)
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 1)
 
         # only on now-date as date
         # NOTE: converting self.now to python datetime to allow testing also
@@ -473,26 +473,27 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = get_events(self.portal,
                          start=pydt(self.now).date(),
                          end=pydt(self.now).date())
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 1)
 
         # only on past date
         res = get_events(self.portal,
                          start=self.past,
                          end=self.past)
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 1)
 
-        # one recurrence occurrence in far future
+        # one recurrence ends in far future
+        # but starts before cutoff, hence excluded
         res = get_events(self.portal,
                          start=self.far,
                          end=self.far)
-        self.assertEqual(len(res), 1)
+        self.assertEqual(len(res), 0)
 
-        # from now on
+        # from now on: now + future
         res = get_events(self.portal,
                          start=self.now)
-        self.assertEqual(len(res), 3)
+        self.assertEqual(len(res), 2)
 
-        # until now
+        # until now: past + now + long
         res = get_events(self.portal,
                          end=self.now)
         self.assertEqual(len(res), 3)
