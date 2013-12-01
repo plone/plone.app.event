@@ -1,4 +1,3 @@
-import itertools
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
@@ -151,8 +150,8 @@ def get_events(context, start=None, end=None, limit=None,
     # unfiltered catalog results are sorted correctly on brain.start
     # filtering on start needs a resort, see docstring below and
     # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_sort
-    if start and sort == 'start':
-        result = sort_by_next_start(context, result, start, sort_reverse)
+    if sort == 'start':
+        result = sort_by_next_start(context, result, start, end, sort_reverse)
 
     # Limiting a start-sorted result set is possible here
     # and provides an important optimization BEFORE costly expansion
@@ -173,7 +172,7 @@ def get_events(context, start=None, end=None, limit=None,
     return result
 
 
-def sort_by_next_start(context, brains, start, sort_reverse):
+def sort_by_next_start(context, brains, start, end, sort_reverse):
     """#114 sorting bug is fallout from a Products.DateRecurringIndex
     limitation. The index contains a set of start and end dates
     represented as integer: that allows valid slicing of searches.
@@ -198,8 +197,11 @@ def sort_by_next_start(context, brains, start, sort_reverse):
     :param brains: [required] catalog brains
     :type brains: catalog brains
 
-    :param start: [required] Date, from which on events should be searched.
+    :param start: minimal start date
     :type start: Python datetime.
+
+    :param end: maximal start date
+    :type end: Python datetime.
 
     :param sort_reverse: Change the order of the sorting.
     :type sort_reverse: boolean
@@ -208,7 +210,10 @@ def sort_by_next_start(context, brains, start, sort_reverse):
     :rtype: catalog brains
 
     """
-    _start = dt2int(start)  # index contains longint sets
+    if start:
+        _start = dt2int(start)  # index contains longint sets
+    if end:
+        _end = dt2int(end)  # index contains longint sets
     catalog = getToolByName(context, 'portal_catalog')
     items = []  # (start:int, occurrence:brain) pairs
     for brain in brains:
@@ -216,15 +221,21 @@ def sort_by_next_start(context, brains, start, sort_reverse):
         # instead, get all occurrence start/end from raw index
         idx = catalog.getIndexDataForRID(brain.getRID())
         _allstarts = sorted(idx['start'])
-        _allends = sorted(idx['end'])
-        # assuming (start, end) pairs belong together
-        #assert(len(_allstarts) == len(_allends))
-        _all = itertools.izip(_allstarts, _allends)
-        # discard past occurrences, catch edge case of ongoing occurrence
-        _future = [s for (s, e) in _all if s >= _start or e >= _start]
+        # filter occurence.start by start+end. do not filter occurrence.end
+        # require start <= occurrence.start <= end: ignore occurrence.end
+        if start and end:
+            _future = [s for s in _allstarts if s >= _start and s <= _end]
+        elif start:
+            _future = [s for s in _allstarts if s >= _start]
+        elif end:
+            _future = [s for s in _allstarts if s <= _end]
+        else:
+            _future = _allstarts
         if not _future:
             continue
-        _next = min(_future)  # can be in past if end is in future
+        # discard past occurrences
+        # discard ongoing occurrences with start before cutoff
+        _next = min(_future)
         items.append((_next, brain))  # key on next start
 
     # sort brains by next start, discard sort key
