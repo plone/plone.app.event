@@ -4,7 +4,10 @@ Changelog
 1.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Avoid failing to create an event when zope.globalrequest.getRequest returns
+  None on the post create event handler. This happens when creating an event
+  during test layer setup time.
+  [rafaelbco]
 
 
 1.0.4 (2013-11-23)
