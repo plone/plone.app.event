@@ -155,7 +155,6 @@ def get_events(context, start=None, end=None, limit=None,
         result = sort_by_next_start(context, result, start, sort_reverse)
 
     # the same pattern should apply to end sorts
-    # implementation is untestable hence blocked by end bug #116
 
     # Limiting a start-sorted result set is possible here
     # and provides an important optimization BEFORE costly expansion
