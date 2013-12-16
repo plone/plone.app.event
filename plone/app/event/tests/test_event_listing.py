@@ -25,15 +25,13 @@ class TestEventsListingDX(AbstractSampleDataEvents):
     def test_get_events_future(self):
         # Default mode is to show all events from now on.
         view = self.portal.restrictedTraverse('@@event_listing')
-        # 3x now + future
-        self.assertEqual(len(view._get_events()), 4)
+        self.assertEqual(len(view._get_events()), 5)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_get_events_past(self):
         self.request.form.update({'mode': 'past'})
         view = self.portal.restrictedTraverse('@@event_listing')
-        # 1x now + 2x past + long
         self.assertEqual(len(view._get_events()), 5)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
@@ -49,8 +47,7 @@ class TestEventsListingDX(AbstractSampleDataEvents):
         today = localized_today().isoformat()
         self.request.form.update({'mode': 'day', 'date': today})
         view = self.portal.restrictedTraverse('@@event_listing')
-        # 1x now
-        self.assertEqual(len(view._get_events()), 1)
+        self.assertEqual(len(view._get_events()), 2)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)
@@ -62,8 +59,7 @@ class TestEventsListingDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
-        self.assertFalse('Long Event' in icalstr)  # started in past
-        self.assertTrue('Future Event' in icalstr)
+        self.assertTrue('Long Event' in icalstr)
 
 
 class TestEventsListingAT(TestEventsListingDX):

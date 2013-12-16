@@ -218,7 +218,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
     def test_event_listing_ical_portal__specific_date(self):
         """Test event_listing ical export for a specific date. The date is when
         a occurrence happens. It shouldn't contain the occurrence but the
-        original event. It shoult not contain the long lasting event.
+        original event and the long lasting event.
         """
         headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter(
@@ -230,9 +230,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
-        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 1)  # exclude long
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 2)
         self.assertTrue('Past Event' in icalstr)
-        self.assertFalse('Long Event' in icalstr)
+        self.assertTrue('Long Event' in icalstr)
 
     def test_collection_ical(self):
         """Test basic icalendar export from ATTopics.
