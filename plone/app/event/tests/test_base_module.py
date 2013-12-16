@@ -557,6 +557,92 @@ class TestGetEventsDX(AbstractSampleDataEvents):
 
         self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
 
+    def test_construct_calendar(self):
+        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
+        cal = construct_calendar(res)  # keys are date-strings.
+
+        def _num_events(values):
+            num = 0
+            for val in values:
+                num += len(val)
+            return num
+
+        # The long_event occurs on every day in the resulting calendar data
+        # structure.
+        self.assertEqual(_num_events(cal.values()), 48)
+
+        # Test with range
+        #
+
+        # Completly outside range and start, end given as datetime
+        cal = construct_calendar(
+            res,
+            start=datetime.datetime(2000, 1, 1, 10, 0),
+            end=datetime.datetime(2000, 1, 2, 10, 0)
+        )
+        self.assertEqual(_num_events(cal.values()), 0)
+
+        # Within range
+        cal = construct_calendar(
+            res,
+            start=datetime.date(2013, 5, 1),
+            end=datetime.date(2013, 5, 31)
+        )
+        self.assertEqual(_num_events(cal.values()), 34)
+
+        # invalid start
+        def _invalid_start():
+            return construct_calendar(
+                res,
+                start='invalid',
+                end=datetime.datetime(2000, 1, 2, 10, 0)
+            )
+
+        self.assertRaises(AssertionError, _invalid_start)
+
+        # invalid end
+        def _invalid_end():
+            return construct_calendar(
+                res,
+                start=datetime.datetime(2000, 1, 1, 10, 0),
+                end='invalid'
+            )
+        self.assertRaises(AssertionError, _invalid_end)
+
+
+class TestGetEventsATPydt(TestGetEventsDX):
+    """Test get_events with AT objects and datetime based dates.
+    """
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def event_factory(self):
+        return ATEventAccessor.create
+
+
+class TestGetEventsATZDT(TestGetEventsATPydt):
+    """Test get_events with AT objects and Zope DateTime based dates.
+    """
+    layer = PAEventAT_INTEGRATION_TESTING
+
+    def make_dates(self):
+        def_tz = default_timezone()
+        now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
+        self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
+        past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
+        future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
+        far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
+        duration = self.duration = 0.1
+        return (now, past, future, far, duration)
+
+
+class TestGetEventsOptimizations(AbstractSampleDataEvents):
+    """Test get_events performance optimizations
+    """
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def event_factory(self):
+        return DXEventAccessor.create
+
     def test_get_event_sort(self):
         """Issue #114: The limit bug described above and in #92 and #93
         is actually a manifestation of a deeper sorting bug,
@@ -677,83 +763,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                              ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], diff(res, expect[:3]))
         self.portal.manage_delObjects(['past_recur', 'tomorrow'])
-
-    def test_construct_calendar(self):
-        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
-        cal = construct_calendar(res)  # keys are date-strings.
-
-        def _num_events(values):
-            num = 0
-            for val in values:
-                num += len(val)
-            return num
-
-        # The long_event occurs on every day in the resulting calendar data
-        # structure.
-        self.assertEqual(_num_events(cal.values()), 48)
-
-        # Test with range
-        #
-
-        # Completly outside range and start, end given as datetime
-        cal = construct_calendar(
-            res,
-            start=datetime.datetime(2000, 1, 1, 10, 0),
-            end=datetime.datetime(2000, 1, 2, 10, 0)
-        )
-        self.assertEqual(_num_events(cal.values()), 0)
-
-        # Within range
-        cal = construct_calendar(
-            res,
-            start=datetime.date(2013, 5, 1),
-            end=datetime.date(2013, 5, 31)
-        )
-        self.assertEqual(_num_events(cal.values()), 34)
-
-        # invalid start
-        def _invalid_start():
-            return construct_calendar(
-                res,
-                start='invalid',
-                end=datetime.datetime(2000, 1, 2, 10, 0)
-            )
-
-        self.assertRaises(AssertionError, _invalid_start)
-
-        # invalid end
-        def _invalid_end():
-            return construct_calendar(
-                res,
-                start=datetime.datetime(2000, 1, 1, 10, 0),
-                end='invalid'
-            )
-        self.assertRaises(AssertionError, _invalid_end)
-
-
-class TestGetEventsATPydt(TestGetEventsDX):
-    """Test get_events with AT objects and datetime based dates.
-    """
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create
-
-
-class TestGetEventsATZDT(TestGetEventsATPydt):
-    """Test get_events with AT objects and Zope DateTime based dates.
-    """
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def make_dates(self):
-        def_tz = default_timezone()
-        now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
-        self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
-        past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
-        future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
-        far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
-        duration = self.duration = 0.1
-        return (now, past, future, far, duration)
 
 
 class TestDatesForDisplayAT(unittest.TestCase):
