@@ -151,7 +151,7 @@ def get_events(context, start=None, end=None, limit=None,
     # unfiltered catalog results are already sorted correctly on brain.start
     # filtering on start/end requires a resort, see docstring below and
     # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_sort
-    if sort in ('start', 'not yet implemented end'):
+    if sort in ('start', 'end'):
         result = filter_and_resort(context, result,
                                    start, end,
                                    sort, sort_reverse)
@@ -188,7 +188,7 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
     The catalog results sort that as B<A instead of A<B.
 
     This method works around that issue by extracting all occurrence
-    starts from the index, and then sorting on the actual next start.
+    start/end from the index, and then sorting on the actual next start/end.
 
     For ongoing events which have an occurrence starting in the past
     but ending in the future, the past start of that ongoing occurrence
@@ -235,9 +235,12 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
             _occ = [(s, e) for (s, e) in _occ if s <= _end]
         if not _occ:
             continue
-        # first start can be before filter window if end is in window
-        _first = min([s for (s, e) in _occ])
-        items.append((_first, brain))  # key on next start
+        if sort == 'start':
+            # first start can be before filter window if end is in window
+            _first = min([s for (s, e) in _occ])
+        elif sort == 'end':
+            _first = min([e for (s, e) in _occ])
+        items.append((_first, brain))  # key on next start/end
 
     # sort brains by next start, discard sort key
     data = [x[1] for x in sorted(items, key=lambda x: x[0])]
