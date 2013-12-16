@@ -774,6 +774,44 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
+    def test_expand_end(self):
+        # past+now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  end=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Past Recur', '2013-04-25 11:00:00', '2013-04-25 12:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited past+now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  end=self.now,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
+
+    def test_expand_start_end(self):
+        # only now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now,
+                                  end=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now,
+                                  end=self.now,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
+
 
 class TestDatesForDisplayAT(unittest.TestCase):
     layer = PAEventAT_INTEGRATION_TESTING
