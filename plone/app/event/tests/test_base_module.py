@@ -629,22 +629,14 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = fmt(get_events(self.portal, expand=True,
                              start=self.now,
                              ret_mode=RET_MODE_ACCESSORS))
-        expect = occ[6:]  # does NOT include ongoing long event
+        expect = occ[1:2] + occ[6:]  # includes ongoing long event
         self.assertEqual(res, expect, diff(res, expect))
 
         # limited now+future occurrences
         res = fmt(get_events(self.portal, expand=True,
                              start=self.now, limit=3,
                              ret_mode=RET_MODE_ACCESSORS))
-        expect = occ[6:9]
-        self.assertEqual(res, expect, diff(res, expect))
-
-        # filter occurrences start between query start + query end
-        res = fmt(get_events(self.portal, expand=True,
-                             start=self.now,
-                             end=self.tomorrow,
-                             ret_mode=RET_MODE_ACCESSORS))
-        expect = occ[6:8]
+        expect = occ[1:2] + occ[6:8]  # includes ongoing long event
         self.assertEqual(res, expect, diff(res, expect))
 
         ### expand=True: events
@@ -670,7 +662,8 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         res = fmt(get_events(self.portal, expand=False,
                              start=self.now,
                              ret_mode=RET_MODE_ACCESSORS))
-        expect = [(u'Now Event', '2013-05-05 10:00:00'),
+        expect = [(u'Long Event', '2013-04-25 10:00:00'),
+                  (u'Now Event', '2013-05-05 10:00:00'),
                   (u'Tomorrow event', '2013-05-06 10:00:00'),
                   # Past Recur next occurrence: '2013-05-09 11:00:00'
                   # Past Recur brain.start: '2013-04-25 11:00:00'
