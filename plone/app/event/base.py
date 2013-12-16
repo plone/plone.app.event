@@ -1,3 +1,4 @@
+import itertools
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
@@ -23,6 +24,7 @@ from plone.event.utils import is_datetime
 from plone.event.utils import is_same_day
 from plone.event.utils import is_same_time
 from plone.event.utils import pydt
+from plone.event.utils import dt2int
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
@@ -139,14 +141,25 @@ def get_events(context, start=None, end=None, limit=None,
     if sort_reverse:
         query['sort_order'] = 'reverse'
 
-    if expand is False and limit:
-        # No sort_limit for expanded events to avoid wrong results! See below.
-        query['sort_limit'] = limit
+    # cannot limit before resorting or expansion, see below
 
     query.update(kw)
 
     cat = getToolByName(context, 'portal_catalog')
     result = cat(**query)
+
+    # unfiltered catalog results are already sorted correctly on brain.start
+    # filtering on start/end requires a resort, see docstring below and
+    # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_sort
+    if sort in ('start', 'end'):
+        result = filter_and_resort(context, result,
+                                   start, end,
+                                   sort, sort_reverse)
+
+        # Limiting a start/end-sorted result set is possible here
+        # and provides an important optimization BEFORE costly expansion
+        if limit:
+            result = result[:limit]
 
     if ret_mode in (RET_MODE_OBJECTS, RET_MODE_ACCESSORS):
         if expand is False:
@@ -155,14 +168,85 @@ def get_events(context, start=None, end=None, limit=None,
             result = expand_events(result, ret_mode, start, end, sort,
                                    sort_reverse)
 
+    # Limiting a non-start-sorted result set can only happen here
     if limit:
-        # Limiting the result set can only happen here, after possibly exanding
-        # the result set with it's occurrences.
-        # Otherwise we might get wrong results - see :
-        # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_limit
         result = result[:limit]
 
     return result
+
+
+def filter_and_resort(context, brains, start, end, sort, sort_reverse):
+    """#114 sorting bug is fallout from a Products.DateRecurringIndex
+    limitation. The index contains a set of start and end dates
+    represented as integer: that allows valid slicing of searches.
+    However the returned brains have a .start attribute which is
+    the start DateTime of the *first* occurrence of an event.
+
+    This results in mis-sorting of search results if the next occurrence
+    of event B is after the next occurrence of event A, but the first
+    occurrence of event B is *before* the first occurrence of event A.
+    The catalog results sort that as B<A instead of A<B.
+
+    This method works around that issue by extracting all occurrence
+    start/end from the index, and then sorting on the actual next start/end.
+
+    For ongoing events which have an occurrence starting in the past
+    but ending in the future, the past start of that ongoing occurrence
+    is selected, so this will show up right at the start of the result.
+
+    :param context: [required] A context object.
+    :type context: Content object
+
+    :param brains: [required] catalog brains
+    :type brains: catalog brains
+
+    :param start: [required] min end datetime (sic!)
+    :type start: Python datetime.
+
+    :param end: [required] max start datetime (sic!)
+    :type start: Python datetime.
+
+    :param sort_reverse: Change the order of the sorting.
+    :type sort_reverse: boolean
+
+    :param sort: Which field to sort on
+    :type sort: 'start' or 'end'
+
+    :returns: catalog brains
+    :rtype: catalog brains
+
+    """
+    _start = dt2int(start)  # index contains longint sets
+    _end = dt2int(end)
+    catalog = getToolByName(context, 'portal_catalog')
+    items = []  # (start:int, occurrence:brain) pairs
+    for brain in brains:
+        # brain.start metadata reflects first occurrence.
+        # instead, get all occurrence start/end from raw index
+        idx = catalog.getIndexDataForRID(brain.getRID())
+        _allstarts = sorted(idx['start'])
+        _allends = sorted(idx['end'])
+        # assuming (start, end) pairs belong together
+        #assert(len(_allstarts) == len(_allends))
+        _occ = itertools.izip(_allstarts, _allends)
+        if start:
+            _occ = [(s, e) for (s, e) in _occ if e >= _start]
+        if end:
+            _occ = [(s, e) for (s, e) in _occ if s <= _end]
+        if not _occ:
+            continue
+        if sort == 'start':
+            # first start can be before filter window if end is in window
+            _first = min([s for (s, e) in _occ])
+        elif sort == 'end':
+            _first = min([e for (s, e) in _occ])
+        items.append((_first, brain))  # key on next start/end
+
+    # sort brains by next start, discard sort key
+    data = [x[1] for x in sorted(items, key=lambda x: x[0])]
+    if sort_reverse:
+        data.reverse()
+    return data
 
 
 def expand_events(events, ret_mode,
