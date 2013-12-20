@@ -702,13 +702,15 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                  x.end.strftime('%Y-%m-%d %H:%M:%S'))
                 for x in seq]
 
-    def test_all(self):
+    ### expand=True: events
+
+    def test_expand_all(self):
         # all occurrences, sorted by start
         res = self.fmt(get_events(self.portal, expand=True,
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, self.occ)
 
-    def test_all_limit(self):
+    def test_expand_all_limit(self):
         # limited occurrences
         res = self.fmt(get_events(self.portal, expand=True,
                                   limit=3,
@@ -716,7 +718,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         expect = self.occ[:3]
         self.assertEqual(res, expect, self.diff(res, expect))
 
-    def test_start(self):
+    def test_expand_start(self):
         # now+future occurrences
         res = self.fmt(get_events(self.portal, expand=True,
                                   start=self.now,
@@ -724,7 +726,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         expect = self.occ[1:2] + self.occ[6:]  # includes ongoing long event
         self.assertEqual(res, expect, self.diff(res, expect))
 
-    def test_start_limit(self):
+    def test_expand_start_limit(self):
         # limited now+future occurrences
         res = self.fmt(get_events(self.portal, expand=True,
                                   start=self.now, limit=3,
@@ -732,9 +734,9 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         expect = self.occ[1:2] + self.occ[6:8]  # includes ongoing long event
         self.assertEqual(res, expect, self.diff(res, expect))
 
-    ### expand=True: events
+    ### expand=False: events
 
-    def test_expand_all(self):
+    def test_noexpand_all(self):
         # all events
         res = self.fmt(get_events(self.portal, expand=False,
                                   ret_mode=RET_MODE_ACCESSORS))
@@ -753,7 +755,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
-    def test_expand_start(self):
+    def test_noexpand_start(self):
         # now+future events
         res = self.fmt(get_events(self.portal, expand=False,
                                   start=self.now,
@@ -774,7 +776,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
-    def test_expand_end(self):
+    def test_noexpand_end(self):
         # past+now events
         res = self.fmt(get_events(self.portal, expand=False,
                                   end=self.now,
@@ -793,7 +795,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
-    def test_expand_start_end(self):
+    def test_noexpand_start_end(self):
         # only now events
         res = self.fmt(get_events(self.portal, expand=False,
                                   start=self.now,
