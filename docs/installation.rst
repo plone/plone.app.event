@@ -106,5 +106,12 @@ Upgrading from Products.ATContentType to plone.app.event
 
 If you want to upgrade Products.ATContentTypes based ATEvents to
 plone.app.event ones, there is an upgrade step for that: "Upgrades old AT
-events to plone.app.events" (Metadata version 1 to 2).
+events to plone.app.events" (Metadata version 1 to 2). In order to use it, go
+to Plone Control Center -> ZMI -> portal_setup -> Upgrades. Select 
+"plone.app.event.at:default" profile and click "Show old upgrades". Select the
+upgrade step and run it. 
+
+You might also need to "clear and rebuild" the catalog after upgrading. You can
+do so at Plone Control Center -> ZMI -> portal_catalog -> Advanced (this 
+may take a while)
 
