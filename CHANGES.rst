@@ -1,13 +1,17 @@
 Changelog
 =========
 
-
 1.1.dev (unreleased)
 --------------------
 
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
   [gyst]
+
+- Avoid failing to create an event when zope.globalrequest.getRequest returns
+  None on the post create event handler. This happens when creating an event
+  during test layer setup time.
+  [rafaelbco]
 
 - iCalendar import: Also import objects, when the "last-modified" property was
   not changed. This conforms to the RFC5545:
