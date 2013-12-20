@@ -5,7 +5,9 @@ Changelog
 1.1.dev (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Fix get_events recurring events sorting, where it was only sorted by the
+  brain's start date, which could easily be outside the queried range.
+  [gyst]
 
 
 1.1.a1 (2013-11-14)
