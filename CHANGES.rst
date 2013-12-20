@@ -9,6 +9,11 @@ Changelog
   brain's start date, which could easily be outside the queried range.
   [gyst]
 
+- iCalendar import: Also import objects, when the "last-modified" property was
+  not changed. This conforms to the RFC5545:
+  http://tools.ietf.org/search/rfc5545#section-3.8.7.3
+  [jone]
+
 
 1.1.a1 (2013-11-14)
 -------------------
@@ -49,9 +54,6 @@ Changelog
 
 1.0.4 (2013-11-23)
 ------------------
-
-- iCalendar import: update the object too when "last-modified" was not changed.
-  [jone]
 
 - Register event.js Javascript as "cookable" to allow merging with other files
   and provide the "plone" global if it wasn't already defined.
