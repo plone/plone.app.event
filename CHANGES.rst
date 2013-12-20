@@ -4,6 +4,20 @@ Changelog
 1.1.dev (unreleased)
 --------------------
 
+.. note::
+
+    The ``ploneintegration`` setuptools extra and GenericSetup profile have
+    been removed for this version. This makes an integration into Plone and
+    ``plone.app.contenttypes`` easier. Please remove them also in your setup
+    and be sure to depend on ``plone.app.portlets>=2.5a1``!
+
+.. note::
+
+    The plone.app.event.dx.event type and plone.app.event.dx:default profile
+    are deprecated and will be removed in a future version of plone.app.event.
+    Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
+    plone.app.event's Dexterity behaviors.
+
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
   [gyst]
@@ -21,18 +35,6 @@ Changelog
 
 1.1.a1 (2013-11-14)
 -------------------
-
-.. note::
-
-    The ``ploneintegration`` setuptools extra and GenericSetup profile have
-    been removed for this version. This makes an integration into Plone and
-    ``plone.app.contenttypes`` easier. Please remove them also in your setup
-    and be sure to depend on ``plone.app.portlets>=2.5a1``!
-
-.. note::
-
-    The plone.app.event.dx.event type and plone.app.event.dx:default profile
-    are deprecated and will be removed in a future version of plone.app.event.
 
 - Don't fail, if first_weekday isn't set in registry.
   [thet]
