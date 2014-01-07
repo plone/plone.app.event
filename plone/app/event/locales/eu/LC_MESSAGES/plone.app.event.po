@@ -1,0 +1,678 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: plone.app.event\n"
+"POT-Creation-Date: 2013-11-06 23:52+0000\n"
+"PO-Revision-Date: 2014-01-07 11:38+0100\n"
+"Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
+"Language-Team: plone <eu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone.app.event\n"
+"X-Poedit-Language: Basque\n"
+
+#. Default: "Events in next 7 days."
+#: plone/app/event/browser/event_listing.py:231
+msgid "7days_events"
+msgstr "Hurrengo 7 egunetako hitzorduak."
+
+#: plone/app/event/portlets/portlet_calendar.py:217
+msgid "Add Calendar Portlet"
+msgstr "Egutegi portleta gehitu"
+
+#: plone/app/event/portlets/portlet_events.py:130
+msgid "Add Events Portlet"
+msgstr "Hitzorduen portleta gehitu"
+
+#: plone/app/event/interfaces.py:37
+msgid "Available timezones"
+msgstr "Ordu-eremuak"
+
+#: plone/app/event/portlets/portlet_calendar.py:59
+msgid "Calendar"
+msgstr "Egutegia"
+
+#: plone/app/event/browser/controlpanel.pt:33
+msgid "Date/Time based on the current event settings:"
+msgstr "Uneko ezarpenen araberako ordua/data"
+
+#: plone/app/event/portlets/portlet_calendar.py:229
+msgid "Edit Calendar Portlet"
+msgstr "Egutegi portleta editatu"
+
+#: plone/app/event/portlets/portlet_events.py:143
+msgid "Edit Events Portlet"
+msgstr "Hitzorduen portleta editat"
+
+#: plone/app/event/profiles/default/controlpanel.xml
+msgid "Event Settings"
+msgstr "Hitzorduen ezarpenak"
+
+#: plone/app/event/portlets/portlet_events.py:71
+msgid "Events"
+msgstr "Hitzorduak"
+
+#: plone/app/event/browser/event_view.pt:45
+msgid "Go to the original Event."
+msgstr "Jatorrizko hitzordura joan"
+
+#: plone/app/event/portlets/portlet_events.py:26
+msgid "How many items to list."
+msgstr "Zenbat elementu zerrendatu"
+
+#: plone/app/event/portlets/portlet_calendar.py:33
+#: plone/app/event/portlets/portlet_events.py:33
+msgid "Items in which workflow state to show."
+msgstr "Zein workflow egoeratako elementuak erakutsi"
+
+#: plone/app/event/browser/event_view.pt:52
+msgid "More occurrences of this event:"
+msgstr "Hitzordu honen agerpen gehiago"
+
+#: plone/app/event/portlets/portlet_events.py:25
+msgid "Number of items to display"
+msgstr "Zenbat elementu erakutsi"
+
+#: plone/app/event/interfaces.py:25
+msgid "Portal default timezone"
+msgstr "Atariaren defektuzko ordu-eremua"
+
+#: plone/app/event/browser/event_view.pt:43
+msgid "This event is part of a recurring Event."
+msgstr "Hitzordu hau errepikatzen den hitzordu baten parte da"
+
+#: plone/app/event/portlets/portlet_calendar.py:218
+msgid "This portlet displays events in a calendar."
+msgstr "Portlet honek hitzorduak egutegi baten erakusten ditu."
+
+#: plone/app/event/portlets/portlet_events.py:131
+msgid "This portlet lists upcoming Events."
+msgstr "Portlet honek datozen hitzorduak zerrendatzen ditu."
+
+#: plone/app/event/portlets/portlet_calendar.py:32
+#: plone/app/event/portlets/portlet_events.py:32
+msgid "Workflow state"
+msgstr "Workflow egoera"
+
+#. Default: "All events"
+#: plone/app/event/browser/event_listing.py:215
+msgid "all_events"
+msgstr "Hitzordu guztiak"
+
+#. Default: "Upcoming Events"
+#: plone/app/event/portlets/portlet_events.pt:10
+msgid "box_events"
+msgstr "Datozen hitzorduak"
+
+#. Default: "Previous events…"
+#: plone/app/event/portlets/portlet_events.pt:50
+msgid "box_previous_events"
+msgstr "Aurreko hitzorduak..."
+
+#. Default: "Upcoming events…"
+#: plone/app/event/portlets/portlet_events.pt:57
+msgid "box_upcoming_events"
+msgstr "Datozen hitorduak..."
+
+#. Default: "Attendees"
+#: plone/app/event/browser/event_view.pt:94
+msgid "contact_attendees"
+msgstr "Bertaratutakoak"
+
+#: plone/app/event/browser/event_listing.pt:128
+#: plone/app/event/browser/event_view.pt:76
+msgid "contact_name"
+msgstr "Kontaktu izena"
+
+#. Default: "Contact Phone"
+#: plone/app/event/browser/event_view.pt:88
+msgid "contact_phone"
+msgstr "Kontaktu telefonoa"
+
+#. Default: "End date must be after start date."
+#: plone/app/event/at/content.py:575
+#: plone/app/event/dx/behaviors.py:139
+msgid "error_end_must_be_after_start_date"
+msgstr "Bukaera-data hasiera-dataren ostean izan behar da."
+
+#. Default: "Invalid start or end date"
+#: plone/app/event/dx/behaviors.py:57
+msgid "error_invalid_date"
+msgstr "Hasiera- edo bukaera-data ez da zuzena"
+
+#. Default: "End date is not valid."
+#: plone/app/event/at/content.py:565
+msgid "error_invalid_end_date"
+msgstr "Bukaera-data ez da zuzena"
+
+#. Default: "Start date is not valid."
+#: plone/app/event/at/content.py:550
+msgid "error_invalid_start_date"
+msgstr "Hasiera-data ez da zuzena"
+
+#. Default: "Web"
+#: plone/app/event/browser/event_view.pt:104
+msgid "event_url"
+msgstr "Hitzorduaren URLa"
+
+#. Default: "What"
+#: plone/app/event/browser/event_view.pt:27
+msgid "event_what"
+msgstr "Zer"
+
+#. Default: "When"
+#: plone/app/event/browser/event_view.pt:33
+msgid "event_when"
+msgstr "Noiz"
+
+#. Default: "${startdate} to ${enddate}"
+#: plone/app/event/browser/formatted_date.pt:27
+msgid "event_when_differentday"
+msgstr "${startdate} - ${enddate}"
+
+#: plone/app/event/browser/formatted_date.pt:20
+msgid "event_when_differentday_optional_word_between_date_and_time"
+msgstr " "
+
+#. Default: "${date} from ${starttime} to ${endtime}"
+#: plone/app/event/browser/formatted_date.pt:71
+msgid "event_when_sameday"
+msgstr "${date} ${starttime} - ${endtime}\""
+
+#. Default: "${date} from ${starttime}"
+#: plone/app/event/browser/formatted_date.pt:52
+msgid "event_when_sameday_openend"
+msgstr "${date} ${starttime}"
+
+#. Default: "Where"
+#: plone/app/event/browser/event_view.pt:67
+msgid "event_where"
+msgstr "Non"
+
+#. Default: "${from} until ${until}."
+#: plone/app/event/browser/event_listing.py:232
+msgid "events_from_until"
+msgstr "${from} - ${until}."
+
+#. Default: "Events in ${month} ${year}"
+#: plone/app/event/browser/event_listing.py:289
+msgid "events_in_month"
+msgstr "${year} ${month}ko hitzorduak"
+
+#. Default: "Events in week ${weeknumber}"
+#: plone/app/event/browser/event_listing.py:266
+msgid "events_in_week"
+msgstr "${weeknumber} asteko hitzorduak"
+
+#. Default: "Events on ${day}"
+#: plone/app/event/browser/event_listing.py:252
+msgid "events_on_day"
+msgstr "${day} eguneko hitzorduak"
+
+#: plone/app/event/browser/event_listing.pt:116
+#: plone/app/event/browser/event_view.pt:107
+msgid "external_website"
+msgstr "Kanpo webgunea"
+
+#. Default: "Future events"
+#: plone/app/event/browser/event_listing.py:221
+msgid "future_events"
+msgstr "Etorkizuneko hitzorduak"
+
+#. Default: "Add event to calendar"
+#: plone/app/event/browser/event_view.pt:112
+msgid "heading_add_to_calendar"
+msgstr "Hitzordua egutegira gehitu"
+
+#. Default: "The timezones, which should be available for the portal. Can be set for users and events"
+#: plone/app/event/interfaces.py:38
+msgid "help_available_timezones"
+msgstr "Aukeratu daitezkeen ordu-eremuak. Erabiltzaile eta hitzorduei esleitu dakizkieke"
+
+#. Default: "Search events in current folder only."
+#: plone/app/event/browser/event_listing.py:427
+msgid "help_current_folder"
+msgstr "Hitzorduak uneko karpetan bakarrik bilatu."
+
+#: plone/app/event/at/content.py:302
+#: plone/app/event/dx/behaviors.py:285
+msgid "help_event_announcement"
+msgstr " "
+
+#. Default: "List of attendees."
+#: plone/app/event/at/content.py:199
+#: plone/app/event/dx/behaviors.py:213
+msgid "help_event_attendees"
+msgstr "Bertaratutakoen zerrenda"
+
+#. Default: "Email address to contact about this event."
+#: plone/app/event/at/content.py:236
+#: plone/app/event/dx/behaviors.py:244
+msgid "help_event_contact_email"
+msgstr "Hitzordu honen inguruko informazioa lortzeko e-posta"
+
+#. Default: "Name of a person to contact about this event."
+#: plone/app/event/at/content.py:217
+#: plone/app/event/dx/behaviors.py:232
+msgid "help_event_contact_name"
+msgstr "Hitzordu honen inguruko informazioa lortzeko pertsona"
+
+#. Default: "Phone number to contact about this event."
+#: plone/app/event/at/content.py:255
+#: plone/app/event/dx/behaviors.py:256
+msgid "help_event_contact_phone"
+msgstr "Hitzorde honen inguruko informazioa lortzeko telefonoa"
+
+#. Default: "Date and Time, when the event ends."
+#: plone/app/event/at/content.py:87
+#: plone/app/event/dx/behaviors.py:85
+msgid "help_event_end"
+msgstr "Hitzorduaren bukaera-data eta ordua"
+
+#. Default: "Settings for the event listing view."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_event_listing_settings"
+msgstr "Hitzordu zerrendaren bistaren ezarpenak."
+
+#. Default: "Location of the event."
+#: plone/app/event/at/content.py:182
+#: plone/app/event/dx/behaviors.py:197
+msgid "help_event_location"
+msgstr "Hitzorduaren tokia"
+
+#. Default: "This event is open ended."
+#: plone/app/event/at/content.py:124
+#: plone/app/event/dx/behaviors.py:109
+msgid "help_event_open_end"
+msgstr "Hitzordu honen bukaera datarik ez dago"
+
+#. Default: "Define the event recurrence rule."
+#: plone/app/event/at/content.py:161
+#: plone/app/event/dx/behaviors.py:181
+msgid "help_event_recurrence"
+msgstr "Hitzorduaren errepikapen erregela definitu"
+
+#. Default: "Event related settings like timezone, etc."
+#: plone/app/event/browser/controlpanel.py:15
+msgid "help_event_settings"
+msgstr "Hitzorduaren inguruko ezarpenak: ordu-eremua, ..."
+
+#. Default: "Date and Time, when the event begins."
+#: plone/app/event/at/content.py:65
+#: plone/app/event/dx/behaviors.py:73
+msgid "help_event_start"
+msgstr "Hitzorduaren hasiera-data eta ordua"
+
+#. Default: "Select the Timezone, where this event happens."
+#: plone/app/event/at/content.py:144
+#: plone/app/event/dx/behaviors.py:122
+msgid "help_event_timezone"
+msgstr "Hitzordu hau gertatuko den tokiaren ordu-eremua aukeratu."
+
+#. Default: "Web address with more info about the event. Add http:// for external links."
+#: plone/app/event/at/content.py:274
+#: plone/app/event/dx/behaviors.py:268
+msgid "help_event_url"
+msgstr "Hitzordu honen inguruko informazio gehiago duen web helbidea. Atari honetatik kanpoko loturei http:// gehitu aurretik."
+
+#. Default: "Event lasts whole day."
+#: plone/app/event/at/content.py:107
+#: plone/app/event/dx/behaviors.py:97
+msgid "help_event_whole_day"
+msgstr "Hitzordua egun osokoa da."
+
+#. Default: "First day in the Week."
+#: plone/app/event/interfaces.py:51
+msgid "help_first_weekday"
+msgstr "Asteko lehenengo egunean."
+
+#. Default: "Import Events from icalendar files."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import"
+msgstr "Hitzorduak icalendar fitxategietatik inportatu."
+
+#. Default: "Click to disable the icalendar import feature on this context."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import_disable"
+msgstr "Egin klik icalendar inportazioa kontestu honetan desaktibatzeko."
+
+#. Default: "Click to enable the icalendar import feature on this context."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import_enable"
+msgstr "Egin klik icalendar inportazioa kontestu honetan aktibatzeko."
+
+#. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
+#: plone/app/event/interfaces.py:26
+msgid "help_portal_timezone"
+msgstr "Atariaren ordu-eremuaren ezarpena. Erabiltzaile bakoitzak bere ordu-eremua ezarri dezake, hemen bat baino gehiago definituz gero."
+
+#. Default: "Content type of the event, which is created when importing icalendar resources."
+#: plone/app/event/ical/importer.py:227
+msgid "ical_import_event_type_desc"
+msgstr "icalendar bidezko inportazioak egiten direnean hitzorduaren eduki-mota"
+
+#. Default: "Event Type"
+#: plone/app/event/ical/importer.py:226
+msgid "ical_import_event_type_title"
+msgstr "Izenburua"
+
+#. Default: "Icalendar resource file, if no URL is given."
+#: plone/app/event/ical/importer.py:245
+msgid "ical_import_file_desc"
+msgstr "icalendar fitxategia URLrik ez bada ematen."
+
+#. Default: "Icalendar File"
+#: plone/app/event/ical/importer.py:244
+msgid "ical_import_file_title"
+msgstr "icalendar fitxategia"
+
+#. Default: "${num} events imported from ${filename}"
+#: plone/app/event/ical/importer.py:352
+msgid "ical_import_imported"
+msgstr "${filename} fitxategitik ${num} hitzordu inportatu dira"
+
+#. Default: "Please provide either a icalendar ics file or a URL to a file."
+#: plone/app/event/ical/importer.py:359
+msgid "ical_import_no_ics"
+msgstr "icalendar fitxategia edo fitxategi baten URL helbidea eman."
+
+#. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
+#: plone/app/event/ical/importer.py:256
+msgid "ical_import_sync_strategy_desc"
+msgstr ""
+"Default: \"Sinkronizazio aukerak:\n"
+"1) \"Berriagoak mantendu\": Inportatu, inportatutakoa aldatu bada\n"
+"   one.\n"
+"2) \"Nirea mantendu\": Arazoren bat dagoenean, ezer ez egin.\n"
+"3) \"Eurena mantendu\": Arazoren bat dagoenean, dagoen hitzordua inportatutakoarekin eguneratu.\n"
+"4) \"Ez sinkronizatu\": Ez sinkronizatu dauden hitzorduak baina berriak inportatu eta sortu\n"
+"    nahiz eta aurretik egon. Bakoitzarentzant sinkronizazio id-a sortu.\""
+
+#. Default: "Synchronization Strategy"
+#: plone/app/event/ical/importer.py:252
+msgid "ical_import_sync_strategy_title"
+msgstr "Sinkronizazioaren ezarpenak"
+
+#. Default: "URL to an external icalendar resource file."
+#: plone/app/event/ical/importer.py:237
+msgid "ical_import_url_desc"
+msgstr "icalendar fitxategi baten kanpoko helbidea"
+
+#. Default: "Icalendar URL"
+#: plone/app/event/ical/importer.py:236
+msgid "ical_import_url_title"
+msgstr "icalendar URLa"
+
+#. Default: "iCal"
+#: plone/app/event/browser/event_listing.pt:48
+#: plone/app/event/browser/event_view.pt:121
+msgid "label_add_to_ical"
+msgstr "iCal"
+
+#. Default: "Current folder"
+#: plone/app/event/browser/event_listing.py:426
+msgid "label_current_folder"
+msgstr "Uneko karpeta"
+
+#. Default: "Email"
+#: plone/app/event/browser/event_listing.pt:126
+msgid "label_email"
+msgstr "E-posta"
+
+#. Default: "Event body text"
+#: plone/app/event/at/content.py:298
+#: plone/app/event/dx/behaviors.py:281
+msgid "label_event_announcement"
+msgstr "Testua"
+
+#. Default: "Attendees"
+#: plone/app/event/at/content.py:195
+#: plone/app/event/dx/behaviors.py:209
+msgid "label_event_attendees"
+msgstr "Bertaratutakoak"
+
+#. Default: "Contact E-mail"
+#: plone/app/event/at/content.py:232
+#: plone/app/event/dx/behaviors.py:240
+msgid "label_event_contact_email"
+msgstr "Kontaktu e-posta"
+
+#. Default: "Contact Name"
+#: plone/app/event/at/content.py:213
+#: plone/app/event/dx/behaviors.py:228
+msgid "label_event_contact_name"
+msgstr "Kontaktu izena"
+
+#. Default: "Contact Phone"
+#: plone/app/event/at/content.py:251
+#: plone/app/event/dx/behaviors.py:252
+msgid "label_event_contact_phone"
+msgstr "Kontaktu telefonoa"
+
+#. Default: "Event Ends"
+#: plone/app/event/at/content.py:83
+#: plone/app/event/dx/behaviors.py:81
+msgid "label_event_end"
+msgstr "Bukaera-data"
+
+#. Default: "Location"
+#: plone/app/event/at/content.py:178
+#: plone/app/event/dx/behaviors.py:193
+msgid "label_event_location"
+msgstr "Tokia"
+
+#. Default: "Open End"
+#: plone/app/event/at/content.py:120
+#: plone/app/event/dx/behaviors.py:105
+msgid "label_event_open_end"
+msgstr "Bukaera irekia"
+
+#. Default: "Recurrence"
+#: plone/app/event/at/content.py:157
+#: plone/app/event/dx/behaviors.py:177
+msgid "label_event_recurrence"
+msgstr "Errepikapenak"
+
+#. Default: "Event settings"
+#: plone/app/event/browser/controlpanel.py:14
+msgid "label_event_settings"
+msgstr "Hitzorduaren ezarpenak"
+
+#. Default: "Event Starts"
+#: plone/app/event/at/content.py:61
+#: plone/app/event/dx/behaviors.py:69
+msgid "label_event_start"
+msgstr "Hasiera-data"
+
+#. Default: "Timezone"
+#: plone/app/event/at/content.py:140
+#: plone/app/event/dx/behaviors.py:118
+msgid "label_event_timezone"
+msgstr "Ordu-eremua"
+
+#. Default: "Event URL"
+#: plone/app/event/at/content.py:270
+#: plone/app/event/dx/behaviors.py:264
+msgid "label_event_url"
+msgstr "Hitzorudaren URLa"
+
+#. Default: "Whole Day"
+#: plone/app/event/at/content.py:103
+#: plone/app/event/dx/behaviors.py:93
+msgid "label_event_whole_day"
+msgstr "Egun osoa"
+
+#. Default: "First Weekday"
+#: plone/app/event/interfaces.py:50
+msgid "label_first_weekday"
+msgstr "Lehenengo asteguna"
+
+#: plone/app/event/browser/event_listing.pt:138
+msgid "label_phone"
+msgstr "Telefonoa"
+
+#. Default: "Web"
+#: plone/app/event/browser/event_listing.pt:116
+msgid "label_web"
+msgstr "Web"
+
+#. Default: "Day"
+#: plone/app/event/browser/event_listing.pt:39
+msgid "mode_day_link"
+msgstr "Eguna"
+
+#. Default: "Upcoming"
+#: plone/app/event/browser/event_listing.pt:27
+msgid "mode_future_link"
+msgstr "Datozenak"
+
+#. Default: "Month"
+#: plone/app/event/browser/event_listing.pt:33
+msgid "mode_month_link"
+msgstr "Hilabetea"
+
+#. Default: "Past"
+#: plone/app/event/browser/event_listing.pt:30
+msgid "mode_past_link"
+msgstr "Aurrekoak"
+
+#. Default: "Week"
+#: plone/app/event/browser/event_listing.pt:36
+msgid "mode_week_link"
+msgstr "Astea"
+
+#. Default: "Ical import settings saved."
+#: plone/app/event/ical/importer.py:314
+msgid "msg_ical_import_settings_saved"
+msgstr "ical inportazioaren ezarpenak gorde egin dira"
+
+#. Default: "Next Day"
+#: plone/app/event/browser/event_listing.pt:71
+msgid "next_day_link"
+msgstr "Hurrengo eguna"
+
+#. Default: "Next Month"
+#: plone/app/event/browser/event_listing.pt:57
+msgid "next_month_link"
+msgstr "Hurrengo hilabetea"
+
+#. Default: "Next Week"
+#: plone/app/event/browser/event_listing.pt:64
+msgid "next_week_link"
+msgstr "Hurrengo astea"
+
+#. Default: "Past events"
+#: plone/app/event/browser/event_listing.py:218
+msgid "past_events"
+msgstr "Pasatutako hitzorduak"
+
+#. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
+#: plone/app/event/portlets/portlet_calendar.py:42
+#: plone/app/event/portlets/portlet_events.py:43
+msgid "portlet_help_search_base"
+msgstr "Hitzorduak bilatzeko oinarri karpeta bilatu. Egutegiko bilaketen loturetan ere karpeta hau erabiliko da oinarri gisa. Hutsik utziz gero, atari guztian zehar bilatuko da eta sortzen diren loturak ataritik aurrerakoak izango dira."
+
+#. Default: "Search base"
+#: plone/app/event/portlets/portlet_calendar.py:41
+#: plone/app/event/portlets/portlet_events.py:42
+msgid "portlet_label_search_base"
+msgstr "Bilaketaren oinarria"
+
+#. Default: "Previous Day"
+#: plone/app/event/browser/event_listing.pt:69
+msgid "prev_day_link"
+msgstr "Aurreko eguna"
+
+#. Default: "Previous Month"
+#: plone/app/event/browser/event_listing.pt:55
+msgid "prev_month_link"
+msgstr "Aurreko hilabetea"
+
+#. Default: "Previous Week"
+#: plone/app/event/browser/event_listing.pt:62
+msgid "prev_week_link"
+msgstr "Aurreko astea"
+
+#. Default: "Event details"
+#: plone/app/event/browser/event_view.pt:24
+msgid "summary_event_details"
+msgstr "Hitzorduaren ingurukoak"
+
+#. Default: "Keep mine"
+#: plone/app/event/vocabularies.py:141
+msgid "sync_keep_mine"
+msgstr "Nirea mantendu"
+
+#. Default: "Keep newer"
+#: plone/app/event/vocabularies.py:140
+msgid "sync_keep_newer"
+msgstr "Berriagoak mantendu"
+
+#. Default: "Keep theirs"
+#: plone/app/event/vocabularies.py:142
+msgid "sync_keep_theirs"
+msgstr "Eurenak mantendu"
+
+#. Default: "No Syncing"
+#: plone/app/event/vocabularies.py:143
+msgid "sync_none"
+msgstr "Ez sinkronizatu"
+
+#. Default: "This Month"
+#: plone/app/event/browser/event_listing.pt:56
+msgid "this_month_link"
+msgstr "Hilabete hau"
+
+#. Default: "This Week"
+#: plone/app/event/browser/event_listing.pt:63
+msgid "this_week_link"
+msgstr "Aste hau"
+
+#. Default: "Download this event in iCal format"
+#: plone/app/event/browser/event_listing.pt:43
+#: plone/app/event/browser/event_view.pt:115
+msgid "title_add_to_ical"
+msgstr "Hitzordu hau iCal formatuan deskargatu"
+
+#. Default: "Event Listing Settings"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_event_listing_settings"
+msgstr "Hitzordu zerrendaren ezarpenak"
+
+#. Default: "Ical import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import"
+msgstr "Ical inportazioa"
+
+#. Default: "Disable icalendar import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import_disable"
+msgstr "icalendar inportazioa desaktibatu"
+
+#. Default: "Enable icalendar import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import_enable"
+msgstr "icalendar inportazioa aktibatu"
+
+#. Default: "Today"
+#: plone/app/event/browser/event_listing.pt:70
+msgid "today_link"
+msgstr "Gaur"
+
+#. Default: "Todays events"
+#: plone/app/event/browser/event_listing.py:228
+msgid "todays_events"
+msgstr "Gaurko hitzorduak"
+
+#. Default: "Todays upcoming events"
+#: plone/app/event/browser/event_listing.py:224
+msgid "todays_upcoming_events"
+msgstr "Gaurko hitzorduak"
+
