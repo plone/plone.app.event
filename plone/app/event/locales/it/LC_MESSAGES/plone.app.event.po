@@ -388,7 +388,7 @@ msgstr "Inserisci un file icalendar ics o un URL di un file."
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
 #: plone/app/event/ical/importer.py:256
 msgid "ical_import_sync_strategy_desc"
-msgstr "Definisce come sincronizzare:\n1)\"Tieni il più nuovo\": Importa se l'evento è stato modificato dopo quello esistente.\n\"Tieni il mio\": in caso di conflitti, non fare nulla.\n3 "Tieni i loro": in caso di conflitti, sovrascrivi l'evento esistente.\n4) \"Nessuna sincronizzazione\": Non sincronizzare ma importa gli eventi e creali nuovi, anche se esistono già. Per ogniuno, crea un nuovo sync_uid."
+msgstr "Definisce come sincronizzare:\n1)\"Tieni il più nuovo\": Importa se l'evento è stato modificato dopo quello esistente.\n\"Tieni il mio\": in caso di conflitti, non fare nulla.\n3 "Tieni i loro": in caso di conflitti, sovrascrivi l'evento esistente.\n4) \"Nessuna sincronizzazione\": Non sincronizzare ma importa gli eventi e creali nuovi, anche se esistono già. Per ognuno, crea un nuovo sync_uid."
 
 #. Default: "Synchronization Strategy"
 #: plone/app/event/ical/importer.py:252
@@ -502,7 +502,7 @@ msgstr "URL dell'evento"
 #: plone/app/event/at/content.py:103
 #: plone/app/event/dx/behaviors.py:93
 msgid "label_event_whole_day"
-msgstr "Evento di tutta la giornata"
+msgstr "Tutta la giornata"
 
 #. Default: "First Weekday"
 #: plone/app/event/interfaces.py:50
@@ -526,7 +526,7 @@ msgstr "Giorno"
 #. Default: "Upcoming"
 #: plone/app/event/browser/event_listing.pt:27
 msgid "mode_future_link"
-msgstr "In arrivo"
+msgstr "Prossimi"
 
 #. Default: "Month"
 #: plone/app/event/browser/event_listing.pt:33
@@ -649,7 +649,7 @@ msgstr "Importazione iCal"
 #. Default: "Disable icalendar import"
 #: plone/app/event/profiles/default/actions.xml
 msgid "title_ical_import_disable"
-msgstr "Disabilita limportazione icalendar"
+msgstr "Disabilita l'importazione icalendar"
 
 #. Default: "Enable icalendar import"
 #: plone/app/event/profiles/default/actions.xml
@@ -669,5 +669,5 @@ msgstr "Eventi di oggi"
 #. Default: "Todays upcoming events"
 #: plone/app/event/browser/event_listing.py:224
 msgid "todays_upcoming_events"
-msgstr "Eventi di oggi"
+msgstr "Prossimi eventi di oggi"
 
