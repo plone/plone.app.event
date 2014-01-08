@@ -6,6 +6,7 @@ Changelog
 
 - Added basque translation
   [erral]
+- Completed italian translation [giacomos]
 
 1.0.4 (2013-11-23)
 ------------------
