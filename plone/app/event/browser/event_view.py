@@ -42,7 +42,7 @@ class EventView(BrowserView):
             (self.context, self.request, self),
             IContentProvider, name='formatted_date'
         )
-        return provider(occ)
+        return provider(occ.context)
 
     @property
     def next_occurrences(self):
