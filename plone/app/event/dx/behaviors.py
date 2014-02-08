@@ -27,7 +27,7 @@ from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
-from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
@@ -144,6 +144,7 @@ class IEventBasic(model.Schema):
                   default=u"End date must be after start date.")
             )
 
+
 @adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
 @implementer(IFieldWidget)
 def StartDateFieldWidget(field, request):
@@ -158,6 +159,7 @@ def EndDateFieldWidget(field, request):
     widget = FieldWidget(field, DatetimeWidget(request))
     widget.first_day = first_weekday_sun0
     return widget
+
 
 def default_start(data):
     return default_start_dt(data.context)
@@ -180,17 +182,6 @@ provideAdapter(ComputedWidgetAttribute(
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
     """
-    # Please note: If you create a new behavior with superclasses IEventBasic
-    # and IRecurrence, then you have to reconfigure the dotted path value of
-    # the start_field parameter for the RecurrenceFieldWidget to the new
-    # behavior name, like: IMyNewBehaviorName.start.
-    form.widget(
-        'recurrence',
-        RecurrenceFieldWidget,
-        start_field='IEventBasic.start',
-        first_day=first_weekday_sun0,
-        show_repeat_forever=False
-    )
     recurrence = RecurrenceField(
         title=_(
             u'label_event_recurrence',
@@ -202,6 +193,20 @@ class IEventRecurrence(model.Schema):
         ),
         required=False
     )
+
+
+@adapter(getSpecification(IEventRecurrence['recurrence']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def RecurrenceFieldWidget(field, request):
+    # Please note: If you create a new behavior with superclasses IEventBasic
+    # and IRecurrence, then you have to reconfigure the dotted path value of
+    # the start_field parameter for the RecurrenceWidget to the new
+    # behavior name, like: IMyNewBehaviorName.start.
+    widget = FieldWidget(field, RecurrenceWidget(request))
+    widget.start_field = 'IEventBasic.start'
+    widget.first_day = first_weekday_sun0
+    widget.show_repeat_forever = False
+    return widget
 
 
 class IEventLocation(model.Schema):
