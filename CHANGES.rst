@@ -1,15 +1,8 @@
 Changelog
 =========
 
-
 1.1.dev (unreleased)
 --------------------
-
-- Nothing changed yet.
-
-
-1.1.a1 (2013-11-14)
--------------------
 
 .. note::
 
@@ -22,6 +15,26 @@ Changelog
 
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
+    Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
+    plone.app.event's Dexterity behaviors.
+
+- Fix get_events recurring events sorting, where it was only sorted by the
+  brain's start date, which could easily be outside the queried range.
+  [gyst]
+
+- Avoid failing to create an event when zope.globalrequest.getRequest returns
+  None on the post create event handler. This happens when creating an event
+  during test layer setup time.
+  [rafaelbco]
+
+- iCalendar import: Also import objects, when the "last-modified" property was
+  not changed. This conforms to the RFC5545:
+  http://tools.ietf.org/search/rfc5545#section-3.8.7.3
+  [jone]
+
+
+1.1.a1 (2013-11-14)
+-------------------
 
 - Don't fail, if first_weekday isn't set in registry.
   [thet]

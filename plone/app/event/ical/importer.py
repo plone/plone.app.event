@@ -161,8 +161,14 @@ def ical_import(container, ics_resource, event_type,
             acc = IEventAccessor(exist_event)
 
             if sync_strategy == base.SYNC_KEEP_NEWER and\
-                    (not ext_modified or acc.last_modified >= ext_modified):
-                # Update only, if newer, if ext_modified exists
+                    (not ext_modified or acc.last_modified > ext_modified):
+                # Update only if modified date was passed in and it is not
+                # older than the current modified date.  The client is not
+                # expected to update the "last-modified" property, it is the
+                # job of the server (calendar store) to keep it up to date.
+                # This makes sure the client did the change on an up-to-date
+                # version of the object.  See
+                # http://tools.ietf.org/search/rfc5545#section-3.8.7.3
                 continue
 
             # Else: update

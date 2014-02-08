@@ -208,7 +208,7 @@ class TestBaseModule(unittest.TestCase):
         self.assertTrue(
             isinstance(start, datetime.datetime) and
             isinstance(end, datetime.datetime) and
-            end == dt_end_of_day(start+datetime.timedelta(days=6))
+            end == dt_end_of_day(start + datetime.timedelta(days=6))
         )
 
         # TODAY
@@ -430,11 +430,13 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertTrue(res[0].start < res[-1].start)
 
         # Test reversed sorting
-        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort_reverse=True)
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         sort_reverse=True)
         self.assertTrue(res[0].start > res[-1].start)
 
         # Test sort_on
-        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="start")
+        res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
+                         sort="start")
         self.assertEqual(
             [it.title for it in res][2:],
             [u'Now Event', u'Future Event']
@@ -625,12 +627,192 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
     def make_dates(self):
         def_tz = default_timezone()
         now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
-        tomorrow = self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
+        self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
         past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
         future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
         far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
         duration = self.duration = 0.1
         return (now, past, future, far, duration)
+
+
+class TestGetEventsOptimizations(AbstractSampleDataEvents):
+    """Test get_events performance optimizations
+
+    Issue #114: The limit bug described above and in #92 and #93
+    is actually a manifestation of a deeper sorting bug,
+    that also affects unlimited and unexpanded get_events().
+    """
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def event_factory(self):
+        return DXEventAccessor.create
+
+    def setUp(self):
+        AbstractSampleDataEvents.setUp(self)
+
+        # add extra events to the base setup
+        factory = self.event_factory()
+        factory(
+            container=self.portal,
+            content_id='past_recur',
+            title=u'Past Recur',
+            start=self.past + self.duration,
+            end=self.past + self.duration + self.duration,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+            recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
+        )
+        factory(
+            container=self.portal,
+            content_id='tomorrow',
+            title=u'Tomorrow event',
+            start=self.tomorrow,
+            end=self.tomorrow + self.duration,
+            open_end=True,
+            location=u"Dornbirn",
+            timezone=TEST_TIMEZONE,
+        )
+        self.occ = [
+            (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Past Recur', '2013-04-25 11:00:00', '2013-04-25 12:00:00'),
+            (u'Past Event', '2013-04-26 00:00:00', '2013-04-26 23:59:59'),
+            (u'Past Event', '2013-04-27 00:00:00', '2013-04-27 23:59:59'),
+            (u'Past Recur', '2013-05-02 11:00:00', '2013-05-02 12:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00'),
+            (u'Tomorrow event', '2013-05-06 10:00:00', '2013-05-06 23:59:59'),
+            (u'Now Event', '2013-05-07 10:00:00', '2013-05-07 11:00:00'),
+            (u'Now Event', '2013-05-09 10:00:00', '2013-05-09 11:00:00'),
+            (u'Past Recur', '2013-05-09 11:00:00', '2013-05-09 12:00:00'),
+            (u'Future Event', '2013-05-15 10:00:00', '2013-05-15 11:00:00'),
+            (u'Past Recur', '2013-05-16 11:00:00', '2013-05-16 12:00:00')]
+
+    def tearDown(self):
+        self.portal.manage_delObjects(['past_recur', 'tomorrow'])
+        AbstractSampleDataEvents.tearDown(self)
+
+    def diff(self, list1, list2):
+        c = set(list1).union(set(list2))
+        d = set(list1).intersection(set(list2))
+        return list(c - d)
+
+    def fmt(self, seq):
+        return [(x.title,
+                 x.start.strftime('%Y-%m-%d %H:%M:%S'),
+                 x.end.strftime('%Y-%m-%d %H:%M:%S'))
+                for x in seq]
+
+    ### expand=True: events
+
+    def test_expand_all(self):
+        # all occurrences, sorted by start
+        res = self.fmt(get_events(self.portal, expand=True,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, self.occ)
+
+    def test_expand_all_limit(self):
+        # limited occurrences
+        res = self.fmt(get_events(self.portal, expand=True,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = self.occ[:3]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+    def test_expand_start(self):
+        # now+future occurrences
+        res = self.fmt(get_events(self.portal, expand=True,
+                                  start=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = self.occ[1:2] + self.occ[6:]  # includes ongoing long event
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+    def test_expand_start_limit(self):
+        # limited now+future occurrences
+        res = self.fmt(get_events(self.portal, expand=True,
+                                  start=self.now, limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = self.occ[1:2] + self.occ[6:8]  # includes ongoing long event
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+    ### expand=False: events
+
+    def test_noexpand_all(self):
+        # all events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Past Recur', '2013-04-25 11:00:00', '2013-04-25 12:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00'),
+            (u'Tomorrow event', '2013-05-06 10:00:00', '2013-05-06 23:59:59'),
+            (u'Future Event', '2013-05-15 10:00:00', '2013-05-15 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
+
+    def test_noexpand_start(self):
+        # now+future events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00'),
+            (u'Tomorrow event', '2013-05-06 10:00:00', '2013-05-06 23:59:59'),
+            # Past Recur next occurrence: '2013-05-09 11:00:00'
+            # Past Recur brain.start: '2013-04-25 11:00:00'
+            (u'Past Recur', '2013-04-25 11:00:00', '2013-04-25 12:00:00'),
+            (u'Future Event', '2013-05-15 10:00:00', '2013-05-15 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited now+future events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now, limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
+
+    def test_noexpand_end(self):
+        # past+now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  end=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Past Recur', '2013-04-25 11:00:00', '2013-04-25 12:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited past+now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  end=self.now,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
+
+    def test_noexpand_start_end(self):
+        # only now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now,
+                                  end=self.now,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        expect = [
+            (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
+            (u'Now Event', '2013-05-05 10:00:00', '2013-05-05 11:00:00')]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # limited now events
+        res = self.fmt(get_events(self.portal, expand=False,
+                                  start=self.now,
+                                  end=self.now,
+                                  limit=3,
+                                  ret_mode=RET_MODE_ACCESSORS))
+        self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
 
 class TestDatesForDisplayAT(unittest.TestCase):

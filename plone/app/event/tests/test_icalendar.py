@@ -434,9 +434,9 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(mod1, mod2)
         self.assertEqual(suid1, suid2)
 
-    def test_import_from_ics__sync_keep_newer(self):
+    def test_import_from_ics__sync_drop_older(self):
         """SYNC_KEEP_NEWER and importing the same file again should update only
-        newer.
+        newer and on equal modified date but drop the change when it is older.
         """
         self.portal.invokeFactory('Folder', 'impfolder4')
         impfolder = self.portal.impfolder4
@@ -458,7 +458,7 @@ class TestIcalImportDX(unittest.TestCase):
 
         res = ical_import(impfolder, icsfile2, self.event_type,
                           sync_strategy=base.SYNC_KEEP_NEWER)
-        self.assertEqual(res['count'], 1)
+        self.assertEqual(res['count'], 4)
         e1a = IEventAccessor(impfolder.e1)
         mod2 = e1a.last_modified
         suid2 = e1a.sync_uid

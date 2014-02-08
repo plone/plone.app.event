@@ -68,6 +68,7 @@ setup(
         'zope.container',
         'zope.contentprovider',
         'zope.formlib',
+        'zope.globalrequest',
         'zope.i18nmessageid',
         'zope.interface',
         'zope.lifecycleevent',

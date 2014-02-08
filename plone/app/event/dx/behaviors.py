@@ -484,7 +484,9 @@ def data_postprocessing(obj, event):
     if not behavior.sync_uid:
         # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
-        request = getRequest()
+        # We don't want to fail when getRequest() returns None, e.g when
+        # creating an event during test layer setup time.
+        request = getRequest() or {}
         domain = request.get('HTTP_HOST')
         behavior.sync_uid = '%s%s' % (
             uid,
