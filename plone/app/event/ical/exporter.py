@@ -40,10 +40,6 @@ def construct_icalendar(context, events):
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
 
-    cal_title = context.Title()
-    if cal_title:
-        cal.add('x-wr-calname', cal_title)
-
     cal_desc = context.Description()
     if cal_desc:
         cal.add('x-wr-caldesc', cal_desc)
