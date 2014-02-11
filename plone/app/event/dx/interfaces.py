@@ -1,8 +1,6 @@
-from plone.app.event.dx.behaviors import IEventAttendees
-from plone.app.event.dx.behaviors import IEventContact
-from plone.app.event.dx.behaviors import IEventLocation
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventRecurrence
+from zope.interface import Interface
 
 
 class IDXEvent(IEvent):
@@ -15,16 +13,16 @@ class IDXEventRecurrence(IEventRecurrence):
     """
 
 
-class IDXEventLocation(IEventLocation):
+class IDXEventLocation(Interface):
     """ Marker interface for Dexterity events with location.
     """
 
 
-class IDXEventAttendees(IEventAttendees):
+class IDXEventAttendees(Interface):
     """ Marker interface for Dexterity events with attendees.
     """
 
 
-class IDXEventContact(IEventContact):
+class IDXEventContact(Interface):
     """ Marker interface for Dexterity events with contact information.
     """
