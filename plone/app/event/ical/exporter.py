@@ -40,14 +40,6 @@ def construct_icalendar(context, events):
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
 
-    cal_desc = context.Description()
-    if cal_desc:
-        cal.add('x-wr-caldesc', cal_desc)
-
-    uuid = IUUID(context, None)
-    if uuid:  # portal object does not have UID
-        cal.add('x-wr-relcalid', uuid)
-
     cal_tz = default_timezone(context)
     if cal_tz:
         cal.add('x-wr-timezone', cal_tz)

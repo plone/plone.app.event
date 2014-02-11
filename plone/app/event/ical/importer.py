@@ -1,7 +1,3 @@
-# TODO:
-#  - implement sync strategies,
-#  - cleanup,
-#  - tests
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView

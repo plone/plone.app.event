@@ -4,6 +4,12 @@ Changelog
 1.0.5 (Unreleased)
 ------------------
 
+- For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
+  X-WR-CALNAME caused Outlook to create a new calendar on every import. These
+  properties are not neccessary and not specified by RFC5545 anyways.
+  Fixes #109, closes #132.
+  [tomgross, thet]
+
 - Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
   and IEventAccessor objects and avoid confusion on using these methods.
   [thet]

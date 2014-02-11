@@ -60,7 +60,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//Plone.org//NONSGML plone.app.event//EN',
-            'X-WR-RELCALID:',
             'X-WR-TIMEZONE:Europe/Vienna',
             'BEGIN:VEVENT',
             'SUMMARY:Now Event',
