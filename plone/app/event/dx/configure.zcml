@@ -7,6 +7,7 @@
     <include package="plone.dexterity" />
     <include package="plone.app.dexterity" /><!-- To initialize DublinCore behaviors -->
     <include package="plone.behavior" file="meta.zcml" />
+    <include package=".upgrades" />
 
     <!-- http://groups.google.com/group/zope-core-dev/browse_thread/thread/6c10ebc16027017f -->
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
