@@ -407,6 +407,48 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_phone, self.contact_phone)
         self.assertEqual(e1.event_url, self.event_url)
 
+    def test_no_overwrite(self):
+        self.portal.invokeFactory(
+            'Event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
+        e1 = self.portal['event1']
+        ann = IAnnotations(e1)
+
+        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
+            self.location + u'X'
+        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
+            self.attendees + (u'Paula',)
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
+            self.contact_email + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
+            self.contact_name + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
+            self.contact_phone + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
+            self.event_url + 'X'
+
+        e1.location = self.location
+        e1.attendees = self.attendees
+        e1.contact_email = self.contact_email
+        e1.contact_phone = self.contact_phone
+        e1.contact_name = self.contact_name
+        e1.event_url = self.event_url
+
+        upgrade_attribute_storage(self.portal)
+
+        # The already existing fields were not touched
+        self.assertEqual(e1.location, self.location)
+        self.assertEqual(e1.attendees, self.attendees)
+        self.assertEqual(e1.contact_email, self.contact_email)
+        self.assertEqual(e1.contact_phone, self.contact_phone)
+        self.assertEqual(e1.contact_name, self.contact_name)
+        self.assertEqual(e1.event_url, self.event_url)
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
