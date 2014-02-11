@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
@@ -13,6 +14,7 @@ from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
+from plone.app.event.dx.upgrades.upgrades import upgrade_attribute_storage
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
@@ -23,6 +25,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from zope.annotation.interfaces import IAnnotations
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify
@@ -341,6 +344,68 @@ class TestDXEventUnittest(unittest.TestCase):
             IEventBasic.validateInvariants(mock)
         except:
             self.fail()
+
+
+class TestDXAnnotationStorageUpdate(unittest.TestCase):
+    """ Unit tests for the Annotation Storage migration
+    """
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    location = u"Köln"
+    attendees = (u'Peter', u'Søren', u'Madeleine')
+    contact_email = u'person@email.com'
+    contact_name = u'Peter Parker'
+    contact_phone = u'555 123 456'
+    event_url = u'http://my.event.url'
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        set_browserlayer(self.request)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_migrate_fields(self):
+        self.portal.invokeFactory(
+            'Event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
+        e1 = self.portal['event1']
+        ann = IAnnotations(e1)
+
+        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
+            self.location
+        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
+            self.attendees
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
+            self.contact_email
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
+            self.contact_name
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
+            self.contact_phone
+        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
+            self.event_url
+
+        # All behavior-related fields are not set yet
+        self.assertEqual(e1.location, None)
+        self.assertEqual(e1.attendees, None)
+        self.assertEqual(e1.contact_email, None)
+        self.assertEqual(e1.contact_name, None)
+        self.assertEqual(e1.contact_phone, None)
+        self.assertEqual(e1.event_url, None)
+
+        upgrade_attribute_storage(self.portal)
+
+        # All behavior-related fields have been migrated
+        self.assertEqual(e1.location, self.location)
+        self.assertEqual(e1.attendees, self.attendees)
+        self.assertEqual(e1.contact_email, self.contact_email)
+        self.assertEqual(e1.contact_name, self.contact_name)
+        self.assertEqual(e1.contact_phone, self.contact_phone)
+        self.assertEqual(e1.event_url, self.event_url)
 
 
 def test_suite():
