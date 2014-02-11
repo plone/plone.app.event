@@ -6,8 +6,9 @@ from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
-
+from zope.event import notify
 from zope.component.hooks import getSite
+from zope.lifecycleevent import ObjectModifiedEvent
 
 import logging
 log = logging.getLogger(__name__)
@@ -41,6 +42,7 @@ def upgrade_attribute_storage(context):
                 'skipping.'.format(event.absolute_url()))
             continue
         annotations = IAnnotations(event)
+        did_work = False
         for behavior in BEHAVIOR_LIST:
             for name in behavior.names():
                 fullname = '{0}.{1}'.format(behavior.__identifier__, name)
@@ -48,4 +50,7 @@ def upgrade_attribute_storage(context):
                 # Only write the old value if there is no new value yet
                 if not getattr(event, name, None):
                     setattr(event, name, oldvalue)
+                    did_work = True
+        if did_work:
+            notify(ObjectModifiedEvent(event))
         log.debug('Handled event at {0}'.format(event.absolute_url()))
