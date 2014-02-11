@@ -5,18 +5,19 @@ from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
-from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+from plone.app.contenttypes.interfaces import IFolder
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
-from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.formlib import form
 from zope.interface import implements
+from z3c.form import field
+from z3c.relationfield.schema import RelationChoice
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -38,7 +39,7 @@ class IEventsPortlet(IPortletDataProvider):
         )
     )
 
-    search_base = schema.Choice(
+    search_base = RelationChoice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
@@ -48,9 +49,8 @@ class IEventsPortlet(IPortletDataProvider):
                     u'the event listing view will be called on the site root.'
         ),
         required=False,
-        source=SearchableTextSourceBinder(
-            {'is_folderish': True},
-            default_query='path:'
+        source=ObjPathSourceBinder(
+            object_provides=IFolder.__identifier__
         ),
     )
 
@@ -80,7 +80,7 @@ class Renderer(base.Renderer):
 
         context = aq_inner(self.context)
 
-        calendar_url = get_calendar_url(context, self.data.search_base)
+        calendar_url = get_calendar_url(context, self.data.search_base and self.data.search_base.to_path or None)
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
 
@@ -105,8 +105,7 @@ class Renderer(base.Renderer):
 
         kw = {}
         if data.search_base:
-            kw['path'] = {'query': '%s%s' % (
-                '/'.join(self.portal.getPhysicalPath()), data.search_base)}
+            kw['path'] = {'query': data.search_base.to_path}
         if data.state:
             kw['review_state'] = data.state
 
@@ -126,11 +125,9 @@ class Renderer(base.Renderer):
 
 
 class AddForm(base.AddForm):
-    form_fields = form.Fields(IEventsPortlet)
+    fields = field.Fields(IEventsPortlet)
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
-    form_fields = form.Fields(IEventsPortlet)
-    form_fields['search_base'].custom_widget = UberSelectionWidget
 
     def create(self, data):
         return Assignment(count=data.get('count', 5),
@@ -139,8 +136,6 @@ class AddForm(base.AddForm):
 
 
 class EditForm(base.EditForm):
-    form_fields = form.Fields(IEventsPortlet)
+    fields = field.Fields(IEventsPortlet)
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
-    form_fields = form.Fields(IEventsPortlet)
-    form_fields['search_base'].custom_widget = UberSelectionWidget
