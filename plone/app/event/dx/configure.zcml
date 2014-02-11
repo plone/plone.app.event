@@ -59,27 +59,27 @@
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventLocation"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventLocation"
+        marker=".behaviors.IEventLocation"
         />
 
     <plone:behavior
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventAttendees"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventAttendees"
+        marker=".behaviors.IEventAttendees"
         />
 
     <plone:behavior
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventContact"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventContact"
+        marker=".behaviors.IEventContact"
         />
 
     <plone:behavior

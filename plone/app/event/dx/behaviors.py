@@ -20,6 +20,7 @@ from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.interfaces import IDexterityContent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
@@ -312,6 +313,32 @@ class IEventSummary(model.Schema):
         required=False,
     )
 
+
+class EventLocation(object):
+
+    implements(IEventLocation)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventAttendees(object):
+
+    implements(IEventAttendees)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventContact(object):
+
+    implements(IEventContact)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
 
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, IFormFieldProvider)
