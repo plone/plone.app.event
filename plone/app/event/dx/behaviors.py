@@ -560,16 +560,13 @@ def searchable_text_indexer(obj):
     text = u''
     text += u'%s\n' % acc.title
     text += u'%s\n' % acc.description
-    behavior = IEventSummary(obj, None)
-    if behavior is None or behavior.text is None:
-        return text.encode('utf-8')
-    output = behavior.text.output
+    textvalue = acc.text
     transforms = getToolByName(obj, 'portal_transforms')
     body_plain = transforms.convertTo(
         'text/plain',
-        output.encode('utf8'),
+        textvalue.encode('utf8'),
         mimetype='text/html',
-        ).getData().strip()
+    ).getData().strip()
     if isinstance(body_plain, str):
         body_plain = body_plain.decode('utf-8')
     text += body_plain
