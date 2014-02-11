@@ -1,12 +1,19 @@
 Changelog
 =========
 
-1.0.5 (UNRELEASED)
--------------------
+1.0.5 (Unreleased)
+------------------
 
-- Added basque translation
+- Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
+  and IEventAccessor objects and avoid confusion on using these methods.
+  [thet]
+
+- Added basque translation.
   [erral]
-- Completed italian translation [giacomos]
+
+- Completed italian translation.
+  [giacomos]
+
 
 1.0.4 (2013-11-23)
 ------------------
@@ -171,7 +178,7 @@ Changelog
 -------------------
 
 - Fix get_events with ret_mode=3, expand=True, without recurrence
-  It was returning full object instead of IEventAccesor instances.
+  It was returning full object instead of IEventAccessor instances.
   This also fix event portlet with norecurrent events.
   [toutpt]
 
