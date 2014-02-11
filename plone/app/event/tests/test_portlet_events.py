@@ -1,5 +1,7 @@
 from DateTime import DateTime
 from Products.GenericSetup.utils import _getDottedName
+from five.intid.intid import IntIds
+from five.intid.site import addUtility
 from plone.app.event.portlets import portlet_events
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -7,6 +9,7 @@ from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.portlets.interfaces import IPortletAssignment
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
@@ -15,8 +18,12 @@ from plone.portlets.interfaces import IPortletType
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component import getSiteManager
 from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
+from zope.interface import alsoProvides
+from zope.intid.interfaces import IIntIds
+from z3c.relationfield.relation import create_relation
 
 import unittest2 as unittest
 
@@ -28,9 +35,12 @@ class PortletTest(unittest.TestCase):
         portal = self.layer['portal']
         self.portal = portal
         self.request = self.layer['request']
+        alsoProvides(self.request, IPloneFormLayer)
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
+        sm = getSiteManager(self.portal)
+        addUtility(sm, IIntIds, IntIds, ofs_name='intids', findroot=False)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='portlets.Events')
@@ -88,6 +98,7 @@ class PortletTest(unittest.TestCase):
         )
         self.assertTrue(isinstance(renderer, portlet_events.Renderer))
 
+
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
         self.portal.manage_permission(
@@ -101,6 +112,7 @@ class PortletTest(unittest.TestCase):
             '++contextportlets++plone.leftcolumn'
         )
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
+
         try:
             addview()
         except Unauthorized:
@@ -117,6 +129,8 @@ class RendererTest(unittest.TestCase):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
+        sm = getSiteManager(self.portal)
+        addUtility(sm, IIntIds, IntIds, ofs_name='intids', findroot=False)
 
         set_timezone("Australia/Brisbane")
 
@@ -175,7 +189,7 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('event_listing' in portlet.render())
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
-            count=5, search_base="/eventfolder"))
+            count=5, search_base=create_relation("/plone/eventfolder")))
         self.assertEqual(1, len(portlet.events))
 
         # A given search base gives calendar urls without event_listing part
