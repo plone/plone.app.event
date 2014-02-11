@@ -9,8 +9,8 @@ from zope.contentprovider.interfaces import IContentProvider
 
 def get_location(context):
     """Return the location.
-    This method can be used to be overwritten by external packages, for example
-    to provide a reference to a Location object as done by collective.venue.
+    This method can be overwritten by external packages, for example to provide
+    a reference to a Location object as done by collective.venue.
     """
     data = IEventAccessor(context)
     return data.location
