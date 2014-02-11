@@ -60,8 +60,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//Plone.org//NONSGML plone.app.event//EN',
-            'X-WR-CALNAME:Now Event',  # calendar name == event title
-            'X-WR-RELCALID:',
             'X-WR-TIMEZONE:Europe/Vienna',
             'BEGIN:VEVENT',
             'SUMMARY:Now Event',
@@ -126,7 +124,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//Plone.org//NONSGML plone.app.event//EN',
-            'X-WR-CALNAME:Plone site',  # calendar name == plone site title
             'X-WR-TIMEZONE:Europe/Vienna',
             # whole_day event
             'BEGIN:VEVENT',

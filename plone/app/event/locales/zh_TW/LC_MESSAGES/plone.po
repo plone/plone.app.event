@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plone.app.event\n"
+"POT-Creation-Date: 2013-04-19 23:38+0000\n"
+"PO-Revision-Date: 2014-01-23 HO:MI+0800\n"
+"Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
+"Language-Team: Plone I18N <plone-i18n@lists.sourceforce.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: zh-tw\n"
+"Language-Name: Traditional Chinese\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+
+# TRANSLATE VIEW NAMES
+# 
+#. Default: "Event Listing"
+msgid "event_listing"
+msgstr "活動列表"
+
+#. Default: "Event"
+msgid "event_view"
+msgstr "活動"
