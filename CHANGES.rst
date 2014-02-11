@@ -10,10 +10,13 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
 
 
-1.0.6.dev (unreleased)
-----------------------
+1.0.6 (2014-02-11)
+------------------
 
-- Nothing changed yet.
+- Avoid failing to create an event when zope.globalrequest.getRequest returns
+  None on the post create event handler. This happens when creating an event
+  during test layer setup time.
+  [rafaelbco]
 
 
 1.0.5 (2014-02-11)
