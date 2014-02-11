@@ -3,15 +3,15 @@ from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventBasic
+from plone.app.event.dx.behaviors import IEventContact
+from plone.app.event.dx.behaviors import IEventLocation
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
 from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.event.dx.interfaces import IDXEventAttendees
-from plone.app.event.dx.interfaces import IDXEventContact
-from plone.app.event.dx.interfaces import IDXEventLocation
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
@@ -74,9 +74,9 @@ class TestDXIntegration(unittest.TestCase):
         new_object = createObject(factory)
         self.assertTrue(IDXEvent.providedBy(new_object))
         self.assertTrue(IDXEventRecurrence.providedBy(new_object))
-        self.assertTrue(IDXEventLocation.providedBy(new_object))
-        self.assertTrue(IDXEventAttendees.providedBy(new_object))
-        self.assertTrue(IDXEventContact.providedBy(new_object))
+        self.assertTrue(IEventLocation.providedBy(new_object))
+        self.assertTrue(IEventAttendees.providedBy(new_object))
+        self.assertTrue(IEventContact.providedBy(new_object))
 
     def test_adding(self):
         self.portal.invokeFactory(
@@ -90,9 +90,9 @@ class TestDXIntegration(unittest.TestCase):
         e1 = self.portal['event1']
         self.assertTrue(IDXEvent.providedBy(e1))
         self.assertTrue(IDXEventRecurrence.providedBy(e1))
-        self.assertTrue(IDXEventLocation.providedBy(e1))
-        self.assertTrue(IDXEventAttendees.providedBy(e1))
-        self.assertTrue(IDXEventContact.providedBy(e1))
+        self.assertTrue(IEventLocation.providedBy(e1))
+        self.assertTrue(IEventAttendees.providedBy(e1))
+        self.assertTrue(IEventContact.providedBy(e1))
 
         self.portal.manage_delObjects(['event1'])
 
