@@ -4,7 +4,8 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use z3c.form for portlet forms.
+  [bosim, davisagli]
 
 
 1.2 (2014-03-01)
