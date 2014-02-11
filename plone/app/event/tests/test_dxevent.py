@@ -374,8 +374,8 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
             whole_day=False
         )
         e1 = self.portal['event1']
+        # Fill the field values into the annotation storage
         ann = IAnnotations(e1)
-
         ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
             self.location
         ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
@@ -397,6 +397,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_phone, None)
         self.assertEqual(e1.event_url, None)
 
+        # Run the upgrade step
         upgrade_attribute_storage(self.portal)
 
         # All behavior-related fields have been migrated
@@ -417,8 +418,9 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
             whole_day=False
         )
         e1 = self.portal['event1']
-        ann = IAnnotations(e1)
 
+        # Fill the field values into the annotation storage
+        ann = IAnnotations(e1)
         ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
             self.location + u'X'
         ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
@@ -432,6 +434,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
             self.event_url + 'X'
 
+        # Add values already into the fields in the new way
         e1.location = self.location
         e1.attendees = self.attendees
         e1.contact_email = self.contact_email
@@ -441,7 +444,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
 
         upgrade_attribute_storage(self.portal)
 
-        # The already existing fields were not touched
+        # The already existing field values were not touched by the upgrade
         self.assertEqual(e1.location, self.location)
         self.assertEqual(e1.attendees, self.attendees)
         self.assertEqual(e1.contact_email, self.contact_email)
