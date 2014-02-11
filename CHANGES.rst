@@ -1,6 +1,7 @@
 Changelog
 =========
 
+
 1.1.dev (unreleased)
 --------------------
 
@@ -56,6 +57,26 @@ Changelog
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
   Plone to integrate plone.app.event.
   [thet]
+
+
+1.0.5 (2014-02-11)
+------------------
+
+- For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
+  X-WR-CALNAME caused Outlook to create a new calendar on every import. These
+  properties are not neccessary and not specified by RFC5545 anyways.
+  Fixes #109, closes #132.
+  [tomgross, thet]
+
+- Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
+  and IEventAccessor objects and avoid confusion on using these methods.
+  [thet]
+
+- Added basque translation.
+  [erral]
+
+- Completed italian translation.
+  [giacomos]
 
 
 1.0.4 (2013-11-23)
@@ -213,7 +234,7 @@ Changelog
 -------------------
 
 - Fix get_events with ret_mode=3, expand=True, without recurrence
-  It was returning full object instead of IEventAccesor instances.
+  It was returning full object instead of IEventAccessor instances.
   This also fix event portlet with norecurrent events.
   [toutpt]
 

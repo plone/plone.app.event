@@ -1,247 +1,243 @@
-# Translation of plone.app.event.pot to Italian
-# Giacomo Spettoli <giacomo.spettoli@gmail.com>, 2011.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: plone.app.event\n"
 "POT-Creation-Date: 2013-11-06 23:52+0000\n"
-"PO-Revision-Date: 2014-01-08 15:00+0200\n"
-"Last-Translator: Giacomo Spettoli <giacomo.spettoli@gmail.com>\n"
-"Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2014-01-23 23:50+0800\n"
+"Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
+"Language-Team: Plone I18N <plone-i18n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n!=1\n"
-"Language-Code: it\n"
-"Language-Name: Italiano\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: zh-tw\n"
+"Language-Name: Traditional Chinese\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone.app.event\n"
-"X-Is-Fallback-For: it-ch it-it\n"
 
 #. Default: "Events in next 7 days."
 #: plone/app/event/browser/event_listing.py:231
 msgid "7days_events"
-msgstr "Eventi nei prossimi 7 giorni."
+msgstr "未來七天內的活動。"
 
 #: plone/app/event/portlets/portlet_calendar.py:217
 msgid "Add Calendar Portlet"
-msgstr "Aggiungi una portlet Calendario"
+msgstr "新增月曆方框"
 
 #: plone/app/event/portlets/portlet_events.py:130
 msgid "Add Events Portlet"
-msgstr "Aggiungi una portlet Eventi"
+msgstr "新增活動方框"
 
 #: plone/app/event/interfaces.py:37
 msgid "Available timezones"
-msgstr "Fusi orari disponibili"
+msgstr "可選取的時區"
 
 #: plone/app/event/portlets/portlet_calendar.py:59
 msgid "Calendar"
-msgstr "Calendario"
+msgstr "月曆方框"
 
 #: plone/app/event/browser/controlpanel.pt:33
 msgid "Date/Time based on the current event settings:"
-msgstr "Data/Ora basate sulla attuale configurazione degli eventi:"
+msgstr "目前日期/時間的格式設定:"
 
 #: plone/app/event/portlets/portlet_calendar.py:229
 msgid "Edit Calendar Portlet"
-msgstr "Modifica la portlet Calendario"
+msgstr "編輯月曆方框"
 
 #: plone/app/event/portlets/portlet_events.py:143
 msgid "Edit Events Portlet"
-msgstr "Modifica la portlet Eventi"
+msgstr "編輯活動方框"
 
 #: plone/app/event/profiles/default/controlpanel.xml
 msgid "Event Settings"
-msgstr "Impostazioni Eventi"
+msgstr "活動設定"
 
 #: plone/app/event/portlets/portlet_events.py:71
 msgid "Events"
-msgstr "Eventi"
+msgstr "活動方框"
 
 #: plone/app/event/browser/event_view.pt:45
 msgid "Go to the original Event."
-msgstr "Vai all'evento originale."
+msgstr "顯示活動的原始內容"
 
 #: plone/app/event/portlets/portlet_events.py:26
 msgid "How many items to list."
-msgstr "Quanti elementi devono essere mostrati."
+msgstr "指定要被顯示的數量。"
 
 #: plone/app/event/portlets/portlet_calendar.py:33
 #: plone/app/event/portlets/portlet_events.py:33
 msgid "Items in which workflow state to show."
-msgstr "In quale stato di workflow devono essere gli elementi da mostrare."
+msgstr "選擇要被顯示的工作流程狀態。"
 
 #: plone/app/event/browser/event_view.pt:52
 msgid "More occurrences of this event:"
-msgstr "Altre occorrenze di questo evento:"
+msgstr "顯示活動更多的時間資訊："
 
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
-msgstr "Numero di elementi da mostrare"
+msgstr "顯示的數量"
 
 #: plone/app/event/interfaces.py:25
 msgid "Portal default timezone"
-msgstr "Fuso orario predefinito del portale"
+msgstr "預設時區"
 
 #: plone/app/event/browser/event_view.pt:43
 msgid "This event is part of a recurring Event."
-msgstr "Questo evento è parte di un evento ricorrente."
+msgstr "這是一個定期舉行的活動。"
 
 #: plone/app/event/portlets/portlet_calendar.py:218
 msgid "This portlet displays events in a calendar."
-msgstr "Questa portlet mostra gli eventi in un calendario."
+msgstr "以月曆形式顯示活動資訊。"
 
 #: plone/app/event/portlets/portlet_events.py:131
 msgid "This portlet lists upcoming Events."
-msgstr "Questa portlet mostra una lista dei prossimi eventi."
+msgstr "用來顯示最新的活動列表。"
 
 #: plone/app/event/portlets/portlet_calendar.py:32
 #: plone/app/event/portlets/portlet_events.py:32
 msgid "Workflow state"
-msgstr "Stato di workflow"
+msgstr "工作流程狀態"
 
 #. Default: "All events"
 #: plone/app/event/browser/event_listing.py:215
 msgid "all_events"
-msgstr "Tutti gli eventi"
+msgstr "所有活動"
 
 #. Default: "Upcoming Events"
 #: plone/app/event/portlets/portlet_events.pt:10
 msgid "box_events"
-msgstr "Prossimi eventi"
+msgstr "近期活動"
 
 #. Default: "Previous events…"
 #: plone/app/event/portlets/portlet_events.pt:50
 msgid "box_previous_events"
-msgstr "Eventi precedenti…"
+msgstr "過往活動…"
 
 #. Default: "Upcoming events…"
 #: plone/app/event/portlets/portlet_events.pt:57
 msgid "box_upcoming_events"
-msgstr "Prossimi eventi…"
+msgstr "近期活動…"
 
 #. Default: "Attendees"
 #: plone/app/event/browser/event_view.pt:94
 msgid "contact_attendees"
-msgstr "Partecipanti"
+msgstr "參與者"
 
 #. Default: "Contact Name"
 #: plone/app/event/browser/event_listing.pt:128
 #: plone/app/event/browser/event_view.pt:76
 msgid "contact_name"
-msgstr "Nome del contatto"
+msgstr "聯絡人員"
 
 #. Default: "Contact Phone"
 #: plone/app/event/browser/event_view.pt:88
 msgid "contact_phone"
-msgstr "Telefono del contatto"
+msgstr "聯絡電話"
 
 #. Default: "End date must be after start date."
 #: plone/app/event/at/content.py:575
 #: plone/app/event/dx/behaviors.py:139
 msgid "error_end_must_be_after_start_date"
-msgstr "La data di fine deve essere successiva alla data di inizio."
+msgstr "結束日期必須在起始日期之後。"
 
 #. Default: "Invalid start or end date"
 #: plone/app/event/dx/behaviors.py:57
 msgid "error_invalid_date"
-msgstr "La data di inizio o di fine non è valida"
+msgstr "起始或結束日期不正確。"
 
 #. Default: "End date is not valid."
 #: plone/app/event/at/content.py:565
 msgid "error_invalid_end_date"
-msgstr "La data di fine non è valida."
+msgstr "結束日期不正確。"
 
 #. Default: "Start date is not valid."
 #: plone/app/event/at/content.py:550
 msgid "error_invalid_start_date"
-msgstr "La data di inizio non è valida."
+msgstr "起始日期不正確。"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_view.pt:104
 msgid "event_url"
-msgstr "Web"
+msgstr "網址"
 
 #. Default: "What"
 #: plone/app/event/browser/event_view.pt:27
 msgid "event_what"
-msgstr "Cosa"
+msgstr "類型"
 
 #. Default: "When"
 #: plone/app/event/browser/event_view.pt:33
 msgid "event_when"
-msgstr "Quando"
+msgstr "時間"
 
 #. Default: "${startdate} to ${enddate}"
 #: plone/app/event/browser/formatted_date.pt:27
 msgid "event_when_differentday"
-msgstr "${startdate} al ${enddate}"
+msgstr "${startdate} 到 ${enddate}"
 
 #: plone/app/event/browser/formatted_date.pt:20
 msgid "event_when_differentday_optional_word_between_date_and_time"
-msgstr "alle"
+msgstr ""
 
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formatted_date.pt:71
 msgid "event_when_sameday"
-msgstr "${date} dalle ${starttime} alle ${endtime}"
+msgstr "${date} 從 ${starttime} 到 ${endtime}"
 
 #. Default: "${date} from ${starttime}"
 #: plone/app/event/browser/formatted_date.pt:52
 msgid "event_when_sameday_openend"
-msgstr "${date} dalle ${starttime}"
+msgstr "${date} 從 ${starttime} 開始"
 
 #. Default: "Where"
 #: plone/app/event/browser/event_view.pt:67
 msgid "event_where"
-msgstr "Dove"
+msgstr "地點"
 
 #. Default: "${from} until ${until}."
 #: plone/app/event/browser/event_listing.py:232
 msgid "events_from_until"
-msgstr "${from} fino al ${until}."
+msgstr "從 ${from} 到 ${until}。"
 
 #. Default: "Events in ${month} ${year}"
 #: plone/app/event/browser/event_listing.py:289
 msgid "events_in_month"
-msgstr "Eventi in ${month} ${year}"
+msgstr "${year} ${month} 的活動"
 
 #. Default: "Events in week ${weeknumber}"
 #: plone/app/event/browser/event_listing.py:266
 msgid "events_in_week"
-msgstr "Eventi nella settimana ${weeknumber}"
+msgstr "第 ${weeknumber} 週的活動"
 
 #. Default: "Events on ${day}"
 #: plone/app/event/browser/event_listing.py:252
 msgid "events_on_day"
-msgstr "Eventi di ${day}"
+msgstr "${day} 的活動"
 
 #. Default: "Visit external website"
 #: plone/app/event/browser/event_listing.pt:116
 #: plone/app/event/browser/event_view.pt:107
 msgid "external_website"
-msgstr "Visita il sito web esterno"
+msgstr "連結外部網站"
 
 #. Default: "Future events"
 #: plone/app/event/browser/event_listing.py:221
 msgid "future_events"
-msgstr "Eventi futuri"
+msgstr "最新活動"
 
 #. Default: "Add event to calendar"
 #: plone/app/event/browser/event_view.pt:112
 msgid "heading_add_to_calendar"
-msgstr "Aggiungi un evento al calendario"
+msgstr "新增活動到行事曆"
 
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: plone/app/event/interfaces.py:38
 msgid "help_available_timezones"
-msgstr "I fusi orari che saranno disponibili nel portale. Possono essere impostati per utenti e per eventi"
+msgstr "網站可供選擇的時區，使用者和活動型別會用到它。"
 
 #. Default: "Search events in current folder only."
 #: plone/app/event/browser/event_listing.py:427
 msgid "help_current_folder"
-msgstr "Cerca gli eventi solo nella cartella corrente."
+msgstr "只在現行目錄裡搜尋活動。"
 
 #: plone/app/event/at/content.py:302
 #: plone/app/event/dx/behaviors.py:285
@@ -252,422 +248,422 @@ msgstr ""
 #: plone/app/event/at/content.py:199
 #: plone/app/event/dx/behaviors.py:213
 msgid "help_event_attendees"
-msgstr "Lista dei partecipanti"
+msgstr "逐行填寫參與者的名單。"
 
 #. Default: "Email address to contact about this event."
 #: plone/app/event/at/content.py:236
 #: plone/app/event/dx/behaviors.py:244
 msgid "help_event_contact_email"
-msgstr "Indirizzo email da contattare per questo evento"
+msgstr "聯絡人員的電郵地址。"
 
 #. Default: "Name of a person to contact about this event."
 #: plone/app/event/at/content.py:217
 #: plone/app/event/dx/behaviors.py:232
 msgid "help_event_contact_name"
-msgstr "Nome della persona da contattare per questo evento."
+msgstr "聯絡人員的姓名。"
 
 #. Default: "Phone number to contact about this event."
 #: plone/app/event/at/content.py:255
 #: plone/app/event/dx/behaviors.py:256
 msgid "help_event_contact_phone"
-msgstr "Numero di telefono da contattare per questo evento."
+msgstr "聯絡人員的電話。"
 
 #. Default: "Date and Time, when the event ends."
 #: plone/app/event/at/content.py:87
 #: plone/app/event/dx/behaviors.py:85
 msgid "help_event_end"
-msgstr "Data e ora della fine dell'evento."
+msgstr "活動結束的日期和時間。"
 
 #. Default: "Settings for the event listing view."
 #: plone/app/event/profiles/default/actions.xml
 msgid "help_event_listing_settings"
-msgstr "Impostazioni per la vista di elenco degli eventi"
+msgstr "活動列表的顯示設定。"
 
 #. Default: "Location of the event."
 #: plone/app/event/at/content.py:182
 #: plone/app/event/dx/behaviors.py:197
 msgid "help_event_location"
-msgstr "Luogo dell'evento."
+msgstr "活動的位置資訊。"
 
 #. Default: "This event is open ended."
 #: plone/app/event/at/content.py:124
 #: plone/app/event/dx/behaviors.py:109
 msgid "help_event_open_end"
-msgstr "Questo evento ha una fine aperta."
+msgstr "活動結束時間未定。"
 
 #. Default: "Define the event recurrence rule."
 #: plone/app/event/at/content.py:161
 #: plone/app/event/dx/behaviors.py:181
 msgid "help_event_recurrence"
-msgstr "Inserisci le regole di ricorrenza."
+msgstr "設定活動的循環週期。"
 
 #. Default: "Event related settings like timezone, etc."
 #: plone/app/event/browser/controlpanel.py:15
 msgid "help_event_settings"
-msgstr "Impostazioni correlate all'evento come il fuso orario, ecc."
+msgstr "設定活動型別的相關資訊，例如時區等。"
 
 #. Default: "Date and Time, when the event begins."
 #: plone/app/event/at/content.py:65
 #: plone/app/event/dx/behaviors.py:73
 msgid "help_event_start"
-msgstr "Data e ora di inizio dell'evento."
+msgstr "活動起始的日期和時間。"
 
 #. Default: "Select the Timezone, where this event happens."
 #: plone/app/event/at/content.py:144
 #: plone/app/event/dx/behaviors.py:122
 msgid "help_event_timezone"
-msgstr "Seleziona il fuso orario dove accadrà questo evento."
+msgstr "選擇活動的時區資訊。"
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: plone/app/event/at/content.py:274
 #: plone/app/event/dx/behaviors.py:268
 msgid "help_event_url"
-msgstr "Indirizzo web con maggiori informazioni sull'evento. Aggiungere http:// per i collegamenti esterni."
+msgstr "說明活動細節的網址。外部網站請加上 http:// 開頭資訊。"
 
 #. Default: "Event lasts whole day."
 #: plone/app/event/at/content.py:107
 #: plone/app/event/dx/behaviors.py:97
 msgid "help_event_whole_day"
-msgstr "L'evento dura l'intera giornata"
+msgstr "活動時間涵蓋一整天。"
 
 #. Default: "First day in the Week."
 #: plone/app/event/interfaces.py:51
 msgid "help_first_weekday"
-msgstr "Primo giorno della settimana."
+msgstr "指定月曆裡每週的起始日。"
 
 #. Default: "Import Events from icalendar files."
 #: plone/app/event/profiles/default/actions.xml
 msgid "help_ical_import"
-msgstr "Importa gli eventi da dei file icalendar."
+msgstr "從 iCalendar 檔案匯入活動。"
 
 #. Default: "Click to disable the icalendar import feature on this context."
 #: plone/app/event/profiles/default/actions.xml
 msgid "help_ical_import_disable"
-msgstr "Clicca per disabilitare l'importazione da icalendar in questo contesto."
+msgstr "停用 iCal 匯入功能。"
 
 #. Default: "Click to enable the icalendar import feature on this context."
 #: plone/app/event/profiles/default/actions.xml
 msgid "help_ical_import_enable"
-msgstr "Clicca per abilitare l'importazione da icalendar in questo contesto."
+msgstr "啟用 iCal 匯入功能。"
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
 #: plone/app/event/interfaces.py:26
 msgid "help_portal_timezone"
-msgstr "L'impostazione del fuso orario del portale. Gli utenti potranno impostare il proprio fuso orario, se 'Fusi orari disponibili' è stato valorizzato."
+msgstr "指定網站的預設時區，搭配可選取的時區，使用者可以指定想要的時區。"
 
 #. Default: "Content type of the event, which is created when importing icalendar resources."
 #: plone/app/event/ical/importer.py:227
 msgid "ical_import_event_type_desc"
-msgstr "Tipo di contenuto degli eventi importati da icalendar."
+msgstr "匯入 iCal 時，預設要建立的活動型別。"
 
 #. Default: "Event Type"
 #: plone/app/event/ical/importer.py:226
 msgid "ical_import_event_type_title"
-msgstr "Tipo di evento"
+msgstr "活動類型"
 
 #. Default: "Icalendar resource file, if no URL is given."
 #: plone/app/event/ical/importer.py:245
 msgid "ical_import_file_desc"
-msgstr "File icalendar, se nessun URL è stato inserito."
+msgstr "iCalendar 檔案或網址。"
 
 #. Default: "Icalendar File"
 #: plone/app/event/ical/importer.py:244
 msgid "ical_import_file_title"
-msgstr "File Icalendar"
+msgstr "iCalendar 檔案"
 
 #. Default: "${num} events imported from ${filename}"
 #: plone/app/event/ical/importer.py:352
 msgid "ical_import_imported"
-msgstr "${num} eventi importati da ${filename}"
+msgstr "從 ${filename} 匯入 ${num} 活動"
 
 #. Default: "Please provide either a icalendar ics file or a URL to a file."
 #: plone/app/event/ical/importer.py:359
 msgid "ical_import_no_ics"
-msgstr "Inserisci un file icalendar ics o un URL di un file."
+msgstr "請提供 iCalendar ICS 檔案或網址。"
 
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
 #: plone/app/event/ical/importer.py:256
 msgid "ical_import_sync_strategy_desc"
-msgstr "Definisce come sincronizzare:\n1)\"Tieni il più nuovo\": Importa se l'evento è stato modificato dopo quello esistente.\n\"Tieni il mio\": in caso di conflitti, non fare nulla.\n3 \"Tieni i loro\": in caso di conflitti, sovrascrivi l'evento esistente.\n4) \"Nessuna sincronizzazione\": Non sincronizzare ma importa gli eventi e creali nuovi, anche se esistono già. Per ognuno, crea un nuovo sync_uid."
+msgstr "設定同步方式:\n1) 保留新的資料: 如果匯入的資料較新，就覆蓋原本舊的。\n2) 保留既有資料: 資料重覆時，不會執行匯入動作。\n3) 保留匯入資料: 資料重覆時，使用匯入的資料。\n4) 不同步: 直接匯入，並為所有資料建立新識別碼。"
 
 #. Default: "Synchronization Strategy"
 #: plone/app/event/ical/importer.py:252
 msgid "ical_import_sync_strategy_title"
-msgstr "Strategia di sincronizzazione"
+msgstr "同步方式"
 
 #. Default: "URL to an external icalendar resource file."
 #: plone/app/event/ical/importer.py:237
 msgid "ical_import_url_desc"
-msgstr "URL ad un file icalendar esterno"
+msgstr "外部 iCalendar 的檔案網址。"
 
 #. Default: "Icalendar URL"
 #: plone/app/event/ical/importer.py:236
 msgid "ical_import_url_title"
-msgstr "URL Icalendar"
+msgstr "iCal 網址"
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
 #: plone/app/event/browser/event_view.pt:121
 msgid "label_add_to_ical"
-msgstr "iCal"
+msgstr "新增 iCal"
 
 #. Default: "Current folder"
 #: plone/app/event/browser/event_listing.py:426
 msgid "label_current_folder"
-msgstr "Cartella corrente"
+msgstr "現行目錄"
 
 #. Default: "Email"
 #: plone/app/event/browser/event_listing.pt:126
 msgid "label_email"
-msgstr "Email"
+msgstr "電郵"
 
 #. Default: "Event body text"
 #: plone/app/event/at/content.py:298
 #: plone/app/event/dx/behaviors.py:281
 msgid "label_event_announcement"
-msgstr "Testo dell'evento"
+msgstr "活動說明"
 
 #. Default: "Attendees"
 #: plone/app/event/at/content.py:195
 #: plone/app/event/dx/behaviors.py:209
 msgid "label_event_attendees"
-msgstr "Partecipanti"
+msgstr "參與者"
 
 #. Default: "Contact E-mail"
 #: plone/app/event/at/content.py:232
 #: plone/app/event/dx/behaviors.py:240
 msgid "label_event_contact_email"
-msgstr "Email di contatto"
+msgstr "聯絡電郵"
 
 #. Default: "Contact Name"
 #: plone/app/event/at/content.py:213
 #: plone/app/event/dx/behaviors.py:228
 msgid "label_event_contact_name"
-msgstr "Nome del contatto"
+msgstr "聯絡人員"
 
 #. Default: "Contact Phone"
 #: plone/app/event/at/content.py:251
 #: plone/app/event/dx/behaviors.py:252
 msgid "label_event_contact_phone"
-msgstr "Telefono del contatto"
+msgstr "聯絡電話"
 
 #. Default: "Event Ends"
 #: plone/app/event/at/content.py:83
 #: plone/app/event/dx/behaviors.py:81
 msgid "label_event_end"
-msgstr "Data di fine evento"
+msgstr "活動結束時間"
 
 #. Default: "Location"
 #: plone/app/event/at/content.py:178
 #: plone/app/event/dx/behaviors.py:193
 msgid "label_event_location"
-msgstr "Luogo"
+msgstr "地點"
 
 #. Default: "Open End"
 #: plone/app/event/at/content.py:120
 #: plone/app/event/dx/behaviors.py:105
 msgid "label_event_open_end"
-msgstr "Fine aperta"
+msgstr "結束時間未定"
 
 #. Default: "Recurrence"
 #: plone/app/event/at/content.py:157
 #: plone/app/event/dx/behaviors.py:177
 msgid "label_event_recurrence"
-msgstr "Ricorrenza"
+msgstr "循環設定"
 
 #. Default: "Event settings"
 #: plone/app/event/browser/controlpanel.py:14
 msgid "label_event_settings"
-msgstr "Impostazioni dell'evento"
+msgstr "活動設定"
 
 #. Default: "Event Starts"
 #: plone/app/event/at/content.py:61
 #: plone/app/event/dx/behaviors.py:69
 msgid "label_event_start"
-msgstr "Data di inizio dell'evento"
+msgstr "活動起始時間"
 
 #. Default: "Timezone"
 #: plone/app/event/at/content.py:140
 #: plone/app/event/dx/behaviors.py:118
 msgid "label_event_timezone"
-msgstr "Fuso orario"
+msgstr "時區"
 
 #. Default: "Event URL"
 #: plone/app/event/at/content.py:270
 #: plone/app/event/dx/behaviors.py:264
 msgid "label_event_url"
-msgstr "URL dell'evento"
+msgstr "活動網址"
 
 #. Default: "Whole Day"
 #: plone/app/event/at/content.py:103
 #: plone/app/event/dx/behaviors.py:93
 msgid "label_event_whole_day"
-msgstr "Tutta la giornata"
+msgstr "從早到晚"
 
 #. Default: "First Weekday"
 #: plone/app/event/interfaces.py:50
 msgid "label_first_weekday"
-msgstr "Primo giorno della settimana"
+msgstr "每週的起始日"
 
 #: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
-msgstr "Web"
+msgstr "電話"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_listing.pt:116
 msgid "label_web"
-msgstr "Web"
+msgstr "網址"
 
 #. Default: "Day"
 #: plone/app/event/browser/event_listing.pt:39
 msgid "mode_day_link"
-msgstr "Giorno"
+msgstr "每日顯示"
 
 #. Default: "Upcoming"
 #: plone/app/event/browser/event_listing.pt:27
 msgid "mode_future_link"
-msgstr "Prossimi"
+msgstr "近期列表"
 
 #. Default: "Month"
 #: plone/app/event/browser/event_listing.pt:33
 msgid "mode_month_link"
-msgstr "Mese"
+msgstr "每月顯示"
 
 #. Default: "Past"
 #: plone/app/event/browser/event_listing.pt:30
 msgid "mode_past_link"
-msgstr "Passato"
+msgstr "過往列表"
 
 #. Default: "Week"
 #: plone/app/event/browser/event_listing.pt:36
 msgid "mode_week_link"
-msgstr "Settimana"
+msgstr "每週顯示"
 
 #. Default: "Ical import settings saved."
 #: plone/app/event/ical/importer.py:314
 msgid "msg_ical_import_settings_saved"
-msgstr "Impostazioni di importazione iCal salvate."
+msgstr "iCal 匯入設定已儲存。"
 
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
 msgid "next_day_link"
-msgstr "Giorno successivo"
+msgstr "後一天"
 
 #. Default: "Next Month"
 #: plone/app/event/browser/event_listing.pt:57
 msgid "next_month_link"
-msgstr "Mese successivo"
+msgstr "後一月"
 
 #. Default: "Next Week"
 #: plone/app/event/browser/event_listing.pt:64
 msgid "next_week_link"
-msgstr "Settimana successiva"
+msgstr "後一週"
 
 #. Default: "Past events"
 #: plone/app/event/browser/event_listing.py:218
 msgid "past_events"
-msgstr "Eventi passati"
+msgstr "過往活動"
 
 #. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
 #: plone/app/event/portlets/portlet_calendar.py:42
 #: plone/app/event/portlets/portlet_events.py:43
 msgid "portlet_help_search_base"
-msgstr "Selezionare la cartella di base per la ricerca di eventi. Questa cartella sarà utilizzata anche come collegamento nelle ricerche di calendario. Se vuoto, l'intero sito verrà cercato e la vista di elenco degli eventi sarà chiamata sulla radice del sito."
+msgstr "指定搜尋活動的起始目錄，這個設定值也會在月曆方框裡生效。留空的話，預設會搜尋整個網站。"
 
 #. Default: "Search base"
 #: plone/app/event/portlets/portlet_calendar.py:41
 #: plone/app/event/portlets/portlet_events.py:42
 msgid "portlet_label_search_base"
-msgstr "Base della ricerca"
+msgstr "搜尋的起始目錄"
 
 #. Default: "Previous Day"
 #: plone/app/event/browser/event_listing.pt:69
 msgid "prev_day_link"
-msgstr "Giorno precedente"
+msgstr "前一天"
 
 #. Default: "Previous Month"
 #: plone/app/event/browser/event_listing.pt:55
 msgid "prev_month_link"
-msgstr "Mese precedente"
+msgstr "前一月"
 
 #. Default: "Previous Week"
 #: plone/app/event/browser/event_listing.pt:62
 msgid "prev_week_link"
-msgstr "Settimana precedente"
+msgstr "前一週"
 
 #. Default: "Event details"
 #: plone/app/event/browser/event_view.pt:24
 msgid "summary_event_details"
-msgstr "Dettagli dell'evento."
+msgstr "活動細節"
 
 #. Default: "Keep mine"
 #: plone/app/event/vocabularies.py:141
 msgid "sync_keep_mine"
-msgstr "Tieni il mio"
+msgstr "保留既有資料"
 
 #. Default: "Keep newer"
 #: plone/app/event/vocabularies.py:140
 msgid "sync_keep_newer"
-msgstr "Tieni il più nuovo"
+msgstr "保留新的資料"
 
 #. Default: "Keep theirs"
 #: plone/app/event/vocabularies.py:142
 msgid "sync_keep_theirs"
-msgstr "Tieni i loro"
+msgstr "保留匯入資料"
 
 #. Default: "No Syncing"
 #: plone/app/event/vocabularies.py:143
 msgid "sync_none"
-msgstr "Nessuna sincronizzazione"
+msgstr "不同步"
 
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56
 msgid "this_month_link"
-msgstr "Questo mese"
+msgstr "本月"
 
 #. Default: "This Week"
 #: plone/app/event/browser/event_listing.pt:63
 msgid "this_week_link"
-msgstr "Questa settimana"
+msgstr "本週"
 
 #. Default: "Download this event in iCal format"
 #: plone/app/event/browser/event_listing.pt:43
 #: plone/app/event/browser/event_view.pt:115
 msgid "title_add_to_ical"
-msgstr "Scarica questo evento in formato iCal"
+msgstr "以 iCal 格式下載活動資訊"
 
 #. Default: "Event Listing Settings"
 #: plone/app/event/profiles/default/actions.xml
 msgid "title_event_listing_settings"
-msgstr "Impostazioni di elenco degli eventi"
+msgstr "活動列表設定"
 
 #. Default: "Ical import"
 #: plone/app/event/profiles/default/actions.xml
 msgid "title_ical_import"
-msgstr "Importazione iCal"
+msgstr "匯入 iCal"
 
 #. Default: "Disable icalendar import"
 #: plone/app/event/profiles/default/actions.xml
 msgid "title_ical_import_disable"
-msgstr "Disabilita l'importazione icalendar"
+msgstr "停用 iCal 功能"
 
 #. Default: "Enable icalendar import"
 #: plone/app/event/profiles/default/actions.xml
 msgid "title_ical_import_enable"
-msgstr "Abilita l'importazione icalendar"
+msgstr "啟用 iCal 功能"
 
 #. Default: "Today"
 #: plone/app/event/browser/event_listing.pt:70
 msgid "today_link"
-msgstr "Oggi"
+msgstr "本日"
 
 #. Default: "Todays events"
 #: plone/app/event/browser/event_listing.py:228
 msgid "todays_events"
-msgstr "Eventi di oggi"
+msgstr "本日活動"
 
 #. Default: "Todays upcoming events"
 #: plone/app/event/browser/event_listing.py:224
 msgid "todays_upcoming_events"
-msgstr "Prossimi eventi di oggi"
+msgstr "本日最新活動"
 

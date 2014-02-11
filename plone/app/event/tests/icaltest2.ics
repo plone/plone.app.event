@@ -1,9 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Plone.org//NONSGML plone.app.event//EN
-X-WR-CALDESC:this is a test description
-X-WR-CALNAME:testevent
-X-WR-RELCALID:48f1a7ad64e847568d860cd092344970
 X-WR-TIMEZONE:Europe/Vienna
 BEGIN:VTIMEZONE
 TZID:Europe/Vienna
