@@ -1,6 +1,21 @@
 Changelog
 =========
 
+.. note::
+
+    The ``ploneintegration`` setuptools extra and GenericSetup profiles are
+    deprecated an will be removed with plone.app.event 1.1.
+
+    The plone.app.event.dx.event type and plone.app.event.dx:default profile
+    are deprecated and will be removed in a future version of plone.app.event.
+
+
+1.0.6.dev (unreleased)
+----------------------
+
+- Nothing changed yet.
+
+
 1.0.5 (2014-02-11)
 ------------------
 
@@ -75,14 +90,6 @@ Changelog
 
 1.0 (2013-11-06)
 ----------------
-
-.. note::
-
-    The ``ploneintegration`` setuptools extra and GenericSetup profiles are
-    deprecated an will be removed with plone.app.event 1.1.
-
-    The plone.app.event.dx.event type and plone.app.event.dx:default profile
-    are deprecated and will be removed in a future version of plone.app.event.
 
 - Implement synchronisation strategies for icalendar import.
   [thet]
