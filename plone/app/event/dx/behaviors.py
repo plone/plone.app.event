@@ -26,7 +26,7 @@ from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
-from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
@@ -165,17 +165,6 @@ provideAdapter(ComputedWidgetAttribute(
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
     """
-    # Please note: If you create a new behavior with superclasses IEventBasic
-    # and IRecurrence, then you have to reconfigure the dotted path value of
-    # the start_field parameter for the RecurrenceFieldWidget to the new
-    # behavior name, like: IMyNewBehaviorName.start.
-    form.widget(
-        'recurrence',
-        RecurrenceFieldWidget,
-        start_field='IEventBasic.start',
-        first_day=first_weekday_sun0,
-        show_repeat_forever=False
-    )
     recurrence = RecurrenceField(
         title=_(
             u'label_event_recurrence',
@@ -187,6 +176,20 @@ class IEventRecurrence(model.Schema):
         ),
         required=False
     )
+
+
+@adapter(getSpecification(IEventRecurrence['recurrence']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def RecurrenceFieldWidget(field, request):
+    # Please note: If you create a new behavior with superclasses IEventBasic
+    # and IRecurrence, then you have to reconfigure the dotted path value of
+    # the start_field parameter for the RecurrenceWidget to the new
+    # behavior name, like: IMyNewBehaviorName.start.
+    widget = FieldWidget(field, RecurrenceWidget(request))
+    widget.start_field = 'IEventBasic.start'
+    widget.first_day = first_weekday_sun0
+    widget.show_repeat_forever = False
+    return widget
 
 
 class IEventLocation(model.Schema):
@@ -464,7 +467,9 @@ def data_postprocessing(obj, event):
     if not behavior.sync_uid:
         # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
-        request = getRequest()
+        # We don't want to fail when getRequest() returns None, e.g when
+        # creating an event during test layer setup time.
+        request = getRequest() or {}
         domain = request.get('HTTP_HOST')
         behavior.sync_uid = '%s%s' % (
             uid,

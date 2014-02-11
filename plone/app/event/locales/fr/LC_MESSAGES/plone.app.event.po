@@ -269,7 +269,7 @@ msgstr "Nom des personnes à contacter pour avoir plus d'information sur l'évé
 #: plone/app/event/at/content.py:255
 #: plone/app/event/dx/behaviors.py:256
 msgid "help_event_contact_phone"
-msgstr "Numéro de téléphone à utiliser pour avoir plus d'informaiton sur l'événement."
+msgstr "Numéro de téléphone à utiliser pour avoir plus d'information sur l'événement."
 
 #. Default: "Date and Time, when the event ends."
 #: plone/app/event/at/content.py:87
@@ -315,7 +315,7 @@ msgstr "Date et heure de démarrage de l'événement."
 #: plone/app/event/at/content.py:144
 #: plone/app/event/dx/behaviors.py:122
 msgid "help_event_timezone"
-msgstr "Sélectionenr le fuseau horaire, ou cet événement a lieu."
+msgstr "Sélectionner le fuseau horaire, où cet événement a lieu."
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: plone/app/event/at/content.py:274

@@ -5,6 +5,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.i18n.locales import locales
 from zope.i18n.locales import LoadLocaleError
 from zope.interface import implements
@@ -31,7 +32,7 @@ class HiddenProfiles(object):
         return [u'plone.app.event.dx:default', ]
 
 
-def catalog_setup(site):
+def catalog_setup(context):
     """Setup plone.app.event's indices in the catalog.
 
     Doing it here instead of in profiles/default/catalog.xml means we
@@ -42,6 +43,7 @@ def catalog_setup(site):
         emptying-the-indexes-td2302709.html
         https://mail.zope.org/pipermail/zope-cmf/2007-March/025664.html
     """
+    site = getSite()
     catalog = getToolByName(site, 'portal_catalog')
     date_idxs = ['start', 'end']
     field_idxs = ['sync_uid']
@@ -73,7 +75,7 @@ def catalog_setup(site):
             logger.info('Catalog metadata column %s already exists.' % name)
 
 
-def first_weekday_setup(site):
+def first_weekday_setup(context):
     """Set the first day of the week based on the portal's locale.
     """
     reg = getUtility(IRegistry)
@@ -84,6 +86,7 @@ def first_weekday_setup(site):
 
     first = 6
     try:
+        site = getSite()
         # find the locale implied by the portal's language
         language = site.Language()
         parts = (language.split('-') + [None, None])[:3]

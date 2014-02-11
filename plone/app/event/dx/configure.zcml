@@ -28,6 +28,10 @@
 
     <adapter factory=".behaviors.EventAccessor" />
 
+    <adapter factory=".behaviors.StartDateFieldWidget" />
+    <adapter factory=".behaviors.EndDateFieldWidget" />
+    <adapter factory=".behaviors.RecurrenceFieldWidget" />
+
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
     <adapter name="SearchableText" factory=".behaviors.searchable_text_indexer" />
