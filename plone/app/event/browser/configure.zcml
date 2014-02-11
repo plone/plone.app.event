@@ -59,15 +59,16 @@
 
     <browser:page
         for="plone.event.interfaces.IOccurrence"
-        name="index_html"
+        name="event_view"
         class=".event_view.EventView"
         template="event_view.pt"
         permission="zope2.View"
         layer="..interfaces.IBrowserLayer"
         />
+
     <browser:defaultView
         for="plone.event.interfaces.IOccurrence"
-        name="index_html"
+        name="event_view"
         layer="..interfaces.IBrowserLayer"
         />
 
