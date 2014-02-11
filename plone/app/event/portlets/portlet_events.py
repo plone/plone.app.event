@@ -1,11 +1,11 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
-from plone.app.contenttypes.interfaces import IFolder
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.formwidget.contenttree import ObjPathSourceBinder
