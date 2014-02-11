@@ -80,7 +80,14 @@ class Renderer(base.Renderer):
 
         context = aq_inner(self.context)
 
-        calendar_url = get_calendar_url(context, self.data.search_base and self.data.search_base.to_path or None)
+        search_base = None
+        if self.data.search_base:
+            search_base = self.data.search_base.to_path
+
+        calendar_url = get_calendar_url(
+            context, search_base
+        )
+
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
 
