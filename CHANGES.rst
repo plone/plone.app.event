@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.5 (Unreleased)
+1.0.5 (2014-02-11)
 ------------------
 
 - For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
