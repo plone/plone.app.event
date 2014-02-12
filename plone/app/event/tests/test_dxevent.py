@@ -395,7 +395,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
 
         # All behavior-related fields are not set yet
         self.assertEqual(e1.location, None)
-        self.assertEqual(e1.attendees, None)
+        self.assertEqual(e1.attendees, ())
         self.assertEqual(e1.contact_email, None)
         self.assertEqual(e1.contact_name, None)
         self.assertEqual(e1.contact_phone, None)
