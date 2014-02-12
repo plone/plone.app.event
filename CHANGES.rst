@@ -19,6 +19,11 @@ Changelog
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
 
+
+- Use attribute storage instead of annotation storage in all Dexterity
+  behaviors. Closes #136, #95, Refs #20.
+  [pysailor]
+
 - Rename the Occurrence's 'index_html' view to 'event_view' for better
   consistency. This also fixes an issue with Solgema.fullcalendar.
   Closes #123.
