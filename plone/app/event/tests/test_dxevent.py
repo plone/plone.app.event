@@ -20,6 +20,7 @@ from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -357,6 +358,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
     contact_name = u'Peter Parker'
     contact_phone = u'555 123 456'
     event_url = u'http://my.event.url'
+    text = u'<p>Cathedral Sprint in Köln</p>'
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -388,6 +390,8 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
             self.contact_phone
         ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
             self.event_url
+        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
+            RichTextValue(raw=self.text)
 
         # All behavior-related fields are not set yet
         self.assertEqual(e1.location, None)
@@ -396,6 +400,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_name, None)
         self.assertEqual(e1.contact_phone, None)
         self.assertEqual(e1.event_url, None)
+        self.assertEqual(e1.text, None)
 
         # Run the upgrade step
         upgrade_attribute_storage(self.portal)
@@ -407,6 +412,9 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_name, self.contact_name)
         self.assertEqual(e1.contact_phone, self.contact_phone)
         self.assertEqual(e1.event_url, self.event_url)
+        self.assertEqual(e1.text.raw, self.text)
+
+        self.portal.manage_delObjects(['event1'])
 
     def test_no_overwrite(self):
         self.portal.invokeFactory(
@@ -432,15 +440,18 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
             self.contact_phone + u'X'
         ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
-            self.event_url + 'X'
+            self.event_url + u'X'
+        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
+            RichTextValue(raw=self.text + u'X')
 
-        # Add values already into the fields in the new way
+        # Add values into the fields in the new way
         e1.location = self.location
         e1.attendees = self.attendees
         e1.contact_email = self.contact_email
         e1.contact_phone = self.contact_phone
         e1.contact_name = self.contact_name
         e1.event_url = self.event_url
+        e1.text = RichTextValue(raw=self.text)
 
         upgrade_attribute_storage(self.portal)
 
@@ -451,6 +462,9 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_phone, self.contact_phone)
         self.assertEqual(e1.contact_name, self.contact_name)
         self.assertEqual(e1.event_url, self.event_url)
+        self.assertEqual(e1.text.raw, self.text)
+
+        self.portal.manage_delObjects(['event1'])
 
 
 def test_suite():

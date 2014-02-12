@@ -340,6 +340,15 @@ class EventContact(object):
     def __init__(self, context):
         self.context = context
 
+
+class EventSummary(object):
+
+    implements(IEventSummary)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, IFormFieldProvider)
 alsoProvides(IEventRecurrence, IFormFieldProvider)

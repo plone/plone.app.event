@@ -4,6 +4,7 @@ from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
+from plone.app.event.dx.behaviors import IEventSummary
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -17,6 +18,7 @@ BEHAVIOR_LIST = [
     IEventAttendees,
     IEventContact,
     IEventLocation,
+    IEventSummary,
 ]
 
 
