@@ -20,6 +20,11 @@ Changelog
     plone.app.event's Dexterity behaviors.
 
 
+- Replace RecurrenceField with plain Text field in the dx recurrence behavior.
+  This reverts the change from 1.0rc2. We don't use form schema hints but an
+  adapter to configure the widget. Closes #137, Fixes #131.
+  [pysailor]
+
 - Use attribute storage instead of annotation storage in all Dexterity
   behaviors. Closes #136, #95, Refs #20.
   [pysailor]
@@ -42,10 +47,6 @@ Changelog
   not changed. This conforms to the RFC5545:
   http://tools.ietf.org/search/rfc5545#section-3.8.7.3
   [jone]
-
-- Replace RecurrenceField with plain Text field in the dx recurrence behavior
-  Closes #131
-  [pysailor]
 
 
 1.1.a1 (2013-11-14)
