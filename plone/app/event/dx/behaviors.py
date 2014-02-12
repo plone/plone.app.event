@@ -27,7 +27,6 @@ from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
-from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
@@ -183,7 +182,7 @@ provideAdapter(ComputedWidgetAttribute(
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
     """
-    recurrence = RecurrenceField(
+    recurrence = schema.Text(
         title=_(
             u'label_event_recurrence',
             default=u'Recurrence'
