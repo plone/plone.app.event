@@ -15,13 +15,43 @@ ${ADMIN_ROLE}  Site Administrator
 *** Test Cases ***
 
 Scenario: Open the Add Event form
-    Given I'm logged in as a '${ADMIN_ROLE}'
-     And an event add form  Testevent
+    Given a site owner
+      and an event add form
     When I click on Recurrence Add
+    Then I should see the recurrence overlay
+    When I select weekly repeat
+    Then I should see the recurrence overlay in weeekly repeat mode
+
+
+*** Keywords ***
+
+# Given
+
+a site owner
+    Enable autologin as  Manager
+
+an event add form
+    Go to  ${PLONE_URL}/++add++Event
+    Wait until page contains  Add Event
+    Input text  name=form.widgets.IDublinCore.title  Testevent
+
+# When
+
+I click on Recurrence Add
+    Click Link  css=a[name='riedit']
+    Wait until page contains  Repeat
+
+I select weekly repeat
+    Select From List  css=#rirtemplate, Weekly
+
+# Then
+
+I should see the recurrence overlay
     Then Page Should Contain  Recurrence
-     And Page Should Contain  Selected dates 
-    When I select Repeats Weekly
-    Then Page Should Contain  Repeats every 
+     And Page Should Contain  Selected dates
+
+I should see the recurrence overlay in weeekly repeat mode
+    Then Page Should Contain  Repeats every
      And Page Should Contain  Sun
      And Page Should Contain  Mon
      And Page Should Contain  Tue
@@ -29,23 +59,4 @@ Scenario: Open the Add Event form
      And Page Should Contain  Thu
      And Page Should Contain  Fri
      And Page Should Contain  Sat
-
-*** Keywords ***
-
-I'm logged in as a '${ROLE}'
-    Enable autologin as  ${ROLE}
-    Go to  ${PLONE_URL}
-
-an event add form
-  [Arguments]  ${title}
-  Go to  ${PLONE_URL}/++add++Event
-  Wait until page contains  Add Event
-  Input text  name=form.widgets.IDublinCore.title  ${title}
-
-I click on Recurrence Add
-  Click Link  css=a[name='riedit']
-  Wait until page contains  Repeat
-
-I select Repeats Weekly
-  Select From List  css=#rirtemplate, Weekly
 
