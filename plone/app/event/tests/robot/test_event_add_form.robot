@@ -49,6 +49,8 @@ I select weekly repeat
 I should see the recurrence overlay
     Then Page Should Contain  Recurrence
      And Page Should Contain  Selected dates
+     And Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
+     And Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
 
 I should see the recurrence overlay in weeekly repeat mode
     Then Page Should Contain  Repeats every
