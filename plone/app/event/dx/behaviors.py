@@ -240,6 +240,7 @@ class IEventAttendees(model.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
+        default=(),
     )
     form.widget(attendees=TextLinesFieldWidget)
 
