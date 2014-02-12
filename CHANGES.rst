@@ -19,6 +19,11 @@ Changelog
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
 
+- Rename the Occurrence's 'index_html' view to 'event_view' for better
+  consistency. This also fixes an issue with Solgema.fullcalendar.
+  Closes #123.
+  [tdesvenain]
+
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
   [gyst]
