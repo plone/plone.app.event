@@ -43,6 +43,10 @@ Changelog
   http://tools.ietf.org/search/rfc5545#section-3.8.7.3
   [jone]
 
+- Replace RecurrenceField with plain Text field in the dx recurrence behavior
+  Closes #131
+  [pysailor]
+
 
 1.1.a1 (2013-11-14)
 -------------------
