@@ -20,12 +20,14 @@ from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.interfaces import IDexterityContent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.formwidget.recurrence.z3cform.field import RecurrenceField
+from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
@@ -165,7 +167,7 @@ provideAdapter(ComputedWidgetAttribute(
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
     """
-    recurrence = RecurrenceField(
+    recurrence = schema.Text(
         title=_(
             u'label_event_recurrence',
             default=u'Recurrence'
@@ -223,6 +225,7 @@ class IEventAttendees(model.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
+        default=(),
     )
     form.widget(attendees=TextLinesFieldWidget)
 
@@ -295,6 +298,41 @@ class IEventSummary(model.Schema):
         required=False,
     )
 
+
+class EventLocation(object):
+
+    implements(IEventLocation)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventAttendees(object):
+
+    implements(IEventAttendees)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventContact(object):
+
+    implements(IEventContact)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventSummary(object):
+
+    implements(IEventSummary)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
 
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, IFormFieldProvider)
@@ -516,16 +554,13 @@ def searchable_text_indexer(obj):
     text = u''
     text += u'%s\n' % acc.title
     text += u'%s\n' % acc.description
-    behavior = IEventSummary(obj, None)
-    if behavior is None or behavior.text is None:
-        return text.encode('utf-8')
-    output = behavior.text.output
+    textvalue = acc.text
     transforms = getToolByName(obj, 'portal_transforms')
     body_plain = transforms.convertTo(
         'text/plain',
-        output.encode('utf8'),
+        textvalue.encode('utf8'),
         mimetype='text/html',
-        ).getData().strip()
+    ).getData().strip()
     if isinstance(body_plain, str):
         body_plain = body_plain.decode('utf-8')
     text += body_plain

@@ -34,6 +34,7 @@ Thanks!
 - Gauthier Bastien, gbastien
 - Georg Bernhard, gogo
 - Giacomo Spettoli, giacomos
+- Guido Stevens, gyst
 - JeanMichel FRANCOIS, toutpt
 - Jens Klein, jensens
 - Lennart Regebro, regebro

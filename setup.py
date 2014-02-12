@@ -43,7 +43,7 @@ setup(
         'Products.statusmessages',
         'Zope2',
         'collective.elephantvocabulary',
-        'icalendar',
+        'icalendar>3.0',
         'plone.app.contentlisting',
         'plone.app.layout',
         'plone.app.portlets>=2.5a1',

@@ -1,28 +1,32 @@
+# -*- coding: utf-8 -*-
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventBasic
+from plone.app.event.dx.behaviors import IEventContact
+from plone.app.event.dx.behaviors import IEventLocation
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
 from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.event.dx.interfaces import IDXEventAttendees
-from plone.app.event.dx.interfaces import IDXEventContact
-from plone.app.event.dx.interfaces import IDXEventLocation
 from plone.app.event.dx.interfaces import IDXEventRecurrence
+from plone.app.event.dx.upgrades.upgrades import upgrade_attribute_storage
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from zope.annotation.interfaces import IAnnotations
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify
@@ -74,9 +78,9 @@ class TestDXIntegration(unittest.TestCase):
         new_object = createObject(factory)
         self.assertTrue(IDXEvent.providedBy(new_object))
         self.assertTrue(IDXEventRecurrence.providedBy(new_object))
-        self.assertTrue(IDXEventLocation.providedBy(new_object))
-        self.assertTrue(IDXEventAttendees.providedBy(new_object))
-        self.assertTrue(IDXEventContact.providedBy(new_object))
+        self.assertTrue(IEventLocation.providedBy(new_object))
+        self.assertTrue(IEventAttendees.providedBy(new_object))
+        self.assertTrue(IEventContact.providedBy(new_object))
 
     def test_adding(self):
         self.portal.invokeFactory(
@@ -90,9 +94,9 @@ class TestDXIntegration(unittest.TestCase):
         e1 = self.portal['event1']
         self.assertTrue(IDXEvent.providedBy(e1))
         self.assertTrue(IDXEventRecurrence.providedBy(e1))
-        self.assertTrue(IDXEventLocation.providedBy(e1))
-        self.assertTrue(IDXEventAttendees.providedBy(e1))
-        self.assertTrue(IDXEventContact.providedBy(e1))
+        self.assertTrue(IEventLocation.providedBy(e1))
+        self.assertTrue(IEventAttendees.providedBy(e1))
+        self.assertTrue(IEventContact.providedBy(e1))
 
         self.portal.manage_delObjects(['event1'])
 
@@ -341,6 +345,126 @@ class TestDXEventUnittest(unittest.TestCase):
             IEventBasic.validateInvariants(mock)
         except:
             self.fail()
+
+
+class TestDXAnnotationStorageUpdate(unittest.TestCase):
+    """ Unit tests for the Annotation Storage migration
+    """
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    location = u"Köln"
+    attendees = (u'Peter', u'Søren', u'Madeleine')
+    contact_email = u'person@email.com'
+    contact_name = u'Peter Parker'
+    contact_phone = u'555 123 456'
+    event_url = u'http://my.event.url'
+    text = u'<p>Cathedral Sprint in Köln</p>'
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        set_browserlayer(self.request)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_migrate_fields(self):
+        self.portal.invokeFactory(
+            'Event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
+        e1 = self.portal['event1']
+        # Fill the field values into the annotation storage
+        ann = IAnnotations(e1)
+        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
+            self.location
+        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
+            self.attendees
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
+            self.contact_email
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
+            self.contact_name
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
+            self.contact_phone
+        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
+            self.event_url
+        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
+            RichTextValue(raw=self.text)
+
+        # All behavior-related fields are not set yet
+        self.assertEqual(e1.location, None)
+        self.assertEqual(e1.attendees, ())
+        self.assertEqual(e1.contact_email, None)
+        self.assertEqual(e1.contact_name, None)
+        self.assertEqual(e1.contact_phone, None)
+        self.assertEqual(e1.event_url, None)
+        self.assertEqual(e1.text, None)
+
+        # Run the upgrade step
+        upgrade_attribute_storage(self.portal)
+
+        # All behavior-related fields have been migrated
+        self.assertEqual(e1.location, self.location)
+        self.assertEqual(e1.attendees, self.attendees)
+        self.assertEqual(e1.contact_email, self.contact_email)
+        self.assertEqual(e1.contact_name, self.contact_name)
+        self.assertEqual(e1.contact_phone, self.contact_phone)
+        self.assertEqual(e1.event_url, self.event_url)
+        self.assertEqual(e1.text.raw, self.text)
+
+        self.portal.manage_delObjects(['event1'])
+
+    def test_no_overwrite(self):
+        self.portal.invokeFactory(
+            'Event',
+            'event1',
+            start=datetime(2011, 11, 11, 11, 0),
+            end=datetime(2011, 11, 11, 12, 0),
+            timezone=TZNAME,
+            whole_day=False
+        )
+        e1 = self.portal['event1']
+
+        # Fill the field values into the annotation storage
+        ann = IAnnotations(e1)
+        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
+            self.location + u'X'
+        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
+            self.attendees + (u'Paula',)
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
+            self.contact_email + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
+            self.contact_name + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
+            self.contact_phone + u'X'
+        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
+            self.event_url + u'X'
+        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
+            RichTextValue(raw=self.text + u'X')
+
+        # Add values into the fields in the new way
+        e1.location = self.location
+        e1.attendees = self.attendees
+        e1.contact_email = self.contact_email
+        e1.contact_phone = self.contact_phone
+        e1.contact_name = self.contact_name
+        e1.event_url = self.event_url
+        e1.text = RichTextValue(raw=self.text)
+
+        upgrade_attribute_storage(self.portal)
+
+        # The already existing field values were not touched by the upgrade
+        self.assertEqual(e1.location, self.location)
+        self.assertEqual(e1.attendees, self.attendees)
+        self.assertEqual(e1.contact_email, self.contact_email)
+        self.assertEqual(e1.contact_phone, self.contact_phone)
+        self.assertEqual(e1.contact_name, self.contact_name)
+        self.assertEqual(e1.event_url, self.event_url)
+        self.assertEqual(e1.text.raw, self.text)
+
+        self.portal.manage_delObjects(['event1'])
 
 
 def test_suite():

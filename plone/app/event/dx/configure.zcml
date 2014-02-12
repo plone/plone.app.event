@@ -7,6 +7,7 @@
     <include package="plone.dexterity" />
     <include package="plone.app.dexterity" /><!-- To initialize DublinCore behaviors -->
     <include package="plone.behavior" file="meta.zcml" />
+    <include package=".upgrades" />
 
     <!-- http://groups.google.com/group/zope-core-dev/browse_thread/thread/6c10ebc16027017f -->
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
@@ -57,35 +58,36 @@
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventLocation"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventLocation"
+        marker=".behaviors.IEventLocation"
         />
 
     <plone:behavior
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventAttendees"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventAttendees"
+        marker=".behaviors.IEventAttendees"
         />
 
     <plone:behavior
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventContact"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventContact"
+        marker=".behaviors.IEventContact"
         />
 
     <plone:behavior
         title="Event Summary"
         description="Summary/body text extension for Events."
         provides=".behaviors.IEventSummary"
-        factory="plone.behavior.AnnotationStorage"
+        factory=".behaviors.EventSummary"
         for="plone.dexterity.interfaces.IDexterityContent"
+        marker=".behaviors.IEventSummary"
         />
 
     <genericsetup:registerProfile

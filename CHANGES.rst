@@ -1,6 +1,7 @@
 Changelog
 =========
 
+
 1.1.dev (unreleased)
 --------------------
 
@@ -17,6 +18,21 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
+
+
+- Replace RecurrenceField with plain Text field in the dx recurrence behavior.
+  This reverts the change from 1.0rc2. We don't use form schema hints but an
+  adapter to configure the widget. Closes #137, Fixes #131.
+  [pysailor]
+
+- Use attribute storage instead of annotation storage in all Dexterity
+  behaviors. Closes #136, #95, Refs #20.
+  [pysailor]
+
+- Rename the Occurrence's 'index_html' view to 'event_view' for better
+  consistency. This also fixes an issue with Solgema.fullcalendar.
+  Closes #123.
+  [tdesvenain]
 
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
@@ -56,6 +72,26 @@ Changelog
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
   Plone to integrate plone.app.event.
   [thet]
+
+
+1.0.5 (2014-02-11)
+------------------
+
+- For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
+  X-WR-CALNAME caused Outlook to create a new calendar on every import. These
+  properties are not neccessary and not specified by RFC5545 anyways.
+  Fixes #109, closes #132.
+  [tomgross, thet]
+
+- Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
+  and IEventAccessor objects and avoid confusion on using these methods.
+  [thet]
+
+- Added basque translation.
+  [erral]
+
+- Completed italian translation.
+  [giacomos]
 
 
 1.0.4 (2013-11-23)
@@ -213,7 +249,7 @@ Changelog
 -------------------
 
 - Fix get_events with ret_mode=3, expand=True, without recurrence
-  It was returning full object instead of IEventAccesor instances.
+  It was returning full object instead of IEventAccessor instances.
   This also fix event portlet with norecurrent events.
   [toutpt]
 

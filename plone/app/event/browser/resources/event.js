@@ -30,6 +30,10 @@ if (typeof(plone) === 'undefined') {
         var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
         var jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
 
+        // using getDateTime doesn't work for start_date here, since the values
+        // are not changed yet, despite docs saying the 'change' event is
+        // defered until the element loses focus.
+        // TODO: revisit this. Related issue: #105, #130
         var start_date = $("input[name$='-calendar']", jq_start).data().dateinput.getValue();
         var new_end_date = new Date(start_date);
         new_end_date.setDate(start_date.getDate() + plone.paevent.end_start_delta);
@@ -49,7 +53,6 @@ if (typeof(plone) === 'undefined') {
             jq_end.removeClass("error");
         }
     }
-
 
 
     function show_hide_widget(widget, hide, fade) {
