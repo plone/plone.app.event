@@ -53,7 +53,6 @@ an event add form
     Input text  id=form-widgets-IEventContact-contact_email  test@email.com
     Input text  id=form-widgets-IEventContact-contact_phone  +1234567890
     Input text  id=form-widgets-IEventContact-event_url  http://test.url
-    Input text  id=form.widgets.IEventSummary.text  Test text
 
 # When
 
@@ -128,7 +127,6 @@ I should see ${NUM} occurrences in the form
 I should see the event detail view
     Then Page Should Contain  Testevent
      And Page Should Contain  Test description
-     And Page Should Contain  Test text
      And Page Should Contain  More occurrences of this event
      And Page Should Contain  Test location
      And Page Should Contain  Test name
@@ -136,7 +134,6 @@ I should see the event detail view
      And Page Should Contain  Test attendee
      And Page Should Contain  Visit external website
      And Page Should Contain  iCal
-
 
 I should see the occurrence detail view
     Then Page Should Contain  Testevent
