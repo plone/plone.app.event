@@ -10,7 +10,6 @@ Test Teardown  Close all browsers
 
 *** Variables ***
 
-${ADMIN_ROLE}  Site Administrator
 
 *** Test Cases ***
 
