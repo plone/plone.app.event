@@ -20,6 +20,20 @@ Changelog
     plone.app.event's Dexterity behaviors.
 
 
+- Change the event detail listing in the event_view to be a definition list
+  instead of a table, making it semantically more correct and the code less
+  verbose. Fixes #141.
+  [thet]
+
+- For recurring events, don't show the last recurrence in the event view but
+  the number of occurrences, queried from the catalog. Together with the
+  previous generator-change this looping over the whole occurrnce list.
+  [thet]
+
+- Change the IRecurrenceSupport adapter's occurrence method to return again a
+  generator, fixing a possible performance issue. Fixes #60.
+  [thet]
+
 - Replace RecurrenceField with plain Text field in the dx recurrence behavior.
   This reverts the change from 1.0rc2. We don't use form schema hints but an
   adapter to configure the widget. Closes #137, Fixes #131.
