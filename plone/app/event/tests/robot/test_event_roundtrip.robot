@@ -14,7 +14,7 @@ ${ADMIN_ROLE}  Site Administrator
 
 *** Test Cases ***
 
-Scenario: Open the Add Event form
+Scenario: Create and view an event
     Given a site owner
       and an event add form
     When I select a date in calendar overlay
