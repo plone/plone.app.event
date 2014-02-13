@@ -26,8 +26,6 @@ from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.formwidget.recurrence.z3cform.field import RecurrenceField
-from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
