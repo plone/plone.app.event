@@ -46,6 +46,7 @@ Documentation
     installation.rst
     architectural-overview.rst
     development.rst
+    tests.rst
     designchoices.rst
     contributors.rst
 

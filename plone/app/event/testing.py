@@ -1,6 +1,7 @@
 from Products.CMFPlone.utils import getFSVersionTuple
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
+from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -170,3 +171,8 @@ PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
 PAEventDX_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PAEventDX_FIXTURE,),
     name="PAEventDX:Functional")
+PAEventDX_ROBOT_TESTING = FunctionalTesting(
+    bases=(PAEventDX_FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, z2.ZSERVER_FIXTURE),
+    name="plone.app.event.dx:Robot")
+
+
