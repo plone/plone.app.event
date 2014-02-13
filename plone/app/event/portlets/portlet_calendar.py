@@ -11,7 +11,6 @@ from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.event.interfaces import IEventAccessor
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.i18nmessageid import MessageFactory
@@ -48,10 +47,7 @@ class ICalendarPortlet(IPortletDataProvider):
                     u'the event listing view will be called on the site root.'
         ),
         required=False,
-        source=ObjPathSourceBinder(
-            object_provides=IFolder.__identifier__
-        ),
-    )
+        vocabulary='plone.formwidget.relations.cmfcontentsearch')
 
 
 class Assignment(base.Assignment):

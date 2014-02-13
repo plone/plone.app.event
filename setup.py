@@ -49,6 +49,7 @@ setup(
         'plone.app.portlets>=2.5a1',
         'plone.app.registry',
         'plone.app.vocabularies',
+        'plone.app.widgets',
         'plone.browserlayer',
         'plone.event>=1.0',
         'plone.formwidget.datetime',
