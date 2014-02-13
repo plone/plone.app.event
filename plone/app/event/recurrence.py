@@ -94,11 +94,8 @@ class RecurrenceSupport(object):
                 start=start,
                 end=start + duration).__of__(self.context)
 
-        # TODO: check performuance.
-        # Here, the generator is converted to a list.
-        events = map(get_obj, starts)
-
-        return events
+        for start in starts:
+            yield get_obj(start)
 
 
 class OccurrenceTraverser(DefaultPublishTraverse):
@@ -113,8 +110,8 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         context = self.context
         dateobj = guess_date_from(name, context)
         if dateobj:
-            occurrence = IRecurrenceSupport(context).occurrences(
-                range_start=dateobj)[0]
+            occs = IRecurrenceSupport(context).occurrences(range_start=dateobj)
+            occurrence = occs.next()
             occ_acc = IEventAccessor(occurrence)
             if is_same_day(dateobj, occ_acc.start):
                 return occurrence

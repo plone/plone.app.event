@@ -286,6 +286,8 @@ class TestDXEventRecurrence(unittest.TestCase):
             mock, IEvent, IEventBasic, IEventRecurrence,
             IDXEvent, IDXEventRecurrence)
         result = IRecurrenceSupport(mock).occurrences()
+        result = list(result)  # cast generator to list
+
         self.assertEqual(4, len(result))
 
         # First occurrence is an IEvent object
