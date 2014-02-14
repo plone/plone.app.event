@@ -22,8 +22,7 @@ BEHAVIOR_LIST = [
 ]
 
 
-def upgrade_attribute_storage(context):
-    portal = getSite()
+def enable_richtext_behavior(self):
     fti = getUtility(IDexterityFTI, name="Event")
     behaviors = [i for i in fti.behaviors]
     behaviors.extend([
@@ -32,6 +31,9 @@ def upgrade_attribute_storage(context):
     behaviors = tuple(set(behaviors))
     fti._updateProperty('behaviors', behaviors)
 
+
+def upgrade_attribute_storage(context):
+    portal = getSite()
     catalog = getToolByName(portal, 'portal_catalog')
     query = {}
     query['object_provides'] = IDXEvent.__identifier__
