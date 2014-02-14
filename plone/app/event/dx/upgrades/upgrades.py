@@ -4,9 +4,11 @@ from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
+from plone.dexterity.interfaces import IDexterityFTI
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -22,6 +24,14 @@ BEHAVIOR_LIST = [
 
 def upgrade_attribute_storage(context):
     portal = getSite()
+    fti = getUtility(IDexterityFTI, name="Event")
+    behaviors = [i for i in fti.behaviors]
+    behaviors.extend([
+        'plone.app.contenttypes.behaviors.richtext.IRichText',
+    ])
+    behaviors = tuple(set(behaviors))
+    fti._updateProperty('behaviors', behaviors)
+
     catalog = getToolByName(portal, 'portal_catalog')
     query = {}
     query['object_provides'] = IDXEvent.__identifier__
