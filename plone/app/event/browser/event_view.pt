@@ -52,7 +52,7 @@
       <dd tal:repeat="occ occs" tal:content="structure python:view.formatted_date(occ)">
         Occurrence Date
       </dd>
-      <dd tal:define="num view/num_occurrences">
+      <dd tal:define="num view/num_occurrences" tal:condition="num">
         There are <tal:num replace="num"/> more occurrences.
       </dd>
       </tal:cond>
