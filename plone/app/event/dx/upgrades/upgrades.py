@@ -4,7 +4,6 @@ from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
-from plone.app.event.dx.behaviors import IEventSummary
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -18,7 +17,6 @@ BEHAVIOR_LIST = [
     IEventAttendees,
     IEventContact,
     IEventLocation,
-    IEventSummary,
 ]
 
 
@@ -50,9 +48,16 @@ def upgrade_attribute_storage(context):
                 fullname = '{0}.{1}'.format(behavior.__identifier__, name)
                 oldvalue = annotations.get(fullname, None)
                 # Only write the old value if there is no new value yet
-                if not getattr(event, name, None):
+                if oldvalue and not getattr(event, name, None):
                     setattr(event, name, oldvalue)
                     did_work = True
+        # The old IEventSummary behavior is gone, just look for the old name
+        # inside the annotation storage
+        oldvalue = annotations.get(
+            'plone.app.event.dx.behaviors.IEventSummary.text', None)
+        if oldvalue and not getattr(event, 'text', None):
+            setattr(event, 'text', oldvalue)
+            did_work = True
         if did_work:
             notify(ObjectModifiedEvent(event))
         log.debug('Handled event at {0}'.format(event.absolute_url()))

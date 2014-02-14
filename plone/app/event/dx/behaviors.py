@@ -4,6 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from datetime import timedelta
 from datetime import tzinfo
+from plone.app.contenttypes.behaviors.richtext import IRichText
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
 from plone.app.event.base import DT
@@ -15,7 +16,6 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
@@ -298,22 +298,6 @@ class IEventContact(model.Schema):
     )
 
 
-class IEventSummary(model.Schema):
-    """Event summary (body text) schema."""
-
-    text = RichText(
-        title=_(
-            u'label_event_announcement',
-            default=u'Event body text'
-        ),
-        description=_(
-            u'help_event_announcement',
-            default=u''
-        ),
-        required=False,
-    )
-
-
 class EventLocation(object):
 
     implements(IEventLocation)
@@ -341,21 +325,12 @@ class EventContact(object):
         self.context = context
 
 
-class EventSummary(object):
-
-    implements(IEventSummary)
-    adapts(IDexterityContent)
-
-    def __init__(self, context):
-        self.context = context
-
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, IFormFieldProvider)
 alsoProvides(IEventRecurrence, IFormFieldProvider)
 alsoProvides(IEventLocation, IFormFieldProvider)
 alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
-alsoProvides(IEventSummary, IFormFieldProvider)
 
 
 class FakeZone(tzinfo):
@@ -635,7 +610,7 @@ class EventAccessor(object):
             contact_phone=IEventContact,
             event_url=IEventContact,
             subjects=ICategorization,
-            text=IEventSummary,
+            text=IRichText,
         )
         object.__setattr__(self, '_behavior_map', bm)
 
@@ -708,12 +683,10 @@ class EventAccessor(object):
 
     @property
     def text(self):
-        behavior = IEventSummary(self.context)
-        textvalue = getattr(behavior, 'text', None)
+        textvalue = getattr(self.context, 'text', None)
         if textvalue is None:
             return u''
         return safe_unicode(textvalue.output)
     @text.setter
     def text(self, value):
-        behavior = IEventSummary(self.context)
-        behavior.text = RichTextValue(raw=safe_unicode(value))
+        self.context.text = RichTextValue(raw=safe_unicode(value))
