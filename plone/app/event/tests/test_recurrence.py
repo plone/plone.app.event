@@ -5,6 +5,8 @@ from plone.app.event.base import get_events
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
+from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -41,7 +43,7 @@ from plone.app.event.at.traverser import OccurrenceTraverser as\
 class TestTraversalDX(AbstractSampleDataEvents):
     """Test OccurrenceTraverser with DX objects.
     """
-    layer = PAEventDX_INTEGRATION_TESTING
+    layer = PAEventDX_FUNCTIONAL_TESTING
 
     def event_factory(self):
         return DXEventAccessor.create
@@ -100,7 +102,7 @@ class TestTraversalDX(AbstractSampleDataEvents):
 class TestTraversalAT(TestTraversalDX):
     """Test OccurrenceTraverser with AT objects.
     """
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventAT_FUNCTIONAL_TESTING
 
     def event_factory(self):
         return ATEventAccessor.create
