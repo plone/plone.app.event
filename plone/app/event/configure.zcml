@@ -9,7 +9,7 @@
   <i18n:registerTranslations directory="locales" />
 
   <!-- external dependencies -->
-  <include package="plone.browserlayer" /> 
+  <include package="plone.browserlayer" />
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
   <include package="plone.formwidget.datetime" />
@@ -40,7 +40,6 @@
       handler="plone.app.event.setuphandlers.setup_misc"
       title="plone.app.event misc"
       description="catalog and first_weekday setup">
-    <depends name="plone-final"/>
   </genericsetup:importStep>
 
   <utility
