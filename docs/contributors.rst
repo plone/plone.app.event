@@ -50,6 +50,7 @@ Thanks!
 - Tom Gross, tomgross
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod
+- Wolfgang Thomas, pysailor
 
 Find out who contributed::
 
