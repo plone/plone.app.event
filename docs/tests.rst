@@ -18,7 +18,7 @@ For development, it might be more convenient to start a test server and run
 robot tests individually, like so::
 
     ./bin/robot-server plone.app.event.testing.PAEventDX_ROBOT_TESTING
-    ./bin/robot plone/app/event/tests/robot/test_event_add_form.robot 
+    ./bin/robot plone/app/event/tests/robot/test_event_roundtrip.robot
 
 In the robot test you can place the `debug` statement to access a robot shell
 to try things out.

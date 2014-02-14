@@ -81,14 +81,6 @@
         marker=".behaviors.IEventContact"
         />
 
-    <plone:behavior
-        title="Event Summary"
-        description="Summary/body text extension for Events."
-        provides=".behaviors.IEventSummary"
-        factory=".behaviors.EventSummary"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".behaviors.IEventSummary"
-        />
 
     <genericsetup:registerProfile
         name="default"
