@@ -11,7 +11,7 @@
 <metal:block define-macro="content-core">
 <tal:def tal:define="data nocall:view/data">
 
-  <div class="eventDetails vevent" itemscope itemtype="http://data-vocabulary.org/Event">
+  <div class="event" itemscope itemtype="http://data-vocabulary.org/Event">
 
     <ul class="hCalendar-hidden">
       <li><a itemprop="url" class="url" href="" tal:attributes="href data/url" tal:content="data/url">url</a></li>
@@ -21,7 +21,7 @@
       <li itemprop="description" class="description" tal:content="data/description">description</li>
     </ul>
 
-    <dl class="eventsummary" summary="Event details" i18n:attributes="summary summary_event_details">
+    <dl class="eventDetails" summary="Event details" i18n:attributes="summary summary_event_details">
 
       <tal:cond tal:condition="data/subjects">
       <dt i18n:translate="event_what">What</dt>

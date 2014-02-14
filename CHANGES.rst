@@ -26,6 +26,7 @@ Changelog
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
 
+
 - Remove the IEventSummary behavior and use the generic IRichText from
   plone.app.contenttypes instead. Fixes #140, Closes #142.
   [pysailor]
