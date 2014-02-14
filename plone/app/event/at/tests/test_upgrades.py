@@ -6,7 +6,7 @@ from Products.Archetypes.tests.utils import mkDummyInContext
 from plone.app.event.at.content import ATEvent
 from plone.app.event.at.content import ATEventSchema
 from plone.app.event.at.upgrades.event import upgrade_step_1
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
@@ -48,7 +48,7 @@ class MockATEvent_2(ATEvent):
 
 
 class PAEventATMigrationTest(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventAT_FUNCTIONAL_TESTING
 
     def setUp(self):
         portal = self.layer['portal']

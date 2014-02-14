@@ -174,5 +174,3 @@ PAEventDX_FUNCTIONAL_TESTING = FunctionalTesting(
 PAEventDX_ROBOT_TESTING = FunctionalTesting(
     bases=(PAEventDX_FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, z2.ZSERVER_FIXTURE),
     name="plone.app.event.dx:Robot")
-
-
