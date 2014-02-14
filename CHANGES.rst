@@ -14,6 +14,13 @@ Changelog
 
 .. note::
 
+    In the event_view template, the event summary has changed from a table to a
+    definition list layout. The event_view's next_occurrences method does not
+    return a dictionary anymore, but only a list of next events. If you have
+    custom event_view templates, you have to update them.
+
+.. note::
+
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
