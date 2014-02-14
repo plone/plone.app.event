@@ -8,7 +8,6 @@ from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
