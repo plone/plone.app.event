@@ -21,112 +21,91 @@
       <li itemprop="description" class="description" tal:content="data/description">description</li>
     </ul>
 
-    <table class="vertical listing" summary="Event details" i18n:attributes="summary summary_event_details">
-      <tbody>
-        <tr tal:condition="data/subjects">
-          <th i18n:translate="event_what">What</th>
-          <td><ul>
-            <li itemprop="eventType" class="category" tal:repeat="item data/subjects" tal:content="item" />
-          </ul></td>
-        </tr>
-        <tr>
-          <th i18n:translate="event_when">When</th>
-          <td tal:define="start_tzname data/timezone;
-                          start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
-                          start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
-            <tal:date replace="structure python:view.formatted_date(context)" />
-            <span class="timezone" tal:condition="start_tzname">
-             (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
-            </span>
-            <tal:occurrence condition="view/is_occurrence">
-            <p>
-              <span i18n:translate="">This event is part of a recurring Event.</span>
-              <a href="" tal:attributes="href view/occurrence_parent_url">
-                <span i18n:translate="">Go to the original Event.</span>
-              </a>
-            </p>
-            </tal:occurrence>
-            <div tal:define="next_occurrences view/next_occurrences;
-                             events next_occurrences/events"
-                 tal:condition="events">
-              <span i18n:translate="">More occurrences of this event:</span>
-              <ul>
-                <li tal:repeat="occ events">
-                  <tal:date replace="structure python:view.formatted_date(occ)" />
-                </li>
-                <li tal:define="tail next_occurrences/tail"
-                    tal:condition="tail">
-                    ⋮<br />
-                    <tal:date replace="structure python:view.formatted_date(tail)" />
-                </li>
-              </ul>
-            </div>
-          </td>
-        </tr>
-        <tr tal:define="location view/get_location" tal:condition="location">
-          <th i18n:translate="event_where">Where</th>
-          <td itemprop="location" class="location"
-              tal:content="structure location">
-            Location
-          </td>
-        </tr>
-        <tr tal:define="contact_email data/contact_email;
-                        contact_name data/contact_name;"
-            tal:condition="python:contact_name or contact_email">
-          <th i18n:translate="contact_name">Contact Name</th>
-          <td>
-            <a tal:condition="contact_email"
-               tal:content="structure python: context.spamProtect(mailaddress=contact_email, mailname=contact_name, cssclass='email fn')">
-               email
-            </a>
-            <span class="fn"
-                  tal:condition="not: contact_email"
-                  tal:content="contact_name" />
-          </td>
-        </tr>
-        <tr tal:condition="data/contact_phone">
-          <th i18n:translate="contact_phone">Contact Phone</th>
-          <td class="tel" tal:content="data/contact_phone">
-              Contact Phone
-          </td>
-        </tr>
-        <tr tal:condition="data/attendees|nothing">
-          <th i18n:translate="contact_attendees">Attendees</th>
-          <td class="attendees">
-            <ul>
-              <li itemprop="attendee" class="attendee"
-                  tal:repeat="item data/attendees"
-                  tal:content="item" />
-            </ul>
-          </td>
-        </tr>
-        <tr tal:condition="data/event_url">
-          <th i18n:translate="event_url">Web</th>
-          <td class="url">
-            <a href="" tal:attributes="href data/event_url">
-              <span i18n:translate="external_website">Visit external website</span>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <th i18n:translate="heading_add_to_calendar">Add event to calendar</th>
-          <td tal:define="here_url context/@@plone_context_state/object_url;
-                          portal_url context/@@plone_portal_state/portal_url;">
-            <a href="#"
-               tal:attributes="href string:$here_url/ics_view"
-               title="Download this event in iCal format"
-               i18n:attributes="title title_add_to_ical;">
-              <img src="" alt=""
-                  tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
-              <span i18n:translate="label_add_to_ical">iCal</span></a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-  </div>
+    <dl class="eventsummary" summary="Event details" i18n:attributes="summary summary_event_details">
 
-  <tal:txt replace="structure data/text" />
+      <tal:cond tal:condition="data/subjects">
+      <dt i18n:translate="event_what">What</dt>
+      <dd itemprop="eventType" class="category" tal:repeat="item data/subjects" tal:content="item" />
+      </tal:cond>
+
+      <dt i18n:translate="event_when">When</dt>
+      <dd tal:define="start_tzname data/timezone;
+                      start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
+                      start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
+        <tal:date replace="structure python:view.formatted_date(context)" />
+        <span class="timezone" tal:condition="start_tzname">
+         (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+        </span>
+      </dd>
+
+      <dd tal:condition="view/is_occurrence">
+        <span i18n:translate="">This event is part of a recurring Event.</span>
+        <a href="" tal:attributes="href view/occurrence_parent_url">
+          <span i18n:translate="">Go to the original Event.</span>
+        </a>
+      </dd>
+
+      <tal:cond tal:define="occs view/next_occurrences" condition="python:occs and not view.is_occurrence">
+      <dt i18n:translate="">
+        More occurrences of this event:
+      </dt>
+      <dd tal:repeat="occ occs" tal:content="structure python:view.formatted_date(occ)">
+        Occurrence Date
+      </dd>
+      <dd tal:define="num view/num_occurrences">
+        There are <tal:num replace="num"/> more occurrences.
+      </dd>
+      </tal:cond>
+
+      <tal:cond define="location view/get_location" condition="location">
+      <dt i18n:translate="event_where">Where</dt>
+      <dd itemprop="location" class="location" tal:content="structure location">Location</dd>
+      </tal:cond>
+
+      <tal:cond define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
+      <dt i18n:translate="contact_name">Contact Name</dt>
+      <dd>
+        <a tal:condition="mail" tal:content="structure python: context.spamProtect(mailaddress=mail, mailname=name, cssclass='email fn')">
+           email
+        </a>
+        <span class="fn" tal:condition="not:mail" tal:content="name" />
+      </dd>
+      </tal:cond>
+
+      <tal:cond condition="data/contact_phone">
+      <dt i18n:translate="contact_phone">Contact Phone</dt>
+      <dd class="tel" tal:content="data/contact_phone">Contact Phone</dd>
+      </tal:cond>
+
+      <tal:cond condition="data/attendees|nothing">
+      <dt i18n:translate="contact_attendees">Attendees</dt>
+      <dd itemprop="attendee" class="attendee" tal:repeat="item data/attendees" tal:content="item" />
+      </tal:cond>
+
+      <tal:cond condition="data/event_url">
+      <dt i18n:translate="event_url">Web</dt>
+      <dd class="url">
+        <a href="" tal:attributes="href data/event_url" i18n:translate="external_website">Visit external website</a>
+      </dd>
+      </tal:cond>
+
+      <dt i18n:translate="heading_add_to_calendar">Add event to calendar</dt>
+      <dd tal:define="here_url context/@@plone_context_state/object_url;
+                      portal_url context/@@plone_portal_state/portal_url;">
+        <a href="#"
+           tal:attributes="href string:$here_url/ics_view"
+           title="Download this event in iCal format"
+           i18n:attributes="title title_add_to_ical;">
+          <img src="" alt=""
+              tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
+          <span i18n:translate="label_add_to_ical">iCal</span></a>
+      </dd>
+
+    </dl>
+
+    <tal:txt replace="structure data/text" />
+
+  </div>
 
   <span class="visualClear" />
 

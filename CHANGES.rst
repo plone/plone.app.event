@@ -14,11 +14,32 @@ Changelog
 
 .. note::
 
+    In the event_view template, the event summary has changed from a table to a
+    definition list layout. The event_view's next_occurrences method does not
+    return a dictionary anymore, but only a list of next events. If you have
+    custom event_view templates, you have to update them.
+
+.. note::
+
     The plone.app.event.dx.event type and plone.app.event.dx:default profile
     are deprecated and will be removed in a future version of plone.app.event.
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
 
+
+- Change the event detail listing in the event_view to be a definition list
+  instead of a table, making it semantically more correct and the code less
+  verbose. Fixes #141.
+  [thet]
+
+- For recurring events, don't show the last recurrence in the event view but
+  the number of occurrences, queried from the catalog. Together with the
+  previous generator-change this looping over the whole occurrnce list.
+  [thet]
+
+- Change the IRecurrenceSupport adapter's occurrence method to return again a
+  generator, fixing a possible performance issue. Fixes #60.
+  [thet]
 
 - Replace RecurrenceField with plain Text field in the dx recurrence behavior.
   This reverts the change from 1.0rc2. We don't use form schema hints but an
