@@ -4,7 +4,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from datetime import timedelta
 from datetime import tzinfo
-from plone.app.contenttypes.behaviors.richtext import IRichText
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
 from plone.app.event.base import DT
@@ -610,7 +609,6 @@ class EventAccessor(object):
             contact_phone=IEventContact,
             event_url=IEventContact,
             subjects=ICategorization,
-            text=IRichText,
         )
         object.__setattr__(self, '_behavior_map', bm)
 
