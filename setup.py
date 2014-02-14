@@ -101,6 +101,7 @@ setup(
             'plone.app.collection',
             'plone.app.contenttypes',
             'plone.app.event [archetypes, dexterity]',
+            'plone.app.robotframework',
             'plone.app.testing [robot]',
             'plone.testing',
             'transaction',
