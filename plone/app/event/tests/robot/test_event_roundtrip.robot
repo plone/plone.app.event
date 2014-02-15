@@ -57,10 +57,10 @@ an event add form
 # When
 
 I select a date in calendar overlay
-    Click Link  css=#formfield-form-widgets-IEventBasic-start a.caltrigger
-    Select From List  css=#calroot #calmonth  1
-    Select From List  css=#calroot #calyear  2014
-    Click Link  css=#calroot #calweeks a[href='#10']
+    Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-date")]
+    Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  February
+    Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] select.picker__select--year  2014
+    Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker__day')][contains(text(), "10")]
 
 I click on Recurrence Add
     Click Link  css=a[name='riedit']
@@ -89,12 +89,9 @@ I open the event listing
 # Then
 
 it should be filled in the form
-    Then List Selection Should Be  css=#form-widgets-IEventBasic-start-day  10
-     And List Selection Should Be  css=#form-widgets-IEventBasic-start-month  2
-     And List Selection Should Be  css=#form-widgets-IEventBasic-start-year  2014
-     And List Selection Should Be  css=#form-widgets-IEventBasic-end-day  10
-     And List Selection Should Be  css=#form-widgets-IEventBasic-end-month  2
-     And List Selection Should Be  css=#form-widgets-IEventBasic-end-year  2014
+    Then Textfield Value Should Be  #form-widgets-IEventBasic-start-day input.pattern-pickadate-date  February 10, 2014
+     And Pass Execution  Following functionality needs to be updated to work with the p.a.widgets date picker
+     And Textfield Value Should Be  #form-widgets-IEventBasic-end-day input.pattern-pickadate-date  February 10, 2014
 
 I should see the recurrence overlay
     Then Page Should Contain  Recurrence
