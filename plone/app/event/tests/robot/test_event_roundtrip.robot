@@ -18,19 +18,26 @@ Scenario: Create and view an event
       and an event add form
     When I select a date in calendar overlay
     Then it should be filled in the form
+
     When I click on Recurrence Add
     Then I should see the recurrence overlay
+
     When I select weekly repeat
     Then I should see the recurrence overlay in weeekly repeat mode
+
     When I fill 3 occurrences
     Then I should see 3 occurrences in the overlay
+
     When I click save in the overlay
     Then the overlay should be closed
      And I should see 3 occurrences in the form
+
     When I click save in the form
     Then I should see the event detail view
+
     When I open an event occurrence
     Then I should see the occurrence detail view
+
     When I open the event listing
     Then I should see the event listing view
 
@@ -89,54 +96,53 @@ I open the event listing
 # Then
 
 it should be filled in the form
-    Then Textfield Value Should Be  #form-widgets-IEventBasic-start-day input.pattern-pickadate-date  February 10, 2014
-     And Pass Execution  Following functionality needs to be updated to work with the p.a.widgets date picker
-     And Textfield Value Should Be  #form-widgets-IEventBasic-end-day input.pattern-pickadate-date  February 10, 2014
+    Textfield Value Should Be  #form-widgets-IEventBasic-start-day input.pattern-pickadate-date  February 10, 2014
+    Pass Execution  Following functionality needs to be updated to work with the p.a.widgets date picker
+    Textfield Value Should Be  #form-widgets-IEventBasic-end-day input.pattern-pickadate-date  February 10, 2014
 
 I should see the recurrence overlay
-    Then Page Should Contain  Recurrence
-     And Page Should Contain  Selected dates
-     And Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
-     And Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
+    Page Should Contain  Recurrence
+    Page Should Contain  Selected dates
+    Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
+    Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
 
 I should see the recurrence overlay in weeekly repeat mode
-    Then Page Should Contain  Repeats every
-     And Page Should Contain  Sun
-     And Page Should Contain  Mon
-     And Page Should Contain  Tue
-     And Page Should Contain  Wed
-     And Page Should Contain  Thu
-     And Page Should Contain  Fri
-     And Page Should Contain  Sat
+    Page Should Contain  Repeats every
+    Page Should Contain  Sun
+    Page Should Contain  Mon
+    Page Should Contain  Tue
+    Page Should Contain  Wed
+    Page Should Contain  Thu
+    Page Should Contain  Fri
+    Page Should Contain  Sat
 
 the overlay should be closed
-  Then Page Should Not Contain  class=.riform
+    Page Should Not Contain  class=.riform
 
 # About class matching with x-path, see:
 # http://stackoverflow.com/questions/1604471/how-can-i-find-an-element-by-css-class-with-xpath
 
 I should see ${NUM} occurrences in the overlay
-    Then Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
+    Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
 
 I should see ${NUM} occurrences in the form
-    Then Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' ridisplay ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
+    Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' ridisplay ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
 
 I should see the event detail view
-    Then Page Should Contain  Testevent
-     And Page Should Contain  Test description
-     And Page Should Contain  More occurrences of this event
-     And Page Should Contain  Test location
-     And Page Should Contain  Test name
-     And Page Should Contain  +1234567890
-     And Page Should Contain  Test attendee
-     And Page Should Contain  Visit external website
-     And Page Should Contain  iCal
+    Page Should Contain  Testevent
+    Page Should Contain  Test description
+    Page Should Contain  More occurrences of this event
+    Page Should Contain  Test location
+    Page Should Contain  Test name
+    Page Should Contain  +1234567890
+    Page Should Contain  Test attendee
+    Page Should Contain  Visit external website
+    Page Should Contain  iCal
 
 I should see the occurrence detail view
-    Then Page Should Contain  Testevent
-     And Page Should Contain  This event is part of a recurring Event.
-     And Page Should Contain  Go to the original Event.
-
+    Page Should Contain  Testevent
+    Page Should Contain  This event is part of a recurring Event.
+    Page Should Contain  Go to the original Event.
 
 I should see the event listing view
-    Then Xpath Should Match X Times  //article[@class="vevent"]  3
+    Xpath Should Match X Times  //article[@class="vevent"]  3
