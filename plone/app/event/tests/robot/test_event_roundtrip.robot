@@ -96,9 +96,9 @@ I open the event listing
 # Then
 
 it should be filled in the form
-  Textfield Value Should Be  #form-widgets-IEventBasic-start-day input.pattern-pickadate-date  February 10, 2014
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-date  February 10, 2014
   Pass Execution  Following functionality needs to be updated to work with the p.a.widgets date picker
-  Textfield Value Should Be  #form-widgets-IEventBasic-end-day input.pattern-pickadate-date  February 10, 2014
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date  February 10, 2014
 
 I should see the recurrence overlay
   Page Should Contain  Recurrence
