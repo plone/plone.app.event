@@ -160,7 +160,7 @@ class PAEventDXLayer(PloneSandboxLayer):
         else:
             self.applyProfile(portal, 'plone.app.contenttypes:default')
 
-        self.applyProfile(portal, 'plone.app.event.dx:default')
+        self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 
 PAEventDX_FIXTURE = PAEventDXLayer()

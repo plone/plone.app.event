@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
+from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
@@ -21,6 +22,11 @@ def patched_now(context=None):
     now = datetime(2013, 5, 5, 10, 0, 0).replace(microsecond=0)
     now = tzinfo.localize(now)  # set tzinfo with correct DST offset
     return now
+
+
+# Patch EventAccessor for IDXEvent to set the correct testing portal type.
+# For custom accessor in addons you would rather do that in an adapter.
+behaviors.EventAccessor.event_type = 'plone.app.event.dx.event'
 
 
 class AbstractSampleDataEvents(unittest.TestCase):
@@ -61,8 +67,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             location=u"Vienna",
             whole_day=True,
             timezone=TEST_TIMEZONE,
-            recurrence='RRULE:FREQ=DAILY;COUNT=3',
-            ).context
+            recurrence='RRULE:FREQ=DAILY;COUNT=3').context
         workflow.doActionFor(self.past_event, 'publish')
 
         self.now_event = factory(

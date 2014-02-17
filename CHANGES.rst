@@ -21,11 +21,14 @@ Changelog
 
 .. note::
 
-    The plone.app.event.dx.event type and plone.app.event.dx:default profile
-    are deprecated and will be removed in a future version of plone.app.event.
-    Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
-    plone.app.event's Dexterity behaviors.
+    The plone.app.event.dx.event type has been moved to the
+    plone.app.event:testing profile. Use plone.app.contenttypes for a Dexterity
+    based Event type, which utilizes plone.app.event's Dexterity behaviors.
 
+
+- Move the plone.app.event.dx.event example type to the plone.app.event:testing
+  profile. Use the Event type from plone.app.contenttypes instead. Fixes #99.
+  [thet]
 
 - Remove the IEventSummary behavior and use the generic IRichText from
   plone.app.contenttypes instead. Fixes #140, Closes #142.
