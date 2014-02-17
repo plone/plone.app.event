@@ -12,32 +12,26 @@ if (typeof(plone) === 'undefined') {
         var start_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate')));
         var end_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate')));
         // delta in days
-        plone.paevent.end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
+        plone.paevent.end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
     function getDateTime(datetimewidget) {
-        var fields = ['year', 'month', 'day', 'hour', 'minute'];
-        var parts = {};
-        $.each(fields, function () {
-            parts[this] = parseInt($(datetimewidget).find("." + this).val(), 10);
-        });
-        var date = new Date(parts.year, parts.month - 1, parts.day,
-                            parts.hour, parts.minute);
-        return date;
+        var date = $('input[name="_submit"]:first', datetimewidget).prop('value');
+        var time = $('input[name="_submit"]:last', datetimewidget).prop('value') || '00:00';
+        var datetime = new Date(date + ' ' + time);
+        return datetime;
     }
 
     function updateEndDate() {
         var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
         var jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
 
-        // using getDateTime doesn't work for start_date here, since the values
-        // are not changed yet, despite docs saying the 'change' event is
-        // defered until the element loses focus.
-        // TODO: revisit this. Related issue: #105, #130
-        var start_date = $("input[name$='-calendar']", jq_start).data().dateinput.getValue();
+        var start_date = getDateTime(jq_start);
         var new_end_date = new Date(start_date);
-        new_end_date.setDate(start_date.getDate() + plone.paevent.end_start_delta);
-        $("input[name$='-calendar']", jq_end).data().dateinput.setValue(new_end_date);
+        new_end_date.setMinutes(start_date.getMinutes() + plone.paevent.end_start_delta);
+
+        $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
+        $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
     }
 
     function validateEndDate() {
@@ -54,14 +48,14 @@ if (typeof(plone) === 'undefined') {
         }
     }
 
-
     function show_hide_widget(widget, hide, fade) {
+        var $widget = $(widget);
         if (hide === true) {
-            if (fade === true) { widget.fadeOut(); }
-            else { widget.hide(); }
+            if (fade === true) { $widget.fadeOut(); }
+            else { $widget.hide(); }
         } else {
-            if (fade === true) { widget.fadeIn(); }
-            else { widget.show(); }
+            if (fade === true) { $widget.fadeIn(); }
+            else { $widget.show(); }
         }
     }
 
@@ -120,10 +114,9 @@ if (typeof(plone) === 'undefined') {
 
         // WHOLE DAY INIT
         var jq_whole_day = a_or_b($('#formfield-form-widgets-IEventBasic-whole_day input'), $('form[name="edit_form"] input#wholeDay'));
-        var jq_datetime = $('.datetimewidget-time');
         if (jq_whole_day.length > 0) {
-            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_datetime, e.target.checked, true); });
-            show_hide_widget(jq_datetime, jq_whole_day.get(0).checked, false);
+            jq_whole_day.bind('change', function (e) { show_hide_widget('.pattern-pickadate-time-wrapper', e.target.checked, true); });
+            show_hide_widget('.pattern-pickadate-time-wrapper', jq_whole_day.get(0).checked, false);
         }
 
         // OPEN END INIT
@@ -136,17 +129,13 @@ if (typeof(plone) === 'undefined') {
 
         // START/END SETTING/VALIDATION
         var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        function init_date_setter(el) {
-            el.on('focus', initDelta);
-            el.on('onShow', initDelta); // bind dateinput, which is added later
-        }
         jq_start.each(function () {
-            init_date_setter($(this));
-            $(this).on('change', updateEndDate);
+            $(this).on('focus', '.picker__input', initDelta);
+            $(this).on('change', '.picker__input', updateEndDate);
         });
         jq_end.each(function () {
-            init_date_setter($(this));
-            $(this).on('change', validateEndDate);
+            $(this).on('focus', '.picker__input', initDelta);
+            $(this).on('change', '.picker__input', validateEndDate);
         });
 
         // EVENT LISTING CALENDAR POPUP
