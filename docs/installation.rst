@@ -61,6 +61,11 @@ have been gone. You just need to remove these dependencies from your setup and
 use the "plone.app.event.at:default" profile instead, if you plan to use the
 Archetypes based ATEvent type.
 
+Use the provided upgrade steps to upgrade Dexterity behaviors: Attribute
+storage (Migrate fields from annotation storage to attribute storage) and New
+IRichText behavior (Enable the new IRichText instead of the IEventSummary
+behavior).
+
 
 Upgrading from Products.ATContentType to plone.app.event
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

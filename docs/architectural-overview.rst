@@ -12,9 +12,10 @@ mind:
   should be least dependend on plone.app.event. Best would be that one can
   deinstall this feature completly.
 
-  [b] Archetypes and Dexterity awareness: plone.app.event should provide the
-  ATEvent content type (factored out from ATContentTypes) and also Dexterity
-  behaviors, which can be used in Dexterity types.
+  [b] Dexterity and Archetypes support: plone.app.event should provide
+  Dexterity behaviors, which can be used in Dexterity types and an ATEvent
+  content type (factored out from ATContentTypes) as a replacement for the
+  Products.ATContentType ATEvent.
 
   [c] Standards compliancy: the iCalendar / `RFC5545
   <http://tools.ietf.org/html/rfc5545>`_ standard is wonderful flexible, so
@@ -70,10 +71,9 @@ drop-in replacement of the ATContentType based ATEvent. Ical, recurrence and
 generic event accessor adapters and some event subscribers related to the
 ATEvent.
 
-The "dx" submodule provides Dexterity behaviors (some granular ones) and a
-Dexterity based content type (Generic Setup). Like in the "at" submodule, ical,
-recurrence and generic event accessor adapters as well as some event
-subscribers are provided.
+The "dx" submodule provides Dexterity behaviors (some granular ones). Like in
+the "at" submodule, ical, recurrence and generic event accessor adapters as
+well as some event subscribers are provided.
 
 Both subpackages are only loaded, if the neccassary features are installed.
 

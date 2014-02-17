@@ -6,7 +6,7 @@
       source="2"
       destination="3"
       title="New IRichText behavior"
-      description="Enable the new IRichText behavior"
+      description="Enable the new IRichText instead of the IEventSummary behavior."
       profile="plone.app.event.dx:default"
       handler=".upgrades.enable_richtext_behavior"
       />
@@ -15,7 +15,7 @@
       source="2"
       destination="3"
       title="Attribute storage"
-      description="Migrate fields from annotation storage to attribute storage"
+      description="Migrate fields from annotation storage to attribute storage."
       profile="plone.app.event.dx:default"
       handler=".upgrades.upgrade_attribute_storage"
       />
