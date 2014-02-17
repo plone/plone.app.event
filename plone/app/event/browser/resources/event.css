@@ -19,10 +19,6 @@
     margin 1em 0 1em 1em;
 }
 
-.hCalendar-hidden {
-    display:none; /* hide hCal fields not useful to human eyes */
-}
-
 /* event listing styles */
 
 
