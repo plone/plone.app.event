@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1dev (unreleased)
+-------------------
+
+- Nothing changed yet.
+
+
 1.1b1 (2014-02-17)
 ------------------
 
