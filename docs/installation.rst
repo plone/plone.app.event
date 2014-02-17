@@ -4,8 +4,22 @@ Installation
 Compatibility
 -------------
 
-plone.app.event is tested with latest Plone 4.2, Plone 4.3 and the upcoming
-Plone 5.0.
+plone.app.event is tested with latest Plone 4.3 and the upcoming Plone 5.0.
+
+
+Removed 4.2 compatibility
+-------------------------
+
+Since plone.app.event 1.1b1 we depend on changes from plone.app.contenttypes
+1.1b1, which depends on plone.dexterity>=2.2.1 which itself (since 2.2) depends
+on a AccessControl version not provided by the Plone 4.2 version fixes.
+
+You can still experiment with Plone 4.2 compatibility if you need to, but
+officially it's support in plone.app.event is removed. There are a number of
+other compatibility issues to be solved and the tests will fail anyways. If you
+really need to, use this as a starting point: `plone.app.dexterity =
+2.0.10`, `plone.dexterity = 2.1.3`, `plone.app.contenttypes = 1.1a1`, `z3c.form
+  = 3.0.5`, `plone.app.z3cform = 0.7.5`.
 
 
 Installation
@@ -37,8 +51,8 @@ plone.app.event's Dexterity behaviors (Through the web or via a GenericSetup
 profile), or install plone.app.contenttypes for ready-to-use Dexterity types.
 
 
-Plone 4.2 and 4.3 installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Plone 4.3 installation
+~~~~~~~~~~~~~~~~~~~~~~
 
 plone.app.event depends on ``plone.app.portlets>=2.5a1``. This version has the
 calendar and event portlet removed, which are now in plone.app.event itself.

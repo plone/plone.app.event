@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.1.dev (unreleased)
---------------------
+1.1dev (unreleased)
+-------------------
 
 .. note::
 
@@ -25,6 +25,9 @@ Changelog
     plone.app.event:testing profile. Use plone.app.contenttypes for a Dexterity
     based Event type, which utilizes plone.app.event's Dexterity behaviors.
 
+- Remove Plone 4.2 compatibility. For more information see installation.rst in
+  the docs.
+  [thet]  
 
 - Move the plone.app.event.dx.event example type to the plone.app.event:testing
   profile. Use the Event type from plone.app.contenttypes instead. Fixes #99.
