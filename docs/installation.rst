@@ -17,9 +17,13 @@ on a AccessControl version not provided by the Plone 4.2 version fixes.
 You can still experiment with Plone 4.2 compatibility if you need to, but
 officially it's support in plone.app.event is removed. There are a number of
 other compatibility issues to be solved and the tests will fail anyways. If you
-really need to, use this as a starting point: `plone.app.dexterity =
-2.0.10`, `plone.dexterity = 2.1.3`, `plone.app.contenttypes = 1.1a1`, `z3c.form
-  = 3.0.5`, `plone.app.z3cform = 0.7.5`.
+really need to, use this as a starting point::
+
+    plone.app.dexterity = 2.0.10
+    plone.dexterity = 2.1.3
+    plone.app.contenttypes = 1.1a1
+    z3c.form = 3.0.5
+    plone.app.z3cform = 0.7.5
 
 
 Installation
