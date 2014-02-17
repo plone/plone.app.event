@@ -24,8 +24,9 @@ Changelog
 .. note::
 
     The plone.app.event.dx.event type has been moved to the
-    plone.app.event:testing profile. Use plone.app.contenttypes for a Dexterity
-    based Event type, which utilizes plone.app.event's Dexterity behaviors.
+    plone.app.event:testing profile and the plone.app.event.dx:default profile
+    has been removed. Use plone.app.contenttypes for a Dexterity based Event
+    type, which utilizes plone.app.event's Dexterity behaviors.
 
 
 - Remove Plone 4.2 compatibility. For more information see installation.rst in
@@ -33,7 +34,8 @@ Changelog
   [thet]
 
 - Move the plone.app.event.dx.event example type to the plone.app.event:testing
-  profile. Use the Event type from plone.app.contenttypes instead. Fixes #99.
+  profile and remove the plone.app.event.dx:default profile. Use the Event type
+  from plone.app.contenttypes instead. Fixes #99.
   [thet]
 
 - Remove the IEventSummary behavior and use the generic IRichText from

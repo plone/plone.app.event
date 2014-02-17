@@ -83,14 +83,4 @@
         marker=".behaviors.IEventContact"
         />
 
-
-    <genericsetup:registerProfile
-        name="default"
-        title="plone.app.event.dx"
-        directory="profiles/default"
-        description="plone.app.event dexterity profile."
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-
 </configure>
