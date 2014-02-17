@@ -13,7 +13,6 @@ from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import BrowserView

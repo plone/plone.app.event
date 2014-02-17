@@ -28,8 +28,7 @@ def initialize(context):
     """Register content types through Archetypes with Zope and the CMF.
     """
     from Products.CMFCore.utils import ContentInit
-    from plone.app.event.at import content
-    content  # please pep
+    from plone.app.event.at import content  # nopep8
 
     content_types, constructors, ftis = atapi.process_types(
         atapi.listTypes(packageName), packageName)
