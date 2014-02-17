@@ -1,13 +1,15 @@
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
-from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -33,11 +35,6 @@ import zope.component
 
 TZNAME = "Europe/Vienna"
 
-from plone.app.event.dx.traverser import OccurrenceTraverser as\
-    OccurrenceTraverserDX
-from plone.app.event.at.traverser import OccurrenceTraverser as\
-    OccurrenceTraverserAT
-
 
 class TestTraversalDX(AbstractSampleDataEvents):
     """Test OccurrenceTraverser with DX objects.
@@ -49,7 +46,7 @@ class TestTraversalDX(AbstractSampleDataEvents):
 
     @property
     def traverser(self):
-        return OccurrenceTraverserDX(self.now_event, self.request)
+        return OccTravDX(self.now_event, self.request)
 
     def test_no_occurrence(self):
         self.assertRaises(
@@ -108,7 +105,7 @@ class TestTraversalAT(TestTraversalDX):
 
     @property
     def traverser(self):
-        return OccurrenceTraverserAT(self.now_event, self.request)
+        return OccTravAT(self.now_event, self.request)
 
 
 class TestOccurrences(unittest.TestCase):

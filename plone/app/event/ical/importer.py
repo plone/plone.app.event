@@ -24,7 +24,6 @@ from zope.interface import Interface
 from zope.interface import alsoProvides, noLongerProvides
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
-#from plone.folder.interfaces import IFolder
 
 import datetime
 import icalendar

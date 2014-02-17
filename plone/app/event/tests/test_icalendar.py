@@ -33,6 +33,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def event_factory(self):
+        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
         return DXEventAccessor.create
 
     def traverser(self, context, request):

@@ -547,14 +547,14 @@ class EventAccessor(object):
     """
     implements(IEventAccessor)
     adapts(IDXEvent)
-    event_type = 'plone.app.event.dx.event'  # If you use a custom type,
-                                             # override this.
+    event_type = None  # If you use the accessor's create classmethod, override
+                       # this in your custom type.
 
     # Unified create method via Accessor
     @classmethod
     def create(cls, container, content_id, title, description=None,
                start=None, end=None, timezone=None,
-               whole_day=None, open_end=None, **kwargs):
+               whole_day=None, open_end=None, event_type=None, **kwargs):
         container.invokeFactory(cls.event_type,
                                 id=content_id,
                                 title=title,

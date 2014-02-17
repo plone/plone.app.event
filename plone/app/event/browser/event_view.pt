@@ -21,7 +21,7 @@
       <li itemprop="description" class="description" tal:content="data/description">description</li>
     </ul>
 
-    <dl class="eventDetails" summary="Event details" i18n:attributes="summary summary_event_details">
+    <dl class="event details" summary="Event details" i18n:attributes="summary summary_event_details">
 
       <tal:cond tal:condition="data/subjects">
       <dt i18n:translate="event_what">What</dt>

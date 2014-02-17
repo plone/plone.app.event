@@ -34,6 +34,15 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="testing"
+      title="plone.app.event testing"
+      directory="profiles/testing"
+      description="Testing profile for plone.app.event"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <genericsetup:importStep
       name="plone.app.event-catalog"
       handler="plone.app.event.setuphandlers.setup_misc"

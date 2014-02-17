@@ -56,9 +56,3 @@ Find out who contributed::
 
     $ git shortlog -s -e
 
-
-Sponsors
---------
-
-- Hochschülerinnen- und `Hochschülerschaft an der TU Graz
-  <https://htu.tugraz.at/>`_.

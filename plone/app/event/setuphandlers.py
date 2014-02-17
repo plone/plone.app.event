@@ -26,10 +26,10 @@ class HiddenProfiles(object):
         """Prevents profiles, which should not be user-installable from showing
         up in the profile list when creating a Plone site.
 
-        plone.app.event.dx:default .. This is an example type, which will be
-        removed in future versions of plone.app.event.
+        plone.app.event:testing .. Testing profile, which provides an
+        example type.
         """
-        return [u'plone.app.event.dx:default', ]
+        return [u'plone.app.event:testing', ]
 
 
 def catalog_setup(context):

@@ -15,7 +15,6 @@ import os
 
 
 PLONE5 = getFSVersionTuple()[0] >= 5
-PLONE42 = getFSVersionTuple()[:2] == (4, 2)  # p.a.contenttypes not 4.2 compat
 
 
 def set_browserlayer(request):
@@ -138,29 +137,18 @@ class PAEventDXLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         self.ostz = os_zone()
         # Load ZCML
-        if PLONE42:
-            import plone.app.collection
-            self.loadZCML(package=plone.app.collection,
-                          context=configurationContext)
-        else:
-            import plone.app.contenttypes
-            self.loadZCML(package=plone.app.contenttypes,
-                          context=configurationContext)
+        import plone.app.contenttypes
+        self.loadZCML(package=plone.app.contenttypes,
+                      context=configurationContext)
 
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx,
                       context=configurationContext)
 
-        if PLONE42:
-            z2.installProduct(app, 'plone.app.collection')
-
     def setUpPloneSite(self, portal):
-        if PLONE42:
-            self.applyProfile(portal, 'plone.app.collection:default')
-        else:
-            self.applyProfile(portal, 'plone.app.contenttypes:default')
+        self.applyProfile(portal, 'plone.app.contenttypes:default')
 
-        self.applyProfile(portal, 'plone.app.event.dx:default')
+        self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 
 PAEventDX_FIXTURE = PAEventDXLayer()
