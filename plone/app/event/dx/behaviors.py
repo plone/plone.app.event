@@ -554,7 +554,7 @@ class EventAccessor(object):
     @classmethod
     def create(cls, container, content_id, title, description=None,
                start=None, end=None, timezone=None,
-               whole_day=None, open_end=None, event_type=None, **kwargs):
+               whole_day=None, open_end=None, **kwargs):
         container.invokeFactory(cls.event_type,
                                 id=content_id,
                                 title=title,
