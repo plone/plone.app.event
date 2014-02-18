@@ -113,6 +113,9 @@ Changelog
 - Improve markup of ``event_listing.pt`` in order to not break on IE 8.
   [rafaelbco]
 
+- Fix label of 'Dates' fieldset.
+  [esteele]
+
 
 1.1b1 (2014-02-17)
 ------------------
