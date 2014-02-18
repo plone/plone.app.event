@@ -7,6 +7,9 @@ Changelog
 - Drop usage of plone.formwidget.datetime and use plone.app.widgets instead.
   [garbas, davisagli]
 
+- Fix label of 'Dates' fieldset.
+  [esteele]
+
 
 1.1b1 (2014-02-17)
 ------------------
