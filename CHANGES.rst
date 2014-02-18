@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.1dev (unreleased)
+1.2dev (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Drop usage of plone.formwidget.datetime and use plone.app.widgets instead.
+  [garbas, davisagli]
 
 
 1.1b1 (2014-02-17)
