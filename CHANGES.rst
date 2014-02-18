@@ -18,8 +18,8 @@ Changelog
     Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
     plone.app.event's Dexterity behaviors.
 
-- Remove DL's from portlet templates.
-  https://github.com/plone/Products.CMFPlone/issues/163
+- Remove DL's from portlet templates, replacing it with semantically correct
+  tags. Ref: https://github.com/plone/Products.CMFPlone/issues/163
   [khink]
 
 - Fix get_events recurring events sorting, where it was only sorted by the
