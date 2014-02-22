@@ -4,6 +4,9 @@ Changelog
 1.2dev (unreleased)
 -------------------
 
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
+
 - Drop usage of plone.formwidget.datetime and use plone.app.widgets instead.
   [garbas, davisagli]
 
