@@ -4,7 +4,8 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Improve markup of ``event_listing.pt`` in order to not break on IE 8.
+  [rafaelbco]
 
 
 1.1b1 (2014-02-17)

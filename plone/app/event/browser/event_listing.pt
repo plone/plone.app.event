@@ -73,11 +73,13 @@
         </tal:day>
         </tal:cond>
       </nav>
-      <div class="visualClear"/>
+      <div class="visualClear"></div>
     </header>
 
     <section>
+
     <tal:items repeat="data batch">
+
       <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent"
           tal:define="startf python:view.date_speller(data.start)">
 
@@ -118,7 +120,7 @@
                   i18n:attributes="title external_website"
                   i18n:translate="label_web">Web</a>
             </li>
-            
+
             <li tal:define="contact_email data/contact_email|nothing;
                             contact_name data/contact_name|nothing"
                 tal:condition="contact_email|contact_name">
@@ -134,14 +136,14 @@
                 <span tal:condition="contact_name" tal:content="contact_name"/>
               </a>
             </li>
-            
+
             <li tal:condition="data/contact_phone" i18n:attributes="title label_phone">
               <span i18n:translate="label_phone">Phone</span>:
               <a class="contact_phone" title=""
                   tal:attributes="href string:tel:${data/contact_phone}"
                   tal:content="data/contact_phone">123</a>
             </li>
-            
+
             <li>
               <a class="event_ical"
                   tal:define="portal_url context/@@plone_portal_state/portal_url;"
@@ -157,13 +159,16 @@
           </ul>
 
         </div>
-        <div class="visualClear"/>
+        <div class="visualClear"></div>
 
       </article>
-    </tal:items>
-    <section>
+
+     </tal:items>
+
+    </section>
 
   </div>
+
   <div metal:use-macro="context/batch_macros/macros/navigation" />
 
 </tal:def>
