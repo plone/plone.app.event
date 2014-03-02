@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2dev (unreleased)
--------------------
+1.2 (2014-03-01)
+----------------
 
 - Don't use spamProtect script to render email address; it doesn't do much.
   [davisagli]
