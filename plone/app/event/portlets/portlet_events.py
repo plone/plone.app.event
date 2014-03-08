@@ -7,7 +7,7 @@ from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
-from plone.app.vocabulary.catalog import CatalogSearch
+from plone.app.vocabularies.catalog import CatalogSearch
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider

@@ -9,7 +9,7 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
-from plone.app.vocabulary.catalog import CatalogSource
+from plone.app.vocabularies.catalog import CatalogSource
 from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
