@@ -1,19 +1,29 @@
 from Acquisition import aq_parent
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
 
-def get_location(context):
+def get_location(accessor):
     """Return the location.
-    This method can be used to be overwritten by external packages, for example
-    to provide a reference to a Location object as done by collective.venue.
+    This method can be overwritten by external packages, for example to provide
+    a reference to a Location object as done by collective.venue.
+
+    :param accessor: Event, Occurrence or IEventAccessor object.
+    :type accessor: IEvent, IOccurrence or IEventAccessor
+
+    :returns: A location string. Possibly a HTML structure to link to another
+              object, representing the location.
+    :rtype: string
     """
-    data = IEventAccessor(context)
-    return data.location
+    if not IEventAccessor.providedBy(accessor):
+        accessor = IEventAccessor(accessor)
+    return accessor.location
 
 
 class EventView(BrowserView):
@@ -22,6 +32,7 @@ class EventView(BrowserView):
         self.context = context
         self.request = request
         self.data = IEventAccessor(context)
+        self.max_occurrences = 6
 
     @property
     def get_location(self):
@@ -46,44 +57,30 @@ class EventView(BrowserView):
 
     @property
     def next_occurrences(self):
-        """Returns all occurrences for this context, except the start
-        occurrence.
-        The maximum defaults to 7 occurrences. If there are more occurrences
-        defined for this context, the result will contain the last item
-        of the occurrence list.
+        """Returns occurrences for this context, except the start
+        occurrence, limited to self.num_occurrences occurrences.
 
-        :returns: Dictionary with ``events`` and ``tail`` as keys.
-        :rtype: dict
-
+        :returns: List with next occurrences.
+        :rtype: list
         """
-        occ_dict = dict(events=[], tail=None)
-        context = self.context
-        adapter = IRecurrenceSupport(context, None)
-        if adapter is not None:
-            occurrences = adapter.occurrences()[1:]  # don't include first
-            occ_dict['events'], occ_dict['tail'] = (
-                self._get_occurrences_helper(occurrences)
-            )
-        return occ_dict
+        occurrences = []
+        adapter = IRecurrenceSupport(self.context, None)
+        if adapter:
+            for cnt, occ in enumerate(adapter.occurrences()):
+                if cnt == self.max_occurrences + 1:
+                    break
+                elif cnt == 0:
+                    continue
+                occurrences.append(occ)
+        return occurrences
 
-    def _get_occurrences_helper(self, occ_list, limit=7):
-        """For many occurrences we limit the amount of occurrences to
-        display. That is, this method returns the first 6 (limit)
-        occurrences and the last occurrence in the list.
+    @property
+    def num_occurrences(self):
+        uid = IUUID(self.context)
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brain = catalog(UID=uid)[0]  # assuming, that the current context is
+                                     # in the catalog
+        idx = catalog.getIndexDataForRID(brain.getRID())
 
-        :param occ_list: The list of occurrences returned from
-                         IRecurrenceSupport
-        :type occ_list: list
-        :param limit: optional, defaults to 7
-        :type limit: integer
-        :rtype: tuple of (list of events, last item of occ_list)
-
-        """
-        events = []
-        tail = None
-        if occ_list:
-            events = occ_list[:limit]
-            many = len(occ_list) > limit
-            tail = events and occ_list.pop() or None
-            tail = tail if many else None
-        return (events, tail)
+        num = len(idx['start']) - 1 - self.max_occurrences
+        return num > 0 and num or 0

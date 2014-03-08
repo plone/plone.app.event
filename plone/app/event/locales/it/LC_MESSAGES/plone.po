@@ -1,11 +1,11 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translation of plone.app.event.pot to Italian
+# Giacomo Spettoli <giacomo.spettoli@gmail.com>, 2013.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2013-04-19 23:38+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2014-01-08 15:00+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,8 +22,8 @@ msgstr ""
 # 
 #. Default: "Event Listing"
 msgid "event_listing"
-msgstr "Event Listing"
+msgstr "Elenco degli eventi"
 
 #. Default: "Event"
 msgid "event_view"
-msgstr "Event"
+msgstr "Evento"

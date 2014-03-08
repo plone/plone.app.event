@@ -8,7 +8,7 @@ plone.app.event - a calendar framework for Plone
 
     Features:
 
-    - Archetypes and Dexterity Type,
+    - Dexterity behaviors and Archetypes type,
     - Timezone support,
     - Recurring Events,
     - Whole day events,
@@ -27,9 +27,10 @@ plone.app.event - a calendar framework for Plone
       reduced to a minimum. plone.app.event should be able to be deinstalled
       from Plone.
 
-    - Archetypes and Dexterity types: plone.app.event should provide the
-      ATEvent content type (factdateored out from ATContentTypes) and also
-      Dexterity behaviors, which can be used in Dexterity types.
+    - Dexterity and Archetypes support: plone.app.event should provide
+      Dexterity behaviors, which can be used in Dexterity types and an ATEvent
+      content type (factored out from ATContentTypes). For a Dexterity event
+      type, use plone.app.contenttypes 1.1 or newer.
 
     - Standards compliancy: We support the icalendar standard (`RFC5545
       <http://tools.ietf.org/html/rfc5545>`_) including recurrence.
@@ -46,6 +47,7 @@ Documentation
     installation.rst
     architectural-overview.rst
     development.rst
+    tests.rst
     designchoices.rst
     contributors.rst
 

@@ -757,6 +757,11 @@ def dates_for_display(occurrence):
         'whole_day'  - whole day events
         'open_end'   - events without end time
 
+    :param occurrence: Event or occurrence object.
+    :type occurrence: IEvent, IOccurrence or IEventAccessor based object.
+    :returns: Dictionary with date strings.
+    :rtype: dict
+
 
     The behavior os ulocalized_time() with time_only is odd.
     Setting time_only=False should return the date part only and *not*
@@ -776,7 +781,11 @@ def dates_for_display(occurrence):
     u'16.03.2010'
 
     """
-    acc = IEventAccessor(occurrence)
+    if IEventAccessor.providedBy(occurrence):
+        acc = occurrence
+        occurrence = occurrence.context
+    else:
+        acc = IEventAccessor(occurrence)
 
     # this needs to separate date and time as ulocalized_time does
     DT_start = DT(acc.start)

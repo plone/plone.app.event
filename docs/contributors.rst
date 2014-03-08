@@ -34,6 +34,7 @@ Thanks!
 - Gauthier Bastien, gbastien
 - Georg Bernhard, gogo
 - Giacomo Spettoli, giacomos
+- Guido Stevens, gyst
 - JeanMichel FRANCOIS, toutpt
 - Jens Klein, jensens
 - Lennart Regebro, regebro
@@ -49,14 +50,9 @@ Thanks!
 - Tom Gross, tomgross
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod
+- Wolfgang Thomas, pysailor
 
 Find out who contributed::
 
     $ git shortlog -s -e
 
-
-Sponsors
---------
-
-- Hochschülerinnen- und `Hochschülerschaft an der TU Graz
-  <https://htu.tugraz.at/>`_.

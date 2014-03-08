@@ -1,12 +1,15 @@
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.at.content import EventAccessor as ATEventAccessor
+from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
+from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -32,23 +35,18 @@ import zope.component
 
 TZNAME = "Europe/Vienna"
 
-from plone.app.event.dx.traverser import OccurrenceTraverser as\
-    OccurrenceTraverserDX
-from plone.app.event.at.traverser import OccurrenceTraverser as\
-    OccurrenceTraverserAT
-
 
 class TestTraversalDX(AbstractSampleDataEvents):
     """Test OccurrenceTraverser with DX objects.
     """
-    layer = PAEventDX_INTEGRATION_TESTING
+    layer = PAEventDX_FUNCTIONAL_TESTING
 
     def event_factory(self):
         return DXEventAccessor.create
 
     @property
     def traverser(self):
-        return OccurrenceTraverserDX(self.now_event, self.request)
+        return OccTravDX(self.now_event, self.request)
 
     def test_no_occurrence(self):
         self.assertRaises(
@@ -100,14 +98,14 @@ class TestTraversalDX(AbstractSampleDataEvents):
 class TestTraversalAT(TestTraversalDX):
     """Test OccurrenceTraverser with AT objects.
     """
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventAT_FUNCTIONAL_TESTING
 
     def event_factory(self):
         return ATEventAccessor.create
 
     @property
     def traverser(self):
-        return OccurrenceTraverserAT(self.now_event, self.request)
+        return OccTravAT(self.now_event, self.request)
 
 
 class TestOccurrences(unittest.TestCase):
@@ -180,14 +178,12 @@ class TestOccurrences(unittest.TestCase):
             (self.portal['interval'], self.request), name='event_view')
         result = view.next_occurrences
         # altogether 5 occurrences, but start occurrence is not included
-        self.assertEqual(4, len(result['events']))
-        self.assertFalse(result['events'][-1] == result['tail'])
+        self.assertEqual(4, len(result))
 
         view = zope.component.getMultiAdapter(
             (self.portal['many'], self.request), name='event_view')
         result = view.next_occurrences
-        self.assertEqual(7, len(result['events']))
-        self.assertFalse(result['events'][-1] == result['tail'])
+        self.assertEqual(view.max_occurrences, len(result))
 
 
 class MockEvent(SimpleItem):
@@ -210,6 +206,7 @@ class TestRecurrenceSupport(unittest.TestCase):
 
     def test_recurrence_occurrences(self):
         result = IRecurrenceSupport(self.data).occurrences()
+        result = list(result)  # cast generator to list
 
         self.assertEqual(4, len(result))
 
@@ -223,6 +220,7 @@ class TestRecurrenceSupport(unittest.TestCase):
         # Test with range
         rs = datetime.datetime(2011, 11, 15, 11, 0, tzinfo=self.tz)
         result = IRecurrenceSupport(self.data).occurrences(range_start=rs)
+        result = list(result)  # cast generator to list
 
         self.assertEqual(4, len(result))
 
@@ -236,6 +234,7 @@ class TestRecurrenceSupport(unittest.TestCase):
         # Test with range
         rs = datetime.datetime(2011, 11, 16, 11, 0, tzinfo=self.tz)
         result = IRecurrenceSupport(self.data).occurrences(range_start=rs)
+        result = list(result)  # cast generator to list
 
         self.assertEqual(3, len(result))
 
@@ -248,6 +247,7 @@ class TestRecurrenceSupport(unittest.TestCase):
         re = datetime.datetime(2011, 11, 12, 11, 0, tzinfo=self.tz)
         result = IRecurrenceSupport(self.data).occurrences(range_start=rs,
                                                            range_end=re)
+        result = list(result)  # cast generator to list
 
         self.assertEqual(2, len(result))
 

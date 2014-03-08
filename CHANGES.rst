@@ -1,8 +1,27 @@
 Changelog
 =========
 
-1.1.dev (unreleased)
---------------------
+1.2.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+1.2 (2014-03-01)
+----------------
+
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
+
+- Drop usage of plone.formwidget.datetime and use plone.app.widgets instead.
+  [garbas, davisagli]
+
+- Fix label of 'Dates' fieldset.
+  [esteele]
+
+
+1.1b1 (2014-02-17)
+------------------
 
 .. note::
 
@@ -13,10 +32,61 @@ Changelog
 
 .. note::
 
-    The plone.app.event.dx.event type and plone.app.event.dx:default profile
-    are deprecated and will be removed in a future version of plone.app.event.
-    Use plone.app.contenttypes for a Dexterity based Event type, which utilizes
-    plone.app.event's Dexterity behaviors.
+    In the event_view template, the event summary has changed from a table to a
+    definition list layout. The event_view's next_occurrences method does not
+    return a dictionary anymore, but only a list of next events. Also, the
+    index_html template for Occurrences is renamed to event_view.  If you have
+    custom view templates for IEvent or IOccurrence objects, you have to update
+    them.
+
+.. note::
+
+    The plone.app.event.dx.event type has been moved to the
+    plone.app.event:testing profile and the plone.app.event.dx:default profile
+    has been removed. Use plone.app.contenttypes for a Dexterity based Event
+    type, which utilizes plone.app.event's Dexterity behaviors.
+
+
+- Remove Plone 4.2 compatibility. For more information see installation.rst in
+  the docs.
+  [thet]
+
+- Move the plone.app.event.dx.event example type to the plone.app.event:testing
+  profile and remove the plone.app.event.dx:default profile. Use the Event type
+  from plone.app.contenttypes instead. Fixes #99.
+  [thet]
+
+- Remove the IEventSummary behavior and use the generic IRichText from
+  plone.app.contenttypes instead. Fixes #140, Closes #142.
+  [pysailor]
+
+- Change the event detail listing in the event_view to be a definition list
+  instead of a table, making it semantically more correct and the code less
+  verbose. Fixes #141.
+  [thet]
+
+- For recurring events, don't show the last recurrence in the event view but
+  the number of occurrences, queried from the catalog. Together with the
+  previous generator-change this looping over the whole occurrnce list.
+  [thet]
+
+- Change the IRecurrenceSupport adapter's occurrence method to return again a
+  generator, fixing a possible performance issue. Fixes #60.
+  [thet]
+
+- Replace RecurrenceField with plain Text field in the dx recurrence behavior.
+  This reverts the change from 1.0rc2. We don't use form schema hints but an
+  adapter to configure the widget. Closes #137, Fixes #131.
+  [pysailor]
+
+- Use attribute storage instead of annotation storage in all Dexterity
+  behaviors. Closes #136, #95, Refs #20.
+  [pysailor]
+
+- Rename the Occurrence's 'index_html' view to 'event_view' for better
+  consistency. This also fixes an issue with Solgema.fullcalendar.
+  Closes #123.
+  [tdesvenain]
 
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
@@ -56,6 +126,26 @@ Changelog
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
   Plone to integrate plone.app.event.
   [thet]
+
+
+1.0.5 (2014-02-11)
+------------------
+
+- For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
+  X-WR-CALNAME caused Outlook to create a new calendar on every import. These
+  properties are not neccessary and not specified by RFC5545 anyways.
+  Fixes #109, closes #132.
+  [tomgross, thet]
+
+- Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
+  and IEventAccessor objects and avoid confusion on using these methods.
+  [thet]
+
+- Added basque translation.
+  [erral]
+
+- Completed italian translation.
+  [giacomos]
 
 
 1.0.4 (2013-11-23)
@@ -213,7 +303,7 @@ Changelog
 -------------------
 
 - Fix get_events with ret_mode=3, expand=True, without recurrence
-  It was returning full object instead of IEventAccesor instances.
+  It was returning full object instead of IEventAccessor instances.
   This also fix event portlet with norecurrent events.
   [toutpt]
 

@@ -33,7 +33,7 @@
     <element value="plone.app.event.dx.behaviors.IEventLocation"/>
     <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
     <element value="plone.app.event.dx.behaviors.IEventContact"/>
-    <element value="plone.app.event.dx.behaviors.IEventSummary"/>
+    <element value="plone.app.contenttypes.behaviors.richtext.IRichText"/>
     <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
     <element value="plone.app.content.interfaces.INameFromTitle"/>
     <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>

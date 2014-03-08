@@ -9,10 +9,9 @@
   <i18n:registerTranslations directory="locales" />
 
   <!-- external dependencies -->
-  <include package="plone.browserlayer" /> 
+  <include package="plone.browserlayer" />
   <include package="plone.event" />
   <include package="plone.formwidget.recurrence" />
-  <include package="plone.formwidget.datetime" />
   <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
 
@@ -35,12 +34,20 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="testing"
+      title="plone.app.event testing"
+      directory="profiles/testing"
+      description="Testing profile for plone.app.event"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <genericsetup:importStep
       name="plone.app.event-catalog"
       handler="plone.app.event.setuphandlers.setup_misc"
       title="plone.app.event misc"
       description="catalog and first_weekday setup">
-    <depends name="plone-final"/>
   </genericsetup:importStep>
 
   <utility

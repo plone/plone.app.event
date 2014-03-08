@@ -18,6 +18,7 @@ class TestEventsListingDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def event_factory(self):
+        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
         return DXEventAccessor.create
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)

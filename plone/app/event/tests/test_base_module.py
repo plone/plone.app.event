@@ -21,8 +21,8 @@ from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents,\
-    TEST_TIMEZONE
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.tests.base_setup import TEST_TIMEZONE
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEvent
@@ -394,6 +394,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def event_factory(self):
+        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
         return DXEventAccessor.create
 
     def test_get_events(self):
@@ -626,11 +627,11 @@ class TestGetEventsATZDT(TestGetEventsATPydt):
 
     def make_dates(self):
         def_tz = default_timezone()
-        now = self.now = DateTime(2013, 5,  5, 10, 0, 0, def_tz)
-        self.tomorrow = DateTime(2013, 5,  6, 10, 0, 0, def_tz)
+        now = self.now = DateTime(2013, 5, 5, 10, 0, 0, def_tz)
+        self.tomorrow = DateTime(2013, 5, 6, 10, 0, 0, def_tz)
         past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
         future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
-        far = self.far = DateTime(2013, 6,  4, 10, 0, 0, def_tz)
+        far = self.far = DateTime(2013, 6, 4, 10, 0, 0, def_tz)
         duration = self.duration = 0.1
         return (now, past, future, far, duration)
 
@@ -645,6 +646,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def event_factory(self):
+        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
         return DXEventAccessor.create
 
     def setUp(self):

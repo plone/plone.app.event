@@ -14,13 +14,15 @@
 }
 
 
+.event.details {
+    float: right;
+    margin 1em 0 1em 1em;
+}
+
 /* event listing styles */
 
 
 /* BEGIN COMMON EVENT STYLES */
-.hCalendar-hidden {
-    display:none; /* hide hCal fields not useful to human eyes */
-}
 
 article.vevent {
     background-color: #EAEAEA;
@@ -164,17 +166,6 @@ article.vevent .documentByLine {
 .event_listing div.location { display: inline-block; }
 /* END EVENT LISTING STYLES */
 
-
-/* BEGIN EVENT DETAILS STYLES */
-.eventDetails table.listing td {
-    min-width:60%;
-}
-.eventDetails table.listing td p {
-    margin-top:0.5em;
-    margin-bottom:0;
-    line-height:1.2em;
-}
-/* END EVENT DETAILS STYLES */
 
 
 /* BEGIN PORTLET CALENDAR */

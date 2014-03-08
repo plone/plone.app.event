@@ -6,6 +6,7 @@ from datetime import timedelta
 from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
+from plone.app.event import PloneMessageFactory as _PMF
 from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
@@ -15,18 +16,16 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
-from plone.app.textfield import RichText
 from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.interfaces import IDexterityContent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.formwidget.datetime.z3cform.widget import DatetimeWidget
-from plone.formwidget.recurrence.z3cform.field import RecurrenceField
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
@@ -67,7 +66,8 @@ class StartBeforeEnd(Invalid):
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
-    model.fieldset('dates', fields=['timezone'])
+    model.fieldset('dates', fields=['timezone'],
+                   label=_PMF(u'label_schema_dates', default=u'Dates'),)
 
     start = schema.Datetime(
         title=_(
@@ -145,22 +145,6 @@ class IEventBasic(model.Schema):
             )
 
 
-@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def StartDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.first_day = first_weekday_sun0
-    return widget
-
-
-@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def EndDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.first_day = first_weekday_sun0
-    return widget
-
-
 def default_start(data):
     return default_start_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
@@ -182,7 +166,7 @@ provideAdapter(ComputedWidgetAttribute(
 class IEventRecurrence(model.Schema):
     """ Recurring Event Schema.
     """
-    recurrence = RecurrenceField(
+    recurrence = schema.Text(
         title=_(
             u'label_event_recurrence',
             default=u'Recurrence'
@@ -240,6 +224,7 @@ class IEventAttendees(model.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
+        default=(),
     )
     form.widget(attendees=TextLinesFieldWidget)
 
@@ -297,20 +282,31 @@ class IEventContact(model.Schema):
     )
 
 
-class IEventSummary(model.Schema):
-    """Event summary (body text) schema."""
+class EventLocation(object):
 
-    text = RichText(
-        title=_(
-            u'label_event_announcement',
-            default=u'Event body text'
-        ),
-        description=_(
-            u'help_event_announcement',
-            default=u''
-        ),
-        required=False,
-    )
+    implements(IEventLocation)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventAttendees(object):
+
+    implements(IEventAttendees)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class EventContact(object):
+
+    implements(IEventContact)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
 
 
 # Mark these interfaces as form field providers
@@ -319,7 +315,6 @@ alsoProvides(IEventRecurrence, IFormFieldProvider)
 alsoProvides(IEventLocation, IFormFieldProvider)
 alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
-alsoProvides(IEventSummary, IFormFieldProvider)
 
 
 class FakeZone(tzinfo):
@@ -533,16 +528,13 @@ def searchable_text_indexer(obj):
     text = u''
     text += u'%s\n' % acc.title
     text += u'%s\n' % acc.description
-    behavior = IEventSummary(obj, None)
-    if behavior is None or behavior.text is None:
-        return text.encode('utf-8')
-    output = behavior.text.output
+    textvalue = acc.text
     transforms = getToolByName(obj, 'portal_transforms')
     body_plain = transforms.convertTo(
         'text/plain',
-        output.encode('utf8'),
+        textvalue.encode('utf8'),
         mimetype='text/html',
-        ).getData().strip()
+    ).getData().strip()
     if isinstance(body_plain, str):
         body_plain = body_plain.decode('utf-8')
     text += body_plain
@@ -557,8 +549,8 @@ class EventAccessor(object):
     """
     implements(IEventAccessor)
     adapts(IDXEvent)
-    event_type = 'plone.app.event.dx.event'  # If you use a custom type,
-                                             # override this.
+    event_type = None  # If you use the accessor's create classmethod, override
+                       # this in your custom type.
 
     # Unified create method via Accessor
     @classmethod
@@ -602,7 +594,6 @@ class EventAccessor(object):
             contact_phone=IEventContact,
             event_url=IEventContact,
             subjects=ICategorization,
-            text=IEventSummary,
         )
         object.__setattr__(self, '_behavior_map', bm)
 
@@ -675,12 +666,10 @@ class EventAccessor(object):
 
     @property
     def text(self):
-        behavior = IEventSummary(self.context)
-        textvalue = getattr(behavior, 'text', None)
+        textvalue = getattr(self.context, 'text', None)
         if textvalue is None:
             return u''
         return safe_unicode(textvalue.output)
     @text.setter
     def text(self, value):
-        behavior = IEventSummary(self.context)
-        behavior.text = RichTextValue(raw=safe_unicode(value))
+        self.context.text = RichTextValue(raw=safe_unicode(value))

@@ -189,15 +189,15 @@ class EventListing(BrowserView):
             qstr
         )
 
-    def get_location(self, event_accessor):
-        return get_location(event_accessor.context)
+    def get_location(self, occ):
+        return get_location(occ)
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(
             (self.context, self.request, self),
             IContentProvider, name='formatted_date'
         )
-        return provider(occ.context)
+        return provider(occ)
 
     def date_speller(self, date):
         return date_speller(self.context, date)

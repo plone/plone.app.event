@@ -15,7 +15,7 @@ class FormattedDateProvider(Explicit):
         """Return a formatted date string.
 
         :param occ: An event or occurrence.
-        :type occ: IEvent or IOccurrence
+        :type occ: IEvent, IOccurrence or IEventAccessor based object
         :returns: Formatted date string for display.
         :rtype: string
 

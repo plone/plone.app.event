@@ -1,7 +1,3 @@
-# TODO:
-#  - implement sync strategies,
-#  - cleanup,
-#  - tests
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -28,7 +24,6 @@ from zope.interface import Interface
 from zope.interface import alsoProvides, noLongerProvides
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
-#from plone.folder.interfaces import IFolder
 
 import datetime
 import icalendar

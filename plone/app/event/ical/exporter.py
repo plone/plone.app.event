@@ -13,7 +13,6 @@ from plone.event.interfaces import IOccurrence
 from plone.event.utils import is_datetime
 from plone.event.utils import tzdel
 from plone.event.utils import utc
-from plone.uuid.interfaces import IUUID
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
@@ -39,18 +38,6 @@ def construct_icalendar(context, events):
     cal = icalendar.Calendar()
     cal.add('prodid', PRODID)
     cal.add('version', VERSION)
-
-    cal_title = context.Title()
-    if cal_title:
-        cal.add('x-wr-calname', cal_title)
-
-    cal_desc = context.Description()
-    if cal_desc:
-        cal.add('x-wr-caldesc', cal_desc)
-
-    uuid = IUUID(context, None)
-    if uuid:  # portal object does not have UID
-        cal.add('x-wr-relcalid', uuid)
 
     cal_tz = default_timezone(context)
     if cal_tz:

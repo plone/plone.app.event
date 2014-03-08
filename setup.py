@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.1.dev'
+version = '1.2.1.dev0'
 
 
 setup(
@@ -43,18 +43,19 @@ setup(
         'Products.statusmessages',
         'Zope2',
         'collective.elephantvocabulary',
-        'icalendar',
+        'icalendar>3.0',
         'plone.app.contentlisting',
+        'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
         'plone.app.portlets>=2.5a1',
+        'plone.app.querystring',
         'plone.app.registry',
         'plone.app.vocabularies',
         'plone.app.widgets',
         'plone.browserlayer',
         'plone.event>=1.0',
-        'plone.formwidget.datetime',
+        'plone.folder',
         'plone.formwidget.recurrence',
-        'plone.formwidget.namedfile',
         'plone.memoize',
         'plone.namedfile',
         'plone.portlets',
@@ -68,7 +69,9 @@ setup(
         'zope.component',
         'zope.container',
         'zope.contentprovider',
+        'zope.event',
         'zope.globalrequest',
+        'zope.i18n',
         'zope.i18nmessageid',
         'zope.interface',
         'zope.lifecycleevent',
@@ -80,18 +83,19 @@ setup(
             'AccessControl',
             'Products.ATContentTypes',
             'Products.Archetypes',
-            'plone.app.imaging',
             'Products.contentmigration',
-            'plone.formwidget.datetime [archetypes]',
+            'plone.app.widgets [archetypes]',
+            'plone.app.imaging',
             'plone.formwidget.recurrence [archetypes]',
         ],
         'dexterity': [
             'plone.app.dexterity',
             'plone.app.textfield',
+            'plone.app.z3cform',
             'plone.autoform>=1.4',
             'plone.behavior',
             'plone.dexterity',
-            'plone.formwidget.datetime [z3cform]',
+            'plone.app.widgets [dexterity]',
             'plone.formwidget.recurrence [z3cform]',
             'plone.indexer',
             'plone.supermodel',
@@ -101,9 +105,13 @@ setup(
             'plone.app.collection',
             'plone.app.contenttypes',
             'plone.app.event [archetypes, dexterity]',
-            'plone.app.testing',
+            'plone.app.robotframework',
+            'plone.app.testing [robot]',
             'plone.testing',
+            'robotsuite',
             'transaction',
+            'unittest2',
+            'zExceptions',
             'zope.event',
         ]
     },

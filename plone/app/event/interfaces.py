@@ -1,5 +1,4 @@
 from plone.app.event import messageFactory as _
-from plone.event.utils import default_timezone as fallback_default_timezone
 from zope import schema
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -31,8 +30,7 @@ class IEventSettings(Interface):
                     u"defined."),
         required=True,
         default=None,
-        vocabulary="plone.app.event.Timezones"
-    )
+        vocabulary="plone.app.event.Timezones")
 
     available_timezones = schema.List(
         title=_(u"Available timezones"),
@@ -42,10 +40,7 @@ class IEventSettings(Interface):
                     u"portal. Can be set for users and events"),
         required=False,
         default=[],
-        value_type=schema.Choice(
-            vocabulary="plone.app.event.Timezones"
-            )
-    )
+        value_type=schema.Choice(vocabulary="plone.app.event.Timezones"))
 
     first_weekday = schema.Choice(
         title=_(u'label_first_weekday', default=u'First Weekday'),
@@ -54,5 +49,4 @@ class IEventSettings(Interface):
             default=u'First day in the Week.'),
         required=True,
         default=None,
-        vocabulary="plone.app.event.Weekdays"
-    )
+        vocabulary="plone.app.event.Weekdays")
