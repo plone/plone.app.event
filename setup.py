@@ -45,7 +45,6 @@ setup(
         'collective.elephantvocabulary',
         'icalendar>3.0',
         'plone.app.contentlisting',
-        'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
         'plone.app.portlets>=2.5a1',
         'plone.app.querystring',

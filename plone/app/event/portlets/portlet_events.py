@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
@@ -8,6 +7,7 @@ from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
+from plone.app.vocabulary.catalog import CatalogSearch
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
@@ -15,8 +15,6 @@ from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implements
-from z3c.form import field
-from z3c.relationfield.schema import RelationChoice
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -38,7 +36,7 @@ class IEventsPortlet(IPortletDataProvider):
         )
     )
 
-    search_base = RelationChoice(
+    search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
@@ -48,8 +46,8 @@ class IEventsPortlet(IPortletDataProvider):
                     u'the event listing view will be called on the site root.'
         ),
         required=False,
-        vocabulary='plone.formwidget.relations.cmfcontentsearch'
-    )
+        source=CatalogSearch(is_folderish=True),
+        )
 
 
 class Assignment(base.Assignment):
@@ -129,7 +127,7 @@ class Renderer(base.Renderer):
 
 
 class AddForm(base.AddForm):
-    fields = field.Fields(IEventsPortlet)
+    schema = IEventsPortlet
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
 
@@ -140,6 +138,6 @@ class AddForm(base.AddForm):
 
 
 class EditForm(base.EditForm):
-    fields = field.Fields(IEventsPortlet)
+    schema = IEventsPortlet
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")

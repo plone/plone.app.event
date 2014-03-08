@@ -1,7 +1,6 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
@@ -10,13 +9,12 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
+from plone.app.vocabulary.catalog import CatalogSource
 from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
-from z3c.form import field
-from z3c.relationfield.schema import RelationChoice
 
 import calendar
 
@@ -37,7 +35,7 @@ class ICalendarPortlet(IPortletDataProvider):
             vocabulary="plone.app.vocabularies.WorkflowStates")
     )
 
-    search_base = RelationChoice(
+    search_base = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
@@ -47,7 +45,8 @@ class ICalendarPortlet(IPortletDataProvider):
                     u'the event listing view will be called on the site root.'
         ),
         required=False,
-        vocabulary='plone.formwidget.relations.cmfcontentsearch')
+        source=CatalogSource(is_folderish=True),
+        )
 
 
 class Assignment(base.Assignment):
@@ -214,7 +213,7 @@ class Renderer(base.Renderer):
 
 
 class AddForm(base.AddForm):
-    fields = field.Fields(ICalendarPortlet)
+    schema = ICalendarPortlet
     label = _(u"Add Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")
 
@@ -224,6 +223,6 @@ class AddForm(base.AddForm):
 
 
 class EditForm(base.EditForm):
-    fields = field.Fields(ICalendarPortlet)
+    schema = ICalendarPortlet
     label = _(u"Edit Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")
