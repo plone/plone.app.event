@@ -3,8 +3,6 @@ from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from calendar import monthrange
-from five.intid.intid import IntIds
-from five.intid.site import addUtility
 from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
@@ -18,11 +16,8 @@ from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
 from zope.component import getUtility
 from zope.component import getMultiAdapter
-from zope.component import getSiteManager
 from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
-from zope.intid.interfaces import IIntIds
-from z3c.relationfield.relation import create_relation
 
 import unittest2 as unittest
 
@@ -103,9 +98,6 @@ class RendererTest(unittest.TestCase):
         setHooks()
         setSite(portal)
 
-        sm = getSiteManager(self.portal)
-        addUtility(sm, IIntIds, IntIds, ofs_name='intids', findroot=False)
-
         # Make sure Events use simple_publication_workflow
         self.portal.portal_workflow.setChainForPortalTypes(
             ['Event'], ['simple_publication_workflow']
@@ -165,7 +157,7 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('event_listing?mode=day' in rd)
 
         r = self.renderer(assignment=portlet_calendar.Assignment(
-            search_base=create_relation("/plone/eventfolder")))
+            search_base_uid=self.portal.eventfolder.UID()))
         r.update()
         rd = r.render()
         self.assertTrue('e1' not in rd and 'e2' in rd)

@@ -65,9 +65,9 @@ class Assignment(base.Assignment):
         self.search_base_uid = search_base_uid
 
     def _uid(self):
-        # This is only called if the instance doesn't have a uid
+        # This is only called if the instance doesn't have a search_base_uid
         # attribute, which is probably because it has an old
-        # 'target_collection' attribute that needs to be converted.
+        # 'search_base' attribute that needs to be converted.
         path = self.search_base
         portal = getToolByName(self, 'portal_url').getPortalObject()
         try:
