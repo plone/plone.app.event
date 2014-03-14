@@ -48,6 +48,7 @@
       handler="plone.app.event.setuphandlers.setup_misc"
       title="plone.app.event misc"
       description="catalog and first_weekday setup">
+      <depends name="plone.app.registry" />
   </genericsetup:importStep>
 
   <utility
