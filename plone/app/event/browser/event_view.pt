@@ -65,9 +65,7 @@
       <tal:cond define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
       <dt i18n:translate="contact_name">Contact Name</dt>
       <dd>
-        <a tal:condition="mail" tal:content="structure python: context.spamProtect(mailaddress=mail, mailname=name, cssclass='email fn')">
-           email
-        </a>
+        <a class="email fn" tal:condition="mail" tal:attributes="href string:mailto:${mail}" tal:content="name" />
         <span class="fn" tal:condition="not:mail" tal:content="name" />
       </dd>
       </tal:cond>

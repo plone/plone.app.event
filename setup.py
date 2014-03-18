@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.2dev'
+version = '1.2.1.dev0'
 
 
 setup(
@@ -45,12 +45,12 @@ setup(
         'collective.elephantvocabulary',
         'icalendar>3.0',
         'plone.app.contentlisting',
-        'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
         'plone.app.portlets>=2.5a1',
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.vocabularies',
+        'plone.app.widgets',
         'plone.browserlayer',
         'plone.event>=1.0',
         'plone.folder',
@@ -69,7 +69,6 @@ setup(
         'zope.container',
         'zope.contentprovider',
         'zope.event',
-        'zope.formlib',
         'zope.globalrequest',
         'zope.i18n',
         'zope.i18nmessageid',

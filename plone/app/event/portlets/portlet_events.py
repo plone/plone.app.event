@@ -1,21 +1,23 @@
 from Acquisition import aq_inner
+from ComputedAttribute import ComputedAttribute
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
-from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
-from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.app.uuid.utils import uuidToObject
+from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
+from Products.CMFCore.utils import getToolByName
+from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.formlib import form
 from zope.interface import implements
 
 
@@ -38,7 +40,7 @@ class IEventsPortlet(IPortletDataProvider):
         )
     )
 
-    search_base = schema.Choice(
+    search_base_uid = schema.Choice(
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
@@ -48,11 +50,8 @@ class IEventsPortlet(IPortletDataProvider):
                     u'the event listing view will be called on the site root.'
         ),
         required=False,
-        source=SearchableTextSourceBinder(
-            {'is_folderish': True},
-            default_query='path:'
-        ),
-    )
+        source=CatalogSource(is_folderish=True),
+        )
 
 
 class Assignment(base.Assignment):
@@ -61,26 +60,48 @@ class Assignment(base.Assignment):
     # reduce upgrade pain
     search_base = None
 
-    def __init__(self, count=5, state=None, search_base=None):
+    def __init__(self, count=5, state=None, search_base_uid=None):
         self.count = count
         self.state = state
-        self.search_base = search_base
+        self.search_base_uid = search_base_uid
 
     @property
     def title(self):
         return _(u"Events")
+
+    def _uid(self):
+        # This is only called if the instance doesn't have a search_base_uid
+        # attribute, which is probably because it has an old
+        # 'search_base' attribute that needs to be converted.
+        path = self.search_base
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        try:
+            search_base = portal.unrestrictedTraverse(path.lstrip('/'))
+        except (AttributeError, KeyError, TypeError, NotFound):
+            return
+        return search_base.UID()
+    search_base_uid = ComputedAttribute(_uid, 1)
 
 
 class Renderer(base.Renderer):
 
     _template = ViewPageTemplateFile('portlet_events.pt')
 
+    def search_base_path(self):
+        search_base = uuidToObject(self.data.search_base_uid)
+        if search_base is not None:
+            search_base = '/'.join(search_base.getPhysicalPath())
+        return search_base
+
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
 
         context = aq_inner(self.context)
 
-        calendar_url = get_calendar_url(context, self.data.search_base)
+        calendar_url = get_calendar_url(
+            context, self.search_base_path()
+        )
+
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
 
@@ -104,9 +125,9 @@ class Renderer(base.Renderer):
         data = self.data
 
         kw = {}
-        if data.search_base:
-            kw['path'] = {'query': '%s%s' % (
-                '/'.join(self.portal.getPhysicalPath()), data.search_base)}
+        search_base_path = self.search_base_path()
+        if search_base_path:
+            kw['path'] = {'query': search_base_path}
         if data.state:
             kw['review_state'] = data.state
 
@@ -126,21 +147,17 @@ class Renderer(base.Renderer):
 
 
 class AddForm(base.AddForm):
-    form_fields = form.Fields(IEventsPortlet)
+    schema = IEventsPortlet
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
-    form_fields = form.Fields(IEventsPortlet)
-    form_fields['search_base'].custom_widget = UberSelectionWidget
 
     def create(self, data):
         return Assignment(count=data.get('count', 5),
                           state=data.get('state', None),
-                          search_base=data.get('search_base', 5))
+                          search_base_uid=data.get('search_base_uid', 5))
 
 
 class EditForm(base.EditForm):
-    form_fields = form.Fields(IEventsPortlet)
+    schema = IEventsPortlet
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
-    form_fields = form.Fields(IEventsPortlet)
-    form_fields['search_base'].custom_widget = UberSelectionWidget

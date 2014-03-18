@@ -1,8 +1,18 @@
 Changelog
 =========
 
-1.2dev (unreleased)
--------------------
+1.2.1 (unreleased)
+------------------
+
+- Use z3c.form for portlet forms.
+  [bosim, davisagli]
+
+
+1.2 (2014-03-01)
+----------------
+
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
 
 - Drop usage of plone.formwidget.datetime and use plone.app.widgets instead.
   [garbas, davisagli]
