@@ -125,6 +125,9 @@ Changelog
   Fixes #109, closes #132.
   [tomgross, thet]
 
+- Add Traditional Chinese Translation. Closes #129.
+  [l34marr]
+
 - Changed `dates_for_display` and `get_location` to accept IEvent, IOccurrence
   and IEventAccessor objects and avoid confusion on using these methods.
   [thet]
