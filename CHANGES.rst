@@ -6,7 +6,8 @@ Changelog
 
 - Add an @@event_summary view, which provides the event summary listing in the
   event view for the purpose of reuse elsewhere. Allow the exclusion of
-  information via an excludes list.
+  information via an excludes list. The relevant methods are moved from
+  event_view to event_summary.
   [thet]
 
 - Improve markup of ``event_listing.pt`` in order to not break on IE 8.
