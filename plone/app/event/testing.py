@@ -46,7 +46,7 @@ def make_fake_response(request):
     headers = {}
     output = []
 
-    class Response:
+    class Response(object):
         def setHeader(self, header, value):
             headers[header] = value
 
