@@ -7,7 +7,7 @@
       tal:omit-tag="">
 <body tal:omit-tag="">
 
-<tal:def tal:define="data nocall:view/data; excludes view/excludes">
+<tal:def tal:define="data python:view.data; excludes view/excludes">
 
   <dl class="event details" summary="Event details" i18n:attributes="summary summary_event_details">
 
