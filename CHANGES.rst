@@ -4,6 +4,11 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
+- Add an @@event_summary view, which provides the event summary listing in the
+  event view for the purpose of reuse elsewhere. Allow the exclusion of
+  information via an excludes list.
+  [thet]
+
 - Improve markup of ``event_listing.pt`` in order to not break on IE 8.
   [rafaelbco]
 

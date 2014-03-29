@@ -258,3 +258,30 @@ get_events function like so::
     from plone.app.event.base import get_events, localized_now
     occ = get_events(context, start=localized_now(), ret_mode=2, expand=True)
 
+
+Reusing the @@event_summary view to list basic event information
+----------------------------------------------------------------
+
+The @@event_summary listing lists basic event information including microdata
+on the right hand side of the default event view. You can reuse this listing in
+custom views by calling the event_summary view on an IEvent providing context
+in page templates like so::
+
+    <tal:eventsummary replace="structure context/@@event_summary"/>
+
+or in Python code like so::
+
+    context.restrictedTraverse('@@event_ticket_summary')()
+
+
+There are cases where you might exclude some of this information. You can do
+that by overriding the `excludes` list of the view. Possible values are::
+
+    title
+    subjects
+    date
+    occurrences
+    location
+    contact
+    event_url
+    ical
