@@ -7,11 +7,7 @@ from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
 
-import logging
 import mock
-
-
-logger = logging.getLogger(name="plone.app.event test_events_listing")
 
 
 class TestEventsListingDX(AbstractSampleDataEvents):

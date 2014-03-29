@@ -73,11 +73,13 @@
         </tal:day>
         </tal:cond>
       </nav>
-      <div class="visualClear"/>
+      <div class="visualClear"></div>
     </header>
 
     <section>
+
     <tal:items repeat="data batch">
+
       <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent"
           tal:define="startf python:view.date_speller(data.start)">
 
@@ -157,13 +159,16 @@
           </ul>
 
         </div>
-        <div class="visualClear"/>
+        <div class="visualClear"></div>
 
       </article>
-    </tal:items>
-    <section>
+
+     </tal:items>
+
+    </section>
 
   </div>
+
   <div metal:use-macro="context/batch_macros/macros/navigation" />
 
 </tal:def>

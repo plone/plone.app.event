@@ -72,6 +72,24 @@
         layer="..interfaces.IBrowserLayer"
         />
 
+    <browser:page
+        for="plone.event.interfaces.IEvent"
+        name="event_summary"
+        class=".event_summary.EventSummaryView"
+        template="event_summary.pt"
+        permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
+        />
+
+    <browser:page
+        for="plone.event.interfaces.IOccurrence"
+        name="event_summary"
+        class=".event_summary.EventSummaryView"
+        template="event_summary.pt"
+        permission="zope2.View"
+        layer="..interfaces.IBrowserLayer"
+        />
+
     <adapter
         name="formatted_date"
         provides="zope.contentprovider.interfaces.IContentProvider"
