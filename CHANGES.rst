@@ -4,6 +4,9 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
+
 - Add an @@event_summary view, which provides the event summary listing in the
   event view for the purpose of reuse elsewhere. Allow the exclusion of
   information via an excludes list.
