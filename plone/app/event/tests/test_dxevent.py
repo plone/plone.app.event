@@ -100,22 +100,6 @@ class TestDXIntegration(unittest.TestCase):
 
         self.portal.manage_delObjects(['event1'])
 
-    def test_view(self):
-        self.portal.invokeFactory(
-            'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0),
-            end=datetime(2011, 11, 11, 12, 0),
-            timezone=TZNAME,
-            whole_day=False
-        )
-        e1 = self.portal['event1']
-        view = e1.restrictedTraverse('@@event_view')
-        self.assertTrue(view.formatted_date(e1) is not None)
-        self.assertTrue(view.next_occurrences is not None)
-
-        self.portal.manage_delObjects(['event1'])
-
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
