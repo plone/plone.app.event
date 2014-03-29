@@ -98,8 +98,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventAttendees.providedBy(e1))
         self.assertTrue(IEventContact.providedBy(e1))
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
@@ -125,8 +123,6 @@ class TestDXIntegration(unittest.TestCase):
             result[0].end,
             DateTime('2011/11/11 12:00:00 %s' % TZNAME)
         )
-
-        self.portal.manage_delObjects(['event1'])
 
     def test_data_postprocessing(self):
         # Addressing bug #62
@@ -188,8 +184,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventBasic(e1).start == dt_2_1)
         self.assertTrue(IEventBasic(e1).end == dt_2_2)
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_recurrence_indexing(self):
         utc = pytz.utc
         self.portal.invokeFactory(
@@ -215,8 +209,6 @@ class TestDXIntegration(unittest.TestCase):
             start=datetime(2011, 11, 12, 11, 0, tzinfo=utc)
         )
         self.assertTrue(len(result) == 1)
-
-        self.portal.manage_delObjects(['event1'])
 
     def test_event_accessor(self):
         utc = pytz.utc
@@ -251,8 +243,6 @@ class TestDXIntegration(unittest.TestCase):
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
-
-        self.portal.manage_delObjects(['event1'])
 
 
 class TestDXEventRecurrence(unittest.TestCase):
@@ -400,8 +390,6 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.event_url, self.event_url)
         self.assertEqual(e1.text.raw, self.text)
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_no_overwrite(self):
         self.portal.invokeFactory(
             'Event',
@@ -449,8 +437,6 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_name, self.contact_name)
         self.assertEqual(e1.event_url, self.event_url)
         self.assertEqual(e1.text.raw, self.text)
-
-        self.portal.manage_delObjects(['event1'])
 
 
 def test_suite():
