@@ -166,7 +166,7 @@ class TestOccurrences(unittest.TestCase):
         self.assertEqual(len(res), 5)
         self.assertTrue(IEventAccessor.providedBy(res[0]))
 
-    def test_eventview_occurrences(self):
+    def test_event_summary_occurrences(self):
         self.portal.invokeFactory(
             'Event',
             'many',
@@ -175,13 +175,13 @@ class TestOccurrences(unittest.TestCase):
             recurrence='RRULE:FREQ=DAILY;COUNT=1000')
 
         view = zope.component.getMultiAdapter(
-            (self.portal['interval'], self.request), name='event_view')
+            (self.portal['interval'], self.request), name='event_summary')
         result = view.next_occurrences
         # altogether 5 occurrences, but start occurrence is not included
         self.assertEqual(4, len(result))
 
         view = zope.component.getMultiAdapter(
-            (self.portal['many'], self.request), name='event_view')
+            (self.portal['many'], self.request), name='event_summary')
         result = view.next_occurrences
         self.assertEqual(view.max_occurrences, len(result))
 
