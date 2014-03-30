@@ -2,11 +2,8 @@
 """
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
-from datetime import timedelta
-from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
-from plone.app.event import PloneMessageFactory as _PMF
 from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
@@ -22,9 +19,7 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import dt_to_zone
 from plone.event.utils import pydt
-from plone.event.utils import tzdel
 from plone.event.utils import utc
 from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
@@ -66,8 +61,6 @@ class StartBeforeEnd(Invalid):
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
-    model.fieldset('dates', fields=['timezone'],
-                   label=_PMF(u'label_schema_dates', default=u'Dates'),)
 
     start = schema.Datetime(
         title=_(
@@ -117,20 +110,6 @@ class IEventBasic(model.Schema):
         required=False
     )
 
-    # TODO: form.order_before(timezone="IPublication.effective")
-    timezone = schema.Choice(
-        title=_(
-            u'label_event_timezone',
-            default=u'Timezone'
-        ),
-        description=_(
-            u'help_event_timezone',
-            default=u'Select the Timezone, where this event happens.'
-        ),
-        required=True,
-        vocabulary="plone.app.event.AvailableTimezones"
-    )
-
     # icalendar event uid
     sync_uid = schema.TextLine(required=False)
     form.mode(sync_uid='hidden')
@@ -146,21 +125,19 @@ class IEventBasic(model.Schema):
 
 
 def default_start(data):
+    """Provide default start for the form.
+    """
     return default_start_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
     default_start, field=IEventBasic['start']), name='default')
 
 
 def default_end(data):
+    """Provide default end for the form.
+    """
     return default_end_dt(data.context)
 provideAdapter(ComputedWidgetAttribute(
     default_end, field=IEventBasic['end']), name='default')
-
-
-def default_tz(data):
-    return default_timezone()
-provideAdapter(ComputedWidgetAttribute(
-    default_tz, field=IEventBasic['timezone']), name='default')
 
 
 class IEventRecurrence(model.Schema):
@@ -282,33 +259,6 @@ class IEventContact(model.Schema):
     )
 
 
-class EventLocation(object):
-
-    implements(IEventLocation)
-    adapts(IDexterityContent)
-
-    def __init__(self, context):
-        self.context = context
-
-
-class EventAttendees(object):
-
-    implements(IEventAttendees)
-    adapts(IDexterityContent)
-
-    def __init__(self, context):
-        self.context = context
-
-
-class EventContact(object):
-
-    implements(IEventContact)
-    adapts(IDexterityContent)
-
-    def __init__(self, context):
-        self.context = context
-
-
 # Mark these interfaces as form field providers
 alsoProvides(IEventBasic, IFormFieldProvider)
 alsoProvides(IEventRecurrence, IFormFieldProvider)
@@ -317,109 +267,48 @@ alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
 
 
-class FakeZone(tzinfo):
-    """Fake timezone to be applied to EventBasic start and end dates before
-    data_postprocessing event handler sets the correct one.
-
-    """
-    def utcoffset(self, dt):
-        return timedelta(0)
-
-    def tzname(self, dt):
-        return "FAKEZONE"
-
-    def dst(self, dt):
-        return timedelta(0)
-
-
+@implementer(IEventBasic)
+@adapter(IDexterityContent)
 class EventBasic(object):
 
     def __init__(self, context):
         self.context = context
 
     @property
-    def start(self):
-        return self._prepare_dt_get(self.context.start)
-    @start.setter
-    def start(self, value):
-        self.context.start = self._prepare_dt_set(value)
-
-    @property
-    def end(self):
-        return self._prepare_dt_get(self.context.end)
-    @end.setter
-    def end(self, value):
-        self.context.end = self._prepare_dt_set(value)
-
-    @property
-    def timezone(self):
-        return getattr(self.context, 'timezone', None)
-    @timezone.setter
-    def timezone(self, value):
-        if self.timezone:
-            # The event is edited and not newly created, otherwise the timezone
-            # info wouldn't exist.
-            # In order to treat user datetime input as localized, so that the
-            # values aren't converted to the target timezone, we have to set
-            # start and end too. Then that a temporary fake zone is applied and
-            # the data_postprocessing event subscriber can do it's job.
-            self.start = self.start
-            self.end = self.end
-        self.context.timezone = value
-
-    # TODO: whole day - and other attributes - might not be set at this time!
-    # TODO: how to provide default values?
-    @property
-    def whole_day(self):
-        return getattr(self.context, 'whole_day', False)
-    @whole_day.setter
-    def whole_day(self, value):
-        self.context.whole_day = value
-
-    @property
-    def open_end(self):
-        return getattr(self.context, 'open_end', False)
-    @open_end.setter
-    def open_end(self, value):
-        self.context.open_end = value
-
-    @property
-    def sync_uid(self):
-        return getattr(self.context, 'sync_uid', None)
-    @sync_uid.setter
-    def sync_uid(self, value):
-        self.context.sync_uid = value
-
-    @property
     def duration(self):
         return self.context.end - self.context.start
 
-    def _prepare_dt_get(self, dt):
-        # always get the date in event's timezone
-        return dt_to_zone(dt, self.context.timezone)
 
-    def _prepare_dt_set(self, dt):
-        # Dates are always set in UTC, saving the actual timezone in another
-        # field. But since the timezone value isn't known at time of saving the
-        # form, we have to save it with a fake zone first and replace it with
-        # the target zone afterwards. So, it's not timezone naive and can be
-        # compared to timezone aware Dates.
-
-        # return with fake zone and without microseconds
-        return dt.replace(microsecond=0, tzinfo=FakeZone())
-
-
+@implementer(IEventRecurrence)
+@adapter(IDexterityContent)
 class EventRecurrence(object):
 
     def __init__(self, context):
         self.context = context
 
-    @property
-    def recurrence(self):
-        return self.context.recurrence
-    @recurrence.setter
-    def recurrence(self, value):
-        self.context.recurrence = value
+
+@implementer(IEventLocation)
+@adapter(IDexterityContent)
+class EventLocation(object):
+
+    def __init__(self, context):
+        self.context = context
+
+
+@implementer(IEventAttendees)
+@adapter(IDexterityContent)
+class EventAttendees(object):
+
+    def __init__(self, context):
+        self.context = context
+
+
+@implementer(IEventContact)
+@adapter(IDexterityContent)
+class EventContact(object):
+
+    def __init__(self, context):
+        self.context = context
 
 
 ## Event handlers
@@ -435,15 +324,6 @@ def data_postprocessing(obj, event):
     # We handle date inputs as floating dates without timezones and apply
     # timezones afterwards.
     def _fix_zone(dt, zone):
-
-        if dt.tzinfo is not None and isinstance(dt.tzinfo, FakeZone):
-            # Delete the tzinfo only, if it was set by IEventBasic setter.
-            # Only in this case the start value on the object itself is what
-            # was entered by the user. After running this event subscriber,
-            # it's in UTC then.
-            # If tzinfo it's not available at all, a naive datetime was set
-            # probably by invokeFactory in tests.
-            dt = tzdel(dt)
 
         if dt.tzinfo is None:
             # In case the tzinfo was deleted above or was not present, we can
@@ -555,7 +435,7 @@ class EventAccessor(object):
     # Unified create method via Accessor
     @classmethod
     def create(cls, container, content_id, title, description=None,
-               start=None, end=None, timezone=None,
+               start=None, end=None,
                whole_day=None, open_end=None, **kwargs):
         container.invokeFactory(cls.event_type,
                                 id=content_id,
@@ -564,8 +444,7 @@ class EventAccessor(object):
                                 start=start,
                                 end=end,
                                 whole_day=whole_day,
-                                open_end=open_end,
-                                timezone=timezone)
+                                open_end=open_end)
         content = container[content_id]
         acc = IEventAccessor(content)
         acc.edit(**kwargs)
@@ -584,7 +463,6 @@ class EventAccessor(object):
             end=IEventBasic,
             whole_day=IEventBasic,
             open_end=IEventBasic,
-            timezone=IEventBasic,
             sync_uid=IEventBasic,
             recurrence=IEventRecurrence,
             location=IEventLocation,
@@ -644,6 +522,7 @@ class EventAccessor(object):
     @property
     def title(self):
         return safe_unicode(getattr(self.context, 'title', None))
+
     @title.setter
     def title(self, value):
         setattr(self.context, 'title', safe_unicode(value))
@@ -651,6 +530,7 @@ class EventAccessor(object):
     @property
     def description(self):
         return safe_unicode(getattr(self.context, 'description', None))
+
     @description.setter
     def description(self, value):
         setattr(self.context, 'description', safe_unicode(value))
@@ -658,6 +538,7 @@ class EventAccessor(object):
     @property
     def last_modified(self):
         return utc(self.context.modification_date)
+
     @last_modified.setter
     def last_modified(self, value):
         tz = default_timezone(self.context, as_tzinfo=True)
@@ -670,6 +551,7 @@ class EventAccessor(object):
         if textvalue is None:
             return u''
         return safe_unicode(textvalue.output)
+
     @text.setter
     def text(self, value):
         self.context.text = RichTextValue(raw=safe_unicode(value))

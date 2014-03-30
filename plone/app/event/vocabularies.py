@@ -87,6 +87,7 @@ directlyProvides(Weekdays, IVocabularyFactory)
 
 @forever.memoize
 def EventTypes(context):
+    # TODO: refactor for DX
     """Vocabulary for available event types.
 
     Insane stuff: All types are created temporary and checked if the provide
