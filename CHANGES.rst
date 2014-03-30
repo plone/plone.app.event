@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0 (unreleased)
+----------------
+
+- Remove Archetypes subpackage.
+  [yenzenz, thet]
+
+
 1.2.1 (unreleased)
 ------------------
 

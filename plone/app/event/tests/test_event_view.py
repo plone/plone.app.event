@@ -1,8 +1,5 @@
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
-from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
@@ -60,14 +57,3 @@ class TestEventViewDX(AbstractSampleDataEvents):
         self.assertTrue('2013-05-09' not in output)
         self.assertTrue('This event is part of a recurring Event.' in output)
         self.assertTrue('http://plone.org' in output)
-
-
-class TestEventViewAT(TestEventViewDX):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create
-
-    @property
-    def traverser(self):
-        return OccTravAT(self.now_event, self.request)

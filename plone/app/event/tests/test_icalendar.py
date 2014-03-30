@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from plone.app.event import base
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
-from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.ical.importer import ical_import
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
-from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import make_fake_response
@@ -245,16 +241,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
-
-
-class ICalendarExportTestAT(ICalendarExportTestDX):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create
-
-    def traverser(self, context, request):
-        return OccTravAT(context, request)
 
 
 class TestIcalImportDX(unittest.TestCase):
@@ -536,8 +522,3 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertNotEqual(desc21, desc22)
         self.assertTrue(start21 < start22)
         self.assertTrue(end21 < end22)
-
-
-class TestIcalImportAT(TestIcalImportDX):
-    layer = PAEventAT_FUNCTIONAL_TESTING
-    event_type = 'Event'

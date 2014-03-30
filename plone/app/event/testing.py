@@ -93,43 +93,6 @@ PAEvent_INTEGRATION_TESTING = IntegrationTesting(
     name="PAEvent:Integration")
 
 
-class PAEventATLayer(PloneSandboxLayer):
-
-    defaultBases = (PAEvent_FIXTURE,)
-
-    def setUpZope(self, app, configurationContext):
-        self.ostz = os_zone()
-        # Load ZCML
-        import plone.app.collection
-        self.loadZCML(package=plone.app.collection,
-                      context=configurationContext)
-        import plone.app.event.at
-        self.loadZCML(package=plone.app.event.at, context=configurationContext)
-
-        z2.installProduct(app, 'Products.ATContentTypes')
-        z2.installProduct(app, 'plone.app.collection')
-        z2.installProduct(app, 'plone.app.event.at')
-
-    def setUpPloneSite(self, portal):
-
-        if PLONE5:
-            # Install Products.ATContentTypes profile only for versions, where
-            # it's available
-            self.applyProfile(portal, 'Products.ATContentTypes:default')
-        self.applyProfile(portal, 'plone.app.collection:default')
-        self.applyProfile(portal, 'plone.app.event.at:default')
-        set_timezone(tz='UTC')
-
-PAEventAT_FIXTURE = PAEventATLayer()
-PAEventAT_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(PAEventAT_FIXTURE,),
-    name="PAEventAT:Integration")
-# Functional testing needed for tests, with explicit transaction commits.
-PAEventAT_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(PAEventAT_FIXTURE,),
-    name="PAEventAT:Functional")
-
-
 class PAEventDXLayer(PloneSandboxLayer):
 
     defaultBases = (PAEvent_FIXTURE,)

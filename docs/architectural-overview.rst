@@ -12,10 +12,8 @@ mind:
   should be least dependend on plone.app.event. Best would be that one can
   deinstall this feature completly.
 
-  [b] Dexterity and Archetypes support: plone.app.event should provide
-  Dexterity behaviors, which can be used in Dexterity types and an ATEvent
-  content type (factored out from ATContentTypes) as a replacement for the
-  Products.ATContentType ATEvent.
+  [b] Dexterity support: plone.app.event should provide Dexterity behaviors,
+  which can be used in Dexterity type.
 
   [c] Standards compliancy: the iCalendar / `RFC5545
   <http://tools.ietf.org/html/rfc5545>`_ standard is wonderful flexible, so
@@ -31,11 +29,8 @@ mind:
 
   [g] Timezone support.
 
-Encapsulation and independence: plone.app.event provides the Archetypes based
-type and the Dexterity behaviors via two other subpackages in that package: at
-and dx. Based on installed features (Products.ATContentTypes or
-plone.dexterity, respectively), eather of those subpackages are included via
-the zcml:condition statement. The calendar and event portlets were moved from
+Encapsulation and independence: plone.app.event provides the Dexterity behaviors.
+The calendar and event portlets were moved from
 plone.app.portlets into plone.app.event, where they belong semantically - thus
 improving encapsulation and independence and reducing interwoven dependencies.
 The calendar portlet was completly refactored. The functionality of the
@@ -43,7 +38,7 @@ CalendarTool (portal_calendar) was reimplenented. Important settings from the
 calendar-controlpanel are now available in the event configlet. Since the
 calendar portlet was the only consumer of the CalendarTool, the CalendarTool,
 the calendar controlpanel and the dependency to Products.CMFCalendar can be
-dropped. The new plone.app.widgets package implements archetypes and z3cform
+dropped. The new plone.app.widgets package implements z3cform
 based widgets, so the old datetime widget can be dropped. Python-dateutil
 provides recurrence calculations based on the RFC5545 standard -
 plone.formwidget.recurrence provides a awidget for recurrence and
@@ -65,11 +60,6 @@ plone.app.event
 ~~~~~~~~~~~~~~~
 
 Github: https://github.com/plone/plone.app.event
-
-The "at" submodule provides the Archetypes based ATEvent content type as a
-drop-in replacement of the ATContentType based ATEvent. Ical, recurrence and
-generic event accessor adapters and some event subscribers related to the
-ATEvent.
 
 The "dx" submodule provides Dexterity behaviors (some granular ones). Like in
 the "at" submodule, ical, recurrence and generic event accessor adapters as
@@ -107,16 +97,6 @@ plone.event
 Github: https://github.com/plone/plone.event
 
 Date/time related utilities, recurrence calculations based on python-dateutil.
-
-
-plone.formwidget.datetime
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Github: https://github.com/plone/plone.formwidget.datetime
-
-Derived from collective.z3cform.datetimewidget and archetypes.datetimewidget
-(which itself was derived from the former). It is splitted into "at" and
-"z3cform" subpackages, like plone.app.event.
 
 
 plone.formwidget.recurrence

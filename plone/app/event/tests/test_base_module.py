@@ -1,6 +1,5 @@
 from DateTime import DateTime
 from plone.app.event import base
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import DEFAULT_END_DELTA
 from plone.app.event.base import DT
@@ -18,7 +17,6 @@ from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -609,31 +607,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         self.assertRaises(AssertionError, _invalid_end)
 
 
-class TestGetEventsATPydt(TestGetEventsDX):
-    """Test get_events with AT objects and datetime based dates.
-    """
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create
-
-
-class TestGetEventsATZDT(TestGetEventsATPydt):
-    """Test get_events with AT objects and Zope DateTime based dates.
-    """
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def make_dates(self):
-        def_tz = default_timezone()
-        now = self.now = DateTime(2013, 5, 5, 10, 0, 0, def_tz)
-        self.tomorrow = DateTime(2013, 5, 6, 10, 0, 0, def_tz)
-        past = self.past = DateTime(2013, 4, 25, 10, 0, 0, def_tz)
-        future = self.future = DateTime(2013, 5, 15, 10, 0, 0, def_tz)
-        far = self.far = DateTime(2013, 6, 4, 10, 0, 0, def_tz)
-        duration = self.duration = 0.1
-        return (now, past, future, far, duration)
-
-
 class TestGetEventsOptimizations(AbstractSampleDataEvents):
     """Test get_events performance optimizations
 
@@ -809,88 +782,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   limit=3,
                                   ret_mode=RET_MODE_ACCESSORS))
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
-
-
-class TestDatesForDisplayAT(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
-    def test_prep_display_with_time(self):
-        event_id = self.portal.invokeFactory(
-            'Event',
-            id="event",
-            startDate='2000/10/12 06:00:00',
-            endDate='2000/10/12 18:00:00',
-            timezone="Europe/Vienna"
-        )
-        event = self.portal[event_id]
-        self.assertEqual(
-            dates_for_display(event),
-            {'start_date': u'Oct 12, 2000',
-             'start_time': u'06:00 AM',
-             'start_iso':  u'2000-10-12T06:00:00+02:00',
-             'end_date':   u'Oct 12, 2000',
-             'end_time':   u'06:00 PM',
-             'end_iso':    u'2000-10-12T18:00:00+02:00',
-             'same_day':   True,
-             'same_time':  False,
-             'whole_day':  False,
-             'open_end':   False,
-             }
-        )
-
-    def test_prep_display_wholeday_sameday(self):
-        event_id = self.portal.invokeFactory(
-            'Event',
-            id="event",
-            startDate='2000/10/12 06:00:00',
-            endDate='2000/10/12 18:00:00',
-            timezone="Europe/Vienna",
-            wholeDay=True
-        )
-        event = self.portal[event_id]
-        self.assertEqual(
-            dates_for_display(event),
-            {'start_date': u'Oct 12, 2000',
-             'start_time': None,
-             'start_iso':  u'2000-10-12',
-             'end_date':   u'Oct 12, 2000',
-             'end_time':   None,
-             'end_iso':    u'2000-10-12',
-             'same_day':   True,
-             'same_time':  False,
-             'whole_day':  True,
-             'open_end':   False
-             }
-        )
-
-    def test_prep_display_wholeday_differentdays(self):
-        event_id = self.portal.invokeFactory(
-            'Event',
-            id="event",
-            startDate='2000/10/12 06:00:00',
-            endDate='2000/10/13 18:00:00',
-            timezone="Europe/Vienna",
-            wholeDay=True
-        )
-        event = self.portal[event_id]
-        self.assertEqual(
-            dates_for_display(event),
-            {'start_date': u'Oct 12, 2000',
-             'start_time': None,
-             'start_iso':  u'2000-10-12',
-             'end_date':   u'Oct 13, 2000',
-             'end_time':   None,
-             'end_iso':    u'2000-10-13',
-             'same_day':   False,
-             'same_time':  False,
-             'whole_day':  True,
-             'open_end':   False,
-             }
-        )
 
 
 class TestDatesForDisplayDX(unittest.TestCase):

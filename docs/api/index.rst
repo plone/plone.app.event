@@ -10,10 +10,6 @@ plone.app.event API
     recurrence.rst
     setuphandlers.rst
     vocabularies.rst
-    at/content.rst
-    at/interfaces.rst
-    at/traverser.rst
-    at/upgrades/event.rst
     browser/controlpanel.rst
     browser/event_listing.rst
     browser/event_view.rst

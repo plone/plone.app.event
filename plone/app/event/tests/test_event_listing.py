@@ -1,7 +1,5 @@
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.base import localized_today
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -57,10 +55,3 @@ class TestEventsListingDX(AbstractSampleDataEvents):
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         icalstr = ''.join(output)
         self.assertTrue('Long Event' in icalstr)
-
-
-class TestEventsListingAT(TestEventsListingDX):
-    layer = PAEventAT_INTEGRATION_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create

@@ -1,14 +1,10 @@
 from OFS.SimpleItem import SimpleItem
-from plone.app.event.at.content import EventAccessor as ATEventAccessor
-from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
-from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
-from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
@@ -95,19 +91,7 @@ class TestTraversalDX(AbstractSampleDataEvents):
         self.assertTrue(title in browser.contents)
 
 
-class TestTraversalAT(TestTraversalDX):
-    """Test OccurrenceTraverser with AT objects.
-    """
-    layer = PAEventAT_FUNCTIONAL_TESTING
-
-    def event_factory(self):
-        return ATEventAccessor.create
-
-    @property
-    def traverser(self):
-        return OccTravAT(self.now_event, self.request)
-
-
+"""
 class TestOccurrences(unittest.TestCase):
 
     layer = PAEventAT_INTEGRATION_TESTING
@@ -184,7 +168,7 @@ class TestOccurrences(unittest.TestCase):
             (self.portal['many'], self.request), name='event_summary')
         result = view.next_occurrences
         self.assertEqual(view.max_occurrences, len(result))
-
+"""
 
 class MockEvent(SimpleItem):
     """ Mock event"""

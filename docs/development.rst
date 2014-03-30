@@ -102,31 +102,6 @@ Then register the behavior in ZCML::
 And register it in your FTI via GenericSetup as usual.
 
 
-Extending the Archetypes based plone.app.event.at.content.ATEvent class
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For Archetypes, derive from ``plone.app.event.at.content.ATEvent``.
-
-Here is an example from `collective.folderishtypes
-<https://github.com/collective/collective.folderishtypes/blob/master/collective/folderishtypes/content/folderish_event.py>`_::
-
-    from Products.Archetypes import atapi
-    from plone.app.event.at import content as event
-
-    type_schema = event.ATEventSchema.copy()  # Add your custom fields here
-    # Move location back to main schemata
-    type_schema.changeSchemataForField('location', 'default')
-    type_schema.moveField('location', before='attendees')
-
-    class CustomEvent(event.ATEvent):
-        portal_type = 'Custom Event'
-        _at_rename_after_creation = True
-        schema = type_schema
-    atapi.registerType(CustomEvent, PROJECTNAME)
-
-Register this type in the FTI via Generic Setup as usual.
-
-
 None of the above
 ~~~~~~~~~~~~~~~~~
 
@@ -160,6 +135,8 @@ Alternatively, use the more convenient IEventAccessor pattern described below.
 
 Accessing event objects via an unified accessor object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TODO: only DX
 
 To make it easier to support Archetypes and Dexterity based objects, an
 adapter for content objects is provided, which allows unified interaction with

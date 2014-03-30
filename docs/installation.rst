@@ -31,11 +31,7 @@ Installation
 
 Depend on one (or both) of these setuptools dependencies::
 
-    'plone.app.event [dexterity]'
-
-or::
-
-    'plone.app.event [archetypes]'
+    'plone.app.event'
 
 
 The zcml dependency is be loaded automatically by z3c.autoinclude.
@@ -44,10 +40,6 @@ Then install plone.app.event via the controlpanel or by depending on the
 following GenericSetup profile in metadata.xml::
 
     plone.app.event:default
-
-For Archetypes, use this one::
-
-    plone.app.event.at:default
 
 Don't use the ``plone.app.event.dx:default`` profile, which will be removed in
 future versions of plone.app.event. Please create your own type based on
@@ -73,6 +65,7 @@ buildout like so::
 
 Upgrading from plone.app.event 1.0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO: ...
 
 The "ploneintegration" setuptools extra, subpackage and GenericSetup profile
 have been gone. You just need to remove these dependencies from your setup and
@@ -118,6 +111,8 @@ first weekday in calendar views.
 
 Upgrading from Products.ATContentType to plone.app.event
 --------------------------------------------------------
+
+TODO: ...
 
 .. warning::
 
