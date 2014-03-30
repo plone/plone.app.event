@@ -556,8 +556,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
                           ret_mode=RET_MODE_ACCESSORS)
         self.assertEqual([e.url for e in limit], [e.url for e in all_[:3]])
 
-        self.portal.manage_delObjects(['past_recur1', 'tomorrow'])
-
     def test_construct_calendar(self):
         res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
         cal = construct_calendar(res)  # keys are date-strings.
@@ -688,10 +686,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             (u'Past Recur', '2013-05-09 11:00:00', '2013-05-09 12:00:00'),
             (u'Future Event', '2013-05-15 10:00:00', '2013-05-15 11:00:00'),
             (u'Past Recur', '2013-05-16 11:00:00', '2013-05-16 12:00:00')]
-
-    def tearDown(self):
-        self.portal.manage_delObjects(['past_recur', 'tomorrow'])
-        AbstractSampleDataEvents.tearDown(self)
 
     def diff(self, list1, list2):
         c = set(list1).union(set(list2))

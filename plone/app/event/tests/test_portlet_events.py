@@ -186,11 +186,8 @@ class RendererTest(unittest.TestCase):
         # A given search base gives calendar urls without event_listing part
         self.assertTrue('event_listing' not in portlet.render())
 
-        # TODO: better create objects at setup and use thest in these tests
-        self.portal.manage_delObjects(['e1', 'eventfolder'])
-
     def test_events_recurring(self):
-        startDT = DateTime('Australia/Brisbane')+1
+        startDT = DateTime('Australia/Brisbane') + 1
 
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
                                   startDate=startDT,
@@ -210,7 +207,7 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('Event 2' not in [x.title for x in events])
 
         rd = r.render()
-        occ1DT = startDT+7
+        occ1DT = startDT + 7
         # The first occurrence of the event itself should show up. It should
         # link to the event and not an occurrence.
         self.assertTrue('http://nohost/plone/e1"' in rd)
@@ -219,8 +216,6 @@ class RendererTest(unittest.TestCase):
             'http://nohost/plone/e1/%s-%02d-%02d' %
             (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd
         )
-
-        self.portal.manage_delObjects(['e1', 'e2'])
 
     def test_events_listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
