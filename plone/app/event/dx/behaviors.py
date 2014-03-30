@@ -13,6 +13,7 @@ from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
+from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
@@ -41,6 +42,8 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import invariant
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import pytz
 
@@ -58,7 +61,21 @@ class StartBeforeEnd(Invalid):
                 default=u"Invalid start or end date")
 
 
-class IEventBasic(model.Schema):
+@provider(IContextAwareDefaultFactory)
+def default_start(context):
+    """Provide default start for the form.
+    """
+    return default_start_dt(context)
+
+
+@provider(IContextAwareDefaultFactory)
+def default_end(context):
+    """Provide default end for the form.
+    """
+    return default_end_dt(context)
+
+
+class IEventBasic(model.Schema, IDXEvent):
     """ Basic event schema.
     """
 
@@ -71,7 +88,8 @@ class IEventBasic(model.Schema):
             u'help_event_start',
             default=u'Date and Time, when the event begins.'
         ),
-        required=True
+        required=True,
+        defaultFactory=default_start
     )
 
     end = schema.Datetime(
@@ -83,7 +101,8 @@ class IEventBasic(model.Schema):
             u'help_event_end',
             default=u'Date and Time, when the event ends.'
         ),
-        required=True
+        required=True,
+        defaultFactory=default_end
     )
 
     whole_day = schema.Bool(
@@ -95,7 +114,8 @@ class IEventBasic(model.Schema):
             u'help_event_whole_day',
             default=u'Event lasts whole day.'
         ),
-        required=False
+        required=False,
+        default=False
     )
 
     open_end = schema.Bool(
@@ -107,7 +127,8 @@ class IEventBasic(model.Schema):
             u'help_event_open_end',
             default=u"This event is open ended."
         ),
-        required=False
+        required=False,
+        default=False
     )
 
     # icalendar event uid
@@ -124,23 +145,7 @@ class IEventBasic(model.Schema):
             )
 
 
-def default_start(data):
-    """Provide default start for the form.
-    """
-    return default_start_dt(data.context)
-provideAdapter(ComputedWidgetAttribute(
-    default_start, field=IEventBasic['start']), name='default')
-
-
-def default_end(data):
-    """Provide default end for the form.
-    """
-    return default_end_dt(data.context)
-provideAdapter(ComputedWidgetAttribute(
-    default_end, field=IEventBasic['end']), name='default')
-
-
-class IEventRecurrence(model.Schema):
+class IEventRecurrence(model.Schema, IDXEventRecurrence):
     """ Recurring Event Schema.
     """
     recurrence = schema.Text(
@@ -152,7 +157,8 @@ class IEventRecurrence(model.Schema):
             u'help_event_recurrence',
             default=u'Define the event recurrence rule.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -182,7 +188,8 @@ class IEventLocation(model.Schema):
             u'help_event_location',
             default=u'Location of the event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -218,7 +225,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_name',
             default=u'Name of a person to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     contact_email = schema.TextLine(
@@ -230,7 +238,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_email',
             default=u'Email address to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     contact_phone = schema.TextLine(
@@ -242,7 +251,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_phone',
             default=u'Phone number to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     event_url = schema.TextLine(
@@ -255,7 +265,8 @@ class IEventContact(model.Schema):
             default=u'Web address with more info about the event. '
                     u'Add http:// for external links.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -267,52 +278,9 @@ alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
 
 
-@implementer(IEventBasic)
-@adapter(IDexterityContent)
-class EventBasic(object):
-
-    def __init__(self, context):
-        self.context = context
-
-    @property
-    def duration(self):
-        return self.context.end - self.context.start
-
-
-@implementer(IEventRecurrence)
-@adapter(IDexterityContent)
-class EventRecurrence(object):
-
-    def __init__(self, context):
-        self.context = context
-
-
-@implementer(IEventLocation)
-@adapter(IDexterityContent)
-class EventLocation(object):
-
-    def __init__(self, context):
-        self.context = context
-
-
-@implementer(IEventAttendees)
-@adapter(IDexterityContent)
-class EventAttendees(object):
-
-    def __init__(self, context):
-        self.context = context
-
-
-@implementer(IEventContact)
-@adapter(IDexterityContent)
-class EventContact(object):
-
-    def __init__(self, context):
-        self.context = context
-
-
 ## Event handlers
 
+"""
 def data_postprocessing(obj, event):
 
     # newly created object, without start/end/timezone (e.g. invokeFactory()
@@ -370,7 +338,7 @@ def data_postprocessing(obj, event):
 
     # Reindex
     obj.reindexObject()
-
+"""
 
 ## Attribute indexer
 
@@ -434,17 +402,9 @@ class EventAccessor(object):
 
     # Unified create method via Accessor
     @classmethod
-    def create(cls, container, content_id, title, description=None,
-               start=None, end=None,
-               whole_day=None, open_end=None, **kwargs):
-        container.invokeFactory(cls.event_type,
-                                id=content_id,
-                                title=title,
-                                description=description,
-                                start=start,
-                                end=end,
-                                whole_day=whole_day,
-                                open_end=open_end)
+    def create(cls, container, content_id, title, **kwargs):
+        container.invokeFactory(
+            cls.event_type, id=content_id, title=title, **kwargs)
         content = container[content_id]
         acc = IEventAccessor(content)
         acc.edit(**kwargs)
@@ -518,7 +478,23 @@ class EventAccessor(object):
     def duration(self):
         return self.end - self.start
 
+    @property
+    def timezone(self):
+        """Returns the timezone name for the event. If the start timezone
+        differs from the end timezone, it returns a tuple with
+        (START_TIMEZONENAME, END_TIMEZONENAME).
+        """
+        tz_start = tz_end = None
+        tz = getattr(self.start, 'tzinfo', None)
+        if tz:
+            tz_start = tz.zone
+        tz = getattr(self.end, 'tzinfo', None)
+        if tz:
+            tz_end = tz.zone
+        return tz_start if tz_start == tz_end else (tz_start, tz_end)
+
     # rw properties not in behaviors (yet) # TODO revisit
+
     @property
     def title(self):
         return safe_unicode(getattr(self.context, 'title', None))
