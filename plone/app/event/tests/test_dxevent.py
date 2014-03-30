@@ -18,6 +18,7 @@ from plone.app.event.dx.upgrades.upgrades import upgrade_attribute_storage
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
+from plone.app.event.testing import make_fake_response
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.app.textfield.value import RichTextValue
@@ -42,6 +43,45 @@ TZNAME = "Europe/Vienna"
 
 class MockEvent(SimpleItem):
     """ Mock event"""
+
+
+from plone.dexterity.browser.edit import DefaultEditForm
+
+
+class TestDXAddEdit(unittest.TestCase):
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'testevent',
+            title="Test Event",
+            start=datetime(2014, 03, 29, 21, 53),
+            end=datetime(2014, 03, 29, 22, 45),
+            timezone=TZNAME
+        )
+        e1 = self.portal['testevent']
+        e1.reindexObject()
+
+    def test_edit_context(self):
+        """Test if already added event can be edited directly on the context as
+        intended.
+        """
+        # DOES NOT WORK...
+        testevent = self.portal.testevent
+        request = self.request
+        request.form = {
+            'form.widgets.IEventBasic.start': ('2014', '2', '2', '10', '10')
+        }
+        edit = DefaultEditForm(testevent, request)
+        edit.update()
+
+        save = edit.buttons['save']
+        edit.handlers.getHandler(save)(edit, edit)
 
 
 class TestDXIntegration(unittest.TestCase):
