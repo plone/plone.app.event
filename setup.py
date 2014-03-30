@@ -51,7 +51,7 @@ setup(
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.textfield',
-        'plone.app.vocabularies',
+        'plone.app.vocabularies>2.1.14',
         'plone.app.widgets [dexterity]',
         'plone.app.widgets',
         'plone.app.z3cform',
