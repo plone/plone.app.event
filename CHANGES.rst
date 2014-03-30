@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- move vocabularies to plone.app.vocabularies
+  [yenzenz, thet]
+
 - Remove Timezone field from IEventBasic behavior. Instead, store timezone
   information directly in the tzinfo object on start and end datetime objects.
   [yenzenz, thet]
