@@ -102,18 +102,10 @@ class TestDXAddEdit(unittest.TestCase):
         ).value = "TestEvent"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-month').value = ("3",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-day').value = ("30",)
+            name='form.widgets.IEventBasic.start').value = "2014-03-30 03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-month').value = ("3",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-day').value = ("31",)
+            name='form.widgets.IEventBasic.end').value = "2014-03-30 04:51"
 
         self.browser.getControl('Save').click()
 
@@ -122,7 +114,6 @@ class TestDXAddEdit(unittest.TestCase):
         self.assertTrue(self.browser.url.endswith('testevent/view'))
         self.assertTrue('TestEvent' in self.browser.contents)
         self.assertTrue('2014-03-30' in self.browser.contents)
-        self.assertTrue('2014-03-31' in self.browser.contents)
 
         # EDIT
         #
@@ -130,25 +121,16 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open('%s/@@edit' % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-month').value = ("2",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-day').value = ("2",)
+            name='form.widgets.IEventBasic.start').value = "2014-03-31 03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-month').value = ("2",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-day').value = ("3",)
+            name='form.widgets.IEventBasic.end').value = "2014-03-31 04:51"
 
         self.browser.getControl('Save').click()
 
         # CHECK VALUES
         #
-        self.assertTrue('2014-02-02' in self.browser.contents)
-        self.assertTrue('2014-02-03' in self.browser.contents)
+        self.assertTrue('2014-03-31' in self.browser.contents)
 
 
 class TestDXIntegration(unittest.TestCase):
