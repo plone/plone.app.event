@@ -820,7 +820,6 @@ class TestDatesForDisplayDX(unittest.TestCase):
             whole_day=True
         )
         event = self.portal[event_id]
-        import pdb; pdb.set_trace()
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
