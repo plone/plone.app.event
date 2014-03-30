@@ -93,6 +93,7 @@ class TestDXAddEdit(unittest.TestCase):
         edit.handlers.getHandler(save)(edit, edit)
         """
 
+        #
         # ADD
         #
         self.browser.open(self.portal.absolute_url())
@@ -115,6 +116,7 @@ class TestDXAddEdit(unittest.TestCase):
         self.assertTrue('TestEvent' in self.browser.contents)
         self.assertTrue('2014-03-30' in self.browser.contents)
 
+        #
         # EDIT
         #
         testevent = self.portal.testevent
@@ -128,9 +130,38 @@ class TestDXAddEdit(unittest.TestCase):
 
         self.browser.getControl('Save').click()
 
-        # CHECK VALUES
+        #
+        # EDIT AGAIN
+        #
+        testevent = self.portal.testevent
+        self.browser.open('%s/@@edit' % testevent.absolute_url())
+
+        self.browser.getControl('Save').click()
+
+        # CHECK DATES/TIMES, MUST NOT HAVE CHANGED
         #
         self.assertTrue('2014-03-31' in self.browser.contents)
+        self.assertTrue('03:51' in self.browser.contents)
+        self.assertTrue('04:51' in self.browser.contents)
+
+        #
+        # EDIT, CHANGE TIMEZONE
+        #
+        testevent = self.portal.testevent
+        self.browser.open('%s/@@edit' % testevent.absolute_url())
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.timezone:list').value =\
+            ["Europe/Madrid", ]
+
+        self.browser.getControl('Save').click()
+
+        # CHECK DATES/TIMES, MUST NOT HAVE CHANGED
+        #
+        self.assertTrue('Europe/Madrid' in self.browser.contents)
+        self.assertTrue('2014-03-31' in self.browser.contents)
+        self.assertTrue('03:51' in self.browser.contents)
+        self.assertTrue('04:51' in self.browser.contents)
 
 
 class TestDXIntegration(unittest.TestCase):
