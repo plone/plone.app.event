@@ -89,9 +89,6 @@ def ical_import(container, ics_resource, event_type,
                 end = start + duration
             # else: whole day or open end
 
-        timezone = getattr(getattr(start, 'tzinfo', None), 'zone', None) or\
-            base.default_timezone(container)
-
         whole_day = False
         open_end = False
         if is_date(start) and (is_date(end) or end is None):
@@ -185,7 +182,6 @@ def ical_import(container, ics_resource, event_type,
         event.description = description
         event.start = start
         event.end = end
-        event.timezone = timezone
         event.whole_day = whole_day
         event.open_end = open_end
         event.location = location

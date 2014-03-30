@@ -534,7 +534,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             start=self.past,
             end=self.past + self.duration,
             location=u"Dornbirn",
-            timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
         factory(
@@ -545,7 +544,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             end=self.tomorrow + self.duration,
             open_end=True,
             location=u"Dornbirn",
-            timezone=TEST_TIMEZONE,
         )
 
         limit = get_events(self.portal, start=self.now, expand=True,
@@ -632,7 +630,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             start=self.past + self.duration,
             end=self.past + self.duration + self.duration,
             location=u"Dornbirn",
-            timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
         factory(
@@ -643,7 +640,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             end=self.tomorrow + self.duration,
             open_end=True,
             location=u"Dornbirn",
-            timezone=TEST_TIMEZONE,
         )
         self.occ = [
             (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
@@ -790,28 +786,28 @@ class TestDatesForDisplayDX(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_prep_display_with_time(self):
         event_id = self.portal.invokeFactory(
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0),
-            end=datetime.datetime(2000, 10, 12, 18, 0, 0),
-            timezone="Europe/Vienna"
+            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
+            end=datetime.datetime(2000, 10, 12, 18, 0, 0, tzinfo=self.tz)
         )
         event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': u'06:00 AM',
-             'start_iso':  u'2000-10-12T06:00:00+02:00',
-             'end_date':   u'Oct 12, 2000',
-             'end_time':   u'06:00 PM',
-             'end_iso':    u'2000-10-12T18:00:00+02:00',
-             'same_day':   True,
-             'same_time':  False,
-             'whole_day':  False,
-             'open_end':   False,
+             'start_iso': '2000-10-12T06:00:00+02:00',
+             'end_date': u'Oct 12, 2000',
+             'end_time': u'06:00 PM',
+             'end_iso': '2000-10-12T18:00:00+02:00',
+             'same_day': True,
+             'same_time': False,
+             'whole_day': False,
+             'open_end': False,
              }
         )
 
@@ -819,24 +815,24 @@ class TestDatesForDisplayDX(unittest.TestCase):
         event_id = self.portal.invokeFactory(
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0),
-            end=datetime.datetime(2000, 10, 12, 18, 0, 0),
-            timezone="Europe/Vienna",
+            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
+            end=datetime.datetime(2000, 10, 12, 18, 0, 0, tzinfo=self.tz),
             whole_day=True
         )
         event = self.portal[event_id]
+        import pdb; pdb.set_trace()
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
-             'end_date':   u'Oct 12, 2000',
-             'end_time':   None,
-             'end_iso':    u'2000-10-12',
-             'same_day':   True,
-             'same_time':  False,
-             'whole_day':  True,
-             'open_end':   False,
+             'start_iso': '2000-10-12',
+             'end_date': u'Oct 12, 2000',
+             'end_time': None,
+             'end_iso': '2000-10-12',
+             'same_day': True,
+             'same_time': False,
+             'whole_day': True,
+             'open_end': False,
              }
         )
 
@@ -844,9 +840,8 @@ class TestDatesForDisplayDX(unittest.TestCase):
         event_id = self.portal.invokeFactory(
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0),
-            end=datetime.datetime(2000, 10, 13, 18, 0, 0),
-            timezone="Europe/Vienna",
+            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
+            end=datetime.datetime(2000, 10, 13, 18, 0, 0, tzinfo=self.tz),
             whole_day=True
         )
         event = self.portal[event_id]
@@ -854,13 +849,13 @@ class TestDatesForDisplayDX(unittest.TestCase):
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
-             'end_date':   u'Oct 13, 2000',
-             'end_time':   None,
-             'end_iso':    u'2000-10-13',
-             'same_day':   False,
-             'same_time':  False,
-             'whole_day':  True,
-             'open_end':   False,
+             'start_iso': '2000-10-12',
+             'end_date': u'Oct 13, 2000',
+             'end_time': None,
+             'end_iso': '2000-10-13',
+             'same_day': False,
+             'same_time': False,
+             'whole_day': True,
+             'open_end': False,
              }
         )

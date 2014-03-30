@@ -19,6 +19,7 @@ from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
+from plone.app.event.tests.test_base_module import TEST_TIMEZONE
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
@@ -39,9 +40,6 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import pytz
 import unittest2 as unittest
 import zope.interface
-
-
-TZNAME = "Europe/Vienna"
 
 
 class MockEvent(SimpleItem):
@@ -76,7 +74,7 @@ class TestDXAddEdit(unittest.TestCase):
             title="Test Event",
             start=datetime(2014, 03, 29, 21, 53),
             end=datetime(2014, 03, 29, 22, 45),
-            timezone=TZNAME
+            timezone=TEST_TIMEZONE
         )
 
         from plone.dexterity.browser.edit import DefaultEditForm
@@ -144,25 +142,6 @@ class TestDXAddEdit(unittest.TestCase):
         self.assertTrue('03:51' in self.browser.contents)
         self.assertTrue('04:51' in self.browser.contents)
 
-        #
-        # EDIT, CHANGE TIMEZONE
-        #
-        testevent = self.portal.testevent
-        self.browser.open('%s/@@edit' % testevent.absolute_url())
-
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.timezone:list').value =\
-            ["Europe/Madrid", ]
-
-        self.browser.getControl('Save').click()
-
-        # CHECK DATES/TIMES, MUST NOT HAVE CHANGED
-        #
-        self.assertTrue('Europe/Madrid' in self.browser.contents)
-        self.assertTrue('2014-03-31' in self.browser.contents)
-        self.assertTrue('03:51' in self.browser.contents)
-        self.assertTrue('04:51' in self.browser.contents)
-
 
 class TestDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
@@ -172,6 +151,7 @@ class TestDXIntegration(unittest.TestCase):
         self.request = self.layer['request']
         set_browserlayer(self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_start_defaults(self):
         data = MockEvent()
@@ -206,9 +186,8 @@ class TestDXIntegration(unittest.TestCase):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
             'event1',
-            start=datetime(2011, 11, 11, 11, 0),
-            end=datetime(2011, 11, 11, 12, 0),
-            timezone=TZNAME,
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
             whole_day=False
         )
         e1 = self.portal['event1']
@@ -222,9 +201,8 @@ class TestDXIntegration(unittest.TestCase):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
             'event1',
-            start=datetime(2011, 11, 11, 11, 0),
-            end=datetime(2011, 11, 11, 12, 0),
-            timezone=TZNAME,
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
             whole_day=False
         )
         e1 = self.portal['event1']
@@ -237,11 +215,11 @@ class TestDXIntegration(unittest.TestCase):
         # result returns Zope's DateTime
         self.assertEqual(
             result[0].start,
-            DateTime('2011/11/11 11:00:00 %s' % TZNAME)
+            DateTime('2011/11/11 11:00:00 %s' % TEST_TIMEZONE)
         )
         self.assertEqual(
             result[0].end,
-            DateTime('2011/11/11 12:00:00 %s' % TZNAME)
+            DateTime('2011/11/11 12:00:00 %s' % TEST_TIMEZONE)
         )
 
     def test_data_postprocessing(self):
@@ -249,9 +227,8 @@ class TestDXIntegration(unittest.TestCase):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
             'event1',
-            start=datetime(2012, 10, 19, 0, 30),
-            end=datetime(2012, 10, 19, 1, 30),
-            timezone="Europe/Vienna",
+            start=datetime(2012, 10, 19, 0, 30, tzinfo=self.tz),
+            end=datetime(2012, 10, 19, 1, 30, tzinfo=self.tz),
             whole_day=False
         )
         e1 = self.portal['event1']
@@ -264,29 +241,28 @@ class TestDXIntegration(unittest.TestCase):
         dt_1_1 = tz_1.localize(datetime(2012, 10, 19, 0, 0))
         dt_1_2 = tz_1.localize(datetime(2012, 10, 19, 23, 59, 59))
 
-        tzname_2 = "Hongkong"
-        tz_2 = pytz.timezone(tzname_2)
-        dt_2 = tz_2.localize(datetime(2012, 10, 19, 0, 30))
-        dt_2_1 = tz_2.localize(datetime(2012, 10, 19, 0, 0))
-        dt_2_2 = tz_2.localize(datetime(2012, 10, 19, 23, 59, 59))
-
         # See, if start isn't moved by timezone offset. Addressing issue #62
         self.assertTrue(IEventBasic(e1).start == dt_1)
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(IEventBasic(e1).start == dt_1)
 
+        # TODO: equivalent with p.a.widgets
+        #tzname_2 = "Hongkong"
+        #tz_2 = pytz.timezone(tzname_2)
+        #dt_2 = tz_2.localize(datetime(2012, 10, 19, 0, 30))
+        #dt_2_1 = tz_2.localize(datetime(2012, 10, 19, 0, 0))
+        #dt_2_2 = tz_2.localize(datetime(2012, 10, 19, 23, 59, 59))
         # After timezone changes, only the timezone should be applied, but the
         # date and time values not converted.
-        IEventAccessor(e1).timezone = tzname_2
-        notify(ObjectModifiedEvent(e1))
-        self.assertTrue(IEventBasic(e1).start == dt_2)
+        #IEventAccessor(e1).timezone = tzname_2
+        #notify(ObjectModifiedEvent(e1))
+        #self.assertTrue(IEventBasic(e1).start == dt_2)
 
         # Test open_end events
         # For open_end events, setting the end date has no effect
         IEventAccessor(e1).edit(
-            timezone=tzname_1,
             open_end=True,
-            end=datetime(2012, 11, 11, 10, 10, 0),
+            end=datetime(2012, 11, 11, 10, 10, 0, tzinfo=tz_1),
         )
         notify(ObjectModifiedEvent(e1))
         self.assertTrue(IEventBasic(e1).start == dt_1)
@@ -299,10 +275,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventBasic(e1).start == dt_1_1)
         self.assertTrue(IEventBasic(e1).end == dt_1_2)
 
-        IEventAccessor(e1).timezone = tzname_2
-        notify(ObjectModifiedEvent(e1))
-        self.assertTrue(IEventBasic(e1).start == dt_2_1)
-        self.assertTrue(IEventBasic(e1).end == dt_2_2)
 
     def test_recurrence_indexing(self):
         utc = pytz.utc
@@ -311,7 +283,6 @@ class TestDXIntegration(unittest.TestCase):
             'event1',
             start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
             end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-            timezone='UTC',
             whole_day=False
         )
         e1 = self.portal['event1']
@@ -337,17 +308,16 @@ class TestDXIntegration(unittest.TestCase):
             'event1',
             start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
             end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-            timezone='UTC',
             whole_day=False
         )
         e1 = self.portal['event1']
 
+        tz = pytz.timezone(TEST_TIMEZONE)
+
         # setting attributes via the accessor
         acc = IEventAccessor(e1)
-        acc.end = datetime(2011, 11, 13, 10, 0)
-        acc.timezone = TZNAME
+        acc.end = datetime(2011, 11, 13, 10, 0, tzinfo=tz)
 
-        tz = pytz.timezone(TZNAME)
 
         # accessor should return end datetime in the event's timezone
         self.assertTrue(acc.end == datetime(2011, 11, 13, 11, 0, tzinfo=tz))
@@ -360,9 +330,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(
             IEventBasic(e1).end == datetime(2011, 11, 13, 11, 0, tzinfo=tz)
         )
-
-        # timezone should be the same on the event object and accessor
-        self.assertTrue(e1.timezone == acc.timezone)
 
 
 class TestDXEventRecurrence(unittest.TestCase):
@@ -396,7 +363,7 @@ class TestDXEventUnittest(unittest.TestCase):
     """
 
     def setUp(self):
-        set_env_timezone(TZNAME)
+        set_env_timezone(TEST_TIMEZONE)
 
     def test_validate_invariants_ok(self):
         mock = MockEvent()
@@ -461,14 +428,14 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.request = self.layer['request']
         set_browserlayer(self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_migrate_fields(self):
         self.portal.invokeFactory(
             'Event',
             'event1',
-            start=datetime(2011, 11, 11, 11, 0),
-            end=datetime(2011, 11, 11, 12, 0),
-            timezone=TZNAME,
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
             whole_day=False
         )
         e1 = self.portal['event1']
@@ -514,9 +481,8 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.portal.invokeFactory(
             'Event',
             'event1',
-            start=datetime(2011, 11, 11, 11, 0),
-            end=datetime(2011, 11, 11, 12, 0),
-            timezone=TZNAME,
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
+            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
             whole_day=False
         )
         e1 = self.portal['event1']
