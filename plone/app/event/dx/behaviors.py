@@ -18,7 +18,6 @@ from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.dexterity.interfaces import IDexterityContent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from plone.event.utils import utc
@@ -28,12 +27,10 @@ from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.util import getSpecification
-from z3c.form.widget import ComputedWidgetAttribute
 from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import adapter
 from zope.component import adapts
-from zope.component import provideAdapter
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import Invalid
@@ -78,7 +75,6 @@ def default_end(context):
 class IEventBasic(model.Schema, IDXEvent):
     """ Basic event schema.
     """
-
     start = schema.Datetime(
         title=_(
             u'label_event_start',
@@ -280,7 +276,6 @@ alsoProvides(IEventContact, IFormFieldProvider)
 
 ## Event handlers
 
-"""
 def data_postprocessing(obj, event):
 
     # newly created object, without start/end/timezone (e.g. invokeFactory()
@@ -338,7 +333,7 @@ def data_postprocessing(obj, event):
 
     # Reindex
     obj.reindexObject()
-"""
+
 
 ## Attribute indexer
 
