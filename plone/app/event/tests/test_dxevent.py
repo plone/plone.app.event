@@ -2,6 +2,7 @@
 from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
+from plone.app.event import base
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import IEventAttendees
@@ -10,6 +11,7 @@ from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
+from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
@@ -26,6 +28,7 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
@@ -34,8 +37,6 @@ from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.component import createObject
 from zope.component import queryUtility
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytz
 import unittest2 as unittest
@@ -142,6 +143,70 @@ class TestDXAddEdit(unittest.TestCase):
         self.assertTrue('03:51' in self.browser.contents)
         self.assertTrue('04:51' in self.browser.contents)
 
+        #
+        # EDIT and set whole_day setting
+        #
+        testevent = self.portal.testevent
+        self.browser.open('%s/@@edit' % testevent.absolute_url())
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.whole_day:list').value = True
+
+        self.browser.getControl('Save').click()
+
+        # CHECK DATES/TIMES, IF THEY ADAPTED ACCORDING TO WHOLE DAY
+        #
+        self.assertTrue('2014-03-31' in self.browser.contents)
+        self.assertTrue('0:00' in self.browser.contents)
+        self.assertTrue('23:59' in self.browser.contents)
+
+
+class TestDataPostprocessing(unittest.TestCase):
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        set_browserlayer(self.request)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def test_data_postprocessing(self):
+
+        at = pytz.timezone("Europe/Vienna")
+
+        start = at.localize(datetime(2012, 10, 19, 0, 30))
+        end = at.localize(datetime(2012, 10, 19, 1, 30))
+
+        start_start = at.localize(datetime(2012, 10, 19, 0, 0, 0))
+        end_end = at.localize(datetime(2012, 10, 19, 23, 59, 59))
+
+        e1 = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            title='event1',
+            start=start,
+            end=end
+        )
+
+        # See, if start isn't moved by timezone offset. Addressing issue #62
+        self.assertEqual(e1.start, start)
+        self.assertEqual(e1.end, end)
+        data_postprocessing_context(e1)
+        self.assertEqual(e1.start, start)
+        self.assertEqual(e1.end, end)
+
+        # Setting open end
+        e1.open_end = True
+        data_postprocessing_context(e1)
+        self.assertEqual(e1.start, start)
+        self.assertEqual(e1.end, end_end)
+
+        # Setting whole day
+        e1.whole_day = True
+        data_postprocessing_context(e1)
+        self.assertEqual(e1.start, start_start)
+        self.assertEqual(e1.end, end_end)
+
 
 class TestDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
@@ -222,59 +287,6 @@ class TestDXIntegration(unittest.TestCase):
             DateTime('2011/11/11 12:00:00 %s' % TEST_TIMEZONE)
         )
 
-    def test_data_postprocessing(self):
-        # Addressing bug #62
-        self.portal.invokeFactory(
-            'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2012, 10, 19, 0, 30, tzinfo=self.tz),
-            end=datetime(2012, 10, 19, 1, 30, tzinfo=self.tz),
-            whole_day=False
-        )
-        e1 = self.portal['event1']
-        e1.reindexObject()
-
-        # Prepare reference objects
-        tzname_1 = "Europe/Vienna"
-        tz_1 = pytz.timezone(tzname_1)
-        dt_1 = tz_1.localize(datetime(2012, 10, 19, 0, 30))
-        dt_1_1 = tz_1.localize(datetime(2012, 10, 19, 0, 0))
-        dt_1_2 = tz_1.localize(datetime(2012, 10, 19, 23, 59, 59))
-
-        # See, if start isn't moved by timezone offset. Addressing issue #62
-        self.assertTrue(IEventBasic(e1).start == dt_1)
-        notify(ObjectModifiedEvent(e1))
-        self.assertTrue(IEventBasic(e1).start == dt_1)
-
-        # TODO: equivalent with p.a.widgets
-        #tzname_2 = "Hongkong"
-        #tz_2 = pytz.timezone(tzname_2)
-        #dt_2 = tz_2.localize(datetime(2012, 10, 19, 0, 30))
-        #dt_2_1 = tz_2.localize(datetime(2012, 10, 19, 0, 0))
-        #dt_2_2 = tz_2.localize(datetime(2012, 10, 19, 23, 59, 59))
-        # After timezone changes, only the timezone should be applied, but the
-        # date and time values not converted.
-        #IEventAccessor(e1).timezone = tzname_2
-        #notify(ObjectModifiedEvent(e1))
-        #self.assertTrue(IEventBasic(e1).start == dt_2)
-
-        # Test open_end events
-        # For open_end events, setting the end date has no effect
-        IEventAccessor(e1).edit(
-            open_end=True,
-            end=datetime(2012, 11, 11, 10, 10, 0, tzinfo=tz_1),
-        )
-        notify(ObjectModifiedEvent(e1))
-        self.assertTrue(IEventBasic(e1).start == dt_1)
-        self.assertTrue(IEventBasic(e1).end == dt_1_2)
-
-        # Likewise with whole_day events. If values were converted, the days
-        # would drift apart.
-        IEventAccessor(e1).whole_day = True
-        notify(ObjectModifiedEvent(e1))
-        self.assertTrue(IEventBasic(e1).start == dt_1_1)
-        self.assertTrue(IEventBasic(e1).end == dt_1_2)
-
 
     def test_recurrence_indexing(self):
         utc = pytz.utc
@@ -286,20 +298,26 @@ class TestDXIntegration(unittest.TestCase):
             whole_day=False
         )
         e1 = self.portal['event1']
-        e1rec = IEventRecurrence(e1)
-        e1rec.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+
+        # When editing via behaviors, the attributes should also be available
+        # on the context itself.
+        IEventRecurrence(e1).recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        self.assertTrue(e1.recurrence == IEventRecurrence(e1).recurrence)
+
         e1.reindexObject()
 
-        # test, if the recurrence attribute is available on the context.
-        # DRI needs that for indexing.
-        self.assertTrue(e1.recurrence == e1rec.recurrence)
+        # Normal get_events call returns the brain, no expanded occurrences
+        result = get_events(self.portal)
+        self.assertEqual(len(result), 1)
 
-        # test, if the occurrences are indexed by DRI
+        # Get all the occurrences
         result = get_events(
-            e1,
-            start=datetime(2011, 11, 12, 11, 0, tzinfo=utc)
+            self.portal,
+            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+            ret_mode=base.RET_MODE_OBJECTS,
+            expand=True
         )
-        self.assertTrue(len(result) == 1)
+        self.assertEqual(len(result), 4)
 
     def test_event_accessor(self):
         utc = pytz.utc

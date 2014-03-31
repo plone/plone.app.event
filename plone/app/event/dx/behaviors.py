@@ -15,6 +15,7 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
+from plone.app.widgets.dx import DatetimeWidget
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -38,12 +39,9 @@ from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import invariant
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface import provider
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
-
-import pytz
-
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -139,6 +137,22 @@ class IEventBasic(model.Schema, IDXEvent):
                 _("error_end_must_be_after_start_date",
                   default=u"End date must be after start date.")
             )
+
+
+@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def StartDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.default_timezone = default_timezone
+    return widget
+
+
+@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def EndDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.default_timezone = default_timezone
+    return widget
 
 
 class IEventRecurrence(model.Schema, IDXEventRecurrence):
@@ -274,66 +288,86 @@ alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
 
 
-## Event handlers
+def data_postprocessing(start, end, whole_day, open_end):
+    """Adjust start and end according to whole_day and open_end setting.
+    """
 
-def data_postprocessing(obj, event):
-
-    # newly created object, without start/end/timezone (e.g. invokeFactory()
-    # called without data from add form), ignore event; it will be notified
-    # again later:
-    if getattr(obj, 'start', None) is None:
-        return
-
-    # We handle date inputs as floating dates without timezones and apply
-    # timezones afterwards.
-    def _fix_zone(dt, zone):
-
+    def _fix_dt(dt, tz):
+        """Fix datetime: Apply missing timezones, remove microseconds.
+        """
         if dt.tzinfo is None:
-            # In case the tzinfo was deleted above or was not present, we can
-            # localize the dt value to the target timezone.
             dt = tz.localize(dt)
-
-        else:
-            # In this case, no changes to start, end or the timezone were made.
-            # Just return the object's datetime (which is in UTC) localized to
-            # the target timezone.
-            dt = dt.astimezone(tz)
 
         return dt.replace(microsecond=0)
 
-    behavior = IEventBasic(obj)
-    # Fix zones
-    tz = pytz.timezone(behavior.timezone)
-    start = _fix_zone(obj.start, tz)
-    end = _fix_zone(obj.end, tz)
+    tz_default = default_timezone()
+
+    tz_start = getattr(start, 'tzinfo', tz_default)
+    tz_end = getattr(end, 'tzinfo', tz_default)
+    start = _fix_dt(start, tz_start)
+    end = _fix_dt(end, tz_end)
 
     # Adapt for whole day
-    if behavior.whole_day:
+    if whole_day:
         start = dt_start_of_day(start)
-    if behavior.open_end:
+    if open_end:
         end = start  # Open end events end on same day
-    if behavior.open_end or behavior.whole_day:
+    if open_end or whole_day:
         end = dt_end_of_day(end)
 
-    # Save back
-    obj.start = utc(start)
-    obj.end = utc(end)
-
-    if not behavior.sync_uid:
+    # TODO:
+    """
+    if not obj.sync_uid:
         # sync_uid has to be set for icalendar data exchange.
         uid = IUUID(obj)
         # We don't want to fail when getRequest() returns None, e.g when
         # creating an event during test layer setup time.
         request = getRequest() or {}
         domain = request.get('HTTP_HOST')
-        behavior.sync_uid = '%s%s' % (
+        obj.sync_uid = '%s%s' % (
             uid,
             domain and '@%s' % domain or ''
         )
+    """
 
-    # Reindex
-    obj.reindexObject()
+    return start, end, whole_day, open_end
 
+
+def data_postprocessing_handler(event):
+    """Event handler called after extractData step of z3c.form to adjust form
+    data.
+    """
+    data = event.data
+
+    if not 'IEventBasic.start' in data:
+        # is not a IEventBasic form
+        return
+    if data.get('processed', False):
+        # data was already manipulated
+        return
+
+    start = data['IEventBasic.start']
+    end = data['IEventBasic.end']
+    whole_day = data['IEventBasic.whole_day']
+    open_end = data['IEventBasic.open_end']
+
+    start, end, whole_day, open_end = data_postprocessing(
+        start, end, whole_day, open_end)
+
+    data['IEventBasic.start'] = start
+    data['IEventBasic.end'] = end
+    data['IEventBasic.whole_day'] = whole_day
+    data['IEventBasic.open_end'] = open_end
+
+    data['processed'] = True
+
+
+def data_postprocessing_context(context):
+    """Convenience method to adjust data on the context.
+    """
+    context.start, context.end, context.whole_day, context.open_end =\
+        data_postprocessing(
+            context.start, context.end, context.whole_day, context.open_end)
 
 ## Attribute indexer
 

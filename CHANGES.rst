@@ -4,6 +4,14 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Make use of new z3c.form DataExtractedEvent and register the
+  data_postprocessing_handler for this event. This adjusts the start and end
+  date according to whole_day and open_end.
+
+- Use default_timezone DatetimeWidget property. All datetime objects from
+  plone.app.widgets' DatetimeWidget now have this timezone, if not otherwise
+  set by the user.
+
 - Use default and defaultFactory properties for behavior schema definitions to
   provide sane defaults for z3c.form *and* programmatically created Dexterity
   types (e.g. via plone.dextterity.utils.createContentInContainer). For that to
@@ -12,13 +20,14 @@ Changelog
   IDXEventRecurrence.
 
 - Remove data_postprocessing event subscriber.
-  
+
 - Remove Timezone field from IEventBasic behavior. Instead, store timezone
   information directly in the tzinfo object on start and end datetime objects.
 
 - Remove Archetypes subpackage.
 
-  [yenzenz, thet]
+
+[thet, yenzenz, garbas]
 
 
 1.2.1 (unreleased)
