@@ -5,10 +5,7 @@ from datetime import datetime, timedelta
 from plone.app.event import base
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventBasic
-from plone.app.event.dx.behaviors import IEventContact
-from plone.app.event.dx.behaviors import IEventLocation
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
 from plone.app.event.dx.behaviors import data_postprocessing_context
@@ -27,7 +24,6 @@ from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.app.textfield.value import RichTextValue
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -35,8 +31,6 @@ from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
-from zope.component import createObject
-from zope.component import queryUtility
 
 import pytz
 import unittest2 as unittest
@@ -233,35 +227,6 @@ class TestDXIntegration(unittest.TestCase):
         delta = default_value - default_start(data)
         self.assertEqual(3600, delta.seconds)
 
-    def test_fti(self):
-        fti = queryUtility(IDexterityFTI, name='plone.app.event.dx.event')
-        self.assertNotEquals(None, fti)
-
-    def test_factory(self):
-        fti = queryUtility(IDexterityFTI, name='plone.app.event.dx.event')
-        factory = fti.factory
-        new_object = createObject(factory)
-        self.assertTrue(IDXEvent.providedBy(new_object))
-        self.assertTrue(IDXEventRecurrence.providedBy(new_object))
-        self.assertTrue(IEventLocation.providedBy(new_object))
-        self.assertTrue(IEventAttendees.providedBy(new_object))
-        self.assertTrue(IEventContact.providedBy(new_object))
-
-    def test_adding(self):
-        self.portal.invokeFactory(
-            'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
-            whole_day=False
-        )
-        e1 = self.portal['event1']
-        self.assertTrue(IDXEvent.providedBy(e1))
-        self.assertTrue(IDXEventRecurrence.providedBy(e1))
-        self.assertTrue(IEventLocation.providedBy(e1))
-        self.assertTrue(IEventAttendees.providedBy(e1))
-        self.assertTrue(IEventContact.providedBy(e1))
-
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
@@ -286,7 +251,6 @@ class TestDXIntegration(unittest.TestCase):
             result[0].end,
             DateTime('2011/11/11 12:00:00 %s' % TEST_TIMEZONE)
         )
-
 
     def test_recurrence_indexing(self):
         utc = pytz.utc
@@ -335,7 +299,6 @@ class TestDXIntegration(unittest.TestCase):
         # setting attributes via the accessor
         acc = IEventAccessor(e1)
         acc.end = datetime(2011, 11, 13, 10, 0, tzinfo=tz)
-
 
         # accessor should return end datetime in the event's timezone
         self.assertTrue(acc.end == datetime(2011, 11, 13, 11, 0, tzinfo=tz))
