@@ -56,8 +56,12 @@ def construct_icalendar(context, events):
         # definition. sounds decent, but not realizable.
         if not acc.whole_day:  # whole day events are exported as dates without
                                # timezone information
-            tzmap = add_to_zones_map(tzmap, tz, acc.start)
-            tzmap = add_to_zones_map(tzmap, tz, acc.end)
+            if isinstance(tz, tuple):
+                tz_start, tz_end = tz
+            else:
+                tz_start = tz_end = tz
+            tzmap = add_to_zones_map(tzmap, tz_start, acc.start)
+            tzmap = add_to_zones_map(tzmap, tz_end, acc.end)
         cal.add_component(IICalendarEventComponent(event).to_ical())
 
     for (tzid, transitions) in tzmap.items():
@@ -247,6 +251,8 @@ class ICalendarEventComponent(object):
                     # localize ex/rdate
                     # TODO: should better already be localized by event object
                     tzid = event.timezone
+                    if isinstance(tzid, tuple):
+                        tzid = tzid[0]
                     # get list of datetime values from ical string
                     try:
                         dtlist = factory.from_ical(val, timezone=tzid)

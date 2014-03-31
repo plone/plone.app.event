@@ -7,11 +7,20 @@ Changelog
 - move vocabularies to plone.app.vocabularies
   [yenzenz, thet]
 
+- Use default and defaultFactory properties for behavior schema definitions to
+  provide sane defaults for z3c.form *and* programmatically created Dexterity
+  types (e.g. via plone.dextterity.utils.createContentInContainer). For that to
+  work, remove the Behavior factory classes, use the default AttributeStorage
+  and let IEventBasic and IEventRecurrence behaviors derive from IDXEvent resp.
+  IDXEventRecurrence.
+
+- Remove data_postprocessing event subscriber.
+  
 - Remove Timezone field from IEventBasic behavior. Instead, store timezone
   information directly in the tzinfo object on start and end datetime objects.
-  [yenzenz, thet]
 
 - Remove Archetypes subpackage.
+
   [yenzenz, thet]
 
 

@@ -15,13 +15,6 @@
 
     <include file="ical.zcml" />
 
-    <subscriber for=".interfaces.IDXEvent
-                     zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-                handler=".behaviors.data_postprocessing" />
-    <subscriber for=".interfaces.IDXEvent
-                     zope.lifecycleevent.interfaces.IObjectCreatedEvent"
-                handler=".behaviors.data_postprocessing" />
-
     <adapter
         factory=".traverser.OccurrenceTraverser"
         permission="zope.Public"
@@ -40,45 +33,35 @@
         title="Event Basic"
         description="Basic Event schema."
         provides=".behaviors.IEventBasic"
-        factory=".behaviors.EventBasic"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEvent"
         />
 
     <plone:behavior
         title="Event Recurrence"
         description="Recurrence extension for Events."
         provides=".behaviors.IEventRecurrence"
-        factory=".behaviors.EventRecurrence"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".interfaces.IDXEventRecurrence"
         />
 
     <plone:behavior
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
-        factory=".behaviors.EventLocation"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".behaviors.IEventLocation"
         />
 
     <plone:behavior
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
-        factory=".behaviors.EventAttendees"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".behaviors.IEventAttendees"
         />
 
     <plone:behavior
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"
-        factory=".behaviors.EventContact"
         for="plone.dexterity.interfaces.IDexterityContent"
-        marker=".behaviors.IEventContact"
         />
 
 </configure>

@@ -192,7 +192,7 @@ class RendererTest(unittest.TestCase):
 
         self.portal.invokeFactory('Event', 'e1', title='Event 1',
                                   startDate=startDT,
-                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10',
+                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10'),
                                   timezone="Australia/Brisbane")
         self.portal.invokeFactory('Event', 'e2', title='Event 2',
                                   startDate=startDT,

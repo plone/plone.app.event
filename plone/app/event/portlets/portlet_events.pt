@@ -18,22 +18,22 @@
         <span class="portletTopRight"></span>
     </dt>
 
-    <tal:events repeat="item view/events">
+    <tal:events repeat="data view/events">
     <dd class="portletItem"
-        tal:define="oddrow repeat/item/odd"
+        tal:define="oddrow repeat/data/odd"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
         <a href="#" class="tile"
-            tal:attributes="href item/url;
-                            title item/description">
-            <span tal:replace="item/title">
+            tal:attributes="href data/url;
+                            title data/description">
+            <span tal:replace="data/title">
                 Some Event
             </span>
         </a>
         <span class="portletItemDetails">
-            <tal:date replace="structure python:view.formatted_date(item)" />
-            <span tal:define="tz item/timezone" tal:condition="tz">(<tal:tzname replace="tz">TZ</tal:tzname>)</span>
+            <tal:date replace="structure python:view.formatted_date(data)" />
+            <span tal:define="tz data/timezone" tal:condition="tz">(<tal:tzname replace="tz">TZ</tal:tzname>)</span>
             <span class="location"
-                tal:define="location python:view.get_location(item)"
+                tal:define="location python:view.get_location(data)"
                 tal:condition="location"> &mdash;
                 <tal:location content="structure location">Location</tal:location>
             </span>

@@ -66,7 +66,6 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=past + duration,
             location=u"Vienna",
             whole_day=True,
-            timezone=TEST_TIMEZONE,
             recurrence='RRULE:FREQ=DAILY;COUNT=3').context
         workflow.doActionFor(self.past_event, 'publish')
 
@@ -77,7 +76,6 @@ class AbstractSampleDataEvents(unittest.TestCase):
             start=now,
             end=now + duration,
             location=u"Vienna",
-            timezone=TEST_TIMEZONE,
             recurrence="""RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1
 RDATE:20130509T000000
 EXDATE:20130506T000000,20140404T000000""",
@@ -94,8 +92,7 @@ EXDATE:20130506T000000,20140404T000000""",
             title=u'Future Event',
             start=future,
             end=future + duration,
-            location=u'Graz',
-            timezone=TEST_TIMEZONE).context
+            location=u'Graz').context
         workflow.doActionFor(self.future_event, 'publish')
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
@@ -105,8 +102,7 @@ EXDATE:20130506T000000,20140404T000000""",
             title=u'Long Event',
             start=past,
             end=far,
-            location=u'Schaftal',
-            timezone=TEST_TIMEZONE).context
+            location=u'Schaftal').context
         workflow.doActionFor(self.long_event, 'publish')
 
         # For AT based tests, this is a plone.app.collection ICollection type
