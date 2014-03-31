@@ -228,40 +228,39 @@ class TestDXIntegration(unittest.TestCase):
         self.assertEqual(3600, delta.seconds)
 
     def test_start_end_dates_indexed(self):
-        self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        e1 = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
-            whole_day=False
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
-        e1 = self.portal['event1']
-        e1.reindexObject()
 
         result = self.portal.portal_catalog(
             path='/'.join(e1.getPhysicalPath())
         )
         self.assertEqual(1, len(result))
+
         # result returns Zope's DateTime
         self.assertEqual(
             result[0].start,
-            DateTime('2011/11/11 11:00:00 %s' % TEST_TIMEZONE)
+            DateTime('2011/11/11 11:00:00 Europe/Vienna')
         )
         self.assertEqual(
             result[0].end,
-            DateTime('2011/11/11 12:00:00 %s' % TEST_TIMEZONE)
+            DateTime('2011/11/11 12:00:00 Europe/Vienna')
         )
 
     def test_recurrence_indexing(self):
-        utc = pytz.utc
-        self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        e1 = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-            whole_day=False
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
-        e1 = self.portal['event1']
 
         # When editing via behaviors, the attributes should also be available
         # on the context itself.
@@ -270,47 +269,39 @@ class TestDXIntegration(unittest.TestCase):
 
         e1.reindexObject()
 
-        # Normal get_events call returns the brain, no expanded occurrences
+        # get_events, no expanded occurrences
         result = get_events(self.portal)
         self.assertEqual(len(result), 1)
 
         # Get all the occurrences
         result = get_events(
             self.portal,
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             ret_mode=base.RET_MODE_OBJECTS,
             expand=True
         )
         self.assertEqual(len(result), 4)
 
     def test_event_accessor(self):
-        utc = pytz.utc
-        self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        e1 = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=utc),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=utc),
-            whole_day=False
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
-        e1 = self.portal['event1']
-
-        tz = pytz.timezone(TEST_TIMEZONE)
 
         # setting attributes via the accessor
         acc = IEventAccessor(e1)
-        acc.end = datetime(2011, 11, 13, 10, 0, tzinfo=tz)
+        new_end = tz.localize(datetime(2011, 11, 13, 10, 0))
+        acc.end = new_end
 
-        # accessor should return end datetime in the event's timezone
-        self.assertTrue(acc.end == datetime(2011, 11, 13, 11, 0, tzinfo=tz))
+        # context's end should be set to new_end
+        self.assertEqual(e1.end, new_end)
 
-        # the behavior's end datetime is stored in utc on the content object
-        self.assertTrue(e1.end == datetime(2011, 11, 13, 10, 0, tzinfo=utc))
-
-        # accessing the end property via the behavior adapter, returns the
-        # value converted to the event's timezone
-        self.assertTrue(
-            IEventBasic(e1).end == datetime(2011, 11, 13, 11, 0, tzinfo=tz)
-        )
+        # accessor's and context datetime should be the same
+        self.assertEqual(acc.end, e1.end)
 
 
 class TestDXEventRecurrence(unittest.TestCase):
@@ -321,7 +312,7 @@ class TestDXEventRecurrence(unittest.TestCase):
         tz = pytz.timezone('Europe/Vienna')
         duration = timedelta(days=4)
         mock = MockEvent()
-        mock.start = datetime(2011, 11, 11, 11, 00, tzinfo=tz)
+        mock.start = tz.localize(datetime(2011, 11, 11, 11, 0))
         mock.end = mock.start + duration
         mock.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
         zope.interface.alsoProvides(
@@ -409,17 +400,17 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.request = self.layer['request']
         set_browserlayer(self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_migrate_fields(self):
-        self.portal.invokeFactory(
+        tz = pytz.timezone('Europe/Berlin')
+        e1 = createContentInContainer(
+            self.portal,
             'Event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
-            whole_day=False
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
-        e1 = self.portal['event1']
+
         # Fill the field values into the annotation storage
         ann = IAnnotations(e1)
         ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
@@ -459,14 +450,14 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.text.raw, self.text)
 
     def test_no_overwrite(self):
-        self.portal.invokeFactory(
+        tz = pytz.timezone('Europe/Berlin')
+        e1 = createContentInContainer(
+            self.portal,
             'Event',
-            'event1',
-            start=datetime(2011, 11, 11, 11, 0, tzinfo=self.tz),
-            end=datetime(2011, 11, 11, 12, 0, tzinfo=self.tz),
-            whole_day=False
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
-        e1 = self.portal['event1']
 
         # Fill the field values into the annotation storage
         ann = IAnnotations(e1)

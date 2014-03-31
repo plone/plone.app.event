@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
+from plone.app.dexterity.utils import createContentInContainer
 from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
@@ -32,9 +33,13 @@ behaviors.EventAccessor.event_type = 'plone.app.event.dx.event'
 class AbstractSampleDataEvents(unittest.TestCase):
     layer = None  # Set the plone.app.testing layer in concrete implementation
 
-    def event_factory(self):
+    def event_factory(self, container, **kwargs):
         # Return the IEventAccessor.create event factory.
-        raise NotImplementedError
+        return createContentInContainer(
+            container,
+            'plone.app.event.dx.event',
+            **kwargs
+        )
 
     def make_dates(self):
         tz = pytz.timezone(TEST_TIMEZONE)
@@ -57,10 +62,10 @@ class AbstractSampleDataEvents(unittest.TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         workflow = getToolByName(self.portal, 'portal_workflow')
 
-        factory = self.event_factory()
+        factory = self.event_factory
         self.past_event = factory(
             container=self.portal,
-            content_id='past',
+            id='past',
             title=u'Past Event',
             start=past,
             end=past + duration,
@@ -71,7 +76,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
         self.now_event = factory(
             container=self.portal,
-            content_id='now',
+            id='now',
             title=u'Now Event',
             start=now,
             end=now + duration,
@@ -88,7 +93,7 @@ EXDATE:20130506T000000,20140404T000000""",
 
         self.future_event = factory(
             container=self.portal,
-            content_id='future',
+            id='future',
             title=u'Future Event',
             start=future,
             end=future + duration,
@@ -98,7 +103,7 @@ EXDATE:20130506T000000,20140404T000000""",
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
         self.long_event = factory(
             container=self.portal.sub,
-            content_id='long',
+            id='long',
             title=u'Long Event',
             start=past,
             end=far,

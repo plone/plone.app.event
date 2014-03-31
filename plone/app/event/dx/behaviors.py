@@ -426,23 +426,6 @@ class EventAccessor(object):
     """
     implements(IEventAccessor)
     adapts(IDXEvent)
-    event_type = None  # If you use the accessor's create classmethod, override
-                       # this in your custom type.
-
-    # Unified create method via Accessor
-    @classmethod
-    def create(cls, container, content_id, title, **kwargs):
-        container.invokeFactory(
-            cls.event_type, id=content_id, title=title, **kwargs)
-        content = container[content_id]
-        acc = IEventAccessor(content)
-        acc.edit(**kwargs)
-        return acc
-
-    def edit(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        notify(ObjectModifiedEvent(self.context))
 
     def __init__(self, context):
         object.__setattr__(self, 'context', context)
