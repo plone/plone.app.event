@@ -1,21 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
   <utility
-      component=".vocabularies.AvailableTimezones"
-      name="plone.app.event.AvailableTimezones"
-      />
-
-  <utility
-      component=".vocabularies.Timezones"
-      name="plone.app.event.Timezones"
-      />
-
-  <utility
-      component=".vocabularies.Weekdays"
-      name="plone.app.event.Weekdays"
-      />
-
-  <utility
       component=".vocabularies.EventTypes"
       name="plone.app.event.EventTypes"
       />
@@ -24,5 +9,22 @@
       component=".vocabularies.SynchronizationStrategies"
       name="plone.app.event.SynchronizationStrategies"
       />
+
+  <!-- BBB - moved over to plone.app.vocabularies - do not use this ones -->
+  <utility
+      component="plone.app.vocabularies.datetimerelated.AvailableTimezonesFactory"
+      name="plone.app.event.AvailableTimezones"
+      />
+
+  <utility
+      component="plone.app.vocabularies.datetimerelated.TimezonesFactory"
+      name="plone.app.event.Timezones"
+      />
+
+  <utility
+      component="plone.app.vocabularies.datetimerelated.WeekdaysFactory"
+      name="plone.app.event.Weekdays"
+      />
+  <!-- END BBB -->
 
 </configure>

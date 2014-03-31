@@ -12,6 +12,8 @@ Changelog
   plone.app.widgets' DatetimeWidget now have this timezone, if not otherwise
   set by the user.
 
+- Move vocabularies to plone.app.vocabularies.
+
 - Use default and defaultFactory properties for behavior schema definitions to
   provide sane defaults for z3c.form *and* programmatically created Dexterity
   types (e.g. via plone.dextterity.utils.createContentInContainer). For that to
@@ -25,7 +27,6 @@ Changelog
   information directly in the tzinfo object on start and end datetime objects.
 
 - Remove Archetypes subpackage.
-
 
 [thet, yenzenz, garbas]
 
