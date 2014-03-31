@@ -115,22 +115,56 @@ information, see below.
 Getting and setting properties
 ------------------------------
 
-For Dexterity based types: Accessing properties behavior interface adaption
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Setting properties directly on the context
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To use the functionality provided by the behaviors, get the behavior adapter
-first. For example, for setting or getting attributes of an event object, do::
+Since plone.app.event version 2.0, you can set properties directly on the
+context. There is no need to use behavior adaption any more.
 
-    from plone.app.event.dx.behaviors import IEventBasic
-    event = IEventBasic(obj)
-    event.start = datetime(2011,11,11,11,00)
-    event.end = datetime(2011,11,11,12,00)
-    event.timezone = 'CET'
+Though, you have to take care to set properties wisely, read on.
 
-    import transaction
-    transaction.commit()
+1) Always use a timezone::
+   
+    import pytz
+    tz = pytz.timezone("Europe/Vienna")
+    event.start = tz.localize(datetime(2010, 10, 10, 12, 12))
+    event.end = tz.localize(datetime(2010, 10, 10, 13, 13))
 
-Alternatively, use the more convenient IEventAccessor pattern described below.
+Always use pytz's `tz.localize(datetime(2010, 10, 10, 12, 12))`. If you set the
+tzinfo object directly on the datetime object like `datetime(2010, 10, 10, 12,
+12, tzinfo=tz)`, the datetime object might not localized to the DST changes of
+your timezone!
+
+
+2) If you set `whole_day` or `open_end`, wether set the start and end times
+accordingly or use the provided `data_postprocessing` or
+`data_postprocessing_context` conveininence functions.
+
+Setting a `whole_day` event::
+
+    event.start = tz.localize(datetime(2010, 10, 10, 0, 0, 0))
+    event.end = tz.localize(datetime(2010, 10, 10, 23, 59, 59))
+    event.whole_day = True
+
+Setting a `open_end` event::
+
+    event.start = tz.localize(datetime(2010, 10, 10, 12, 12))
+    event.end = tz.localize(datetime(2010, 10, 10, 23, 59, 59))
+    event.open_day = True
+
+Using `data_postprocessing`::
+
+    event.start, event.end, event.whole_day, event.open_end =\
+        data_postprocessing(
+            event.start, event.end, event.whole_day, event.open_end)
+
+Using `data_postprocessing_context`::
+
+    data_postprocessing_context(context)
+
+
+If you set the values through a z3c.form, an event handler listening to
+`z3c.form.events.DataExtractedEvent` will take care of this.
 
 
 Accessing event objects via an unified accessor object
