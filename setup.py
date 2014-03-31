@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.2.1.dev0'
+version = '2.0.dev0'
 
 
 setup(
@@ -52,8 +52,7 @@ setup(
         'plone.app.registry',
         'plone.app.textfield',
         'plone.app.vocabularies',
-        'plone.app.widgets [dexterity]',
-        'plone.app.widgets',
+        'plone.app.widgets [dexterity] >= 1.6.0dev',
         'plone.app.z3cform',
         'plone.autoform>=1.4',
         'plone.behavior',
@@ -73,7 +72,7 @@ setup(
         'plone.z3cform',
         'pytz',
         'transaction',
-        'z3c.form',
+        'z3c.form >= 3.2.1.dev0',
         'zope.annotation',
         'zope.component',
         'zope.container',
