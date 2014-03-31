@@ -13,8 +13,8 @@ import pytz
 import random
 
 
-@forever.memoize
 @provider(IVocabularyFactory)
+@forever.memoize
 def EventTypes(context):
     # TODO: refactor for DX
     """Vocabulary for available event types.
