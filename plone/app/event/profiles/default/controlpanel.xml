@@ -5,25 +5,11 @@
     i18n:domain="plone.app.event"
     purge="False">
 
-    <!-- Hide old calendar calendar settings -->
+    <!-- Hide old calendar calendar settings if there -->
     <configlet
         title="Calendar"
         action_id="CalendarSettings"
         visible="False"
         />
-
-    <!-- Register new calendar settings -->
-    <configlet
-        title="Event Settings"
-        action_id="plone.app.event.eventsettings"
-        appId="plone.app.event"
-        category="Plone"
-        condition_expr=""
-        url_expr="string:${portal_url}/@@event-settings"
-        icon_expr="string:${portal_url}/++resource++plone.app.event/event_icon.png"
-        visible="True"
-        i18n:attributes="title">
-            <permission>Manage portal</permission>
-    </configlet>
 
 </object>

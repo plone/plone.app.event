@@ -10,17 +10,6 @@
         layer="..interfaces.IBrowserLayer"
         />
 
-    <!-- Control panel -->
-    <browser:page
-        name="event-settings"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        class=".controlpanel.EventControlPanel"
-        template="controlpanel.pt"
-        permission="cmf.ManagePortal"
-        layer="..interfaces.IBrowserLayer"
-        />
-
-
     <!-- Event listing -->
     <browser:page
         for="*"
