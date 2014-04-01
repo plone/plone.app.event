@@ -346,6 +346,8 @@ def data_postprocessing_handler(event):
         # data was already manipulated
         return
 
+    # TODO: e.g. on open_end events, there is no IEventBasic.end data in the
+    # data. In that case, we have to add it.
     start = data['IEventBasic.start']
     end = data['IEventBasic.end']
     whole_day = data['IEventBasic.whole_day']
