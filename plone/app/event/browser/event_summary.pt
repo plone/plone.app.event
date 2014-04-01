@@ -9,7 +9,7 @@
 
 <tal:def tal:define="data python:view.data; excludes view/excludes">
 
-  <dl class="event details" summary="Event details" i18n:attributes="summary summary_event_details">
+  <dl class="event summary details" summary="Event details" i18n:attributes="summary summary_event_details">
 
     <tal:cond condition="python:'title' not in excludes">
       <dt i18n:translate="event_event">Event</dt>

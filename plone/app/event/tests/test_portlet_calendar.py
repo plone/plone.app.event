@@ -168,8 +168,6 @@ class RendererTest(unittest.TestCase):
         # link to calendar view in rendering
         self.assertTrue('?mode=day&amp;date=' in rd)
 
-        self.portal.manage_delObjects(['e1', 'eventfolder'])
-
     def test_long_event(self):
         start = DateTime('Europe/Vienna')
         end = DateTime('Europe/Vienna') + 2
@@ -182,7 +180,6 @@ class RendererTest(unittest.TestCase):
         r.update()
         rd = r.render()
         self.assertEqual(rd.count('http://nohost/plone/e1'), 3)
-        self.portal.manage_delObjects(['e1'])
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
@@ -206,8 +203,6 @@ class RendererTest(unittest.TestCase):
         self.assertNotEqual(
             html, portlet.render(), "Cache key wasn't invalidated"
         )
-
-        self.portal.manage_delObjects(['e1'])
 
     def test_event_nonascii(self):
         # test issue with non-ascii event title and location

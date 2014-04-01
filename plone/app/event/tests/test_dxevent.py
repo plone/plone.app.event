@@ -15,9 +15,12 @@ from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.event.dx.upgrades.upgrades import upgrade_attribute_storage
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.app.textfield.value import RichTextValue
@@ -26,6 +29,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.component import createObject
 from zope.component import queryUtility
@@ -42,6 +46,109 @@ TZNAME = "Europe/Vienna"
 
 class MockEvent(SimpleItem):
     """ Mock event"""
+
+
+class TestDXAddEdit(unittest.TestCase):
+    layer = PAEventDX_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        app = self.layer['app']
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.browser = Browser(app)
+        self.browser.handleErrors = False
+        self.browser.addHeader(
+            'Authorization',
+            'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,)
+        )
+
+    def test_edit_context(self):
+        """Test if already added event can be edited directly on the context as
+        intended.
+        If should not fail with a timezone related error.
+        """
+        """
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'testevent',
+            title="Test Event",
+            start=datetime(2014, 03, 29, 21, 53),
+            end=datetime(2014, 03, 29, 22, 45),
+            timezone=TZNAME
+        )
+
+        from plone.dexterity.browser.edit import DefaultEditForm
+        # DOES NOT WORK...
+        testevent = self.portal.testevent
+        request = self.request
+        request.form = {
+            'form.widgets.IEventBasic.start': ('2014', '2', '2', '10', '10')
+        }
+        edit = DefaultEditForm(testevent, request)
+        edit.update()
+
+        save = edit.buttons['save']
+        edit.handlers.getHandler(save)(edit, edit)
+        """
+
+        # ADD
+        #
+        self.browser.open(self.portal.absolute_url())
+        self.browser.getLink('plone.app.event.dx.event').click()
+        self.browser.getControl(
+            name='form.widgets.IDublinCore.title'
+        ).value = "TestEvent"
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-year').value = ("2014",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-month').value = ("3",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-day').value = ("30",)
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-year').value = ("2014",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-month').value = ("3",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-day').value = ("31",)
+
+        self.browser.getControl('Save').click()
+
+        # CHECK VALUES
+        #
+        self.assertTrue(self.browser.url.endswith('testevent/view'))
+        self.assertTrue('TestEvent' in self.browser.contents)
+        self.assertTrue('2014-03-30' in self.browser.contents)
+        self.assertTrue('2014-03-31' in self.browser.contents)
+
+        # EDIT
+        #
+        testevent = self.portal.testevent
+        self.browser.open('%s/@@edit' % testevent.absolute_url())
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-year').value = ("2014",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-month').value = ("2",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start-day').value = ("2",)
+
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-year').value = ("2014",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-month').value = ("2",)
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end-day').value = ("3",)
+
+        self.browser.getControl('Save').click()
+
+        # CHECK VALUES
+        #
+        self.assertTrue('2014-02-02' in self.browser.contents)
+        self.assertTrue('2014-02-03' in self.browser.contents)
 
 
 class TestDXIntegration(unittest.TestCase):
@@ -98,8 +205,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventAttendees.providedBy(e1))
         self.assertTrue(IEventContact.providedBy(e1))
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_start_end_dates_indexed(self):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
@@ -125,8 +230,6 @@ class TestDXIntegration(unittest.TestCase):
             result[0].end,
             DateTime('2011/11/11 12:00:00 %s' % TZNAME)
         )
-
-        self.portal.manage_delObjects(['event1'])
 
     def test_data_postprocessing(self):
         # Addressing bug #62
@@ -188,8 +291,6 @@ class TestDXIntegration(unittest.TestCase):
         self.assertTrue(IEventBasic(e1).start == dt_2_1)
         self.assertTrue(IEventBasic(e1).end == dt_2_2)
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_recurrence_indexing(self):
         utc = pytz.utc
         self.portal.invokeFactory(
@@ -215,8 +316,6 @@ class TestDXIntegration(unittest.TestCase):
             start=datetime(2011, 11, 12, 11, 0, tzinfo=utc)
         )
         self.assertTrue(len(result) == 1)
-
-        self.portal.manage_delObjects(['event1'])
 
     def test_event_accessor(self):
         utc = pytz.utc
@@ -251,8 +350,6 @@ class TestDXIntegration(unittest.TestCase):
 
         # timezone should be the same on the event object and accessor
         self.assertTrue(e1.timezone == acc.timezone)
-
-        self.portal.manage_delObjects(['event1'])
 
 
 class TestDXEventRecurrence(unittest.TestCase):
@@ -400,8 +497,6 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.event_url, self.event_url)
         self.assertEqual(e1.text.raw, self.text)
 
-        self.portal.manage_delObjects(['event1'])
-
     def test_no_overwrite(self):
         self.portal.invokeFactory(
             'Event',
@@ -449,8 +544,6 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.contact_name, self.contact_name)
         self.assertEqual(e1.event_url, self.event_url)
         self.assertEqual(e1.text.raw, self.text)
-
-        self.portal.manage_delObjects(['event1'])
 
 
 def test_suite():

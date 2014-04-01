@@ -2,8 +2,8 @@ from plone.app.event.at.content import EventAccessor as ATEventAccessor
 from plone.app.event.at.traverser import OccurrenceTraverser as OccTravAT
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
-from plone.app.event.testing import PAEventAT_FUNCTIONAL_TESTING
-from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
+from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
 
@@ -11,7 +11,7 @@ import mock
 
 
 class TestEventViewDX(AbstractSampleDataEvents):
-    layer = PAEventDX_FUNCTIONAL_TESTING
+    layer = PAEventDX_INTEGRATION_TESTING
 
     def event_factory(self):
         DXEventAccessor.portal_type = 'plone.app.event.dx.event'
@@ -63,7 +63,7 @@ class TestEventViewDX(AbstractSampleDataEvents):
 
 
 class TestEventViewAT(TestEventViewDX):
-    layer = PAEventAT_FUNCTIONAL_TESTING
+    layer = PAEventAT_INTEGRATION_TESTING
 
     def event_factory(self):
         return ATEventAccessor.create

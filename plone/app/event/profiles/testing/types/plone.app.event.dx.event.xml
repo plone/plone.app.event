@@ -4,7 +4,7 @@
     i18n:domain="plone">
 
   <!-- Basic properties -->
-  <property name="title" i18n:translate="">Event</property>
+  <property name="title" i18n:translate="">plone.app.event.dx.event</property>
   <property name="description"
       i18n:translate="">Events can be shown in calendars.</property>
   <property name="icon_expr"></property>
