@@ -102,18 +102,10 @@ class TestDXAddEdit(unittest.TestCase):
         ).value = "TestEvent"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-month').value = ("3",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-day').value = ("30",)
+            name='form.widgets.IEventBasic.start').value = '2014-03-30'
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-month').value = ("3",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-day').value = ("31",)
+            name='form.widgets.IEventBasic.end').value = '2014-03-31'
 
         self.browser.getControl('Save').click()
 
@@ -130,18 +122,10 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open('%s/@@edit' % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-month').value = ("2",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.start-day').value = ("2",)
+            name='form.widgets.IEventBasic.start').value = '2014-02-02'
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end-year').value = ("2014",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-month').value = ("2",)
-        self.browser.getControl(
-            name='form.widgets.IEventBasic.end-day').value = ("3",)
+            name='form.widgets.IEventBasic.end').value = '2014-02-03'
 
         self.browser.getControl('Save').click()
 
