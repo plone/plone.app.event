@@ -50,12 +50,12 @@ Development design choices
   use-case (1) the editor sits in Taipeh but edits a conference in Madrid, so
   she has to set the timezone of the event in the form. At display time usally
   the viewer is interested to see the local time of the conference in the
-  output, so display is always in Europe/Madrid timezone.
+  output, so display should be in Europe/Madrid timezone.
 
-  In use-case two the editor usally refers to his own local timezone. He will
+  In use-case (2) the editor usally refers to his own local timezone. He will
   keep the preset in the form. At display time the viewer is interested to see
   the date and time in his local timezone. On change of daylight-saving time in
-  the original timezone the datetime was entered for it stays alsoway on 10:00am.
+  the original timezone the datetime was entered stays on 10:00am.
   But if the participant in a other timezone has not this change it means he has
   the call scheduled one hour earlier or later in summer or winter time. So DST
   makes things again difficult, but heres no way to get rid of it as long as
