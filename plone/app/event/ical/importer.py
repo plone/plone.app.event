@@ -112,6 +112,13 @@ def ical_import(container, ics_resource, event_type,
         assert(is_datetime(start))
         assert(is_datetime(end))
 
+        # Set timezone, if not already set
+        tz = base.default_timezone(container, as_tzinfo=True)
+        if not getattr(start, 'tzinfo', False):
+            start = tz.localize(start)
+        if not getattr(end, 'tzinfo', False):
+            end = tz.localize(end)
+
         title = _get_prop('SUMMARY', item)
         description = _get_prop('DESCRIPTION', item)
         location = _get_prop('LOCATION', item)
@@ -131,7 +138,7 @@ def ical_import(container, ics_resource, event_type,
         contact = _get_prop('CONTACT', item)
         categories = item.get('CATEGORIES', ())
         if hasattr(categories, '__iter__'):
-            categories = [safe_unicode(it) for it in categories]
+            categories = tuple([safe_unicode(it) for it in categories])
 
         ext_modified = utc(_get_prop('LAST-MODIFIED', item))
 

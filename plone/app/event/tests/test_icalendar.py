@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from plone.app.event import base
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.ical.importer import ical_import
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
@@ -11,7 +10,6 @@ from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.event.interfaces import IEventAccessor
-from plone.event.utils import pydt
 from zope.component import getMultiAdapter
 
 import os
@@ -27,10 +25,6 @@ import unittest2 as unittest
 
 class ICalendarExportTestDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
-
-    def event_factory(self):
-        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
-        return DXEventAccessor.create
 
     def traverser(self, context, request):
         return OccTravDX(context, request)
@@ -274,11 +268,11 @@ class TestIcalImportDX(unittest.TestCase):
         e1 = IEventAccessor(impfolder.e1)
         self.assertEqual(
             e1.start,
-            pydt(datetime(2013, 7, 19, 12, 0, tzinfo=at))
+            at.localize(datetime(2013, 7, 19, 12, 0))
         )
         self.assertEqual(
             e1.end,
-            pydt(datetime(2013, 7, 20, 13, 0, tzinfo=at))
+            at.localize(datetime(2013, 7, 20, 13, 0))
         )
         self.assertEqual(
             e1.description,
@@ -300,11 +294,11 @@ class TestIcalImportDX(unittest.TestCase):
         e2 = IEventAccessor(impfolder.e2)
         self.assertEqual(
             e2.start,
-            pydt(datetime(1996, 4, 1, 1, 0, tzinfo=utc))
+            utc.localize(datetime(1996, 4, 1, 1, 0))
         )
         self.assertEqual(
             e2.end,
-            pydt(datetime(1996, 4, 1, 2, 0, tzinfo=utc))
+            utc.localize(datetime(1996, 4, 1, 2, 0))
         )
         self.assertEqual(
             e2.recurrence,
@@ -315,11 +309,11 @@ class TestIcalImportDX(unittest.TestCase):
         e3 = IEventAccessor(impfolder.e3)
         self.assertEqual(
             e3.start,
-            pydt(datetime(2012, 3, 27, 10, 0, tzinfo=at))
+            at.localize(datetime(2012, 3, 27, 10, 0))
         )
         self.assertEqual(
             e3.end,
-            pydt(datetime(2012, 3, 27, 18, 0, tzinfo=at))
+            at.localize(datetime(2012, 3, 27, 18, 0))
         )
         self.assertEqual(
             e3.recurrence,
@@ -331,11 +325,11 @@ class TestIcalImportDX(unittest.TestCase):
         e4 = IEventAccessor(impfolder.e4)
         self.assertEqual(
             e4.start,
-            pydt(datetime(2013, 4, 4, 0, 0, tzinfo=utc))
+            utc.localize(datetime(2013, 4, 4, 0, 0))
         )
         self.assertEqual(
             e4.end,
-            pydt(datetime(2013, 4, 4, 23, 59, 59, tzinfo=utc))
+            utc.localize(datetime(2013, 4, 4, 23, 59, 59))
         )
         self.assertEqual(
             e4.whole_day,
@@ -349,11 +343,11 @@ class TestIcalImportDX(unittest.TestCase):
         e5 = IEventAccessor(impfolder.e5)
         self.assertEqual(
             e5.start,
-            pydt(datetime(2013, 4, 2, 12, 0, tzinfo=utc))
+            utc.localize(datetime(2013, 4, 2, 12, 0))
         )
         self.assertEqual(
             e5.end,
-            pydt(datetime(2013, 4, 2, 23, 59, 59, tzinfo=utc))
+            utc.localize(datetime(2013, 4, 2, 23, 59, 59))
         )
         self.assertEqual(
             e5.whole_day,
