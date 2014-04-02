@@ -20,6 +20,7 @@ from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
+from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -528,14 +529,17 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         factory = self.event_factory
         factory(
             container=self.portal,
-            content_id='past_recur1',
-            title=u'Past Event recurring 1',
+            content_id='past_recur',
+            title=u'Past Event recurring',
             start=self.past,
             end=self.past + self.duration,
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        factory(
+        # data_postprocessing normalization is not needed, as we values are set
+        # correctly in the first place.
+
+        tomorrow = factory(
             container=self.portal,
             content_id='tomorrow',
             title=u'Tomorrow event',
@@ -544,6 +548,10 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
+        # Normalize values and reindex, what normally the form would do
+        # (especially, end time isn't set like open_end settings requests to.
+        data_postprocessing_context(tomorrow)
+        tomorrow.reindexObject()
 
         limit = get_events(self.portal, start=self.now, expand=True,
                            ret_mode=RET_MODE_ACCESSORS, limit=3)
@@ -627,7 +635,10 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        factory(
+        # data_postprocessing normalization is not needed, as we values are set
+        # correctly in the first place.
+
+        tomorrow = factory(
             container=self.portal,
             content_id='tomorrow',
             title=u'Tomorrow event',
@@ -636,6 +647,11 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
+        # Normalize values and reindex, what normally the form would do
+        # (especially, end time isn't set like open_end settings requests to.
+        data_postprocessing_context(tomorrow)
+        tomorrow.reindexObject()
+
         self.occ = [
             (u'Past Event', '2013-04-25 00:00:00', '2013-04-25 23:59:59'),
             (u'Long Event', '2013-04-25 10:00:00', '2013-06-04 10:00:00'),
@@ -812,8 +828,8 @@ class TestDatesForDisplay(unittest.TestCase):
             self.portal,
             'plone.app.event.dx.event',
             id="event",
-            start=tz.localize(datetime(2000, 10, 12, 6, 0, 0)),
-            end=tz.localize(datetime(2000, 10, 12, 18, 0, 0)),
+            start=tz.localize(datetime(2000, 10, 12, 0, 0, 0)),
+            end=tz.localize(datetime(2000, 10, 12, 23, 59, 59)),
             whole_day=True
         )
         self.assertEqual(
@@ -837,8 +853,8 @@ class TestDatesForDisplay(unittest.TestCase):
             self.portal,
             'plone.app.event.dx.event',
             id="event",
-            start=tz.localize(datetime(2000, 10, 12, 6, 0, 0)),
-            end=tz.localize(datetime(2000, 10, 13, 18, 0, 0)),
+            start=tz.localize(datetime(2000, 10, 12, 0, 0, 0)),
+            end=tz.localize(datetime(2000, 10, 13, 23, 59, 59)),
             whole_day=True
         )
         self.assertEqual(

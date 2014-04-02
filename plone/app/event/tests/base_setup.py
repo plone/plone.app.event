@@ -1,12 +1,13 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
-from plone.dexterity.utils import createContentInContainer
 from plone.app.event.dx import behaviors
+from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.dexterity.utils import createContentInContainer
 
 import unittest2 as unittest
 import pytz
@@ -73,6 +74,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
             whole_day=True,
             recurrence='RRULE:FREQ=DAILY;COUNT=3')
         workflow.doActionFor(self.past_event, 'publish')
+        # adjust start and end according to whole_day and open_end
+        data_postprocessing_context(self.past_event)
+        self.past_event.reindexObject()
 
         self.now_event = factory(
             container=self.portal,
@@ -90,6 +94,8 @@ EXDATE:20130506T000000,20140404T000000""",
             event_url='http://plone.org',
             subjects=['plone', 'testing'])
         workflow.doActionFor(self.now_event, 'publish')
+        data_postprocessing_context(self.now_event)
+        self.now_event.reindexObject()
 
         self.future_event = factory(
             container=self.portal,
@@ -99,6 +105,8 @@ EXDATE:20130506T000000,20140404T000000""",
             end=future + duration,
             location=u'Graz')
         workflow.doActionFor(self.future_event, 'publish')
+        data_postprocessing_context(self.future_event)
+        self.future_event.reindexObject()
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
         self.long_event = factory(
@@ -109,6 +117,8 @@ EXDATE:20130506T000000,20140404T000000""",
             end=far,
             location=u'Schaftal')
         workflow.doActionFor(self.long_event, 'publish')
+        data_postprocessing_context(self.long_event)
+        self.long_event.reindexObject()
 
         # For AT based tests, this is a plone.app.collection ICollection type
         # For DX based tests, it's a plone.app.contenttypes ICollection type
@@ -122,3 +132,4 @@ EXDATE:20130506T000000,20140404T000000""",
              'v': ['Event', 'plone.app.event.dx.event']
              },
         ]
+        collection.reindexObject()
