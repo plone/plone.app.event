@@ -1,4 +1,7 @@
 from DateTime import DateTime
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import DEFAULT_END_DELTA
@@ -23,6 +26,7 @@ from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import TEST_TIMEZONE
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
@@ -30,7 +34,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
 
-import datetime
 import pytz
 import unittest2 as unittest
 
@@ -49,7 +52,7 @@ class TestBaseModule(unittest.TestCase):
 
     def test_default_end(self):
         self.assertEqualDatetime(
-            default_end() - datetime.timedelta(hours=DEFAULT_END_DELTA),
+            default_end() - timedelta(hours=DEFAULT_END_DELTA),
             default_start())
 
     def test_default_start(self):
@@ -61,14 +64,14 @@ class TestBaseModule(unittest.TestCase):
         # TODO: DateTime better shouldn't do this!
         cet = pytz.timezone('CET')
         self.assertEqual(
-            DT(datetime.datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)),
+            DT(datetime(2011, 11, 11, 11, 0, 0, tzinfo=cet)),
             DateTime('2011/11/11 11:00:00 GMT+1')
         )
 
         # Python dates get converted to a DateTime with timecomponent including
         # a timezone
         self.assertEqual(
-            DT(datetime.date(2011, 11, 11)),
+            DT(date(2011, 11, 11)),
             DateTime('2011/11/11 00:00:00 UTC')
         )
 
@@ -87,7 +90,7 @@ class TestBaseModule(unittest.TestCase):
         # Invalid datetime zones are converted to the portal timezone
         # Testing with no timezone
         self.assertEqual(
-            DT(datetime.datetime(2011, 11, 11, 11, 0, 0)),
+            DT(datetime(2011, 11, 11, 11, 0, 0)),
             DateTime('2011/11/11 11:00:00 UTC')
         )
 
@@ -105,14 +108,14 @@ class TestBaseModule(unittest.TestCase):
 
         # exact=False
         self.assertEqual(
-            DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
+            DT(datetime(2012, 12, 12, 10, 10, 10, 123456,
                tzinfo=tz), exact=False),
             DateTime('2012/12/12 10:10:10 Europe/Vienna')
         )
 
         # exact=True
         self.assertEqual(
-            DT(datetime.datetime(2012, 12, 12, 10, 10, 10, 123456,
+            DT(datetime(2012, 12, 12, 10, 10, 10, 123456,
                tzinfo=tz), exact=True),
             DateTime('2012/12/12 10:10:10.123456 Europe/Vienna')
         )
@@ -153,23 +156,23 @@ class TestBaseModule(unittest.TestCase):
     def test__dt_start_of_day(self):
         from plone.app.event.base import dt_start_of_day
         self.assertEqual(
-            dt_start_of_day(datetime.datetime(2013, 2, 1, 18, 35)),
-            datetime.datetime(2013, 2, 1, 0, 0, 0, 0)
+            dt_start_of_day(datetime(2013, 2, 1, 18, 35)),
+            datetime(2013, 2, 1, 0, 0, 0, 0)
         )
         self.assertEqual(
-            dt_start_of_day(datetime.date(2013, 2, 1)),
-            datetime.datetime(2013, 2, 1, 0, 0, 0, 0)
+            dt_start_of_day(date(2013, 2, 1)),
+            datetime(2013, 2, 1, 0, 0, 0, 0)
         )
 
     def test__dt_end_of_day(self):
         from plone.app.event.base import dt_end_of_day
         self.assertEqual(
-            dt_end_of_day(datetime.datetime(2013, 2, 1, 18, 35)),
-            datetime.datetime(2013, 2, 1, 23, 59, 59, 0)
+            dt_end_of_day(datetime(2013, 2, 1, 18, 35)),
+            datetime(2013, 2, 1, 23, 59, 59, 0)
         )
         self.assertEqual(
-            dt_end_of_day(datetime.date(2013, 2, 1)),
-            datetime.datetime(2013, 2, 1, 23, 59, 59, 0)
+            dt_end_of_day(date(2013, 2, 1)),
+            datetime(2013, 2, 1, 23, 59, 59, 0)
         )
 
     def test__start_end_from_mode(self):
@@ -184,19 +187,19 @@ class TestBaseModule(unittest.TestCase):
         # PAST
         #
         start, end = start_end_from_mode('past')
-        self.assertTrue(start is None and isinstance(end, datetime.datetime))
+        self.assertTrue(start is None and isinstance(end, datetime))
 
         # FUTURE
         #
         start, end = start_end_from_mode('future')
-        self.assertTrue(isinstance(start, datetime.datetime) and end is None)
+        self.assertTrue(isinstance(start, datetime) and end is None)
 
         # NOW
         #
         start, end = start_end_from_mode('now')
         self.assertTrue(
-            isinstance(start, datetime.datetime) and
-            isinstance(end, datetime.datetime) and
+            isinstance(start, datetime) and
+            isinstance(end, datetime) and
             end.hour == 23 and end.minute == 59 and end.second == 59
         )
 
@@ -204,17 +207,17 @@ class TestBaseModule(unittest.TestCase):
         #
         start, end = start_end_from_mode('7days')
         self.assertTrue(
-            isinstance(start, datetime.datetime) and
-            isinstance(end, datetime.datetime) and
-            end == dt_end_of_day(start + datetime.timedelta(days=6))
+            isinstance(start, datetime) and
+            isinstance(end, datetime) and
+            end == dt_end_of_day(start + timedelta(days=6))
         )
 
         # TODAY
         #
         start, end = start_end_from_mode('today')
         self.assertTrue(
-            isinstance(start, datetime.datetime) and
-            isinstance(end, datetime.datetime) and
+            isinstance(start, datetime) and
+            isinstance(end, datetime) and
             start.hour == 0 and start.minute == 0 and start.second == 0 and
             end.hour == 23 and end.minute == 59 and end.second == 59 and
             (start, end) == start_end_from_mode('day')
@@ -222,7 +225,7 @@ class TestBaseModule(unittest.TestCase):
 
         # DAY
         #
-        day = datetime.datetime(2013, 2, 1, 18, 22)
+        day = datetime(2013, 2, 1, 18, 22)
         start, end = start_end_from_mode('day', day)
         self.assertTrue(
             start.date() == day.date() == end.date() and
@@ -231,7 +234,7 @@ class TestBaseModule(unittest.TestCase):
         )
 
         # test with date-only
-        day = datetime.datetime(2013, 2, 1)
+        day = datetime(2013, 2, 1)
         start, end = start_end_from_mode('day', day)
         self.assertTrue(
             start.date() == day.date() == end.date() and
@@ -254,7 +257,7 @@ class TestBaseModule(unittest.TestCase):
         orig_first_weekday = base.first_weekday
 
         base.first_weekday = ret_0
-        day = datetime.datetime(2013, 2, 2)
+        day = datetime(2013, 2, 2)
         start, end = start_end_from_mode('week', day)
         self.assertTrue(
             start.isoformat() == '2013-01-28T00:00:00' and
@@ -262,7 +265,7 @@ class TestBaseModule(unittest.TestCase):
         )
 
         base.first_weekday = ret_1
-        day = datetime.datetime(2013, 2, 2)
+        day = datetime(2013, 2, 2)
         start, end = start_end_from_mode('week', day)
         self.assertTrue(
             start.isoformat() == '2013-01-29T00:00:00' and
@@ -270,7 +273,7 @@ class TestBaseModule(unittest.TestCase):
         )
 
         base.first_weekday = ret_6
-        day = datetime.datetime(2013, 2, 1)
+        day = datetime(2013, 2, 1)
         start, end = start_end_from_mode('week', day)
         self.assertTrue(
             start.isoformat() == '2013-01-27T00:00:00' and
@@ -284,7 +287,7 @@ class TestBaseModule(unittest.TestCase):
         start, end = start_end_from_mode('month')
         self.assertTrue(start < end and start.day == 1)
 
-        day = datetime.datetime(2013, 2, 7)
+        day = datetime(2013, 2, 7)
         start, end = start_end_from_mode('month', day)
         self.assertTrue(
             start.year == 2013 and start.month == 2 and start.day == 1 and
@@ -390,10 +393,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     """Test get_events with DX objects.
     """
     layer = PAEventDX_INTEGRATION_TESTING
-
-    def event_factory(self):
-        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
-        return DXEventAccessor.create
 
     def test_get_events(self):
 
@@ -526,7 +525,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         be done after expanding the occurrences. Then we really have the
         correct order.
         """
-        factory = self.event_factory()
+        factory = self.event_factory
         factory(
             container=self.portal,
             content_id='past_recur1',
@@ -572,16 +571,16 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         # Completly outside range and start, end given as datetime
         cal = construct_calendar(
             res,
-            start=datetime.datetime(2000, 1, 1, 10, 0),
-            end=datetime.datetime(2000, 1, 2, 10, 0)
+            start=datetime(2000, 1, 1, 10, 0),
+            end=datetime(2000, 1, 2, 10, 0)
         )
         self.assertEqual(_num_events(cal.values()), 0)
 
         # Within range
         cal = construct_calendar(
             res,
-            start=datetime.date(2013, 5, 1),
-            end=datetime.date(2013, 5, 31)
+            start=date(2013, 5, 1),
+            end=date(2013, 5, 31)
         )
         self.assertEqual(_num_events(cal.values()), 34)
 
@@ -590,7 +589,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             return construct_calendar(
                 res,
                 start='invalid',
-                end=datetime.datetime(2000, 1, 2, 10, 0)
+                end=datetime(2000, 1, 2, 10, 0)
             )
 
         self.assertRaises(AssertionError, _invalid_start)
@@ -599,7 +598,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         def _invalid_end():
             return construct_calendar(
                 res,
-                start=datetime.datetime(2000, 1, 1, 10, 0),
+                start=datetime(2000, 1, 1, 10, 0),
                 end='invalid'
             )
         self.assertRaises(AssertionError, _invalid_end)
@@ -614,15 +613,11 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
     """
     layer = PAEventDX_INTEGRATION_TESTING
 
-    def event_factory(self):
-        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
-        return DXEventAccessor.create
-
     def setUp(self):
         AbstractSampleDataEvents.setUp(self)
 
         # add extra events to the base setup
-        factory = self.event_factory()
+        factory = self.event_factory
         factory(
             container=self.portal,
             content_id='past_recur',
@@ -780,22 +775,22 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         self.assertEqual(res, expect[:3], self.diff(res, expect[:3]))
 
 
-class TestDatesForDisplayDX(unittest.TestCase):
+class TestDatesForDisplay(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_prep_display_with_time(self):
-        event_id = self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        event = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
-            end=datetime.datetime(2000, 10, 12, 18, 0, 0, tzinfo=self.tz)
+            start=tz.localize(datetime(2000, 10, 12, 6, 0, 0)),
+            end=tz.localize(datetime(2000, 10, 12, 18, 0, 0))
         )
-        event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
@@ -812,14 +807,15 @@ class TestDatesForDisplayDX(unittest.TestCase):
         )
 
     def test_prep_display_wholeday_sameday(self):
-        event_id = self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        event = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
-            end=datetime.datetime(2000, 10, 12, 18, 0, 0, tzinfo=self.tz),
+            start=tz.localize(datetime(2000, 10, 12, 6, 0, 0)),
+            end=tz.localize(datetime(2000, 10, 12, 18, 0, 0)),
             whole_day=True
         )
-        event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
@@ -836,14 +832,15 @@ class TestDatesForDisplayDX(unittest.TestCase):
         )
 
     def test_prep_display_wholeday_differentdays(self):
-        event_id = self.portal.invokeFactory(
+        tz = pytz.timezone("Europe/Vienna")
+        event = createContentInContainer(
+            self.portal,
             'plone.app.event.dx.event',
             id="event",
-            start=datetime.datetime(2000, 10, 12, 6, 0, 0, tzinfo=self.tz),
-            end=datetime.datetime(2000, 10, 13, 18, 0, 0, tzinfo=self.tz),
+            start=tz.localize(datetime(2000, 10, 12, 6, 0, 0)),
+            end=tz.localize(datetime(2000, 10, 13, 18, 0, 0)),
             whole_day=True
         )
-        event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',

@@ -71,7 +71,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
             end=past + duration,
             location=u"Vienna",
             whole_day=True,
-            recurrence='RRULE:FREQ=DAILY;COUNT=3').context
+            recurrence='RRULE:FREQ=DAILY;COUNT=3')
         workflow.doActionFor(self.past_event, 'publish')
 
         self.now_event = factory(
@@ -88,7 +88,7 @@ EXDATE:20130506T000000,20140404T000000""",
             contact_email='testdriver@plone.org',
             contact_phone='+123456789',
             event_url='http://plone.org',
-            subjects=['plone', 'testing']).context
+            subjects=['plone', 'testing'])
         workflow.doActionFor(self.now_event, 'publish')
 
         self.future_event = factory(
@@ -97,7 +97,7 @@ EXDATE:20130506T000000,20140404T000000""",
             title=u'Future Event',
             start=future,
             end=future + duration,
-            location=u'Graz').context
+            location=u'Graz')
         workflow.doActionFor(self.future_event, 'publish')
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
@@ -107,7 +107,7 @@ EXDATE:20130506T000000,20140404T000000""",
             title=u'Long Event',
             start=past,
             end=far,
-            location=u'Schaftal').context
+            location=u'Schaftal')
         workflow.doActionFor(self.long_event, 'publish')
 
         # For AT based tests, this is a plone.app.collection ICollection type
