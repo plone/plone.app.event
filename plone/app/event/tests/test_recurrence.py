@@ -37,9 +37,6 @@ class TestTraversalDX(AbstractSampleDataEvents):
     """
     layer = PAEventDX_FUNCTIONAL_TESTING
 
-    def event_factory(self):
-        return DXEventAccessor.create
-
     @property
     def traverser(self):
         return OccTravDX(self.now_event, self.request)

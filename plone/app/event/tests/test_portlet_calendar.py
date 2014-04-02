@@ -40,9 +40,10 @@ class PortletTest(unittest.TestCase):
         portlet = getUtility(IPortletType, name='portlets.Calendar')
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEqual([
-            'plone.app.portlets.interfaces.IColumn',
-            'plone.app.portlets.interfaces.IDashboard'
+        self.assertEqual(
+            [
+                'plone.app.portlets.interfaces.IColumn',
+                'plone.app.portlets.interfaces.IDashboard'
             ],
             registered_interfaces
         )

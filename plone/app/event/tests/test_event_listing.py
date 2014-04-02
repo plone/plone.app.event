@@ -1,5 +1,4 @@
 from plone.app.event.base import localized_today
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import make_fake_response
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -10,10 +9,6 @@ import mock
 
 class TestEventsListingDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
-
-    def event_factory(self):
-        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
-        return DXEventAccessor.create
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)

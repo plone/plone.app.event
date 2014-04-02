@@ -10,10 +10,6 @@ import mock
 class TestEventSummaryDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
-    def event_factory(self):
-        DXEventAccessor.portal_type = 'plone.app.event.dx.event'
-        return DXEventAccessor.create
-
     @property
     def traverser(self):
         return OccTravDX(self.now_event, self.request)
