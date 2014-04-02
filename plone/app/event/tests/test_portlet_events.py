@@ -1,12 +1,15 @@
-from DateTime import DateTime
 from Products.GenericSetup.utils import _getDottedName
+from datetime import datetime
+from datetime import timedelta
 from plone.app.event.portlets import portlet_events
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.app.z3cform.interfaces import IPloneFormLayer
+from plone.dexterity.utils import createContentInContainer
 from plone.portlets.interfaces import IPortletAssignment
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
@@ -19,7 +22,12 @@ from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
 from zope.interface import alsoProvides
 
+import pytz
 import unittest2 as unittest
+
+
+TZNAME = 'Australia/Brisbane'
+PTYPE = 'plone.app.event.dx.event'
 
 
 class PortletTest(unittest.TestCase):
@@ -111,28 +119,19 @@ class PortletTest(unittest.TestCase):
             self.fail()
 
 
-# TODO
-"""
 class RendererTest(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         portal = self.layer['portal']
         self.portal = portal
         self.request = self.layer['request']
-        setRoles(portal, TEST_USER_ID, ['Manager'])
-        setHooks()
-        setSite(portal)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-        set_timezone("Australia/Brisbane")
+        set_timezone(TZNAME)
 
         # TODO: don't use admin privileges for test methods except
         # test_prev_events_link and test_prev_events_link_and_navigation_root
-
-        # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(
-            ['Event'], ['simple_publication_workflow']
-        )
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
@@ -152,15 +151,16 @@ class RendererTest(unittest.TestCase):
         )
 
     def test_events(self):
-        start = DateTime('Australia/Brisbane') + 2
-        end = DateTime('Australia/Brisbane') + 4
-        self.portal.invokeFactory('Event', 'e1',
-                                  startDate=start, endDate=end)
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(hours=1)
+
+        e1 = createContentInContainer(
+            self.portal, PTYPE, title='e1', start=start, end=end)
         self.portal.invokeFactory('Folder', 'eventfolder')
-        # one event in the events folder
-        self.portal.eventfolder.invokeFactory('Event', 'e2',
-                                              startDate=start, endDate=end)
-        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+        createContentInContainer(
+            self.portal.eventfolder, PTYPE, title='e2', start=start, end=end)
+        self.portal.portal_workflow.doActionFor(e1, 'publish')
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
@@ -188,17 +188,17 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('event_listing' not in portlet.render())
 
     def test_events_recurring(self):
-        startDT = DateTime('Australia/Brisbane') + 1
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now()) + timedelta(days=1)
 
-        self.portal.invokeFactory('Event', 'e1', title='Event 1',
-                                  startDate=startDT,
-                                  recurrence='RRULE:FREQ=WEEKLY;COUNT=10'),
-                                  timezone="Australia/Brisbane")
-        self.portal.invokeFactory('Event', 'e2', title='Event 2',
-                                  startDate=startDT,
-                                  recurrence='RRULE:FREQ=DAILY;COUNT=3',
-                                  timezone="Australia/Brisbane")
-        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+        e1 = createContentInContainer(
+            self.portal, PTYPE, id='e1', title='Event 1', start=start,
+            recurrence='RRULE:FREQ=WEEKLY;COUNT=10')
+        createContentInContainer(
+            self.portal, PTYPE, id='e1', title='Event 1', start=start,
+            recurrence='RRULE:FREQ=DAILY;COUNT=3')
+
+        self.portal.portal_workflow.doActionFor(e1, 'publish')
 
         r = self.renderer(
             assignment=portlet_events.Assignment(count=5,
@@ -208,14 +208,14 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('Event 2' not in [x.title for x in events])
 
         rd = r.render()
-        occ1DT = startDT + 7
+        occ1dt = start + timedelta(days=7)
         # The first occurrence of the event itself should show up. It should
         # link to the event and not an occurrence.
         self.assertTrue('http://nohost/plone/e1"' in rd)
         # Occurrences should link to the Occurrence.
         self.assertTrue(
             'http://nohost/plone/e1/%s-%02d-%02d' %
-            (occ1DT.year(), occ1DT.month(), occ1DT.day()) in rd
+            (occ1dt.year, occ1dt.month, occ1dt.day) in rd
         )
 
     def test_events_listing_link(self):
@@ -223,4 +223,3 @@ class RendererTest(unittest.TestCase):
         rd = r.render()
         self.assertTrue('?mode=future' in rd)
         self.assertTrue('?mode=past' in rd)
-"""

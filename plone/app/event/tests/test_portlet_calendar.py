@@ -107,11 +107,6 @@ class RendererTest(unittest.TestCase):
         setSite(portal)
         set_timezone(TZNAME)
 
-        # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(
-            ['Event'], ['simple_publication_workflow']
-        )
-
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
         context = context or self.portal

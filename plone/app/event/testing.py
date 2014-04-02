@@ -1,4 +1,5 @@
 from Products.CMFPlone.utils import getFSVersionTuple
+from Products.CMFPlone.utils import getToolByName
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.event.interfaces import IEventSettings
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
@@ -72,7 +73,8 @@ class PAEventLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        portal.portal_workflow.setDefaultChain("simple_publication_workflow")
+        wft = getToolByName(portal, 'portal_workflow')
+        wft.setDefaultChain("simple_publication_workflow")
         self.applyProfile(portal, 'plone.app.event:default')
         set_timezone(tz='UTC')
 
