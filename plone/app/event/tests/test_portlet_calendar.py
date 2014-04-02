@@ -1,25 +1,33 @@
 # -*- coding: utf-8 -*-
-from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from calendar import monthrange
+from datetime import datetime
+from datetime import timedelta
 from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.dexterity.utils import createContentInContainer
 from plone.portlets.interfaces import IPortletAssignment
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
-from zope.component import getUtility
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
 
+import pytz
 import unittest2 as unittest
 
+
+TZNAME = 'Europe/Vienna'
+PTYPE = 'plone.app.event.dx.event'
 
 class PortletTest(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
@@ -86,10 +94,8 @@ class PortletTest(unittest.TestCase):
         self.assertTrue(isinstance(renderer, portlet_calendar.Renderer))
 
 
-# TODO
-"""
 class RendererTest(unittest.TestCase):
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         portal = self.layer['portal']
@@ -99,6 +105,7 @@ class RendererTest(unittest.TestCase):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
+        set_timezone(TZNAME)
 
         # Make sure Events use simple_publication_workflow
         self.portal.portal_workflow.setChainForPortalTypes(
@@ -122,15 +129,16 @@ class RendererTest(unittest.TestCase):
         )
 
     def test_portlet_config(self):
-        start = DateTime('Europe/Vienna')
-        end = DateTime('Europe/Vienna') + 0.1
-        self.portal.invokeFactory('Event', 'e1',
-                                  startDate=start, endDate=end)
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(hours=1)
+
+        e1 = createContentInContainer(
+            self.portal, PTYPE, title='e1', start=start, end=end)
         self.portal.invokeFactory('Folder', 'eventfolder')
-        # one event in the events folder
-        self.portal.eventfolder.invokeFactory('Event', 'e2',
-                                              startDate=start, endDate=end)
-        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+        createContentInContainer(
+            self.portal.eventfolder, PTYPE, title='e2', start=start, end=end)
+        self.portal.portal_workflow.doActionFor(e1, 'publish')
 
         r = self.renderer(assignment=portlet_calendar.Assignment(
             state=('draft',)))
@@ -171,14 +179,17 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('?mode=day&amp;date=' in rd)
 
     def test_long_event(self):
-        start = DateTime('Europe/Vienna')
-        end = DateTime('Europe/Vienna') + 2
-        self.portal.invokeFactory('Event', 'e1',
-                                  startDate=start, endDate=end)
-        self.portal.portal_workflow.doActionFor(self.portal.e1, 'publish')
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(days=2)
 
-        r = self.renderer(assignment=portlet_calendar.Assignment(
-            state=('published', )))
+        e1 = createContentInContainer(
+            self.portal, PTYPE, title='e1', start=start, end=end)
+        self.portal.portal_workflow.doActionFor(e1, 'publish')
+
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(state=('published', ))
+        )
         r.update()
         rd = r.render()
         self.assertEqual(rd.count('http://nohost/plone/e1'), 3)
@@ -192,12 +203,14 @@ class RendererTest(unittest.TestCase):
         # Now let's add a new event on the first day of the current month
         year, month = portlet.year_month_display()
         day = monthrange(year, month)[1]  # (wkday, days)
-        last_day_month = DateTime('%s/%s/%s' % (year, month, day))
-        hour = 1 / 24.0
+
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime(year, month, day, 23, 0, 0))
+        end = tz.localize(datetime(year, month, day, 23, 30, 0))
         # Event starts at 23:00 and ends at 23:30
-        self.portal.invokeFactory('Event', 'e1',
-                                  startDate=last_day_month + 23*hour,
-                                  endDate=last_day_month + 23.5*hour)
+        createContentInContainer(
+            self.portal, PTYPE, title='e1', start=start, end=end
+        )
 
         # Try to render the calendar portlet again, it must be different Now
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
@@ -209,9 +222,14 @@ class RendererTest(unittest.TestCase):
     def test_event_nonascii(self):
         # test issue with non-ascii event title and location
         title = u'Plön€¢önf München 2012'
-        self.portal.invokeFactory('Event', 'e1', title=title,
-                                  location=u'München')
-        #self.wft.doActionFor(self.portal.e1, 'publish')
+
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(hours=1)
+        e1 = createContentInContainer(
+            self.portal, PTYPE, title=title, start=start, end=end,
+            location=u'München')
+        self.wft.doActionFor(e1, 'publish')
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertTrue(title in portlet.render())
@@ -235,5 +253,3 @@ class RendererTest(unittest.TestCase):
         r.update()
         today = localized_today(self.portal)
         self.assertEqual(r.year_month_display(), (today.year, today.month))
-
-"""
