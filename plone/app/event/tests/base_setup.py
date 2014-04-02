@@ -92,7 +92,10 @@ EXDATE:20130506T000000,20140404T000000""",
             contact_email='testdriver@plone.org',
             contact_phone='+123456789',
             event_url='http://plone.org',
-            subjects=['plone', 'testing'])
+            subject=('plone', 'testing'))  # change to subjects, once this is
+        # fixed:
+        # https://github.com/plone/plone.dexterity/pull/18
+        # https://github.com/plone/plone.app.dexterity/issues/118
         workflow.doActionFor(self.now_event, 'publish')
         data_postprocessing_context(self.now_event)
         self.now_event.reindexObject()
