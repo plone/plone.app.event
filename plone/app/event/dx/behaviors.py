@@ -434,7 +434,7 @@ def data_postprocessing(obj, event):
 
     # We handle date inputs as floating dates without timezones and apply
     # timezones afterwards.
-    def _fix_zone(dt, zone):
+    def _fix_zone(dt, tz):
 
         if dt.tzinfo is not None and isinstance(dt.tzinfo, FakeZone):
             # Delete the tzinfo only, if it was set by IEventBasic setter.

@@ -4,6 +4,14 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
+- Changes in the Dexterity IRichText behavior migration: don't fail, if no
+  Event type is found in the Dexterity FTI and remove the old IEventSummary
+  behavior, if found.
+  [thet]
+
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
+
 - Add an @@event_summary view, which provides the event summary listing in the
   event view for the purpose of reuse elsewhere. Allow the exclusion of
   information via an excludes list. The relevant methods are moved from
