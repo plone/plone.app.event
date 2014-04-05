@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2014-04-05)
 ------------------
 
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no
