@@ -7,10 +7,16 @@ Changelog
 - Add an event_listing view for IEvent objects to show all of it's occurrences.
   [thet]
 
+- Remove the visual distinction between IEvent and IOccurrences in the
+  event_view. The user is likely not interested, if a Occurrence or the
+  original Event is shown. Instead a Status Message is shown for users with
+  rights to edit the event, saying that the original event, which can be
+  modified, is one level up.
+  [thet]
+
 - Change the occurrence listing in the @@event_summary view to directly link
   to the occurrence objects, rename the label to 'All dates' and also include
-  the first date of the original event. To even further remove the distinction,
-  you can pass 'original_event_link' to @@event_summary's excludes list.
+  the first date of the original event.
   [thet]
 
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no
