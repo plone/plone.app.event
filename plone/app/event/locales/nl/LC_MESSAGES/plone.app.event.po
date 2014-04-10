@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-04-10 12:37+0000\n"
+"POT-Creation-Date: 2014-04-10 13:29+0000\n"
 "PO-Revision-Date: 2013-11-14 16:00+0100\n"
 "Last-Translator: Kees Hink <kees@fourdigits.nl>\n"
 "Language-Team: Plone Nederland <translators@plone.nl>\n"
@@ -562,8 +562,8 @@ msgstr "Volgende maand"
 msgid "next_week_link"
 msgstr "Volgende week"
 
-#. Default: "This event is part of a recurring Event. To edit the original event, click here: ${linkstart}Go to the original event${linkend}."
-#: plone/app/event/browser/event_view.py:35
+#. Default: "This event is part of a recurring Event. To edit the original event, go one level up."
+#: plone/app/event/browser/event_view.py:34
 msgid "part_of_recurring_event"
 msgstr ""
 

@@ -31,15 +31,9 @@ class EventView(BrowserView):
         self.data = IEventAccessor(context)
 
         if IOccurrence.providedBy(context):
-            url = aq_parent(context)
             msg = _(
                 'part_of_recurring_event',
                 default=u'This event is part of a recurring Event. '
-                        u'To edit the original event, click here: '
-                        u'${linkstart}Go to the original event${linkend}.',
-                mapping={
-                    'linkstart': u'<a href="{}">'.format(url.absolute_url()),
-                    'linkend': u'</a>'
-                },
+                        u'To edit the original event, go one level up.'
             )
             IStatusMessage(self.request).addStatusMessage(msg, 'info')

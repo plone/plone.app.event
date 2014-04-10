@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.app.event\n"
-"POT-Creation-Date: 2014-04-10 12:37+0000\n"
+"POT-Creation-Date: 2014-04-10 13:29+0000\n"
 "PO-Revision-Date: 2014-01-23 23:50+0800\n"
 "Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
 "Language-Team: Plone I18N <plone-i18n@lists.sourceforge.net>\n"
@@ -559,8 +559,8 @@ msgstr "後一月"
 msgid "next_week_link"
 msgstr "後一週"
 
-#. Default: "This event is part of a recurring Event. To edit the original event, click here: ${linkstart}Go to the original event${linkend}."
-#: plone/app/event/browser/event_view.py:35
+#. Default: "This event is part of a recurring Event. To edit the original event, go one level up."
+#: plone/app/event/browser/event_view.py:34
 msgid "part_of_recurring_event"
 msgstr ""
 
