@@ -45,18 +45,22 @@
     </tal:cond>
 
     <tal:cond condition="python:'occurrences' not in excludes">
-    <tal:cond condition="not:view/is_occurrence">
     <tal:cond tal:define="occs view/next_occurrences" condition="occs">
       <dt i18n:translate="">
         More occurrences of this event:
       </dt>
-      <dd tal:repeat="occ occs" tal:content="structure python:view.formatted_date(occ)">
-        Occurrence Date
+      <dd tal:repeat="occ occs">
+        <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
+        <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
+          <strong tal:omit-tag="not: this_is_occ">
+            <tal:date replace="structure python:view.formatted_date(occ)"/>
+          </strong>
+        </a>
+        </tal:def>
       </dd>
       <dd tal:define="num view/num_more_occurrences" tal:condition="num">
         There are <tal:num replace="num"/> more occurrences.
       </dd>
-    </tal:cond>
     </tal:cond>
     </tal:cond>
 

@@ -4,6 +4,10 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
+- Change the occurrence listing in the @@event_summary view to directly link to
+  the occurrence objects.
+  [thet]
+
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no
   Event type is found in the Dexterity FTI and remove the old IEventSummary
   behavior, if found.

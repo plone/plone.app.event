@@ -139,7 +139,7 @@ class EventOccurrenceAccessor(object):
     def __init__(self, context):
         object.__setattr__(self, 'context', context)
 
-        own_attr = ['start', 'end', 'url', 'parent']
+        own_attr = ['start', 'end', 'url']
         object.__setattr__(self, '_own_attr', own_attr)
 
     def _get_context(self, name):

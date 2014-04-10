@@ -28,6 +28,12 @@ class EventSummaryView(BrowserView):
         return IOccurrence.providedBy(self.context)
 
     @property
+    def event_context(self):
+        if self.is_occurrence:
+            return aq_parent(self.context)
+        return self.context
+
+    @property
     def occurrence_parent_url(self):
         if self.is_occurrence:
             return aq_parent(self.context).absolute_url()
@@ -49,7 +55,7 @@ class EventSummaryView(BrowserView):
         :rtype: list
         """
         occurrences = []
-        adapter = IRecurrenceSupport(self.context, None)
+        adapter = IRecurrenceSupport(self.event_context, None)
         if adapter:
             for cnt, occ in enumerate(adapter.occurrences()):
                 if cnt == self.max_occurrences + 1:
@@ -64,11 +70,11 @@ class EventSummaryView(BrowserView):
         """Return the number of extra occurrences, which are not listed by
         next_occurrences.
         """
-        uid = IUUID(self.context, None)
+        uid = IUUID(self.event_context, None)
         if not uid:
             # Might be an occurrence
             return 0
-        catalog = getToolByName(self.context, 'portal_catalog')
+        catalog = getToolByName(self.event_context, 'portal_catalog')
         brain = catalog(UID=uid)[0]  # assuming, that the current context is
                                      # in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
