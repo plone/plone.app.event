@@ -4,8 +4,10 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
-- Change the occurrence listing in the @@event_summary view to directly link to
-  the occurrence objects.
+- Change the occurrence listing in the @@event_summary view to directly link
+  to the occurrence objects, rename the label to 'All dates' and also include
+  the first date of the original event. To even further remove the distinction,
+  you can pass 'original_event_link' to @@event_summary's excludes list.
   [thet]
 
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no

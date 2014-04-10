@@ -74,6 +74,9 @@ msgstr "Workflow-statussen waarmee Agenda-items getoond worden."
 msgid "More occurrences of this event:"
 msgstr "Meer herhalingen van dit Agenda-item:"
 
+msgid "All dates"
+msgstr "Alle datums"
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr "Aantal te tonen items"

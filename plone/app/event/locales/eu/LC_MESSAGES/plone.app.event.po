@@ -76,6 +76,9 @@ msgstr "Zein workflow egoeratako elementuak erakutsi"
 msgid "More occurrences of this event:"
 msgstr "Hitzordu honen agerpen gehiago"
 
+msgid "All dates"
+msgstr "Datak guztiak"
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr "Zenbat elementu erakutsi"

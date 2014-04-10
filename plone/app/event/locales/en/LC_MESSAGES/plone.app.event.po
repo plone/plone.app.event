@@ -74,6 +74,9 @@ msgstr ""
 msgid "More occurrences of this event:"
 msgstr ""
 
+msgid "All dates"
+msgstr ""
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr ""

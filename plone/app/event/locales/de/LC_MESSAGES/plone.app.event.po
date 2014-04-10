@@ -74,6 +74,9 @@ msgstr "Nur Artikel in diesen Status anzeigen."
 msgid "More occurrences of this event:"
 msgstr "Weitere Termine:"
 
+msgid "All dates"
+msgstr "Alle Termine"
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr "Anzahl der angezeigten Artikel"

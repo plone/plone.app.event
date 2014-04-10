@@ -72,6 +72,9 @@ msgstr "選擇要被顯示的工作流程狀態。"
 msgid "More occurrences of this event:"
 msgstr "顯示活動更多的時間資訊："
 
+msgid "All dates"
+msgstr "所有時間"
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr "顯示的數量"

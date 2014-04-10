@@ -35,7 +35,7 @@
       </dd>
     </tal:cond>
 
-    <tal:cond condition="python:'occurrence_link' not in excludes">
+    <tal:cond condition="python:'original_event_link' not in excludes">
       <dd tal:condition="view/is_occurrence">
         <span i18n:translate="">This event is part of a recurring Event.</span>
         <a href="" tal:attributes="href view/occurrence_parent_url">
@@ -47,7 +47,7 @@
     <tal:cond condition="python:'occurrences' not in excludes">
     <tal:cond tal:define="occs view/next_occurrences" condition="occs">
       <dt i18n:translate="">
-        More occurrences of this event:
+        All dates
       </dt>
       <dd tal:repeat="occ occs">
         <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">

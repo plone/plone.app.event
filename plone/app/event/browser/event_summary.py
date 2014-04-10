@@ -60,8 +60,6 @@ class EventSummaryView(BrowserView):
             for cnt, occ in enumerate(adapter.occurrences()):
                 if cnt == self.max_occurrences + 1:
                     break
-                elif cnt == 0:
-                    continue
                 occurrences.append(occ)
         return occurrences
 

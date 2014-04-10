@@ -76,6 +76,9 @@ msgstr "In quale stato di workflow devono essere gli elementi da mostrare."
 msgid "More occurrences of this event:"
 msgstr "Altre occorrenze di questo evento:"
 
+msgid "All dates"
+msgstr "Tutte le date"
+
 #: plone/app/event/portlets/portlet_events.py:25
 msgid "Number of items to display"
 msgstr "Numero di elementi da mostrare"
