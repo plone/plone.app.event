@@ -280,7 +280,6 @@ that by overriding the `excludes` list of the view. Possible values are::
     title
     subjects
     date
-    original_event_link
     occurrences
     location
     contact

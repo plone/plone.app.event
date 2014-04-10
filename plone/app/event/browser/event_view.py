@@ -1,5 +1,9 @@
+from Acquisition import aq_parent
 from Products.Five.browser import BrowserView
 from plone.event.interfaces import IEventAccessor
+from Products.statusmessages.interfaces import IStatusMessage
+from plone.event.interfaces import IOccurrence
+from plone.app.event import messageFactory as _
 
 
 def get_location(accessor):
@@ -25,3 +29,17 @@ class EventView(BrowserView):
         self.context = context
         self.request = request
         self.data = IEventAccessor(context)
+
+        if IOccurrence.providedBy(context):
+            url = aq_parent(context)
+            msg = _(
+                'part_of_recurring_event',
+                default=u'This event is part of a recurring Event. '
+                        u'To edit the original event, click here: '
+                        u'${linkstart}Go to the original event${linkend}.',
+                mapping={
+                    'linkstart': u'<a href="{}">'.format(url.absolute_url()),
+                    'linkend': u'</a>'
+                },
+            )
+            IStatusMessage(self.request).addStatusMessage(msg, 'info')
