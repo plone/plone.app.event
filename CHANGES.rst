@@ -27,7 +27,8 @@ Changelog
 
 - Change the occurrence listing in the @@event_summary view to directly link
   to the occurrence objects, rename the label to 'All dates' and also include
-  the first date of the original event.
+  the first date of the original event. The event_summary's max_occurrences
+  attribute now also includes the starting event.
   [thet]
 
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no

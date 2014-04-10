@@ -52,7 +52,7 @@ class EventSummaryView(BrowserView):
         adapter = IRecurrenceSupport(self.event_context, None)
         if adapter:
             for cnt, occ in enumerate(adapter.occurrences()):
-                if cnt == self.max_occurrences + 1:
+                if cnt == self.max_occurrences:
                     break
                 occurrences.append(occ)
         return occurrences
