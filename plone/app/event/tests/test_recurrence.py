@@ -73,6 +73,13 @@ class TestTraversalDX(AbstractSampleDataEvents):
         self.assertTrue(IOccurrence.providedBy(item))
         self.assertEqual(type(self.now_event), type(item.aq_parent))
 
+        # Test attributes of Occurrence
+        self.assertEqual(item.portal_type, 'Occurrence')
+        self.assertEqual(item.id, '2013-05-07')
+        delta = datetime.timedelta(days=2)
+        self.assertEqual(item.start, self.now + delta)
+        self.assertEqual(item.end, self.now + delta + self.duration)
+
     def test_occurrence_accessor(self):
         start = self.now
         end = self.future
@@ -177,8 +184,8 @@ class TestOccurrences(unittest.TestCase):
         view = zope.component.getMultiAdapter(
             (self.portal['interval'], self.request), name='event_summary')
         result = view.next_occurrences
-        # altogether 5 occurrences, but start occurrence is not included
-        self.assertEqual(4, len(result))
+        # altogether 5 occurrences, but start occurrence is included
+        self.assertEqual(5, len(result))
 
         view = zope.component.getMultiAdapter(
             (self.portal['many'], self.request), name='event_summary')

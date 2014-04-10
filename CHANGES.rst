@@ -11,6 +11,9 @@ Changelog
     ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
     will be removed for the next version.
 
+- Add a portal_type attribute to Occurrence objects and set it to 'Occurrence',
+  so they can be easily identified without looking up interfaces.
+  [thet]
 
 - Add an event_listing view for IEvent objects to show all of it's occurrences.
   [thet]

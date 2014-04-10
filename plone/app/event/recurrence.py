@@ -128,6 +128,7 @@ class Occurrence(SimpleItem):
         self.id = id
         self.start = start
         self.end = end
+        self.portal_type = 'Occurrence'
 
 
 class EventOccurrenceAccessor(object):
