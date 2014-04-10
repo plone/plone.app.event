@@ -33,12 +33,6 @@ class EventSummaryView(BrowserView):
             return aq_parent(self.context)
         return self.context
 
-    @property
-    def occurrence_parent_url(self):
-        if self.is_occurrence:
-            return aq_parent(self.context).absolute_url()
-        return None
-
     def formatted_date(self, occ):
         provider = getMultiAdapter(
             (self.context, self.request, self),
@@ -79,3 +73,10 @@ class EventSummaryView(BrowserView):
 
         num = len(idx['start']) - 1 - self.max_occurrences
         return num > 0 and num or 0
+
+    # BBB Removed with next version
+    @property
+    def occurrence_parent_url(self):
+        if self.is_occurrence:
+            return aq_parent(self.context).absolute_url()
+        return None

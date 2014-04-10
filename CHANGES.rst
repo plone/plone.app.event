@@ -4,6 +4,14 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
+.. note::
+
+    Methods used for the ``event_summary`` view have has been moved from the
+    ``event_view`` to ``plone.app.event.browser.event_summary``. The
+    ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
+    will be removed for the next version.
+
+
 - Add an event_listing view for IEvent objects to show all of it's occurrences.
   [thet]
 
