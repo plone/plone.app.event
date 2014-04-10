@@ -71,8 +71,8 @@ class EventSummaryView(BrowserView):
                                      # in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
 
-        num = len(idx['start']) - 1 - self.max_occurrences
-        return num > 0 and num or 0
+        num = len(idx['start']) - self.max_occurrences
+        return num if num > 0 else 0
 
     # BBB Removed with next version
     @property

@@ -184,17 +184,21 @@ class TestOccurrences(unittest.TestCase):
         view = zope.component.getMultiAdapter(
             (self.portal['interval'], self.request), name='event_summary')
         result = view.next_occurrences
-        # altogether 5 occurrences, but start occurrence is included
+        # altogether 5 occurrences, start occurrence is included
         self.assertEqual(5, len(result))
 
         view = zope.component.getMultiAdapter(
             (self.portal['many'], self.request), name='event_summary')
-        result = view.next_occurrences
-        self.assertEqual(view.max_occurrences, len(result))
+
+        # Number of shown occurrences should match max_occurrences setting
+        self.assertEqual(len(view.next_occurrences), view.max_occurrences)
+        # num_more_occurrences should return number of remaining occurrences
+        self.assertEqual(
+            view.num_more_occurrences, 1000 - view.max_occurrences)
 
 
 class MockEvent(SimpleItem):
-    """ Mock event"""
+    """Mock event"""
 
 
 class TestRecurrenceSupport(unittest.TestCase):
