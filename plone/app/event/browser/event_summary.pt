@@ -59,7 +59,9 @@
         </tal:def>
       </dd>
       <dd tal:define="num view/num_more_occurrences" tal:condition="num">
-        There are <tal:num replace="num"/> more occurrences.
+        <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing">
+          There are <tal:num replace="num"/> more occurrences.
+        </a>
       </dd>
     </tal:cond>
     </tal:cond>

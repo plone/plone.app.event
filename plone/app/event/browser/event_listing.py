@@ -18,6 +18,7 @@ from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.app.querystring import queryparser
 from plone.memoize import view
+from plone.uuid.interfaces import IUUID
 from plone.z3cform.layout import wrap_form
 from z3c.form import button
 from z3c.form import field
@@ -47,7 +48,7 @@ class EventListing(BrowserView):
         self.now = now = localized_now(context)
         self.settings = IEventListingSettings(self.context)
 
-        # Batch parameter
+        # Request parameter
         req = self.request.form
         self.b_start = 'b_start' in req and int(req['b_start']) or 0
         self.b_size = 'b_size' in req and int(req['b_size']) or 10
@@ -70,6 +71,9 @@ class EventListing(BrowserView):
 
         if self.mode is None:
             self.mode = self._date and 'day' or 'future'
+
+        self.uid = None  # Used to get all occurrences from a single event.
+                         # Overrides all other settings
 
     @property
     def default_context(self):
@@ -109,18 +113,23 @@ class EventListing(BrowserView):
     def _get_events(self, ret_mode=RET_MODE_ACCESSORS, expand=True):
         context = self.context
         kw = {}
-        if self.path:
-            kw['path'] = self.path
-        elif self.settings.current_folder_only:
-            kw['path'] = '/'.join(context.getPhysicalPath())
+        if self.uid:
+            # In this case, restrict search for single event
+            kw['UID'] = self.uid
+        else:
+            if self.path:
+                kw['path'] = self.path
+            elif self.settings.current_folder_only:
+                kw['path'] = '/'.join(context.getPhysicalPath())
+
+            if self.tags:
+                kw['Subject'] = {'query': self.tags, 'operator': 'and'}
+
+            if self.searchable_text:
+                kw['SearchableText'] = self.searchable_text
+
         #kw['b_start'] = self.b_start
         #kw['b_size']  = self.b_size
-
-        if self.tags:
-            kw['Subject'] = {'query': self.tags, 'operator': 'and'}
-
-        if self.searchable_text:
-            kw['SearchableText'] = self.searchable_text
 
         start, end = self._start_end
 
@@ -418,6 +427,16 @@ class EventListing(BrowserView):
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):
         return self.ical
+
+
+class EventEventListing(EventListing):
+    """This is an EventListing for an individual event, to list all
+    occurrences batched and navigatable with all the features, the EventListing
+    offers.
+    """
+    def __init__(self, context, request):
+        super(EventEventListing, self).__init__(context, request)
+        self.uid = IUUID(self.context)
 
 
 class IEventListingSettings(Interface):

@@ -4,6 +4,9 @@ Changelog
 1.1dev (unreleased)
 -------------------
 
+- Add an event_listing view for IEvent objects to show all of it's occurrences.
+  [thet]
+
 - Change the occurrence listing in the @@event_summary view to directly link
   to the occurrence objects, rename the label to 'All dates' and also include
   the first date of the original event. To even further remove the distinction,
