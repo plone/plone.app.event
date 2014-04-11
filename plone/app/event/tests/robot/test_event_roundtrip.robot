@@ -127,7 +127,7 @@ I should see ${NUM} occurrences in the form
 I should see the event detail view
     Then Page Should Contain  Testevent
      And Page Should Contain  Test description
-     And Page Should Contain  More occurrences of this event
+     And Page Should Contain  All dates
      And Page Should Contain  Test location
      And Page Should Contain  Test name
      And Page Should Contain  +1234567890
@@ -137,9 +137,14 @@ I should see the event detail view
 
 I should see the occurrence detail view
     Then Page Should Contain  Testevent
-     And Page Should Contain  This event is part of a recurring Event.
-     And Page Should Contain  Go to the original Event.
-
+     And Page Should Contain  Test description
+     And Page Should Contain  All dates
+     And Page Should Contain  Test location
+     And Page Should Contain  Test name
+     And Page Should Contain  +1234567890
+     And Page Should Contain  Test attendee
+     And Page Should Contain  Visit external website
+     And Page Should Contain  iCal
 
 I should see the event listing view
     Then Xpath Should Match X Times  //article[@class="vevent"]  3

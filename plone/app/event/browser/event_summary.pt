@@ -36,24 +36,24 @@
     </tal:cond>
 
     <tal:cond condition="python:'occurrences' not in excludes">
-      <dd tal:condition="view/is_occurrence">
-        <span i18n:translate="">This event is part of a recurring Event.</span>
-        <a href="" tal:attributes="href view/occurrence_parent_url">
-          <span i18n:translate="">Go to the original Event.</span>
-        </a>
-      </dd>
-    <tal:cond condition="not:view/is_occurrence">
-    <tal:cond tal:define="occs view/next_occurrences" condition="occs">
+    <tal:cond tal:define="occs view/next_occurrences" condition="python:len(occs) > 1">
       <dt i18n:translate="">
-        More occurrences of this event:
+        All dates
       </dt>
-      <dd tal:repeat="occ occs" tal:content="structure python:view.formatted_date(occ)">
-        Occurrence Date
+      <dd tal:repeat="occ occs">
+        <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
+        <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
+          <strong tal:omit-tag="not: this_is_occ">
+            <tal:date replace="structure python:view.formatted_date(occ)"/>
+          </strong>
+        </a>
+        </tal:def>
       </dd>
       <dd tal:define="num view/num_more_occurrences" tal:condition="num">
-        There are <tal:num replace="num"/> more occurrences.
+        <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing">
+          There are <tal:num replace="num"/> more occurrences.
+        </a>
       </dd>
-    </tal:cond>
     </tal:cond>
     </tal:cond>
 

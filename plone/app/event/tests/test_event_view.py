@@ -31,7 +31,7 @@ class TestEventViewDX(AbstractSampleDataEvents):
         self.assertTrue('2013-05-15' in output)
         self.assertTrue('(Europe/Vienna / UTC200)' in output)
         self.assertTrue('Graz' in output)
-        self.assertTrue('More occurrences of this event' not in output)
+        self.assertTrue('All dates' not in output)
 
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_event_view__recurring(self):
@@ -41,7 +41,7 @@ class TestEventViewDX(AbstractSampleDataEvents):
 
         self.assertTrue('Now Event' in output)
         self.assertTrue('2013-05-05' in output)
-        self.assertTrue('More occurrences of this event' in output)
+        self.assertTrue('All dates' in output)
         self.assertTrue('2013-05-07' in output)
         self.assertTrue('2013-05-09' in output)
         self.assertTrue('http://plone.org' in output)
@@ -54,11 +54,9 @@ class TestEventViewDX(AbstractSampleDataEvents):
         output = view()
 
         self.assertTrue('Now Event' in output)
-        self.assertTrue('2013-05-05' not in output)
-        self.assertTrue('More occurrences of this event' not in output)
+        self.assertTrue('2013-05-05' in output)
         self.assertTrue('2013-05-07' in output)
-        self.assertTrue('2013-05-09' not in output)
-        self.assertTrue('This event is part of a recurring Event.' in output)
+        self.assertTrue('2013-05-09' in output)
         self.assertTrue('http://plone.org' in output)
 
 
