@@ -91,7 +91,6 @@ class PortletTest(unittest.TestCase):
         )
         self.assertTrue(isinstance(renderer, portlet_events.Renderer))
 
-
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
         self.portal.manage_permission(
