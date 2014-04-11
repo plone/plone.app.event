@@ -28,10 +28,10 @@ class EventSummaryView(BrowserView):
         return IOccurrence.providedBy(self.context)
 
     @property
-    def occurrence_parent_url(self):
+    def event_context(self):
         if self.is_occurrence:
-            return aq_parent(self.context).absolute_url()
-        return None
+            return aq_parent(self.context)
+        return self.context
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(
@@ -49,13 +49,11 @@ class EventSummaryView(BrowserView):
         :rtype: list
         """
         occurrences = []
-        adapter = IRecurrenceSupport(self.context, None)
+        adapter = IRecurrenceSupport(self.event_context, None)
         if adapter:
             for cnt, occ in enumerate(adapter.occurrences()):
-                if cnt == self.max_occurrences + 1:
+                if cnt == self.max_occurrences:
                     break
-                elif cnt == 0:
-                    continue
                 occurrences.append(occ)
         return occurrences
 
@@ -64,14 +62,21 @@ class EventSummaryView(BrowserView):
         """Return the number of extra occurrences, which are not listed by
         next_occurrences.
         """
-        uid = IUUID(self.context, None)
+        uid = IUUID(self.event_context, None)
         if not uid:
             # Might be an occurrence
             return 0
-        catalog = getToolByName(self.context, 'portal_catalog')
+        catalog = getToolByName(self.event_context, 'portal_catalog')
         brain = catalog(UID=uid)[0]  # assuming, that the current context is
                                      # in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
 
-        num = len(idx['start']) - 1 - self.max_occurrences
-        return num > 0 and num or 0
+        num = len(idx['start']) - self.max_occurrences
+        return num if num > 0 else 0
+
+    # BBB Removed with next version
+    @property
+    def occurrence_parent_url(self):
+        if self.is_occurrence:
+            return aq_parent(self.context).absolute_url()
+        return None

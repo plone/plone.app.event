@@ -4,7 +4,36 @@ Changelog
 1.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+.. note::
+
+    Methods used for the ``event_summary`` view have has been moved from the
+    ``event_view`` to ``plone.app.event.browser.event_summary``. The
+    ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
+    will be removed for the next version.
+
+- Disable the edit bar on Occurrence objects. They are transient and cannot be
+  edited.
+  [thet]
+
+- Add a portal_type attribute to Occurrence objects and set it to 'Occurrence',
+  so they can be easily identified without looking up interfaces.
+  [thet]
+
+- Add an event_listing view for IEvent objects to show all of it's occurrences.
+  [thet]
+
+- Remove the visual distinction between IEvent and IOccurrences in the
+  event_view. The user is likely not interested, if a Occurrence or the
+  original Event is shown. Instead a Status Message is shown for users with
+  rights to edit the event, saying that the original event, which can be
+  modified, is one level up.
+  [thet]
+
+- Change the occurrence listing in the @@event_summary view to directly link
+  to the occurrence objects, rename the label to 'All dates' and also include
+  the first date of the original event. The event_summary's max_occurrences
+  attribute now also includes the starting event.
+  [thet]
 
 
 1.2.1 (2014-04-05)

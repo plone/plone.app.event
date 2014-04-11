@@ -32,6 +32,7 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         self.assertTrue('2013-05-15' in output)
         self.assertTrue('(Europe/Vienna / UTC200)' in output)
         self.assertTrue('Graz' in output)
+        self.assertTrue('All dates' not in output)
 
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_event_summary__recurring(self):
@@ -42,14 +43,14 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         self.assertEqual(view.is_occurrence, False)
         self.assertEqual(view.get_location, u'Vienna')
         self.assertEqual(view.occurrence_parent_url, None)
-        self.assertEqual(len(view.next_occurrences), 2)
+        self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 
         output = view()
 
         #self.assertTrue('Now Event' not in output)  # Title not shown by def.
         self.assertTrue('2013-05-05' in output)
-        self.assertTrue('More occurrences of this event' in output)
+        self.assertTrue('All dates' in output)
         self.assertTrue('2013-05-07' in output)
         self.assertTrue('2013-05-09' in output)
         self.assertTrue('http://plone.org' in output)
@@ -64,17 +65,16 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         self.assertEqual(view.is_occurrence, True)
         self.assertEqual(view.get_location, u'Vienna')
         self.assertEqual(view.occurrence_parent_url, 'http://nohost/plone/now')
-        self.assertEqual(len(view.next_occurrences), 0)
+        self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 
         output = view()
 
         self.assertTrue('Now Event' not in output)  # Title not shown by def.
-        self.assertTrue('2013-05-05' not in output)
-        self.assertTrue('More occurrences of this event' not in output)
+        self.assertTrue('All dates' in output)
+        self.assertTrue('2013-05-05' in output)
         self.assertTrue('2013-05-07' in output)
-        self.assertTrue('2013-05-09' not in output)
-        self.assertTrue('This event is part of a recurring Event.' in output)
+        self.assertTrue('2013-05-09' in output)
         self.assertTrue('http://plone.org' in output)
 
     @mock.patch('plone.app.event.base.localized_now', new=PN)
@@ -89,7 +89,7 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
 
         self.assertTrue('Now Event' in output)  # Title not shown by def.
         self.assertTrue('2013-05-05' in output)
-        self.assertTrue('More occurrences of this event' not in output)
+        self.assertTrue('All dates' not in output)
         self.assertTrue('2013-05-07' not in output)
         self.assertTrue('2013-05-09' not in output)
         self.assertTrue('http://plone.org' not in output)

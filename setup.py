@@ -54,7 +54,7 @@ setup(
         'plone.browserlayer',
         'plone.event>=1.0',
         'plone.folder',
-        'plone.formwidget.recurrence',
+        'plone.formwidget.recurrence>=1.2.1',
         'plone.memoize',
         'plone.namedfile',
         'plone.portlets',
