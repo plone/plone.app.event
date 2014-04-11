@@ -36,7 +36,7 @@
     </tal:cond>
 
     <tal:cond condition="python:'occurrences' not in excludes">
-    <tal:cond tal:define="occs view/next_occurrences" condition="occs">
+    <tal:cond tal:define="occs view/next_occurrences" condition="python:len(occs) > 1">
       <dt i18n:translate="">
         All dates
       </dt>
