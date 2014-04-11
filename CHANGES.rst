@@ -12,7 +12,9 @@ Changelog
     will be removed for the next version.
 
 - Disable the edit bar on Occurrence objects. They are transient and cannot be
-  edited.
+  edited. Remove the visual distinction between IEvent and IOccurrences in the
+  event_summary view. The user is likely not interested, if a Occurrence or the
+  original Event is shown.
   [thet]
 
 - Add a portal_type attribute to Occurrence objects and set it to 'Occurrence',
@@ -20,13 +22,6 @@ Changelog
   [thet]
 
 - Add an event_listing view for IEvent objects to show all of it's occurrences.
-  [thet]
-
-- Remove the visual distinction between IEvent and IOccurrences in the
-  event_view. The user is likely not interested, if a Occurrence or the
-  original Event is shown. Instead a Status Message is shown for users with
-  rights to edit the event, saying that the original event, which can be
-  modified, is one level up.
   [thet]
 
 - Change the occurrence listing in the @@event_summary view to directly link
