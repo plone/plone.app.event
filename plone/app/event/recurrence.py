@@ -122,7 +122,11 @@ class OccurrenceTraverser(DefaultPublishTraverse):
 
 
 class Occurrence(SimpleItem):
+    """Transient Occurrence object, representing an individual event in a
+    recurrecne set.
+    """
     implements(IOccurrence)
+    _Copy_or_Move_Permission = []
 
     def __init__(self, id, start, end):
         self.id = id

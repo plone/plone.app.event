@@ -25,6 +25,9 @@
    </property>
    <property name="visible">True</property>
   </object>
+  <object name="local_roles" meta_type="CMF Action" purge="False">
+   <property name="available_expr">python:getattr(object, 'portal_type', '') != 'Occurrence'</property>
+  </object>
  </object>
 
  <object name="object_buttons" meta_type="CMF Action Category">
