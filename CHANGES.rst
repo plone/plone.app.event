@@ -11,6 +11,10 @@ Changelog
     ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
     will be removed for the next version.
 
+- Disable the edit bar on Occurrence objects. They are transient and cannot be
+  edited.
+  [thet]
+
 - Add a portal_type attribute to Occurrence objects and set it to 'Occurrence',
   so they can be easily identified without looking up interfaces.
   [thet]
