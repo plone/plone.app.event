@@ -18,8 +18,10 @@ setup(
         open("CHANGES.rst").read(),
     ),
     classifiers=[
-        "Framework :: Plone",
-        "Programming Language :: Python",
+        "Development Status :: 4 - Beta",
+        "Framework :: Plone :: 5.0",
+        "Programming Language :: Python :: 2.7",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
     ],
     keywords='plone event',
     author='Plone Foundation',
