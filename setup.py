@@ -104,7 +104,7 @@ setup(
         'test': [
             'mock',
             'plone.app.collection',
-            'plone.app.contenttypes',
+            'plone.app.contenttypes >= 1.1b1',
             'plone.app.event [archetypes, dexterity]',
             'plone.app.robotframework',
             'plone.app.testing [robot]',
