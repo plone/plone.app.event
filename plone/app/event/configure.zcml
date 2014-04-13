@@ -14,6 +14,7 @@
   <include package="plone.formwidget.recurrence" />
   <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
+  <include package="plone.app.widgets" />
 
   <!-- internal dependencies -->
   <include file="permissions.zcml" />
