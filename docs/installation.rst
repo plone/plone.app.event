@@ -4,30 +4,19 @@ Installation
 Compatibility
 -------------
 
-plone.app.event is tested with latest Plone 4.3 and the upcoming Plone 5.0.
+plone.app.event 1.2 and up is only compatible with Plone 5, which does not have
+any stable releases at time of this writing.
 
-
-Removed 4.2 compatibility
--------------------------
-
-Since plone.app.event 1.1b1 we depend on changes from plone.app.contenttypes
-1.1b1, which depends on plone.dexterity>=2.2.1 which itself (since 2.2) depends
-on a AccessControl version not provided by the Plone 4.2 version fixes.
-
-You can still experiment with Plone 4.2 compatibility if you need to, but
-officially it's support in plone.app.event is removed. There are a number of
-other compatibility issues to be solved and the tests will fail anyways. If you
-really need to, use this as a starting point::
-
-    plone.app.dexterity = 2.0.10
-    plone.dexterity = 2.1.3
-    plone.app.contenttypes = 1.1a1
-    z3c.form = 3.0.5
-    plone.app.z3cform = 0.7.5
+For use with Plone 4.3, use a plone.app.event version from the 1.1 release
+series.
 
 
 Installation
 ------------
+
+``plone.app.event`` only provides Dexterity behaviors to build own types based
+on them.  If you want to install a Dexterity based Event type, you can simply
+use ``plone.app.contenttypes`` 1.1b1 or up.
 
 Depend on one (or both) of these setuptools dependencies::
 
@@ -48,27 +37,6 @@ following GenericSetup profile in metadata.xml::
 For Archetypes, use this one::
 
     plone.app.event.at:default
-
-Don't use the ``plone.app.event.dx:default`` profile, which will be removed in
-future versions of plone.app.event. Please create your own type based on
-plone.app.event's Dexterity behaviors (Through the web or via a GenericSetup
-profile), or install plone.app.contenttypes for ready-to-use Dexterity types.
-
-
-Plone 4.3 installation
-~~~~~~~~~~~~~~~~~~~~~~
-
-plone.app.event depends on ``plone.app.portlets>=2.5a1``. This version has the
-calendar and event portlet removed, which are now in plone.app.event itself.
-Also, it allows the calendar portlet to do AJAX calls without KSS via standard
-jQuery. For Plone < 5.0 you have to fix the plone.app.portlets version in your
-buildout like so::
-
-    [buildout]
-    versions = versions
-
-    [versions]
-    plone.app.portlets = 2.5a1
 
 
 Upgrading from plone.app.event 1.0
