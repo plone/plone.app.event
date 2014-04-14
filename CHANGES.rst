@@ -11,6 +11,9 @@ Changelog
     ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
     will be removed for the next version.
 
+- Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
+  base.cfg to buildout.cfg, remove test-43.cfg and sources-dev.cfg.
+
 - Disable the edit bar on Occurrence objects. They are transient and cannot be
   edited. Remove the visual distinction between IEvent and IOccurrences in the
   event_summary view. The user is likely not interested, if a Occurrence or the

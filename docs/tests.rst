@@ -1,10 +1,10 @@
 Running tests
 =============
 
-If you have run the buildout (dev.cfg, test-42.cfg or test-43.cfg), you can run
-all tests like so::
+After running buildout with the dev.cfg or tests.cfg config files, you can run
+all tests (including robot tests with ``--all`` switch) like so::
 
-    ./bin/test -s plone.app.event
+    ./bin/test -s plone.app.event --all
 
 The `-t` switch allows you to run a specific test file or method. The
 `--list-tests` lists all available tests.
@@ -25,4 +25,3 @@ to try things out.
 
 For more information on this topic visit:
 http://developer.plone.org/reference_manuals/external/plone.app.robotframework/happy.html
-

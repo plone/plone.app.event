@@ -11,6 +11,20 @@ For use with Plone 4.3, use a plone.app.event version from the 1.1 release
 series.
 
 
+Buildout files
+--------------
+
+- ``buildout.cfg``: plone.app.event base installation.
+
+- ``dev.cfg``: plone.app.event development configuration, including tests.
+
+- ``tests.cfg``: plone.app.event tests only.
+
+- ``sources.cfg``: plone.app.event mr.developer source definitions.
+
+- ``versions.cfg``: plone.app.event version requirements.
+
+
 Installation
 ------------
 
