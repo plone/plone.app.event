@@ -26,6 +26,20 @@ really need to, use this as a starting point::
     plone.app.z3cform = 0.7.5
 
 
+Buildout files
+--------------
+
+- ``buildout.cfg``: plone.app.event base installation.
+
+- ``dev.cfg``: plone.app.event development configuration, including tests.
+
+- ``tests.cfg``: plone.app.event tests only.
+
+- ``sources.cfg``: plone.app.event mr.developer source definitions.
+
+- ``versions.cfg``: plone.app.event version requirements.
+
+
 Installation
 ------------
 
