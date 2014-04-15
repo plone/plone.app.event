@@ -12,7 +12,9 @@ Changelog
     will be removed for the next version.
 
 - Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
-  base.cfg to buildout.cfg, remove test-43.cfg and sources-dev.cfg.
+  base.cfg to buildout.cfg, remove test-43.cfg, sources-dev.cfg and
+  jenkins.cfg.
+  [thet]
 
 - Disable the edit bar on Occurrence objects. They are transient and cannot be
   edited. Remove the visual distinction between IEvent and IOccurrences in the
