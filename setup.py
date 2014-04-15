@@ -87,6 +87,7 @@ setup(
         'zope.schema',
     ],
     extras_require={
+        'dexterity': [],  # BBB, remove with next version
         'test': [
             'mock',
             'plone.app.collection',
