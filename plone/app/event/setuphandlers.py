@@ -1,22 +1,13 @@
-from plone.app.event.base import wkday_to_mon0
-from plone.app.event.interfaces import IEventSettings
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
-from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.i18n.locales import locales
-from zope.i18n.locales import LoadLocaleError
 from zope.interface import implements
+
 import logging
 
 
 logger = logging.getLogger(__name__)
-
-
-def isNotThisProfile(context, marker_file):
-    return context.readDataFile(marker_file) is None
 
 
 class HiddenProfiles(object):
@@ -76,9 +67,8 @@ def catalog_setup(context):
 
 
 def setup_misc(context):
-    if isNotThisProfile(context, 'plone.app.event-default.txt'):
+    if context.readDataFile('plone.app.event-default.txt') is None:
         return
 
     portal = context.getSite()
-
     catalog_setup(portal)

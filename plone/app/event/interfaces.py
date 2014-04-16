@@ -1,5 +1,3 @@
-from plone.app.event import messageFactory as _
-from zope import schema
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -15,7 +13,3 @@ class IBrowserLayer(IDefaultBrowserLayer):
 class IICalendarImportEnabled(Interface):
     """Marker interface for contexts, where icalendar import is enabled.
     """
-
-# BBB
-from Products.CMFPlone.interfaces.controlpanel import IDateAndTimeSchema
-IEventSettings = IDateAndTimeSchema

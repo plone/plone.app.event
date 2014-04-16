@@ -12,7 +12,10 @@ Changelog
   plone.app.widgets' DatetimeWidget now have this timezone, if not otherwise
   set by the user.
 
-- Move vocabularies to plone.app.vocabularies.
+- Move controlpanel to Products.CMFPlone.controlpanel.
+
+- Move vocabularies to plone.app.vocabularies and use plone.* instead of
+  plone.app.event.* prefix for registry keys.
 
 - Use default and defaultFactory properties for behavior schema definitions to
   provide sane defaults for z3c.form *and* programmatically created Dexterity
