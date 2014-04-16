@@ -19,21 +19,25 @@ from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
+from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.event.tests.base_setup import TEST_TIMEZONE
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
+from plone.event.utils import default_timezone as os_default_timezone
 from plone.event.utils import pydt
+from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
+
 
 import pytz
 import unittest2 as unittest
@@ -296,6 +300,22 @@ class TestBaseModule(unittest.TestCase):
             end.year == 2013 and end.month == 2 and end.day == 28 and
             end.hour == 23 and end.minute == 59 and end.second == 59
         )
+
+
+class TimezoneTest(unittest.TestCase):
+    layer = PAEvent_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        set_env_timezone('UTC')
+        set_timezone('UTC')
+
+    def test_default_timezone(self):
+        self.assertTrue(os_default_timezone() == default_timezone() == 'UTC')
+
+        registry = getUtility(IRegistry)
+        registry['plone.portal_timezone'] = "Europe/Vienna"
+        self.assertTrue(default_timezone() == 'Europe/Vienna')
 
 
 class TestAnnotationAdapter(unittest.TestCase):
