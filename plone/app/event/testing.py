@@ -1,7 +1,6 @@
 from Products.CMFPlone.utils import getFSVersionTuple
 from Products.CMFPlone.utils import getToolByName
 from plone.app.event.interfaces import IBrowserLayer
-from plone.app.event.interfaces import IEventSettings
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
@@ -30,8 +29,7 @@ def set_browserlayer(request):
 def set_timezone(tz):
     # Set the portal timezone
     reg = getUtility(IRegistry)
-    settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-    settings.portal_timezone = tz
+    reg['plone.portal_timezone'] = tz
 
 
 def set_env_timezone(tz):

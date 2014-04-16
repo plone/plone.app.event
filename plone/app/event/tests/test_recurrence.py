@@ -3,11 +3,11 @@ from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
-from plone.app.event.interfaces import IEventSettings
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
+from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
@@ -98,10 +98,7 @@ class TestOccurrences(unittest.TestCase):
         self.request = self.layer['request']
 
         set_browserlayer(self.request)
-
-        reg = zope.component.getUtility(IRegistry)
-        settings = reg.forInterface(IEventSettings, prefix="plone.app.event")
-        settings.portal_timezone = TZNAME
+        set_timezone(TZNAME) = TZNAME
 
         now = patched_now()
 

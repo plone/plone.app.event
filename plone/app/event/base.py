@@ -11,7 +11,6 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from persistent.dict import PersistentDict
-from plone.app.event.interfaces import IEventSettings
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent
@@ -29,7 +28,6 @@ from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
 
@@ -437,14 +435,9 @@ def default_timezone(context=None, as_tzinfo=False):
             info = pytz.timezone(member_timezone)
             return info if as_tzinfo else info.zone
 
-    portal_timezone = None
-    reg = queryUtility(IRegistry, context=context, default=None)
-    if reg:
-        portal_timezone = reg.forInterface(
-            IEventSettings,
-            prefix="plone.app.event",
-            check=False  # Don't fail, if portal_timezone isn't set.
-        ).portal_timezone
+    reg_key = 'plone.portal_timezone'
+    registry = getUtility(IRegistry)
+    portal_timezone = registry.get(reg_key, None)
 
     # fallback to what plone.event is doing
     if not portal_timezone:
@@ -502,13 +495,9 @@ def first_weekday():
     :rtype: integer
 
     """
-    try:
-        controlpanel = getUtility(IRegistry).forInterface(
-            IEventSettings, prefix="plone.app.event"
-        )
-        first_wd = controlpanel.first_weekday
-    except KeyError:
-        first_wd = None
+    reg_key = 'plone.first_weekday'
+    registry = getUtility(IRegistry)
+    first_wd = registry.get(reg_key, None)
 
     if not first_wd:
         return 0
