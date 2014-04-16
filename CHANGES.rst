@@ -34,8 +34,51 @@ Changelog
 [thet, yenzenz, garbas]
 
 
-1.2.1 (unreleased)
+1.2.2 (2014-04-15)
 ------------------
+
+.. note::
+
+    Methods used for the ``event_summary`` view have has been moved from the
+    ``event_view`` to ``plone.app.event.browser.event_summary``. The
+    ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
+    will be removed for the next version.
+
+- Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
+  base.cfg to buildout.cfg, remove test-43.cfg, sources-dev.cfg and
+  jenkins.cfg.
+  [thet]
+
+- Disable the edit bar on Occurrence objects. They are transient and cannot be
+  edited. Remove the visual distinction between IEvent and IOccurrences in the
+  event_summary view. The user is likely not interested, if a Occurrence or the
+  original Event is shown.
+  [thet]
+
+- Add a portal_type attribute to Occurrence objects and set it to 'Occurrence',
+  so they can be easily identified without looking up interfaces.
+  [thet]
+
+- Add an event_listing view for IEvent objects to show all of it's occurrences.
+  [thet]
+
+- Change the occurrence listing in the @@event_summary view to directly link
+  to the occurrence objects, rename the label to 'All dates' and also include
+  the first date of the original event. The event_summary's max_occurrences
+  attribute now also includes the starting event.
+  [thet]
+
+
+1.2.1 (2014-04-05)
+------------------
+
+- Changes in the Dexterity IRichText behavior migration: don't fail, if no
+  Event type is found in the Dexterity FTI and remove the old IEventSummary
+  behavior, if found.
+  [thet]
+
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
 
 - Add an @@event_summary view, which provides the event summary listing in the
   event view for the purpose of reuse elsewhere. Allow the exclusion of

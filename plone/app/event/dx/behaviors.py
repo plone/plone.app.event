@@ -32,15 +32,12 @@ from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import adapter
 from zope.component import adapts
-from zope.event import notify
-from zope.globalrequest import getRequest
 from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import invariant
 from zope.interface import provider
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
@@ -370,6 +367,7 @@ def data_postprocessing_context(context):
     context.start, context.end, context.whole_day, context.open_end =\
         data_postprocessing(
             context.start, context.end, context.whole_day, context.open_end)
+
 
 ## Attribute indexer
 

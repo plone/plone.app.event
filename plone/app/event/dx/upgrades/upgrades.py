@@ -8,7 +8,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
-from zope.component import getUtility
+from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -23,8 +23,11 @@ BEHAVIOR_LIST = [
 
 
 def enable_richtext_behavior(self):
-    fti = getUtility(IDexterityFTI, name="Event")
-    behaviors = [i for i in fti.behaviors]
+    fti = queryUtility(IDexterityFTI, name="Event", default=None)
+    if not fti:
+        return
+    behaviors = [it for it in fti.behaviors
+                 if 'plone.app.event.dx.behaviors.IEventSummary' not in it]
     behaviors.extend([
         'plone.app.contenttypes.behaviors.richtext.IRichText',
     ])
