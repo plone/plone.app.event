@@ -1,10 +1,10 @@
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
@@ -17,7 +17,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
-from plone.registry.interfaces import IRegistry
+from plone.dexterity.utils import createContentInContainer
 from plone.testing.z2 import Browser
 from zope.publisher.interfaces.browser import IBrowserView
 
@@ -95,56 +95,52 @@ class TestTraversalDX(AbstractSampleDataEvents):
         self.assertTrue(title in browser.contents)
 
 
-"""
 class TestOccurrences(unittest.TestCase):
-
-    layer = PAEventAT_INTEGRATION_TESTING
+    layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
 
         set_browserlayer(self.request)
-        set_timezone(TZNAME) = TZNAME
+        set_timezone(TZNAME)
 
         now = patched_now()
 
         yesterday = now - datetime.timedelta(days=1)
 
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory(
-            'Event',
-            'daily',
+        self.daily = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            id='daily',
             title=u'Daily Event',
             start=now,
             end=now + datetime.timedelta(hours=1),
             location=u'Vienna',
             recurrence='RRULE:FREQ=DAILY;COUNT=4',
-            timezone=TZNAME)
-
-        self.portal.invokeFactory(
-            'Event',
-            'interval',
+        )
+        self.interval = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            id='interval',
             title=u'Interval Event',
             start=yesterday,
             end=yesterday + datetime.timedelta(hours=1),
             location=u'Halle',
             recurrence='RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5',
-            timezone=TZNAME)
+        )
 
         self.now = now
         self.yesterday = yesterday
-        self.daily = self.portal['daily']
-        self.interval = self.portal['interval']
 
     def test_get_occurrences(self):
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
                          expand=True)
         self.assertEqual(len(res), 9)
-
         res = get_events(self.portal, start=self.now,
                          ret_mode=RET_MODE_ACCESSORS, expand=True)
-        self.assertEqual(len(res), 9)
+        self.assertEqual(len(res), 8)
 
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS,
                          expand=True, limit=5)
@@ -152,12 +148,14 @@ class TestOccurrences(unittest.TestCase):
         self.assertTrue(IEventAccessor.providedBy(res[0]))
 
     def test_event_summary_occurrences(self):
-        self.portal.invokeFactory(
-            'Event',
-            'many',
+        createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            id='many',
             title=u'Interval Event',
             location=u'Brisbane',
-            recurrence='RRULE:FREQ=DAILY;COUNT=1000')
+            recurrence='RRULE:FREQ=DAILY;COUNT=1000'
+        )
 
         view = zope.component.getMultiAdapter(
             (self.portal['interval'], self.request), name='event_summary')
@@ -173,7 +171,6 @@ class TestOccurrences(unittest.TestCase):
         # num_more_occurrences should return number of remaining occurrences
         self.assertEqual(
             view.num_more_occurrences, 1000 - view.max_occurrences)
-"""
 
 
 class MockEvent(SimpleItem):
