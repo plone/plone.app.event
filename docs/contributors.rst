@@ -28,19 +28,33 @@ Thanks!
 
 - Johannes Raggam, thet (Main author and PLIP implementation)
 - Andreas Jung, zopyx
+- Andreas Zeidler, witsch
+- Andrew Mleczko, amleczko
+- Bo Simonsen, bosim
+- Cillian de Róiste, cillianderoiste
 - David Glick, davisagli
-- Érico Andrei, ericof
+- Eric Steele, esteele
 - Franklin Kingma, kingel
 - Gauthier Bastien, gbastien
 - Georg Bernhard, gogo
 - Giacomo Spettoli, giacomos
+- Gil Forcada, gforcada
 - Guido Stevens, gyst
 - JeanMichel FRANCOIS, toutpt
 - Jens Klein, jensens
+- Jonas Baumann, jone
+- Kees Hink, khink
 - Lennart Regebro, regebro
+- Mikel Larreategi, erral
 - Nathan Van Gheem, vangheem
+- Patrick Gerken, do3cc
+- Peter Holzer, agitator
+- Peter Mathis, petschki
 - Philip Bauer, pbauer
+- Rafael Oliveira, rafaelbco
+- Ramon Navarro Bosch, blooodbare
 - Robert Niederreiter, rnixx
+- Roel Bruggink, jaroel
 - Rok Garbas, garbas
 - Róman Joost, romanofski
 - Sean Upton, seanupton
@@ -51,8 +65,9 @@ Thanks!
 - Vincent Fretin, vincentfretin
 - Vitaliy Podoba, piv, vipod
 - Wolfgang Thomas, pysailor
+- jnachtigall
+- Érico Andrei, ericof
 
 Find out who contributed::
 
     $ git shortlog -s -e
-
