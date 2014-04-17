@@ -73,10 +73,3 @@ class EventSummaryView(BrowserView):
 
         num = len(idx['start']) - self.max_occurrences
         return num if num > 0 else 0
-
-    # BBB Removed with next version
-    @property
-    def occurrence_parent_url(self):
-        if self.is_occurrence:
-            return aq_parent(self.context).absolute_url()
-        return None

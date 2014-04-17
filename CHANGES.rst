@@ -41,8 +41,7 @@ Changelog
 
     Methods used for the ``event_summary`` view have has been moved from the
     ``event_view`` to ``plone.app.event.browser.event_summary``. The
-    ``occurrence_parent_url`` method in the ``event_summary`` is deprecated and
-    will be removed for the next version.
+    ``occurrence_parent_url`` method has been removed.
 
 - Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
   base.cfg to buildout.cfg, remove test-43.cfg, sources-dev.cfg and
