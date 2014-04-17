@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0 (unreleased)
-----------------
+2.0a1 (2014-04-17)
+------------------
 
 - Make use of new z3c.form DataExtractedEvent and register the
   data_postprocessing_handler for this event. This adjusts the start and end
