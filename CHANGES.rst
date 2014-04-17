@@ -34,6 +34,14 @@ Changelog
 [thet, yenzenz, garbas]
 
 
+1.2.3 (2014-04-17)
+------------------
+
+- Remove DL's from portlet templates, replacing it with semantically correct
+  tags. Ref: https://github.com/plone/Products.CMFPlone/issues/163
+  [khink]
+
+
 1.2.2 (2014-04-15)
 ------------------
 
