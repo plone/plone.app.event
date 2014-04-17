@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.3 (unreleased)
+1.2.3 (2014-04-17)
 ------------------
 
 - Remove DL's from portlet templates, replacing it with semantically correct
