@@ -18,7 +18,6 @@ from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
-from plone.app.event.tests.test_base_module import TEST_TIMEZONE
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
@@ -35,6 +34,9 @@ from zope.annotation.interfaces import IAnnotations
 import pytz
 import unittest2 as unittest
 import zope.interface
+
+
+TEST_TIMEZONE = "Europe/Vienna"
 
 
 class MockEvent(SimpleItem):
