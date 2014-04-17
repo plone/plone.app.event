@@ -146,6 +146,10 @@ Changelog
   Closes #123.
   [tdesvenain]
 
+- Remove DL's from portlet templates, replacing it with semantically correct
+  tags. Ref: https://github.com/plone/Products.CMFPlone/issues/163
+  [khink]
+
 - Fix get_events recurring events sorting, where it was only sorted by the
   brain's start date, which could easily be outside the queried range.
   [gyst]

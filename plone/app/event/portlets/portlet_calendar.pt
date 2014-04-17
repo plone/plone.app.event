@@ -3,12 +3,12 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="plone"
       tal:omit-tag="">
-<dl class="portlet portletCalendar"
+<section class="portlet portletCalendar"
     tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
                 month view/month;
                 year view/year;">
 
-    <dt class="portletHeader">
+    <header class="portletHeader">
       <span class="portletTopLeft"></span>
       <a href="#" rel="nofollow"
            class="calendarPrevious"
@@ -39,9 +39,9 @@
                            data-month next_month;"
            i18n:attributes="title title_next_month;">&raquo;</a>
         <span class="portletTopRight"></span>
-    </dt>
+    </header>
 
-    <dd class="portletItem">
+    <div class="portletContent">
         <table class="ploneCalendar" summary="Calendar"
             i18n:attributes="summary summary_calendar">
             <caption class="hiddenStructure"
@@ -78,6 +78,6 @@
         </table>
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>
-    </dd>
-</dl>
+    </div>
+</section>
 </html>
