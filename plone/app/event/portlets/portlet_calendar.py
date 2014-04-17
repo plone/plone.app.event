@@ -56,10 +56,6 @@ class Assignment(base.Assignment):
     implements(ICalendarPortlet)
     title = _(u'Calendar')
 
-    # reduce upgrade pain
-    state = None
-    search_base = None
-
     def __init__(self, state=None, search_base_uid=None):
         self.state = state
         self.search_base_uid = search_base_uid
@@ -90,9 +86,7 @@ class Renderer(base.Renderer):
     def update(self):
         context = aq_inner(self.context)
 
-        self.calendar_url = get_calendar_url(
-            context, self.search_base_path()
-        )
+        self.calendar_url = get_calendar_url(context, self.search_base_path())
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (

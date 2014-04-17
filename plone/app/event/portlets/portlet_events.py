@@ -51,14 +51,11 @@ class IEventsPortlet(IPortletDataProvider):
         ),
         required=False,
         source=CatalogSource(is_folderish=True),
-        )
+    )
 
 
 class Assignment(base.Assignment):
     implements(IEventsPortlet)
-
-    # reduce upgrade pain
-    search_base = None
 
     def __init__(self, count=5, state=None, search_base_uid=None):
         self.count = count
@@ -98,9 +95,7 @@ class Renderer(base.Renderer):
 
         context = aq_inner(self.context)
 
-        calendar_url = get_calendar_url(
-            context, self.search_base_path()
-        )
+        calendar_url = get_calendar_url(context, self.search_base_path())
 
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url

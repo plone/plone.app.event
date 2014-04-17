@@ -7,6 +7,7 @@ from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
+from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
@@ -103,6 +104,7 @@ class TestOccurrences(unittest.TestCase):
         self.request = self.layer['request']
 
         set_browserlayer(self.request)
+        set_env_timezone(TZNAME)
         set_timezone(TZNAME)
 
         now = patched_now()

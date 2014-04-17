@@ -4,6 +4,7 @@ from datetime import timedelta
 from plone.app.event.portlets import portlet_events
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import TEST_USER_ID
@@ -127,10 +128,8 @@ class RendererTest(unittest.TestCase):
         self.request = self.layer['request']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
+        set_env_timezone(TZNAME)
         set_timezone(TZNAME)
-
-        # TODO: don't use admin privileges for test methods except
-        # test_prev_events_link and test_prev_events_link_and_navigation_root
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
@@ -149,17 +148,20 @@ class RendererTest(unittest.TestCase):
             IPortletRenderer
         )
 
-    def test_events(self):
+    def test_portlet_event_renderer__get_events(self):
         tz = pytz.timezone(TZNAME)
         start = tz.localize(datetime.now())
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, title='e1', start=start, end=end)
+            self.portal, PTYPE,
+            id='e1', title='e1', start=start, end=end)
+        self.portal.portal_workflow.doActionFor(e1, 'publish')
+
         self.portal.invokeFactory('Folder', 'eventfolder')
         createContentInContainer(
-            self.portal.eventfolder, PTYPE, title='e2', start=start, end=end)
-        self.portal.portal_workflow.doActionFor(e1, 'publish')
+            self.portal.eventfolder, PTYPE,
+            id='e2', title='e2', start=start, end=end)
 
         portlet = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
@@ -186,7 +188,7 @@ class RendererTest(unittest.TestCase):
         # A given search base gives calendar urls without event_listing part
         self.assertTrue('event_listing' not in portlet.render())
 
-    def test_events_recurring(self):
+    def test_portlet_event_renderer__recurring(self):
         tz = pytz.timezone(TZNAME)
         start = tz.localize(datetime.now()) + timedelta(days=1)
 
@@ -217,7 +219,7 @@ class RendererTest(unittest.TestCase):
             (occ1dt.year, occ1dt.month, occ1dt.day) in rd
         )
 
-    def test_events_listing_link(self):
+    def test_portlet_event_renderer__listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
         rd = r.render()
         self.assertTrue('?mode=future' in rd)

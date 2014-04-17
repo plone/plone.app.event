@@ -1,4 +1,3 @@
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents

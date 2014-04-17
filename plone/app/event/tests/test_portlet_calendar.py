@@ -8,6 +8,7 @@ from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -105,6 +106,8 @@ class RendererTest(unittest.TestCase):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
+
+        set_env_timezone(TZNAME)
         set_timezone(TZNAME)
 
     def renderer(self, context=None, request=None, view=None, manager=None,
