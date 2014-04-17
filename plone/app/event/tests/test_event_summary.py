@@ -42,7 +42,6 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
 
         self.assertEqual(view.is_occurrence, False)
         self.assertEqual(view.get_location, u'Vienna')
-        self.assertEqual(view.occurrence_parent_url, None)
         self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 
@@ -64,7 +63,6 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
 
         self.assertEqual(view.is_occurrence, True)
         self.assertEqual(view.get_location, u'Vienna')
-        self.assertEqual(view.occurrence_parent_url, 'http://nohost/plone/now')
         self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 
