@@ -17,7 +17,7 @@ version  branch
 1.1.x    1.1.x   Plone 4.3+         No              Yes
 1.2.x    1.2.x   Plone 5            1.5             Yes
 2.x      master  Plone 5            1.6+            No
-===============  ==========  =================  ==========
+=======  ======  ==========  =================  ==========
 
 
 Removed 4.2 compatibility
