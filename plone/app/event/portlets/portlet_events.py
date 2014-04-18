@@ -57,6 +57,9 @@ class IEventsPortlet(IPortletDataProvider):
 class Assignment(base.Assignment):
     implements(IEventsPortlet)
 
+    # reduce upgrade pain
+    search_base = None
+
     def __init__(self, count=5, state=None, search_base_uid=None):
         self.count = count
         self.state = state

@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.0a2 (unreleased)
+------------------
+
+- Re-add some BBB Assignment class attributes for calendar and event portlets
+  to not break Plone upgrades.
+  [thet]
+
+
 2.0a1 (2014-04-17)
 ------------------
 

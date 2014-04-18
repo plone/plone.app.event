@@ -56,6 +56,10 @@ class Assignment(base.Assignment):
     implements(ICalendarPortlet)
     title = _(u'Calendar')
 
+    # reduce upgrade pain
+    state = None
+    search_base = None
+
     def __init__(self, state=None, search_base_uid=None):
         self.state = state
         self.search_base_uid = search_base_uid
