@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a2 (unreleased)
+2.0a2 (2014-04-19)
 ------------------
 
 - Re-add some BBB Assignment class attributes for calendar and event portlets
