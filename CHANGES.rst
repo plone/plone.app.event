@@ -4,7 +4,9 @@ Changelog
 2.0a3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update plone.formwidget.recurrence version dependency for plone.app.widgets
+  support.
+  [thet]
 
 
 2.0a2 (2014-04-19)

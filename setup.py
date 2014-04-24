@@ -62,7 +62,7 @@ setup(
         'plone.dexterity',
         'plone.event>=1.0',
         'plone.folder',
-        'plone.formwidget.recurrence [z3cform] >= 1.2.1',
+        'plone.formwidget.recurrence [z3cform] >= 1.2.2',
         'plone.formwidget.recurrence',
         'plone.formwidget.recurrence',
         'plone.indexer',
