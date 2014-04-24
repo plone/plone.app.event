@@ -23,7 +23,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.utils import pydt
-from plone.app.widgets.at import DatetimeWidget
+from plone.app.widgets import at as pawidgets
 from plone.formwidget.recurrence.at.widget import RecurrenceValidator
 from plone.formwidget.recurrence.at.widget import RecurrenceWidget
 from zope.event import notify
@@ -601,7 +601,7 @@ class PAEventATFieldTest(unittest.TestCase):
         )
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, DatetimeWidget),
+        self.assertTrue(isinstance(field.widget, pawidgets.DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
@@ -787,7 +787,7 @@ class PAEventATFieldTest(unittest.TestCase):
         )
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, DatetimeWidget),
+        self.assertTrue(isinstance(field.widget, pawidgets.DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
@@ -829,7 +829,7 @@ class PAEventATFieldTest(unittest.TestCase):
         )
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
+        self.assertTrue(isinstance(field.widget, pawidgets.KeywordsWidget),
                         'Value is %s' % id(field.widget))
 
     def test_textField(self):
@@ -871,7 +871,7 @@ class PAEventATFieldTest(unittest.TestCase):
         )
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
+        self.assertTrue(isinstance(field.widget, pawidgets.TinyMCEWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(self.obj)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
