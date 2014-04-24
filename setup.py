@@ -47,6 +47,7 @@ setup(
         'collective.elephantvocabulary',
         'icalendar > 3.0',
         'plone.app.contentlisting',
+        'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
         'plone.app.portlets >= 3.0',
         'plone.app.querystring',
@@ -71,6 +72,7 @@ setup(
         'zope.container',
         'zope.contentprovider',
         'zope.event',
+        'zope.formlib',
         'zope.globalrequest',
         'zope.i18n',
         'zope.i18nmessageid',

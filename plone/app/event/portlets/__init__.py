@@ -9,7 +9,6 @@ def get_calendar_url(context, search_base):
     calendar_url = None
     if search_base:
         portal = find_ploneroot(context)
-        search_base = '/'.join(search_base.split('/')[2:])
         calendar_url = portal.unrestrictedTraverse(
             search_base.lstrip('/')  # start relative, first slash is omitted
         ).absolute_url()

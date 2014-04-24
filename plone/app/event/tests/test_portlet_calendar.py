@@ -157,7 +157,7 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('event_listing?mode=day' in rd)
 
         r = self.renderer(assignment=portlet_calendar.Assignment(
-            search_base_uid=self.portal.eventfolder.UID()))
+            search_base="/eventfolder"))
         r.update()
         rd = r.render()
         self.assertTrue('e1' not in rd and 'e2' in rd)
