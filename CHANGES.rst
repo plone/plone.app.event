@@ -1,10 +1,14 @@
 Changelog
 =========
 
+
 1.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Backport for Archetypes subpackage: Avoid failing to create an event when
+  zope.globalrequest.getRequest returns None on the post create event handler.
+  This happens when creating an event during test layer setup time.
+  [rafaelbco, thet]
 
 
 1.2.3 (2014-04-17)
