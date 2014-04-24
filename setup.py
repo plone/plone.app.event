@@ -49,10 +49,10 @@ setup(
         'plone.app.contentlisting',
         'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
-        'plone.app.portlets >= 3.0',
+        'plone.app.portlets >= 2.5a1',
         'plone.app.querystring',
         'plone.app.registry',
-        'plone.app.vocabularies >= 2.1.15.dev0',
+        'plone.app.vocabularies',
         'plone.app.widgets',
         'plone.browserlayer',
         'plone.event >= 1.0',
