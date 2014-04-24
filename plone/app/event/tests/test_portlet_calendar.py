@@ -43,7 +43,8 @@ class PortletTest(unittest.TestCase):
         registered_interfaces.sort()
         self.assertEqual([
             'plone.app.portlets.interfaces.IColumn',
-            'plone.app.portlets.interfaces.IDashboard'],
+            'plone.app.portlets.interfaces.IDashboard'
+            ],
             registered_interfaces
         )
 

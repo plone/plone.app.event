@@ -49,7 +49,7 @@ class ICalendarPortlet(IPortletDataProvider):
         ),
         required=False,
         source=CatalogSource(is_folderish=True),
-    )
+        )
 
 
 class Assignment(base.Assignment):
@@ -99,6 +99,7 @@ class Renderer(base.Renderer):
             self.get_previous_month(year, month))
         self.next_year, self.next_month = next_year, next_month = (
             self.get_next_month(year, month))
+        # TODO: respect current url-query string
         self.prev_query = '?month=%s&year=%s' % (prev_month, prev_year)
         self.next_query = '?month=%s&year=%s' % (next_month, next_year)
 
