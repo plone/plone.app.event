@@ -5,6 +5,9 @@ Changelog
 1.2.4 (unreleased)
 ------------------
 
+- Use hiddenStructure instead of hCalendar-hidden class to hide microdata tags.
+  [thet]
+
 - Revert Pull-Requests #146 (Remove dt dl dd) and #135 (z3c.form portlets) to
   restore Plone 4.3 compatibility. If you want to use these changes, use
   plone.app.event 2.0 instead.
