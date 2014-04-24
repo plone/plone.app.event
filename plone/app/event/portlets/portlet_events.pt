@@ -2,10 +2,10 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       tal:omit-tag="">
-<section class="portlet portletEvents"
+<dl class="portlet portletEvents"
     i18n:domain="plone.app.event">
 
-  <header class="portletHeader">
+    <dt class="portletHeader">
         <span class="portletTopLeft"></span>
         <a href=""
            class="tile"
@@ -16,11 +16,10 @@
             Upcoming Events
         </a>
         <span class="portletTopRight"></span>
-  </header>
+    </dt>
 
-  <ul class="portletContent">
     <tal:events repeat="item view/events">
-    <li class="portletItem"
+    <dd class="portletItem"
         tal:define="oddrow repeat/item/odd"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
         <a href="#" class="tile"
@@ -39,27 +38,31 @@
                 <tal:location content="structure location">Location</tal:location>
             </span>
         </span>
-    </li>
+    </dd>
     </tal:events>
-  </ul>
 
-  <footer class="portletFooter">
-        <a class="tile"
-            tal:define="prev_link view/prev_url"
-            tal:condition="prev_link"
+    <dd class="portletFooter"
+        tal:define="prev_link view/prev_url"
+        tal:condition="prev_link">
+        <a href=""
             tal:attributes="href prev_link"
-            i18n:translate="box_previous_events">
-          Previous events&hellip;
+            class="tile">
+            <span i18n:translate="box_previous_events">
+                Previous events&hellip;
+            </span>
         </a>
+    </dd>
 
-        <a class="tile"
+    <dd class="portletFooter">
+        <a href=""
+            class="tile"
             tal:define="next_link view/next_url"
             tal:attributes="href next_link"
             i18n:translate="box_upcoming_events">
-          Upcoming events&hellip;
+            Upcoming events&hellip;
         </a>
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>
-  </footer>
-</section>
+    </dd>
+</dl>
 </html>
