@@ -6,15 +6,16 @@
     i18n:domain="plone.app.event">
 
   <header class="portletHeader">
-    <span class="portletTopLeft"></span>
-    <a href="" class="tile"
-        tal:define="next_link view/next_url"
-        tal:omit-tag="not:next_link"
-        tal:attributes="href next_link"
-        i18n:translate="box_events">
-        Upcoming Events
-    </a>
-    <span class="portletTopRight"></span>
+        <span class="portletTopLeft"></span>
+        <a href=""
+           class="tile"
+           tal:define="next_link view/next_url"
+           tal:omit-tag="not:next_link"
+           tal:attributes="href next_link"
+           i18n:translate="box_events">
+            Upcoming Events
+        </a>
+        <span class="portletTopRight"></span>
   </header>
 
   <ul class="portletContent">
@@ -22,41 +23,43 @@
     <li class="portletItem"
         tal:define="oddrow repeat/item/odd"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
-      <a href="#" class="tile"
-          tal:attributes="href item/url;
-                          title item/description">
-        <span tal:replace="item/title">Some Event</span>
-      </a>
-      <span class="portletItemDetails">
-        <tal:date replace="structure python:view.formatted_date(item)" />
-        <span tal:define="tz item/timezone" tal:condition="tz">(<tal:tzname replace="tz">TZ</tal:tzname>)</span>
-        <span class="location"
-            tal:define="location python:view.get_location(item)"
-            tal:condition="location"> &mdash;
-          <tal:location content="structure location">Location</tal:location>
+        <a href="#" class="tile"
+            tal:attributes="href item/url;
+                            title item/description">
+            <span tal:replace="item/title">
+                Some Event
+            </span>
+        </a>
+        <span class="portletItemDetails">
+            <tal:date replace="structure python:view.formatted_date(item)" />
+            <span tal:define="tz item/timezone" tal:condition="tz">(<tal:tzname replace="tz">TZ</tal:tzname>)</span>
+            <span class="location"
+                tal:define="location python:view.get_location(item)"
+                tal:condition="location"> &mdash;
+                <tal:location content="structure location">Location</tal:location>
+            </span>
         </span>
-      </span>
     </li>
     </tal:events>
   </ul>
 
   <footer class="portletFooter">
-    <a class="tile"
-        tal:define="prev_link view/prev_url"
-        tal:condition="prev_link"
-        tal:attributes="href prev_link"
-        i18n:translate="box_previous_events">
-      Previous events&hellip;
-    </a>
+        <a class="tile"
+            tal:define="prev_link view/prev_url"
+            tal:condition="prev_link"
+            tal:attributes="href prev_link"
+            i18n:translate="box_previous_events">
+          Previous events&hellip;
+        </a>
 
-    <a class="tile"
-        tal:define="next_link view/next_url"
-        tal:attributes="href next_link"
-        i18n:translate="box_upcoming_events">
-      Upcoming events&hellip;
-    </a>
-    <span class="portletBottomLeft"></span>
-    <span class="portletBottomRight"></span>
+        <a class="tile"
+            tal:define="next_link view/next_url"
+            tal:attributes="href next_link"
+            i18n:translate="box_upcoming_events">
+          Upcoming events&hellip;
+        </a>
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
   </footer>
 </section>
 </html>
