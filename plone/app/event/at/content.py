@@ -155,9 +155,7 @@ ATEventSchema = ATContentTypeSchema.copy() + atapi.Schema((
                 u'help_event_recurrence',
                 default='Define the event recurrence rule.'
             ),
-            startFieldYear='startDate-year',
-            startFieldMonth='startDate-month',
-            startFieldDay='startDate-day',
+            startField='startDate',
             first_day=first_weekday,
             show_repeat_forever=False
         ),

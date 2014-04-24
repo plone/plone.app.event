@@ -5,6 +5,10 @@ Changelog
 1.2.4 (unreleased)
 ------------------
 
+- Use plone.formwidget.recurrence 1.2.2 for plone.app.widgets support and
+  correctly configure recurrence field's startField property for ATEvent.
+  [thet]
+
 - Use hiddenStructure instead of hCalendar-hidden class to hide microdata tags.
   [thet]
 
