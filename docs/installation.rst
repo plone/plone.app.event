@@ -9,15 +9,15 @@ plone.app.event is tested with latest Plone 4.3 and the upcoming Plone 5.0.
 
 The following is a compatibility map of all current plone.app.event versions:
 
-=======  ======  ==========  =================  ==========
-plone.app.event    Plone     plone.app.widgets  Archetypes
----------------  ----------  -----------------  ----------
-version  branch                      
-=======  ======  ==========  =================  ==========
-1.1.x    1.1.x   Plone 4.3+         No              Yes
-1.2.x    1.2.x   Plone 5            1.5             Yes
-2.x      master  Plone 5            1.6+            No
-=======  ======  ==========  =================  ==========
+=======  ======  ==========  =================  ======================  ==========
+plone.app.event    Plone     plone.app.widgets  plone.app.contenttypes  Archetypes
+---------------  ----------  -----------------  ----------------------  ----------
+version  branch
+=======  ======  ==========  =================  ======================  ==========
+1.1.x    1.1.x   Plone 4.3+         No                  1.1.x               Yes
+1.2.x    1.2.x   Plone 4.3+         1.5                 < 1.2a3             Yes
+2.x      master  Plone 5            1.6+               >= 1.2a3             No
+=======  ======  ==========  =================  ======================  ==========
 
 
 Removed 4.2 compatibility
