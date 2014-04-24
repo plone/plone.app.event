@@ -12,15 +12,16 @@ series.
 
 The following is a compatibility map of all current plone.app.event versions:
 
-=======  ======  ==========  =================  ==========
-plone.app.event    Plone     plone.app.widgets  Archetypes
----------------  ----------  -----------------  ----------
+=======  ======  ==========  =================  ======================  ==========
+plone.app.event    Plone     plone.app.widgets  plone.app.contenttypes  Archetypes
+---------------  ----------  -----------------  ----------------------  ----------
 version  branch
-=======  ======  ==========  =================  ==========
-1.1.x    1.1.x   Plone 4.3+         No              Yes
-1.2.x    1.2.x   Plone 5            1.5             Yes
-2.x      master  Plone 5            1.6+            No
-=======  ======  ==========  =================  ==========
+=======  ======  ==========  =================  ======================  ==========
+1.1.x    1.1.x   Plone 4.3+         No                  1.1.x               Yes
+1.2.x    1.2.x   Plone 4.3+         1.5+                < 1.2a3             Yes
+1.3.x    1.3.x   Plone 5            1.5+                < 1.2a3             No
+2.x      master  Plone 5            1.6+               >= 1.2a3             No
+=======  ======  ==========  =================  ======================  ==========
 
 
 Buildout files
