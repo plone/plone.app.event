@@ -4,12 +4,6 @@ Installation
 Compatibility
 -------------
 
-plone.app.event 1.2 and up is only compatible with Plone 5, which does not have
-any stable releases at time of this writing.
-
-For use with Plone 4.3, use a plone.app.event version from the 1.1 release
-series.
-
 The following is a compatibility map of all current plone.app.event versions:
 
 =======  ======  ==========  =================  ======================  ==========
