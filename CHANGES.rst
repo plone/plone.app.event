@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.2.4 (unreleased)
+1.2.4 (2014-04-24)
 ------------------
 
 - Use plone.formwidget.recurrence 1.2.2 for plone.app.widgets support and
