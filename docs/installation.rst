@@ -18,8 +18,7 @@ plone.app.event    Plone     plone.app.widgets  plone.app.contenttypes  Archetyp
 version  branch
 =======  ======  ==========  =================  ======================  ==========
 1.1.x    1.1.x   Plone 4.3+         No                  1.1.x               Yes
-1.2.x    1.2.x   Plone 4.3+         1.5+                < 1.2a3             Yes
-1.3.x    1.3.x   Plone 5            1.5+                < 1.2a3             No
+1.2.x    1.2.x   Plone 4.3+         1.5                 < 1.2a3             Yes
 2.x      master  Plone 5            1.6+               >= 1.2a3             No
 =======  ======  ==========  =================  ======================  ==========
 
