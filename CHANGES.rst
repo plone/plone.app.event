@@ -2,7 +2,29 @@ Changelog
 =========
 
 
-1.2.1 (unreleased)
+1.2.4 (unreleased)
+------------------
+
+- Revert Pull-Requests #146 (Remove dt dl dd) and #135 (z3c.form portlets) to
+  restore Plone 4.3 compatibility. If you want to use these changes, use
+  plone.app.event 2.0 instead.
+  [thet]
+
+- Backport for Archetypes subpackage: Avoid failing to create an event when
+  zope.globalrequest.getRequest returns None on the post create event handler.
+  This happens when creating an event during test layer setup time.
+  [rafaelbco, thet]
+
+
+1.2.3 (2014-04-17)
+------------------
+
+- Remove DL's from portlet templates, replacing it with semantically correct
+  tags. Ref: https://github.com/plone/Products.CMFPlone/issues/163
+  [khink]
+
+
+1.2.2 (2014-04-15)
 ------------------
 
 .. note::
@@ -11,20 +33,9 @@ Changelog
     ``event_view`` to ``plone.app.event.browser.event_summary``. The
     ``occurrence_parent_url`` method has been removed.
 
-- Register the event_listing view also for IEvent objects and adapt it to allow
-  the listing of all occurrences of an individual event.
-  [thet]
-
-- Change the occurrence listing in the @@event_summary view to directly link
-  to the occurrence objects, rename the label to 'All dates' and also include
-  the first date of the original event. The event_summary's max_occurrences
-  attribute now also includes the starting event.
-  [thet]
-
-- Add an @@event_summary view, which provides the event summary listing in the
-  event view for the purpose of reuse elsewhere. Allow the exclusion of
-  information via an excludes list. The relevant methods are moved from
-  event_view to event_summary.
+- Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
+  base.cfg to buildout.cfg, remove test-43.cfg, sources-dev.cfg and
+  jenkins.cfg.
   [thet]
 
 - Disable the edit bar on Occurrence objects. They are transient and cannot be
@@ -37,26 +48,38 @@ Changelog
   so they can be easily identified without looking up interfaces.
   [thet]
 
-- Don't use spamProtect script to render email address; it doesn't do much.
-  [davisagli]
+- Add an event_listing view for IEvent objects to show all of it's occurrences.
+  [thet]
 
-- Improve markup of ``event_listing.pt`` in order to not break on IE 8.
-  [rafaelbco]
+- Change the occurrence listing in the @@event_summary view to directly link
+  to the occurrence objects, rename the label to 'All dates' and also include
+  the first date of the original event. The event_summary's max_occurrences
+  attribute now also includes the starting event.
+  [thet]
+
+
+1.2.1 (2014-04-05)
+------------------
 
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no
   Event type is found in the Dexterity FTI and remove the old IEventSummary
   behavior, if found.
   [thet]
 
-- Backport for Archetypes subpackage: Avoid failing to create an event when
-  zope.globalrequest.getRequest returns None on the post create event handler.
-  This happens when creating an event during test layer setup time.
-  [rafaelbco, thet]
+- Don't use spamProtect script to render email address; it doesn't do much.
+  [davisagli]
 
-- Simplify buildout infrastructure: Move base-test.cfg to test.cfg, move
-  base.cfg to buildout.cfg, remove test-43.cfg, sources-dev.cfg and
-  jenkins.cfg.
+- Add an @@event_summary view, which provides the event summary listing in the
+  event view for the purpose of reuse elsewhere. Allow the exclusion of
+  information via an excludes list. The relevant methods are moved from
+  event_view to event_summary.
   [thet]
+
+- Improve markup of ``event_listing.pt`` in order to not break on IE 8.
+  [rafaelbco]
+
+- Use z3c.form for portlet forms.
+  [bosim, davisagli]
 
 
 1.2 (2014-03-01)
@@ -1051,3 +1074,4 @@ Please note, the next release will have all deprections removed.
 
 - Initial alpha release.
   [thet]
+
