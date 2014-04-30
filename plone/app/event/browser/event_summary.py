@@ -67,8 +67,10 @@ class EventSummaryView(BrowserView):
             # Might be an occurrence
             return 0
         catalog = getToolByName(self.event_context, 'portal_catalog')
-        brain = catalog(UID=uid)[0]  # assuming, that the current context is
-                                     # in the catalog
+        brains = catalog(UID=uid)
+        if len(brains) == 0:
+            return 0
+        brain = brains[0]  # assuming, that current context is in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
 
         num = len(idx['start']) - self.max_occurrences
