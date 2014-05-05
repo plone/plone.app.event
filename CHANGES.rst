@@ -4,6 +4,10 @@ Changelog
 2.0a3 (unreleased)
 ------------------
 
+- Fix a rare issue with event_summary, where a object's UID cannot be found in
+  the catalog.
+  [thet]
+
 - Update plone.formwidget.recurrence version dependency for plone.app.widgets
   support.
   [thet]
