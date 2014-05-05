@@ -69,6 +69,7 @@ class EventSummaryView(BrowserView):
         catalog = getToolByName(self.event_context, 'portal_catalog')
         brains = catalog(UID=uid)
         if len(brains) == 0:
+            # Should not happen, but happened for me.
             return 0
         brain = brains[0]  # assuming, that current context is in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())

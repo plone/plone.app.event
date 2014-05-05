@@ -4,6 +4,10 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
+- Fix a rare issue with event_summary, where a object's UID cannot be found in
+  the catalog.
+  [thet]
+
 - Backport for Archetypes subpackage: Avoid failing to create an event when
   zope.globalrequest.getRequest returns None on the post create event handler.
   This happens when creating an event during test layer setup time.
