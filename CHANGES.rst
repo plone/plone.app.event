@@ -4,7 +4,8 @@ Changelog
 1.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix a rare issue with event_summary, where a object's UID cannot be found in
+  the catalog.
   [thet]
 
 
