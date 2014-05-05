@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '2.0a3.dev0'
+version = '2.0a3'
 
 
 setup(
@@ -62,7 +62,7 @@ setup(
         'plone.dexterity',
         'plone.event>=1.0',
         'plone.folder',
-        'plone.formwidget.recurrence [z3cform] >= 1.2.2',
+        'plone.formwidget.recurrence [z3cform] >= 1.2.3',
         'plone.formwidget.recurrence',
         'plone.formwidget.recurrence',
         'plone.indexer',

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a3 (unreleased)
+2.0a3 (2014-05-06)
 ------------------
 
 - Fix a rare issue with event_summary, where a object's UID cannot be found in
