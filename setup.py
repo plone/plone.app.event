@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.2.5.dev0'
+version = '1.2.5'
 
 
 setup(
@@ -57,7 +57,7 @@ setup(
         'plone.browserlayer',
         'plone.event >= 1.0',
         'plone.folder',
-        'plone.formwidget.recurrence >= 1.2.2',
+        'plone.formwidget.recurrence >= 1.2.3',
         'plone.memoize',
         'plone.namedfile',
         'plone.portlets',
