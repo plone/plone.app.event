@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '1.1.1'
+version = '1.1.2.dev0'
 
 
 setup(
@@ -50,7 +50,7 @@ setup(
         'plone.app.contentlisting',
         'plone.app.form',  # TODO: remove when z3cform portlets are in place
         'plone.app.layout',
-        'plone.app.portlets>=2.5a1',
+        'plone.app.portlets >=2.5.1, <3.0',
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.vocabularies',

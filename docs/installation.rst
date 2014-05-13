@@ -85,7 +85,7 @@ profile), or install plone.app.contenttypes for ready-to-use Dexterity types.
 Plone 4.3 installation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-plone.app.event depends on ``plone.app.portlets>=2.5a1``. This version has the
+plone.app.event depends on ``plone.app.portlets >=2.5.1, <3.0``. This version has the
 calendar and event portlet removed, which are now in plone.app.event itself.
 Also, it allows the calendar portlet to do AJAX calls without KSS via standard
 jQuery. For Plone < 5.0 you have to fix the plone.app.portlets version in your
@@ -95,7 +95,7 @@ buildout like so::
     versions = versions
 
     [versions]
-    plone.app.portlets = 2.5a1
+    plone.app.portlets = 2.5.1
 
 
 Upgrading from plone.app.event 1.0

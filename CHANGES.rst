@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1.2 (unreleased)
+------------------
+
+- Update plone.app.portlets version requirement to >= 2.5.1 and < 3.0.
+  [thet]
+
+
 1.1.1 (2014-05-06)
 ------------------
 
