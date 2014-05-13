@@ -59,6 +59,22 @@ For Archetypes, use this one::
     plone.app.event.at:default
 
 
+Plone 4.3 installation
+~~~~~~~~~~~~~~~~~~~~~~
+
+plone.app.event depends on ``plone.app.portlets >=2.5.1, <3.0``. Releases in
+this version range use the calendar and event portlets from plone.app.event, if
+available. Also, it allows the calendar portlet to do AJAX calls without KSS
+but standard jQuery. For Plone < 5.0 you have to fix the plone.app.portlets
+version in your buildout like so:
+
+[buildout]
+versions = versions
+
+[versions]
+plone.app.portlets = 2.5.1
+
+
 Upgrading from plone.app.event 1.0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
