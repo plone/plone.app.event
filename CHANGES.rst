@@ -12,6 +12,10 @@ Changelog
   which let's the date/time value to shift.
   [thet]
 
+- Add ``location`` indexer. ``location`` is a default metadata field in
+  portal_catalog so we should provide that information by default.
+  [saily]
+
 - Update plone.app.portlets version requirement to >= 2.5.1 and < 3.0.
   [thet]
 
