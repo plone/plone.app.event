@@ -15,6 +15,10 @@ Changelog
 - Do not set the simple_publication_workflow in the p.a.event test fixture.
   [timo]
 
+- Add ``location`` indexer. ``location`` is a default metadata field in
+  portal_catalog so we should provide that information by default.
+  [saily]
+
 
 2.0a3 (2014-05-06)
 ------------------
