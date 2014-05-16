@@ -527,6 +527,12 @@ def end_indexer(obj):
     return DT(event.end)
 
 
+# Location indexer
+@indexer(IDXEvent)
+def location_indexer(obj):
+    return IEventLocation(obj).location
+
+
 # icalendar event UID indexer
 @indexer(IDXEvent)
 def sync_uid_indexer(obj):

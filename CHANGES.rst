@@ -53,6 +53,10 @@ Changelog
   attribute now also includes the starting event.
   [thet]
 
+- Add ``location`` indexer. ``location`` is a default metadata field in
+  portal_catalog so we should provide that information by default.
+  [saily]
+
 - Changes in the Dexterity IRichText behavior migration: don't fail, if no
   Event type is found in the Dexterity FTI and remove the old IEventSummary
   behavior, if found.
