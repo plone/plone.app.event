@@ -175,6 +175,17 @@ class RendererTest(unittest.TestCase):
         # link to calendar view in rendering
         self.assertTrue('?mode=day&amp;date=' in rd)
 
+    def test_dummy_check_environment(self):
+        # JUST WANT TO CHECK THE SERVER ENV!
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(days=2)
+
+        self.assertEqual(
+            '%s, %s, %s' % (start, end, tz),
+            'Just want to check the server env!'
+        )
+
     def test_long_event(self):
         tz = pytz.timezone(TZNAME)
         start = tz.localize(datetime.now())
