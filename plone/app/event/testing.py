@@ -72,7 +72,6 @@ class PAEventLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        portal.portal_workflow.setDefaultChain("simple_publication_workflow")
         self.applyProfile(portal, 'plone.app.event:default')
         set_timezone(tz='UTC')
 

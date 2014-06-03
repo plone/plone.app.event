@@ -4,6 +4,9 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
+- Remove enabling simple_publication_workflow from testing fixture.
+  [timo]
+
 - Update plone.app.portlets version requirement to >= 2.5.1 and < 3.0.
   [thet]
 
