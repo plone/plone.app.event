@@ -12,6 +12,9 @@ Changelog
   which let's the date/time value to shift.
   [thet]
 
+- Remove enabling simple_publication_workflow from testing fixture.
+  [timo]
+
 - Add ``location`` indexer. ``location`` is a default metadata field in
   portal_catalog so we should provide that information by default.
   [saily]
