@@ -62,6 +62,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         now, past, future, far, duration = self.make_dates()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         workflow = getToolByName(self.portal, 'portal_workflow')
+        workflow.setDefaultChain("simple_publication_workflow")
 
         factory = self.event_factory
         self.past_event = factory(

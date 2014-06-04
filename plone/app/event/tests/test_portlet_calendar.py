@@ -102,6 +102,7 @@ class RendererTest(unittest.TestCase):
         self.portal = portal
         self.request = self.layer['request']
         self.wft = getToolByName(self.portal, 'portal_workflow')
+        self.wft.setDefaultChain("simple_publication_workflow")
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)

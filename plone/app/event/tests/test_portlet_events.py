@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from datetime import datetime
 from datetime import timedelta
@@ -127,7 +128,8 @@ class RendererTest(unittest.TestCase):
         self.portal = portal
         self.request = self.layer['request']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
+        wftool = getToolByName(self.portal, "portal_workflow")
+        wftool.setDefaultChain("simple_publication_workflow")
         set_env_timezone(TZNAME)
         set_timezone(TZNAME)
 

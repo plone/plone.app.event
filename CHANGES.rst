@@ -4,7 +4,8 @@ Changelog
 2.0a4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not set the simple_publication_workflow in the p.a.event test fixture.
+  [timo]
 
 
 2.0a3 (2014-05-06)
