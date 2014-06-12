@@ -13,7 +13,7 @@ Changelog
 1.0.7.dev (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Deactivated javascript until #105, #130 is fixed.  [rristow]
 
 
 1.0.6 (2014-02-11)
