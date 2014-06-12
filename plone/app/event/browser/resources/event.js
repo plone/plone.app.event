@@ -142,7 +142,9 @@ if (typeof(plone) === 'undefined') {
         }
         jq_start.each(function () {
             init_date_setter($(this));
-            $(this).on('change', updateEndDate);
+            //Deactivate, because it's not working with the select elements
+            //Related issue: #105, #130
+            //$(this).on('change', updateEndDate);
         });
         jq_end.each(function () {
             init_date_setter($(this));

@@ -10,10 +10,16 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
 
 
-1.0.7.dev (unreleased)
-----------------------
+1.0.7 (unreleased)
+------------------
 
 - Nothing changed yet.
+
+
+1.0.6-FHNW1 (2014-06-12)
+------------------------
+
+- Deactivated javascript until #105, #130 is fixed.  [rristow]
 
 
 1.0.6 (2014-02-11)
