@@ -10,6 +10,12 @@ Changelog
     are deprecated and will be removed in a future version of plone.app.event.
 
 
+1.0.7 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 1.0.6-FHNW1 (2014-06-12)
 ------------------------
 
