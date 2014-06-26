@@ -4,6 +4,14 @@ Changelog
 1.2.6 (unreleased)
 ------------------
 
+- Fix event.js Javascript, which produced Javascript date parsing errors when
+  changing the start date in Firefox. Firefox correctly hasn't implemented date
+  string for nearly ISO 8601 compatible date strings without a "T" between the
+  date and time part. Chrome on the other hand interprets timezone naive
+  date/time strings as UTC and returns it localized to the user's timezone,
+  which let's the date/time value to shift.
+  [thet]
+
 - Update plone.app.portlets version requirement to >= 2.5.1 and < 3.0.
   [thet]
 

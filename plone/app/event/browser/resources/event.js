@@ -24,8 +24,21 @@ if (plone === undefined) {
     function getDateTime(datetimewidget) {
         var date, time, datetime;
         date = $('input[name="_submit"]:first', datetimewidget).prop('value');
+        date = date.split("-");
         time = $('input[name="_submit"]:last', datetimewidget).prop('value') || '00:00';
-        datetime = new Date(date + ' ' + time);
+        time = time.split(":");
+
+        // We can't just parse the ``date + 'T' + time`` string, because of
+        // Chromium bug: https://code.google.com/p/chromium/issues/detail?id=145198
+        // When passing date and time components, the passed date/time is
+        // interpreted as local time and not UTC.
+        datetime = new Date(
+            parseInt(date[0], 10),
+            parseInt(date[1], 10) - 1, // you know, javascript's month index starts with 0
+            parseInt(date[2], 10),
+            parseInt(time[0], 10),
+            parseInt(time[1], 10)
+        );
         return datetime;
     }
 
