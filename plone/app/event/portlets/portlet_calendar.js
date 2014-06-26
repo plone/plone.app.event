@@ -1,11 +1,15 @@
+/*jslint browser: true*/
+/*global $, jQuery, plone, portal_url */
+
 (function ($) {
 
     function load_portlet_calendar(event, elem) {
         // depends on plone_javascript_variables.js for portal_url
         event.preventDefault();
-        var pw = elem.closest('.portletWrapper');
-        var elem_data = elem.data();
-        var portlethash = pw.attr('id');
+        var pw, elem_data, portlethash, url;
+        pw = elem.closest('.portletWrapper');
+        elem_data = elem.data();
+        portlethash = pw.attr('id');
         portlethash = portlethash.substring(15, portlethash.length);
         url = portal_url +
               '/@@render-portlet?portlethash=' + portlethash +
