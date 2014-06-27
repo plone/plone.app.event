@@ -41,10 +41,9 @@ class PortletTest(unittest.TestCase):
         portlet = getUtility(IPortletType, name='portlets.Calendar')
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEqual([
-            'plone.app.portlets.interfaces.IColumn',
-            'plone.app.portlets.interfaces.IDashboard'
-            ],
+        self.assertEqual(
+            ['plone.app.portlets.interfaces.IColumn',
+             'plone.app.portlets.interfaces.IDashboard'],
             registered_interfaces
         )
 
@@ -93,15 +92,11 @@ class RendererTest(unittest.TestCase):
         portal = self.layer['portal']
         self.portal = portal
         self.request = self.layer['request']
-        self.wft = getToolByName(self.portal, 'portal_workflow')
+        wftool = getToolByName(self.portal, "portal_workflow")
+        wftool.setDefaultChain("simple_publication_workflow")
         setRoles(portal, TEST_USER_ID, ['Manager'])
         setHooks()
         setSite(portal)
-
-        # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(
-            ['Event'], ['simple_publication_workflow']
-        )
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
@@ -194,8 +189,8 @@ class RendererTest(unittest.TestCase):
         hour = 1 / 24.0
         # Event starts at 23:00 and ends at 23:30
         self.portal.invokeFactory('Event', 'e1',
-                                  startDate=last_day_month + 23*hour,
-                                  endDate=last_day_month + 23.5*hour)
+                                  startDate=last_day_month + 23 * hour,
+                                  endDate=last_day_month + 23.5 * hour)
 
         # Try to render the calendar portlet again, it must be different Now
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
@@ -209,7 +204,6 @@ class RendererTest(unittest.TestCase):
         title = u'Plön€¢önf München 2012'
         self.portal.invokeFactory('Event', 'e1', title=title,
                                   location=u'München')
-        #self.wft.doActionFor(self.portal.e1, 'publish')
         portlet = self.renderer(assignment=portlet_calendar.Assignment())
         portlet.update()
         self.assertTrue(title in portlet.render())
