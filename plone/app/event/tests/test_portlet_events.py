@@ -1,4 +1,5 @@
 from DateTime import DateTime
+from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from plone.app.event.portlets import portlet_events
 from plone.app.event.testing import PAEventAT_INTEGRATION_TESTING
@@ -115,18 +116,11 @@ class RendererTest(unittest.TestCase):
         self.portal = portal
         self.request = self.layer['request']
         setRoles(portal, TEST_USER_ID, ['Manager'])
+        wftool = getToolByName(self.portal, "portal_workflow")
+        wftool.setDefaultChain("simple_publication_workflow")
         setHooks()
         setSite(portal)
-
         set_timezone("Australia/Brisbane")
-
-        # TODO: don't use admin privileges for test methods except
-        # test_prev_events_link and test_prev_events_link_and_navigation_root
-
-        # Make sure Events use simple_publication_workflow
-        self.portal.portal_workflow.setChainForPortalTypes(
-            ['Event'], ['simple_publication_workflow']
-        )
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
