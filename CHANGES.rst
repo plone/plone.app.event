@@ -4,6 +4,12 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
+- Fix default values for ``whole_day`` and ``open_end`` on Dexterity objects,
+  which were not set, if left unchecked in the add or edit forms. Includes an
+  upgrade step. Fixes #150 "Diff-functionality is broken with event-behavior",
+  but only for new versions and not the version history.
+  [thet]
+
 - Remove enabling simple_publication_workflow from testing fixture.
   [timo]
 

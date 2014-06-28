@@ -20,5 +20,17 @@
       handler=".upgrades.upgrade_attribute_storage"
       />
 
+  <genericsetup:upgradeStep
+      source="13"
+      destination="14"
+      title="Fix defaults for whole_day and open_end"
+      description="If whole_day and open_end were not explicitly set in the
+                   add form, they were also not set on the context. This
+                   upgrade step fixes old content without whole_day and
+                   open_end set."
+      profile="plone.app.event:default"
+      handler=".upgrades.upgrade_defaults_wholeday_openend"
+      />
+
 </configure>
 
