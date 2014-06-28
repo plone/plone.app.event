@@ -831,10 +831,10 @@ class TestDatesForDisplayAT(unittest.TestCase):
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': u'06:00 AM',
-             'start_iso':  u'2000-10-12T06:00:00+02:00',
+             'start_iso':  '2000-10-12T06:00:00+02:00',
              'end_date':   u'Oct 12, 2000',
              'end_time':   u'06:00 PM',
-             'end_iso':    u'2000-10-12T18:00:00+02:00',
+             'end_iso':    '2000-10-12T18:00:00+02:00',
              'same_day':   True,
              'same_time':  False,
              'whole_day':  False,
@@ -856,10 +856,10 @@ class TestDatesForDisplayAT(unittest.TestCase):
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
+             'start_iso':  '2000-10-12',
              'end_date':   u'Oct 12, 2000',
              'end_time':   None,
-             'end_iso':    u'2000-10-12',
+             'end_iso':    '2000-10-12',
              'same_day':   True,
              'same_time':  False,
              'whole_day':  True,
@@ -881,10 +881,10 @@ class TestDatesForDisplayAT(unittest.TestCase):
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
+             'start_iso':  '2000-10-12',
              'end_date':   u'Oct 13, 2000',
              'end_time':   None,
-             'end_iso':    u'2000-10-13',
+             'end_iso':    '2000-10-13',
              'same_day':   False,
              'same_time':  False,
              'whole_day':  True,
@@ -906,17 +906,19 @@ class TestDatesForDisplayDX(unittest.TestCase):
             id="event",
             start=datetime.datetime(2000, 10, 12, 6, 0, 0),
             end=datetime.datetime(2000, 10, 12, 18, 0, 0),
-            timezone="Europe/Vienna"
+            timezone="Europe/Vienna",
+            whole_day=False,
+            open_end=False
         )
         event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': u'06:00 AM',
-             'start_iso':  u'2000-10-12T06:00:00+02:00',
+             'start_iso':  '2000-10-12T06:00:00+02:00',
              'end_date':   u'Oct 12, 2000',
              'end_time':   u'06:00 PM',
-             'end_iso':    u'2000-10-12T18:00:00+02:00',
+             'end_iso':    '2000-10-12T18:00:00+02:00',
              'same_day':   True,
              'same_time':  False,
              'whole_day':  False,
@@ -931,17 +933,18 @@ class TestDatesForDisplayDX(unittest.TestCase):
             start=datetime.datetime(2000, 10, 12, 6, 0, 0),
             end=datetime.datetime(2000, 10, 12, 18, 0, 0),
             timezone="Europe/Vienna",
-            whole_day=True
+            whole_day=True,
+            open_end=False
         )
         event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
+             'start_iso':  '2000-10-12',
              'end_date':   u'Oct 12, 2000',
              'end_time':   None,
-             'end_iso':    u'2000-10-12',
+             'end_iso':    '2000-10-12',
              'same_day':   True,
              'same_time':  False,
              'whole_day':  True,
@@ -956,17 +959,18 @@ class TestDatesForDisplayDX(unittest.TestCase):
             start=datetime.datetime(2000, 10, 12, 6, 0, 0),
             end=datetime.datetime(2000, 10, 13, 18, 0, 0),
             timezone="Europe/Vienna",
-            whole_day=True
+            whole_day=True,
+            open_end=False
         )
         event = self.portal[event_id]
         self.assertEqual(
             dates_for_display(event),
             {'start_date': u'Oct 12, 2000',
              'start_time': None,
-             'start_iso':  u'2000-10-12',
+             'start_iso':  '2000-10-12',
              'end_date':   u'Oct 13, 2000',
              'end_time':   None,
-             'end_iso':    u'2000-10-13',
+             'end_iso':    '2000-10-13',
              'same_day':   False,
              'same_time':  False,
              'whole_day':  True,
