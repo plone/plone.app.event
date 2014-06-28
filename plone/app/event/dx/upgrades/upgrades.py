@@ -76,3 +76,36 @@ def upgrade_attribute_storage(context):
         if did_work:
             notify(ObjectModifiedEvent(event))
         log.debug('Handled event at {0}'.format(event.absolute_url()))
+
+
+def upgrade_defaults_wholeday_openend(context):
+    portal = getSite()
+    catalog = getToolByName(portal, 'portal_catalog')
+    query = {}
+    query['object_provides'] = IDXEvent.__identifier__
+    results = catalog(**query)
+    log.info('There are {0} in total, stating migration...'.format(
+        len(results)))
+    for result in results:
+        changed = False
+        try:
+            event = result.getObject()
+        except:
+            log.warning(
+                'Not possible to fetch event object from catalog result for '
+                'item: {0}.'.format(result.getPath()))
+            continue
+
+        if not hasattr(event, 'whole_day'):
+            event.whole_day = False
+            log.info('set whole_day = false for event at {0}'.format(
+                event.absolute_url()))
+            changed = True
+        if not hasattr(event, 'open_end'):
+            event.open_end = False
+            log.info('Set open_end = False for event at {0}'.format(
+                event.absolute_url()))
+            changed = True
+
+        if changed:
+            notify(ObjectModifiedEvent(event))

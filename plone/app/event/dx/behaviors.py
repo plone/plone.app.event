@@ -102,7 +102,8 @@ class IEventBasic(model.Schema):
             u'help_event_whole_day',
             default=u'Event lasts whole day.'
         ),
-        required=False
+        required=False,
+        default=False
     )
 
     open_end = schema.Bool(
@@ -114,7 +115,8 @@ class IEventBasic(model.Schema):
             u'help_event_open_end',
             default=u"This event is open ended."
         ),
-        required=False
+        required=False,
+        default=False
     )
 
     # TODO: form.order_before(timezone="IPublication.effective")
@@ -175,7 +177,8 @@ class IEventRecurrence(model.Schema):
             u'help_event_recurrence',
             default=u'Define the event recurrence rule.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -205,7 +208,8 @@ class IEventLocation(model.Schema):
             u'help_event_location',
             default=u'Location of the event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -241,7 +245,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_name',
             default=u'Name of a person to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     contact_email = schema.TextLine(
@@ -253,7 +258,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_email',
             default=u'Email address to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     contact_phone = schema.TextLine(
@@ -265,7 +271,8 @@ class IEventContact(model.Schema):
             u'help_event_contact_phone',
             default=u'Phone number to contact about this event.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
     event_url = schema.TextLine(
@@ -278,7 +285,8 @@ class IEventContact(model.Schema):
             default=u'Web address with more info about the event. '
                     u'Add http:// for external links.'
         ),
-        required=False
+        required=False,
+        default=None
     )
 
 
@@ -367,18 +375,16 @@ class EventBasic(object):
             self.end = self.end
         self.context.timezone = value
 
-    # TODO: whole day - and other attributes - might not be set at this time!
-    # TODO: how to provide default values?
     @property
     def whole_day(self):
-        return getattr(self.context, 'whole_day', False)
+        return getattr(self.context, 'whole_day', None)
     @whole_day.setter
     def whole_day(self, value):
         self.context.whole_day = value
 
     @property
     def open_end(self):
-        return getattr(self.context, 'open_end', False)
+        return getattr(self.context, 'open_end', None)
     @open_end.setter
     def open_end(self, value):
         self.context.open_end = value

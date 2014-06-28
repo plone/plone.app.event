@@ -4,13 +4,18 @@ Changelog
 1.2.6 (unreleased)
 ------------------
 
+- Fix default values for ``whole_day`` and ``open_end`` on Dexterity objects,
+  which were not set, if left unchecked in the add or edit forms. Includes an
+  upgrade step. Fixes #150 "Diff-functionality is broken with event-behavior",
+  but only for new versions and not the version history.
+  [thet]
+
 - Fix event.js Javascript, which produced Javascript date parsing errors when
   changing the start date in Firefox. Firefox correctly hasn't implemented date
   string for nearly ISO 8601 compatible date strings without a "T" between the
   date and time part. Chrome on the other hand interprets timezone naive
   date/time strings as UTC and returns it localized to the user's timezone,
   which let's the date/time value to shift.
-  [thet]
 
 - Remove enabling simple_publication_workflow from testing fixture.
   [timo]
