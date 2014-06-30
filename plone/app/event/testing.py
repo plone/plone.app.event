@@ -71,7 +71,10 @@ class PAEventLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.event, context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        self.applyProfile(portal, 'plone.app.event:default')
+        if PLONE5:
+            self.applyProfile(portal, 'plone.app.event:default')
+        else:
+            self.applyProfile(portal, 'plone.app.event:bbb')
         set_timezone(tz='UTC')
 
     def tearDownZope(self, app):
@@ -108,7 +111,8 @@ class PAEventDXLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.contenttypes:default')
-
+        if not PLONE5:
+            self.applyProfile(portal, 'plone.app.event:bbb')
         self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 

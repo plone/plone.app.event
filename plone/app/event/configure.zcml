@@ -24,6 +24,7 @@
   <include package=".ical" />
   <include file="recurrence.zcml" />
   <include file="vocabularies.zcml" />
+  <include package=".bbb" zcml:condition="not-have plone5" />
 
   <genericsetup:registerProfile
       name="default"
@@ -50,6 +51,25 @@
       description="catalog and first_weekday setup">
       <depends name="plone.app.registry" />
   </genericsetup:importStep>
+
+  <configure zcml:condition="not-have plone5">
+    <genericsetup:registerProfile
+        name="bbb"
+        title="plone.app.event for Plone 4"
+        directory="bbb/profiles/default"
+        description="plone.app.event framework registration."
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:importStep
+        name="plone.app.event-bbb"
+        handler="plone.app.event.bbb.setuphandlers.setup_misc"
+        title="plone.app.event misc"
+        description="first_weekday setup">
+      <depends name="plone.app.registry" />
+    </genericsetup:importStep>
+  </configure>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"
