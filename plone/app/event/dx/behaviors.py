@@ -297,10 +297,10 @@ def data_postprocessing(start, end, whole_day, open_end):
 
         return dt.replace(microsecond=0)
 
-    tz_default = default_timezone()
+    tz_default = default_timezone(as_tzinfo=True)
 
-    tz_start = getattr(start, 'tzinfo', tz_default)
-    tz_end = getattr(end, 'tzinfo', tz_default)
+    tz_start = getattr(start, 'tzinfo', None) or tz_default
+    tz_end = getattr(end, 'tzinfo', None) or tz_default
     start = _fix_dt(start, tz_start)
     end = _fix_dt(end, tz_end)
 
