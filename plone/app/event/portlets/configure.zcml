@@ -1,6 +1,7 @@
 <configure xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone.app.event">
 
     <browser:resource
@@ -17,6 +18,7 @@
         renderer=".portlet_calendar.Renderer"
         addview=".portlet_calendar.AddForm"
         editview=".portlet_calendar.EditForm"
+        zcml:condition="have plone-5"
         />
 
     <plone:portlet
@@ -26,6 +28,7 @@
         renderer=".portlet_events.Renderer"
         addview=".portlet_events.AddForm"
         editview=".portlet_events.EditForm"
+        zcml:condition="have plone-5"
         />
 
 </configure>

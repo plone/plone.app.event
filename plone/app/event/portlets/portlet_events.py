@@ -8,13 +8,6 @@ from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
-try:
-    # BBB: plone.app.portlets < 3.x
-    from plone.app.portlets.browser.z3cformhelper import AddForm
-    from plone.app.portlets.browser.z3cformhelper import EditForm
-except ImportError:
-    from plone.app.portlets.portlets.base import AddForm
-    from plone.app.portlets.portlets.base import EditForm
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.compress import xhtml_compress
@@ -151,7 +144,7 @@ class Renderer(base.Renderer):
         return get_location(event)
 
 
-class AddForm(AddForm):
+class AddForm(base.AddForm):
     schema = IEventsPortlet
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
@@ -162,7 +155,7 @@ class AddForm(AddForm):
                           search_base_uid=data.get('search_base_uid', 5))
 
 
-class EditForm(EditForm):
+class EditForm(base.EditForm):
     schema = IEventsPortlet
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")

@@ -6,6 +6,8 @@ from datetime import datetime
 from datetime import timedelta
 from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
+from plone.app.event.bbb.portlets \
+    import portlet_calendar as bbb_portlet_calendar
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
@@ -91,7 +93,10 @@ class PortletTest(unittest.TestCase):
             (context, self.request, view, manager, assignment),
             IPortletRenderer
         )
-        self.assertTrue(isinstance(renderer, portlet_calendar.Renderer))
+        self.assertTrue(
+            isinstance(renderer, portlet_calendar.Renderer)
+            or isinstance(renderer, bbb_portlet_calendar.Renderer)
+        )
 
 
 class RendererTest(unittest.TestCase):
