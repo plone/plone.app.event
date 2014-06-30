@@ -24,7 +24,7 @@
   <include package=".ical" />
   <include file="recurrence.zcml" />
   <include file="vocabularies.zcml" />
-  <include package=".bbb" zcml:condition="not-have plone5" />
+  <include package=".bbb" zcml:condition="not-have plone-5" />
 
   <genericsetup:registerProfile
       name="default"
