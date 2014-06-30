@@ -1,9 +1,9 @@
+from Products.CMFPlone.utils import getFSVersionTuple
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.portlets import portlet_events
-from plone.app.event.bbb.portlets import portlet_events as bbb_portlet_events
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
@@ -28,9 +28,13 @@ from zope.interface import alsoProvides
 import pytz
 import unittest2 as unittest
 
-
 TZNAME = 'Australia/Brisbane'
 PTYPE = 'plone.app.event.dx.event'
+PLONE5 = getFSVersionTuple()[0] >= 5
+
+if not PLONE5:
+    from plone.app.event.bbb.portlets \
+        import portlet_events as bbb_portlet_events
 
 
 class PortletTest(unittest.TestCase):
@@ -85,10 +89,10 @@ class PortletTest(unittest.TestCase):
 
         mapping['foo'] = portlet_events.Assignment(count=5)
         editview = getMultiAdapter((mapping['foo'], self.request), name='edit')
-        self.assertTrue(
-            isinstance(editview, portlet_events.EditForm)
-            or isinstance(editview, bbb_portlet_events.EditForm)
-        )
+        if PLONE5:
+            self.assertTrue(isinstance(editview, portlet_events.EditForm))
+        else:
+            self.assertTrue(isinstance(editview, bbb_portlet_events.EditForm))
 
 
     def testRenderer(self):
@@ -103,10 +107,10 @@ class PortletTest(unittest.TestCase):
             (context, self.request, view, manager, assignment),
             IPortletRenderer
         )
-        self.assertTrue(
-            isinstance(renderer, portlet_events.Renderer)
-            or isinstance(renderer, bbb_portlet_events.Renderer)
-        )
+        if PLONE5:
+            self.assertTrue(isinstance(renderer, portlet_events.Renderer))
+        else:
+            self.assertTrue(isinstance(renderer, bbb_portlet_events.Renderer))
 
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
