@@ -52,7 +52,7 @@
       <depends name="plone.app.registry" />
   </genericsetup:importStep>
 
-  <configure zcml:condition="not-have plone5">
+  <configure zcml:condition="not-have plone-5">
     <genericsetup:registerProfile
         name="bbb"
         title="plone.app.event for Plone 4"
