@@ -24,4 +24,4 @@ In the robot test you can place the `debug` statement to access a robot shell
 to try things out.
 
 For more information on this topic visit:
-http://developer.plone.org/reference_manuals/external/plone.app.robotframework/happy.html
+http://docs.plone.org/external/plone.app.robotframework/docs/source/index.html
