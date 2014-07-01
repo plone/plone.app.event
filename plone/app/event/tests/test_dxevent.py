@@ -106,6 +106,12 @@ class TestDXAddEdit(unittest.TestCase):
             name='form.widgets.IDublinCore.title'
         ).value = "TestEvent"
 
+        # TODO: these values are simply not set in the pat-pickadate pattern.
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start').value = '2014-03-30'
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end').value = '2014-03-31'
+
         self.browser.getControl('Save').click()
 
         # CHECK VALUES
