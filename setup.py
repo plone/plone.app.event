@@ -49,7 +49,7 @@ setup(
         'plone.app.contentlisting',
         'plone.app.dexterity',
         'plone.app.layout',
-        'plone.app.portlets',
+        'plone.app.portlets >= 2.5.1',
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.textfield',
