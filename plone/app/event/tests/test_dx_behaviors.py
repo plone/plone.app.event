@@ -18,6 +18,7 @@ from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
+from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
@@ -31,6 +32,7 @@ from plone.event.interfaces import IRecurrenceSupport
 from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 
+import mock
 import pytz
 import unittest2 as unittest
 import zope.interface
@@ -58,6 +60,68 @@ class TestDXAddEdit(unittest.TestCase):
             'Authorization',
             'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,)
         )
+
+    @mock.patch('plone.app.event.base.localized_now', new=patched_now)
+    def test_defaults(self):
+        """Test, if defaults are set correctly.
+
+        Would have loved to do it like follows, but that doesn't set defaults:
+
+        TRY 1:
+        self.portal.invokeFactory(
+            'plone.app.event.dx.event',
+            'event1',
+            title="event1",
+        )
+
+        TRY 2:
+        from plone.dexterity.utils import createContentInContainer
+        e1 = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            'event1'
+        )
+
+        TRY 3:
+        from plone.dexterity.browser.add import DefaultAddForm
+        form = DefaultAddForm(self.portal, self.request)
+        form.portal_type = 'plone.app.event.dx.event'
+        e1 = form.create(data={'title': 'event1'})
+        form.add(e1)
+        """
+
+        self.browser.open('{}/{}'.format(
+            self.portal.absolute_url(),
+            '++add++plone.app.event.dx.event'
+        ))
+
+        self.browser.getControl(
+            name='form.widgets.IDublinCore.title'
+        ).value = "TestEvent"
+
+        # TODO: these values are simply not set in the pat-pickadate pattern.
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.start').value = '2014-03-30'
+        self.browser.getControl(
+            name='form.widgets.IEventBasic.end').value = '2014-03-31'
+
+        self.browser.getControl('Save').click()
+
+        # CHECK VALUES
+        #
+        # TODO: fix all defaults
+        event = self.portal['testevent']
+        # self.assertEqual(
+        #     event.start,
+        #     patched_now()
+        # )
+        # self.assertEqual(
+        #     event.end,
+        #     patched_now() + timedelta(hours=DEFAULT_END_DELTA)
+        # )
+        self.assertEqual(event.whole_day, False)
+        self.assertEqual(event.open_end, False)
+        # self.assertEqual(event.timezone, TEST_TIMEZONE)
 
     def test_edit_context(self):
         """Test if already added event can be edited directly on the context as
