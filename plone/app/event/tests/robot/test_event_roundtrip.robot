@@ -65,7 +65,9 @@ an event add form
 
 I select a date in calendar overlay
   Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-date")]
-  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  February
+  Wait until page contains  Sat
+# For Javascript: Month 1 = February.
+  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  1
   Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] select.picker__select--year  2014
   Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker__day')][contains(text(), "10")]
 
