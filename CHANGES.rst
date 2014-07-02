@@ -11,11 +11,13 @@ Changelog
   [thet]
 
 - Fix event.js Javascript, which produced Javascript date parsing errors when
-  changing the start date in Firefox. Firefox correctly hasn't implemented date
-  string for nearly ISO 8601 compatible date strings without a "T" between the
-  date and time part. Chrome on the other hand interprets timezone naive
-  date/time strings as UTC and returns it localized to the user's timezone,
-  which let's the date/time value to shift.
+  changing the start date in Firefox. Firefox does not parse date string, which
+  are only nearly ISO 8601 compatible, without a "T" between the date and time
+  part. Chrome on the other hand interprets timezone naive date/time strings as
+  UTC and returns it localized to the user's timezone, which leads to shifting
+  date/time values. For more info see this Bug report:
+  https://code.google.com/p/chromium/issues/detail?id=145198
+  [thet]
 
 - Remove enabling simple_publication_workflow from testing fixture.
   [timo]
