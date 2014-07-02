@@ -33,7 +33,7 @@ def first_weekday_setup(context):
 
 
 def setup_misc(context):
-    if context.readDataFile('plone.app.event-bbb.txt') is None:
+    if context.readDataFile('plone.app.event.bbb.txt') is None:
         return
 
     portal = context.getSite()
