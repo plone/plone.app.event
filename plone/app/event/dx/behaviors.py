@@ -390,6 +390,16 @@ def end_indexer(obj):
     return DT(event.end)
 
 
+# Location indexer
+@indexer(IDXEvent)
+def location_indexer(obj):
+    location_adapter = IEventLocation(obj, None)
+    if location_adapter:
+        return location_adapter.location
+
+    raise AttributeError
+
+
 # icalendar event UID indexer
 @indexer(IDXEvent)
 def sync_uid_indexer(obj):

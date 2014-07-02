@@ -4,8 +4,20 @@ Changelog
 2.0a4 (unreleased)
 ------------------
 
+- Fix event.js Javascript, which produced Javascript date parsing errors when
+  changing the start date in Firefox. Firefox correctly hasn't implemented date
+  string for nearly ISO 8601 compatible date strings without a "T" between the
+  date and time part. Chrome on the other hand interprets timezone naive
+  date/time strings as UTC and returns it localized to the user's timezone,
+  which let's the date/time value to shift.
+  [thet]
+
 - Do not set the simple_publication_workflow in the p.a.event test fixture.
   [timo]
+
+- Add ``location`` indexer. ``location`` is a default metadata field in
+  portal_catalog so we should provide that information by default.
+  [saily]
 
 
 2.0a3 (2014-05-06)

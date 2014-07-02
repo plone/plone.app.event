@@ -27,6 +27,7 @@
 
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />
+    <adapter name="location" factory=".behaviors.location_indexer" />
     <adapter name="SearchableText" factory=".behaviors.searchable_text_indexer" />
     <adapter name="sync_uid" factory=".behaviors.sync_uid_indexer" />
 
