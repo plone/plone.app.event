@@ -104,7 +104,6 @@ it should be filled in the form
 I should see the recurrence overlay
   Page Should Contain  Recurrence
   Page Should Contain  Selected dates
-  Pass Execution  TODO: fix Following functionality
   Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
   Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
 
