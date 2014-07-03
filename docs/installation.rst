@@ -4,11 +4,8 @@ Installation
 Compatibility
 -------------
 
-plone.app.event 2.0 is only compatible with Plone 5, which does not have any
-stable releases at time of this writing.
-
-For use with Plone 4.3, use a plone.app.event version from the 1.x release
-series.
+plone.app.event 2.0 is a rewrite of plone.app.event 1.x and fixes some issues.
+See Changelog.rst.
 
 The following is a compatibility map of all current plone.app.event versions:
 
@@ -18,8 +15,8 @@ plone.app.event    Plone     plone.app.widgets  plone.app.contenttypes  Archetyp
 version  branch
 =======  ======  ==========  =================  ======================  ==========
 1.1.x    1.1.x   Plone 4.3+         No                  1.1.x               Yes
-1.2.x    1.2.x   Plone 4.3+         1.5                 < 1.2a3             Yes
-2.x      master  Plone 5            1.6+               >= 1.2a3             No
+1.2.x    1.2.x   Plone 4.3+         1.5               < 1.2a3               Yes
+2.x      master  Plone 4.3+         1.7              >= 1.2a3               No
 =======  ======  ==========  =================  ======================  ==========
 
 
@@ -42,7 +39,7 @@ Installation
 
 ``plone.app.event`` only provides Dexterity behaviors to build own types based
 on them.  If you want to install a Dexterity based Event type, you can simply
-use ``plone.app.contenttypes`` 1.1b1 or up.
+use ``plone.app.contenttypes`` 1.2a3 or up.
 
 Depend on one (or both) of these setuptools dependencies::
 
@@ -55,6 +52,15 @@ Then install plone.app.event via the controlpanel or by depending on the
 following GenericSetup profile in metadata.xml::
 
     plone.app.event:default
+
+
+Upgrading from plone.app.event 1.x
+----------------------------------
+
+TODO: ...
+
+There are upgrade steps in plone.app.contenttypes for 1.x to 2.0. That has to
+be revisited and refactored.
 
 
 Upgrading from plone.app.event 1.0
