@@ -3,13 +3,12 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="plone"
       tal:omit-tag="">
-<section class="portlet portletCalendar"
+<section class="portlet portletCalendar" role="section"
     tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
                 month view/month;
                 year view/year;">
 
   <header class="portletHeader">
-    <span class="portletTopLeft"></span>
     <a href="#" rel="nofollow" class="calendarPrevious" title="Previous month"
         tal:define="prev_month view/prev_month;
                     prev_year view/prev_year"
@@ -34,10 +33,9 @@
                          data-year next_year;
                          data-month next_month;"
          i18n:attributes="title title_next_month;">&raquo;</a>
-    <span class="portletTopRight"></span>
   </header>
 
-  <div class="portletContent">
+  <section class="portletContent">
     <table class="ploneCalendar" summary="Calendar"
         i18n:attributes="summary summary_calendar">
       <caption class="hiddenStructure"
@@ -61,8 +59,12 @@
                           (next_month and ' cal_next_month' or ''),
                           (prev_month and ' cal_prev_month' or ''),
                           (events and ' cal_has_events' or ''))">
+            <tal:comment tal:condition="nothing">Add span or a to style td children and not td</tal:comment>
+            <span
+                tal:condition="not:events"
+                tal:content="day/day"></span>
             <a href=""
-                tal:omit-tag="not:events"
+                tal:condition="events"
                 tal:attributes="href python:view.date_events_url(day['date_string']);
                                 title day/events_string;"
                 tal:content="day/day">31</a>
@@ -72,8 +74,6 @@
         </tr>
       </tbody>
     </table>
-    <span class="portletBottomLeft"></span>
-    <span class="portletBottomRight"></span>
-  </div>
+  </section>
 </section>
 </html>
