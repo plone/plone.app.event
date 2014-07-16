@@ -19,7 +19,7 @@ msgstr ""
 #. Default: "Events in next 7 days."
 #: plone/app/event/browser/event_listing.py:240
 msgid "7days_events"
-msgstr ""
+msgstr "これから7日以内のイベント"
 
 #: plone/app/event/portlets/portlet_calendar.py:217
 msgid "Add Calendar Portlet"
@@ -171,7 +171,7 @@ msgstr ""
 #. Default: "${startdate} to ${enddate}"
 #: plone/app/event/browser/formatted_date.pt:27
 msgid "event_when_differentday"
-msgstr ""
+msgstr "${startdate}から${enddate}までのイベント"
 
 #: plone/app/event/browser/formatted_date.pt:20
 msgid "event_when_differentday_optional_word_between_date_and_time"
@@ -180,48 +180,48 @@ msgstr ""
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formatted_date.pt:71
 msgid "event_when_sameday"
-msgstr ""
+msgstr "${date}の${starttime}から${endtime}までのイベント"
 
 #. Default: "${date} from ${starttime}"
 #: plone/app/event/browser/formatted_date.pt:52
 msgid "event_when_sameday_openend"
-msgstr ""
+msgstr "${date}の${starttime}以降のイベント"
 
 #. Default: "Where"
 #: plone/app/event/browser/event_summary.pt:62
 msgid "event_where"
-msgstr ""
+msgstr "場所"
 
 #. Default: "${from} until ${until}."
 #: plone/app/event/browser/event_listing.py:241
 msgid "events_from_until"
-msgstr ""
+msgstr "${from}から${until}までのイベント"
 
 #. Default: "Events in ${month} ${year}"
 #: plone/app/event/browser/event_listing.py:298
 msgid "events_in_month"
-msgstr ""
+msgstr "${year}年${month}月のイベント"
 
 #. Default: "Events in week ${weeknumber}"
 #: plone/app/event/browser/event_listing.py:275
 msgid "events_in_week"
-msgstr ""
+msgstr "第${weeknumber}週のイベント"
 
 #. Default: "Events on ${day}"
 #: plone/app/event/browser/event_listing.py:261
 msgid "events_on_day"
-msgstr ""
+msgstr "${day}のイベント"
 
 #. Default: "Visit external website"
 #: plone/app/event/browser/event_listing.pt:118
 #: plone/app/event/browser/event_summary.pt:91
 msgid "external_website"
-msgstr ""
+msgstr "外部Webサイトを見る"
 
 #. Default: "Future events"
 #: plone/app/event/browser/event_listing.py:230
 msgid "future_events"
-msgstr ""
+msgstr "これからのイベント"
 
 #. Default: "Add event to calendar"
 #: plone/app/event/browser/event_summary.pt:97
