@@ -23,15 +23,19 @@ version  branch
 Buildout files
 --------------
 
-- ``buildout.cfg``: plone.app.event base installation.
+- ``buildout.cfg``: Base installation for Plone 5.
 
-- ``dev.cfg``: plone.app.event development configuration, including tests.
+- ``buildout-43.cfg``: Base installation for Plone 4.3.
 
-- ``tests.cfg``: plone.app.event tests only.
+- ``dev.cfg``: Development configuration, including tests, for Plone 5.
 
-- ``sources.cfg``: plone.app.event mr.developer source definitions.
+- ``test.cfg``: Test build for Plone 5.
 
-- ``versions.cfg``: plone.app.event version requirements.
+- ``test-43.cfg``: Test build for Plone 4.3.
+
+- ``sources.cfg``: mr.developer source definitions.
+
+- ``versions.cfg``: Recommended version requirements.
 
 
 Installation

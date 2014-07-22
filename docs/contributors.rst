@@ -30,6 +30,7 @@ Thanks!
 - Andreas Jung, zopyx
 - Andreas Zeidler, witsch
 - Andrew Mleczko, amleczko
+- Asko Soukka, datakurre
 - Bo Simonsen, bosim
 - Cillian de Róiste, cillianderoiste
 - David Glick, davisagli
