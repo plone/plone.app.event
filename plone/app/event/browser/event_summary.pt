@@ -9,105 +9,125 @@
 
 <tal:def tal:define="data python:view.data; excludes view/excludes">
 
-  <dl class="event summary details" summary="Event details" i18n:attributes="summary summary_event_details">
+  <ul class="event summary details" summary="Event details" i18n:attributes="summary summary_event_details">
 
     <tal:cond condition="python:'title' not in excludes">
-      <dt i18n:translate="event_event">Event</dt>
-      <dd class="title"><a tal:attributes="href data/url" tal:content="data/title">title</a></dd>
+      <li class="event-title">
+        <strong i18n:translate="event_event">Event</strong>
+        <a tal:attributes="href data/url" tal:content="data/title">title</a>
+      </li>
     </tal:cond>
 
     <tal:cond condition="python:'subjects' not in excludes">
     <tal:cond condition="data/subjects">
-      <dt i18n:translate="event_what">What</dt>
-      <dd itemprop="eventType" class="category" tal:repeat="item data/subjects" tal:content="item" />
+      <li class="event-category">
+        <strong i18n:translate="event_what">What</strong>
+        <span itemprop="eventType" tal:repeat="item data/subjects" tal:content="item" />
+      </li>
     </tal:cond>
     </tal:cond>
 
     <tal:cond condition="python:'date' not in excludes">
-      <dt i18n:translate="event_when">When</dt>
-      <dd tal:define="start_tzname data/timezone;
+      <li class="event-timezone">
+        <strong i18n:translate="event_when">When</strong>
+        <span tal:define="start_tzname data/timezone;
                       start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                       start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
-        <tal:date replace="structure python:view.formatted_date(context)" />
-        <span class="timezone" tal:condition="start_tzname">
-         (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+          <tal:date replace="structure python:view.formatted_date(context)" />
+          <span tal:condition="start_tzname">
+            (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
+          </span>
         </span>
-      </dd>
+      </li>
     </tal:cond>
 
     <tal:cond condition="python:'occurrences' not in excludes">
     <tal:cond tal:define="occs view/next_occurrences" condition="python:len(occs) > 1">
-      <dt i18n:translate="">
-        All dates
-      </dt>
-      <dd tal:repeat="occ occs">
-        <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
-        <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
-          <strong tal:omit-tag="not: this_is_occ">
-            <tal:date replace="structure python:view.formatted_date(occ)"/>
-          </strong>
-        </a>
-        </tal:def>
-      </dd>
-      <dd tal:define="num view/num_more_occurrences" tal:condition="num">
-        <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing">
-          There are <tal:num replace="num"/> more occurrences.
-        </a>
-      </dd>
+      <li class="event-dates">
+        <strong i18n:translate="">
+          All dates
+        </strong>
+        <span tal:repeat="occ occs">
+          <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
+          <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
+            <strong tal:omit-tag="not: this_is_occ">
+              <tal:date replace="structure python:view.formatted_date(occ)"/>
+            </strong>
+          </a>
+          </tal:def>
+        </span>
+        <span tal:define="num view/num_more_occurrences" tal:condition="num">
+          <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing">
+            There are <tal:num replace="num"/> more occurrences.
+          </a>
+        </span>
+      </li>
     </tal:cond>
     </tal:cond>
 
     <tal:cond condition="python:'location' not in excludes">
     <tal:cond define="location view/get_location" condition="location">
-      <dt i18n:translate="event_where">Where</dt>
-      <dd itemprop="location" class="location" tal:content="structure location">Location</dd>
+      <li class="event-location">
+        <strong i18n:translate="event_where">Where</strong>
+        <span itemprop="location" tal:content="structure location">Location</span>
+      </li>
     </tal:cond>
     </tal:cond>
 
     <tal:cond condition="python:'contact' not in excludes">
     <tal:cond define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
-      <dt i18n:translate="contact_name">Contact Name</dt>
-      <dd>
-        <a class="email fn" tal:condition="mail" tal:attributes="href string:mailto:${mail}" tal:content="name" />
-        <span class="fn" tal:condition="not:mail" tal:content="name" />
-      </dd>
+      <li class="event-contact">
+        <strong i18n:translate="contact_name">Contact Name</strong>
+        <tal:span>
+          <a class="email" tal:condition="mail" tal:attributes="href string:mailto:${mail}" tal:content="name" />
+          <span tal:condition="not:mail" tal:content="name" />
+        </tal:span>
+      </li>
     </tal:cond>
 
     <tal:cond condition="data/contact_phone">
-      <dt i18n:translate="contact_phone">Contact Phone</dt>
-      <dd class="tel" tal:content="data/contact_phone">Contact Phone</dd>
+      <li class="event-tel">
+        <strong i18n:translate="contact_phone">Contact Phone</strong>
+        <span tal:content="data/contact_phone">Contact Phone</span>
+      </li>
     </tal:cond>
 
     <tal:cond condition="data/attendees|nothing">
-      <dt i18n:translate="contact_attendees">Attendees</dt>
-      <dd itemprop="attendee" class="attendee" tal:repeat="item data/attendees" tal:content="item" />
+      <li class="event-attendee">
+        <strong i18n:translate="contact_attendees">Attendees</strong>
+        <span itemprop="attendee" tal:repeat="item data/attendees" tal:content="item" />
+      </li>
     </tal:cond>
     </tal:cond>
 
     <tal:cond condition="python:'event_url' not in excludes">
     <tal:cond condition="data/event_url">
-      <dt i18n:translate="event_url">Web</dt>
-      <dd class="url">
-        <a href="" tal:attributes="href data/event_url" i18n:translate="external_website">Visit external website</a>
-      </dd>
+      <li class="event-url">
+        <strong i18n:translate="event_url">Web</strong>
+        <tal:span>
+          <a href="" tal:attributes="href data/event_url" i18n:translate="external_website">Visit external website</a>
+        </tal:span>
+      </li>
     </tal:cond>
     </tal:cond>
 
     <tal:cond condition="python:'ical' not in excludes">
-      <dt i18n:translate="heading_add_to_calendar">Add event to calendar</dt>
-      <dd tal:define="here_url context/@@plone_context_state/object_url;
-                      portal_url context/@@plone_portal_state/portal_url;">
-        <a href="#"
-           tal:attributes="href string:$here_url/ics_view"
-           title="Download this event in iCal format"
-           i18n:attributes="title title_add_to_ical;">
-          <img src="" alt=""
-              tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
-          <span i18n:translate="label_add_to_ical">iCal</span></a>
-      </dd>
+      <li class="event-calendar">
+        <strong i18n:translate="heading_add_to_calendar">Add event to calendar</strong>
+        <tal:span tal:define="here_url context/@@plone_context_state/object_url;
+                        portal_url context/@@plone_portal_state/portal_url;">
+          <a href="#"
+             tal:attributes="href string:$here_url/ics_view"
+             title="Download this event in iCal format"
+             i18n:attributes="title title_add_to_ical;">
+            <img src="" alt=""
+                tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
+            <span i18n:translate="label_add_to_ical">iCal</span></a>
+        </tal:span>
+      </li>
     </tal:cond>
 
-  </dl>
+  </ul>
 
 </tal:def>
 
