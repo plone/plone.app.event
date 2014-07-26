@@ -18,37 +18,22 @@
                  mode request/mode|string:future;
                  toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
 
-  <div class="event_listing">
-    <header>
-      <nav tal:define="show_filter python:not (view.is_collection or view.is_topic)">
-        <ul class="mode_selector">
+  <div class="event_listing autotabs">
+      <nav class="autotoc-nav" tal:define="show_filter python:not (view.is_collection or view.is_topic)">
           <tal:cond condition="show_filter">
-          <li class="" tal:attributes="class python:mode=='future' and 'selected' or ''">
-            <a class="mode_future"   href="" tal:attributes="href view/mode_future_url"   i18n:translate="mode_future_link">Upcoming</a>
-          </li>
-          <li class="" tal:attributes="class python:mode=='past' and 'selected' or ''">
-            <a class="mode_past"   href="" tal:attributes="href view/mode_past_url"   i18n:translate="mode_past_link">Past</a>
-          </li>
-          <li class="" tal:attributes="class python:mode=='month' and 'selected' or ''">
-            <a class="mode_month" href="" tal:attributes="href view/mode_month_url" i18n:translate="mode_month_link">Month</a>
-          </li>
-          <li class="" tal:attributes="class python:mode=='week' and 'selected' or ''">
-            <a class="mode_week"  href="" tal:attributes="href view/mode_week_url"  i18n:translate="mode_week_link">Week</a>
-          </li>
-          <li class="" tal:attributes="class python:mode=='day' and 'selected' or ''">
-            <a class="mode_day"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
-          </li>
+            <a tal:attributes="class python:mode=='future' and 'active' or nothing"  href="" tal:attributes="href view/mode_future_url"   i18n:translate="mode_future_link">Upcoming</a>
+            <a tal:attributes="class python:mode=='past' and 'active' or nothing"  href="" tal:attributes="href view/mode_past_url"   i18n:translate="mode_past_link">Past</a>
+            <a tal:attributes="class python:mode=='month' and 'active' or nothing" href="" tal:attributes="href view/mode_month_url" i18n:translate="mode_month_link">Month</a>
+            <a tal:attributes="class python:mode=='week' and 'active' or nothing"  href="" tal:attributes="href view/mode_week_url"  i18n:translate="mode_week_link">Week</a>
+            <a tal:attributes="class python:mode=='day' and 'active' or nothing"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
           </tal:cond>
-          <li>
             <a class="mode_ical"  href="" tal:attributes="href view/ical_url"
                title="Download this event in iCal format"
                i18n:attributes="title title_add_to_ical;">
                 <img src="" alt=""
                     tal:attributes="src string:${portal_url}/++resource++plone.app.event/icon_export_ical.png"/>
-                <span i18n:translate="label_add_to_ical">iCal</span></a>
-
-          </li>
-        </ul>
+                <span i18n:translate="label_add_to_ical">iCal</span>
+            </a>
         <tal:cond condition="show_filter">
         <tal:month condition="python:mode=='month'">
         <ul class="sub_nav">
@@ -73,8 +58,6 @@
         </tal:day>
         </tal:cond>
       </nav>
-      <div class="visualClear"></div>
-    </header>
 
     <section>
 
@@ -83,16 +66,15 @@
       <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent"
           tal:define="startf python:view.date_speller(data.start)">
 
-        <ul class="hCalendar-hidden">
+        <div class="cal_date">
+            <span class="cal_month" tal:content="string:${startf/month}">Oct.</span>        
+            <span class="cal_day" tal:content="string:${startf/day}">15</span>
+            <span class="cal_wkday" tal:content="python:startf['wkday']">Tue</span>    
+        </div>
+        <ul class="sr-only">
           <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">end</li>
           <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
         </ul>
-
-        <div class="cal_date">
-            <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
-            <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
-            <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
-        </div>
 
         <div class="cal_info">
           <h2><a href="" itemprop="url" class="url" tal:attributes="href data/url">
@@ -159,8 +141,6 @@
           </ul>
 
         </div>
-        <div class="visualClear"></div>
-
       </article>
 
      </tal:items>
