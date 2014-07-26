@@ -21,11 +21,11 @@
   <div class="event_listing autotabs">
       <nav class="autotoc-nav" tal:define="show_filter python:not (view.is_collection or view.is_topic)">
           <tal:cond condition="show_filter">
-            <a tal:attributes="class python:mode=='future' and 'active' or nothing"  href="" tal:attributes="href view/mode_future_url"   i18n:translate="mode_future_link">Upcoming</a>
-            <a tal:attributes="class python:mode=='past' and 'active' or nothing"  href="" tal:attributes="href view/mode_past_url"   i18n:translate="mode_past_link">Past</a>
+            <a tal:attributes="class python:mode=='future' and 'active' or nothing"  href="" tal:attributes="href view/mode_future_url"  i18n:translate="mode_future_link">Upcoming</a>
+            <a tal:attributes="class python:mode=='past' and 'active' or nothing"  href="" tal:attributes="href view/mode_past_url"  i18n:translate="mode_past_link">Past</a>
             <a tal:attributes="class python:mode=='month' and 'active' or nothing" href="" tal:attributes="href view/mode_month_url" i18n:translate="mode_month_link">Month</a>
             <a tal:attributes="class python:mode=='week' and 'active' or nothing"  href="" tal:attributes="href view/mode_week_url"  i18n:translate="mode_week_link">Week</a>
-            <a tal:attributes="class python:mode=='day' and 'active' or nothing"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
+            <a tal:attributes="class python:mode=='day' and 'active' or nothing"   href="" tal:attributes="href view/mode_day_url"  i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
           </tal:cond>
             <a class="mode_ical"  href="" tal:attributes="href view/ical_url"
                title="Download this event in iCal format"
@@ -36,25 +36,25 @@
             </a>
         <tal:cond condition="show_filter">
         <tal:month condition="python:mode=='month'">
-        <ul class="sub_nav">
-          <li><a class="prev_month" href="" tal:attributes="href view/prev_month_url" i18n:translate="prev_month_link">Previous Month</a></li>
-          <li><a class="this_month" href="" tal:attributes="href view/this_month_url" i18n:translate="this_month_link">This Month</a></li>
-          <li><a class="next_month" href="" tal:attributes="href view/next_month_url" i18n:translate="next_month_link">Next Month</a></li>
-        </ul>
+        <div class="sub_nav">
+          <a class="prev_month" href="" tal:attributes="href view/prev_month_url" i18n:translate="prev_month_link">Previous Month</a>
+          <a class="this_month" href="" tal:attributes="href view/this_month_url" i18n:translate="this_month_link">This Month</a>
+          <a class="next_month" href="" tal:attributes="href view/next_month_url" i18n:translate="next_month_link">Next Month</a>
+        </div>
         </tal:month>
         <tal:week condition="python:mode=='week'">
-        <ul class="sub_nav">
-          <li><a class="prev_week"  href="" tal:attributes="href view/prev_week_url"  i18n:translate="prev_week_link">Previous Week</a></li>
-          <li><a class="this_week"  href="" tal:attributes="href view/this_week_url"  i18n:translate="this_week_link">This Week</a></li>
-          <li><a class="next_week"  href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a></li>
-        </ul>
+        <div class="sub_nav">
+          <a class="prev_week"  href="" tal:attributes="href view/prev_week_url"  i18n:translate="prev_week_link">Previous Week</a>
+          <a class="this_week"  href="" tal:attributes="href view/this_week_url"  i18n:translate="this_week_link">This Week</a>
+          <a class="next_week"  href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a>
+        </div>
         </tal:week>
         <tal:day condition="python:mode in ('day', 'today')">
-        <ul class="sub_nav">
-          <li><a class="prev_day"   href="" tal:attributes="href view/prev_day_url"   i18n:translate="prev_day_link">Previous Day</a></li>
-          <li><a class="today"      href="" tal:attributes="href view/today_url"      i18n:translate="today_link">Today</a></li>
-          <li><a class="next_day"   href="" tal:attributes="href view/next_day_url"   i18n:translate="next_day_link">Next Day</a></li>
-        </ul>
+        <div class="sub_nav">
+          <a class="prev_day"   href="" tal:attributes="href view/prev_day_url"   i18n:translate="prev_day_link">Previous Day</a>
+          <a class="today"      href="" tal:attributes="href view/today_url"      i18n:translate="today_link">Today</a>
+          <a class="next_day"   href="" tal:attributes="href view/next_day_url"   i18n:translate="next_day_link">Next Day</a>
+        </div>
         </tal:day>
         </tal:cond>
       </nav>
