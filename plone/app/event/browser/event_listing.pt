@@ -49,7 +49,7 @@
             <div class="sub_nav">
               <a class="events-week-prev" href="" tal:attributes="href view/prev_week_url"  i18n:translate="prev_week_link">Previous Week</a>
               <a class="events-week-this" href="" tal:attributes="href view/this_week_url"  i18n:translate="this_week_link">This Week</a>
-              <a class="events-week-nest" href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a>
+              <a class="events-week-next" href="" tal:attributes="href view/next_week_url"  i18n:translate="next_week_link">Next Week</a>
             </div>
           </tal:week>
           <tal:day condition="python:mode in ('day', 'today')">
