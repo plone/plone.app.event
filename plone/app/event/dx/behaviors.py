@@ -297,10 +297,10 @@ def data_postprocessing(start, end, whole_day, open_end):
 
         return dt.replace(microsecond=0)
 
-    tz_default = default_timezone()
+    tz_default = default_timezone(as_tzinfo=True)
 
-    tz_start = getattr(start, 'tzinfo', tz_default)
-    tz_end = getattr(end, 'tzinfo', tz_default)
+    tz_start = getattr(start, 'tzinfo', None) or tz_default
+    tz_end = getattr(end, 'tzinfo', None) or tz_default
     start = _fix_dt(start, tz_start)
     end = _fix_dt(end, tz_end)
 
@@ -346,7 +346,7 @@ def data_postprocessing_handler(event):
     # TODO: e.g. on open_end events, there is no IEventBasic.end data in the
     # data. In that case, we have to add it.
     start = data['IEventBasic.start']
-    end = data['IEventBasic.end']
+    end = data.get('IEventBasic.end') or start  # end can be missing
     whole_day = data['IEventBasic.whole_day']
     open_end = data['IEventBasic.open_end']
 
@@ -354,7 +354,8 @@ def data_postprocessing_handler(event):
         start, end, whole_day, open_end)
 
     data['IEventBasic.start'] = start
-    data['IEventBasic.end'] = end
+    if data.get('IEventBasic.end'):  # end can be missing
+        data['IEventBasic.end'] = end
     data['IEventBasic.whole_day'] = whole_day
     data['IEventBasic.open_end'] = open_end
 

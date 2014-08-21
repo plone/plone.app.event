@@ -1,0 +1,26 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="plone.app.event">
+
+  <include package=".browser" />
+  <include package=".portlets" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="plone.app.event (support for Plone 4)"
+      directory="profiles/default"
+      description="plone.app.event framework registration."
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:importStep
+      name="plone.app.event-bbb"
+      handler=".setuphandlers.setup_misc"
+      title="plone.app.event-bbb misc"
+      description="first_weekday setup">
+    <depends name="plone.app.registry" />
+  </genericsetup:importStep>
+
+</configure>

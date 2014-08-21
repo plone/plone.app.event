@@ -1,8 +1,17 @@
 Changelog
 =========
 
-2.0a4 (unreleased)
+2.0a5 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.0a4 (2014-07-22)
+------------------
+
+- Restore Plone 4.3 compatibility.
+  [datakurre]
 
 - Fix event.js Javascript, which produced Javascript date parsing errors when
   changing the start date in Firefox. Firefox does not parse date string, which

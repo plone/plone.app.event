@@ -436,7 +436,7 @@ def default_timezone(context=None, as_tzinfo=False):
             return info if as_tzinfo else info.zone
 
     reg_key = 'plone.portal_timezone'
-    registry = getUtility(IRegistry)
+    registry = getUtility(IRegistry, context=context)
     portal_timezone = registry.get(reg_key, None)
 
     # fallback to what plone.event is doing
@@ -662,9 +662,8 @@ def start_end_from_mode(mode, dt=None, context=None):
                     'day': Return all events on the given day (dt parameter
                            required)
                     'week': Show a weeks events, optionally from a given date.
-                 These settings override the start and end parameters.
-                    Not implemented yet:
                     'month': Show this month's events.
+                 These settings override the start and end parameters.
     :type mode: string
 
     :param dt: Optional datetime for day mode.

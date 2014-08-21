@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '2.0a4.dev0'
+version = '2.0a5.dev0'
 
 
 setup(
@@ -28,7 +28,7 @@ setup(
     author_email='plone-developers@lists.sourceforge.net',
     url='https://github.com/plone/plone.app.event',
     license='GPL',
-    packages=find_packages(exclude=['ez_setup']),
+    packages=find_packages(),
     namespace_packages=['plone', 'plone.app'],
     include_package_data=True,
     zip_safe=False,
@@ -49,11 +49,11 @@ setup(
         'plone.app.contentlisting',
         'plone.app.dexterity',
         'plone.app.layout',
-        'plone.app.portlets >= 3.0',
+        'plone.app.portlets >= 2.5.1',
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.textfield',
-        'plone.app.widgets [dexterity] >= 1.6.0dev',
+        'plone.app.widgets [dexterity] >= 1.7.0',
         'plone.app.vocabularies >= 2.1.15.dev0',
         'plone.app.z3cform',
         'plone.autoform>=1.4',
@@ -62,9 +62,7 @@ setup(
         'plone.dexterity',
         'plone.event>=1.0',
         'plone.folder',
-        'plone.formwidget.recurrence [z3cform] >= 1.2.3',
-        'plone.formwidget.recurrence',
-        'plone.formwidget.recurrence',
+        'plone.formwidget.recurrence [z3cform] >= 1.2.4',
         'plone.indexer',
         'plone.memoize',
         'plone.namedfile',

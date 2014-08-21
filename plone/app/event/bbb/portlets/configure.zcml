@@ -1,0 +1,23 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:plone="http://namespaces.plone.org/plone"
+           i18n_domain="plone.app.event">
+
+  <plone:portlet
+      name="portlets.Calendar"
+      interface="..portlets.portlet_calendar.ICalendarPortlet"
+      assignment="..portlets.portlet_calendar.Assignment"
+      renderer=".portlet_calendar.Renderer"
+      addview=".portlet_calendar.AddForm"
+      editview=".portlet_calendar.EditForm"
+      />
+
+  <plone:portlet
+      name="portlets.Events"
+      interface="..portlets.portlet_events.IEventsPortlet"
+      assignment="..portlets.portlet_events.Assignment"
+      renderer=".portlet_events.Renderer"
+      addview=".portlet_events.AddForm"
+      editview=".portlet_events.EditForm"
+      />
+
+</configure>

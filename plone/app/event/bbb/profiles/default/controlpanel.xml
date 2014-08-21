@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel" meta_type="Plone Control Panel Tool"
+        i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <configlet title="Date and Time" action_id="DateAndTime" appId="DateAndTime"
+             category="Plone" condition_expr=""
+             icon_expr="string:$portal_url/event_icon.png"
+             url_expr="string:${portal_url}/@@dateandtime-controlpanel" visible="True"
+             i18n:attributes="title">
+    <permission>Plone Site Setup: Site</permission>
+  </configlet>
+</object>

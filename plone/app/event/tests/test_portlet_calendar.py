@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import getFSVersionTuple
 from Products.GenericSetup.utils import _getDottedName
 from calendar import monthrange
 from datetime import datetime
@@ -29,6 +30,11 @@ import unittest2 as unittest
 
 TZNAME = 'Europe/Vienna'
 PTYPE = 'plone.app.event.dx.event'
+PLONE5 = getFSVersionTuple()[0] >= 5
+
+if not PLONE5:
+    from plone.app.event.bbb.portlets \
+        import portlet_calendar as bbb_portlet_calendar
 
 
 class PortletTest(unittest.TestCase):
@@ -91,7 +97,11 @@ class PortletTest(unittest.TestCase):
             (context, self.request, view, manager, assignment),
             IPortletRenderer
         )
-        self.assertTrue(isinstance(renderer, portlet_calendar.Renderer))
+        if PLONE5:
+            self.assertTrue(isinstance(renderer, portlet_calendar.Renderer))
+        else:
+            self.assertTrue(isinstance(renderer,
+                                       bbb_portlet_calendar.Renderer))
 
 
 class RendererTest(unittest.TestCase):

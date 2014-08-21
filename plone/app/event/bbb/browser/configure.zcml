@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <!-- Date and Time Control panel -->
+  <browser:page
+      name="dateandtime-controlpanel"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".controlpanel.DateAndTimeControlPanel"
+      permission="plone.app.controlpanel.Site"
+      />
+
+</configure>
