@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.6 (unreleased)
+1.2.6 (2014-08-26)
 ------------------
 
 - Configure plone.app.widgets for start and end date fields.
