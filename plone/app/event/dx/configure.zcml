@@ -30,6 +30,8 @@
     <adapter factory=".behaviors.EventAccessor" />
 
     <adapter factory=".behaviors.RecurrenceFieldWidget" />
+    <adapter factory=".behaviors.StartDateFieldWidget" />
+    <adapter factory=".behaviors.EndDateFieldWidget" />
 
     <adapter name="start" factory=".behaviors.start_indexer" />
     <adapter name="end" factory=".behaviors.end_indexer" />

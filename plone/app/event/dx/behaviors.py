@@ -17,6 +17,7 @@ from plone.app.event.base import first_weekday
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.textfield.value import RichTextValue
+from plone.app.widgets.dx import DatetimeWidget
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -163,6 +164,22 @@ def default_tz(data):
     return default_timezone()
 provideAdapter(ComputedWidgetAttribute(
     default_tz, field=IEventBasic['timezone']), name='default')
+
+
+@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def StartDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.default_timezone = default_timezone
+    return widget
+
+
+@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
+@implementer(IFieldWidget)
+def EndDateFieldWidget(field, request):
+    widget = FieldWidget(field, DatetimeWidget(request))
+    widget.default_timezone = default_timezone
+    return widget
 
 
 class IEventRecurrence(model.Schema):

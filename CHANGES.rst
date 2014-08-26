@@ -4,6 +4,9 @@ Changelog
 1.2.6 (unreleased)
 ------------------
 
+- Configure plone.app.widgets for start and end date fields.
+  [thet]
+
 - Fix default values for ``whole_day`` and ``open_end`` on Dexterity objects,
   which were not set, if left unchecked in the add or edit forms. Includes an
   upgrade step. Fixes #150 "Diff-functionality is broken with event-behavior",
