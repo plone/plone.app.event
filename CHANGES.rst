@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
+1.1.2 (2014-08-26)
 ------------------
 
 - Fix default values for ``whole_day`` and ``open_end`` on Dexterity objects,
