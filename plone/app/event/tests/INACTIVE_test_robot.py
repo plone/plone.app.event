@@ -6,6 +6,7 @@ import robotsuite
 import unittest
 
 
+# TODO: Remove
 # The robot test fails irregularily, most probably when run on end-of-day, even
 # with this fix in place:
 # https://github.com/plone/plone.app.event/commit/623cec04872a847e2b9f810346424a6d663c6370
@@ -15,7 +16,7 @@ import unittest
 # Scenario: plone.app.event.tests.test_robot.RobotTestCase.Scenario Create and view an event  # noqa
 # Message: Value of text field 'css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date' should have been 'February 10, 2014' but was 'February 11, 2014'  # noqa
 @unittest.skip("Skipping due to irregular failures")
-def test_suite():
+def INACTIVE_test_suite():
     suite = unittest.TestSuite()
     suite.level = ROBOT_TEST_LEVEL
     suite.addTests([
