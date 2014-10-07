@@ -4,7 +4,8 @@ Changelog
 2.0a5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix German translation for Monat.
+  [thet]
 
 
 2.0a4 (2014-07-22)
