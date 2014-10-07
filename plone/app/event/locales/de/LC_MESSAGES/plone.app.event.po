@@ -549,7 +549,7 @@ msgstr "Nächster Tag"
 #. Default: "Next Month"
 #: plone/app/event/browser/event_listing.pt:57
 msgid "next_month_link"
-msgstr "Nächstes Monat"
+msgstr "Nächster Monat"
 
 #. Default: "Next Week"
 #: plone/app/event/browser/event_listing.pt:64
@@ -581,7 +581,7 @@ msgstr "Vorheriger Tag"
 #. Default: "Previous Month"
 #: plone/app/event/browser/event_listing.pt:55
 msgid "prev_month_link"
-msgstr "Vorheriges Monat"
+msgstr "Vorheriger Monat"
 
 #. Default: "Previous Week"
 #: plone/app/event/browser/event_listing.pt:62
@@ -616,7 +616,7 @@ msgstr "Keine Synchronisation"
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56
 msgid "this_month_link"
-msgstr "Dieses Monat"
+msgstr "Dieser Monat"
 
 #. Default: "This Week"
 #: plone/app/event/browser/event_listing.pt:63

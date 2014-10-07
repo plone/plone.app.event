@@ -4,7 +4,8 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix German translation for Monat.
+  [thet]
 
 
 1.1.2 (2014-08-26)
