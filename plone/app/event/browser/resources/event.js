@@ -6,51 +6,64 @@ if (typeof(plone) === 'undefined') {
 (function ($, plone) {
 
     plone.paevent = plone.paevent || {};
-    plone.paevent.end_start_delta = 1 / 24;  // Delta in days
+    plone.paevent.end_start_delta = 1;  // Delta in hours
+    plone.paevent.start_date = function() {
+        return a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
+    };
+    plone.paevent.end_date = function() {
+        return a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+    };
 
     function initDelta(e) {
-        var start_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate')));
-        var end_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate')));
-        // delta in days
-        plone.paevent.end_start_delta = (end_datetime - start_datetime) / 1000 / (3600 * 24);
+        var start_datetime = getDateTime(plone.paevent.start_date());
+        var end_datetime = getDateTime(plone.paevent.end_date());
+        // delta in hours
+        plone.paevent.end_start_delta = (end_datetime - start_datetime) / 1000 / 3600;
+        if(plone.paevent.end_start_delta < 1) {
+            // prevent saving false deltas
+            plone.paevent.end_start_delta = 1;
+        }
     }
 
     function getDateTime(datetimewidget) {
         var fields = ['year', 'month', 'day', 'hour', 'minute'];
         var parts = {};
-        $.each(fields, function () {
-            parts[this] = parseInt($(datetimewidget).find("." + this).val(), 10);
+        $.each(fields, function (idx, fld) {
+            parts[fld] = parseInt($("[name$='-" + fld + "']", datetimewidget).val(), 10);
         });
         var date = new Date(parts.year, parts.month - 1, parts.day,
                             parts.hour, parts.minute);
         return date;
     }
 
-    function updateEndDate() {
-        var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        var jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+    function setDateTime(datetimewidget, new_date) {
+        $("[name$='-year']", datetimewidget).val(new_date.getYear());
+        $("[name$='-month']", datetimewidget).val(new_date.getMonth());
+        $("[name$='-day']", datetimewidget).val(new_date.getDate());
+        $("[name$='-hour']", datetimewidget).val(new_date.getHours());
+        $("[name$='-minute']", datetimewidget).val(new_date.getMinutes());
+    }
 
+    function updateEndDate() {
         // using getDateTime doesn't work for start_date here, since the values
         // are not changed yet, despite docs saying the 'change' event is
         // defered until the element loses focus.
         // TODO: revisit this. Related issue: #105, #130
-        var start_date = $("input[name$='-calendar']", jq_start).data().dateinput.getValue();
-        var new_end_date = new Date(start_date);
-        new_end_date.setDate(start_date.getDate() + plone.paevent.end_start_delta);
-        $("input[name$='-calendar']", jq_end).data().dateinput.setValue(new_end_date);
+        var start_date = getDateTime(plone.paevent.start_date());
+        var new_end_date = start_date;
+        new_end_date.setHours(new_end_date.getHours() + plone.paevent.end_start_delta);
+        setDateTime(plone.paevent.end_date(), new_end_date);
+        $("input[name$='-calendar']", plone.paevent.end_date()).data('dateinput').setValue(new_end_date);
     }
 
     function validateEndDate() {
-        var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        var jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
-
-        var start_datetime = getDateTime(jq_start);
-        var end_datetime = getDateTime(jq_end);
+        var start_datetime = getDateTime(plone.paevent.start_date());
+        var end_datetime = getDateTime(plone.paevent.end_date());
 
         if (end_datetime < start_datetime) {
-            jq_end.addClass("error");
+            plone.paevent.end_date().addClass("error");
         } else {
-            jq_end.removeClass("error");
+            plone.paevent.end_date().removeClass("error");
         }
     }
 
@@ -114,7 +127,7 @@ if (typeof(plone) === 'undefined') {
     }
 
 
-    $(document).ready(function () {
+    $(function () {
 
         // EDIT FORM
 
@@ -128,25 +141,23 @@ if (typeof(plone) === 'undefined') {
 
         // OPEN END INIT
         var jq_open_end = a_or_b($('#formfield-form-widgets-IEventBasic-open_end input'), $('form[name="edit_form"] input#openEnd'));
-        var jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+        var jq_end = plone.paevent.end_date();
         if (jq_open_end.length > 0) {
             jq_open_end.bind('change', function (e) { show_hide_widget(jq_end, e.target.checked, true); });
             show_hide_widget(jq_end, jq_open_end.get(0).checked, false);
         }
 
         // START/END SETTING/VALIDATION
-        var jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        function init_date_setter(el) {
-            el.on('focus', initDelta);
-            el.on('onShow', initDelta); // bind dateinput, which is added later
-        }
-        jq_start.each(function () {
-            init_date_setter($(this));
-            $(this).on('change', updateEndDate);
+        var jq_start = plone.paevent.start_date();
+        $("select", jq_start).on("change", updateEndDate);
+        $("input[name$='-calendar']", jq_start).on("onHide", updateEndDate);
+        $("select", jq_end).on("change", function () {
+            initDelta();
+            validateEndDate();
         });
-        jq_end.each(function () {
-            init_date_setter($(this));
-            $(this).on('change', validateEndDate);
+        $("input[name$='-calendar']", jq_end).on("onHide", function() {
+            initDelta();
+            validateEndDate();
         });
 
         // EVENT LISTING CALENDAR POPUP
