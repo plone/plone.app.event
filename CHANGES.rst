@@ -11,7 +11,9 @@ Changelog
 
 - Fix German translation for Monat.
   [thet]
-
+- Fix enddate delta calculation and validation.
+  Ref: https://github.com/plone/plone.app.event/issues/130
+  [petschki]
 
 1.1.2 (2014-08-26)
 ------------------
