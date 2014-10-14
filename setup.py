@@ -53,7 +53,7 @@ setup(
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.vocabularies',
-        'plone.app.widgets >= 1.7.0',
+        'plone.app.widgets >= 1.4.0',
         'plone.browserlayer',
         'plone.event >= 1.0',
         'plone.folder',

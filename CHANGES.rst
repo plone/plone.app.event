@@ -4,6 +4,10 @@ Changelog
 1.2.7 (unreleased)
 ------------------
 
+- Change plone.app.widgets version fix to 1.4+, which is still compatible.
+  Fixes #164.
+  [thet]
+
 - For Dexterity objects, don't fail accessing start and end if those are not
   available on the context, e.g. after event related behaviors were added to
   the object. Same for the recurrence attribute. Fixes #160.
