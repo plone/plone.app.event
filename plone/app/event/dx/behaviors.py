@@ -362,14 +362,16 @@ class EventBasic(object):
 
     @property
     def start(self):
-        return self._prepare_dt_get(self.context.start)
+        start = getattr(self.context, 'start', None)
+        return self._prepare_dt_get(start) if start else None
     @start.setter
     def start(self, value):
         self.context.start = self._prepare_dt_set(value)
 
     @property
     def end(self):
-        return self._prepare_dt_get(self.context.end)
+        end = getattr(self.context, 'end', None)
+        return self._prepare_dt_get(end) if end else None
     @end.setter
     def end(self, value):
         self.context.end = self._prepare_dt_set(value)
@@ -413,7 +415,7 @@ class EventBasic(object):
 
     @property
     def duration(self):
-        return self.context.end - self.context.start
+        return self.end - self.start
 
     def _prepare_dt_get(self, dt):
         # always get the date in event's timezone
@@ -437,7 +439,7 @@ class EventRecurrence(object):
 
     @property
     def recurrence(self):
-        return self.context.recurrence
+        return getattr(self.context, 'recurrence', None)
     @recurrence.setter
     def recurrence(self, value):
         self.context.recurrence = value

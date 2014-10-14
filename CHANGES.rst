@@ -4,6 +4,11 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
+- For Dexterity objects, don't fail accessing start and end if those are not
+  available on the context, e.g. after event related behaviors were added to
+  the object. Same for the recurrence attribute. Fixes #160.
+  [thet]
+
 - Fix German translation for Monat.
   [thet]
 
