@@ -4,6 +4,10 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
+- Fix enddate delta calculation and validation.
+  Fixes #130, Closes #166
+  [petschki]
+
 - For Dexterity objects, don't fail accessing start and end if those are not
   available on the context, e.g. after event related behaviors were added to
   the object. Same for the recurrence attribute. Fixes #160.
@@ -11,9 +15,6 @@ Changelog
 
 - Fix German translation for Monat.
   [thet]
-- Fix enddate delta calculation and validation.
-  Ref: https://github.com/plone/plone.app.event/issues/130
-  [petschki]
 
 1.1.2 (2014-08-26)
 ------------------
