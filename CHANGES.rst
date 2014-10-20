@@ -16,6 +16,10 @@ Changelog
 - Fix German translation for Monat.
   [thet]
 
+- Added locales for Catalan and Spanish
+  [sneridagh]
+
+
 1.1.2 (2014-08-26)
 ------------------
 
