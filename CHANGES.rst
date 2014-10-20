@@ -7,6 +7,13 @@ Changelog
 - Fix German translation for Monat.
   [thet]
 
+- Integration of the new markup update and CSS for both Plone and Barceloneta
+  theme. This is the work done in the GSOC Barceloneta theme project.
+  [albertcasado, sneridagh]
+
+- Update markup for portlets and change dt dl for ul li tags.
+  [albertcasado]
+
 
 2.0a4 (2014-07-22)
 ------------------
