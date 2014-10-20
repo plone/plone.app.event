@@ -1,0 +1,669 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2014-04-11 09:40+0000\n"
+"PO-Revision-Date: 2014-10-20 16:09+0100\n"
+"Last-Translator: Corina Riba Santos <corina.riba@upcnet.es>\n"
+"Language-Team: LANGUAGE <plone.team@upcnet.es>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: ca\n"
+"Language-Name: Catalan\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone.app.event\n"
+
+#. Default: "Events in next 7 days."
+#: plone/app/event/browser/event_listing.py:240
+msgid "7days_events"
+msgstr "Esdeveniments dels propers 7 dies"
+
+#: plone/app/event/portlets/portlet_calendar.py:217
+msgid "Add Calendar Portlet"
+msgstr "Afegeix portlets de Calendari"
+
+#: plone/app/event/portlets/portlet_events.py:130
+msgid "Add Events Portlet"
+msgstr "Afegeix un portlet d'esdeveniment"
+
+#: plone/app/event/browser/event_summary.pt:40
+msgid "All dates"
+msgstr "Totes les dates"
+
+#: plone/app/event/interfaces.py:36
+msgid "Available timezones"
+msgstr "Zones horaries disponibles"
+
+#: plone/app/event/portlets/portlet_calendar.py:59
+msgid "Calendar"
+msgstr "Calendari"
+
+#: plone/app/event/browser/controlpanel.pt:33
+msgid "Date/Time based on the current event settings:"
+msgstr "Data/Hora basat en la configuració dels esdeveniments actuals:"
+
+#: plone/app/event/portlets/portlet_calendar.py:229
+msgid "Edit Calendar Portlet"
+msgstr "Edita el portlet de Calendari"
+
+#: plone/app/event/portlets/portlet_events.py:143
+msgid "Edit Events Portlet"
+msgstr "Edita el portlet d'esdeveniments"
+
+#: plone/app/event/profiles/default/controlpanel.xml
+msgid "Event Settings"
+msgstr "Configuració de l'esdeveniment"
+
+#: plone/app/event/portlets/portlet_events.py:71
+msgid "Events"
+msgstr "Esdeveniments"
+
+#: plone/app/event/portlets/portlet_events.py:26
+msgid "How many items to list."
+msgstr "Quants elements llistar."
+
+#: plone/app/event/portlets/portlet_calendar.py:33
+#: plone/app/event/portlets/portlet_events.py:33
+msgid "Items in which workflow state to show."
+msgstr "Elements en els quals mostrar l'estat del circuit."
+
+#: plone/app/event/portlets/portlet_events.py:25
+msgid "Number of items to display"
+msgstr "Nombre d'elements a mostrar"
+
+#: plone/app/event/interfaces.py:25
+msgid "Portal default timezone"
+msgstr "Zona Horaria per defecte del lloc"
+
+#: plone/app/event/portlets/portlet_calendar.py:218
+msgid "This portlet displays events in a calendar."
+msgstr "Aquest portlet mostra els esdeveniments del calendari"
+
+#: plone/app/event/portlets/portlet_events.py:131
+msgid "This portlet lists upcoming Events."
+msgstr "Aquest portlet llista els propers esdeveniments."
+
+#: plone/app/event/portlets/portlet_calendar.py:32
+#: plone/app/event/portlets/portlet_events.py:32
+msgid "Workflow state"
+msgstr "Estat del circuit"
+
+#. Default: "All events"
+#: plone/app/event/browser/event_listing.py:224
+msgid "all_events"
+msgstr "Tots els esdeveniments"
+
+#. Default: "Upcoming Events"
+#: plone/app/event/portlets/portlet_events.pt:10
+msgid "box_events"
+msgstr "Propers esdeveniments"
+
+#. Default: "Previous events…"
+#: plone/app/event/portlets/portlet_events.pt:50
+msgid "box_previous_events"
+msgstr "Esdeveniments anteriors…"
+
+#. Default: "Upcoming events…"
+#: plone/app/event/portlets/portlet_events.pt:57
+msgid "box_upcoming_events"
+msgstr "Propers esdeveniments…"
+
+#. Default: "Attendees"
+#: plone/app/event/browser/event_summary.pt:82
+msgid "contact_attendees"
+msgstr "Assistents"
+
+#. Default: "Contact Name"
+#: plone/app/event/browser/event_listing.pt:130
+#: plone/app/event/browser/event_summary.pt:69
+msgid "contact_name"
+msgstr "Nom de contacte"
+
+#. Default: "Contact Phone"
+#: plone/app/event/browser/event_summary.pt:77
+msgid "contact_phone"
+msgstr "Telèfon de contacte"
+
+#. Default: "End date must be after start date."
+#: plone/app/event/at/content.py:575 plone/app/event/dx/behaviors.py:142
+msgid "error_end_must_be_after_start_date"
+msgstr "La data de finalització ha de ser posterior a la data d'inici."
+
+#. Default: "Invalid start or end date"
+#: plone/app/event/dx/behaviors.py:62
+msgid "error_invalid_date"
+msgstr "Data d'inici o fi incorrecta"
+
+#. Default: "End date is not valid."
+#: plone/app/event/at/content.py:565
+msgid "error_invalid_end_date"
+msgstr "La data de finalització no és vàlida."
+
+#. Default: "Start date is not valid."
+#: plone/app/event/at/content.py:550
+msgid "error_invalid_start_date"
+msgstr "La data d'inici no és vàlida."
+
+#. Default: "Event"
+#: plone/app/event/browser/event_summary.pt:15
+#, fuzzy
+msgid "event_event"
+msgstr "Quan"
+
+#. Default: "Web"
+#: plone/app/event/browser/event_summary.pt:89
+msgid "event_url"
+msgstr "URL de l'esdeveniment"
+
+#. Default: "What"
+#: plone/app/event/browser/event_summary.pt:21
+msgid "event_what"
+msgstr "Què"
+
+#. Default: "When"
+#: plone/app/event/browser/event_summary.pt:27
+msgid "event_when"
+msgstr "Quan"
+
+#. Default: "${startdate} to ${enddate}"
+#: plone/app/event/browser/formatted_date.pt:27
+msgid "event_when_differentday"
+msgstr "${startdate} a ${linebreak} ${enddate}"
+
+#: plone/app/event/browser/formatted_date.pt:20
+msgid "event_when_differentday_optional_word_between_date_and_time"
+msgstr "a"
+
+#. Default: "${date} from ${starttime} to ${endtime}"
+#: plone/app/event/browser/formatted_date.pt:71
+msgid "event_when_sameday"
+msgstr "${date} ${linebreak} de ${starttime} a ${endtime}"
+
+#. Default: "${date} from ${starttime}"
+#: plone/app/event/browser/formatted_date.pt:52
+msgid "event_when_sameday_openend"
+msgstr "${date} des de/d' ${starttime}\""
+
+#. Default: "Where"
+#: plone/app/event/browser/event_summary.pt:62
+msgid "event_where"
+msgstr "On"
+
+#. Default: "${from} until ${until}."
+#: plone/app/event/browser/event_listing.py:241
+msgid "events_from_until"
+msgstr "${from} fins el ${until}."
+
+#. Default: "Events in ${month} ${year}"
+#: plone/app/event/browser/event_listing.py:298
+msgid "events_in_month"
+msgstr "Esdeveniments de/d' ${month} ${year}"
+
+#. Default: "Events in week ${weeknumber}"
+#: plone/app/event/browser/event_listing.py:275
+msgid "events_in_week"
+msgstr "Esdeveniments en la setmana ${weeknumber}"
+
+#. Default: "Events on ${day}"
+#: plone/app/event/browser/event_listing.py:261
+msgid "events_on_day"
+msgstr "Esdeveniments en ${day}"
+
+#. Default: "Visit external website"
+#: plone/app/event/browser/event_listing.pt:118
+#: plone/app/event/browser/event_summary.pt:91
+msgid "external_website"
+msgstr "Lloc web relacionat"
+
+#. Default: "Future events"
+#: plone/app/event/browser/event_listing.py:230
+msgid "future_events"
+msgstr "Propers esdeveniments"
+
+#. Default: "Add event to calendar"
+#: plone/app/event/browser/event_summary.pt:97
+msgid "heading_add_to_calendar"
+msgstr "Afegeix un esdeveniment al calendari"
+
+#. Default: "The timezones, which should be available for the portal. Can be set for users and events"
+#: plone/app/event/interfaces.py:37
+msgid "help_available_timezones"
+msgstr ""
+"Los zones horàries disponibles per al lloc. Es poden configurar per usuari i "
+"esdeveniments"
+
+#. Default: "Search events in current folder only."
+#: plone/app/event/browser/event_listing.py:446
+msgid "help_current_folder"
+msgstr "Cerca esdeveniments només en la carpeta actual."
+
+#: plone/app/event/at/content.py:302
+msgid "help_event_announcement"
+msgstr ""
+
+#. Default: "List of attendees."
+#: plone/app/event/at/content.py:199 plone/app/event/dx/behaviors.py:235
+msgid "help_event_attendees"
+msgstr "Lista d'assistens"
+
+#. Default: "Email address to contact about this event."
+#: plone/app/event/at/content.py:236 plone/app/event/dx/behaviors.py:267
+msgid "help_event_contact_email"
+msgstr "Adreça de contacte de l'esdeveniment."
+
+#. Default: "Name of a person to contact about this event."
+#: plone/app/event/at/content.py:217 plone/app/event/dx/behaviors.py:255
+msgid "help_event_contact_name"
+msgstr "Responsable de l'esdeveniment."
+
+#. Default: "Phone number to contact about this event."
+#: plone/app/event/at/content.py:255 plone/app/event/dx/behaviors.py:279
+msgid "help_event_contact_phone"
+msgstr "Telèfon de contacte de l'esdeveniment"
+
+#. Default: "Date and Time, when the event ends."
+#: plone/app/event/at/content.py:87 plone/app/event/dx/behaviors.py:88
+msgid "help_event_end"
+msgstr "Data i hora en la que finalitza l'esdeveniment."
+
+#. Default: "Settings for the event listing view."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_event_listing_settings"
+msgstr "Configuració de la llista d'esdeveniments."
+
+#. Default: "Location of the event."
+#: plone/app/event/at/content.py:182 plone/app/event/dx/behaviors.py:219
+msgid "help_event_location"
+msgstr "Lloc de l'esdeveniment."
+
+#. Default: "This event is open ended."
+#: plone/app/event/at/content.py:124 plone/app/event/dx/behaviors.py:112
+msgid "help_event_open_end"
+msgstr "Esdeveniment sense data de fi."
+
+#. Default: "Define the event recurrence rule."
+#: plone/app/event/at/content.py:161 plone/app/event/dx/behaviors.py:189
+msgid "help_event_recurrence"
+msgstr "Defineix la regla de periodicitat de l'esdeveniment"
+
+#. Default: "Event related settings like timezone, etc."
+#: plone/app/event/browser/controlpanel.py:15
+msgid "help_event_settings"
+msgstr "Configuració de l'esdeveniment: zona horària, etc."
+
+#. Default: "Date and Time, when the event begins."
+#: plone/app/event/at/content.py:65 plone/app/event/dx/behaviors.py:76
+msgid "help_event_start"
+msgstr "Data i hora d'inici de l'esdeveniment."
+
+#. Default: "Select the Timezone, where this event happens."
+#: plone/app/event/at/content.py:144 plone/app/event/dx/behaviors.py:125
+msgid "help_event_timezone"
+msgstr "Selecciona la zona horària en la que comença l'esdeveniment."
+
+#. Default: "Web address with more info about the event. Add http:// for external links."
+#: plone/app/event/at/content.py:274 plone/app/event/dx/behaviors.py:291
+msgid "help_event_url"
+msgstr ""
+"Adreça web amb més informació sobre l'esdeveniment. Afegiu http:// si es "
+"tracta d'un enllaç extern."
+
+#. Default: "Event lasts whole day."
+#: plone/app/event/at/content.py:107 plone/app/event/dx/behaviors.py:100
+msgid "help_event_whole_day"
+msgstr "Esdeveniments de dia complet"
+
+#. Default: "First day in the Week."
+#: plone/app/event/interfaces.py:47
+msgid "help_first_weekday"
+msgstr "Primer dia de la setmana"
+
+#. Default: "Import Events from icalendar files."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import"
+msgstr "Importa esdeveniments des d'un arxiu iCalendar"
+
+#. Default: "Click to disable the icalendar import feature on this context."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import_disable"
+msgstr "Click per deshabilitar l'importació des d'un arxiu iCalendar."
+
+#. Default: "Click to enable the icalendar import feature on this context."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import_enable"
+msgstr "Click per habilitar l'importació des d'un arxiu iCalendar"
+
+#. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
+#: plone/app/event/interfaces.py:26
+msgid "help_portal_timezone"
+msgstr ""
+"La configuració de la zona horària del lloc. Els usuaris poden establir la "
+"seva pròpia zona horària, si n'hi ha definides."
+
+#. Default: "Content type of the event, which is created when importing icalendar resources."
+#: plone/app/event/ical/importer.py:232
+msgid "ical_import_event_type_desc"
+msgstr ""
+"Tipus de contingut de l'esdeveniment, que serà creat quan s'importi des d'un "
+"arxiu iCal"
+
+#. Default: "Event Type"
+#: plone/app/event/ical/importer.py:231
+msgid "ical_import_event_type_title"
+msgstr "Esdeveniment"
+
+#. Default: "Icalendar resource file, if no URL is given."
+#: plone/app/event/ical/importer.py:250
+msgid "ical_import_file_desc"
+msgstr "Font de l'iCalendar, si no es proporciona un esdeveniment."
+
+#. Default: "Icalendar File"
+#: plone/app/event/ical/importer.py:249
+msgid "ical_import_file_title"
+msgstr "Arxiu iCalendar"
+
+#. Default: "${num} events imported from ${filename}"
+#: plone/app/event/ical/importer.py:357
+msgid "ical_import_imported"
+msgstr "${num} esdeveniments importats des de/d' ${filename}"
+
+#. Default: "Please provide either a icalendar ics file or a URL to a file."
+#: plone/app/event/ical/importer.py:364
+msgid "ical_import_no_ics"
+msgstr "Si us plau, proporciona un arxiu iCalendar o un enllaç a un arxiu."
+
+#. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
+#: plone/app/event/ical/importer.py:261
+msgid "ical_import_sync_strategy_desc"
+msgstr ""
+"Defineix com sincronitzar:\n"
+"1) \"Conserva els nous\": Importa, si l'esdeveniment importat s'ha modificat "
+"desprès de l'existent.\n"
+"2) \"Conserva el meu\": Si hi ha conflicte, no facis res.\n"
+"3) \"Conserva el seu\": Si hi ha conflicte, actualitza l'esdeveniment "
+"existent amb l'importat.\n"
+"4) \"No sincronitzar\": No sincronitzis però importa els esdeveniments nous, "
+"inclós si ja existeixen\n"
+".Per cada un crea un nou sync_uid."
+
+#. Default: "Synchronization Strategy"
+#: plone/app/event/ical/importer.py:257
+msgid "ical_import_sync_strategy_title"
+msgstr "Estratègia de sincronització"
+
+#. Default: "URL to an external icalendar resource file."
+#: plone/app/event/ical/importer.py:242
+msgid "ical_import_url_desc"
+msgstr "URL del arxiu iCalendar extern."
+
+#. Default: "Icalendar URL"
+#: plone/app/event/ical/importer.py:241
+msgid "ical_import_url_title"
+msgstr "URL de l'iCalendar"
+
+#. Default: "iCal"
+#: plone/app/event/browser/event_listing.pt:48
+#: plone/app/event/browser/event_summary.pt:106
+msgid "label_add_to_ical"
+msgstr "iCal"
+
+#. Default: "Current folder"
+#: plone/app/event/browser/event_listing.py:445
+msgid "label_current_folder"
+msgstr "Carpeta actual"
+
+#. Default: "Email"
+#: plone/app/event/browser/event_listing.pt:128
+msgid "label_email"
+msgstr "Correu electrònic"
+
+#. Default: "Event body text"
+#: plone/app/event/at/content.py:298
+msgid "label_event_announcement"
+msgstr "Text de l'esdeveniment"
+
+#. Default: "Attendees"
+#: plone/app/event/at/content.py:195 plone/app/event/dx/behaviors.py:231
+msgid "label_event_attendees"
+msgstr "Assistents"
+
+#. Default: "Contact E-mail"
+#: plone/app/event/at/content.py:232 plone/app/event/dx/behaviors.py:263
+msgid "label_event_contact_email"
+msgstr "Adreça de correu de contacte"
+
+#. Default: "Contact Name"
+#: plone/app/event/at/content.py:213 plone/app/event/dx/behaviors.py:251
+msgid "label_event_contact_name"
+msgstr "Nom de contacte"
+
+#. Default: "Contact Phone"
+#: plone/app/event/at/content.py:251 plone/app/event/dx/behaviors.py:275
+msgid "label_event_contact_phone"
+msgstr "Telèfon de contacte"
+
+#. Default: "Event Ends"
+#: plone/app/event/at/content.py:83 plone/app/event/dx/behaviors.py:84
+msgid "label_event_end"
+msgstr "L'event finalitza"
+
+#. Default: "Location"
+#: plone/app/event/at/content.py:178 plone/app/event/dx/behaviors.py:215
+msgid "label_event_location"
+msgstr "Ubicació de l'event"
+
+#. Default: "Open End"
+#: plone/app/event/at/content.py:120 plone/app/event/dx/behaviors.py:108
+msgid "label_event_open_end"
+msgstr "Finalització oberta"
+
+#. Default: "Recurrence"
+#: plone/app/event/at/content.py:157 plone/app/event/dx/behaviors.py:185
+msgid "label_event_recurrence"
+msgstr "Periodicitat de l'esdeveniment"
+
+#. Default: "Event settings"
+#: plone/app/event/browser/controlpanel.py:14
+msgid "label_event_settings"
+msgstr "Configuració de l'esdeveniment"
+
+#. Default: "Event Starts"
+#: plone/app/event/at/content.py:61 plone/app/event/dx/behaviors.py:72
+msgid "label_event_start"
+msgstr "L'event comença"
+
+#. Default: "Timezone"
+#: plone/app/event/at/content.py:140 plone/app/event/dx/behaviors.py:121
+msgid "label_event_timezone"
+msgstr "Zona horària"
+
+#. Default: "Event URL"
+#: plone/app/event/at/content.py:270 plone/app/event/dx/behaviors.py:287
+msgid "label_event_url"
+msgstr "URL de l'esdeveniment"
+
+#. Default: "Whole Day"
+#: plone/app/event/at/content.py:103 plone/app/event/dx/behaviors.py:96
+msgid "label_event_whole_day"
+msgstr "Esdeveniment de tot el dia"
+
+#. Default: "First Weekday"
+#: plone/app/event/interfaces.py:46
+msgid "label_first_weekday"
+msgstr "Primera setmana"
+
+#: plone/app/event/browser/event_listing.pt:140
+msgid "label_phone"
+msgstr "Telèfon"
+
+#. Default: "Web"
+#: plone/app/event/browser/event_listing.pt:118
+msgid "label_web"
+msgstr "Web"
+
+#. Default: "Day"
+#: plone/app/event/browser/event_listing.pt:39
+msgid "mode_day_link"
+msgstr "Dia"
+
+#. Default: "Upcoming"
+#: plone/app/event/browser/event_listing.pt:27
+msgid "mode_future_link"
+msgstr "Propers"
+
+#. Default: "Month"
+#: plone/app/event/browser/event_listing.pt:33
+msgid "mode_month_link"
+msgstr "Mes"
+
+#. Default: "Past"
+#: plone/app/event/browser/event_listing.pt:30
+msgid "mode_past_link"
+msgstr "Pasat"
+
+#. Default: "Week"
+#: plone/app/event/browser/event_listing.pt:36
+msgid "mode_week_link"
+msgstr "Setmana"
+
+#. Default: "Ical import settings saved."
+#: plone/app/event/ical/importer.py:319
+msgid "msg_ical_import_settings_saved"
+msgstr "Configuració de la importació iCal desada"
+
+#. Default: "Next Day"
+#: plone/app/event/browser/event_listing.pt:71
+msgid "next_day_link"
+msgstr "Demà"
+
+#. Default: "Next Month"
+#: plone/app/event/browser/event_listing.pt:57
+msgid "next_month_link"
+msgstr "El proper mes"
+
+#. Default: "Next Week"
+#: plone/app/event/browser/event_listing.pt:64
+msgid "next_week_link"
+msgstr "Propera setmana"
+
+#. Default: "Past events"
+#: plone/app/event/browser/event_listing.py:227
+msgid "past_events"
+msgstr "Esdeveniments passats"
+
+#. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
+#: plone/app/event/portlets/portlet_calendar.py:42
+#: plone/app/event/portlets/portlet_events.py:43
+msgid "portlet_help_search_base"
+msgstr ""
+"Selecciona la carpeta on cerca els esdeveniments. Aquesta carpeta es farà "
+"servir per enllaçar en les cerques del calendari. Si no s'especifica, es "
+"cercaran a tot el lloc i la llista serà cridada des de l'arrel."
+
+#. Default: "Search base"
+#: plone/app/event/portlets/portlet_calendar.py:41
+#: plone/app/event/portlets/portlet_events.py:42
+msgid "portlet_label_search_base"
+msgstr "Cerca"
+
+#. Default: "Previous Day"
+#: plone/app/event/browser/event_listing.pt:69
+msgid "prev_day_link"
+msgstr "Ahir"
+
+#. Default: "Previous Month"
+#: plone/app/event/browser/event_listing.pt:55
+msgid "prev_month_link"
+msgstr "Mes anterior"
+
+#. Default: "Previous Week"
+#: plone/app/event/browser/event_listing.pt:62
+msgid "prev_week_link"
+msgstr "Setmana anterior"
+
+#. Default: "Event details"
+#: plone/app/event/browser/event_summary.pt:12
+msgid "summary_event_details"
+msgstr "Detalls de l'event"
+
+#. Default: "Keep mine"
+#: plone/app/event/vocabularies.py:141
+msgid "sync_keep_mine"
+msgstr "Conservar els meus"
+
+#. Default: "Keep newer"
+#: plone/app/event/vocabularies.py:140
+msgid "sync_keep_newer"
+msgstr "Conservar els més nous"
+
+#. Default: "Keep theirs"
+#: plone/app/event/vocabularies.py:142
+msgid "sync_keep_theirs"
+msgstr "Conservar els seus"
+
+#. Default: "No Syncing"
+#: plone/app/event/vocabularies.py:143
+msgid "sync_none"
+msgstr "No sincronitzar"
+
+#. Default: "This Month"
+#: plone/app/event/browser/event_listing.pt:56
+msgid "this_month_link"
+msgstr "Aquest mes"
+
+#. Default: "This Week"
+#: plone/app/event/browser/event_listing.pt:63
+msgid "this_week_link"
+msgstr "Aquesta setmana"
+
+#. Default: "Download this event in iCal format"
+#: plone/app/event/browser/event_listing.pt:43
+#: plone/app/event/browser/event_summary.pt:100
+msgid "title_add_to_ical"
+msgstr "Baixa aquest esdeveniment en format iCal"
+
+#. Default: "Event Listing Settings"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_event_listing_settings"
+msgstr "Configuració de la llista d'esdeveniments"
+
+#. Default: "Ical import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import"
+msgstr "Importació iCal"
+
+#. Default: "Disable icalendar import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import_disable"
+msgstr "No permetre impotar d'iCalendar"
+
+#. Default: "Enable icalendar import"
+#: plone/app/event/profiles/default/actions.xml
+msgid "title_ical_import_enable"
+msgstr "Permetre importar d'iCalendar"
+
+#. Default: "Today"
+#: plone/app/event/browser/event_listing.pt:70
+msgid "today_link"
+msgstr "Avui"
+
+#. Default: "Todays events"
+#: plone/app/event/browser/event_listing.py:237
+msgid "todays_events"
+msgstr "Esdeveniments d'avui"
+
+#. Default: "Todays upcoming events"
+#: plone/app/event/browser/event_listing.py:233
+msgid "todays_upcoming_events"
+msgstr "Propoers esdeveniments d'avui"
+
+#~ msgid "Go to the original Event."
+#~ msgstr "Anar a l'esdeveniment original"
+
+#~ msgid "More occurrences of this event:"
+#~ msgstr "Més aparicions d'aquest esdeveniments:"
+
+#~ msgid "This event is part of a recurring Event."
+#~ msgstr "aquest esdeveniment es part d'un esdeveniment periòdic"
