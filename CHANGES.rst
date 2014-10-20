@@ -14,6 +14,9 @@ Changelog
 - Update markup for portlets and change dt dl for ul li tags.
   [albertcasado]
 
+- Added locales for Catalan and Spanish
+  [sneridagh]
+
 
 2.0a4 (2014-07-22)
 ------------------
