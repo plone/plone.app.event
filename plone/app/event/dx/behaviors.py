@@ -667,7 +667,7 @@ class EventAccessor(object):
 
     @property
     def created(self):
-        return utc(self.context.creation_date)
+        return utc(getattr(self.context, 'creation_date', None))
 
     @property
     def duration(self):
@@ -690,7 +690,7 @@ class EventAccessor(object):
 
     @property
     def last_modified(self):
-        return utc(self.context.modification_date)
+        return utc(getattr(self.context, 'modification_date', None))
     @last_modified.setter
     def last_modified(self, value):
         tz = default_timezone(self.context, as_tzinfo=True)

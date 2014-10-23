@@ -26,8 +26,8 @@
     <tal:cond condition="python:'date' not in excludes">
       <dt i18n:translate="event_when">When</dt>
       <dd tal:define="start_tzname data/timezone;
-                      start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
-                      start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
+                      start_utcdelta python:data.start.tzinfo.utcoffset(data.start) if data.start else None;
+                      start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60 if start_utcdelta else 0;">
         <tal:date replace="structure python:view.formatted_date(context)" />
         <span class="timezone" tal:condition="start_tzname">
          (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)

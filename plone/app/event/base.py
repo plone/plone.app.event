@@ -788,8 +788,13 @@ def dates_for_display(occurrence):
         acc = IEventAccessor(occurrence)
 
     # this needs to separate date and time as ulocalized_time does
-    DT_start = DT(acc.start)
-    DT_end = DT(acc.end)
+    _start = acc.start
+    _end = acc.end
+    _whole_day = acc.whole_day
+    _open_end = acc.open_end
+
+    DT_start = DT(_start)
+    DT_end = DT(_end)
     start_date = ulocalized_time(
         DT_start, long_format=False, time_only=None, context=occurrence
     )
@@ -803,19 +808,17 @@ def dates_for_display(occurrence):
         DT_end, long_format=False, time_only=True, context=occurrence
     )
 
-    same_day = is_same_day(acc.start, acc.end)
-    same_time = is_same_time(acc.start, acc.end)
+    same_day = is_same_day(_start, _end) if _start and _end else None
+    same_time = is_same_time(_start, _end) if _start and _end else None
 
     # set time fields to None for whole day events
-    if acc.whole_day:
+    if _whole_day:
         start_time = end_time = None
-    if acc.open_end:
+    if _open_end:
         end_time = None
 
-    start_iso = acc.whole_day and acc.start.date().isoformat()\
-        or acc.start.isoformat()
-    end_iso = acc.whole_day and acc.end.date().isoformat()\
-        or acc.end.isoformat()
+    start_iso = None if not _start else _start.date().isoformat() if _whole_day else _start.isoformat()  # noqa
+    end_iso = None if not _end else _end.date().isoformat() if _whole_day else end.isoformat()  # noqa
 
     return dict(
         # Start

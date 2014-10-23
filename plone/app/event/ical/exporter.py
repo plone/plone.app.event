@@ -86,7 +86,8 @@ def construct_icalendar(context, events):
 
 
 def add_to_zones_map(tzmap, tzid, dt):
-    if tzid.lower() == 'utc' or not is_datetime(dt):
+
+    if not tzid or not is_datetime(dt) or tzid.lower() == 'utc':
         # no need to define UTC nor timezones for date objects.
         return tzmap
     null = datetime(1, 1, 1)
