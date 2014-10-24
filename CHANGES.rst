@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a5 (unreleased)
+2.0a5 (2014-10-23)
 ------------------
 
 - Fix German translation for Monat.
