@@ -188,7 +188,8 @@ class RendererTest(unittest.TestCase):
 
     def test_long_event(self):
         tz = pytz.timezone(TZNAME)
-        start = tz.localize(datetime.now())
+        actual = tz.localize(datetime.now())
+        start = tz.localize(datetime(actual.year, actual.month, 1))
         end = start + timedelta(days=2)
 
         e1 = createContentInContainer(
