@@ -4,6 +4,11 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
+- Whole day setting now only effects start end dates,
+  doesn't hide effective range time with DX anymore.
+  Fixes #167
+  [agitator]
+
 - Fix enddate delta calculation and validation.
   Fixes #130, Closes #166
   [petschki]

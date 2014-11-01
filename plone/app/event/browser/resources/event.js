@@ -133,7 +133,8 @@ if (typeof(plone) === 'undefined') {
 
         // WHOLE DAY INIT
         var jq_whole_day = a_or_b($('#formfield-form-widgets-IEventBasic-whole_day input'), $('form[name="edit_form"] input#wholeDay'));
-        var jq_datetime = $('.datetimewidget-time');
+        var jq_datetime = a_or_b($('#form-widgets-IEventBasic-start-timecomponents, #form-widgets-IEventBasic-end-timecomponents'),
+                                 $('.datetimewidget-time'));
         if (jq_whole_day.length > 0) {
             jq_whole_day.bind('change', function (e) { show_hide_widget(jq_datetime, e.target.checked, true); });
             show_hide_widget(jq_datetime, jq_whole_day.get(0).checked, false);
