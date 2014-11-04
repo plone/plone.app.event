@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
@@ -9,8 +10,9 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 
-import unittest2 as unittest
 import pytz
+import transaction
+import unittest2 as unittest
 
 TEST_TIMEZONE = 'Europe/Vienna'
 
@@ -137,3 +139,30 @@ EXDATE:20130506T000000,20140404T000000""",
              },
         ]
         collection.reindexObject()
+
+    def tearDown(self):
+        types = ['Event',
+            'Document',
+            'Folder',
+            'Collection',
+            'plone.app.event.dx.event',
+        ]
+        ids_to_remove = [
+            'future',
+            'sub',
+            'now',
+            'past',
+            'collection',
+            'past-event-recurring',
+            'tomorrow-event',
+            'long',
+            'past-recur',
+        ]
+        to_remove = []
+        all_ids = self.portal.objectIds()
+        for id_to_remove in ids_to_remove:
+            if id_to_remove in all_ids:
+                to_remove.append(id_to_remove)
+        if to_remove:
+            self.portal.manage_delObjects(ids=to_remove)
+            transaction.commit()
