@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.3 (unreleased)
+1.1.3 (2014-11-06)
 ------------------
 
 - Whole day setting now only effects start end dates,
