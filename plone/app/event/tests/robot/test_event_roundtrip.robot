@@ -103,9 +103,9 @@ I open the event listing
 
 it should be filled in the form
   Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-time  10:00 p.m.
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-time  10:00 a.m.
   Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-time  11:00 p.m.
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-time  11:00 a.m.
 
 I should see the recurrence overlay
   Page Should Contain  Recurrence
