@@ -133,13 +133,15 @@ if (plone === undefined) {
 
         // EDIT FORM
 
-        var jq_whole_day, jq_open_end, jq_end, jq_start;
+        var jq_whole_day, jq_time, jq_open_end, jq_end, jq_start;
 
         // WHOLE DAY INIT
         jq_whole_day = a_or_b($('#formfield-form-widgets-IEventBasic-whole_day input'), $('form[name="edit_form"] input#wholeDay'));
+        jq_time = a_or_b($('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper'),
+                         $('#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper'));
         if (jq_whole_day.length > 0) {
-            jq_whole_day.bind('change', function (e) { show_hide_widget('.pattern-pickadate-time-wrapper', e.target.checked, true); });
-            show_hide_widget('.pattern-pickadate-time-wrapper', jq_whole_day.get(0).checked, false);
+            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_time, e.target.checked, true); });
+            show_hide_widget(jq_time, jq_whole_day.get(0).checked, false);
         }
 
         // OPEN END INIT

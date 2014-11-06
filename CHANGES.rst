@@ -4,7 +4,8 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Whole day setting doesn't hide effective range anymore. Fixes issue #167.
+  [thet]
 
 
 2.0a5 (2014-10-23)
