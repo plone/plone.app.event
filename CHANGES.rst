@@ -4,6 +4,10 @@ Changelog
 1.2.7 (unreleased)
 ------------------
 
+
+- Whole day setting doesn't hide effective range anymore. Fixes issue #167.
+  [thet]
+
 - Change plone.app.widgets version fix to 1.4+, which is still compatible.
   Fixes #164.
   [thet]
