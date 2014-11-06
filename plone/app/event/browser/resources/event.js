@@ -129,7 +129,7 @@ if (plone === undefined) {
     }
 
 
-    $(document).ready(function () {
+    $(window).load(function () {
 
         // EDIT FORM
 
