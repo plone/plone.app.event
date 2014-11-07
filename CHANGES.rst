@@ -4,7 +4,8 @@ Changelog
 1.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix label of 'Dates' fieldset.
+  [esteele]
 
 
 1.1.3 (2014-11-06)
@@ -112,9 +113,6 @@ Changelog
 
 - Improve markup of ``event_listing.pt`` in order to not break on IE 8.
   [rafaelbco]
-
-- Fix label of 'Dates' fieldset.
-  [esteele]
 
 
 1.1b1 (2014-02-17)
