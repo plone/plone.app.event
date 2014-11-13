@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.4 (unreleased)
+1.1.4 (2014-11-13)
 ------------------
 
 - Fix label of 'Dates' fieldset.
