@@ -90,6 +90,23 @@ def construct_icalendar(context, events):
 
 
 def add_to_zones_map(tzmap, tzid, dt):
+    """Build a dictionary of timezone information from a timezone identifier
+    and a date/time object for which the timezone information should be
+    calculated.
+
+    :param tzmap: An existing dictionary of timezone information to be extended
+                  or an empty dictionary.
+    :type tzmap: dictionary
+    :param tzid: A timezone identifier.
+    :type tzid: string
+    :param dt: A datetime object.
+    :type dt: datetime
+
+    :returns: A dictionary with timezone information needed to build VTIMEZONE
+              entries.
+    :rtype: dictionary
+    """
+
     if tzid.lower() == 'utc' or not is_datetime(dt):
         # no need to define UTC nor timezones for date objects.
         return tzmap
