@@ -54,6 +54,11 @@ import pytz
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
+try:
+    from plone.multilingualbehavior.interfaces import ILanguageIndependentField
+except ImportError:
+    from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
+
 
 def first_weekday_sun0():
     return wkday_to_mon1(first_weekday())
@@ -147,6 +152,12 @@ class IEventBasic(model.Schema):
                   default=u"End date must be after start date.")
             )
 
+alsoProvides(IEventBasic['start'], ILanguageIndependentField)
+alsoProvides(IEventBasic['end'], ILanguageIndependentField)
+alsoProvides(IEventBasic['whole_day'], ILanguageIndependentField)
+alsoProvides(IEventBasic['open_end'], ILanguageIndependentField)
+alsoProvides(IEventBasic['timezone'], ILanguageIndependentField)
+
 
 @adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
 @implementer(IFieldWidget)
@@ -198,6 +209,8 @@ class IEventRecurrence(model.Schema):
         default=None
     )
 
+alsoProvides(IEventRecurrence['recurrence'], ILanguageIndependentField)
+
 
 @adapter(getSpecification(IEventRecurrence['recurrence']), IPloneFormLayer)
 @implementer(IFieldWidget)
@@ -229,6 +242,8 @@ class IEventLocation(model.Schema):
         default=None
     )
 
+alsoProvides(IEventLocation['location'], ILanguageIndependentField)
+
 
 class IEventAttendees(model.Schema):
     """ Event Attendees Schema.
@@ -248,6 +263,8 @@ class IEventAttendees(model.Schema):
         default=(),
     )
     form.widget(attendees=TextLinesFieldWidget)
+
+alsoProvides(IEventAttendees['attendees'], ILanguageIndependentField)
 
 
 class IEventContact(model.Schema):
@@ -305,6 +322,12 @@ class IEventContact(model.Schema):
         required=False,
         default=None
     )
+
+alsoProvides(IEventContact['contact_name'], ILanguageIndependentField)
+alsoProvides(IEventContact['contact_email'], ILanguageIndependentField)
+alsoProvides(IEventContact['contact_phone'], ILanguageIndependentField)
+## should the event_url be independent too?
+## maybe not to allow lang specific more info links
 
 
 class EventLocation(object):
