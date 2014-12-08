@@ -49,15 +49,23 @@ from zope.interface import invariant
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytz
-
+import pkg_resources
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
 try:
+    pkg_resources.get_distribution('plone.multilingualbehavior')
     from plone.multilingualbehavior.interfaces import ILanguageIndependentField
-except ImportError:
+    HAS_MULTILINGUAL_SUPPORT = True
+except pkg_resources.DistributionNotFound:
+    HAS_MULTILINGUAL_SUPPORT = False
+try:
+    pkg_resources.get_distribution('plone.app.multilingual')
     from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
+    HAS_MULTILINGUAL_SUPPORT = True
+except pkg_resources.DistributionNotFound:
+    HAS_MULTILINGUAL_SUPPORT = False
 
 
 def first_weekday_sun0():
@@ -151,12 +159,12 @@ class IEventBasic(model.Schema):
                 _("error_end_must_be_after_start_date",
                   default=u"End date must be after start date.")
             )
-
-alsoProvides(IEventBasic['start'], ILanguageIndependentField)
-alsoProvides(IEventBasic['end'], ILanguageIndependentField)
-alsoProvides(IEventBasic['whole_day'], ILanguageIndependentField)
-alsoProvides(IEventBasic['open_end'], ILanguageIndependentField)
-alsoProvides(IEventBasic['timezone'], ILanguageIndependentField)
+if HAS_MULTILINGUAL_SUPPORT:
+    alsoProvides(IEventBasic['start'], ILanguageIndependentField)
+    alsoProvides(IEventBasic['end'], ILanguageIndependentField)
+    alsoProvides(IEventBasic['whole_day'], ILanguageIndependentField)
+    alsoProvides(IEventBasic['open_end'], ILanguageIndependentField)
+    alsoProvides(IEventBasic['timezone'], ILanguageIndependentField)
 
 
 @adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
@@ -209,7 +217,8 @@ class IEventRecurrence(model.Schema):
         default=None
     )
 
-alsoProvides(IEventRecurrence['recurrence'], ILanguageIndependentField)
+if HAS_MULTILINGUAL_SUPPORT:
+    alsoProvides(IEventRecurrence['recurrence'], ILanguageIndependentField)
 
 
 @adapter(getSpecification(IEventRecurrence['recurrence']), IPloneFormLayer)
@@ -242,7 +251,8 @@ class IEventLocation(model.Schema):
         default=None
     )
 
-alsoProvides(IEventLocation['location'], ILanguageIndependentField)
+if HAS_MULTILINGUAL_SUPPORT:
+    alsoProvides(IEventLocation['location'], ILanguageIndependentField)
 
 
 class IEventAttendees(model.Schema):
@@ -264,7 +274,8 @@ class IEventAttendees(model.Schema):
     )
     form.widget(attendees=TextLinesFieldWidget)
 
-alsoProvides(IEventAttendees['attendees'], ILanguageIndependentField)
+if HAS_MULTILINGUAL_SUPPORT:
+    alsoProvides(IEventAttendees['attendees'], ILanguageIndependentField)
 
 
 class IEventContact(model.Schema):
@@ -323,11 +334,10 @@ class IEventContact(model.Schema):
         default=None
     )
 
-alsoProvides(IEventContact['contact_name'], ILanguageIndependentField)
-alsoProvides(IEventContact['contact_email'], ILanguageIndependentField)
-alsoProvides(IEventContact['contact_phone'], ILanguageIndependentField)
-## should the event_url be independent too?
-## maybe not to allow lang specific more info links
+if HAS_MULTILINGUAL_SUPPORT:
+    alsoProvides(IEventContact['contact_name'], ILanguageIndependentField)
+    alsoProvides(IEventContact['contact_email'], ILanguageIndependentField)
+    alsoProvides(IEventContact['contact_phone'], ILanguageIndependentField)
 
 
 class EventLocation(object):
