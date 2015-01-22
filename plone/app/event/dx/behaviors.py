@@ -1,16 +1,14 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
 from datetime import timedelta
 from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
 from plone.app.event import PloneMessageFactory as _PMF
-from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
+from plone.app.event.base import DT
 from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
@@ -31,6 +29,8 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.util import getSpecification
 from z3c.form.widget import ComputedWidgetAttribute
@@ -41,12 +41,14 @@ from zope.component import adapts
 from zope.component import provideAdapter
 from zope.event import notify
 from zope.globalrequest import getRequest
-from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
+from zope.interface import Invalid
 from zope.interface import invariant
+from zope.interface import provider
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import pytz
 import pkg_resources
@@ -77,6 +79,20 @@ class StartBeforeEnd(Invalid):
                 default=u"Invalid start or end date")
 
 
+@provider(IContextAwareDefaultFactory)
+def default_start(context):
+    """Provide default start for the form.
+    """
+    return default_start_dt(context)
+
+
+@provider(IContextAwareDefaultFactory)
+def default_end(context):
+    """Provide default end for the form.
+    """
+    return default_end_dt(context)
+
+
 class IEventBasic(model.Schema):
     """ Basic event schema.
     """
@@ -92,7 +108,8 @@ class IEventBasic(model.Schema):
             u'help_event_start',
             default=u'Date and Time, when the event begins.'
         ),
-        required=True
+        required=True,
+        defaultFactory=default_start
     )
 
     end = schema.Datetime(
@@ -104,7 +121,8 @@ class IEventBasic(model.Schema):
             u'help_event_end',
             default=u'Date and Time, when the event ends.'
         ),
-        required=True
+        required=True,
+        defaultFactory=default_end
     )
 
     whole_day = schema.Bool(
@@ -181,18 +199,6 @@ def EndDateFieldWidget(field, request):
     widget = FieldWidget(field, DatetimeWidget(request))
     widget.first_day = first_weekday_sun0
     return widget
-
-
-def default_start(data):
-    return default_start_dt(data.context)
-provideAdapter(ComputedWidgetAttribute(
-    default_start, field=IEventBasic['start']), name='default')
-
-
-def default_end(data):
-    return default_end_dt(data.context)
-provideAdapter(ComputedWidgetAttribute(
-    default_end, field=IEventBasic['end']), name='default')
 
 
 def default_tz(data):
