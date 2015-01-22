@@ -4,7 +4,8 @@ Changelog
 1.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- added support for language independent fields with plone.app.multilingual
+  [agitator]
 
 
 1.1.4 (2014-11-13)
