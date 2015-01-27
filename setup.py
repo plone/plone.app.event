@@ -55,7 +55,7 @@ setup(
         'plone.app.textfield',
         'plone.app.widgets [dexterity] >= 1.7.0',
         'plone.app.vocabularies >= 2.1.15.dev0',
-        'plone.app.z3cform',
+        'plone.app.z3cform>=1.1.0.dev0',
         'plone.autoform>=1.4',
         'plone.behavior',
         'plone.browserlayer',

@@ -15,7 +15,7 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
-from plone.app.widgets.dx import DatetimeWidget
+from plone.app.z3cform.widget import DatetimeWidget
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
