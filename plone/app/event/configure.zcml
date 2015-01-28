@@ -46,10 +46,10 @@
 
   <genericsetup:importStep
       name="plone.app.event-catalog"
-      handler="plone.app.event.setuphandlers.setup_misc"
-      title="plone.app.event misc"
-      description="catalog and first_weekday setup">
-      <depends name="plone.app.registry" />
+      handler="plone.app.event.setuphandlers.setup_catalog"
+      title="plone.app.event catalog setup"
+      description="registers indices and metadata columns for plone.app.event">
+    <depends name="plone.app.registry" />
   </genericsetup:importStep>
 
   <utility
