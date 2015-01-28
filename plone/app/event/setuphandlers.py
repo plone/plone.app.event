@@ -1,7 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
-from zope.component.hooks import getSite
 from zope.interface import implements
 
 import logging
@@ -34,8 +33,7 @@ def catalog_setup(context):
         emptying-the-indexes-td2302709.html
         https://mail.zope.org/pipermail/zope-cmf/2007-March/025664.html
     """
-    site = getSite()
-    catalog = getToolByName(site, 'portal_catalog')
+    catalog = getToolByName(context, 'portal_catalog')
     date_idxs = ['start', 'end']
     field_idxs = ['sync_uid']
     idxs = date_idxs + field_idxs
