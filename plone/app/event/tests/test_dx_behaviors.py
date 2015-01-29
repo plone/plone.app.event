@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from datetime import datetime, timedelta
 from plone.app.event import base
@@ -8,7 +7,6 @@ from plone.app.event.base import localized_now
 from plone.app.event.dx.behaviors import IEventBasic
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
-from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
@@ -221,7 +219,7 @@ class TestDXAddEdit(unittest.TestCase):
         self.assertTrue('23:59' in self.browser.contents)
 
 
-class TestDataPostprocessing(unittest.TestCase):
+class TestEventAccessor(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
@@ -230,7 +228,28 @@ class TestDataPostprocessing(unittest.TestCase):
         set_browserlayer(self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-    def test_data_postprocessing(self):
+    def test_event_accessor(self):
+        tz = pytz.timezone("Europe/Vienna")
+        e1 = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            title='event1',
+            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
+            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
+        )
+
+        # setting attributes via the accessor
+        acc = IEventAccessor(e1)
+        new_end = tz.localize(datetime(2011, 11, 13, 10, 0))
+        acc.end = new_end
+
+        # context's end should be set to new_end
+        self.assertEqual(e1.end, new_end)
+
+        # accessor's and context datetime should be the same
+        self.assertEqual(acc.end, e1.end)
+
+    def test_event_accessor_whole_day__open_end(self):
 
         at = pytz.timezone("Europe/Vienna")
 
@@ -247,25 +266,25 @@ class TestDataPostprocessing(unittest.TestCase):
             start=start,
             end=end
         )
+        acc = IEventAccessor(e1)
 
-        # See, if start isn't moved by timezone offset. Addressing issue #62
-        self.assertEqual(e1.start, start)
-        self.assertEqual(e1.end, end)
-        data_postprocessing_context(e1)
+        # check set
         self.assertEqual(e1.start, start)
         self.assertEqual(e1.end, end)
 
         # Setting open end
         e1.open_end = True
-        data_postprocessing_context(e1)
         self.assertEqual(e1.start, start)
-        self.assertEqual(e1.end, end_end)
+        self.assertEqual(e1.end, end)
+        self.assertEqual(acc.start, start)
+        self.assertEqual(acc.end, end_end)
 
         # Setting whole day
         e1.whole_day = True
-        data_postprocessing_context(e1)
-        self.assertEqual(e1.start, start_start)
-        self.assertEqual(e1.end, end_end)
+        self.assertEqual(e1.start, start)
+        self.assertEqual(e1.end, end)
+        self.assertEqual(acc.start, start_start)
+        self.assertEqual(acc.end, end_end)
 
 
 class TestDXIntegration(unittest.TestCase):
@@ -343,27 +362,6 @@ class TestDXIntegration(unittest.TestCase):
             expand=True
         )
         self.assertEqual(len(result), 4)
-
-    def test_event_accessor(self):
-        tz = pytz.timezone("Europe/Vienna")
-        e1 = createContentInContainer(
-            self.portal,
-            'plone.app.event.dx.event',
-            title='event1',
-            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
-            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
-        )
-
-        # setting attributes via the accessor
-        acc = IEventAccessor(e1)
-        new_end = tz.localize(datetime(2011, 11, 13, 10, 0))
-        acc.end = new_end
-
-        # context's end should be set to new_end
-        self.assertEqual(e1.end, new_end)
-
-        # accessor's and context datetime should be the same
-        self.assertEqual(acc.end, e1.end)
 
 
 class TestDXEventRecurrence(unittest.TestCase):

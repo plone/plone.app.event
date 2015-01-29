@@ -19,7 +19,6 @@ from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
@@ -556,8 +555,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        # data_postprocessing normalization is not needed, as we values are set
-        # correctly in the first place.
 
         tomorrow = factory(
             container=self.portal,
@@ -568,9 +565,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
-        # Normalize values and reindex, what normally the form would do
-        # (especially, end time isn't set like open_end settings requests to.
-        data_postprocessing_context(tomorrow)
         tomorrow.reindexObject()
 
         limit = get_events(self.portal, start=self.now, expand=True,
@@ -655,8 +649,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        # data_postprocessing normalization is not needed, as we values are set
-        # correctly in the first place.
 
         tomorrow = factory(
             container=self.portal,
@@ -667,9 +659,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
-        # Normalize values and reindex, what normally the form would do
-        # (especially, end time isn't set like open_end settings requests to.
-        data_postprocessing_context(tomorrow)
         tomorrow.reindexObject()
 
         self.occ = [

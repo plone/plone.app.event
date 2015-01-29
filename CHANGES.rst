@@ -4,6 +4,12 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Remove ``data_postprocessing`` logic, which was handling ``open_end`` and
+  ``whole_day`` events and was manipulating the object on form submission.
+  Instead, just adapt start/end dates on indexing and when accessing them via
+  ``IEventAccessor``.
+  [thet]
+
 - No need to return DateTime objects for the indexer.
   Products.DateRecurringIndex works with Python datetime objects.
   [thet]

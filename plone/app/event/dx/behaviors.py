@@ -285,89 +285,19 @@ alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
 
 
-def data_postprocessing(start, end, whole_day, open_end):
-    """Adjust start and end according to whole_day and open_end setting.
-    """
-
-    def _fix_dt(dt, tz):
-        """Fix datetime: Apply missing timezones, remove microseconds.
-        """
-        if dt.tzinfo is None:
-            dt = tz.localize(dt)
-
-        return dt.replace(microsecond=0)
-
-    tz_default = default_timezone(as_tzinfo=True)
-
-    tz_start = getattr(start, 'tzinfo', None) or tz_default
-    tz_end = getattr(end, 'tzinfo', None) or tz_default
-    start = _fix_dt(start, tz_start)
-    end = _fix_dt(end, tz_end)
-
-    # Adapt for whole day
-    if whole_day:
-        start = dt_start_of_day(start)
-    if open_end:
-        end = start  # Open end events end on same day
-    if open_end or whole_day:
-        end = dt_end_of_day(end)
-
-    # TODO:
-    """
-    if not obj.sync_uid:
-        # sync_uid has to be set for icalendar data exchange.
-        uid = IUUID(obj)
-        # We don't want to fail when getRequest() returns None, e.g when
-        # creating an event during test layer setup time.
-        request = getRequest() or {}
-        domain = request.get('HTTP_HOST')
-        obj.sync_uid = '%s%s' % (
-            uid,
-            domain and '@%s' % domain or ''
-        )
-    """
-
-    return start, end, whole_day, open_end
-
-
-def data_postprocessing_handler(event):
-    """Event handler called after extractData step of z3c.form to adjust form
-    data.
-    """
-    data = event.data
-
-    if not 'IEventBasic.start' in data:
-        # is not a IEventBasic form
-        return
-    if data.get('processed', False):
-        # data was already manipulated
-        return
-
-    # TODO: e.g. on open_end events, there is no IEventBasic.end data in the
-    # data. In that case, we have to add it.
-    start = data['IEventBasic.start']
-    end = data.get('IEventBasic.end') or start  # end can be missing
-    whole_day = data['IEventBasic.whole_day']
-    open_end = data['IEventBasic.open_end']
-
-    start, end, whole_day, open_end = data_postprocessing(
-        start, end, whole_day, open_end)
-
-    data['IEventBasic.start'] = start
-    if data.get('IEventBasic.end'):  # end can be missing
-        data['IEventBasic.end'] = end
-    data['IEventBasic.whole_day'] = whole_day
-    data['IEventBasic.open_end'] = open_end
-
-    data['processed'] = True
-
-
-def data_postprocessing_context(context):
-    """Convenience method to adjust data on the context.
-    """
-    context.start, context.end, context.whole_day, context.open_end =\
-        data_postprocessing(
-            context.start, context.end, context.whole_day, context.open_end)
+"""
+if not obj.sync_uid:
+    # sync_uid has to be set for icalendar data exchange.
+    uid = IUUID(obj)
+    # We don't want to fail when getRequest() returns None, e.g when
+    # creating an event during test layer setup time.
+    request = getRequest() or {}
+    domain = request.get('HTTP_HOST')
+    obj.sync_uid = '%s%s' % (
+        uid,
+        domain and '@%s' % domain or ''
+    )
+"""
 
 
 ## Attribute indexer
@@ -375,13 +305,23 @@ def data_postprocessing_context(context):
 # Start indexer
 @indexer(IDXEvent)
 def start_indexer(obj):
-    return IEventBasic(obj).start
+    acc = IEventBasic(obj)
+    start = acc.start
+    if acc.whole_day:
+        start = dt_start_of_day(start)
+    return start
 
 
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
-    return IEventBasic(obj).end
+    acc = IEventBasic(obj)
+    end = acc.end
+    if acc.open_end:
+        end = acc.start  # Open end events end on same day
+    if acc.open_end or acc.whole_day:
+        end = dt_end_of_day(end)
+    return end
 
 
 # Location indexer
@@ -496,16 +436,40 @@ class EventAccessor(object):
         return self.end - self.start
 
     @property
+    def start(self):
+        start = IEventBasic(self.context).start
+        if self.whole_day:
+            start = dt_start_of_day(start)
+        return start
+
+    @start.setter
+    def start(self, value):
+        return setattr(self, 'start', value)
+
+    @property
+    def end(self):
+        end = IEventBasic(self.context).end
+        if self.open_end:
+            end = IEventBasic(self.context).start
+        if self.open_end or self.whole_day:
+            end = dt_end_of_day(end)
+        return end
+
+    @end.setter
+    def end(self, value):
+        return setattr(self, 'end', value)
+
+    @property
     def timezone(self):
         """Returns the timezone name for the event. If the start timezone
         differs from the end timezone, it returns a tuple with
         (START_TIMEZONENAME, END_TIMEZONENAME).
         """
         tz_start = tz_end = None
-        tz = getattr(self.start, 'tzinfo', None)
+        tz = getattr(IEventBasic(self.context).start, 'tzinfo', None)
         if tz:
             tz_start = tz.zone
-        tz = getattr(self.end, 'tzinfo', None)
+        tz = getattr(IEventBasic(self.context).end, 'tzinfo', None)
         if tz:
             tz_end = tz.zone
         return tz_start if tz_start == tz_end else (tz_start, tz_end)

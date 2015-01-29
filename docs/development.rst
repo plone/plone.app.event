@@ -136,35 +136,11 @@ tzinfo object directly on the datetime object like `datetime(2010, 10, 10, 12,
 your timezone!
 
 
-2) If you set `whole_day` or `open_end`, wether set the start and end times
-accordingly or use the provided `data_postprocessing` or
-`data_postprocessing_context` conveininence functions.
-
-Setting a `whole_day` event::
-
-    event.start = tz.localize(datetime(2010, 10, 10, 0, 0, 0))
-    event.end = tz.localize(datetime(2010, 10, 10, 23, 59, 59))
-    event.whole_day = True
-
-Setting a `open_end` event::
-
-    event.start = tz.localize(datetime(2010, 10, 10, 12, 12))
-    event.end = tz.localize(datetime(2010, 10, 10, 23, 59, 59))
-    event.open_day = True
-
-Using `data_postprocessing`::
-
-    event.start, event.end, event.whole_day, event.open_end =\
-        data_postprocessing(
-            event.start, event.end, event.whole_day, event.open_end)
-
-Using `data_postprocessing_context`::
-
-    data_postprocessing_context(context)
-
-
-If you set the values through a z3c.form, an event handler listening to
-`z3c.form.events.DataExtractedEvent` will take care of this.
+2) Since plone.app.event 2.0b1, there is no need to call the
+``data_postprocessing`` function to manipulate the object accordingly to the
+value of the ``whole_day`` or ``end_date`` attributes. The start and end dates
+are only converted to the beginning respectively to the end of the day for
+indexing and when accessing the dates via the IEventAccessor.
 
 
 Accessing event objects via an unified accessor object
