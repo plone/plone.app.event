@@ -236,7 +236,7 @@ class IIcalendarImportSettings(Interface):
             'ical_import_event_type_desc',
             default=u"Content type of the event, which is created when "
                     u"importing icalendar resources."),
-        vocabulary='plone.app.event.EventTypes',
+        vocabulary='plone.app.vocabularies.ReallyUserFriendlyTypes',
         required=True
     )
 

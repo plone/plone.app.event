@@ -10,6 +10,12 @@ Changelog
   ``IEventAccessor``.
   [thet]
 
+- Remove the ``plone.app.event.EventTypes`` vocabulary, which relied on
+  temporaily creating types. It's used for importing ical files. It should be
+  possible to figure out, which types might suitable for creating events from
+  ical VEVENT entries.
+  [thet]
+
 - No need to return DateTime objects for the indexer.
   Products.DateRecurringIndex works with Python datetime objects.
   [thet]

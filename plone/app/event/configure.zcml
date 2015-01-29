@@ -23,8 +23,12 @@
   <include package=".portlets" />
   <include package=".ical" />
   <include file="recurrence.zcml" />
-  <include file="vocabularies.zcml" />
   <include package=".bbb" zcml:condition="not-have plone-5" />
+
+  <utility
+      component=".vocabularies.SynchronizationStrategies"
+      name="plone.app.event.SynchronizationStrategies"
+      />
 
   <genericsetup:registerProfile
       name="default"
