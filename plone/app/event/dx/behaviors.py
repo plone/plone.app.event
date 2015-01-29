@@ -305,23 +305,13 @@ if not obj.sync_uid:
 # Start indexer
 @indexer(IDXEvent)
 def start_indexer(obj):
-    acc = IEventBasic(obj)
-    start = acc.start
-    if acc.whole_day:
-        start = dt_start_of_day(start)
-    return start
+    return IEventAccessor(obj).start
 
 
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
-    acc = IEventBasic(obj)
-    end = acc.end
-    if acc.open_end:
-        end = acc.start  # Open end events end on same day
-    if acc.open_end or acc.whole_day:
-        end = dt_end_of_day(end)
-    return end
+    return IEventAccessor(obj).end
 
 
 # Location indexer
