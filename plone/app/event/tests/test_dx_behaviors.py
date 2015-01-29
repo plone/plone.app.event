@@ -295,12 +295,14 @@ class TestDXIntegration(unittest.TestCase):
 
     def test_start_end_dates_indexed(self):
         tz = pytz.timezone("Europe/Vienna")
+        start = tz.localize(datetime(2011, 11, 11, 11, 0))
+        end = tz.localize(datetime(2011, 11, 11, 12, 0))
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
             title='event1',
-            start=tz.localize(datetime(2011, 11, 11, 11, 0)),
-            end=tz.localize(datetime(2011, 11, 11, 12, 0)),
+            start=start,
+            end=end
         )
 
         result = self.portal.portal_catalog(
@@ -308,15 +310,9 @@ class TestDXIntegration(unittest.TestCase):
         )
         self.assertEqual(1, len(result))
 
-        # result returns Zope's DateTime
-        self.assertEqual(
-            result[0].start,
-            DateTime('2011/11/11 11:00:00 Europe/Vienna')
-        )
-        self.assertEqual(
-            result[0].end,
-            DateTime('2011/11/11 12:00:00 Europe/Vienna')
-        )
+        # The start and end datetime's are indexed as Python datetimes
+        self.assertEqual(result[0].start, start)
+        self.assertEqual(result[0].end, end)
 
     def test_recurrence_indexing(self):
         tz = pytz.timezone("Europe/Vienna")

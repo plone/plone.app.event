@@ -375,19 +375,13 @@ def data_postprocessing_context(context):
 # Start indexer
 @indexer(IDXEvent)
 def start_indexer(obj):
-    event = IEventBasic(obj)
-    if event.start is None:
-        return None
-    return DT(event.start)
+    return IEventBasic(obj).start
 
 
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
-    event = IEventBasic(obj)
-    if event.end is None:
-        return None
-    return DT(event.end)
+    return IEventBasic(obj).end
 
 
 # Location indexer

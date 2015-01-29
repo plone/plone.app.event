@@ -4,6 +4,10 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- No need to return DateTime objects for the indexer.
+  Products.DateRecurringIndex works with Python datetime objects.
+  [thet]
+
 - Whole day setting doesn't hide effective range anymore. Fixes issue #167.
   [thet]
 
