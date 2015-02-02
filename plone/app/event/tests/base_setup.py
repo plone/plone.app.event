@@ -44,7 +44,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
     def make_dates(self):
         tz = pytz.timezone(TEST_TIMEZONE)
         now = self.now = patched_now()
-        tomorrow = self.tomorrow = tz.normalize(now + timedelta(days=1))
+        self.tomorrow = tz.normalize(now + timedelta(days=1))
         past = self.past = tz.normalize(now - timedelta(days=10))
         future = self.future = tz.normalize(now + timedelta(days=10))
         far = self.far = tz.normalize(now + timedelta(days=30))
@@ -52,6 +52,23 @@ class AbstractSampleDataEvents(unittest.TestCase):
         return (now, past, future, far, duration)
 
     def setUp(self):
+        """Construct sample contents.
+
+        These are all events:
+
+        'Long Event: 2013-04-25T10:00:00+02:00 - 2013-06-04T10:00:00+02:00'
+
+        'Past Event: 2013-04-25T00:00:00+02:00 - 2013-04-25T23:59:59+02:00'
+        'Past Event: 2013-04-26T00:00:00+02:00 - 2013-04-26T23:59:59+02:00'
+        'Past Event: 2013-04-27T00:00:00+02:00 - 2013-04-27T23:59:59+02:00'
+
+        'Now Event: 2013-05-05T10:00:00+02:00 - 2013-05-05T11:00:00+02:00'
+        'Now Event: 2013-05-07T10:00:00+02:00 - 2013-05-07T11:00:00+02:00'
+        'Now Event: 2013-05-09T10:00:00+02:00 - 2013-05-09T11:00:00+02:00'
+
+        'Future Event: 2013-05-15T10:00:00+02:00 - 2013-05-15T11:00:00+02:00'
+
+        """
         self.portal = self.layer['portal']
         self.app = self.layer['app']
         self.request = self.layer['request']

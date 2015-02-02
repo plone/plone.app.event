@@ -104,7 +104,7 @@ class TestBaseModule(unittest.TestCase):
             DateTime('2011/11/11 11:00:00 Europe/Vienna')
         )
 
-        ## TEST WITH/WITHOUT MICROSECONDS
+        # TEST WITH/WITHOUT MICROSECONDS
 
         # From Python datetime
 
@@ -604,7 +604,9 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             start=date(2013, 5, 1),
             end=date(2013, 5, 31)
         )
-        self.assertEqual(_num_events(cal.values()), 34)
+        self.assertEqual(_num_events(cal.values()), 35)
+        # First day must also be set in the calendar
+        self.assertTrue('2013-05-01' in cal.keys())
 
         # invalid start
         def _invalid_start():
@@ -687,7 +689,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                  x.end.strftime('%Y-%m-%d %H:%M:%S'))
                 for x in seq]
 
-    ### expand=True: events
+    # expand=True: events
 
     def test_expand_all(self):
         # all occurrences, sorted by start
@@ -719,7 +721,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         expect = self.occ[1:2] + self.occ[6:8]  # includes ongoing long event
         self.assertEqual(res, expect, self.diff(res, expect))
 
-    ### expand=False: events
+    # expand=False: events
 
     def test_noexpand_all(self):
         # all events

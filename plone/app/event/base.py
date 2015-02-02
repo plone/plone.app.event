@@ -372,8 +372,8 @@ def construct_calendar(events, start=None, end=None):
             # avoid long loops
             if start and end_date < start:
                 break  # if the date is completly outside the range
-            if start and next_start_date <= start:
-                continue  # if start is outside but end reaches into range
+            if start and next_start_date < start:
+                continue  # if start_date is outside but end reaches into range
             if end and next_start_date > end:
                 break  # if date is outside range
 

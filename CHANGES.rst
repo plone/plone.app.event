@@ -4,6 +4,10 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Fix ``construct_calendar`` in plone.app.event.base to also return events for
+  the first day in the calendar month.
+  [thet]
+
 - Remove ``data_postprocessing`` logic, which was handling ``open_end`` and
   ``whole_day`` events and was manipulating the object on form submission.
   Instead, just adapt start/end dates on indexing and when accessing them via
