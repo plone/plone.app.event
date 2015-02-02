@@ -39,13 +39,6 @@
         />
 
     <adapter
-        for="plone.app.collection.interfaces.ICollection"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_collection"
-        zcml:condition="installed plone.app.collection"
-        />
-
-    <adapter
         for="plone.app.contenttypes.interfaces.ICollection"
         provides="plone.event.interfaces.IICalendar"
         factory=".exporter.calendar_from_collection"
@@ -82,15 +75,6 @@
         name="ics_view"
         class=".exporter.EventsICal"
         permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
-
-    <browser:page
-        for="plone.app.collection.interfaces.ICollection"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        zcml:condition="installed plone.app.collection"
         layer="..interfaces.IBrowserLayer"
         />
 

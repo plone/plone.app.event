@@ -136,8 +136,7 @@ EXDATE:20130506T000000,20140404T000000""",
         workflow.doActionFor(self.long_event, 'publish')
         self.long_event.reindexObject()
 
-        # For AT based tests, this is a plone.app.collection ICollection type
-        # For DX based tests, it's a plone.app.contenttypes ICollection type
+        # plone.app.contenttypes ICollection type
         self.portal.invokeFactory('Collection', 'collection', title=u'Col')
         collection = self.portal.collection
         collection.sort_on = u'start'

@@ -31,13 +31,9 @@ from zope.interface import Interface
 from zope.interface import implements
 
 try:
-    from plone.app.collection.interfaces import ICollection
+    from plone.app.contenttypes.interfaces import ICollection
 except ImportError:
     ICollection = None
-try:
-    from Products.ATContentTypes.interfaces import IATTopic
-except ImportError:
-    IATTopic = None
 
 
 class EventListing(BrowserView):
@@ -90,11 +86,6 @@ class EventListing(BrowserView):
         return ICollection and ICollection.providedBy(ctx) or False
 
     @property
-    def is_topic(self):
-        ctx = self.default_context
-        return IATTopic and IATTopic.providedBy(ctx) or False
-
-    @property
     def date(self):
         dt = None
         if self._date:
@@ -143,16 +134,10 @@ class EventListing(BrowserView):
 
     def events(self, ret_mode=RET_MODE_ACCESSORS, expand=True, batch=True):
         res = []
-        is_col = self.is_collection
-        is_top = self.is_topic
-        if is_col or is_top:
+        if self.is_collection:
             ctx = self.default_context
-            if is_col:
-                res = ctx.results(batch=False, sort_on='start', brains=True)
-                query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
-            else:
-                res = ctx.queryCatalog(batch=False, full_objects=False)
-                query = ctx.buildQuery()
+            res = ctx.results(batch=False, sort_on='start', brains=True)
+            query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
             if expand:
                 # get start and end values from the query to ensure limited
                 # listing for occurrences
@@ -399,7 +384,7 @@ class EventListing(BrowserView):
     # COLLECTION daterange start/end determination
     def _expand_events_start_end(self, start, end):
         # make sane start and end values for expand_events from
-        # Collection/Topic start/end criterions.
+        # Collection start/end criterions.
         # if end/min is given, it overrides start/min settings to make sure,
         # ongoing events are shown in the listing!
         # XXX: This actually fits most needs, but not all. Maybe someone

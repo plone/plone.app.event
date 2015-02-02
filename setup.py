@@ -91,7 +91,6 @@ setup(
         'dexterity': [],  # BBB, remove with next version
         'test': [
             'mock',
-            'plone.app.collection',
             'plone.app.contenttypes >= 1.2a3',
             'plone.app.robotframework',
             'plone.app.testing [robot]',

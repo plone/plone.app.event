@@ -20,7 +20,7 @@
 
   <div class="event_listing">
     <header>
-      <nav tal:define="show_filter python:not (view.is_collection or view.is_topic)">
+      <nav tal:define="show_filter python:not view.is_collection">
         <ul class="mode_selector">
           <tal:cond condition="show_filter">
           <li class="" tal:attributes="class python:mode=='future' and 'selected' or ''">

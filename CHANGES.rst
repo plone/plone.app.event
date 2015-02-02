@@ -4,6 +4,10 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Remove support for ``plone.app.collection`` and ``ATTopic`` - plone.app.event
+  2.x is Dexterity only.
+  [thet]
+
 - Fix ``construct_calendar`` in plone.app.event.base to also return events for
   the first day in the calendar month.
   [thet]
