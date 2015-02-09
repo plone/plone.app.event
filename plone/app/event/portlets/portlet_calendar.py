@@ -20,6 +20,7 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 
 import calendar
+import json
 
 
 PLMF = MessageFactory('plonelocales')
@@ -226,6 +227,18 @@ class Renderer(base.Renderer):
                  'events_string': events_string,
                  'events': date_events})
         return caldata
+
+    @property
+    def nav_pattern_options(self):
+        return json.dumps({
+            'url': 'el',
+            'content': '#portletwrapper-%s' % self.hash,
+            'target': '#portletwrapper-%s' % self.hash
+        })
+
+    @property
+    def hash(self):
+        return self.__portlet_metadata__.get('hash', '')
 
 
 class AddForm(base.AddForm):

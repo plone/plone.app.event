@@ -9,12 +9,13 @@
                 year view/year;">
 
   <header class="portletHeader">
-    <a href="#" rel="nofollow" class="calendarPrevious" title="Previous month"
+    <a href="#" rel="nofollow" class="calendarPrevious pat-contentloader" title="Previous month"
         tal:define="prev_month view/prev_month;
                     prev_year view/prev_year"
         tal:attributes="href view/prev_query;
                         data-year prev_year;
-                        data-month prev_month;"
+                        data-month prev_month;
+                        data-pat-contentloader view/nav_pattern_options"
         i18n:attributes="title title_previous_month;">&laquo;</a>
 
     <span i18n:translate="" tal:omit-tag="">
@@ -26,12 +27,13 @@
           tal:omit-tag="">year</span>
     </span>
 
-    <a href="#" rel="nofollow" class="calendarNext" title="Next month"
+    <a href="#" rel="nofollow" class="calendarNext pat-contentloader" title="Next month"
          tal:define="next_month view/next_month;
                      next_year view/next_year"
          tal:attributes="href view/next_query;
                          data-year next_year;
-                         data-month next_month;"
+                         data-month next_month;
+                         data-pat-contentloader view/nav_pattern_options"
          i18n:attributes="title title_next_month;">&raquo;</a>
   </header>
 
@@ -67,6 +69,7 @@
                 tal:condition="events"
                 tal:attributes="href python:view.date_events_url(day['date_string']);
                                 title day/events_string;"
+                
                 tal:content="day/day">31</a>
 
           </td>
