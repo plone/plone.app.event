@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Some Plone 5 related js improvements
+  [vangheem]
+
 - Remove support for ``plone.app.collection`` and ``ATTopic`` - plone.app.event
   2.x is Dexterity only.
   [thet]

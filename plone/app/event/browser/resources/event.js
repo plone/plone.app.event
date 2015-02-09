@@ -1,15 +1,21 @@
 /*jslint browser: true*/
-/*global $, jQuery, plone*/
+/*global $, jQuery, plone, require*/
 
-if (plone === undefined) {
-    // Make sure, plone global exists
-    var plone = {};
+
+if(require === undefined){
+  require = function(reqs, torun){
+    'use strict';
+    return torun(window.jQuery);
+  }
 }
 
-(function ($, plone) {
 
-    plone.paevent = plone.paevent || {};
-    plone.paevent.end_start_delta = 1 / 24;  // Delta in days
+require([
+    'jquery'
+], function($){
+    'use strict';
+
+    var end_start_delta = 1 / 24;  // Delta in days
 
     function a_or_b(a, b) {
         var ret;
@@ -47,7 +53,7 @@ if (plone === undefined) {
         start_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate')));
         end_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate')));
         // delta in days
-        plone.paevent.end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
+        end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
     function updateEndDate() {
@@ -57,7 +63,7 @@ if (plone === undefined) {
 
         start_date = getDateTime(jq_start);
         new_end_date = new Date(start_date);
-        new_end_date.setMinutes(start_date.getMinutes() + plone.paevent.end_start_delta);
+        new_end_date.setMinutes(start_date.getMinutes() + end_start_delta);
 
         $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
         $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
@@ -167,4 +173,4 @@ if (plone === undefined) {
         event_listing_calendar_init($("#event_listing_calendar"));
 
     });
-}(jQuery, plone));
+});
