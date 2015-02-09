@@ -18,6 +18,7 @@ from zExceptions import NotFound
 from zope import schema
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
+from zope.component.hooks import getSite
 
 import calendar
 import json
@@ -228,17 +229,20 @@ class Renderer(base.Renderer):
                  'events': date_events})
         return caldata
 
-    @property
-    def nav_pattern_options(self):
+    def nav_pattern_options(self, year, month):
         return json.dumps({
-            'url': 'el',
-            'content': '#portletwrapper-%s' % self.hash,
-            'target': '#portletwrapper-%s' % self.hash
+            'url': '%s/@@render-portlet?portlethash=%s&year=%s&month=%s' % (
+                getSite().absolute_url(),
+                self.hash,
+                year, month),
+            'target': '#portletwrapper-%s > *' % self.hash
         })
 
     @property
     def hash(self):
-        return self.__portlet_metadata__.get('hash', '')
+        return self.request.form.get(
+            'portlethash',
+            getattr(self, '__portlet_metadata__', {}).get('hash', ''))
 
 
 class AddForm(base.AddForm):
