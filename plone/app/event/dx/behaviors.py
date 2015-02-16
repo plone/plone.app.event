@@ -15,7 +15,6 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
-from plone.app.z3cform.widget import DatetimeWidget
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -42,6 +41,12 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
+
+try:
+    # Plone 5
+    from plone.app.z3cform.widget import DatetimeWidget
+except ImportError:
+    from plone.app.widgets.dx import DatetimeWidget
 
 
 def first_weekday_sun0():

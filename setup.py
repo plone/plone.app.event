@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '2.0a5'
+version = '2.0.dev0'
 
 
 setup(
@@ -53,9 +53,8 @@ setup(
         'plone.app.querystring',
         'plone.app.registry',
         'plone.app.textfield',
-        'plone.app.widgets [dexterity] >= 1.7.0',
         'plone.app.vocabularies >= 2.1.15.dev0',
-        'plone.app.z3cform>=1.1.0.dev0',
+        'plone.app.z3cform',
         'plone.autoform>=1.4',
         'plone.behavior',
         'plone.browserlayer',
@@ -100,6 +99,12 @@ setup(
             'unittest2',
             'zExceptions',
             'zope.event',
+        ],
+        'plone43': [
+            'plone.app.widgets [dexterity] >= 1.7.0',
+        ],
+        'plone50': [  # optional, plone 5 already depends on these versions
+            'plone.app.z3cform >= 1.1.0.dev0',
         ]
     },
     entry_points="""

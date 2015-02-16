@@ -3,6 +3,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="plone.app.event">
 
+  <include package="plone.app.widgets" />
+
   <include package=".browser" />
   <include package=".portlets" />
 
