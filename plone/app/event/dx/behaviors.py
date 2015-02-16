@@ -42,10 +42,13 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 # TODO: altern., for backwards compat., we could import from plone.z3cform
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
+import pkg_resources
+
 try:
     # Plone 5
+    pkg_resources.get_distribution('plone.app.z3cform')
     from plone.app.z3cform.widget import DatetimeWidget
-except ImportError:
+except pkg_resources.DistributionNotFound:
     from plone.app.widgets.dx import DatetimeWidget
 
 
