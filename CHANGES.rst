@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 2.0a6 (2015-03-04)
 ------------------
 
