@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.0 (unreleased)
+2.0a6 (2015-03-04)
 ------------------
 
 - Some Plone 5 related js improvements
@@ -10,10 +10,6 @@ Changelog
 - Use Plone 5 imports from plone.app.z3cform and make plone.app.widgets a soft
   dependency.
   [vangheem]
-
-
-2.0.0 (unreleased)
-------------------
 
 - Remove support for ``plone.app.collection`` and ``ATTopic`` - plone.app.event
   2.x is Dexterity only.
