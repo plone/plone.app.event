@@ -4,7 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- In the event_view, use the ``#parent-fieldname-text`` wrapper for text
+  output, because of consistency.
+  [thet]
 
 
 2.0a6 (2015-03-04)

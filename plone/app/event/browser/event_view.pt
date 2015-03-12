@@ -23,7 +23,9 @@
 
     <tal:eventsummary replace="structure context/@@event_summary"/>
 
-    <tal:txt replace="structure data/text" />
+    <div id="parent-fieldname-text" tal:condition="data/text">
+      <tal:text content="structure data/text" />
+    </div>
 
   </div>
 
