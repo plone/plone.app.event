@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0 (unreleased)
-----------------
+2.0a7 (2015-03-13)
+------------------
 
 - In the event_view, use the ``#parent-fieldname-text`` wrapper for text
   output, because of consistency.
