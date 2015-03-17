@@ -4,7 +4,10 @@ Changelog
 2.0a8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix a bug in displaying the ``event_listing`` on Collections. Show the date
+  filter on Collections, if no start/end critierias are given in the
+  Collection's query.
+  [thet]
 
 
 2.0a7 (2015-03-13)

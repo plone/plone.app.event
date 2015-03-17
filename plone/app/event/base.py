@@ -114,6 +114,8 @@ def get_events(context, start=None, end=None, limit=None,
     query = {}
     query['object_provides'] = IEvent.__identifier__
 
+    query.update(start_end_query(start, end))
+
     if 'path' not in kw:
         # limit to the current navigation root, usually (not always) site
         portal = getSite()
@@ -121,15 +123,6 @@ def get_events(context, start=None, end=None, limit=None,
         query['path'] = '/'.join(navroot.getPhysicalPath())
     else:
         query['path'] = kw['path']
-
-    if start:
-        # All events from start date ongoing:
-        # The minimum end date of events is the date from which we search.
-        query['end'] = {'query': start, 'range': 'min'}
-    if end:
-        # All events until end date:
-        # The maximum start date must be the date until we search.
-        query['start'] = {'query': end, 'range': 'max'}
 
     # Sorting
     # In expand mode we sort after calculation of recurrences again. But we
@@ -406,6 +399,21 @@ def _prepare_range(context, start, end):
         end = end + timedelta(days=1)
     end = pydt(end, missing_zone=tz)
     return start, end
+
+
+def start_end_query(start, end):
+    """Make a catalog query out of start and end dates.
+    """
+    query = {}
+    if start:
+        # All events from start date ongoing:
+        # The minimum end date of events is the date from which we search.
+        query['end'] = {'query': start, 'range': 'min'}
+    if end:
+        # All events until end date:
+        # The maximum start date must be the date until we search.
+        query['start'] = {'query': end, 'range': 'max'}
+    return query
 
 
 # TIMEZONE HANDLING

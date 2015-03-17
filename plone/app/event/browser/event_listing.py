@@ -7,12 +7,14 @@ from plone.app.event import messageFactory as _
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event.base import _prepare_range
 from plone.app.event.base import date_speller
 from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
+from plone.app.event.base import start_end_query
 from plone.app.event.browser.event_view import get_location
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
@@ -68,8 +70,7 @@ class EventListing(BrowserView):
         if self.mode is None:
             self.mode = self._date and 'day' or 'future'
 
-        self.uid = None  # Used to get all occurrences from a single event.
-                         # Overrides all other settings
+        self.uid = None  # Used to get all occurrences from a single event. Overrides all other settings  # noqa
 
     @property
     def default_context(self):
@@ -84,6 +85,18 @@ class EventListing(BrowserView):
     def is_collection(self):
         ctx = self.default_context
         return ICollection and ICollection.providedBy(ctx) or False
+
+    @property
+    def show_filter(self):
+        ret = True
+        if self.is_collection:
+            ctx = self.default_context
+            query = queryparser.parseFormquery(ctx, ctx.query)
+            if 'start' in query or 'end' in query:
+                # Don't show the date filter, if a date is given in the
+                # collection's query
+                ret = False
+        return ret
 
     @property
     def date(self):
@@ -119,8 +132,8 @@ class EventListing(BrowserView):
             if self.searchable_text:
                 kw['SearchableText'] = self.searchable_text
 
-        #kw['b_start'] = self.b_start
-        #kw['b_size']  = self.b_size
+        # kw['b_start'] = self.b_start
+        # kw['b_size']  = self.b_size
 
         start, end = self._start_end
 
@@ -136,15 +149,26 @@ class EventListing(BrowserView):
         res = []
         if self.is_collection:
             ctx = self.default_context
-            res = ctx.results(batch=False, sort_on='start', brains=True)
-            query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
+            query = queryparser.parseFormquery(ctx, ctx.query)
+            custom_query = {}
+            if 'start' not in query or 'end' not in query:
+                # ... else don't show the navigation bar
+                start, end = self._start_end
+                start, end = _prepare_range(ctx, start, end)
+                custom_query = start_end_query(start, end)
+            res = ctx.results(
+                batch=False, brains=True, custom_query=custom_query
+            )
             if expand:
                 # get start and end values from the query to ensure limited
                 # listing for occurrences
-                start, end = self._expand_events_start_end(query.get('start'),
-                                                           query.get('end'))
-                res = expand_events(res, ret_mode, sort='start', start=start,
-                                    end=end)
+                start, end = self._expand_events_start_end(
+                    query.get('start') or custom_query.get('start'),
+                    query.get('end') or custom_query.get('end')
+                )
+                res = expand_events(
+                    res, ret_mode, sort='start', start=start, end=end
+                )
         else:
             res = self._get_events(ret_mode, expand=expand)
         if batch:
