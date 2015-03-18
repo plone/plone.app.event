@@ -137,7 +137,7 @@ def ical_import(container, ics_resource, event_type,
 
         contact = _get_prop('CONTACT', item)
         categories = item.get('CATEGORIES', ())
-        if hasattr(categories, '__iter__'):
+        if getattr(categories, '__iter__', False):
             categories = tuple([safe_unicode(it) for it in categories])
 
         ext_modified = utc(_get_prop('LAST-MODIFIED', item))
