@@ -36,7 +36,7 @@ def set_env_timezone(tz):
 
 
 def os_zone():
-    return 'TZ' in os.environ.keys() and os.environ['TZ'] or None
+    return os.environ['TZ'] if 'TZ' in os.environ.keys() else None
 
 
 def make_fake_response(request):

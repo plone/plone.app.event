@@ -125,11 +125,11 @@ def add_to_zones_map(tzmap, tzid, dt):
     #     way we get the maximum transition time which is smaller than the
     #     given datetime.
     transition = max(transitions,
-                     key=lambda item: item <= dtzl and item or null)
+                     key=lambda item: item if item <= dtzl else null)
 
     # get previous transition to calculate tzoffsetfrom
     idx = transitions.index(transition)
-    prev_idx = idx > 0 and idx - 1 or idx
+    prev_idx = idx - 1 if idx > 0 else idx
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):

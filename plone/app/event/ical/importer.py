@@ -61,12 +61,12 @@ def ical_import(container, ics_resource, event_type,
 
         TODO: component property parameters like TZID are not used here.
         """
-        val = prop in ical and ical[prop] or []
+        val = ical[prop] if prop in ical else []
         if not isinstance(val, list):
             val = [val]
         #ret = ''
         #for item in val:
-        #    ret = ret and '%s\n' % ret or ret  # insert linebreak
+        #    ret = '%s\n' % ret if ret else ret  # insert linebreak
         #    ret = '%s%s:%s' % (ret, prop, item.to_ical())
         #return ret
 
@@ -75,9 +75,9 @@ def ical_import(container, ics_resource, event_type,
         # https://github.com/collective/jquery.recurrenceinput.js/issues/15
         ret = ''
         for item in val:
-            ret = ret and '%s,' % ret or ret  # insert linebreak
+            ret = '%s,' % ret if ret else ret  # insert linebreak
             ret = '%s%s' % (ret, item.to_ical())
-        return ret and '%s:%s' % (prop, ret) or None
+        return '%s:%s' % (prop, ret) if ret else None
 
     count = 0
     for item in events:
@@ -126,7 +126,7 @@ def ical_import(container, ics_resource, event_type,
         url = _get_prop('URL', item)
 
         rrule = _get_prop('RRULE', item)
-        rrule = rrule and 'RRULE:%s' % rrule.to_ical() or ''
+        rrule = 'RRULE:%s' % rrule.to_ical() if rrule else ''
         rdates = _from_list(item, 'RDATE')
         exdates = _from_list(item, 'EXDATE')
         rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])

@@ -57,10 +57,10 @@
                           events day/events;
                           limit python:len(events) if events is not None else 0"
               tal:attributes="class python:u'event%s%s%s%s' %
-                          ((today and ' today' or ''),
-                          (next_month and ' cal_next_month' or ''),
-                          (prev_month and ' cal_prev_month' or ''),
-                          (events and ' cal_has_events' or ''))">
+                          ((' today' if today else ''),
+                          (' cal_next_month' if next_month else ''),
+                          (' cal_prev_month' if prev_month else ''),
+                          (' cal_has_events' if events else ''))">
             <tal:comment tal:condition="nothing">Add span or a to style td children and not td</tal:comment>
             <span
                 tal:condition="not:events"

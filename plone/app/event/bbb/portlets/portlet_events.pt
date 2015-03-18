@@ -21,7 +21,7 @@
     <tal:events repeat="item view/events">
     <dd class="portletItem"
         tal:define="oddrow repeat/item/odd"
-        tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
+        tal:attributes="class python:'portletItem oddrow' if oddrow else 'portletItem even'">
         <a href="#" class="tile"
             tal:attributes="href item/url;
                             title item/description">

@@ -932,7 +932,7 @@ class AnnotationAdapter(object):
             self._data[name] = value
 
     def __getattr__(self, name):
-        return self._data and self._data.get(name, None) or None
+        return self._data.get(name, None) if self._data else None
 
 
 def find_context(context, viewname=None, iface=None,

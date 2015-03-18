@@ -211,9 +211,9 @@ class Renderer(base.Renderer):
                     events_string += base % (
                         accessor.url,
                         accessor.title,
-                        not whole_day and u' %s' % time or u'',
-                        not whole_day and location and u', ' or u'',
-                        location and u' %s' % location or u'')
+                        u' %s' % time if not whole_day else u'',
+                        u', ' if not whole_day and location else u'',
+                        u' %s' % location if location else u'')
 
             caldata[-1].append(
                 {'date': dat,

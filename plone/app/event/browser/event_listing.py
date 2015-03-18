@@ -48,19 +48,18 @@ class EventListing(BrowserView):
 
         # Request parameter
         req = self.request.form
-        self.b_start = 'b_start' in req and int(req['b_start']) or 0
-        self.b_size = 'b_size' in req and int(req['b_size']) or 10
-        self.orphan = 'orphan' in req and int(req['orphan']) or 1
-        self.mode = 'mode' in req and req['mode'] or None
-        self._date = 'date' in req and req['date'] or None
-        self.tags = 'tags' in req and req['tags'] or None
-        self.searchable_text = 'SearchableText' in req and\
-            req['SearchableText'] or None
-        self.path = 'path' in req and req['path'] or None
+        self.b_start = int(req['b_start']) if 'b_start' in req else 0
+        self.b_size  = int(req['b_size'])  if 'b_size'  in req else 10
+        self.orphan  = int(req['orphan'])  if 'orphan'  in req else 1
+        self.mode    = req['mode'] if 'mode' in req else None
+        self._date   = req['date'] if 'date' in req else None
+        self.tags    = req['tags'] if 'tags' in req else None
+        self.searchable_text = req['SearchableText'] if 'SearchableText' in req else None  # noqa
+        self.path    = req['path'] if 'path' in req else None
 
-        day = 'day' in req and int(req['day']) or None
-        month = 'month' in req and int(req['month']) or None
-        year = 'year' in req and int(req['year']) or None
+        day   = int(req['day'])   if 'day'   in req else None
+        month = int(req['month']) if 'month' in req else None
+        year  = int(req['year'])  if 'year'  in req else None
 
         if not self._date and day or month or year:
             self._date = date(year or now.year,
@@ -68,7 +67,7 @@ class EventListing(BrowserView):
                               day or now.day).isoformat()
 
         if self.mode is None:
-            self.mode = self._date and 'day' or 'future'
+            self.mode = 'day' if self._date else 'future'
 
         self.uid = None  # Used to get all occurrences from a single event. Overrides all other settings  # noqa
 
@@ -84,7 +83,7 @@ class EventListing(BrowserView):
     @property
     def is_collection(self):
         ctx = self.default_context
-        return ICollection and ICollection.providedBy(ctx) or False
+        return ICollection.providedBy(ctx) if ICollection else False
 
     @property
     def show_filter(self):
@@ -197,11 +196,13 @@ class EventListing(BrowserView):
     def ical_url(self):
         date = self.date
         mode = self.mode
-        qstr = (date or mode) and '?%s%s%s' % (
-            mode and 'mode=%s' % mode,
-            mode and date and '&' or '',
-            date and 'date=%s' % date or ''
-        ) or ''
+
+        qstr = '&'.join([
+            it for it in ['mode=%s' % mode if mode else None,
+                          'date=%s' % date if date else None]
+            if it
+        ])
+        qstr = '?%s' % qstr if qstr else ''
         return '%s/@@event_listing_ical%s' % (
             self.context.absolute_url(),
             qstr
@@ -223,8 +224,8 @@ class EventListing(BrowserView):
     @property
     def header_string(self):
         start, end = self._start_end
-        start_dict = start and date_speller(self.context, start) or None
-        end_dict = end and date_speller(self.context, end) or None
+        start_dict = date_speller(self.context, start) if start else None
+        end_dict = date_speller(self.context, end) if end else None
 
         mode = self.mode
         main_msgid = None
@@ -314,15 +315,15 @@ class EventListing(BrowserView):
             )
 
         trans = self.context.translate
-        return {'main': main_msgid and trans(main_msgid) or '',
-                'sub': sub_msgid and trans(sub_msgid) or ''}
+        return {'main': trans(main_msgid) if main_msgid else '',
+                'sub': trans(sub_msgid) if sub_msgid else ''}
 
     # MODE URLs
     def _date_nav_url(self, mode, datestr=''):
         return '%s?mode=%s%s' % (
             self.request.getURL(),
             mode,
-            datestr and '&date=%s' % datestr or ''
+            '&date=%s' % datestr if datestr else ''
         )
 
     @property

@@ -303,7 +303,7 @@ if not obj.sync_uid:
     domain = request.get('HTTP_HOST')
     obj.sync_uid = '%s%s' % (
         uid,
-        domain and '@%s' % domain or ''
+        '@%s' % domain if domain else ''
     )
 """
 
