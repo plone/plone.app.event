@@ -4,7 +4,6 @@ from calendar import monthrange
 from datetime import date
 from datetime import timedelta
 from plone.app.event import messageFactory as _
-from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import _prepare_range
@@ -21,16 +20,8 @@ from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
-from plone.z3cform.layout import wrap_form
-from z3c.form import button
-from z3c.form import field
-from z3c.form import form
-from zope import schema
-from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.interface import Interface
-from zope.interface import implements
 
 try:
     from plone.app.contenttypes.interfaces import ICollection
@@ -44,7 +35,6 @@ class EventListing(BrowserView):
         super(EventListing, self).__init__(context, request)
 
         self.now = now = localized_now(context)
-        self.settings = IEventListingSettings(self.context)
 
         # Request parameter
         req = self.request.form
@@ -122,7 +112,8 @@ class EventListing(BrowserView):
         else:
             if self.path:
                 kw['path'] = self.path
-            elif self.settings.current_folder_only:
+            else:
+                # Search current and subsequent folders
                 kw['path'] = '/'.join(context.getPhysicalPath())
 
             if self.tags:
@@ -207,6 +198,33 @@ class EventListing(BrowserView):
             self.context.absolute_url(),
             qstr
         )
+
+    # COLLECTION daterange start/end determination
+    def _expand_events_start_end(self, start, end):
+        # make sane start and end values for expand_events from
+        # Collection start/end criterions.
+        # if end/min is given, it overrides start/min settings to make sure,
+        # ongoing events are shown in the listing!
+        # XXX: This actually fits most needs, but not all. Maybe someone
+        # wants to come up with some edgecases!
+        se = dict(start=None, end=None)
+        if start:
+            q = start.get('query')
+            r = start.get('range')
+            if r == "min":
+                se["start"] = q
+            elif r == "max":
+                se["end"] = q
+            elif r in ("minmax", "min:max"):
+                list(q).sort()
+                se["start"] = q[0]
+                se["end"] = q[1]
+        if end:
+            q = end.get('query')
+            r = end.get('range')
+            if r == "min":
+                se["start"] = q
+        return se["start"], se["end"]
 
     def get_location(self, occ):
         return get_location(occ)
@@ -406,33 +424,6 @@ class EventListing(BrowserView):
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
 
-    # COLLECTION daterange start/end determination
-    def _expand_events_start_end(self, start, end):
-        # make sane start and end values for expand_events from
-        # Collection start/end criterions.
-        # if end/min is given, it overrides start/min settings to make sure,
-        # ongoing events are shown in the listing!
-        # XXX: This actually fits most needs, but not all. Maybe someone
-        # wants to come up with some edgecases!
-        se = dict(start=None, end=None)
-        if start:
-            q = start.get('query')
-            r = start.get('range')
-            if r == "min":
-                se["start"] = q
-            elif r == "max":
-                se["end"] = q
-            elif r in ("minmax", "min:max"):
-                list(q).sort()
-                se["start"] = q[0]
-                se["end"] = q[1]
-        if end:
-            q = end.get('query')
-            r = end.get('range')
-            if r == "min":
-                se["start"] = q
-        return se["start"], se["end"]
-
 
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):
@@ -447,51 +438,3 @@ class EventEventListing(EventListing):
     def __init__(self, context, request):
         super(EventEventListing, self).__init__(context, request)
         self.uid = IUUID(self.context)
-
-
-class IEventListingSettings(Interface):
-
-    current_folder_only = schema.Bool(
-        title=_('label_current_folder', default=u'Current folder'),
-        description=_('help_current_folder',
-                      default=u'Search events in current folder only.'),
-        default=False
-    )
-
-
-class EventListingSettings(AnnotationAdapter):
-    """Annotation Adapter for IEventListingSettings
-    """
-    implements(IEventListingSettings)
-    adapts(Interface)
-    ANNOTATION_KEY = "plone.app.event-event_listing-settings"
-
-
-class EventListingSettingsForm(form.Form):
-    fields = field.Fields(IEventListingSettings)
-    ignoreContext = False
-
-    def getContent(self):
-        data = {}
-        settings = IEventListingSettings(self.context)
-        data['current_folder_only'] = settings.current_folder_only
-        return data
-
-    def form_next(self):
-        self.request.response.redirect(self.context.absolute_url())
-
-    @button.buttonAndHandler(u'Save')
-    def handleSave(self, action):
-        data, errors = self.extractData()
-        if errors:
-            return False
-        settings = IEventListingSettings(self.context)
-        settings.current_folder_only = data['current_folder_only']
-        self.form_next()
-
-    @button.buttonAndHandler(u'Cancel')
-    def handleCancel(self, action):
-        self.form_next()
-
-
-EventListingSettingsFormView = wrap_form(EventListingSettingsForm)

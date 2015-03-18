@@ -76,3 +76,12 @@ def upgrade_attribute_storage(context):
         if did_work:
             notify(ObjectModifiedEvent(event))
         log.debug('Handled event at {0}'.format(event.absolute_url()))
+
+
+def remove_event_listing_settings(context):
+    portal = getSite()
+    actions = getToolByName(portal, 'portal_actions')
+    ob = getattr(actions, 'object')
+    if ob and getattr(ob, 'event_listing_settings', False):
+        actions.object.manage_delObjects(['event_listing_settings', ])
+        log.debug('Removed event_listing_settings from object actions.')

@@ -18,21 +18,21 @@ class TestEventsListingPortal(AbstractSampleDataEvents):
     def test_get_events_future(self):
         # Default mode is to show all events from now on.
         view = self._listing_view()
-        self.assertEqual(len(view._get_events()), 5)
+        self.assertEqual(len(view.events(batch=False)), 5)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_get_events_past(self):
         self.request.form.update({'mode': 'past'})
         view = self._listing_view()
-        self.assertEqual(len(view._get_events()), 5)
+        self.assertEqual(len(view.events(batch=False)), 5)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_get_events_all(self):
         self.request.form.update({'mode': 'all'})
         view = self._listing_view()
-        self.assertEqual(len(view._get_events()), 8)
+        self.assertEqual(len(view.events(batch=False)), 8)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)
@@ -40,7 +40,7 @@ class TestEventsListingPortal(AbstractSampleDataEvents):
         today = localized_today().isoformat()
         self.request.form.update({'mode': 'day', 'date': today})
         view = self._listing_view()
-        self.assertEqual(len(view._get_events()), 2)
+        self.assertEqual(len(view.events(batch=False)), 2)
 
     @mock.patch('plone.app.event.browser.event_listing.localized_now', new=PN)
     @mock.patch('plone.app.event.base.localized_now', new=PN)

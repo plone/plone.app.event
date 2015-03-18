@@ -11,7 +11,7 @@ from plone.app.event.dx.behaviors import default_end
 from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
-from plone.app.event.dx.upgrades.upgrades import upgrade_attribute_storage
+from plone.app.event.upgrades.upgrades import upgrade_attribute_storage
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer

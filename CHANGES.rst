@@ -4,6 +4,12 @@ Changelog
 2.0a8 (unreleased)
 ------------------
 
+- Change ``event_listing`` to search only in current context and below, not the
+  whole portal by default. Remove the setting ``current_folder_only``, which
+  was annotated to the context. Since the collection support is much better now,
+  use them for custom searches.
+  [thet]
+
 - Fix a bug in displaying the ``event_listing`` on Collections. Show the date
   filter on Collections, if no start/end critierias are given in the
   Collection's query.
