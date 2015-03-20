@@ -27,7 +27,11 @@
         </a>
         <span class="portletItemDetails">
           <tal:date replace="structure python:view.formatted_date(item)" />
-          <span tal:define="tz item/timezone" tal:condition="tz">(<tal:tzname replace="tz">TZ</tal:tzname>)</span>
+          <span class="timezone"
+              tal:define="tz item/timezone"
+              tal:condition="tz">
+            (<tal:tzname replace="tz">TZ</tal:tzname>)
+          </span>
           <span class="location"
               tal:define="location python:view.get_location(item)"
               tal:condition="location"> &mdash;
