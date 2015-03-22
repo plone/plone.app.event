@@ -34,7 +34,8 @@
                       start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                       start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;">
           <tal:date replace="structure python:view.formatted_date(context)" />
-          <span tal:condition="start_tzname">
+          <span class="timezone"
+              tal:condition="start_tzname">
             (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
           </span>
         </span>

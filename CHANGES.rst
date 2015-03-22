@@ -15,7 +15,8 @@ Changelog
   Collection's query.
   [thet]
 
-- Add a CSS class for the timezone in the events portlet.
+- Add a CSS class for the timezone in the events portlet and the
+  ``event_summary`` view.
   [mitakas]
 
 
