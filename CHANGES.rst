@@ -19,6 +19,10 @@ Changelog
   ``event_summary`` view.
   [mitakas]
 
+- In the ``event_summary`` view, change the ``event-timezone`` list-item class
+  to ``event-date``.
+  [thet]
+
 
 2.0a7 (2015-03-13)
 ------------------

@@ -28,7 +28,7 @@
     </tal:cond>
 
     <tal:cond condition="python:'date' not in excludes">
-      <li class="event-timezone">
+      <li class="event-date">
         <strong i18n:translate="event_when">When</strong>
         <span tal:define="start_tzname data/timezone;
                       start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
