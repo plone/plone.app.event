@@ -33,13 +33,12 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         view = self.portal.now.restrictedTraverse('@@event_summary')
 
         self.assertEqual(view.is_occurrence, False)
-        self.assertEqual(view.get_location, u'Vienna')
         self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 
         output = view()
 
-        #self.assertTrue('Now Event' not in output)  # Title not shown by def.
+        # self.assertTrue('Now Event' not in output)  # Title not shown by def.
         self.assertTrue('2013-05-05' in output)
         self.assertTrue('All dates' in output)
         self.assertTrue('2013-05-07' in output)
@@ -54,7 +53,6 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         view = occ.restrictedTraverse('@@event_summary')
 
         self.assertEqual(view.is_occurrence, True)
-        self.assertEqual(view.get_location, u'Vienna')
         self.assertEqual(len(view.next_occurrences), 3)
         self.assertEqual(view.num_more_occurrences, 0)
 

@@ -67,10 +67,10 @@
     </tal:cond>
 
     <tal:cond condition="python:'location' not in excludes">
-    <tal:cond define="location view/get_location" condition="location">
+    <tal:cond condition="data/location">
       <li class="event-location">
         <strong i18n:translate="event_where">Where</strong>
-        <span itemprop="location" tal:content="structure location">Location</span>
+        <span itemprop="location" tal:content="structure data/location">Location</span>
       </li>
     </tal:cond>
     </tal:cond>
