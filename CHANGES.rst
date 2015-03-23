@@ -4,6 +4,13 @@ Changelog
 2.0a8 (unreleased)
 ------------------
 
+- Remove ``get_location`` view helper method. This was used to allow external
+  addons (specifically ``collective.venue``) to override it and return a html
+  link to a location object instead. Instead of this hack, which also only
+  works for the location use case, override the necessary templates in your
+  addons. In case of doubt, simplicity outweight extensibility options.
+  [thet]
+
 - Change ``adapts`` and ``implements`` to their decorator equivalents
   ``adapter`` and ``implementer``.
   [thet]

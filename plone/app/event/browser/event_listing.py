@@ -14,7 +14,6 @@ from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import start_end_query
-from plone.app.event.browser.event_view import get_location
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.app.querystring import queryparser
@@ -225,9 +224,6 @@ class EventListing(BrowserView):
             if r == "min":
                 se["start"] = q
         return se["start"], se["end"]
-
-    def get_location(self, occ):
-        return get_location(occ)
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(

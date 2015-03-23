@@ -7,7 +7,6 @@ from plone.event.interfaces import IRecurrenceSupport
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from plone.app.event.browser.event_view import get_location
 
 
 class EventSummaryView(BrowserView):
@@ -18,10 +17,6 @@ class EventSummaryView(BrowserView):
         self.data = IEventAccessor(context)
         self.max_occurrences = 6
         self.excludes = ['title', ]
-
-    @property
-    def get_location(self):
-        return get_location(self.context)
 
     @property
     def is_occurrence(self):

@@ -37,9 +37,8 @@
                 (<tal:tzname replace="tz">TZ</tal:tzname>)
             </span>
             <span class="location"
-                tal:define="location python:view.get_location(item)"
-                tal:condition="location"> &mdash;
-                <tal:location content="structure location">Location</tal:location>
+                tal:condition="item/location"> &mdash;
+                <tal:location content="structure item/location">Location</tal:location>
             </span>
         </span>
     </dd>
