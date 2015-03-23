@@ -203,12 +203,6 @@ def ical_import(container, ics_resource, event_type,
             event.sync_uid = sync_uid
         notify(ObjectModifiedEvent(content))
 
-        # Archetypes specific code
-        if getattr(content, 'processForm', False):
-            # Will finish Archetypes content item creation process,
-            # rename-after-creation and such
-            content.processForm()
-
         # Use commits instead of savepoints to avoid "FileStorageError:
         # description too long" on large imports.
         transaction.get().commit()  # Commit before rename
