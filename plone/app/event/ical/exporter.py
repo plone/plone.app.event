@@ -14,7 +14,6 @@ from plone.event.utils import is_datetime
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from zope.interface import implementer
-from zope.interface import implements
 from zope.publisher.browser import BrowserView
 
 import icalendar
@@ -189,10 +188,10 @@ def calendar_from_collection(context):
     return construct_icalendar(context, result)
 
 
+@implementer(IICalendarEventComponent)
 class ICalendarEventComponent(object):
     """Returns an icalendar object of the event.
     """
-    implements(IICalendarEventComponent)
 
     def __init__(self, context):
         self.context = context

@@ -16,9 +16,9 @@ from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
 from zExceptions import NotFound
 from zope import schema
-from zope.i18nmessageid import MessageFactory
-from zope.interface import implements
 from zope.component.hooks import getSite
+from zope.i18nmessageid import MessageFactory
+from zope.interface import implementer
 
 import calendar
 import json
@@ -54,8 +54,8 @@ class ICalendarPortlet(IPortletDataProvider):
     )
 
 
+@implementer(ICalendarPortlet)
 class Assignment(base.Assignment):
-    implements(ICalendarPortlet)
     title = _(u'Calendar')
 
     # reduce upgrade pain

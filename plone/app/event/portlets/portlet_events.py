@@ -18,7 +18,7 @@ from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -54,8 +54,8 @@ class IEventsPortlet(IPortletDataProvider):
     )
 
 
+@implementer(IEventsPortlet)
 class Assignment(base.Assignment):
-    implements(IEventsPortlet)
 
     # reduce upgrade pain
     search_base = None

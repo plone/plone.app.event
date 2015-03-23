@@ -4,6 +4,10 @@ Changelog
 2.0a8 (unreleased)
 ------------------
 
+- Change ``adapts`` and ``implements`` to their decorator equivalents
+  ``adapter`` and ``implementer``.
+  [thet]
+
 - Change ``event_listing`` to search only in current context and below, not the
   whole portal by default. Remove the setting ``current_folder_only``, which
   was annotated to the context. Since the collection support is much better now,

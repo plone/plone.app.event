@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
-from zope.interface import implements
+from zope.interface import implementer
 
 import logging
 
@@ -9,8 +9,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@implementer(INonInstallable)
 class HiddenProfiles(object):
-    implements(INonInstallable)
 
     def getNonInstallableProfiles(self):
         """Prevents profiles, which should not be user-installable from showing

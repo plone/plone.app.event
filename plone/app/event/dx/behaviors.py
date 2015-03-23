@@ -30,11 +30,9 @@ from z3c.form.util import getSpecification
 from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import adapter
-from zope.component import adapts
 from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implementer
-from zope.interface import implements
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
@@ -363,12 +361,12 @@ def searchable_text_indexer(obj):
 
 # Object adapters
 
+@adapter(IDXEvent)
+@implementer(IEventAccessor)
 class EventAccessor(object):
     """Generic event accessor adapter implementation for Dexterity content
        objects.
     """
-    implements(IEventAccessor)
-    adapts(IDXEvent)
 
     def __init__(self, context):
         object.__setattr__(self, 'context', context)

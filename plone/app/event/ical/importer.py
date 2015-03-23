@@ -17,12 +17,12 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form import form, field
 from zope import schema
-from zope.component import adapts
+from zope.component import adapter
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.interface import Interface
 from zope.interface import alsoProvides, noLongerProvides
-from zope.interface import implements
+from zope.interface import implementer
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import datetime
@@ -277,11 +277,11 @@ class IIcalendarImportSettings(Interface):
     )
 
 
+@adapter(Interface)
+@implementer(IIcalendarImportSettings)
 class IcalendarImportSettings(AnnotationAdapter):
     """Annotation Adapter for IIcalendarImportSettings.
     """
-    implements(IIcalendarImportSettings)
-    adapts(Interface)
     #adapts(IFolder) ## ?? TODO: when adapting this in z3c.form, why is a
                      ## ATFolder not adaptable to this adapter, when it
                      ## implements IFolder?
