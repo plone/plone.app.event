@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a8 (unreleased)
+2.0a8 (2015-03-26)
 ------------------
 
 - Remove ``get_location`` view helper method. This was used to allow external
