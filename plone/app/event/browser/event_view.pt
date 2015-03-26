@@ -16,7 +16,7 @@
     <ul class="hiddenStructure">
       <li><a itemprop="url" class="url" href="" tal:attributes="href data/url" tal:content="data/url">url</a></li>
       <li itemprop="summary" class="summary" tal:content="data/title">title</li>
-      <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">end</li>
+      <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">start</li>
       <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
       <li itemprop="description" class="description" tal:content="data/description">description</li>
     </ul>
