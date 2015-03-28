@@ -2,7 +2,6 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.dx import behaviors
-from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
 from plone.app.testing import TEST_USER_ID
@@ -45,7 +44,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
     def make_dates(self):
         tz = pytz.timezone(TEST_TIMEZONE)
         now = self.now = patched_now()
-        tomorrow = self.tomorrow = tz.normalize(now + timedelta(days=1))
+        self.tomorrow = tz.normalize(now + timedelta(days=1))
         past = self.past = tz.normalize(now - timedelta(days=10))
         future = self.future = tz.normalize(now + timedelta(days=10))
         far = self.far = tz.normalize(now + timedelta(days=30))
@@ -53,6 +52,23 @@ class AbstractSampleDataEvents(unittest.TestCase):
         return (now, past, future, far, duration)
 
     def setUp(self):
+        """Construct sample contents.
+
+        These are all events:
+
+        'Long Event: 2013-04-25T10:00:00+02:00 - 2013-06-04T10:00:00+02:00'
+
+        'Past Event: 2013-04-25T00:00:00+02:00 - 2013-04-25T23:59:59+02:00'
+        'Past Event: 2013-04-26T00:00:00+02:00 - 2013-04-26T23:59:59+02:00'
+        'Past Event: 2013-04-27T00:00:00+02:00 - 2013-04-27T23:59:59+02:00'
+
+        'Now Event: 2013-05-05T10:00:00+02:00 - 2013-05-05T11:00:00+02:00'
+        'Now Event: 2013-05-07T10:00:00+02:00 - 2013-05-07T11:00:00+02:00'
+        'Now Event: 2013-05-09T10:00:00+02:00 - 2013-05-09T11:00:00+02:00'
+
+        'Future Event: 2013-05-15T10:00:00+02:00 - 2013-05-15T11:00:00+02:00'
+
+        """
         self.portal = self.layer['portal']
         self.app = self.layer['app']
         self.request = self.layer['request']
@@ -76,7 +92,6 @@ class AbstractSampleDataEvents(unittest.TestCase):
             recurrence='RRULE:FREQ=DAILY;COUNT=3')
         workflow.doActionFor(self.past_event, 'publish')
         # adjust start and end according to whole_day and open_end
-        data_postprocessing_context(self.past_event)
         self.past_event.reindexObject()
 
         self.now_event = factory(
@@ -98,7 +113,6 @@ EXDATE:20130506T000000,20140404T000000""",
         # https://github.com/plone/plone.dexterity/pull/18
         # https://github.com/plone/plone.app.dexterity/issues/118
         workflow.doActionFor(self.now_event, 'publish')
-        data_postprocessing_context(self.now_event)
         self.now_event.reindexObject()
 
         self.future_event = factory(
@@ -109,7 +123,6 @@ EXDATE:20130506T000000,20140404T000000""",
             end=future + duration,
             location=u'Graz')
         workflow.doActionFor(self.future_event, 'publish')
-        data_postprocessing_context(self.future_event)
         self.future_event.reindexObject()
 
         self.portal.invokeFactory('Folder', 'sub', title=u'sub')
@@ -121,11 +134,9 @@ EXDATE:20130506T000000,20140404T000000""",
             end=far,
             location=u'Schaftal')
         workflow.doActionFor(self.long_event, 'publish')
-        data_postprocessing_context(self.long_event)
         self.long_event.reindexObject()
 
-        # For AT based tests, this is a plone.app.collection ICollection type
-        # For DX based tests, it's a plone.app.contenttypes ICollection type
+        # plone.app.contenttypes ICollection type
         self.portal.invokeFactory('Collection', 'collection', title=u'Col')
         collection = self.portal.collection
         collection.sort_on = u'start'

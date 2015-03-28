@@ -19,7 +19,6 @@ from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.dx.behaviors import data_postprocessing_context
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
@@ -105,7 +104,7 @@ class TestBaseModule(unittest.TestCase):
             DateTime('2011/11/11 11:00:00 Europe/Vienna')
         )
 
-        ## TEST WITH/WITHOUT MICROSECONDS
+        # TEST WITH/WITHOUT MICROSECONDS
 
         # From Python datetime
 
@@ -556,8 +555,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        # data_postprocessing normalization is not needed, as we values are set
-        # correctly in the first place.
 
         tomorrow = factory(
             container=self.portal,
@@ -568,9 +565,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
-        # Normalize values and reindex, what normally the form would do
-        # (especially, end time isn't set like open_end settings requests to.
-        data_postprocessing_context(tomorrow)
         tomorrow.reindexObject()
 
         limit = get_events(self.portal, start=self.now, expand=True,
@@ -610,7 +604,9 @@ class TestGetEventsDX(AbstractSampleDataEvents):
             start=date(2013, 5, 1),
             end=date(2013, 5, 31)
         )
-        self.assertEqual(_num_events(cal.values()), 34)
+        self.assertEqual(_num_events(cal.values()), 35)
+        # First day must also be set in the calendar
+        self.assertTrue('2013-05-01' in cal.keys())
 
         # invalid start
         def _invalid_start():
@@ -655,8 +651,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             location=u"Dornbirn",
             recurrence='RRULE:FREQ=WEEKLY;COUNT=4',
         )
-        # data_postprocessing normalization is not needed, as we values are set
-        # correctly in the first place.
 
         tomorrow = factory(
             container=self.portal,
@@ -667,9 +661,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             open_end=True,
             location=u"Dornbirn",
         )
-        # Normalize values and reindex, what normally the form would do
-        # (especially, end time isn't set like open_end settings requests to.
-        data_postprocessing_context(tomorrow)
         tomorrow.reindexObject()
 
         self.occ = [
@@ -698,7 +689,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                  x.end.strftime('%Y-%m-%d %H:%M:%S'))
                 for x in seq]
 
-    ### expand=True: events
+    # expand=True: events
 
     def test_expand_all(self):
         # all occurrences, sorted by start
@@ -730,7 +721,7 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         expect = self.occ[1:2] + self.occ[6:8]  # includes ongoing long event
         self.assertEqual(res, expect, self.diff(res, expect))
 
-    ### expand=False: events
+    # expand=False: events
 
     def test_noexpand_all(self):
         # all events

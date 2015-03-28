@@ -1,5 +1,4 @@
 from Products.CMFPlone.utils import getFSVersionTuple
-from Products.CMFPlone.utils import getToolByName
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
@@ -37,7 +36,7 @@ def set_env_timezone(tz):
 
 
 def os_zone():
-    return 'TZ' in os.environ.keys() and os.environ['TZ'] or None
+    return os.environ['TZ'] if 'TZ' in os.environ.keys() else None
 
 
 def make_fake_response(request):

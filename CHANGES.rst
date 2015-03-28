@@ -1,10 +1,107 @@
 Changelog
 =========
 
-2.0a5 (unreleased)
+2.0a9 (unreleased)
 ------------------
 
 - Nothing changed yet.
+
+
+2.0a8 (2015-03-26)
+------------------
+
+- Remove ``get_location`` view helper method. This was used to allow external
+  addons (specifically ``collective.venue``) to override it and return a html
+  link to a location object instead. Instead of this hack, which also only
+  works for the location use case, override the necessary templates in your
+  addons. In case of doubt, simplicity outweight extensibility options.
+  [thet]
+
+- Change ``adapts`` and ``implements`` to their decorator equivalents
+  ``adapter`` and ``implementer``.
+  [thet]
+
+- Change ``event_listing`` to search only in current context and below, not the
+  whole portal by default. Remove the setting ``current_folder_only``, which
+  was annotated to the context. Since the collection support is much better now,
+  use them for custom searches.
+  [thet]
+
+- Fix a bug in displaying the ``event_listing`` on Collections. Show the date
+  filter on Collections, if no start/end critierias are given in the
+  Collection's query.
+  [thet]
+
+- Add a CSS class for the timezone in the events portlet and the
+  ``event_summary`` view.
+  [mitakas]
+
+- In the ``event_summary`` view, change the ``event-timezone`` list-item class
+  to ``event-date``.
+  [thet]
+
+
+2.0a7 (2015-03-13)
+------------------
+
+- In the event_view, use the ``#parent-fieldname-text`` wrapper for text
+  output, because of consistency.
+  [thet]
+
+
+2.0a6 (2015-03-04)
+------------------
+
+- Some Plone 5 related js improvements
+  [vangheem]
+
+- Use Plone 5 imports from plone.app.z3cform and make plone.app.widgets a soft
+  dependency.
+  [vangheem]
+
+- Remove support for ``plone.app.collection`` and ``ATTopic`` - plone.app.event
+  2.x is Dexterity only.
+  [thet]
+
+- Fix ``construct_calendar`` in plone.app.event.base to also return events for
+  the first day in the calendar month.
+  [thet]
+
+- Remove ``data_postprocessing`` logic, which was handling ``open_end`` and
+  ``whole_day`` events and was manipulating the object on form submission.
+  Instead, just adapt start/end dates on indexing and when accessing them via
+  ``IEventAccessor``.
+  [thet]
+
+- Remove the ``plone.app.event.EventTypes`` vocabulary, which relied on
+  temporaily creating types. It's used for importing ical files. It should be
+  possible to figure out, which types might suitable for creating events from
+  ical VEVENT entries.
+  [thet]
+
+- No need to return DateTime objects for the indexer.
+  Products.DateRecurringIndex works with Python datetime objects.
+  [thet]
+
+- Whole day setting doesn't hide effective range anymore. Fixes issue #167.
+  [thet]
+
+
+2.0a5 (2014-10-23)
+------------------
+
+- Fix German translation for Monat.
+  [thet]
+
+- Integration of the new markup update and CSS for both Plone and Barceloneta
+  theme. This is the work done in the GSOC Barceloneta theme project.
+  [albertcasado, sneridagh]
+
+- Update markup for portlets and change dt dl for ul li tags.
+  [albertcasado]
+
+- Added locales for Catalan and Spanish
+  [sneridagh]
 
 
 2.0a4 (2014-07-22)

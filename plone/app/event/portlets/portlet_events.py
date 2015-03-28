@@ -4,7 +4,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.browser.event_view import get_location
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
@@ -18,7 +17,7 @@ from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -54,8 +53,8 @@ class IEventsPortlet(IPortletDataProvider):
     )
 
 
+@implementer(IEventsPortlet)
 class Assignment(base.Assignment):
-    implements(IEventsPortlet)
 
     # reduce upgrade pain
     search_base = None
@@ -139,9 +138,6 @@ class Renderer(base.Renderer):
             IContentProvider, name='formatted_date'
         )
         return provider(event)
-
-    def get_location(self, event):
-        return get_location(event)
 
 
 class AddForm(base.AddForm):

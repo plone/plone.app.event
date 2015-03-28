@@ -114,6 +114,8 @@ def get_events(context, start=None, end=None, limit=None,
     query = {}
     query['object_provides'] = IEvent.__identifier__
 
+    query.update(start_end_query(start, end))
+
     if 'path' not in kw:
         # limit to the current navigation root, usually (not always) site
         portal = getSite()
@@ -121,15 +123,6 @@ def get_events(context, start=None, end=None, limit=None,
         query['path'] = '/'.join(navroot.getPhysicalPath())
     else:
         query['path'] = kw['path']
-
-    if start:
-        # All events from start date ongoing:
-        # The minimum end date of events is the date from which we search.
-        query['end'] = {'query': start, 'range': 'min'}
-    if end:
-        # All events until end date:
-        # The maximum start date must be the date until we search.
-        query['start'] = {'query': end, 'range': 'max'}
 
     # Sorting
     # In expand mode we sort after calculation of recurrences again. But we
@@ -279,7 +272,7 @@ def expand_events(events, ret_mode,
 
     exp_result = []
     for it in events:
-        obj = hasattr(it, 'getObject') and it.getObject() or it
+        obj = it.getObject() if getattr(it, 'getObject', False) else it
         if IEventRecurrence.providedBy(obj):
             occurrences = [_obj_or_acc(occ, ret_mode) for occ in
                            IRecurrenceSupport(obj).occurrences(start, end)]
@@ -372,8 +365,8 @@ def construct_calendar(events, start=None, end=None):
             # avoid long loops
             if start and end_date < start:
                 break  # if the date is completly outside the range
-            if start and next_start_date <= start:
-                continue  # if start is outside but end reaches into range
+            if start and next_start_date < start:
+                continue  # if start_date is outside but end reaches into range
             if end and next_start_date > end:
                 break  # if date is outside range
 
@@ -408,6 +401,21 @@ def _prepare_range(context, start, end):
     return start, end
 
 
+def start_end_query(start, end):
+    """Make a catalog query out of start and end dates.
+    """
+    query = {}
+    if start:
+        # All events from start date ongoing:
+        # The minimum end date of events is the date from which we search.
+        query['end'] = {'query': start, 'range': 'min'}
+    if end:
+        # All events until end date:
+        # The maximum start date must be the date until we search.
+        query['start'] = {'query': end, 'range': 'max'}
+    return query
+
+
 # TIMEZONE HANDLING
 
 def default_timezone(context=None, as_tzinfo=False):
@@ -436,7 +444,7 @@ def default_timezone(context=None, as_tzinfo=False):
             return info if as_tzinfo else info.zone
 
     reg_key = 'plone.portal_timezone'
-    registry = getUtility(IRegistry, context=context)
+    registry = getUtility(IRegistry)
     portal_timezone = registry.get(reg_key, None)
 
     # fallback to what plone.event is doing
@@ -662,8 +670,9 @@ def start_end_from_mode(mode, dt=None, context=None):
                     'day': Return all events on the given day (dt parameter
                            required)
                     'week': Show a weeks events, optionally from a given date.
-                    'month': Show this month's events.
                  These settings override the start and end parameters.
+                    Not implemented yet:
+                    'month': Show this month's events.
     :type mode: string
 
     :param dt: Optional datetime for day mode.
@@ -923,7 +932,7 @@ class AnnotationAdapter(object):
             self._data[name] = value
 
     def __getattr__(self, name):
-        return self._data and self._data.get(name, None) or None
+        return self._data.get(name, None) if self._data else None
 
 
 def find_context(context, viewname=None, iface=None,

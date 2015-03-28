@@ -1,0 +1,29 @@
+# Translation of plone.app.event.pot to Spanish
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2013-04-19 23:38+0000\n"
+"PO-Revision-Date: 2014-10-20 16:20+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+"Language-Code: es\n"
+"Language-Name: Spanish\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+"Language: es\n"
+"X-Generator: Poedit 1.6.10\n"
+
+# TRANSLATE VIEW NAMES
+#
+#. Default: "Event Listing"
+msgid "event_listing"
+msgstr "Lista de eventos"
+
+#. Default: "Event"
+msgid "event_view"
+msgstr "Evento"

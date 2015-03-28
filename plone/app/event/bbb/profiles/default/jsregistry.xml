@@ -6,7 +6,7 @@
       compression="safe"
       cookable="True"
       enabled="True"
-      id="++resource++plone.app.event/event.js"
+      id="++resource++plone.app.event.portlet_calendar.js"
       inline="False"
       />
 

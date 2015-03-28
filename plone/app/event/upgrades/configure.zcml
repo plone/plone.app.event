@@ -20,5 +20,13 @@
       handler=".upgrades.upgrade_attribute_storage"
       />
 
-</configure>
+  <genericsetup:upgradeStep
+      source="14"
+      destination="15"
+      title="Remove object-action event_listing_settings"
+      description=""
+      profile="plone.app.event:default"
+      handler=".upgrades.remove_event_listing_settings"
+      />
 
+</configure>

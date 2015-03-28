@@ -17,12 +17,12 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form import form, field
 from zope import schema
-from zope.component import adapts
+from zope.component import adapter
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.interface import Interface
 from zope.interface import alsoProvides, noLongerProvides
-from zope.interface import implements
+from zope.interface import implementer
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import datetime
@@ -61,12 +61,12 @@ def ical_import(container, ics_resource, event_type,
 
         TODO: component property parameters like TZID are not used here.
         """
-        val = prop in ical and ical[prop] or []
+        val = ical[prop] if prop in ical else []
         if not isinstance(val, list):
             val = [val]
         #ret = ''
         #for item in val:
-        #    ret = ret and '%s\n' % ret or ret  # insert linebreak
+        #    ret = '%s\n' % ret if ret else ret  # insert linebreak
         #    ret = '%s%s:%s' % (ret, prop, item.to_ical())
         #return ret
 
@@ -75,9 +75,9 @@ def ical_import(container, ics_resource, event_type,
         # https://github.com/collective/jquery.recurrenceinput.js/issues/15
         ret = ''
         for item in val:
-            ret = ret and '%s,' % ret or ret  # insert linebreak
+            ret = '%s,' % ret if ret else ret  # insert linebreak
             ret = '%s%s' % (ret, item.to_ical())
-        return ret and '%s:%s' % (prop, ret) or None
+        return '%s:%s' % (prop, ret) if ret else None
 
     count = 0
     for item in events:
@@ -126,7 +126,7 @@ def ical_import(container, ics_resource, event_type,
         url = _get_prop('URL', item)
 
         rrule = _get_prop('RRULE', item)
-        rrule = rrule and 'RRULE:%s' % rrule.to_ical() or ''
+        rrule = 'RRULE:%s' % rrule.to_ical() if rrule else ''
         rdates = _from_list(item, 'RDATE')
         exdates = _from_list(item, 'EXDATE')
         rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])
@@ -137,7 +137,7 @@ def ical_import(container, ics_resource, event_type,
 
         contact = _get_prop('CONTACT', item)
         categories = item.get('CATEGORIES', ())
-        if hasattr(categories, '__iter__'):
+        if getattr(categories, '__iter__', False):
             categories = tuple([safe_unicode(it) for it in categories])
 
         ext_modified = utc(_get_prop('LAST-MODIFIED', item))
@@ -203,12 +203,6 @@ def ical_import(container, ics_resource, event_type,
             event.sync_uid = sync_uid
         notify(ObjectModifiedEvent(content))
 
-        # Archetypes specific code
-        if getattr(content, 'processForm', False):
-            # Will finish Archetypes content item creation process,
-            # rename-after-creation and such
-            content.processForm()
-
         # Use commits instead of savepoints to avoid "FileStorageError:
         # description too long" on large imports.
         transaction.get().commit()  # Commit before rename
@@ -236,7 +230,7 @@ class IIcalendarImportSettings(Interface):
             'ical_import_event_type_desc',
             default=u"Content type of the event, which is created when "
                     u"importing icalendar resources."),
-        vocabulary='plone.app.event.EventTypes',
+        vocabulary='plone.app.vocabularies.ReallyUserFriendlyTypes',
         required=True
     )
 
@@ -277,11 +271,11 @@ class IIcalendarImportSettings(Interface):
     )
 
 
+@adapter(Interface)
+@implementer(IIcalendarImportSettings)
 class IcalendarImportSettings(AnnotationAdapter):
     """Annotation Adapter for IIcalendarImportSettings.
     """
-    implements(IIcalendarImportSettings)
-    adapts(Interface)
     #adapts(IFolder) ## ?? TODO: when adapting this in z3c.form, why is a
                      ## ATFolder not adaptable to this adapter, when it
                      ## implements IFolder?

@@ -10,9 +10,9 @@ from plone.event.interfaces import IRecurrenceSupport
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import is_same_day
 from plone.namedfile.scaling import ImageScale as DXImageScaling
-from zope.component import adapts
+from zope.component import adapter
 from zope.interface import Interface
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 try:
@@ -37,11 +37,11 @@ except ImportError:
     pass
 
 
+@adapter(IEventRecurrence)
+@implementer(IRecurrenceSupport)
 class RecurrenceSupport(object):
     """IRecurrenceSupport Adapter.
     """
-    implements(IRecurrenceSupport)
-    adapts(IEventRecurrence)
 
     def __init__(self, context):
         self.context = context
@@ -98,13 +98,13 @@ class RecurrenceSupport(object):
             yield get_obj(start)
 
 
+@adapter(IEventRecurrence, IBrowserRequest)
 class OccurrenceTraverser(DefaultPublishTraverse):
     """Generic Occurrence traverser.
 
     Please note: the .at and .dx subpackages implement their own Occurrence
     traversers.
     """
-    adapts(IEventRecurrence, IBrowserRequest)
 
     def publishTraverse(self, request, name):
         context = self.context
@@ -121,11 +121,11 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         return super(OccurrenceTraverser, self).publishTraverse(request, name)
 
 
+@implementer(IOccurrence)
 class Occurrence(SimpleItem):
     """Transient Occurrence object, representing an individual event in a
     recurrecne set.
     """
-    implements(IOccurrence)
 
     def __init__(self, id, start, end):
         self.id = id
@@ -134,11 +134,11 @@ class Occurrence(SimpleItem):
         self.portal_type = 'Occurrence'
 
 
+@adapter(IOccurrence)
+@implementer(IEventAccessor)
 class EventOccurrenceAccessor(object):
     """Generic event accessor adapter implementation for Occurrence objects.
     """
-    implements(IEventAccessor)
-    adapts(IOccurrence)
 
     def __init__(self, context):
         object.__setattr__(self, 'context', context)

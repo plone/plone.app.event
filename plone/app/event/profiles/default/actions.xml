@@ -3,17 +3,6 @@
    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <object name="object" meta_type="CMF Action Category">
-  <object name="event_listing_settings" meta_type="CMF Action" i18n:domain="plone.app.event">
-   <property name="title" i18n:translate="title_event_listing_settings">Event Listing Settings</property>
-   <property name="description" i18n:translate="help_event_listing_settings">Settings for the event listing view.</property>
-   <property name="url_expr">string:${object_url}/@@event_listing_settings</property>
-   <property name="icon_expr"></property>
-   <property name="available_expr">python:object.defaultView()=='event_listing' and object.portal_type not in ('Collection', 'Topic')</property>
-   <property name="permissions">
-    <element value="Manage properties"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
   <object name="ical_import_settings" meta_type="CMF Action" i18n:domain="plone.app.event">
    <property name="title" i18n:translate="title_ical_import">Ical import</property>
    <property name="description" i18n:translate="help_ical_import">Import Events from icalendar files.</property>

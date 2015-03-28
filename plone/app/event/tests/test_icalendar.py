@@ -223,7 +223,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertTrue('Long Event' in icalstr)
 
     def test_collection_ical(self):
-        """Test basic icalendar export from ATTopics.
+        """Test basic icalendar export from Collections.
         """
         headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter(

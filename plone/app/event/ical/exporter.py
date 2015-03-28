@@ -14,7 +14,6 @@ from plone.event.utils import is_datetime
 from plone.event.utils import tzdel
 from plone.event.utils import utc
 from zope.interface import implementer
-from zope.interface import implements
 from zope.publisher.browser import BrowserView
 
 import icalendar
@@ -44,7 +43,7 @@ def construct_icalendar(context, events):
         cal.add('x-wr-timezone', cal_tz)
 
     tzmap = {}
-    if not hasattr(events, '__getslice__'):  # LazyMap doesn't have __iter__
+    if not getattr(events, '__getslice__', False):  # LazyMap doesn't have __iter__  # noqa
         events = [events]
     for event in events:
         if ICatalogBrain.providedBy(event) or\
@@ -90,6 +89,23 @@ def construct_icalendar(context, events):
 
 
 def add_to_zones_map(tzmap, tzid, dt):
+    """Build a dictionary of timezone information from a timezone identifier
+    and a date/time object for which the timezone information should be
+    calculated.
+
+    :param tzmap: An existing dictionary of timezone information to be extended
+                  or an empty dictionary.
+    :type tzmap: dictionary
+    :param tzid: A timezone identifier.
+    :type tzid: string
+    :param dt: A datetime object.
+    :type dt: datetime
+
+    :returns: A dictionary with timezone information needed to build VTIMEZONE
+              entries.
+    :rtype: dictionary
+    """
+
     if tzid.lower() == 'utc' or not is_datetime(dt):
         # no need to define UTC nor timezones for date objects.
         return tzmap
@@ -108,11 +124,11 @@ def add_to_zones_map(tzmap, tzid, dt):
     #     way we get the maximum transition time which is smaller than the
     #     given datetime.
     transition = max(transitions,
-                     key=lambda item: item <= dtzl and item or null)
+                     key=lambda item: item if item <= dtzl else null)
 
     # get previous transition to calculate tzoffsetfrom
     idx = transitions.index(transition)
-    prev_idx = idx > 0 and idx - 1 or idx
+    prev_idx = idx - 1 if idx > 0 else idx
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):
@@ -172,10 +188,10 @@ def calendar_from_collection(context):
     return construct_icalendar(context, result)
 
 
+@implementer(IICalendarEventComponent)
 class ICalendarEventComponent(object):
     """Returns an icalendar object of the event.
     """
-    implements(IICalendarEventComponent)
 
     def __init__(self, context):
         self.context = context

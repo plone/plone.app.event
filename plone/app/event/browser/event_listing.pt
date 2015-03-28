@@ -20,22 +20,22 @@
 
   <div class="event_listing">
     <header>
-      <nav tal:define="show_filter python:not (view.is_collection or view.is_topic)">
+      <nav tal:define="show_filter view/show_filter">
         <ul class="mode_selector">
           <tal:cond condition="show_filter">
-          <li class="" tal:attributes="class python:mode=='future' and 'selected' or ''">
+          <li class="" tal:attributes="class python:'selected' if mode=='future' else ''">
             <a class="mode_future"   href="" tal:attributes="href view/mode_future_url"   i18n:translate="mode_future_link">Upcoming</a>
           </li>
-          <li class="" tal:attributes="class python:mode=='past' and 'selected' or ''">
+          <li class="" tal:attributes="class python:'selected' if mode=='past' else ''">
             <a class="mode_past"   href="" tal:attributes="href view/mode_past_url"   i18n:translate="mode_past_link">Past</a>
           </li>
-          <li class="" tal:attributes="class python:mode=='month' and 'selected' or ''">
+          <li class="" tal:attributes="class python:'selected' if mode=='month' else ''">
             <a class="mode_month" href="" tal:attributes="href view/mode_month_url" i18n:translate="mode_month_link">Month</a>
           </li>
-          <li class="" tal:attributes="class python:mode=='week' and 'selected' or ''">
+          <li class="" tal:attributes="class python:'selected' if mode=='week' else ''">
             <a class="mode_week"  href="" tal:attributes="href view/mode_week_url"  i18n:translate="mode_week_link">Week</a>
           </li>
-          <li class="" tal:attributes="class python:mode=='day' and 'selected' or ''">
+          <li class="" tal:attributes="class python:'selected' if mode=='day' else ''">
             <a class="mode_day"   href="" tal:attributes="href view/mode_day_url"   i18n:translate="mode_day_link">Day</a> <input id="event_listing_calendar" type="hidden" />
           </li>
           </tal:cond>
@@ -101,9 +101,8 @@
           <div class="documentByLine">
             <tal:date tal:replace="structure python:view.formatted_date(data)"/>
             <div itemprop="location" class="location"
-                tal:define="location python:view.get_location(data)"
-                tal:condition="location"
-                tal:content="structure location">location</div>
+                tal:condition="data/location"
+                tal:content="structure data/location">location</div>
           </div>
 
           <p itemprop="description" class="description" tal:condition="data/description" tal:content="data/description" />

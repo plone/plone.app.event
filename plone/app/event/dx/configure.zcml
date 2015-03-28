@@ -6,7 +6,6 @@
     <include package="plone.dexterity" />
     <include package="plone.app.dexterity" /><!-- To initialize DublinCore behaviors -->
     <include package="plone.behavior" file="meta.zcml" />
-    <include package=".upgrades" />
 
     <!-- http://groups.google.com/group/zope-core-dev/browse_thread/thread/6c10ebc16027017f -->
     <!-- ZCML of this package fails in Zope 2.13 for strange reason -->
@@ -30,9 +29,6 @@
     <adapter name="location" factory=".behaviors.location_indexer" />
     <adapter name="SearchableText" factory=".behaviors.searchable_text_indexer" />
     <adapter name="sync_uid" factory=".behaviors.sync_uid_indexer" />
-
-    <subscriber for="z3c.form.interfaces.IDataExtractedEvent"
-                handler=".behaviors.data_postprocessing_handler" />
 
     <plone:behavior
         title="Event Basic"

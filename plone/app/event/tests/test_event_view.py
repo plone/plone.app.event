@@ -1,14 +1,14 @@
 from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
 
 import mock
 
 
-class TestEventViewDX(AbstractSampleDataEvents):
-    layer = PAEventDX_INTEGRATION_TESTING
+class FunctionalTestEventViewDX(AbstractSampleDataEvents):
+    layer = PAEventDX_FUNCTIONAL_TESTING
 
     @property
     def traverser(self):

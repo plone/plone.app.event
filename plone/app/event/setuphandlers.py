@@ -1,8 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
-from zope.component.hooks import getSite
-from zope.interface import implements
+from zope.interface import implementer
 
 import logging
 
@@ -10,8 +9,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@implementer(INonInstallable)
 class HiddenProfiles(object):
-    implements(INonInstallable)
 
     def getNonInstallableProfiles(self):
         """Prevents profiles, which should not be user-installable from showing
@@ -23,7 +22,7 @@ class HiddenProfiles(object):
         return [u'plone.app.event:testing', ]
 
 
-def catalog_setup(context):
+def setup_catalog(context):
     """Setup plone.app.event's indices in the catalog.
 
     Doing it here instead of in profiles/default/catalog.xml means we
@@ -34,8 +33,10 @@ def catalog_setup(context):
         emptying-the-indexes-td2302709.html
         https://mail.zope.org/pipermail/zope-cmf/2007-March/025664.html
     """
-    site = getSite()
-    catalog = getToolByName(site, 'portal_catalog')
+    if context.readDataFile('plone.app.event-default.txt') is None:
+        return
+    portal = context.getSite()
+    catalog = getToolByName(portal, 'portal_catalog')
     date_idxs = ['start', 'end']
     field_idxs = ['sync_uid']
     idxs = date_idxs + field_idxs
@@ -64,11 +65,3 @@ def catalog_setup(context):
             logger.info('Catalog metadata column %s created.' % name)
         except CatalogError:
             logger.info('Catalog metadata column %s already exists.' % name)
-
-
-def setup_misc(context):
-    if context.readDataFile('plone.app.event-default.txt') is None:
-        return
-
-    portal = context.getSite()
-    catalog_setup(portal)

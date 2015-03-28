@@ -4,40 +4,28 @@ from calendar import monthrange
 from datetime import date
 from datetime import timedelta
 from plone.app.event import messageFactory as _
-from plone.app.event.base import AnnotationAdapter
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event.base import _prepare_range
 from plone.app.event.base import date_speller
 from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
-from plone.app.event.browser.event_view import get_location
+from plone.app.event.base import start_end_query
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
-from plone.z3cform.layout import wrap_form
-from z3c.form import button
-from z3c.form import field
-from z3c.form import form
-from zope import schema
-from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-from zope.interface import Interface
-from zope.interface import implements
 
 try:
-    from plone.app.collection.interfaces import ICollection
+    from plone.app.contenttypes.interfaces import ICollection
 except ImportError:
     ICollection = None
-try:
-    from Products.ATContentTypes.interfaces import IATTopic
-except ImportError:
-    IATTopic = None
 
 
 class EventListing(BrowserView):
@@ -46,23 +34,21 @@ class EventListing(BrowserView):
         super(EventListing, self).__init__(context, request)
 
         self.now = now = localized_now(context)
-        self.settings = IEventListingSettings(self.context)
 
         # Request parameter
         req = self.request.form
-        self.b_start = 'b_start' in req and int(req['b_start']) or 0
-        self.b_size = 'b_size' in req and int(req['b_size']) or 10
-        self.orphan = 'orphan' in req and int(req['orphan']) or 1
-        self.mode = 'mode' in req and req['mode'] or None
-        self._date = 'date' in req and req['date'] or None
-        self.tags = 'tags' in req and req['tags'] or None
-        self.searchable_text = 'SearchableText' in req and\
-            req['SearchableText'] or None
-        self.path = 'path' in req and req['path'] or None
+        self.b_start = int(req['b_start']) if 'b_start' in req else 0
+        self.b_size  = int(req['b_size'])  if 'b_size'  in req else 10
+        self.orphan  = int(req['orphan'])  if 'orphan'  in req else 1
+        self.mode    = req['mode'] if 'mode' in req else None
+        self._date   = req['date'] if 'date' in req else None
+        self.tags    = req['tags'] if 'tags' in req else None
+        self.searchable_text = req['SearchableText'] if 'SearchableText' in req else None  # noqa
+        self.path    = req['path'] if 'path' in req else None
 
-        day = 'day' in req and int(req['day']) or None
-        month = 'month' in req and int(req['month']) or None
-        year = 'year' in req and int(req['year']) or None
+        day   = int(req['day'])   if 'day'   in req else None
+        month = int(req['month']) if 'month' in req else None
+        year  = int(req['year'])  if 'year'  in req else None
 
         if not self._date and day or month or year:
             self._date = date(year or now.year,
@@ -70,10 +56,9 @@ class EventListing(BrowserView):
                               day or now.day).isoformat()
 
         if self.mode is None:
-            self.mode = self._date and 'day' or 'future'
+            self.mode = 'day' if self._date else 'future'
 
-        self.uid = None  # Used to get all occurrences from a single event.
-                         # Overrides all other settings
+        self.uid = None  # Used to get all occurrences from a single event. Overrides all other settings  # noqa
 
     @property
     def default_context(self):
@@ -87,12 +72,19 @@ class EventListing(BrowserView):
     @property
     def is_collection(self):
         ctx = self.default_context
-        return ICollection and ICollection.providedBy(ctx) or False
+        return ICollection.providedBy(ctx) if ICollection else False
 
     @property
-    def is_topic(self):
-        ctx = self.default_context
-        return IATTopic and IATTopic.providedBy(ctx) or False
+    def show_filter(self):
+        ret = True
+        if self.is_collection:
+            ctx = self.default_context
+            query = queryparser.parseFormquery(ctx, ctx.query)
+            if 'start' in query or 'end' in query:
+                # Don't show the date filter, if a date is given in the
+                # collection's query
+                ret = False
+        return ret
 
     @property
     def date(self):
@@ -119,7 +111,8 @@ class EventListing(BrowserView):
         else:
             if self.path:
                 kw['path'] = self.path
-            elif self.settings.current_folder_only:
+            else:
+                # Search current and subsequent folders
                 kw['path'] = '/'.join(context.getPhysicalPath())
 
             if self.tags:
@@ -128,8 +121,8 @@ class EventListing(BrowserView):
             if self.searchable_text:
                 kw['SearchableText'] = self.searchable_text
 
-        #kw['b_start'] = self.b_start
-        #kw['b_size']  = self.b_size
+        # kw['b_start'] = self.b_start
+        # kw['b_size']  = self.b_size
 
         start, end = self._start_end
 
@@ -143,23 +136,28 @@ class EventListing(BrowserView):
 
     def events(self, ret_mode=RET_MODE_ACCESSORS, expand=True, batch=True):
         res = []
-        is_col = self.is_collection
-        is_top = self.is_topic
-        if is_col or is_top:
+        if self.is_collection:
             ctx = self.default_context
-            if is_col:
-                res = ctx.results(batch=False, sort_on='start', brains=True)
-                query = queryparser.parseFormquery(ctx, ctx.getRawQuery())
-            else:
-                res = ctx.queryCatalog(batch=False, full_objects=False)
-                query = ctx.buildQuery()
+            query = queryparser.parseFormquery(ctx, ctx.query)
+            custom_query = {}
+            if 'start' not in query or 'end' not in query:
+                # ... else don't show the navigation bar
+                start, end = self._start_end
+                start, end = _prepare_range(ctx, start, end)
+                custom_query = start_end_query(start, end)
+            res = ctx.results(
+                batch=False, brains=True, custom_query=custom_query
+            )
             if expand:
                 # get start and end values from the query to ensure limited
                 # listing for occurrences
-                start, end = self._expand_events_start_end(query.get('start'),
-                                                           query.get('end'))
-                res = expand_events(res, ret_mode, sort='start', start=start,
-                                    end=end)
+                start, end = self._expand_events_start_end(
+                    query.get('start') or custom_query.get('start'),
+                    query.get('end') or custom_query.get('end')
+                )
+                res = expand_events(
+                    res, ret_mode, sort='start', start=start, end=end
+                )
         else:
             res = self._get_events(ret_mode, expand=expand)
         if batch:
@@ -188,18 +186,44 @@ class EventListing(BrowserView):
     def ical_url(self):
         date = self.date
         mode = self.mode
-        qstr = (date or mode) and '?%s%s%s' % (
-            mode and 'mode=%s' % mode,
-            mode and date and '&' or '',
-            date and 'date=%s' % date or ''
-        ) or ''
+
+        qstr = '&'.join([
+            it for it in ['mode=%s' % mode if mode else None,
+                          'date=%s' % date if date else None]
+            if it
+        ])
+        qstr = '?%s' % qstr if qstr else ''
         return '%s/@@event_listing_ical%s' % (
             self.context.absolute_url(),
             qstr
         )
 
-    def get_location(self, occ):
-        return get_location(occ)
+    # COLLECTION daterange start/end determination
+    def _expand_events_start_end(self, start, end):
+        # make sane start and end values for expand_events from
+        # Collection start/end criterions.
+        # if end/min is given, it overrides start/min settings to make sure,
+        # ongoing events are shown in the listing!
+        # XXX: This actually fits most needs, but not all. Maybe someone
+        # wants to come up with some edgecases!
+        se = dict(start=None, end=None)
+        if start:
+            q = start.get('query')
+            r = start.get('range')
+            if r == "min":
+                se["start"] = q
+            elif r == "max":
+                se["end"] = q
+            elif r in ("minmax", "min:max"):
+                list(q).sort()
+                se["start"] = q[0]
+                se["end"] = q[1]
+        if end:
+            q = end.get('query')
+            r = end.get('range')
+            if r == "min":
+                se["start"] = q
+        return se["start"], se["end"]
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(
@@ -214,8 +238,8 @@ class EventListing(BrowserView):
     @property
     def header_string(self):
         start, end = self._start_end
-        start_dict = start and date_speller(self.context, start) or None
-        end_dict = end and date_speller(self.context, end) or None
+        start_dict = date_speller(self.context, start) if start else None
+        end_dict = date_speller(self.context, end) if end else None
 
         mode = self.mode
         main_msgid = None
@@ -305,15 +329,15 @@ class EventListing(BrowserView):
             )
 
         trans = self.context.translate
-        return {'main': main_msgid and trans(main_msgid) or '',
-                'sub': sub_msgid and trans(sub_msgid) or ''}
+        return {'main': trans(main_msgid) if main_msgid else '',
+                'sub': trans(sub_msgid) if sub_msgid else ''}
 
     # MODE URLs
     def _date_nav_url(self, mode, datestr=''):
         return '%s?mode=%s%s' % (
             self.request.getURL(),
             mode,
-            datestr and '&date=%s' % datestr or ''
+            '&date=%s' % datestr if datestr else ''
         )
 
     @property
@@ -396,33 +420,6 @@ class EventListing(BrowserView):
         datestr = (now.replace(day=1) - timedelta(days=1)).date().isoformat()
         return self._date_nav_url('month', datestr)
 
-    # COLLECTION daterange start/end determination
-    def _expand_events_start_end(self, start, end):
-        # make sane start and end values for expand_events from
-        # Collection/Topic start/end criterions.
-        # if end/min is given, it overrides start/min settings to make sure,
-        # ongoing events are shown in the listing!
-        # XXX: This actually fits most needs, but not all. Maybe someone
-        # wants to come up with some edgecases!
-        se = dict(start=None, end=None)
-        if start:
-            q = start.get('query')
-            r = start.get('range')
-            if r == "min":
-                se["start"] = q
-            elif r == "max":
-                se["end"] = q
-            elif r in ("minmax", "min:max"):
-                list(q).sort()
-                se["start"] = q[0]
-                se["end"] = q[1]
-        if end:
-            q = end.get('query')
-            r = end.get('range')
-            if r == "min":
-                se["start"] = q
-        return se["start"], se["end"]
-
 
 class EventListingIcal(EventListing):
     def __call__(self, *args, **kwargs):
@@ -437,51 +434,3 @@ class EventEventListing(EventListing):
     def __init__(self, context, request):
         super(EventEventListing, self).__init__(context, request)
         self.uid = IUUID(self.context)
-
-
-class IEventListingSettings(Interface):
-
-    current_folder_only = schema.Bool(
-        title=_('label_current_folder', default=u'Current folder'),
-        description=_('help_current_folder',
-                      default=u'Search events in current folder only.'),
-        default=False
-    )
-
-
-class EventListingSettings(AnnotationAdapter):
-    """Annotation Adapter for IEventListingSettings
-    """
-    implements(IEventListingSettings)
-    adapts(Interface)
-    ANNOTATION_KEY = "plone.app.event-event_listing-settings"
-
-
-class EventListingSettingsForm(form.Form):
-    fields = field.Fields(IEventListingSettings)
-    ignoreContext = False
-
-    def getContent(self):
-        data = {}
-        settings = IEventListingSettings(self.context)
-        data['current_folder_only'] = settings.current_folder_only
-        return data
-
-    def form_next(self):
-        self.request.response.redirect(self.context.absolute_url())
-
-    @button.buttonAndHandler(u'Save')
-    def handleSave(self, action):
-        data, errors = self.extractData()
-        if errors:
-            return False
-        settings = IEventListingSettings(self.context)
-        settings.current_folder_only = data['current_folder_only']
-        self.form_next()
-
-    @button.buttonAndHandler(u'Cancel')
-    def handleCancel(self, action):
-        self.form_next()
-
-
-EventListingSettingsFormView = wrap_form(EventListingSettingsForm)

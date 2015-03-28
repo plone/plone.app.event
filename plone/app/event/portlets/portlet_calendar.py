@@ -16,10 +16,12 @@ from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
 from zExceptions import NotFound
 from zope import schema
+from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
-from zope.interface import implements
+from zope.interface import implementer
 
 import calendar
+import json
 
 
 PLMF = MessageFactory('plonelocales')
@@ -52,8 +54,8 @@ class ICalendarPortlet(IPortletDataProvider):
     )
 
 
+@implementer(ICalendarPortlet)
 class Assignment(base.Assignment):
-    implements(ICalendarPortlet)
     title = _(u'Calendar')
 
     # reduce upgrade pain
@@ -209,9 +211,9 @@ class Renderer(base.Renderer):
                     events_string += base % (
                         accessor.url,
                         accessor.title,
-                        not whole_day and u' %s' % time or u'',
-                        not whole_day and location and u', ' or u'',
-                        location and u' %s' % location or u'')
+                        u' %s' % time if not whole_day else u'',
+                        u', ' if not whole_day and location else u'',
+                        u' %s' % location if location else u'')
 
             caldata[-1].append(
                 {'date': dat,
@@ -226,6 +228,21 @@ class Renderer(base.Renderer):
                  'events_string': events_string,
                  'events': date_events})
         return caldata
+
+    def nav_pattern_options(self, year, month):
+        return json.dumps({
+            'url': '%s/@@render-portlet?portlethash=%s&year=%s&month=%s' % (
+                getSite().absolute_url(),
+                self.hash,
+                year, month),
+            'target': '#portletwrapper-%s > *' % self.hash
+        })
+
+    @property
+    def hash(self):
+        return self.request.form.get(
+            'portlethash',
+            getattr(self, '__portlet_metadata__', {}).get('hash', ''))
 
 
 class AddForm(base.AddForm):
