@@ -4,6 +4,7 @@
   <dependencies>
     <dependency>profile-plone.app.registry:default</dependency>
     <dependency>profile-plone.app.widgets:default</dependency>
+    <dependency>profile-plone.app.z3cform:default</dependency>
     <dependency>profile-plone.formwidget.recurrence:default</dependency>
   </dependencies>
 </metadata>
