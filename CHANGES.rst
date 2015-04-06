@@ -4,7 +4,8 @@ Changelog
 2.0a9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix Plone 4.3 BBB z3c.form portlets to show their fields in Add/Edit Forms.
+  [thet]
 
 
 2.0a8 (2015-03-26)

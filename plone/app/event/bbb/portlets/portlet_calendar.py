@@ -5,6 +5,7 @@ from plone.app.portlets.browser.z3cformhelper import EditForm
 from plone.app.event.portlets.portlet_calendar import Renderer as RendererBase
 from plone.app.event.portlets.portlet_calendar import ICalendarPortlet
 from plone.app.event.portlets.portlet_calendar import Assignment
+from z3c.form import field
 
 
 class Renderer(RendererBase):
@@ -12,7 +13,7 @@ class Renderer(RendererBase):
 
 
 class AddForm(AddForm):
-    schema = ICalendarPortlet
+    fields = field.Fields(ICalendarPortlet)
     label = _(u"Add Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")
 
@@ -22,6 +23,6 @@ class AddForm(AddForm):
 
 
 class EditForm(EditForm):
-    schema = ICalendarPortlet
+    fields = field.Fields(ICalendarPortlet)
     label = _(u"Edit Calendar Portlet")
     description = _(u"This portlet displays events in a calendar.")

@@ -5,6 +5,7 @@ from plone.app.portlets.browser.z3cformhelper import EditForm
 from plone.app.event.portlets.portlet_events import Renderer as RendererBase
 from plone.app.event.portlets.portlet_events import Assignment
 from plone.app.event.portlets.portlet_events import IEventsPortlet
+from z3c.form import field
 
 
 class Renderer(RendererBase):
@@ -12,7 +13,7 @@ class Renderer(RendererBase):
 
 
 class AddForm(AddForm):
-    schema = IEventsPortlet
+    fields = field.Fields(IEventsPortlet)
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
 
@@ -23,6 +24,6 @@ class AddForm(AddForm):
 
 
 class EditForm(EditForm):
-    schema = IEventsPortlet
+    fields = field.Fields(IEventsPortlet)
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
