@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone.app.event">
 
     <browser:resourceDirectory
@@ -77,6 +78,19 @@
         permission="zope2.View"
         layer="..interfaces.IBrowserLayer"
         />
+
+    <configure
+        zcml:condition="installed plone.app.contenttypes"
+        package="plone.app.contenttypes.behaviors">
+      <browser:viewlet
+          name="contentleadimage"
+          for="plone.event.interfaces.IOccurrence"
+          class="plone.app.event.browser.leadimage_viewlet.LeadImageViewlet"
+          manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+          template="leadimage.pt"
+          permission="zope2.View"
+          />
+    </configure>
 
     <adapter
         name="formatted_date"

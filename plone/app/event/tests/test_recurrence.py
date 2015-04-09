@@ -1,7 +1,7 @@
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
-from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
+from plone.app.event.dx.traverser import OccurrenceTraverser
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
@@ -13,15 +13,17 @@ from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
+from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
-from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.interfaces import IImageScaleTraversable
 from plone.testing.z2 import Browser
+from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserView
-
+from mock import Mock
 
 import datetime
 import pytz
@@ -39,17 +41,19 @@ class TestTraversalDX(AbstractSampleDataEvents):
     layer = PAEventDX_FUNCTIONAL_TESTING
 
     @property
-    def traverser(self):
-        return OccTravDX(self.now_event, self.request)
+    def occ_traverser_1(self):
+        return OccurrenceTraverser(self.now_event, self.request)
 
     def test_no_occurrence(self):
         self.assertRaises(
             AttributeError,
-            self.traverser.publishTraverse,
-            self.request, 'foo')
+            self.occ_traverser_1.publishTraverse,
+            self.request,
+            'foo'
+        )
 
     def test_default_views(self):
-        view = self.traverser.publishTraverse(self.request, 'event_view')
+        view = self.occ_traverser_1.publishTraverse(self.request, 'event_view')
         self.assertTrue(IBrowserView.providedBy(view))
 
     def test_occurrence(self):
@@ -59,11 +63,11 @@ class TestTraversalDX(AbstractSampleDataEvents):
         # Try to traverse to inexistent occurrence
         self.assertRaises(
             AttributeError,
-            self.traverser.publishTraverse,
+            self.occ_traverser_1.publishTraverse,
             self.request, '2000-01-01')
 
         # Traverse to existent occurrence
-        item = self.traverser.publishTraverse(self.request, '2013-05-07')
+        item = self.occ_traverser_1.publishTraverse(self.request, '2013-05-07')
         self.assertTrue(IOccurrence.providedBy(item))
         self.assertEqual(type(self.now_event), type(item.aq_parent))
 
@@ -94,6 +98,14 @@ class TestTraversalDX(AbstractSampleDataEvents):
         browser.open(url)
         title = self.now_event.title.encode('ascii')
         self.assertTrue(title in browser.contents)
+
+    def test_traverse_occurrence_imagescaling(self):
+        self.now_event.image = Mock()
+        occurrence = self.occ_traverser_1.publishTraverse(
+            self.request, '2013-05-07'
+        )
+        image_view = occurrence.restrictedTraverse('@@images')
+        self.assertEqual(image_view.context, self.now_event)
 
 
 class TestOccurrences(unittest.TestCase):
@@ -190,7 +202,7 @@ class TestRecurrenceSupport(unittest.TestCase):
         data.start = datetime.datetime(2011, 11, 11, 11, 00, tzinfo=tz)
         data.end = data.start + duration
         data.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
-        zope.interface.alsoProvides(data, IEvent, IEventRecurrence)
+        alsoProvides(data, IEvent, IEventRecurrence)
         self.data = data
 
     def test_recurrence_occurrences(self):
