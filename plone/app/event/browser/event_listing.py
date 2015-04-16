@@ -139,12 +139,12 @@ class EventListing(BrowserView):
         if self.is_collection:
             ctx = self.default_context
             query = queryparser.parseFormquery(ctx, ctx.query)
-            custom_query = {}
+            custom_query = self.request.get('contentFilter', {})
             if 'start' not in query or 'end' not in query:
                 # ... else don't show the navigation bar
                 start, end = self._start_end
                 start, end = _prepare_range(ctx, start, end)
-                custom_query = start_end_query(start, end)
+                custom_query.update(start_end_query(start, end))
             res = ctx.results(
                 batch=False, brains=True, custom_query=custom_query
             )

@@ -4,6 +4,9 @@ Changelog
 2.0a9 (unreleased)
 ------------------
 
+- Support for ``contentFilter`` on request for ``event_listing``.
+  [thet]
+
 - Fix ``ImageScalingViewFactory`` and add a custom ILeadImage viewlet for
   Occurrences. Fixes the display of ILeadImage images from the originating
   event in event views of occurrences by delegating to the parent object.
