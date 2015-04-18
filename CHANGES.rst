@@ -4,7 +4,13 @@ Changelog
 2.0a9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix ``ImageScalingViewFactory`` and add a custom ILeadImage viewlet for
+  Occurrences. Fixes the display of ILeadImage images from the originating
+  event in event views of occurrences by delegating to the parent object.
+  [thet]
+
+- Fix Plone 4.3 BBB z3c.form portlets to show their fields in Add/Edit Forms.
+  [thet]
 
 
 2.0a8 (2015-03-26)

@@ -617,7 +617,7 @@ msgstr ""
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56
 msgid "this_month_link"
-msgstr "Ce mois ci"
+msgstr "Ce mois-ci"
 
 #. Default: "This Week"
 #: plone/app/event/browser/event_listing.pt:63

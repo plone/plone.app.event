@@ -129,7 +129,8 @@ msgid "contact_phone"
 msgstr "Kontaktní telefon"
 
 #. Default: "End date must be after start date."
-#: plone/app/event/at/content.py:575 plone/app/event/dx/behaviors.py:142
+#: plone/app/event/at/content.py:575
+#: plone/app/event/dx/behaviors.py:142
 msgid "error_end_must_be_after_start_date"
 msgstr "Datum ukončení musí být po datu začátku události."
 
@@ -231,9 +232,7 @@ msgstr "Přidat událost do kalendáře"
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: plone/app/event/interfaces.py:37
 msgid "help_available_timezones"
-msgstr ""
-"Časová pásma, která budou používána v portálu. Mohou být nastavena pro "
-"události a také jednotlivými uživateli."
+msgstr "Časová pásma, která budou používána v portálu. Mohou být nastavena pro události a také jednotlivými uživateli."
 
 #. Default: "Search events in current folder only."
 #: plone/app/event/browser/event_listing.py:446
@@ -245,29 +244,32 @@ msgid "help_event_announcement"
 msgstr "Text k události"
 
 #. Default: "List of attendees."
-#: plone/app/event/at/content.py:199 plone/app/event/dx/behaviors.py:235
+#: plone/app/event/at/content.py:199
+#: plone/app/event/dx/behaviors.py:235
 msgid "help_event_attendees"
 msgstr "Seznam účastníku."
 
 #. Default: "Email address to contact about this event."
-#: plone/app/event/at/content.py:236 plone/app/event/dx/behaviors.py:267
+#: plone/app/event/at/content.py:236
+#: plone/app/event/dx/behaviors.py:267
 msgid "help_event_contact_email"
-msgstr ""
-"Emailová adresa, kam mohou zájemci napsat o bližší informace k této události."
+msgstr "Emailová adresa, kam mohou zájemci napsat o bližší informace k této události."
 
 #. Default: "Name of a person to contact about this event."
-#: plone/app/event/at/content.py:217 plone/app/event/dx/behaviors.py:255
+#: plone/app/event/at/content.py:217
+#: plone/app/event/dx/behaviors.py:255
 msgid "help_event_contact_name"
 msgstr "Jméno osoby,. která má na starosti kontakt s účastníky a veřejností."
 
 #. Default: "Phone number to contact about this event."
-#: plone/app/event/at/content.py:255 plone/app/event/dx/behaviors.py:279
+#: plone/app/event/at/content.py:255
+#: plone/app/event/dx/behaviors.py:279
 msgid "help_event_contact_phone"
-msgstr ""
-"Telefonní číslo, kde mohou zájemci získat bližší informace o této události."
+msgstr "Telefonní číslo, kde mohou zájemci získat bližší informace o této události."
 
 #. Default: "Date and Time, when the event ends."
-#: plone/app/event/at/content.py:87 plone/app/event/dx/behaviors.py:88
+#: plone/app/event/at/content.py:87
+#: plone/app/event/dx/behaviors.py:88
 msgid "help_event_end"
 msgstr "Datum a čas, kdy událost končí"
 
@@ -277,17 +279,20 @@ msgid "help_event_listing_settings"
 msgstr "Nastavení zobrazení události"
 
 #. Default: "Location of the event."
-#: plone/app/event/at/content.py:182 plone/app/event/dx/behaviors.py:219
+#: plone/app/event/at/content.py:182
+#: plone/app/event/dx/behaviors.py:219
 msgid "help_event_location"
 msgstr "Místo konání události."
 
 #. Default: "This event is open ended."
-#: plone/app/event/at/content.py:124 plone/app/event/dx/behaviors.py:112
+#: plone/app/event/at/content.py:124
+#: plone/app/event/dx/behaviors.py:112
 msgid "help_event_open_end"
 msgstr "Tato událost nemá přesně určený konec."
 
 #. Default: "Define the event recurrence rule."
-#: plone/app/event/at/content.py:161 plone/app/event/dx/behaviors.py:189
+#: plone/app/event/at/content.py:161
+#: plone/app/event/dx/behaviors.py:189
 msgid "help_event_recurrence"
 msgstr "Definice pravidla pro opakování události."
 
@@ -297,24 +302,26 @@ msgid "help_event_settings"
 msgstr "Nastavení vlastností události jako je časové pásmo atd."
 
 #. Default: "Date and Time, when the event begins."
-#: plone/app/event/at/content.py:65 plone/app/event/dx/behaviors.py:76
+#: plone/app/event/at/content.py:65
+#: plone/app/event/dx/behaviors.py:76
 msgid "help_event_start"
 msgstr "Datum a čas začátku události."
 
 #. Default: "Select the Timezone, where this event happens."
-#: plone/app/event/at/content.py:144 plone/app/event/dx/behaviors.py:125
+#: plone/app/event/at/content.py:144
+#: plone/app/event/dx/behaviors.py:125
 msgid "help_event_timezone"
 msgstr "Vyberte časové pásmo, ve kterém se událost koná."
 
 #. Default: "Web address with more info about the event. Add http:// for external links."
-#: plone/app/event/at/content.py:274 plone/app/event/dx/behaviors.py:291
+#: plone/app/event/at/content.py:274
+#: plone/app/event/dx/behaviors.py:291
 msgid "help_event_url"
-msgstr ""
-"Adresa stránky, kde se nacházejí bližší informace o události. Pro odkazy "
-"mimo tento portál musíte použít i prefix http://"
+msgstr "Adresa stránky, kde se nacházejí bližší informace o události. Pro odkazy mimo tento portál musíte použít i prefix http://"
 
 #. Default: "Event lasts whole day."
-#: plone/app/event/at/content.py:107 plone/app/event/dx/behaviors.py:100
+#: plone/app/event/at/content.py:107
+#: plone/app/event/dx/behaviors.py:100
 msgid "help_event_whole_day"
 msgstr "Událost trvá celý den."
 
@@ -341,9 +348,7 @@ msgstr "Pokud chcete povolit icalendar import pro tuto položku, klepněte zde."
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
 #: plone/app/event/interfaces.py:26
 msgid "help_portal_timezone"
-msgstr ""
-"Nastavení časového pásma portálu. Uživatelé si mohou vybrat jiné časové "
-"pásmo ze seznamu povolených časových pásem."
+msgstr "Nastavení časového pásma portálu. Uživatelé si mohou vybrat jiné časové pásmo ze seznamu povolených časových pásem."
 
 #. Default: "Content type of the event, which is created when importing icalendar resources."
 #: plone/app/event/ical/importer.py:232
@@ -358,8 +363,7 @@ msgstr "Typ položky"
 #. Default: "Icalendar resource file, if no URL is given."
 #: plone/app/event/ical/importer.py:250
 msgid "ical_import_file_desc"
-msgstr ""
-"Pokud není zadána adresa icalendar souboru, nahrajte icalendar soubor zde."
+msgstr "Pokud není zadána adresa icalendar souboru, nahrajte icalendar soubor zde."
 
 #. Default: "Icalendar File"
 #: plone/app/event/ical/importer.py:249
@@ -381,14 +385,10 @@ msgstr "Zadejste prosím soubor icalendar (ics) nebo jeho webovou adresu"
 msgid "ical_import_sync_strategy_desc"
 msgstr ""
 "Nastavení synchronizace:\n"
-"1) \"Ponechat novější\": Importovat, pokud importovaná událost je změněna po "
-"událost v portálu.\n"
+"1) \"Ponechat novější\": Importovat, pokud importovaná událost je změněna po událost v portálu.\n"
 "2) \"Ponechat moje\":V případě konfliktu, nedělat nic\n"
-"3) \"Použít jejich\": V případě konfliktu nahradit událost z importovaného "
-"spuboru.\n"
-"4) \"Nesynchronizovat\": Nesynchronizovat existující události, ale "
-"importovat události a vytvořit novéi když už takové události existují. Pro "
-"každou nově importovanou vytvořit nové unikátní ID pro synchropnizaci"
+"3) \"Použít jejich\": V případě konfliktu nahradit událost z importovaného spuboru.\n"
+"4) \"Nesynchronizovat\": Nesynchronizovat existující události, ale importovat události a vytvořit novéi když už takové události existují. Pro každou nově importovanou vytvořit nové unikátní ID pro synchropnizaci"
 
 #. Default: "Synchronization Strategy"
 #: plone/app/event/ical/importer.py:257
@@ -427,42 +427,50 @@ msgid "label_event_announcement"
 msgstr "Informace o události"
 
 #. Default: "Attendees"
-#: plone/app/event/at/content.py:195 plone/app/event/dx/behaviors.py:231
+#: plone/app/event/at/content.py:195
+#: plone/app/event/dx/behaviors.py:231
 msgid "label_event_attendees"
 msgstr "Účastníci"
 
 #. Default: "Contact E-mail"
-#: plone/app/event/at/content.py:232 plone/app/event/dx/behaviors.py:263
+#: plone/app/event/at/content.py:232
+#: plone/app/event/dx/behaviors.py:263
 msgid "label_event_contact_email"
 msgstr "Kontaktní e-mail"
 
 #. Default: "Contact Name"
-#: plone/app/event/at/content.py:213 plone/app/event/dx/behaviors.py:251
+#: plone/app/event/at/content.py:213
+#: plone/app/event/dx/behaviors.py:251
 msgid "label_event_contact_name"
 msgstr "Jméno kontaktu"
 
 #. Default: "Contact Phone"
-#: plone/app/event/at/content.py:251 plone/app/event/dx/behaviors.py:275
+#: plone/app/event/at/content.py:251
+#: plone/app/event/dx/behaviors.py:275
 msgid "label_event_contact_phone"
 msgstr "Kontaktní telefon"
 
 #. Default: "Event Ends"
-#: plone/app/event/at/content.py:83 plone/app/event/dx/behaviors.py:84
+#: plone/app/event/at/content.py:83
+#: plone/app/event/dx/behaviors.py:84
 msgid "label_event_end"
 msgstr "Konec události"
 
 #. Default: "Location"
-#: plone/app/event/at/content.py:178 plone/app/event/dx/behaviors.py:215
+#: plone/app/event/at/content.py:178
+#: plone/app/event/dx/behaviors.py:215
 msgid "label_event_location"
 msgstr "Místo konání"
 
 #. Default: "Open End"
-#: plone/app/event/at/content.py:120 plone/app/event/dx/behaviors.py:108
+#: plone/app/event/at/content.py:120
+#: plone/app/event/dx/behaviors.py:108
 msgid "label_event_open_end"
 msgstr "Neurčitý konec"
 
 #. Default: "Recurrence"
-#: plone/app/event/at/content.py:157 plone/app/event/dx/behaviors.py:185
+#: plone/app/event/at/content.py:157
+#: plone/app/event/dx/behaviors.py:185
 msgid "label_event_recurrence"
 msgstr "Opakování"
 
@@ -472,22 +480,26 @@ msgid "label_event_settings"
 msgstr "Nastavení události"
 
 #. Default: "Event Starts"
-#: plone/app/event/at/content.py:61 plone/app/event/dx/behaviors.py:72
+#: plone/app/event/at/content.py:61
+#: plone/app/event/dx/behaviors.py:72
 msgid "label_event_start"
 msgstr "Začátek události"
 
 #. Default: "Timezone"
-#: plone/app/event/at/content.py:140 plone/app/event/dx/behaviors.py:121
+#: plone/app/event/at/content.py:140
+#: plone/app/event/dx/behaviors.py:121
 msgid "label_event_timezone"
 msgstr "Časové pásmo"
 
 #. Default: "Event URL"
-#: plone/app/event/at/content.py:270 plone/app/event/dx/behaviors.py:287
+#: plone/app/event/at/content.py:270
+#: plone/app/event/dx/behaviors.py:287
 msgid "label_event_url"
 msgstr "Adresa události"
 
 #. Default: "Whole Day"
-#: plone/app/event/at/content.py:103 plone/app/event/dx/behaviors.py:96
+#: plone/app/event/at/content.py:103
+#: plone/app/event/dx/behaviors.py:96
 msgid "label_event_whole_day"
 msgstr "Celý den"
 
@@ -559,10 +571,7 @@ msgstr "Uskutečněné události"
 #: plone/app/event/portlets/portlet_calendar.py:42
 #: plone/app/event/portlets/portlet_events.py:43
 msgid "portlet_help_search_base"
-msgstr ""
-"Vyberte výchozí složku, kde budou vyhledávány události. Tato složka bude "
-"také použita jako odkaz ve vyhledávání z kalendáře. Pokud není složka "
-"uvedena, pak se budou vyhledávat události v celém portálu."
+msgstr "Vyberte výchozí složku, kde budou vyhledávány události. Tato složka bude také použita jako odkaz ve vyhledávání z kalendáře. Pokud není složka uvedena, pak se budou vyhledávat události v celém portálu."
 
 #. Default: "Search base"
 #: plone/app/event/portlets/portlet_calendar.py:41
@@ -660,3 +669,4 @@ msgstr "Dnešní události"
 #: plone/app/event/browser/event_listing.py:233
 msgid "todays_upcoming_events"
 msgstr "Dnešní nadcházející události"
+
