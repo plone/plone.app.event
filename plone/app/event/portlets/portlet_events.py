@@ -172,12 +172,14 @@ class Renderer(base.Renderer):
             start, end = _prepare_range(search_base, start, end)
             query_kw.update(start_end_query(start, end))
             events = search_base.results(
-                batch=False, brains=True, custom_query=query_kw
+                batch=False, brains=True, custom_query=query_kw,
+                limit=data.count
             )
             events = expand_events(
                 events, ret_mode=RET_MODE_ACCESSORS,
                 sort='start', start=start, end=end
             )
+            events = events[:data.count]  # limit expanded
         else:
             search_base_path = self.search_base_path
             if search_base_path:
