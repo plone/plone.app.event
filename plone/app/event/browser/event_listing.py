@@ -23,7 +23,7 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
 try:
-    from plone.app.contenttypes.interfaces import ICollection
+    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
 except ImportError:
     ICollection = None
 

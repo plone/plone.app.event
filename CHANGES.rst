@@ -10,6 +10,10 @@ Changelog
 2.0a9 (2015-05-04)
 ------------------
 
+- Extend Collection support on ``event_listing`` for content items providing
+  ``ISyndicatableCollection``.
+  [thet]
+
 - Support for ``contentFilter`` on request for ``event_listing``.
   [thet]
 
