@@ -1,6 +1,13 @@
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
+from plone.app.contenttypes.interfaces import IFolder
+from plone.app.event.base import expand_events
+from plone.app.event.base import _prepare_range
+from plone.app.event.base import start_end_query
+
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
@@ -12,12 +19,17 @@ from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.compress import xhtml_compress
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
-from Products.CMFCore.utils import getToolByName
 from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implementer
+from plone.app.querystring import queryparser
+
+try:
+    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
+except ImportError:
+    ICollection = None
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -43,13 +55,20 @@ class IEventsPortlet(IPortletDataProvider):
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
-            default=u'Select search base folder to search for events. This '
-                    u'folder will also be used to link to in calendar '
-                    u'searches. If empty, the whole site will be searched and '
-                    u'the event listing view will be called on the site root.'
+            default=u'Select search base Folder or Collection to search for '
+                    u'events. The URL to to this item will also be used to '
+                    u'link to in calendar searches. If empty, the whole site '
+                    u'will be searched and the event listing view will be '
+                    u'called on the site root.'
         ),
         required=False,
-        source=CatalogSource(is_folderish=True),
+        source=CatalogSource(object_provides={
+            'query': [
+                ISyndicatableCollection.__identifier__,
+                IFolder.__identifier__
+            ],
+            'operator': 'or'
+        }),
     )
 
 
@@ -86,8 +105,17 @@ class Renderer(base.Renderer):
 
     _template = ViewPageTemplateFile('portlet_events.pt')
 
+    _search_base = None
+
+    @property
+    def search_base(self):
+        if not self._search_base:
+            self._search_base = uuidToObject(self.data.search_base_uid)
+        return self._search_base
+
+    @property
     def search_base_path(self):
-        search_base = uuidToObject(self.data.search_base_uid)
+        search_base = self.search_base
         if search_base is not None:
             search_base = '/'.join(search_base.getPhysicalPath())
         return search_base
@@ -97,7 +125,7 @@ class Renderer(base.Renderer):
 
         context = aq_inner(self.context)
 
-        calendar_url = get_calendar_url(context, self.search_base_path())
+        calendar_url = get_calendar_url(context, self.search_base_path)
 
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
@@ -121,16 +149,45 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         data = self.data
 
-        kw = {}
-        search_base_path = self.search_base_path()
-        if search_base_path:
-            kw['path'] = {'query': search_base_path}
+        query_kw = {}
         if data.state:
-            kw['review_state'] = data.state
+            query_kw['review_state'] = data.state
 
-        return get_events(context, start=localized_now(context),
-                          ret_mode=RET_MODE_ACCESSORS,
-                          expand=True, limit=data.count, **kw)
+        events = []
+        query_kw.update(self.request.get('contentFilter', {}))
+        search_base = self.search_base
+        if ICollection.providedBy(search_base):
+            query = queryparser.parseFormquery(search_base, search_base.query)
+
+            start = None
+            if 'start' in query:
+                start = query['start']
+            else:
+                start = localized_now(context)
+
+            end = None
+            if 'end' in query:
+                end = query['end']
+
+            start, end = _prepare_range(search_base, start, end)
+            query_kw.update(start_end_query(start, end))
+            events = search_base.results(
+                batch=False, brains=True, custom_query=query_kw
+            )
+            events = expand_events(
+                events, ret_mode=RET_MODE_ACCESSORS,
+                sort='start', start=start, end=end
+            )
+        else:
+            search_base_path = self.search_base_path
+            if search_base_path:
+                query_kw['path'] = {'query': search_base_path}
+            events = get_events(
+                context, start=localized_now(context),
+                ret_mode=RET_MODE_ACCESSORS,
+                expand=True, limit=data.count, **query_kw
+            )
+        return events
 
     def formatted_date(self, event):
         provider = getMultiAdapter(

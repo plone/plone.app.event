@@ -10,6 +10,9 @@ Changelog
 2.0a9 (2015-05-04)
 ------------------
 
+- Add support for Collections as data source for calendar and event portlets.
+  [thet]
+
 - Extend Collection support on ``event_listing`` for content items providing
   ``ISyndicatableCollection``.
   [thet]

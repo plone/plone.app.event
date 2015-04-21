@@ -2,14 +2,20 @@ from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
+from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event.base import _prepare_range
+from plone.app.event.base import expand_events
 from plone.app.event.base import first_weekday
 from plone.app.event.base import get_events, construct_calendar
 from plone.app.event.base import localized_today
+from plone.app.event.base import start_end_query
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.portlets import get_calendar_url
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
+from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.event.interfaces import IEventAccessor
@@ -19,10 +25,13 @@ from zope import schema
 from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
-
 import calendar
 import json
 
+try:
+    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
+except ImportError:
+    ICollection = None
 
 PLMF = MessageFactory('plonelocales')
 
@@ -44,13 +53,20 @@ class ICalendarPortlet(IPortletDataProvider):
         title=_(u'portlet_label_search_base', default=u'Search base'),
         description=_(
             u'portlet_help_search_base',
-            default=u'Select search base folder to search for events. This '
-                    u'folder will also be used to link to in calendar '
-                    u'searches. If empty, the whole site will be searched and '
-                    u'the event listing view will be called on the site root.'
+            default=u'Select search base Folder or Collection to search for '
+                    u'events. The URL to to this item will also be used to '
+                    u'link to in calendar searches. If empty, the whole site '
+                    u'will be searched and the event listing view will be '
+                    u'called on the site root.'
         ),
         required=False,
-        source=CatalogSource(is_folderish=True),
+        source=CatalogSource(object_provides={
+            'query': [
+                ISyndicatableCollection.__identifier__,
+                IFolder.__identifier__
+            ],
+            'operator': 'or'
+        }),
     )
 
 
@@ -83,8 +99,17 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
 
+    _search_base = None
+
+    @property
+    def search_base(self):
+        if not self._search_base:
+            self._search_base = uuidToObject(self.data.search_base_uid)
+        return self._search_base
+
+    @property
     def search_base_path(self):
-        search_base = uuidToObject(self.data.search_base_uid)
+        search_base = self.search_base
         if search_base is not None:
             search_base = '/'.join(search_base.getPhysicalPath())
         return search_base
@@ -92,7 +117,7 @@ class Renderer(base.Renderer):
     def update(self):
         context = aq_inner(self.context)
 
-        self.calendar_url = get_calendar_url(context, self.search_base_path())
+        self.calendar_url = get_calendar_url(context, self.search_base_path)
 
         self.year, self.month = year, month = self.year_month_display()
         self.prev_year, self.prev_month = prev_year, prev_month = (
@@ -171,21 +196,43 @@ class Renderer(base.Renderer):
         year, month = self.year_month_display()
         monthdates = [dat for dat in self.cal.itermonthdates(year, month)]
 
+        start = monthdates[0]
+        end = monthdates[-1]
+
         data = self.data
         query_kw = {}
-
-        search_base_path = self.search_base_path()
-        if search_base_path:
-            query_kw['path'] = {'query': search_base_path}
-
         if data.state:
             query_kw['review_state'] = data.state
 
-        start = monthdates[0]
-        end = monthdates[-1]
-        events = get_events(context, start=start, end=end,
-                            ret_mode=RET_MODE_OBJECTS,
-                            expand=True, **query_kw)
+        events = []
+        query_kw.update(self.request.get('contentFilter', {}))
+        search_base = self.search_base
+        if ICollection.providedBy(search_base):
+            query = queryparser.parseFormquery(search_base, search_base.query)
+
+            # restrict start/end with those from query, if given.
+            if 'start' in query and query['start'] > start:
+                start = query['start']
+            if 'end' in query and query['end'] < end:
+                end = query['end']
+
+            start, end = _prepare_range(search_base, start, end)
+            query_kw.update(start_end_query(start, end))
+            events = search_base.results(
+                batch=False, brains=True, custom_query=query_kw
+            )
+            events = expand_events(
+                events, ret_mode=RET_MODE_OBJECTS,
+                sort='start', start=start, end=end
+            )
+        else:
+            search_base_path = self.search_base_path
+            if search_base_path:
+                query_kw['path'] = {'query': search_base_path}
+            events = get_events(context, start=start, end=end,
+                                ret_mode=RET_MODE_OBJECTS,
+                                expand=True, **query_kw)
+
         cal_dict = construct_calendar(events, start=start, end=end)
 
         # [[day1week1, day2week1, ... day7week1], [day1week2, ...]]
