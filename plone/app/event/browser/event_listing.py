@@ -138,7 +138,14 @@ class EventListing(BrowserView):
         res = []
         if self.is_collection:
             ctx = self.default_context
-            query = queryparser.parseFormquery(ctx, ctx.query)
+            # Whatever sorting is defined, we're overriding it.
+            sort_on = 'start'
+            sort_order = None
+            if self.mode in ('past', 'all'):
+                sort_order = 'reverse'
+            query = queryparser.parseFormquery(
+                ctx, ctx.query, sort_on=sort_on, sort_order=sort_order
+            )
             custom_query = self.request.get('contentFilter', {})
             if 'start' not in query or 'end' not in query:
                 # ... else don't show the navigation bar
@@ -156,7 +163,9 @@ class EventListing(BrowserView):
                     query.get('end') or custom_query.get('end')
                 )
                 res = expand_events(
-                    res, ret_mode, sort='start', start=start, end=end
+                    res, ret_mode,
+                    start=start, end=end,
+                    sort=sort_on, sort_reverse=True if sort_order else False
                 )
         else:
             res = self._get_events(ret_mode, expand=expand)
