@@ -200,15 +200,19 @@ class Renderer(base.Renderer):
         end = monthdates[-1]
 
         data = self.data
-        query_kw = {}
+        query = {}
         if data.state:
-            query_kw['review_state'] = data.state
+            query['review_state'] = data.state
 
         events = []
-        query_kw.update(self.request.get('contentFilter', {}))
+        query.update(self.request.get('contentFilter', {}))
         search_base = self.search_base
         if ICollection.providedBy(search_base):
-            query = queryparser.parseFormquery(search_base, search_base.query)
+            # Whatever sorting is defined, we're overriding it.
+            query = queryparser.parseFormquery(
+                search_base, search_base.query,
+                sort_on='start', sort_order=None
+            )
 
             # restrict start/end with those from query, if given.
             if 'start' in query and query['start'] > start:
@@ -217,21 +221,22 @@ class Renderer(base.Renderer):
                 end = query['end']
 
             start, end = _prepare_range(search_base, start, end)
-            query_kw.update(start_end_query(start, end))
+            query.update(start_end_query(start, end))
             events = search_base.results(
-                batch=False, brains=True, custom_query=query_kw
+                batch=False, brains=True, custom_query=query
             )
             events = expand_events(
                 events, ret_mode=RET_MODE_OBJECTS,
-                sort='start', start=start, end=end
+                start=start, end=end,
+                sort='start', sort_reverse=False
             )
         else:
             search_base_path = self.search_base_path
             if search_base_path:
-                query_kw['path'] = {'query': search_base_path}
+                query['path'] = {'query': search_base_path}
             events = get_events(context, start=start, end=end,
                                 ret_mode=RET_MODE_OBJECTS,
-                                expand=True, **query_kw)
+                                expand=True, **query)
 
         cal_dict = construct_calendar(events, start=start, end=end)
 
