@@ -7,3 +7,5 @@ Recurrence support, event views and a lot more.
 
 For a Dexterity event type using plone.app.event, use plone.app.contenttypes
 1.1 or newer.
+
+The complete documentation can be found on: https://ploneappevent.readthedocs.org
