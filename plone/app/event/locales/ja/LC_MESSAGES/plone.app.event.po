@@ -327,7 +327,7 @@ msgstr "丸一日かかる終日イベント"
 #. Default: "First day in the Week."
 #: plone/app/event/interfaces.py:47
 msgid "help_first_weekday"
-msgstr "週の最初の日
+msgstr "週の最初の日"
 
 #. Default: "Import Events from icalendar files."
 #: plone/app/event/profiles/default/actions.xml
