@@ -15,6 +15,8 @@ Changelog
 - Fix Plone 4.3 BBB z3c.form portlets to show their fields in Add/Edit Forms.
   [thet]
 
+- Update Japanese translation.
+  [terapyon]
 
 2.0a8 (2015-03-26)
 ------------------

@@ -1,0 +1,27 @@
+# Takanori Suzuki <takanori@takanory.net>,2014
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-04-19 23:38+0000\n"
+"PO-Revision-Date: 2014-07-02 21:36+0900\n"
+"Last-Translator: Takanori Suzuki <takanori@takanory.net>\n"
+"Language-Team: Plone Japanese Team <https://github.com/plonejp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: ja-jp\n"
+"Language-Name: Japanese\n"
+"Preferred-Encodings: utf-8\n"
+"Domain: plone\n"
+"X-Is-Fallback-For: ja-jp\n"
+
+# TRANSLATE VIEW NAMES
+# 
+#. Default: "Event Listing"
+msgid "event_listing"
+msgstr "イベント一覧"
+
+#. Default: "Event"
+msgid "event_view"
+msgstr "イベント"
