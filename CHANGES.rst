@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a9 (unreleased)
+2.0a9 (2015-05-04)
 ------------------
 
 - Support for ``contentFilter`` on request for ``event_listing``.
