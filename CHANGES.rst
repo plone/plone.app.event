@@ -4,7 +4,16 @@ Changelog
 2.0a10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- For ``event_listing`` on Collections, ignore the Collection's sorting and use
+  what the event listing's mode defines for sorting.
+  [thet]
+
+- Add support for Collections as data source for calendar and event portlets.
+  [thet]
+
+- Extend Collection support on ``event_listing`` for content items providing
+  ``ISyndicatableCollection``.
+  [thet]
 
 
 2.0a9 (2015-05-04)
