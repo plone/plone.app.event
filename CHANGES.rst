@@ -4,12 +4,6 @@ Changelog
 2.0a10 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
-
-2.0a9 (2015-05-04)
-------------------
-
 - For ``event_listing`` on Collections, ignore the Collection's sorting and use
   what the event listing's mode defines for sorting.
   [thet]
@@ -20,6 +14,10 @@ Changelog
 - Extend Collection support on ``event_listing`` for content items providing
   ``ISyndicatableCollection``.
   [thet]
+
+
+2.0a9 (2015-05-04)
+------------------
 
 - Support for ``contentFilter`` on request for ``event_listing``.
   [thet]
