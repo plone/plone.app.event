@@ -1,19 +1,27 @@
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.portlets import PloneMessageFactory as _
-from plone.app.portlets.browser.z3cformhelper import AddForm
-from plone.app.portlets.browser.z3cformhelper import EditForm
+try:
+    from plone.app.portlets.browser import z3cformhelper
+    P_A_PORTLETS_PRE_3 = True
+except:
+    P_A_PORTLETS_PRE_3 = False
+from plone.app.portlets.portlets import base
 from plone.app.event.portlets.portlet_events import Renderer as RendererBase
 from plone.app.event.portlets.portlet_events import Assignment
 from plone.app.event.portlets.portlet_events import IEventsPortlet
-from z3c.form import field
+if P_A_PORTLETS_PRE_3:
+    from z3c.form import field
 
 
 class Renderer(RendererBase):
     render = ViewPageTemplateFile('portlet_events.pt')
 
 
-class AddForm(AddForm):
-    fields = field.Fields(IEventsPortlet)
+class AddForm(base.AddForm):
+    if P_A_PORTLETS_PRE_3:
+        fields = field.Fields(IEventsPortlet)
+    else:
+        schema = IEventsPortlet
     label = _(u"Add Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
 
@@ -23,7 +31,10 @@ class AddForm(AddForm):
                           search_base_uid=data.get('search_base_uid', 5))
 
 
-class EditForm(EditForm):
-    fields = field.Fields(IEventsPortlet)
+class EditForm(base.EditForm):
+    if P_A_PORTLETS_PRE_3:
+        fields = field.Fields(IEventsPortlet)
+    else:
+        schema = IEventsPortlet
     label = _(u"Edit Events Portlet")
     description = _(u"This portlet lists upcoming Events.")
