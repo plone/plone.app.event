@@ -171,7 +171,7 @@ msgstr "Quan"
 #. Default: "${startdate} to ${enddate}"
 #: plone/app/event/browser/formatted_date.pt:27
 msgid "event_when_differentday"
-msgstr "${startdate} a ${linebreak} ${enddate}"
+msgstr "${startdate} a ${enddate}"
 
 #: plone/app/event/browser/formatted_date.pt:20
 msgid "event_when_differentday_optional_word_between_date_and_time"
@@ -180,7 +180,7 @@ msgstr "a"
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formatted_date.pt:71
 msgid "event_when_sameday"
-msgstr "${date} ${linebreak} de ${starttime} a ${endtime}"
+msgstr "${date} de ${starttime} a ${endtime}"
 
 #. Default: "${date} from ${starttime}"
 #: plone/app/event/browser/formatted_date.pt:52
