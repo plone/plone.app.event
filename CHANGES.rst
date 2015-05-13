@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a10 (unreleased)
+2.0a10 (2015-05-13)
 -------------------
 
 - For ``event_listing`` on Collections, ignore the Collection's sorting and use
