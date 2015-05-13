@@ -4,7 +4,9 @@ Changelog
 2.0a11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Rerelease, because one of our test servers complains about the
+  previous release.
+  [maurits]
 
 
 2.0a10 (2015-05-13)
