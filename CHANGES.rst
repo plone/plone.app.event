@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a11 (unreleased)
+2.0a11 (2015-05-13)
 -------------------
 
 - Rerelease, because one of our test servers complains about the
