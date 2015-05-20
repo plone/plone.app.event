@@ -18,6 +18,10 @@ Changelog
 2.0a10 (2015-05-13)
 -------------------
 
+- Import BBB superclasses from  plone.app.portlets.portlets.base so it works
+  with plone.app.portlets 3.0 and up
+  [frapell]
+
 - For ``event_listing`` on Collections, ignore the Collection's sorting and use
   what the event listing's mode defines for sorting.
   [thet]
