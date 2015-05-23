@@ -4,7 +4,6 @@ import pkg_resources
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.portlets import PloneMessageFactory as _
 
-from plone.app.portlets.portlets import base
 from plone.app.event.portlets.portlet_calendar import Renderer as RendererBase
 from plone.app.event.portlets.portlet_calendar import ICalendarPortlet
 from plone.app.event.portlets.portlet_calendar import Assignment
@@ -15,10 +14,11 @@ wanted = StrictVersion('3.0')
 
 if version >= wanted:
     P_A_PORTLETS_PRE_3 = False
-    from z3c.form import field
+    from plone.app.portlets.portlets import base
 else:
     P_A_PORTLETS_PRE_3 = True
-    from plone.app.portlets.browser import z3cformhelper
+    from z3c.form import field
+    from plone.app.portlets.browser import z3cformhelper as base
 
 
 class Renderer(RendererBase):
