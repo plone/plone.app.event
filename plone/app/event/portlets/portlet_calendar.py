@@ -105,7 +105,8 @@ class Renderer(base.Renderer):
     def search_base(self):
         if not self._search_base:
             self._search_base = uuidToObject(self.data.search_base_uid)
-        return self._search_base
+        # aq_inner, because somehow search_base gets wrapped by the renderer
+        return aq_inner(self._search_base)
 
     @property
     def search_base_path(self):

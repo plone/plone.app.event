@@ -4,6 +4,10 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- Unwrap search_base for portlets, as it might be wrapped by the portlet
+  renderer class. Fixes an error with getting the events to display.
+  [thet]
+
 - Import BBB superclasses from  plone.app.portlets.portlets.base so it works
   with plone.app.portlets 3.0 and up
   [frapell]
