@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a12 (unreleased)
+2.0a12 (2015-06-05)
 -------------------
 
 - Unwrap search_base for portlets, as it might be wrapped by the portlet
