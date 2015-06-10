@@ -4,6 +4,10 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- Let ``date_speller`` return the short, 2-letter weekday abbreviation instead
+  of a 3-letter one.
+  [thet]
+
 - Remove inconsistency in date_speller and rename ``month`` and ``wkday`` keys
   to ``month_name`` and ``wkday_name``. Introduce ``month``, the non-zero
   padded numeric value of the current month, ``month2``, the zero-padded one,

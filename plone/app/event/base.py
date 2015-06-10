@@ -865,7 +865,7 @@ def date_speller(context, dt):
             domain=dom, context=context
         ),
         wkday_abbr=util.translate(
-            util.day_msgid(dt.dow(), 'a'),
+            util.day_msgid(dt.dow(), 's'),
             domain=dom, context=context
         ),
 
