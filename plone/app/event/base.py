@@ -847,21 +847,23 @@ def date_speller(context, dt):
     date_dict = dict(
         year=dt.year(),
 
-        month=util.translate(
+        month=dt.month(),
+        month2=zero_pad(dt.month()),
+        month_name=util.translate(
             util.month_msgid(dt.month()),
             domain=dom, context=context
         ),
-
         month_abbr=util.translate(
             util.month_msgid(dt.month(), 'a'),
             domain=dom, context=context
         ),
 
-        wkday=util.translate(
+        week=dt.week(),
+        wkday=dt.dow(),
+        wkday_name=util.translate(
             util.day_msgid(dt.dow()),
             domain=dom, context=context
         ),
-
         wkday_abbr=util.translate(
             util.day_msgid(dt.dow(), 'a'),
             domain=dom, context=context

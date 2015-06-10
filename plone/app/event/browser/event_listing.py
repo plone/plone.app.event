@@ -276,15 +276,15 @@ class EventListing(BrowserView):
                 default=u"${from} until ${until}.",
                 mapping={
                     'from': "%s, %s. %s %s" % (
-                        start_dict['wkday'],
+                        start_dict['wkday_name'],
                         start.day,
-                        start_dict['month'],
+                        start_dict['month_name'],
                         start.year
                     ),
                     'until': "%s, %s. %s %s" % (
-                        end_dict['wkday'],
+                        end_dict['wkday_name'],
                         end.day,
-                        end_dict['month'],
+                        end_dict['month_name'],
                         end.year
                     ),
                 }
@@ -296,9 +296,9 @@ class EventListing(BrowserView):
                 default=u"Events on ${day}",
                 mapping={
                     'day': "%s, %s. %s %s" % (
-                        start_dict['wkday'],
+                        start_dict['wkday_name'],
                         start.day,
-                        start_dict['month'],
+                        start_dict['month_name'],
                         start.year
                     ),
                 }
@@ -313,15 +313,15 @@ class EventListing(BrowserView):
                 default=u"${from} until ${until}.",
                 mapping={
                     'from': "%s, %s. %s %s" % (
-                        start_dict['wkday'],
+                        start_dict['wkday_name'],
                         start.day,
-                        start_dict['month'],
+                        start_dict['month_name'],
                         start.year
                     ),
                     'until': "%s, %s. %s %s" % (
-                        end_dict['wkday'],
+                        end_dict['wkday_name'],
                         end.day,
-                        end_dict['month'],
+                        end_dict['month_name'],
                         end.year
                     ),
                 }
@@ -332,7 +332,7 @@ class EventListing(BrowserView):
                 u"events_in_month",
                 default=u"Events in ${month} ${year}",
                 mapping={
-                    'month': start_dict['month'],
+                    'month': start_dict['month_name'],
                     'year': start.year,
                 }
             )

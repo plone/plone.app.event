@@ -10,6 +10,7 @@ from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import construct_calendar
 from plone.app.event.base import dates_for_display
+from plone.app.event.base import date_speller
 from plone.app.event.base import default_end
 from plone.app.event.base import default_start
 from plone.app.event.base import default_timezone
@@ -299,6 +300,30 @@ class TestBaseModule(unittest.TestCase):
             end.year == 2013 and end.month == 2 and end.day == 28 and
             end.hour == 23 and end.minute == 59 and end.second == 59
         )
+
+    def test_date_speller(self):
+        DT = DateTime(2015, 6, 6, 1, 2, 3)
+        date_spelled = date_speller(self.portal, DT)
+        self.assertEqual(date_spelled['year'], 2015)
+        self.assertEqual(date_spelled['month'], 6)
+        self.assertEqual(date_spelled['month2'], '06')
+        self.assertEqual(date_spelled['day'], 6)
+        self.assertEqual(date_spelled['day2'], '06')
+        self.assertEqual(date_spelled['hour'], 1)
+        self.assertEqual(date_spelled['hour2'], '01')
+        self.assertEqual(date_spelled['minute'], 2)
+        self.assertEqual(date_spelled['minute2'], '02')
+        self.assertEqual(date_spelled['second'], 3)
+        self.assertEqual(date_spelled['second2'], '03')
+        self.assertEqual(date_spelled['week'], 23)
+
+        # locale specific
+        # TODO: test better.
+        self.assertTrue(isinstance(date_spelled['wkday'], int))
+        self.assertTrue(isinstance(date_spelled['month_name'], basestring))
+        self.assertTrue(isinstance(date_spelled['month_abbr'], basestring))
+        self.assertTrue(isinstance(date_spelled['wkday_name'], basestring))
+        self.assertTrue(isinstance(date_spelled['wkday_abbr'], basestring))
 
 
 class TimezoneTest(unittest.TestCase):

@@ -4,7 +4,12 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Remove inconsistency in date_speller and rename ``month`` and ``wkday`` keys
+  to ``month_name`` and ``wkday_name``. Introduce ``month``, the non-zero
+  padded numeric value of the current month, ``month2``, the zero-padded one,
+  ``wkday``, the weekday number and ``week``, the weeknumber of the current
+  year.
+  [thet]
 
 
 2.0a12 (2015-06-05)
