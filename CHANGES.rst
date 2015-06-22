@@ -4,6 +4,11 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- For the event portlet, cache the list of events on the request
+  (plone.memoize.view) instead of the instance, which creates a write
+  transaction.
+  [thet]
+
 - Let ``date_speller`` return the short, 2-letter weekday abbreviation instead
   of a 3-letter one.
   [thet]

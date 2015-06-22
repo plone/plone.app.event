@@ -17,7 +17,7 @@ from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.compress import xhtml_compress
-from plone.memoize.instance import memoize
+from plone.memoize import view
 from plone.portlets.interfaces import IPortletDataProvider
 from zExceptions import NotFound
 from zope import schema
@@ -145,7 +145,7 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self.events)
 
     @property
-    @memoize
+    @view.memoize
     def events(self):
         context = aq_inner(self.context)
         data = self.data
