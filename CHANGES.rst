@@ -4,6 +4,10 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- BBB portlets: do the version comparison with LooseVersion, so that
+  Plone-style development version numbers like ``2.5.4.dev0`` also work.
+  [thet]
+
 - For the event portlet, cache the list of events on the request
   (plone.memoize.view) instead of the instance, which creates a write
   transaction.

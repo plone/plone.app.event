@@ -1,16 +1,15 @@
-from distutils.version import StrictVersion
-import pkg_resources
-
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.portlets import PloneMessageFactory as _
-
-from plone.app.event.portlets.portlet_events import Renderer as RendererBase
+from distutils.version import LooseVersion
 from plone.app.event.portlets.portlet_events import Assignment
 from plone.app.event.portlets.portlet_events import IEventsPortlet
+from plone.app.event.portlets.portlet_events import Renderer as RendererBase
+from plone.app.portlets import PloneMessageFactory as _
+import pkg_resources
 
 
-version = StrictVersion(pkg_resources.require("plone.app.portlets")[0].version)
-wanted = StrictVersion('3.0')
+version = LooseVersion(pkg_resources.require("plone.app.portlets")[0].version)
+wanted = LooseVersion('3.0')
+
 
 if version >= wanted:
     P_A_PORTLETS_PRE_3 = False
