@@ -4,13 +4,13 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
-- BBB portlets: do the version comparison with LooseVersion, so that
-  Plone-style development version numbers like ``2.5.4.dev0`` also work.
+- For the event portlet, don't cache the list of events on memoize instance,
+  which creates a write transaction. Remove the caching until a solid cache key
+  is found, which also works for multiple portlet instances.
   [thet]
 
-- For the event portlet, cache the list of events on the request
-  (plone.memoize.view) instead of the instance, which creates a write
-  transaction.
+- BBB portlets: do the version comparison with LooseVersion, so that
+  Plone-style development version numbers like ``2.5.4.dev0`` also work.
   [thet]
 
 - Let ``date_speller`` return the short, 2-letter weekday abbreviation instead
