@@ -45,8 +45,13 @@ class EventListing(BrowserView):
 
         # Request parameter
         req = self.request.form
+
+        b_size  = int(req.get('b_size', 0))
+        if not b_size and self.is_collection:
+            collection_behavior = ICollection(self.default_context)
+            b_size = getattr(collection_behavior, 'item_count', 0)
+        self.b_size = b_size or 10
         self.b_start = int(req.get('b_start', 0))
-        self.b_size  = int(req.get('b_size', 10))
         self.orphan  = int(req.get('orphan', 1))
         self.mode    = req.get('mode', None)
         self._date   = req.get('date', None)

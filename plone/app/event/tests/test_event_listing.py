@@ -60,6 +60,32 @@ class TestEventsListingCollection(TestEventsListingPortal):
     def _listing_view(self, name='@@event_listing'):
         return self.portal.collection.restrictedTraverse(name)
 
+    def test_collection_batching(self):
+        """Test if the batch size can be set via request parameter or the
+        collection's item_count.
+        """
+        # plone.app.contenttypes ICollection type
+        self.portal.invokeFactory('Collection', 'col_test', title=u'Col')
+        collection = self.portal.col_test
+        collection.query = [
+            {'i': 'portal_type',
+             'o': 'plone.app.querystring.operation.selection.is',
+             'v': ['Event', 'plone.app.event.dx.event']
+             },
+        ]
+        self.request.form.update({'mode': 'all'})
+
+        view = collection.restrictedTraverse('@@event_listing')
+        self.assertEqual(len(view.events(batch=True)), 8)
+
+        collection.item_count = 4
+        view = collection.restrictedTraverse('@@event_listing')
+        self.assertEqual(len(view.events(batch=True)), 4)
+
+        self.request.form.update({'b_size': 2})
+        view = collection.restrictedTraverse('@@event_listing')
+        self.assertEqual(len(view.events(batch=True)), 2)
+
     def test_date_filtering(self):
         """Test if date filters are available on Collections without start or
         end search criterias.
