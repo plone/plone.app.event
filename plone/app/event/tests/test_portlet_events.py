@@ -127,7 +127,7 @@ class PortletTest(unittest.TestCase):
         addview = mapping.restrictedTraverse('+/' + portlet.addview)
 
         try:
-            addview()
+            addview.createAndAdd(data={})
         except Unauthorized:
             self.fail()
 
