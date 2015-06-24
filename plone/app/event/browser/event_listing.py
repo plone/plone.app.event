@@ -35,20 +35,28 @@ class EventListing(BrowserView):
 
         self.now = now = localized_now(context)
 
+        # Try to get the default page
+        default = getDefaultPage(context)
+        self.default_context = context[default] if default else context
+
+        self.is_collection = False
+        if ICollection:
+            self.is_collection = ICollection.providedBy(self.default_context)
+
         # Request parameter
         req = self.request.form
-        self.b_start = int(req['b_start']) if 'b_start' in req else 0
-        self.b_size  = int(req['b_size'])  if 'b_size'  in req else 10
-        self.orphan  = int(req['orphan'])  if 'orphan'  in req else 1
-        self.mode    = req['mode'] if 'mode' in req else None
-        self._date   = req['date'] if 'date' in req else None
-        self.tags    = req['tags'] if 'tags' in req else None
-        self.searchable_text = req['SearchableText'] if 'SearchableText' in req else None  # noqa
-        self.path    = req['path'] if 'path' in req else None
+        self.b_start = int(req.get('b_start', 0))
+        self.b_size  = int(req.get('b_size', 10))
+        self.orphan  = int(req.get('orphan', 1))
+        self.mode    = req.get('mode', None)
+        self._date   = req.get('date', None)
+        self.tags    = req.get('tags', None)
+        self.searchable_text = req.get('SearchableText', None)
+        self.path    = req.get('path', None)
 
-        day   = int(req['day'])   if 'day'   in req else None
-        month = int(req['month']) if 'month' in req else None
-        year  = int(req['year'])  if 'year'  in req else None
+        day   = int(req.get('day', 0)) or None
+        month = int(req.get('month', 0)) or None
+        year  = int(req.get('year', 0)) or None
 
         if not self._date and day or month or year:
             self._date = date(year or now.year,
@@ -59,20 +67,6 @@ class EventListing(BrowserView):
             self.mode = 'day' if self._date else 'future'
 
         self.uid = None  # Used to get all occurrences from a single event. Overrides all other settings  # noqa
-
-    @property
-    def default_context(self):
-        # Try to get the default page
-        context = self.context
-        default = getDefaultPage(context)
-        if default:
-            context = context[default]
-        return context
-
-    @property
-    def is_collection(self):
-        ctx = self.default_context
-        return ICollection.providedBy(ctx) if ICollection else False
 
     @property
     def show_filter(self):
