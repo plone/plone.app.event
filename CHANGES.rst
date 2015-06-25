@@ -28,6 +28,9 @@ Changelog
   year.
   [thet]
 
+- Don't purge type profiles when adding event_listing view
+  [tomgross]
+
 
 2.0a12 (2015-06-05)
 -------------------
