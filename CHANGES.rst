@@ -4,8 +4,8 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
-- In the event listing, use the collection's ``item_count`` attribute to limit
-  the batch size.
+- For event listings on collections, use the collection's ``item_count``
+  attribute to limit the batch size.
   [thet]
 
 - For the event portlet, don't cache the list of events on memoize instance,
