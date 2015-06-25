@@ -38,6 +38,7 @@ class EventSummaryView(BrowserView):
         return provider(occ)
 
     @property
+    @view.memoize
     def next_occurrences(self):
         """Returns occurrences for this context, except the start
         occurrence, limited to self.max_occurrence occurrences.
@@ -48,7 +49,8 @@ class EventSummaryView(BrowserView):
         occurrences = []
         adapter = IRecurrenceSupport(self.event_context, None)
         if adapter:
-            for cnt, occ in enumerate(adapter.occurrences()):
+            for cnt, occ in enumerate(adapter.occurrences(
+                    range_start=self.data.start)):
                 if cnt == self.max_occurrences:
                     break
                 occurrences.append(occ)
@@ -70,8 +72,7 @@ class EventSummaryView(BrowserView):
             return 0
         brain = brains[0]  # assuming, that current context is in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
-
-        num = len(idx['start']) - self.max_occurrences
+        num = len(idx['start']) - len(self.next_occurrences)
         return num if num > 0 else 0
 
     @property

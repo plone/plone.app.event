@@ -1,4 +1,3 @@
-from plone.app.event.dx.behaviors import EventAccessor as DXEventAccessor
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
@@ -47,7 +46,7 @@ class FunctionalTestEventViewDX(AbstractSampleDataEvents):
         output = view()
 
         self.assertTrue('Now Event' in output)
-        self.assertTrue('2013-05-05' in output)
+        self.assertTrue('2013-05-05' not in output)  # Lists only upcoming relative to occurrence's date  # noqa
         self.assertTrue('2013-05-07' in output)
         self.assertTrue('2013-05-09' in output)
         self.assertTrue('http://plone.org' in output)

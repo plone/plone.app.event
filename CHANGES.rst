@@ -4,6 +4,11 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- Show only upcoming occurrences in the for ``@@event_summary`` for events with
+  occurrences. On the last occurrence, only a link to all occurrences via
+  ``@@event_listing`` is shown.
+  [thet]
+
 - Translation updates (num_more_occurrences).
   [thet]
 
