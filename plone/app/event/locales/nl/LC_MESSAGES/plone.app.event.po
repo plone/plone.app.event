@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-04-11 09:40+0000\n"
+"POT-Creation-Date: 2015-06-25 12:28+0000\n"
 "PO-Revision-Date: 2013-11-14 16:00+0100\n"
 "Last-Translator: Kees Hink <kees@fourdigits.nl>\n"
 "Language-Team: Plone Nederland <translators@plone.nl>\n"
@@ -17,154 +17,147 @@ msgstr ""
 "Domain: plone.app.event\n"
 
 #. Default: "Events in next 7 days."
-#: plone/app/event/browser/event_listing.py:240
+#: plone/app/event/browser/event_listing.py:272
 msgid "7days_events"
 msgstr "Agenda-items in de komende 7 dagen"
 
-#: plone/app/event/portlets/portlet_calendar.py:217
+#: plone/app/event/bbb/portlets/portlet_calendar.py:32
+#: plone/app/event/portlets/portlet_calendar.py:303
 msgid "Add Calendar Portlet"
 msgstr "Agenda-portlet toevoegen"
 
-#: plone/app/event/portlets/portlet_events.py:130
+#: plone/app/event/bbb/portlets/portlet_events.py:32
+#: plone/app/event/portlets/portlet_events.py:208
 msgid "Add Events Portlet"
 msgstr "Portlet voor Agenda-items toevoegen"
 
-#: plone/app/event/browser/event_summary.pt:40
+#: plone/app/event/browser/event_summary.pt:48
 msgid "All dates"
 msgstr "Alle datums"
 
-#: plone/app/event/interfaces.py:36
+#: plone/app/event/bbb/interfaces.py:22
 msgid "Available timezones"
 msgstr "Beschikbare tijdzones"
 
-#: plone/app/event/portlets/portlet_calendar.py:59
+#: plone/app/event/portlets/portlet_calendar.py:75
 msgid "Calendar"
 msgstr "Agenda"
 
-#: plone/app/event/browser/controlpanel.pt:33
-msgid "Date/Time based on the current event settings:"
-msgstr "Datum/tijd gebaseerd op de huidige Agenda-instellingen:"
+#: plone/app/event/bbb/browser/controlpanel.py:10
+msgid "Date and Time settings"
+msgstr ""
 
-#: plone/app/event/portlets/portlet_calendar.py:229
+#: plone/app/event/bbb/portlets/portlet_calendar.py:45
+#: plone/app/event/portlets/portlet_calendar.py:313
 msgid "Edit Calendar Portlet"
 msgstr "Agenda-portlet bewerken"
 
-#: plone/app/event/portlets/portlet_events.py:143
+#: plone/app/event/bbb/portlets/portlet_events.py:46
+#: plone/app/event/portlets/portlet_events.py:219
 msgid "Edit Events Portlet"
 msgstr "Portlet voor Agenda-items bewerken"
 
-#: plone/app/event/profiles/default/controlpanel.xml
-msgid "Event Settings"
-msgstr "Agenda-instellingen"
-
-#: plone/app/event/portlets/portlet_events.py:71
+#: plone/app/event/portlets/portlet_events.py:87
 msgid "Events"
 msgstr "Agenda-items"
 
-#: plone/app/event/portlets/portlet_events.py:26
+#: plone/app/event/portlets/portlet_events.py:38
 msgid "How many items to list."
 msgstr "Aantal in de lijst op te sommen items."
 
-#: plone/app/event/portlets/portlet_calendar.py:33
-#: plone/app/event/portlets/portlet_events.py:33
+#: plone/app/event/portlets/portlet_calendar.py:45
+#: plone/app/event/portlets/portlet_events.py:45
 msgid "Items in which workflow state to show."
 msgstr "Workflow-statussen waarmee Agenda-items getoond worden."
 
-#: plone/app/event/portlets/portlet_events.py:25
+#: plone/app/event/portlets/portlet_events.py:37
 msgid "Number of items to display"
 msgstr "Aantal te tonen items"
 
-#: plone/app/event/interfaces.py:25
+#: plone/app/event/bbb/interfaces.py:11
 msgid "Portal default timezone"
 msgstr "Standaard-tijdzone van site"
 
-#: plone/app/event/portlets/portlet_calendar.py:218
+#: plone/app/event/bbb/portlets/portlet_calendar.py:33
+#: plone/app/event/portlets/portlet_calendar.py:304
 msgid "This portlet displays events in a calendar."
 msgstr "Dit portlet toont Agenda-items in een agenda."
 
-#: plone/app/event/portlets/portlet_events.py:131
+#: plone/app/event/bbb/portlets/portlet_events.py:33
+#: plone/app/event/portlets/portlet_events.py:209
 msgid "This portlet lists upcoming Events."
 msgstr "Dit portlet geeft een lijst van toekomstige agenda-items."
 
-#: plone/app/event/portlets/portlet_calendar.py:32
-#: plone/app/event/portlets/portlet_events.py:32
+#: plone/app/event/portlets/portlet_calendar.py:44
+#: plone/app/event/portlets/portlet_events.py:44
 msgid "Workflow state"
 msgstr "Workflow-status"
 
 #. Default: "All events"
-#: plone/app/event/browser/event_listing.py:224
+#: plone/app/event/browser/event_listing.py:256
 msgid "all_events"
 msgstr "Alle agenda-items"
 
 #. Default: "Upcoming Events"
-#: plone/app/event/portlets/portlet_events.pt:10
+#: plone/app/event/bbb/portlets/portlet_events.pt:10
+#: plone/app/event/portlets/portlet_events.pt:9
 msgid "box_events"
 msgstr "Toekomstige agenda-items"
 
 #. Default: "Previous events…"
-#: plone/app/event/portlets/portlet_events.pt:50
+#: plone/app/event/bbb/portlets/portlet_events.pt:53
+#: plone/app/event/portlets/portlet_events.pt:45
 msgid "box_previous_events"
 msgstr "Voorbije agenda-items…"
 
 #. Default: "Upcoming events…"
-#: plone/app/event/portlets/portlet_events.pt:57
+#: plone/app/event/bbb/portlets/portlet_events.pt:60
+#: plone/app/event/portlets/portlet_events.pt:53
 msgid "box_upcoming_events"
 msgstr "Toekomstige agenda-items…"
 
 #. Default: "Attendees"
-#: plone/app/event/browser/event_summary.pt:82
+#: plone/app/event/browser/event_summary.pt:98
 msgid "contact_attendees"
 msgstr "Deelnemers"
 
 #. Default: "Contact Name"
-#: plone/app/event/browser/event_listing.pt:130
-#: plone/app/event/browser/event_summary.pt:69
+#: plone/app/event/browser/event_summary.pt:81
 msgid "contact_name"
 msgstr "Naam contactpersoon"
 
 #. Default: "Contact Phone"
-#: plone/app/event/browser/event_summary.pt:77
+#: plone/app/event/browser/event_summary.pt:91
 msgid "contact_phone"
 msgstr "Telefoon contactpersoon"
 
 #. Default: "End date must be after start date."
-#: plone/app/event/at/content.py:575
-#: plone/app/event/dx/behaviors.py:142
+#: plone/app/event/dx/behaviors.py:140
 msgid "error_end_must_be_after_start_date"
 msgstr "Einddatum moet na startdatum liggen"
 
 #. Default: "Invalid start or end date"
-#: plone/app/event/dx/behaviors.py:62
+#: plone/app/event/dx/behaviors.py:58
 msgid "error_invalid_date"
 msgstr "Ongeldige start- of einddatum"
 
-#. Default: "End date is not valid."
-#: plone/app/event/at/content.py:565
-msgid "error_invalid_end_date"
-msgstr "Einddatum is ongeldig."
-
-#. Default: "Start date is not valid."
-#: plone/app/event/at/content.py:550
-msgid "error_invalid_start_date"
-msgstr "Startdatum is ongeldig."
-
 #. Default: "Event"
-#: plone/app/event/browser/event_summary.pt:15
+#: plone/app/event/browser/event_summary.pt:16
 msgid "event_event"
 msgstr ""
 
 #. Default: "Web"
-#: plone/app/event/browser/event_summary.pt:89
+#: plone/app/event/browser/event_summary.pt:107
 msgid "event_url"
 msgstr "Website"
 
 #. Default: "What"
-#: plone/app/event/browser/event_summary.pt:21
+#: plone/app/event/browser/event_summary.pt:24
 msgid "event_what"
 msgstr "Wat"
 
 #. Default: "When"
-#: plone/app/event/browser/event_summary.pt:27
+#: plone/app/event/browser/event_summary.pt:32
 msgid "event_when"
 msgstr "Wanneer"
 
@@ -188,144 +181,114 @@ msgid "event_when_sameday_openend"
 msgstr "${date} vanaf ${starttime}"
 
 #. Default: "Where"
-#: plone/app/event/browser/event_summary.pt:62
+#: plone/app/event/browser/event_summary.pt:72
 msgid "event_where"
 msgstr "Waar"
 
 #. Default: "${from} until ${until}."
-#: plone/app/event/browser/event_listing.py:241
+#: plone/app/event/browser/event_listing.py:273
 msgid "events_from_until"
 msgstr "${from} tot ${until}."
 
 #. Default: "Events in ${month} ${year}"
-#: plone/app/event/browser/event_listing.py:298
+#: plone/app/event/browser/event_listing.py:330
 msgid "events_in_month"
 msgstr "Agenda-items in ${month} ${year}"
 
 #. Default: "Events in week ${weeknumber}"
-#: plone/app/event/browser/event_listing.py:275
+#: plone/app/event/browser/event_listing.py:307
 msgid "events_in_week"
 msgstr "Agenda-items in week ${weeknumber}"
 
 #. Default: "Events on ${day}"
-#: plone/app/event/browser/event_listing.py:261
+#: plone/app/event/browser/event_listing.py:293
 msgid "events_on_day"
 msgstr "Agenda-items op ${day}"
 
 #. Default: "Visit external website"
-#: plone/app/event/browser/event_listing.pt:118
-#: plone/app/event/browser/event_summary.pt:91
+#: plone/app/event/browser/event_listing.pt:117
+#: plone/app/event/browser/event_summary.pt:109
 msgid "external_website"
 msgstr "Bezoek externe website"
 
 #. Default: "Future events"
-#: plone/app/event/browser/event_listing.py:230
+#: plone/app/event/browser/event_listing.py:262
 msgid "future_events"
 msgstr "Toekomstige Agenda-items"
 
 #. Default: "Add event to calendar"
-#: plone/app/event/browser/event_summary.pt:97
+#: plone/app/event/browser/event_summary.pt:117
 msgid "heading_add_to_calendar"
 msgstr "Agenda-item aan agenda toevoegen"
 
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
-#: plone/app/event/interfaces.py:37
+#: plone/app/event/bbb/interfaces.py:23
 msgid "help_available_timezones"
 msgstr "Tijdzones die in de site beschikbaar moeten zijn. Deze kunnen voor gebruikers en agenda-items ingesteld worden."
 
-#. Default: "Search events in current folder only."
-#: plone/app/event/browser/event_listing.py:446
-msgid "help_current_folder"
-msgstr "Agenda-items alleen in huidige map zoeken."
-
-#: plone/app/event/at/content.py:302
-msgid "help_event_announcement"
-msgstr ""
-
 #. Default: "List of attendees."
-#: plone/app/event/at/content.py:199
-#: plone/app/event/dx/behaviors.py:235
+#: plone/app/event/dx/behaviors.py:217
 msgid "help_event_attendees"
 msgstr "Deelnemerslijst."
 
 #. Default: "Email address to contact about this event."
-#: plone/app/event/at/content.py:236
-#: plone/app/event/dx/behaviors.py:267
+#: plone/app/event/dx/behaviors.py:250
 msgid "help_event_contact_email"
 msgstr "E-mailadres om contact mee op te nemen over dit agenda-item."
 
 #. Default: "Name of a person to contact about this event."
-#: plone/app/event/at/content.py:217
-#: plone/app/event/dx/behaviors.py:255
+#: plone/app/event/dx/behaviors.py:237
 msgid "help_event_contact_name"
 msgstr "Contactpersoon voor dit agenda-item."
 
 #. Default: "Phone number to contact about this event."
-#: plone/app/event/at/content.py:255
-#: plone/app/event/dx/behaviors.py:279
+#: plone/app/event/dx/behaviors.py:263
 msgid "help_event_contact_phone"
 msgstr "Telefoonnummer om contact mee op te nemen over dit agenda-item."
 
 #. Default: "Date and Time, when the event ends."
-#: plone/app/event/at/content.py:87
-#: plone/app/event/dx/behaviors.py:88
+#: plone/app/event/dx/behaviors.py:97
 msgid "help_event_end"
 msgstr "Einddatum en -tijd van het agenda-item"
 
-#. Default: "Settings for the event listing view."
-#: plone/app/event/profiles/default/actions.xml
-msgid "help_event_listing_settings"
-msgstr "Instellingen voor de lijst van agenda-items."
-
 #. Default: "Location of the event."
-#: plone/app/event/at/content.py:182
-#: plone/app/event/dx/behaviors.py:219
+#: plone/app/event/dx/behaviors.py:200
 msgid "help_event_location"
 msgstr "Plaats van het agenda-item."
 
 #. Default: "This event is open ended."
-#: plone/app/event/at/content.py:124
-#: plone/app/event/dx/behaviors.py:112
+#: plone/app/event/dx/behaviors.py:123
 msgid "help_event_open_end"
 msgstr "Dit agenda-item heeft geen einde."
 
 #. Default: "Define the event recurrence rule."
-#: plone/app/event/at/content.py:161
-#: plone/app/event/dx/behaviors.py:189
+#: plone/app/event/dx/behaviors.py:169
 msgid "help_event_recurrence"
 msgstr "Beschrijf de herhalingsregel voor het agenda-item."
 
-#. Default: "Event related settings like timezone, etc."
-#: plone/app/event/browser/controlpanel.py:15
+#. Default: "Date and Time related settings like timezone(s), etc."
+#: plone/app/event/bbb/browser/controlpanel.py:15
+#, fuzzy
 msgid "help_event_settings"
 msgstr "Instellingen die met agenda-items te maken hebben, zoals tijdzone."
 
 #. Default: "Date and Time, when the event begins."
-#: plone/app/event/at/content.py:65
-#: plone/app/event/dx/behaviors.py:76
+#: plone/app/event/dx/behaviors.py:84
 msgid "help_event_start"
 msgstr "Startdatum en -tijd van het agenda-item."
 
-#. Default: "Select the Timezone, where this event happens."
-#: plone/app/event/at/content.py:144
-#: plone/app/event/dx/behaviors.py:125
-msgid "help_event_timezone"
-msgstr "Selecteer de tijdzone waarin het agenda-item plaatsvindt."
-
 #. Default: "Web address with more info about the event. Add http:// for external links."
-#: plone/app/event/at/content.py:274
-#: plone/app/event/dx/behaviors.py:291
+#: plone/app/event/dx/behaviors.py:276
 msgid "help_event_url"
 msgstr "Internetadres met meer informatie over het agenda-item. Voeg http:// e voor externe links."
 
 #. Default: "Event lasts whole day."
-#: plone/app/event/at/content.py:107
-#: plone/app/event/dx/behaviors.py:100
+#: plone/app/event/dx/behaviors.py:110
 msgid "help_event_whole_day"
 msgstr "Agenda-item duurt de hele dag."
 
 #. Default: "First day in the Week."
-#: plone/app/event/interfaces.py:47
+#: plone/app/event/bbb/interfaces.py:34
 msgid "help_first_weekday"
 msgstr "Eerste dag van de week."
 
@@ -345,42 +308,42 @@ msgid "help_ical_import_enable"
 msgstr "Klik om de icalendar-functie hier in te schakelen."
 
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
-#: plone/app/event/interfaces.py:26
+#: plone/app/event/bbb/interfaces.py:12
 msgid "help_portal_timezone"
 msgstr "De tijdzone-instelling van de site. Gebruikers kunnen hun eigen tijdzone instellen, als deze beschikbaar zijn."
 
 #. Default: "Content type of the event, which is created when importing icalendar resources."
-#: plone/app/event/ical/importer.py:232
+#: plone/app/event/ical/importer.py:229
 msgid "ical_import_event_type_desc"
 msgstr "Contenttype aan te maken agenda-items bij het importeren van icalendar-bronnen."
 
 #. Default: "Event Type"
-#: plone/app/event/ical/importer.py:231
+#: plone/app/event/ical/importer.py:228
 msgid "ical_import_event_type_title"
 msgstr "Contentype voor Agenda-item"
 
 #. Default: "Icalendar resource file, if no URL is given."
-#: plone/app/event/ical/importer.py:250
+#: plone/app/event/ical/importer.py:247
 msgid "ical_import_file_desc"
 msgstr "ICalendar bestand als geen URL wordt opgegeven"
 
 #. Default: "Icalendar File"
-#: plone/app/event/ical/importer.py:249
+#: plone/app/event/ical/importer.py:246
 msgid "ical_import_file_title"
 msgstr "Icalendar-bestand"
 
 #. Default: "${num} events imported from ${filename}"
-#: plone/app/event/ical/importer.py:357
+#: plone/app/event/ical/importer.py:354
 msgid "ical_import_imported"
 msgstr "${num} agenda-items geïmporteerd vanuit ${filename}"
 
 #. Default: "Please provide either a icalendar ics file or a URL to a file."
-#: plone/app/event/ical/importer.py:364
+#: plone/app/event/ical/importer.py:361
 msgid "ical_import_no_ics"
 msgstr "Geef een icalendar- of ics-bestand op, of een URL naar een bestand."
 
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
-#: plone/app/event/ical/importer.py:261
+#: plone/app/event/ical/importer.py:258
 msgid "ical_import_sync_strategy_desc"
 msgstr ""
 "Hoe te synchroniseren:\n"
@@ -391,129 +354,103 @@ msgstr ""
 "    Maak een nieuw sync_uid aan voor elk."
 
 #. Default: "Synchronization Strategy"
-#: plone/app/event/ical/importer.py:257
+#: plone/app/event/ical/importer.py:254
 msgid "ical_import_sync_strategy_title"
 msgstr "Synchronisatie-strategie"
 
 #. Default: "URL to an external icalendar resource file."
-#: plone/app/event/ical/importer.py:242
+#: plone/app/event/ical/importer.py:239
 msgid "ical_import_url_desc"
 msgstr "URL naar extern icalendar-bestand."
 
 #. Default: "Icalendar URL"
-#: plone/app/event/ical/importer.py:241
+#: plone/app/event/ical/importer.py:238
 msgid "ical_import_url_title"
 msgstr "Icalendar-URL"
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
-#: plone/app/event/browser/event_summary.pt:106
+#: plone/app/event/browser/event_summary.pt:126
 msgid "label_add_to_ical"
 msgstr "iCal"
 
-#. Default: "Current folder"
-#: plone/app/event/browser/event_listing.py:445
-msgid "label_current_folder"
-msgstr "Huidige map"
+#. Default: "Date and Time settings"
+#: plone/app/event/bbb/browser/controlpanel.py:14
+msgid "label_dateandtime_settings"
+msgstr ""
 
 #. Default: "Email"
-#: plone/app/event/browser/event_listing.pt:128
+#: plone/app/event/browser/event_listing.pt:127
 msgid "label_email"
 msgstr "E-mail"
 
-#. Default: "Event body text"
-#: plone/app/event/at/content.py:298
-msgid "label_event_announcement"
-msgstr "Tekst van agenda-item "
-
 #. Default: "Attendees"
-#: plone/app/event/at/content.py:195
-#: plone/app/event/dx/behaviors.py:231
+#: plone/app/event/dx/behaviors.py:213
 msgid "label_event_attendees"
 msgstr "Deelnemers"
 
 #. Default: "Contact E-mail"
-#: plone/app/event/at/content.py:232
-#: plone/app/event/dx/behaviors.py:263
+#: plone/app/event/dx/behaviors.py:246
 msgid "label_event_contact_email"
 msgstr "E-mail contactpersoon"
 
 #. Default: "Contact Name"
-#: plone/app/event/at/content.py:213
-#: plone/app/event/dx/behaviors.py:251
+#: plone/app/event/dx/behaviors.py:233
 msgid "label_event_contact_name"
 msgstr "Naam contactpersoon"
 
 #. Default: "Contact Phone"
-#: plone/app/event/at/content.py:251
-#: plone/app/event/dx/behaviors.py:275
+#: plone/app/event/dx/behaviors.py:259
 msgid "label_event_contact_phone"
 msgstr "Telefoon contactpersoon"
 
 #. Default: "Event Ends"
-#: plone/app/event/at/content.py:83
-#: plone/app/event/dx/behaviors.py:84
+#: plone/app/event/dx/behaviors.py:93
 msgid "label_event_end"
 msgstr "Agenda-item eindigt"
 
 #. Default: "Location"
-#: plone/app/event/at/content.py:178
-#: plone/app/event/dx/behaviors.py:215
+#: plone/app/event/dx/behaviors.py:196
 msgid "label_event_location"
 msgstr "Plaats"
 
 #. Default: "Open End"
-#: plone/app/event/at/content.py:120
-#: plone/app/event/dx/behaviors.py:108
+#: plone/app/event/dx/behaviors.py:119
 msgid "label_event_open_end"
 msgstr "Geen einde"
 
 #. Default: "Recurrence"
-#: plone/app/event/at/content.py:157
-#: plone/app/event/dx/behaviors.py:185
+#: plone/app/event/dx/behaviors.py:165
 msgid "label_event_recurrence"
 msgstr "Herhalingen"
 
-#. Default: "Event settings"
-#: plone/app/event/browser/controlpanel.py:14
-msgid "label_event_settings"
-msgstr "Instellingen voor agenda-items"
-
 #. Default: "Event Starts"
-#: plone/app/event/at/content.py:61
-#: plone/app/event/dx/behaviors.py:72
+#: plone/app/event/dx/behaviors.py:80
 msgid "label_event_start"
 msgstr "Agenda-item start"
 
-#. Default: "Timezone"
-#: plone/app/event/at/content.py:140
-#: plone/app/event/dx/behaviors.py:121
-msgid "label_event_timezone"
-msgstr "Tijdzone"
-
 #. Default: "Event URL"
-#: plone/app/event/at/content.py:270
-#: plone/app/event/dx/behaviors.py:287
+#: plone/app/event/dx/behaviors.py:272
 msgid "label_event_url"
 msgstr "URL voor agenda-item"
 
 #. Default: "Whole Day"
-#: plone/app/event/at/content.py:103
-#: plone/app/event/dx/behaviors.py:96
+#: plone/app/event/dx/behaviors.py:106
 msgid "label_event_whole_day"
 msgstr "Hele dag"
 
 #. Default: "First Weekday"
-#: plone/app/event/interfaces.py:46
+#: plone/app/event/bbb/interfaces.py:33
 msgid "label_first_weekday"
 msgstr "Eerste dag van de week"
 
-#: plone/app/event/browser/event_listing.pt:140
+#. Default: "Phone"
+#: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
 msgstr ""
 
 #. Default: "Web"
-#: plone/app/event/browser/event_listing.pt:118
+#: plone/app/event/browser/event_listing.pt:117
 msgid "label_web"
 msgstr "Website"
 
@@ -543,7 +480,7 @@ msgid "mode_week_link"
 msgstr "Week"
 
 #. Default: "Ical import settings saved."
-#: plone/app/event/ical/importer.py:319
+#: plone/app/event/ical/importer.py:316
 msgid "msg_ical_import_settings_saved"
 msgstr "Ical import-instellingen opgeslagen"
 
@@ -563,19 +500,20 @@ msgid "next_week_link"
 msgstr "Volgende week"
 
 #. Default: "Past events"
-#: plone/app/event/browser/event_listing.py:227
+#: plone/app/event/browser/event_listing.py:259
 msgid "past_events"
 msgstr "Afgelopen agenda-items"
 
-#. Default: "Select search base folder to search for events. This folder will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
-#: plone/app/event/portlets/portlet_calendar.py:42
-#: plone/app/event/portlets/portlet_events.py:43
+#. Default: "Select search base Folder or Collection to search for events. The URL to to this item will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
+#: plone/app/event/portlets/portlet_calendar.py:54
+#: plone/app/event/portlets/portlet_events.py:55
+#, fuzzy
 msgid "portlet_help_search_base"
 msgstr "Kies een map om naar agenda-items te zoeken. Deze wordt ook gebruikt om naartoe te linken vanuit agenda-zoekacties. Als dit veld leeg is wordt de hele site doorzocht, en wordt de lijst van agenda-items wordt aangeroepen op het hoogste niveau in de site."
 
 #. Default: "Search base"
-#: plone/app/event/portlets/portlet_calendar.py:41
-#: plone/app/event/portlets/portlet_events.py:42
+#: plone/app/event/portlets/portlet_calendar.py:53
+#: plone/app/event/portlets/portlet_events.py:54
 msgid "portlet_label_search_base"
 msgstr "Uitgangspunt voor zoeken"
 
@@ -600,22 +538,22 @@ msgid "summary_event_details"
 msgstr "Details van agenda-item"
 
 #. Default: "Keep mine"
-#: plone/app/event/vocabularies.py:141
+#: plone/app/event/vocabularies.py:24
 msgid "sync_keep_mine"
 msgstr "De mijne houden"
 
 #. Default: "Keep newer"
-#: plone/app/event/vocabularies.py:140
+#: plone/app/event/vocabularies.py:23
 msgid "sync_keep_newer"
 msgstr "Nieuwste houden"
 
 #. Default: "Keep theirs"
-#: plone/app/event/vocabularies.py:142
+#: plone/app/event/vocabularies.py:25
 msgid "sync_keep_theirs"
 msgstr "De hunne houden"
 
 #. Default: "No Syncing"
-#: plone/app/event/vocabularies.py:143
+#: plone/app/event/vocabularies.py:26
 msgid "sync_none"
 msgstr "Niet synchroniseren"
 
@@ -631,14 +569,9 @@ msgstr "Deze week"
 
 #. Default: "Download this event in iCal format"
 #: plone/app/event/browser/event_listing.pt:43
-#: plone/app/event/browser/event_summary.pt:100
+#: plone/app/event/browser/event_summary.pt:120
 msgid "title_add_to_ical"
 msgstr "Dit agenda-item downloaden in iCal-formaat"
-
-#. Default: "Event Listing Settings"
-#: plone/app/event/profiles/default/actions.xml
-msgid "title_event_listing_settings"
-msgstr "Instellingen voor agenda-items lijst"
 
 #. Default: "Ical import"
 #: plone/app/event/profiles/default/actions.xml
@@ -661,12 +594,12 @@ msgid "today_link"
 msgstr "Vandaag"
 
 #. Default: "Todays events"
-#: plone/app/event/browser/event_listing.py:237
+#: plone/app/event/browser/event_listing.py:269
 msgid "todays_events"
 msgstr "Agenda-items vandaag"
 
 #. Default: "Todays upcoming events"
-#: plone/app/event/browser/event_listing.py:233
+#: plone/app/event/browser/event_listing.py:265
 msgid "todays_upcoming_events"
 msgstr "Agenda-items vanaf vandaag"
 
