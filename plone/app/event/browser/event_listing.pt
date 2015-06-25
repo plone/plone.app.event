@@ -114,7 +114,7 @@
             </li>
 
             <li tal:condition="data/event_url">
-              <a class="event_url" title=""
+              <a class="event_url" title="External Website"
                   tal:attributes="href data/event_url"
                   i18n:attributes="title external_website"
                   i18n:translate="label_web">Web</a>
@@ -127,16 +127,15 @@
                 <i18n:label_email translate="label_email">Email</i18n:label_email>:
               </span>
               <a class="contact_email" title=""
-                  i18n:attributes="title contact_name"
                   tal:omit-tag="not:contact_email"
-                  tal:attributes="href string:mailto:${contact_email}">
+                  tal:attributes="href string:mailto:${contact_email}; title contact_name">
                 <span tal:condition="python:contact_email and not contact_name"
                       tal:replace="contact_email">Email</span>
                 <span tal:condition="contact_name" tal:content="contact_name"/>
               </a>
             </li>
 
-            <li tal:condition="data/contact_phone" i18n:attributes="title label_phone">
+            <li tal:condition="data/contact_phone" title="Phone" i18n:attributes="title label_phone">
               <span i18n:translate="label_phone">Phone</span>:
               <a class="contact_phone" title=""
                   tal:attributes="href string:tel:${data/contact_phone}"
