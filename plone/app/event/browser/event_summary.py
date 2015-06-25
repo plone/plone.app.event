@@ -1,9 +1,11 @@
 from Acquisition import aq_parent
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+from plone.app.event import messageFactory as _
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.memoize import view
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
@@ -53,6 +55,7 @@ class EventSummaryView(BrowserView):
         return occurrences
 
     @property
+    @view.memoize
     def num_more_occurrences(self):
         """Return the number of extra occurrences, which are not listed by
         next_occurrences.
@@ -70,3 +73,12 @@ class EventSummaryView(BrowserView):
 
         num = len(idx['start']) - self.max_occurrences
         return num if num > 0 else 0
+
+    @property
+    def more_occurrences_text(self):
+        msgid = _(
+            u"msg_num_more_occurrences",
+            default=u"There are ${results} more occurrences.",
+            mapping={u"results": self.num_more_occurrences}
+        )
+        return self.context.translate(msgid)

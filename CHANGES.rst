@@ -4,6 +4,9 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- Translation updates (num_more_occurrences).
+  [thet]
+
 - For event listings on collections, use the collection's ``item_count``
   attribute to limit the batch size.
   [thet]

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.app.event\n"
-"POT-Creation-Date: 2015-06-25 12:28+0000\n"
+"POT-Creation-Date: 2015-06-25 12:29+0000\n"
 "PO-Revision-Date: 2014-08-24 09:10+0100\n"
 "Last-Translator: Radim Novotny <novotny.radim@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.8\n"
 
 #. Default: "Events in next 7 days."
-#: plone/app/event/browser/event_listing.py:272
+#: plone/app/event/browser/event_listing.py:278
 msgid "7days_events"
 msgstr "Události v následujícím týdnu."
 
@@ -95,7 +95,7 @@ msgid "Workflow state"
 msgstr "Stav workflow"
 
 #. Default: "All events"
-#: plone/app/event/browser/event_listing.py:256
+#: plone/app/event/browser/event_listing.py:262
 msgid "all_events"
 msgstr "Všechny události"
 
@@ -118,17 +118,17 @@ msgid "box_upcoming_events"
 msgstr "Nadcházející události..."
 
 #. Default: "Attendees"
-#: plone/app/event/browser/event_summary.pt:98
+#: plone/app/event/browser/event_summary.pt:99
 msgid "contact_attendees"
 msgstr "Účastníci"
 
 #. Default: "Contact Name"
-#: plone/app/event/browser/event_summary.pt:81
+#: plone/app/event/browser/event_summary.pt:82
 msgid "contact_name"
 msgstr "Jméno kontaktu"
 
 #. Default: "Contact Phone"
-#: plone/app/event/browser/event_summary.pt:91
+#: plone/app/event/browser/event_summary.pt:92
 msgid "contact_phone"
 msgstr "Kontaktní telefon"
 
@@ -148,7 +148,7 @@ msgid "event_event"
 msgstr "Událost"
 
 #. Default: "Web"
-#: plone/app/event/browser/event_summary.pt:107
+#: plone/app/event/browser/event_summary.pt:108
 msgid "event_url"
 msgstr "Adresa události"
 
@@ -182,43 +182,43 @@ msgid "event_when_sameday_openend"
 msgstr "${date} od ${starttime}"
 
 #. Default: "Where"
-#: plone/app/event/browser/event_summary.pt:72
+#: plone/app/event/browser/event_summary.pt:73
 msgid "event_where"
 msgstr "Kde"
 
 #. Default: "${from} until ${until}."
-#: plone/app/event/browser/event_listing.py:273
+#: plone/app/event/browser/event_listing.py:279
 msgid "events_from_until"
 msgstr "${from} do ${until}."
 
 #. Default: "Events in ${month} ${year}"
-#: plone/app/event/browser/event_listing.py:330
+#: plone/app/event/browser/event_listing.py:336
 msgid "events_in_month"
 msgstr "Události v ${month} ${year}"
 
 #. Default: "Events in week ${weeknumber}"
-#: plone/app/event/browser/event_listing.py:307
+#: plone/app/event/browser/event_listing.py:313
 msgid "events_in_week"
 msgstr "Události v týdnu ${weeknumber}"
 
 #. Default: "Events on ${day}"
-#: plone/app/event/browser/event_listing.py:293
+#: plone/app/event/browser/event_listing.py:299
 msgid "events_on_day"
 msgstr "Události dne ${day}"
 
 #. Default: "Visit external website"
 #: plone/app/event/browser/event_listing.pt:117
-#: plone/app/event/browser/event_summary.pt:109
+#: plone/app/event/browser/event_summary.pt:110
 msgid "external_website"
 msgstr "Přejít na stránku události"
 
 #. Default: "Future events"
-#: plone/app/event/browser/event_listing.py:262
+#: plone/app/event/browser/event_listing.py:268
 msgid "future_events"
 msgstr "Nadcházející události"
 
 #. Default: "Add event to calendar"
-#: plone/app/event/browser/event_summary.pt:117
+#: plone/app/event/browser/event_summary.pt:118
 msgid "heading_add_to_calendar"
 msgstr "Přidat událost do kalendáře"
 
@@ -370,7 +370,7 @@ msgstr "icalendar URL"
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
-#: plone/app/event/browser/event_summary.pt:126
+#: plone/app/event/browser/event_summary.pt:127
 msgid "label_add_to_ical"
 msgstr "iCal"
 
@@ -484,6 +484,11 @@ msgstr "Týden"
 msgid "msg_ical_import_settings_saved"
 msgstr "Nastavení ical importu bylo uloženo"
 
+#. Default: "There are ${results} more occurrences."
+#: plone/app/event/browser/event_summary.py:79
+msgid "msg_num_more_occurrences"
+msgstr ""
+
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
 msgid "next_day_link"
@@ -500,7 +505,7 @@ msgid "next_week_link"
 msgstr "Následující týden"
 
 #. Default: "Past events"
-#: plone/app/event/browser/event_listing.py:259
+#: plone/app/event/browser/event_listing.py:265
 msgid "past_events"
 msgstr "Uskutečněné události"
 
@@ -569,7 +574,7 @@ msgstr "Tento týden"
 
 #. Default: "Download this event in iCal format"
 #: plone/app/event/browser/event_listing.pt:43
-#: plone/app/event/browser/event_summary.pt:120
+#: plone/app/event/browser/event_summary.pt:121
 msgid "title_add_to_ical"
 msgstr "Stáhnout tuto událost ve formátu iCal"
 
@@ -594,12 +599,12 @@ msgid "today_link"
 msgstr "Dnes"
 
 #. Default: "Todays events"
-#: plone/app/event/browser/event_listing.py:269
+#: plone/app/event/browser/event_listing.py:275
 msgid "todays_events"
 msgstr "Dnešní události"
 
 #. Default: "Todays upcoming events"
-#: plone/app/event/browser/event_listing.py:265
+#: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "Dnešní nadcházející události"
 

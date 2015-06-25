@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-25 12:28+0000\n"
+"POT-Creation-Date: 2015-06-25 12:29+0000\n"
 "PO-Revision-Date: 2011-12-06 23:00+0200\n"
 "Last-Translator: JeanMichel FRANCOIS <toutpt@gmail.com>\n"
 "Language-Team: Plone fr <plone-fr@lists.plone.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Domain: plone.app.event\n"
 
 #. Default: "Events in next 7 days."
-#: plone/app/event/browser/event_listing.py:272
+#: plone/app/event/browser/event_listing.py:278
 msgid "7days_events"
 msgstr "Les événements des 7 prochains jours."
 
@@ -95,7 +95,7 @@ msgid "Workflow state"
 msgstr "État de workflow"
 
 #. Default: "All events"
-#: plone/app/event/browser/event_listing.py:256
+#: plone/app/event/browser/event_listing.py:262
 msgid "all_events"
 msgstr "Tous les événements"
 
@@ -118,17 +118,17 @@ msgid "box_upcoming_events"
 msgstr "Événements à venir…"
 
 #. Default: "Attendees"
-#: plone/app/event/browser/event_summary.pt:98
+#: plone/app/event/browser/event_summary.pt:99
 msgid "contact_attendees"
 msgstr "Participants"
 
 #. Default: "Contact Name"
-#: plone/app/event/browser/event_summary.pt:81
+#: plone/app/event/browser/event_summary.pt:82
 msgid "contact_name"
 msgstr "Nom du contact"
 
 #. Default: "Contact Phone"
-#: plone/app/event/browser/event_summary.pt:91
+#: plone/app/event/browser/event_summary.pt:92
 msgid "contact_phone"
 msgstr "Téléphone du contact"
 
@@ -148,7 +148,7 @@ msgid "event_event"
 msgstr ""
 
 #. Default: "Web"
-#: plone/app/event/browser/event_summary.pt:107
+#: plone/app/event/browser/event_summary.pt:108
 msgid "event_url"
 msgstr "Site Internet"
 
@@ -182,43 +182,43 @@ msgid "event_when_sameday_openend"
 msgstr "${date} à partir de ${starttime}"
 
 #. Default: "Where"
-#: plone/app/event/browser/event_summary.pt:72
+#: plone/app/event/browser/event_summary.pt:73
 msgid "event_where"
 msgstr "Ou"
 
 #. Default: "${from} until ${until}."
-#: plone/app/event/browser/event_listing.py:273
+#: plone/app/event/browser/event_listing.py:279
 msgid "events_from_until"
 msgstr "${from} jusqu'à ${until}."
 
 #. Default: "Events in ${month} ${year}"
-#: plone/app/event/browser/event_listing.py:330
+#: plone/app/event/browser/event_listing.py:336
 msgid "events_in_month"
 msgstr "Événements en ${month} ${year}"
 
 #. Default: "Events in week ${weeknumber}"
-#: plone/app/event/browser/event_listing.py:307
+#: plone/app/event/browser/event_listing.py:313
 msgid "events_in_week"
 msgstr "Événements de la semaine ${weeknumber}"
 
 #. Default: "Events on ${day}"
-#: plone/app/event/browser/event_listing.py:293
+#: plone/app/event/browser/event_listing.py:299
 msgid "events_on_day"
 msgstr "Événements le ${day}"
 
 #. Default: "Visit external website"
 #: plone/app/event/browser/event_listing.pt:117
-#: plone/app/event/browser/event_summary.pt:109
+#: plone/app/event/browser/event_summary.pt:110
 msgid "external_website"
 msgstr "Visitez le site Internet"
 
 #. Default: "Future events"
-#: plone/app/event/browser/event_listing.py:262
+#: plone/app/event/browser/event_listing.py:268
 msgid "future_events"
 msgstr "Événements futur"
 
 #. Default: "Add event to calendar"
-#: plone/app/event/browser/event_summary.pt:117
+#: plone/app/event/browser/event_summary.pt:118
 msgid "heading_add_to_calendar"
 msgstr "Ajouter l'événement au calendrier"
 
@@ -365,7 +365,7 @@ msgstr ""
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
-#: plone/app/event/browser/event_summary.pt:126
+#: plone/app/event/browser/event_summary.pt:127
 msgid "label_add_to_ical"
 msgstr "iCal"
 
@@ -479,6 +479,11 @@ msgstr "Semaine"
 msgid "msg_ical_import_settings_saved"
 msgstr ""
 
+#. Default: "There are ${results} more occurrences."
+#: plone/app/event/browser/event_summary.py:79
+msgid "msg_num_more_occurrences"
+msgstr ""
+
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
 msgid "next_day_link"
@@ -495,7 +500,7 @@ msgid "next_week_link"
 msgstr "Semaine prochaine"
 
 #. Default: "Past events"
-#: plone/app/event/browser/event_listing.py:259
+#: plone/app/event/browser/event_listing.py:265
 msgid "past_events"
 msgstr "Événements passés"
 
@@ -564,7 +569,7 @@ msgstr "Cette semaine"
 
 #. Default: "Download this event in iCal format"
 #: plone/app/event/browser/event_listing.pt:43
-#: plone/app/event/browser/event_summary.pt:120
+#: plone/app/event/browser/event_summary.pt:121
 msgid "title_add_to_ical"
 msgstr "Télécharger cet événement au format iCal"
 
@@ -589,12 +594,12 @@ msgid "today_link"
 msgstr "Aujourd'hui"
 
 #. Default: "Todays events"
-#: plone/app/event/browser/event_listing.py:269
+#: plone/app/event/browser/event_listing.py:275
 msgid "todays_events"
 msgstr "Les événements du jour"
 
 #. Default: "Todays upcoming events"
-#: plone/app/event/browser/event_listing.py:265
+#: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "Les événements à venir dans la journée"
 

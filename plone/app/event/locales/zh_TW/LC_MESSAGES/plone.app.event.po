@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.app.event\n"
-"POT-Creation-Date: 2015-06-25 12:28+0000\n"
+"POT-Creation-Date: 2015-06-25 12:29+0000\n"
 "PO-Revision-Date: 2014-01-23 23:50+0800\n"
 "Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
 "Language-Team: Plone I18N <plone-i18n@lists.sourceforge.net>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: plone.app.event\n"
 
 #. Default: "Events in next 7 days."
-#: plone/app/event/browser/event_listing.py:272
+#: plone/app/event/browser/event_listing.py:278
 msgid "7days_events"
 msgstr "未來七天內的活動。"
 
@@ -92,7 +92,7 @@ msgid "Workflow state"
 msgstr "工作流程狀態"
 
 #. Default: "All events"
-#: plone/app/event/browser/event_listing.py:256
+#: plone/app/event/browser/event_listing.py:262
 msgid "all_events"
 msgstr "所有活動"
 
@@ -115,17 +115,17 @@ msgid "box_upcoming_events"
 msgstr "近期活動…"
 
 #. Default: "Attendees"
-#: plone/app/event/browser/event_summary.pt:98
+#: plone/app/event/browser/event_summary.pt:99
 msgid "contact_attendees"
 msgstr "參與者"
 
 #. Default: "Contact Name"
-#: plone/app/event/browser/event_summary.pt:81
+#: plone/app/event/browser/event_summary.pt:82
 msgid "contact_name"
 msgstr "聯絡人員"
 
 #. Default: "Contact Phone"
-#: plone/app/event/browser/event_summary.pt:91
+#: plone/app/event/browser/event_summary.pt:92
 msgid "contact_phone"
 msgstr "聯絡電話"
 
@@ -145,7 +145,7 @@ msgid "event_event"
 msgstr ""
 
 #. Default: "Web"
-#: plone/app/event/browser/event_summary.pt:107
+#: plone/app/event/browser/event_summary.pt:108
 msgid "event_url"
 msgstr "網址"
 
@@ -179,43 +179,43 @@ msgid "event_when_sameday_openend"
 msgstr "${date} 從 ${starttime} 開始"
 
 #. Default: "Where"
-#: plone/app/event/browser/event_summary.pt:72
+#: plone/app/event/browser/event_summary.pt:73
 msgid "event_where"
 msgstr "地點"
 
 #. Default: "${from} until ${until}."
-#: plone/app/event/browser/event_listing.py:273
+#: plone/app/event/browser/event_listing.py:279
 msgid "events_from_until"
 msgstr "從 ${from} 到 ${until}。"
 
 #. Default: "Events in ${month} ${year}"
-#: plone/app/event/browser/event_listing.py:330
+#: plone/app/event/browser/event_listing.py:336
 msgid "events_in_month"
 msgstr "${year} ${month} 的活動"
 
 #. Default: "Events in week ${weeknumber}"
-#: plone/app/event/browser/event_listing.py:307
+#: plone/app/event/browser/event_listing.py:313
 msgid "events_in_week"
 msgstr "第 ${weeknumber} 週的活動"
 
 #. Default: "Events on ${day}"
-#: plone/app/event/browser/event_listing.py:293
+#: plone/app/event/browser/event_listing.py:299
 msgid "events_on_day"
 msgstr "${day} 的活動"
 
 #. Default: "Visit external website"
 #: plone/app/event/browser/event_listing.pt:117
-#: plone/app/event/browser/event_summary.pt:109
+#: plone/app/event/browser/event_summary.pt:110
 msgid "external_website"
 msgstr "連結外部網站"
 
 #. Default: "Future events"
-#: plone/app/event/browser/event_listing.py:262
+#: plone/app/event/browser/event_listing.py:268
 msgid "future_events"
 msgstr "最新活動"
 
 #. Default: "Add event to calendar"
-#: plone/app/event/browser/event_summary.pt:117
+#: plone/app/event/browser/event_summary.pt:118
 msgid "heading_add_to_calendar"
 msgstr "新增活動到行事曆"
 
@@ -367,7 +367,7 @@ msgstr "iCal 網址"
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
-#: plone/app/event/browser/event_summary.pt:126
+#: plone/app/event/browser/event_summary.pt:127
 msgid "label_add_to_ical"
 msgstr "新增 iCal"
 
@@ -481,6 +481,11 @@ msgstr "每週顯示"
 msgid "msg_ical_import_settings_saved"
 msgstr "iCal 匯入設定已儲存。"
 
+#. Default: "There are ${results} more occurrences."
+#: plone/app/event/browser/event_summary.py:79
+msgid "msg_num_more_occurrences"
+msgstr ""
+
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
 msgid "next_day_link"
@@ -497,7 +502,7 @@ msgid "next_week_link"
 msgstr "後一週"
 
 #. Default: "Past events"
-#: plone/app/event/browser/event_listing.py:259
+#: plone/app/event/browser/event_listing.py:265
 msgid "past_events"
 msgstr "過往活動"
 
@@ -566,7 +571,7 @@ msgstr "本週"
 
 #. Default: "Download this event in iCal format"
 #: plone/app/event/browser/event_listing.pt:43
-#: plone/app/event/browser/event_summary.pt:120
+#: plone/app/event/browser/event_summary.pt:121
 msgid "title_add_to_ical"
 msgstr "以 iCal 格式下載活動資訊"
 
@@ -591,12 +596,12 @@ msgid "today_link"
 msgstr "本日"
 
 #. Default: "Todays events"
-#: plone/app/event/browser/event_listing.py:269
+#: plone/app/event/browser/event_listing.py:275
 msgid "todays_events"
 msgstr "本日活動"
 
 #. Default: "Todays upcoming events"
-#: plone/app/event/browser/event_listing.py:265
+#: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "本日最新活動"
 
