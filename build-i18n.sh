@@ -1,5 +1,6 @@
 #!/bin/sh
-I18NDUDE=./bin/i18ndude
+# Make sure, i18ndude is in your path.
+I18NDUDE=i18ndude
 I18NPATH=plone/app/event
 DOMAIN=plone.app.event
 $I18NDUDE rebuild-pot --pot $I18NPATH/locales/$DOMAIN.pot --create $DOMAIN $I18NPATH
