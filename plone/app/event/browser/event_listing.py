@@ -100,7 +100,6 @@ class EventListing(BrowserView):
         start, end = start_end_from_mode(self.mode, self.date, self.context)
         return start, end
 
-    @view.memoize
     def _get_events(self, ret_mode=RET_MODE_ACCESSORS, expand=True):
         context = self.context
         kw = {}
@@ -133,6 +132,7 @@ class EventListing(BrowserView):
                           sort=sort, sort_reverse=sort_reverse,
                           ret_mode=ret_mode, expand=expand, **kw)
 
+    @view.memoize
     def events(self, ret_mode=RET_MODE_ACCESSORS, expand=True, batch=True):
         res = []
         if self.is_collection:
