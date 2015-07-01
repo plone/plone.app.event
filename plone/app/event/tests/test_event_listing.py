@@ -60,7 +60,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
     def _listing_view(self, name='@@event_listing'):
         return self.portal.collection.restrictedTraverse(name)
 
-    def test_collection_batching(self):
+    def _collection_batching_base(self):
         """Test if the batch size can be set via request parameter or the
         collection's item_count.
         """
@@ -74,14 +74,28 @@ class TestEventsListingCollection(TestEventsListingPortal):
              },
         ]
         self.request.form.update({'mode': 'all'})
+        return collection
 
+    def test_collection_batching__all(self):
+        """Don't limit the results by using.
+        """
+        collection = self._collection_batching_base()
         view = collection.restrictedTraverse('@@event_listing')
         self.assertEqual(len(view.events(batch=True)), 8)
 
+    def test_collection_batching__reduce_by_collection_setting(self):
+        """Limit the results by setting item_count on the collection.
+        """
+        collection = self._collection_batching_base()
+        view = collection.restrictedTraverse('@@event_listing')
         collection.item_count = 4
         view = collection.restrictedTraverse('@@event_listing')
         self.assertEqual(len(view.events(batch=True)), 4)
 
+    def test_collection_batching__reduce_by_request_parameter(self):
+        """Limit the results by using a request parameter.
+        """
+        collection = self._collection_batching_base()
         self.request.form.update({'b_size': 2})
         view = collection.restrictedTraverse('@@event_listing')
         self.assertEqual(len(view.events(batch=True)), 2)
