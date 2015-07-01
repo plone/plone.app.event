@@ -61,8 +61,11 @@ class TestEventsListingCollection(TestEventsListingPortal):
         return self.portal.collection.restrictedTraverse(name)
 
     def _collection_batching_base(self):
-        """Test if the batch size can be set via request parameter or the
-        collection's item_count.
+        """Base preparation for batching tests below.
+
+        The event_listing view caches it's results on the request, so the
+        batching tests below need to be in seperate test methods to get a fresh
+        environment with newly calculated results.
         """
         # plone.app.contenttypes ICollection type
         self.portal.invokeFactory('Collection', 'col_test', title=u'Col')
