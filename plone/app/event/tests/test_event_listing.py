@@ -80,7 +80,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         return collection
 
     def test_collection_batching__all(self):
-        """Don't limit the results by using.
+        """Don't limit the results.
         """
         collection = self._collection_batching_base()
         view = collection.restrictedTraverse('@@event_listing')
