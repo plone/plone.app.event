@@ -4,6 +4,11 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- For event listings, view-cache the ``events`` method, which is directly used
+  in tempaltes and also caches collection results instead of the
+  ``_get_events`` method.
+  [thet]
+
 - Show only upcoming occurrences in the for ``@@event_summary`` for events with
   occurrences. On the last occurrence, only a link to all occurrences via
   ``@@event_listing`` is shown.
