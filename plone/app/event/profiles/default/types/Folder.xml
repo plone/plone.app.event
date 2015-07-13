@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="Folder">
+<object name="Folder" purge="False">
  <property name="view_methods" purge="False">
   <element value="event_listing"/>
  </property>
