@@ -73,7 +73,7 @@
         </tal:day>
         </tal:cond>
       </nav>
-      <div class="visualClear"></div>
+      <div class="clearfix"></div>
     </header>
 
     <section>
@@ -83,14 +83,14 @@
       <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent"
           tal:define="startf python:view.date_speller(data.start)">
 
-        <ul class="hCalendar-hidden">
+        <ul class="hiddenStructure">
           <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">end</li>
           <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
         </ul>
 
         <div class="cal_date">
             <span class="cal_wkday" tal:content="python:startf['wkday_abbr'][:2]">Tue</span>
-            <span class="cal_day" tal:content="string:${startf/day}.">15.</span>
+            <span class="cal_day" tal:content="string:${startf/day}">15</span>
             <span class="cal_month" tal:content="string:${startf/month_abbr}.">Oct.</span>
         </div>
 
