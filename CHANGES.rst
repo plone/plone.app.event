@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a13 (unreleased)
+2.0a13 (2015-07-15)
 -------------------
 
 - Fix some design issues in ``event_listing``.
