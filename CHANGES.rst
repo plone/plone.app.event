@@ -4,6 +4,13 @@ Changelog
 2.0a13 (unreleased)
 -------------------
 
+- Fix some design issues in ``event_listing``.
+  [pbauer]
+
+- Remove superfluous ``for`` in behavior registrtions, which do not have a
+  ``factory``.
+  [fulv]
+
 - For event listings, view-cache the ``events`` method, which is directly used
   in tempaltes and also caches collection results instead of the
   ``_get_events`` method.
