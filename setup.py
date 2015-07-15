@@ -58,7 +58,7 @@ setup(
         'plone.event>=1.0',
         'plone.folder',
         'plone.formwidget.datetime>=1.1',
-        'plone.formwidget.recurrence>=1.2.1',
+        'plone.formwidget.recurrence >=1.2.1, <2.0dev',
         'plone.memoize',
         'plone.namedfile',
         'plone.portlets',

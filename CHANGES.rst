@@ -4,7 +4,8 @@ Changelog
 1.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Ensure ``plone.formwidget.recurrence`` is ``<2.0dev``.
+  [saily]
 
 
 1.1.4 (2014-11-13)
