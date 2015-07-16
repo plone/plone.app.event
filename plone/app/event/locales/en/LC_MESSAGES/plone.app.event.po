@@ -44,7 +44,7 @@ msgid "Calendar"
 msgstr ""
 
 #: plone/app/event/bbb/browser/controlpanel.py:10
-msgid "Date and Time settings"
+msgid "Date and Time Settings"
 msgstr ""
 
 #: plone/app/event/bbb/portlets/portlet_calendar.py:45
@@ -367,7 +367,7 @@ msgstr ""
 msgid "label_add_to_ical"
 msgstr ""
 
-#. Default: "Date and Time settings"
+#. Default: "Date and Time Settings"
 #: plone/app/event/bbb/browser/controlpanel.py:14
 msgid "label_dateandtime_settings"
 msgstr ""

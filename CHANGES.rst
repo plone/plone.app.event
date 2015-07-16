@@ -54,6 +54,9 @@ Changelog
   year.
   [thet]
 
+- Make configlets titles consistent across the site, first letter capitalized
+  [sneridagh]
+
 
 2.0a12 (2015-06-05)
 -------------------
