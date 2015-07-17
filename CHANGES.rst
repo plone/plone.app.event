@@ -4,6 +4,10 @@ Changelog
 2.0b2 (unreleased)
 ------------------
 
+- Unified event_listing style with plonetheme.barceloneta styles and added svg
+  icons.
+  [agitator]
+
 - initialize events.js javascript after all patterns are initialized.
   [garbas]
 
