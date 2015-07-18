@@ -4,7 +4,8 @@ Changelog
 2.0a14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Make configlets titles consistent across the site, first letter capitalized.
+  [sneridagh]
 
 
 2.0a13 (2015-07-15)
