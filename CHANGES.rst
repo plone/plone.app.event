@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0a14 (unreleased)
--------------------
+2.0b1 (unreleased)
+------------------
 
 - Make configlets titles consistent across the site, first letter capitalized.
   [sneridagh]
