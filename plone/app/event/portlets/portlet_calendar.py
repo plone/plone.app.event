@@ -2,8 +2,6 @@ from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
-from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import _prepare_range
 from plone.app.event.base import expand_events
@@ -30,7 +28,16 @@ import json
 
 try:
     from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
+    from plone.app.contenttypes.interfaces import IFolder
+    search_base_uid_source = CatalogSource(object_provides={
+        'query': [
+            ICollection.__identifier__,
+            IFolder.__identifier__
+        ],
+        'operator': 'or'
+    })
 except ImportError:
+    search_base_uid_source = CatalogSource(is_folderish=True)
     ICollection = None
 
 PLMF = MessageFactory('plonelocales')
@@ -60,13 +67,7 @@ class ICalendarPortlet(IPortletDataProvider):
                     u'called on the site root.'
         ),
         required=False,
-        source=CatalogSource(object_provides={
-            'query': [
-                ISyndicatableCollection.__identifier__,
-                IFolder.__identifier__
-            ],
-            'operator': 'or'
-        }),
+        source=search_base_uid_source,
     )
 
 
@@ -208,7 +209,7 @@ class Renderer(base.Renderer):
         events = []
         query.update(self.request.get('contentFilter', {}))
         search_base = self.search_base
-        if ICollection.providedBy(search_base):
+        if ICollection and ICollection.providedBy(search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
                 search_base, search_base.query,

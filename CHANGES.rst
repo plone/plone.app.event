@@ -4,7 +4,12 @@ Changelog
 2.0b2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- initialize events.js javascript after all patterns are initialized.
+  [garbas]
+
+- removing dependency on plone.app.contenttypes that introduce with latest
+  changes to portlets code.
+  [garbas]
 
 
 2.0b1 (2015-07-18)
