@@ -134,7 +134,8 @@ require([
         }
     }
 
-    function initilize_event() {
+
+    $(window).load(function () {
 
         // EDIT FORM
 
@@ -171,16 +172,5 @@ require([
         // EVENT LISTING CALENDAR POPUP
         event_listing_calendar_init($("#event_listing_calendar"));
 
-    };
-
-    // mockup-core should trigger event once it initiallized all patterns (in
-    // mockup-core) but it only sets body class once all patterns were
-    // initialized
-    var interval = setInterval(function(){
-      if ($(document.body).hasClass('patterns-loaded')) {
-        clearInterval(interval);
-        initilize_event();
-      }
-    }, 100);
- 
+    });
 });
