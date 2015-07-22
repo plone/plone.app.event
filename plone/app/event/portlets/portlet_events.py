@@ -9,7 +9,7 @@ from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.portlets import get_calendar_url
-from plone.app.event.portlets.portlet_events import (
+from plone.app.event.portlets.portlet_calendar import (
     ICollection, search_base_uid_source
 )
 from plone.app.portlets import PloneMessageFactory as _
