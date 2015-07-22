@@ -2,20 +2,19 @@ from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
-from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event.base import expand_events
 from plone.app.event.base import _prepare_range
 from plone.app.event.base import start_end_query
-
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
 from plone.app.event.portlets import get_calendar_url
+from plone.app.event.portlets.portlet_events import (
+    ICollection, search_base_uid_source
+)
 from plone.app.portlets import PloneMessageFactory as _
 from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
-from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 from zExceptions import NotFound
@@ -24,11 +23,6 @@ from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implementer
 from plone.app.querystring import queryparser
-
-try:
-    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
-except ImportError:
-    ICollection = None
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -61,13 +55,7 @@ class IEventsPortlet(IPortletDataProvider):
                     u'called on the site root.'
         ),
         required=False,
-        source=CatalogSource(object_provides={
-            'query': [
-                ISyndicatableCollection.__identifier__,
-                IFolder.__identifier__
-            ],
-            'operator': 'or'
-        }),
+        source=search_base_uid_source,
     )
 
 
@@ -155,7 +143,7 @@ class Renderer(base.Renderer):
         events = []
         query.update(self.request.get('contentFilter', {}))
         search_base = self.search_base
-        if ICollection.providedBy(search_base):
+        if ICollection and ICollection.providedBy(search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
                 search_base, search_base.query,
