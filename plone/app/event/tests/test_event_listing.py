@@ -121,14 +121,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
             '@@event_listing'
         )
         out = view()
-        for _class in [
-            'mode_future',
-            'mode_past',
-            'mode_month',
-            'mode_week',
-            'mode_day',
-        ]:
-            self.assertTrue(_class in out)
+        self.assertTrue('mode_past' in out)
 
     def test_no_date_filtering(self):
         """Test if date filters are not available on Collections with start or
