@@ -12,7 +12,6 @@
     *display: block;
     padding-left: 20px !important;
 }
-
 .event.summary {
     float: right;
     clear: right; /* if there are more right-floating elements, clear them, so
@@ -25,50 +24,41 @@
 
 /* BEGIN COMMON EVENT STYLES */
 
-article.vevent {
-    background-color: #EAEAEA;
-    border-radius: 1em 1em 1em 1em;
-    margin-top: 1em;
-    padding: 1em;
+article.vevent a.event_ical img {
+    vertical-align: baseline;
+    height: 1em;
+    width: auto;
+    color: #007bb3;
 }
-
 .vevent div.cal_date {
     float:left;
     vertical-align:top;
-    margin: 0 1.5em 0.5em 0;
-    padding:0.7em 0.7em 0.5em;
+    text-align: center;
+    margin: 42px 1.5em 0.5em 0;
     background-color:white;
-    border:none;
     border-radius:0.5em;
-    box-shadow: 0.5em 0.5em 0.4em black;
+    /*box-shadow: 0.5em 0.5em 0.4em black;*/
     min-width:4.4em;
 }
 .vevent span.cal_wkday {
     display:block;
-    font-size:2.3em;
-    font-weight:bold;
-    border-bottom:2px solid black;
+    font-size:1em;
+    font-weight:normal;
     padding-bottom:0.3em;
 }
 .vevent span.cal_day {
     font-size:1.7em;
-    display:inline-block;
+    display:block;
     padding-top:0.3em;
 }
 .vevent span.cal_month {
     font-size:1.3em;
     line-height:1.3em;
-    display:inline-block;
+    background: #007bb3;
+    display:block;
 }
 
-.vevent div.cal_info { margin-left:8em; }
-article.vevent .documentByLine {
-    background: none repeat scroll 0 0 transparent;
-    color: black !important;
-    font-size: 1em !important;
-    font-weight: bold;
-    padding: 0;
-}
+.vevent div.cal_info { margin-left:9em; }
 
 /* horizontal event metadata */
 #content .vevent ul.metadata { margin: 0.8em 0; }
@@ -102,69 +92,48 @@ article.vevent .documentByLine {
 .vevent .datedisplay {
     line-height:1.5em;
     margin-bottom:0.2em;
-    font-weight:bold;
+    /*font-weight:bold;*/
     font-size:100%;
 }
 
 .vevent abbr.dtstart {
-    font-weight:bold;
+    /*font-weight:bold;*/
 }
 /* END COMMON EVENT STYLES */
 
 
 /* BEGIN EVENT LISTING STYLES */
-#content .event_listing nav ul {
-    margin-left:0;
+.template-event_listing .documentFirstHeading {
+    position: relative;
+}
+.template-event_listing .documentFirstHeading nav {
+    font-size: 14px;
+    position: absolute;
+    right: 0;
+    bottom: 13px;
+}
+.template-event_listing .documentFirstHeading nav ul {
+    margin:0;
     list-style-type:none;
 }
-#content .event_listing nav ul li {
-    display:inline-block;
-    padding: 0 0.75em;
-    line-height: 2em;
-    margin:0;
-}
-#content .event_listing nav ul li:last-of-type { margin-right:0; }
-
-.event_listing nav > ul,
-.event_listing nav {
-    background-color: #DDDDDD;
-    min-height:2em;
-}
-.event_listing nav {
-    border: 0.3em solid #DDDDDD;
-    border-bottom:none;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-}
-.event_listing ul.mode_selector {
+.template-event_listing ul.mode_selector {
     display: block;
     margin-left: 0;
-    float:left;
+    list-style-type: none;
 }
-.event_listing ul.sub_nav {
-    display: block;
-    margin-left: 0;
-    float:right;
-    border-bottom-left-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
+.template-event_listing ul.mode_selector li {
+    display: inline;
 }
-#content .event_listing nav ul li a {
-    border:none;
+.template-event_listing nav ul.mode_selector li a {
     display: inline-block;
+    margin-left: 0.5em;
 }
-.event_listing ul.mode_selector li:hover,
-.event_listing ul.mode_selector li.selected {
-    background: white;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-    color: Black;
+.template-event_listing nav ul.mode_selector li a:hover,
+.template-event_listing nav ul.mode_selector li a:focus {
+    text-decoration: underline;
+    border-bottom: 0;
 }
-.event_listing ul.mode_selector li.selected {
-    font-weight: bold;
-}
-#content .event_listing p { margin:0; }
 
-.event_listing div.location { display: inline-block; }
 /* END EVENT LISTING STYLES */
 
 
