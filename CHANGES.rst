@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b2 (unreleased)
+2.0b2 (2015-08-20)
 ------------------
 
 - Unified event_listing style with plonetheme.barceloneta styles and added svg
