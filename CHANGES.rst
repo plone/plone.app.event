@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.5 (unreleased)
+1.1.5 (2015-09-08)
 ------------------
 
 - Ensure ``plone.formwidget.recurrence`` is ``<2.0dev``.
