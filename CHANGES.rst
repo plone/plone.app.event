@@ -4,7 +4,8 @@ Changelog
 2.0b3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated basque translation
+  [erral]
 
 
 2.0b2 (2015-08-20)
