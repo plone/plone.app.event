@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0b3 (unreleased)
-------------------
+2.0 (2015-09-11)
+----------------
 
 - Updated basque translation
   [erral]
