@@ -28,7 +28,7 @@ from mock import Mock
 import datetime
 import pytz
 import transaction
-import unittest2 as unittest
+import unittest
 import zope.component
 
 

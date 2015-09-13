@@ -40,7 +40,7 @@ from zope.interface import directlyProvides
 
 
 import pytz
-import unittest2 as unittest
+import unittest
 
 
 class TestBaseModule(unittest.TestCase):
