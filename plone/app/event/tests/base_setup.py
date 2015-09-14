@@ -8,7 +8,7 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 
-import unittest2 as unittest
+import unittest
 import pytz
 
 TEST_TIMEZONE = 'Europe/Vienna'

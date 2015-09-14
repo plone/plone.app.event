@@ -14,7 +14,7 @@ from zope.component import getMultiAdapter
 
 import os
 import pytz
-import unittest2 as unittest
+import unittest
 
 
 # TODO:

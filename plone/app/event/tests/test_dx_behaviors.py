@@ -32,7 +32,7 @@ from zope.annotation.interfaces import IAnnotations
 
 import mock
 import pytz
-import unittest2 as unittest
+import unittest
 import zope.interface
 
 

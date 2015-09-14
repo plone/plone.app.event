@@ -96,7 +96,6 @@ setup(
             'plone.testing',
             'robotsuite',
             'transaction',
-            'unittest2',
             'zExceptions',
             'zope.event',
         ],

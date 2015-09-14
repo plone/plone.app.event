@@ -26,7 +26,7 @@ from zope.component.hooks import setSite
 from zope.interface import alsoProvides
 
 import pytz
-import unittest2 as unittest
+import unittest
 
 TZNAME = 'Australia/Brisbane'
 PTYPE = 'plone.app.event.dx.event'
