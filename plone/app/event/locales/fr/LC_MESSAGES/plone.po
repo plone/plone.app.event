@@ -3,26 +3,28 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: 2013-04-19 23:38+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2015-09-16 00:51+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language-Code: fr\n"
 "Language-Name: French\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
+"Last-Translator: Encolpe DEGOUTE <encolpe.degoute@free.fr>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"X-Generator: Poedit 1.7.5\n"
 
 # TRANSLATE VIEW NAMES
-# 
+#
 #. Default: "Event Listing"
 msgid "event_listing"
-msgstr "Event Listing"
+msgstr "Liste d'événements"
 
 #. Default: "Event"
 msgid "event_view"
-msgstr "Event"
+msgstr "Événement"

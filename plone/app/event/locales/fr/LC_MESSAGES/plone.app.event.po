@@ -3,19 +3,21 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
-"PO-Revision-Date: 2011-12-06 23:00+0200\n"
-"Last-Translator: JeanMichel FRANCOIS <toutpt@gmail.com>\n"
+"PO-Revision-Date: 2015-09-16 01:13+0100\n"
+"Last-Translator: Encolpe DEGOUTE <encolpe.degoute@free.fr>\n"
 "Language-Team: Plone fr <plone-fr@lists.plone.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language-Code: fr\n"
 "Language-Name: French\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone.app.event\n"
+"Language: fr\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #. Default: "Events in next 7 days."
 #: plone/app/event/browser/event_listing.py:278
@@ -46,7 +48,7 @@ msgstr "Calendrier"
 
 #: plone/app/event/bbb/browser/controlpanel.py:10
 msgid "Date and Time Settings"
-msgstr ""
+msgstr "Paramètres de date et d'heure"
 
 #: plone/app/event/bbb/portlets/portlet_calendar.py:45
 #: plone/app/event/portlets/portlet_calendar.py:313
@@ -145,7 +147,7 @@ msgstr "La date de début ou la date de fin n'est pas valide."
 #. Default: "Event"
 #: plone/app/event/browser/event_summary.pt:16
 msgid "event_event"
-msgstr ""
+msgstr "Événement"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_summary.pt:108
@@ -169,7 +171,7 @@ msgstr "Du ${startdate} <span class=\"timespan\">au</span> ${enddate}"
 
 #: plone/app/event/browser/formatted_date.pt:20
 msgid "event_when_differentday_optional_word_between_date_and_time"
-msgstr ""
+msgstr " "
 
 #. Default: "${date} from ${starttime} to ${endtime}"
 #: plone/app/event/browser/formatted_date.pt:71
@@ -269,7 +271,6 @@ msgstr "Définir la règle de récurrence de l'événement."
 
 #. Default: "Date and Time related settings like timezone(s), etc."
 #: plone/app/event/bbb/browser/controlpanel.py:15
-#, fuzzy
 msgid "help_event_settings"
 msgstr "Paramètres relatif aux événements comme les fuseaux horaires, etc."
 
@@ -316,52 +317,58 @@ msgstr "Le fuseau horaire du site. Les utilisateurs peuvent mettre leur propre f
 #. Default: "Content type of the event, which is created when importing icalendar resources."
 #: plone/app/event/ical/importer.py:229
 msgid "ical_import_event_type_desc"
-msgstr ""
+msgstr "Type de contenu de l'événement, celui qui sera utilisé durant l'importation des ressources iCalendar."
 
 #. Default: "Event Type"
 #: plone/app/event/ical/importer.py:228
 msgid "ical_import_event_type_title"
-msgstr ""
+msgstr "Type d'événement"
 
 #. Default: "Icalendar resource file, if no URL is given."
 #: plone/app/event/ical/importer.py:247
 msgid "ical_import_file_desc"
-msgstr ""
+msgstr "Fichier de ressource iCalendar si aucune URL n'est fournie."
 
 #. Default: "Icalendar File"
 #: plone/app/event/ical/importer.py:246
 msgid "ical_import_file_title"
-msgstr ""
+msgstr "Fichier iCalendar"
 
 #. Default: "${num} events imported from ${filename}"
 #: plone/app/event/ical/importer.py:354
 msgid "ical_import_imported"
-msgstr ""
+msgstr "${num} événements importés depuis ${filename}"
 
 #. Default: "Please provide either a icalendar ics file or a URL to a file."
 #: plone/app/event/ical/importer.py:361
 msgid "ical_import_no_ics"
-msgstr ""
+msgstr "Veuillez fournir soit un fichier iCalendar (.ics) soit une URL vers un fichier."
 
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
 #: plone/app/event/ical/importer.py:258
+#, fuzzy
 msgid "ical_import_sync_strategy_desc"
 msgstr ""
+"Défini la manière de synchroniser :\n"
+"1) \"Garder les nouveaux\" : Importer, si l'événement a été modifié après celui existant.\n"
+" 2) \"Garder le mien\" : En cas de conflit, ne rien faire.\n"
+" 3) \"Garder le leur\" :  En cas de conflit, mettre à jour l'événement à partir de celui externe.\n"
+" 4) \"Pas de synchronisation\" : Ne rien synchroniser mais importer les événements et en créer de nouveaux même s'ils existent déjà. Pour chacun, créer un nouvel identifiant de synchronisation."
 
 #. Default: "Synchronization Strategy"
 #: plone/app/event/ical/importer.py:254
 msgid "ical_import_sync_strategy_title"
-msgstr ""
+msgstr "Stratégie de synchronisation"
 
 #. Default: "URL to an external icalendar resource file."
 #: plone/app/event/ical/importer.py:239
 msgid "ical_import_url_desc"
-msgstr ""
+msgstr "URLd'un fichier externe d'une ressource iCalendar"
 
 #. Default: "Icalendar URL"
 #: plone/app/event/ical/importer.py:238
 msgid "ical_import_url_title"
-msgstr ""
+msgstr "URL iCalendar"
 
 #. Default: "iCal"
 #: plone/app/event/browser/event_listing.pt:48
@@ -372,12 +379,12 @@ msgstr "iCal"
 #. Default: "Date and Time Settings"
 #: plone/app/event/bbb/browser/controlpanel.py:14
 msgid "label_dateandtime_settings"
-msgstr ""
+msgstr "Paramètres de date et d'heure"
 
 #. Default: "Email"
 #: plone/app/event/browser/event_listing.pt:127
 msgid "label_email"
-msgstr "Email"
+msgstr "Courriel"
 
 #. Default: "Attendees"
 #: plone/app/event/dx/behaviors.py:213
@@ -442,7 +449,7 @@ msgstr "Premier jour"
 #. Default: "Phone"
 #: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
-msgstr ""
+msgstr "Téléphone"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_listing.pt:117
@@ -477,12 +484,12 @@ msgstr "Semaine"
 #. Default: "Ical import settings saved."
 #: plone/app/event/ical/importer.py:316
 msgid "msg_ical_import_settings_saved"
-msgstr ""
+msgstr "Paramètres de l'import iCal enregistrés."
 
 #. Default: "There are ${results} more occurrences."
 #: plone/app/event/browser/event_summary.py:79
 msgid "msg_num_more_occurrences"
-msgstr ""
+msgstr "Il y a ${results} occurrences en plus."
 
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
@@ -507,9 +514,8 @@ msgstr "Événements passés"
 #. Default: "Select search base Folder or Collection to search for events. The URL to to this item will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
 #: plone/app/event/portlets/portlet_calendar.py:54
 #: plone/app/event/portlets/portlet_events.py:55
-#, fuzzy
 msgid "portlet_help_search_base"
-msgstr "Sélectionner le dossier de base pour la recherche d'événements. Ce dossier sera aussi utilisé de lien dans les recherches de calendrier. Si laissé vide, les recherches se feront sur tout le site et l'affichage en liste des événements se trouvera à la racine du site."
+msgstr "Sélectionner le dossier ou la collection de base pour la recherche d'événements. Cet élément sera aussi utilisé de lien dans les recherches de calendrier. Si laissé vide, les recherches se feront sur tout le site et l'affichage en liste des événements se trouvera à la racine du site."
 
 #. Default: "Search base"
 #: plone/app/event/portlets/portlet_calendar.py:53
@@ -540,22 +546,22 @@ msgstr "Détail de l'événement"
 #. Default: "Keep mine"
 #: plone/app/event/vocabularies.py:24
 msgid "sync_keep_mine"
-msgstr ""
+msgstr "Garder les miennes"
 
 #. Default: "Keep newer"
 #: plone/app/event/vocabularies.py:23
 msgid "sync_keep_newer"
-msgstr ""
+msgstr "Garder les nouvelles"
 
 #. Default: "Keep theirs"
 #: plone/app/event/vocabularies.py:25
 msgid "sync_keep_theirs"
-msgstr ""
+msgstr "Garder les leurs"
 
 #. Default: "No Syncing"
 #: plone/app/event/vocabularies.py:26
 msgid "sync_none"
-msgstr ""
+msgstr "Pas de synchronisation"
 
 #. Default: "This Month"
 #: plone/app/event/browser/event_listing.pt:56
@@ -602,4 +608,3 @@ msgstr "Les événements du jour"
 #: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "Les événements à venir dans la journée"
-
