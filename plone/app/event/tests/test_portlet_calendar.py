@@ -25,7 +25,7 @@ from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
 
 import pytz
-import unittest2 as unittest
+import unittest
 
 
 TZNAME = 'Europe/Vienna'
