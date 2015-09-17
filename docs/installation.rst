@@ -9,7 +9,7 @@ See Changelog.rst.
 
 The following is a compatibility map of all current plone.app.event versions:
 
-=======  ======  ==========  =================  ======================  ==========
+===============  ==========  =================  ======================  ==========
 plone.app.event    Plone     plone.app.widgets  plone.app.contenttypes  Archetypes
 ---------------  ----------  -----------------  ----------------------  ----------
 version  branch
