@@ -31,7 +31,8 @@ class IEventsPortlet(IPortletDataProvider):
         title=_(u'Number of items to display'),
         description=_(u'How many items to list.'),
         required=True,
-        default=5
+        default=5,
+        min=1,
     )
 
     state = schema.Tuple(

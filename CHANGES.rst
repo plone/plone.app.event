@@ -4,8 +4,12 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Prevent negative number of items in event-portlet.
+  [pbauer]
+
 - Remove unittest2 dependency.
   [gforcada]
+
 
 2.0 (2015-09-11)
 ----------------
