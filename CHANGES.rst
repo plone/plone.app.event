@@ -10,6 +10,9 @@ Changelog
 - Remove unittest2 dependency.
   [gforcada]
 
+- Resolve deprecation warning for getDefaultPage.
+  [fulv]
+
 
 2.0 (2015-09-11)
 ----------------
