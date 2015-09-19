@@ -26,7 +26,7 @@
           <span tal:replace="item/title">Some Event</span>
         </a>
         <span class="portletItemDetails">
-          <tal:date replace="structure python:view.formatted_date(item)" />
+          <tal:date replace="structure python:view.formatted_date(item)" /><br />
           <span class="timezone"
               tal:define="tz item/timezone"
               tal:condition="tz">
@@ -49,7 +49,7 @@
         i18n:translate="box_previous_events">
       Previous events&hellip;
     </a>
-
+    <br />
     <a class="tile upcoming-events"
         tal:define="next_link view/next_url"
         tal:attributes="href next_link"
