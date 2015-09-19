@@ -25,6 +25,14 @@
    <for interface="plone.app.portlets.interfaces.IDashboard" />
  </portlet>
 
+ <assignment
+     manager="plone.rightcolumn"
+     category="context"
+     key="/"
+     type="portlets.Events"
+     name="events"
+     />
+
  <!-- EXAMPLE ASSIGNMENTS
  <assignment
      manager="plone.rightcolumn"
@@ -32,13 +40,6 @@
      key="/"
      type="portlets.Calendar"
      name="calendar"
-     />
- <assignment
-     manager="plone.rightcolumn"
-     category="context"
-     key="/"
-     type="portlets.Events"
-     name="events"
      />
   -->
 

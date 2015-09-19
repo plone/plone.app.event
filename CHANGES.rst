@@ -4,6 +4,10 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Enable event-portlet by default.
+  Fixes https://github.com/plone/Products.CMFPlone/issues/760
+  [pbauer]
+
 - Prevent negative number of items in event-portlet.
   [pbauer]
 
