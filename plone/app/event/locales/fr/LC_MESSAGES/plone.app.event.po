@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
-"PO-Revision-Date: 2015-09-16 01:13+0100\n"
+"PO-Revision-Date: 2015-09-20 23:53+0100\n"
 "Last-Translator: Encolpe DEGOUTE <encolpe.degoute@free.fr>\n"
 "Language-Team: Plone fr <plone-fr@lists.plone.org>\n"
 "MIME-Version: 1.0\n"
@@ -346,7 +346,6 @@ msgstr "Veuillez fournir soit un fichier iCalendar (.ics) soit une URL vers un f
 
 #. Default: "Defines how to synchronize:\n1) \"Keep newer\": Import, if the imported event is modified after the existing\n   one.\n2) \"Keep mine\": On conflicts, just do nothing.\n3) \"Keep theirs\": On conflicts, update the existing event with the external\n   one.\n4) \"No Syncing\": Don't synchronize but import events and create new ones, even\n    if they already exist. For each one, create a new sync_uid."
 #: plone/app/event/ical/importer.py:258
-#, fuzzy
 msgid "ical_import_sync_strategy_desc"
 msgstr ""
 "Défini la manière de synchroniser :\n"
