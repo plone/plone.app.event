@@ -608,3 +608,4 @@ msgstr "Les événements du jour"
 #: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "Les événements à venir dans la journée"
+
