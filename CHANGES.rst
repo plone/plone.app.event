@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
+2.0.1 (2015-09-20)
 ------------------
 
 - Enable event-portlet by default.
