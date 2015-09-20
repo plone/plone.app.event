@@ -227,9 +227,7 @@ msgstr "Hitzordua egutegira gehitu"
 #. Default: "The timezones, which should be available for the portal. Can be set for users and events"
 #: plone/app/event/bbb/interfaces.py:23
 msgid "help_available_timezones"
-msgstr ""
-"Aukeratu daitezkeen ordu-eremuak. Erabiltzaile eta hitzorduei esleitu "
-"dakizkieke"
+msgstr "Aukeratu daitezkeen ordu-eremuak. Erabiltzaile eta hitzorduei esleitu dakizkieke"
 
 #. Default: "List of attendees."
 #: plone/app/event/dx/behaviors.py:217
@@ -284,9 +282,7 @@ msgstr "Hitzorduaren hasiera-data eta ordua"
 #. Default: "Web address with more info about the event. Add http:// for external links."
 #: plone/app/event/dx/behaviors.py:276
 msgid "help_event_url"
-msgstr ""
-"Hitzordu honen inguruko informazio gehiago duen web helbidea. Atari "
-"honetatik kanpoko loturei http:// gehitu aurretik."
+msgstr "Hitzordu honen inguruko informazio gehiago duen web helbidea. Atari honetatik kanpoko loturei http:// gehitu aurretik."
 
 #. Default: "Event lasts whole day."
 #: plone/app/event/dx/behaviors.py:110
@@ -316,9 +312,7 @@ msgstr "Egin klik icalendar inportazioa kontestu honetan aktibatzeko."
 #. Default: "The timezone setting of the portal. Users can set their own timezone, if available timezones are defined."
 #: plone/app/event/bbb/interfaces.py:12
 msgid "help_portal_timezone"
-msgstr ""
-"Atariaren ordu-eremuaren ezarpena. Erabiltzaile bakoitzak bere ordu-eremua "
-"ezarri dezake, hemen bat baino gehiago definituz gero."
+msgstr "Atariaren ordu-eremuaren ezarpena. Erabiltzaile bakoitzak bere ordu-eremua ezarri dezake, hemen bat baino gehiago definituz gero."
 
 #. Default: "Content type of the event, which is created when importing icalendar resources."
 #: plone/app/event/ical/importer.py:229
@@ -358,10 +352,8 @@ msgstr ""
 "1) \"Berriagoak mantendu\": Inportatu, inportatutakoa aldatu bada\n"
 "   one.\n"
 "2) \"Nirea mantendu\": Arazoren bat dagoenean, ezer ez egin.\n"
-"3) \"Eurena mantendu\": Arazoren bat dagoenean, dagoen hitzordua "
-"inportatutakoarekin eguneratu.\n"
-"4) \"Ez sinkronizatu\": Ez sinkronizatu dauden hitzorduak baina berriak "
-"inportatu eta sortu\n"
+"3) \"Eurena mantendu\": Arazoren bat dagoenean, dagoen hitzordua inportatutakoarekin eguneratu.\n"
+"4) \"Ez sinkronizatu\": Ez sinkronizatu dauden hitzorduak baina berriak inportatu eta sortu\n"
 "    nahiz eta aurretik egon. Bakoitzarentzant sinkronizazio id-a sortu.\""
 
 #. Default: "Synchronization Strategy"
@@ -524,11 +516,7 @@ msgstr "Pasatutako hitzorduak"
 #: plone/app/event/portlets/portlet_calendar.py:54
 #: plone/app/event/portlets/portlet_events.py:55
 msgid "portlet_help_search_base"
-msgstr ""
-"Hitzorduak bilatzeko karpeta edo bilduma aukeratu. Egutegiko bilaketen "
-"loturetan ere karpeta honen helbidea erabiliko da oinarri gisa. Hutsik utziz "
-"gero, atari guztian zehar bilatuko da eta sortzen diren loturak ataritik "
-"aurrerakoak izango dira."
+msgstr "Hitzorduak bilatzeko karpeta edo bilduma aukeratu. Egutegiko bilaketen loturetan ere karpeta honen helbidea erabiliko da oinarri gisa. Hutsik utziz gero, atari guztian zehar bilatuko da eta sortzen diren loturak ataritik aurrerakoak izango dira."
 
 #. Default: "Search base"
 #: plone/app/event/portlets/portlet_calendar.py:53
@@ -621,3 +609,4 @@ msgstr "Gaurko hitzorduak"
 #: plone/app/event/browser/event_listing.py:271
 msgid "todays_upcoming_events"
 msgstr "Gaurko hitzorduak"
+
