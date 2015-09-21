@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.0.2 (2015-09-21)
 ------------------
+
+- Update French translations
+  [enclope]
+
+- Resolve deprecation warning for getDefaultPage.
+  [jensens]
 
 - Fix word break on event linsting template
   [sneridagh]
