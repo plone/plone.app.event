@@ -4,7 +4,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix word break on event linsting template
+  [sneridagh]
 
 
 2.0.1 (2015-09-20)
