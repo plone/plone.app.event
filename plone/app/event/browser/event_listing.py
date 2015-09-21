@@ -15,10 +15,10 @@ from plone.app.event.base import localized_now
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import start_end_query
 from plone.app.event.ical.exporter import construct_icalendar
-from plone.app.layout.navigation.defaultpage import getDefaultPage
 from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.defaultpage import get_default_page
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 
@@ -36,7 +36,7 @@ class EventListing(BrowserView):
         self.now = now = localized_now(context)
 
         # Try to get the default page
-        default = getDefaultPage(context)
+        default = get_default_page(context)
         self.default_context = context[default] if default else context
 
         self.is_collection = False
