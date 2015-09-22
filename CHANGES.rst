@@ -4,8 +4,8 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Plone 4 compatibility for ``get_default_page`` import.
+  [thet]
 
 2.0.2 (2015-09-21)
 ------------------
