@@ -18,9 +18,14 @@ from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
-from Products.CMFPlone.defaultpage import get_default_page
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
+
+try:
+    from Products.CMFPlone.defaultpage import get_default_page
+except ImportError:
+    # Plone 4
+    from plone.app.layout.navigation.defaultpage import getDefaultPage as get_default_page  # noqa
 
 try:
     from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
