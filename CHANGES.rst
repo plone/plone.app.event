@@ -4,7 +4,10 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix the occurrences calculation to reliably return an Event instead of
+  Occurrence object for the originating event. There was a bug introduced by a
+  newer pytz version.
+  [thet]
 
 
 2.0.3 (2015-09-27)

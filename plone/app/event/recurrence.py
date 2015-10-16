@@ -9,6 +9,7 @@ from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.recurrence import recurrence_sequence_ical
 from plone.event.utils import is_same_day
+from plone.event.utils import pydt
 from plone.namedfile.interfaces import IImageScaleTraversable
 from plone.namedfile.scaling import ImageScaling
 from zope.component import adapter
@@ -66,7 +67,7 @@ class RecurrenceSupport(object):
         # but doing it for backwards compatibility as views/templates
         # still rely on acquisition-wrapped objects.
         def get_obj(start):
-            if event.start.replace(microsecond=0) == start:
+            if pydt(event.start.replace(microsecond=0)) == start:
                 # If the occurrence date is the same as the event object, the
                 # occurrence is the event itself. return it as such.
                 # Dates from recurrence_sequence_ical are explicitly without
