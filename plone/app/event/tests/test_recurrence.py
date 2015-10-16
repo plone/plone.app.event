@@ -1,30 +1,28 @@
+from mock import Mock
 from OFS.SimpleItem import SimpleItem
-from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import get_events
+from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.dx.traverser import OccurrenceTraverser
 from plone.app.event.recurrence import Occurrence
+from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
-from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
-from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
-from plone.namedfile.interfaces import IImageScaleTraversable
 from plone.testing.z2 import Browser
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserView
-from mock import Mock
-
 import datetime
 import pytz
 import transaction
