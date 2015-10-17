@@ -18,6 +18,8 @@ docs/make.bat
 eggs/
 include/
 lib/
+lib64
 parts/
+pip-selfcheck.json
 var/
 !.gitignore
