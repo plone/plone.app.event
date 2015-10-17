@@ -41,7 +41,6 @@ Documentation
     development.rst
     tests.rst
     designchoices.rst
-    contributors.rst
 
 
 API documentation
