@@ -50,12 +50,3 @@ API documentation
 .. toctree::
 
     api/index.rst
-
-
-Legal
-=====
-
-.. toctree::
-
-    LICENSE-copyright.rst
-    LICENSE-GPL.rst
