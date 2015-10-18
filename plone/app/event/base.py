@@ -85,6 +85,7 @@ def get_events(context, start=None, end=None, limit=None,
 
     :param ret_mode: Return type of search results. These options are
                      available:
+
                          * 1 (brains): Return results as catalog brains.
                          * 2 (objects): Return results as IEvent and/or
                                         IOccurrence objects.
@@ -249,11 +250,13 @@ def expand_events(events, ret_mode,
 
     :param ret_mode: Return type of search results. These options are
                      available:
+
                          * 2 (objects): Return results as IEvent and/or
                                         IOccurrence objects.
                          * 3 (accessors): Return results as IEventAccessor
                                           wrapper objects.
                      Option "1" (brains) is not supported.
+
     :type ret_mode: integer [2|3]
 
     :param start: Date, from which on events should be expanded.
@@ -661,6 +664,7 @@ def start_end_from_mode(mode, dt=None, context=None):
     functions.
 
     :param mode: One of the following modes:
+
                     'all' Show all events.
                     'past': Show only past events with descending sorting.
                     'future': Show only future events (default).
@@ -670,9 +674,13 @@ def start_end_from_mode(mode, dt=None, context=None):
                     'day': Return all events on the given day (dt parameter
                            required)
                     'week': Show a weeks events, optionally from a given date.
+
                  These settings override the start and end parameters.
-                    Not implemented yet:
+
+                 Not implemented yet:
+
                     'month': Show this month's events.
+
     :type mode: string
 
     :param dt: Optional datetime for day mode.

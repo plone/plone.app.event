@@ -46,6 +46,7 @@ class RecurrenceSupport(object):
 
         Please note: Events beginning before range_start but ending afterwards
                      won't be found.
+
         TODO: really?
 
         TODO: test with event start = 21st feb, event end = start+36h,
