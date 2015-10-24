@@ -22,4 +22,5 @@ lib64
 parts/
 pip-selfcheck.json
 var/
+!.gitattributes
 !.gitignore
