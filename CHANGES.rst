@@ -4,7 +4,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
-- Fix the occurrences calculation to reliably return an Event instead of
+Fixes:
+
+- Fixed the occurrences calculation to reliably return an Event instead of
   Occurrence object for the originating event. There was a bug introduced by a
   newer pytz version.
   [thet]
