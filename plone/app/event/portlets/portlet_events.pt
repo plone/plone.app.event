@@ -18,25 +18,36 @@
     <ul>
       <tal:events repeat="item view/events">
       <li class="portletItem"
-          tal:define="oddrow repeat/item/odd"
+          tal:define="normalize nocall:view/context/@@plone/normalizeString;
+                      oddrow repeat/item/odd;
+                      item_url      python:item[0].url;
+                      item_descr    python:item[0].description; 
+                      item_title    python:item[0].title;
+                      item_location python:item[0].location;
+                      item_hasimage python:item[1]"
           tal:attributes="class python:'portletItem odd' if oddrow else 'portletItem even'">
         <a href="#" class="tile"
-            tal:attributes="href item/url;
-                            title item/description">
-          <span tal:replace="item/title">Some Event</span>
+            tal:attributes="href item_url;
+                            title item_descr">
+            <img class="image-icon" 
+               tal:define="getIcon python:item[0].url+'/@@images/image/icon'"
+               tal:condition="item_hasimage"
+               tal:attributes="href item_url;
+                               src  string:$getIcon">                               
+          <span tal:replace="item_title">Some Event</span>
         </a>
         <span class="portletItemDetails">
-          <tal:date replace="structure python:view.formatted_date(item)" /><br />
+          <tal:date replace="structure python:view.formatted_date(item[0])" /><br />
           <span class="timezone"
-              tal:define="tz item/timezone"
+              tal:define="tz python:item[0].timezone"
               tal:condition="tz">
             (<tal:tzname replace="tz">TZ</tal:tzname>)
           </span>
           <span class="location"
-              tal:condition="item/location"> &mdash;
-            <tal:location content="structure item/location">Location</tal:location>
+              tal:condition="item_location"> &mdash;
+            <tal:location content="structure item_location">Location</tal:location>
           </span>
-        </span>
+        </span>	
       </li>
       </tal:events>
     </ul>
