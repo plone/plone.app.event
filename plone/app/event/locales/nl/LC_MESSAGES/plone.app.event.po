@@ -102,19 +102,19 @@ msgstr "Alle agenda-items"
 #: plone/app/event/bbb/portlets/portlet_events.pt:10
 #: plone/app/event/portlets/portlet_events.pt:9
 msgid "box_events"
-msgstr "Toekomstige agenda-items"
+msgstr "Agenda"
 
 #. Default: "Previous events…"
 #: plone/app/event/bbb/portlets/portlet_events.pt:53
 #: plone/app/event/portlets/portlet_events.pt:45
 msgid "box_previous_events"
-msgstr "Voorbije agenda-items…"
+msgstr "Archief…"
 
 #. Default: "Upcoming events…"
 #: plone/app/event/bbb/portlets/portlet_events.pt:60
 #: plone/app/event/portlets/portlet_events.pt:53
 msgid "box_upcoming_events"
-msgstr "Toekomstige agenda-items…"
+msgstr "Toekomstige Agenda-items…"
 
 #. Default: "Attendees"
 #: plone/app/event/browser/event_summary.pt:99
@@ -144,7 +144,7 @@ msgstr "Ongeldige start- of einddatum"
 #. Default: "Event"
 #: plone/app/event/browser/event_summary.pt:16
 msgid "event_event"
-msgstr ""
+msgstr "Agenda-item"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_summary.pt:108
@@ -377,7 +377,7 @@ msgstr "iCal"
 #. Default: "Date and Time Settings"
 #: plone/app/event/bbb/browser/controlpanel.py:14
 msgid "label_dateandtime_settings"
-msgstr ""
+msgstr "Datum en tijd instellingen"
 
 #. Default: "Email"
 #: plone/app/event/browser/event_listing.pt:127
@@ -447,7 +447,7 @@ msgstr "Eerste dag van de week"
 #. Default: "Phone"
 #: plone/app/event/browser/event_listing.pt:138
 msgid "label_phone"
-msgstr ""
+msgstr "Telefoon"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_listing.pt:117
@@ -487,7 +487,7 @@ msgstr "Ical import-instellingen opgeslagen"
 #. Default: "There are ${results} more occurrences."
 #: plone/app/event/browser/event_summary.py:79
 msgid "msg_num_more_occurrences"
-msgstr ""
+msgstr "Er zijn nog ${resuls} andere momenten."
 
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
