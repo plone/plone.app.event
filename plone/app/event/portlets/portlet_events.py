@@ -184,7 +184,7 @@ class Renderer(base.Renderer):
             )
             eventlist=[]
             for ev in events:
-                hasimage = True if getattr(ev.context, 'image', None) else False
+                hasimage = bool(getattr(ev.context, 'image', None))
                 eventlist.append((ev, hasimage))
         return eventlist
 
