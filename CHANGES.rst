@@ -10,7 +10,10 @@ New:
 
 Fixes:
 
-- *add item here*
+- show thumbs when leadimage behavior enabled for eventtype:
+  see  https://github.com/plone/Products.CMFPlone/issues/1226
+  [fgrcon]
+  
 
 
 2.0.4 (2015-10-28)
