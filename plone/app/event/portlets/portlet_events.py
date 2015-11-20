@@ -182,10 +182,12 @@ class Renderer(base.Renderer):
                 ret_mode=RET_MODE_ACCESSORS,
                 expand=True, limit=data.count, **query
             )
-            eventlist=[]
-            for ev in events:
-                hasimage = bool(getattr(ev.context, 'image', None))
-                eventlist.append((ev, hasimage))
+
+        eventlist = []
+        for ev in events:
+            hasimage = bool(getattr(ev.context, 'image', None))
+            eventlist.append((ev, hasimage))
+
         return eventlist
 
     def formatted_date(self, event):
