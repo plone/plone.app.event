@@ -183,12 +183,7 @@ class Renderer(base.Renderer):
                 expand=True, limit=data.count, **query
             )
 
-        eventlist = []
-        for ev in events:
-            hasimage = bool(getattr(ev.context, 'image', None))
-            eventlist.append((ev, hasimage))
-
-        return eventlist
+        return events
 
     def formatted_date(self, event):
         provider = getMultiAdapter(

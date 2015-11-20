@@ -220,7 +220,7 @@ class RendererTest(unittest.TestCase):
                                                  state=('published',)))
         events = r.events
         self.assertEqual(5, len(events))
-        self.assertTrue('Event 2' not in [x[0].title for x in events])
+        self.assertTrue('Event 2' not in [x.title for x in events])
 
         rd = r.render()
         occ1dt = start + timedelta(days=7)

@@ -18,28 +18,27 @@
     <ul>
       <tal:events repeat="item view/events">
       <li class="portletItem"
-          tal:define="normalize nocall:view/context/@@plone/normalizeString;
-                      oddrow repeat/item/odd;
-                      item_url      python:item[0].url;
-                      item_descr    python:item[0].description; 
-                      item_title    python:item[0].title;
-                      item_location python:item[0].location;
-                      item_hasimage python:item[1]"
+          tal:define="oddrow repeat/item/odd;
+                      item_url      item/url;
+                      item_descr    item/description;
+                      item_title    item/title;
+                      item_location item/location;
+                      item_hasimage item/context/image|nothing"
           tal:attributes="class python:'portletItem odd' if oddrow else 'portletItem even'">
         <a href="#" class="tile"
             tal:attributes="href item_url;
                             title item_descr">
-            <img class="image-icon" 
-               tal:define="getIcon python:item[0].url+'/@@images/image/icon'"
+            <img class="image-icon"
                tal:condition="item_hasimage"
+               tal:define="getIcon string:${item_url}/@@images/image/icon"
                tal:attributes="href item_url;
-                               src  string:$getIcon">                               
+                               src  string:$getIcon">
           <span tal:replace="item_title">Some Event</span>
         </a>
         <span class="portletItemDetails">
-          <tal:date replace="structure python:view.formatted_date(item[0])" /><br />
+          <tal:date replace="structure python:view.formatted_date(item)" /><br />
           <span class="timezone"
-              tal:define="tz python:item[0].timezone"
+              tal:define="tz item/timezone"
               tal:condition="tz">
             (<tal:tzname replace="tz">TZ</tal:tzname>)
           </span>
@@ -47,7 +46,7 @@
               tal:condition="item_location"> &mdash;
             <tal:location content="structure item_location">Location</tal:location>
           </span>
-        </span>	
+        </span>
       </li>
       </tal:events>
     </ul>
