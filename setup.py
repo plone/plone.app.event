@@ -100,9 +100,6 @@ setup(
         ],
         'plone43': [
             'plone.app.widgets [dexterity] >= 1.7.0',
-        ],
-        'plone50': [  # optional, plone 5 already depends on these versions
-            'plone.app.z3cform >= 1.1.0.dev0',
         ]
     },
     entry_points="""

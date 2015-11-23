@@ -12,8 +12,19 @@ New:
 
 Fixes:
 
-- *add item here*
-  
+- Cleanup tasks: Only install the plone.app.widgets profile for Plone 4.3.
+  Remove the unnecessary ``plone50`` setup.py extra section. Fix
+  plone.app.event to also work with plone.app.z3cform versions below < 1.0.
+  [thet]
+
+- Cleanup buildout: Remove sources.cfg, versions.cfg, test.cfg, test-43.cfg and
+  test.cfg. Since this package is merged, it doesn't make much sense to
+  maintain separate version and sources files to extend from. Tests and
+  development environment is built in the buildout.cfg and buildout-43.cfg
+  files. Remove bootstrap.py - use ``virtualenv .; ./bin/pip install
+  zc.buildout`` instead.
+  [thet]
+
 
 2.0.4 (2015-10-28)
 ------------------

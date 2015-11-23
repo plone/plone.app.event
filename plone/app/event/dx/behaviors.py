@@ -1,6 +1,7 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import getFSVersionTuple
 from Products.CMFPlone.utils import safe_unicode
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
@@ -25,6 +26,7 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
+from z3c.form.browser.textlines import TextLinesFieldWidget
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.util import getSpecification
 from z3c.form.widget import FieldWidget
@@ -37,16 +39,14 @@ from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
-# TODO: altern., for backwards compat., we could import from plone.z3cform
-from z3c.form.browser.textlines import TextLinesFieldWidget
 
-import pkg_resources
+PLONE5 = getFSVersionTuple()[0] >= 5
 
-try:
+if PLONE5:
     # Plone 5
-    pkg_resources.get_distribution('plone.app.z3cform')
     from plone.app.z3cform.widget import DatetimeWidget
-except pkg_resources.DistributionNotFound:
+else:
+    # Plone 4
     from plone.app.widgets.dx import DatetimeWidget
 
 
