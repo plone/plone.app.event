@@ -143,7 +143,7 @@ EXDATE:20130506T000000,20140404T000000""",
         collection.reverse_sort = True
         collection.query = [
             {'i': 'portal_type',
-             'o': 'plone.app.querystring.operation.selection.is',
+             'o': 'plone.app.querystring.operation.selection.any',
              'v': ['Event', 'plone.app.event.dx.event']
              },
         ]

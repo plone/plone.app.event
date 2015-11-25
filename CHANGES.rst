@@ -25,6 +25,10 @@ Fixes:
   zc.buildout`` instead.
   [thet]
 
+- In tests, use ``selection.any`` in querystrings.
+  Issue https://github.com/plone/Products.CMFPlone/issues/1040
+  [maurits]
+
 
 2.0.4 (2015-10-28)
 ------------------

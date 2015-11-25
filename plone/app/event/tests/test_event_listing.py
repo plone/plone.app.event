@@ -72,7 +72,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         collection = self.portal.col_test
         collection.query = [
             {'i': 'portal_type',
-             'o': 'plone.app.querystring.operation.selection.is',
+             'o': 'plone.app.querystring.operation.selection.any',
              'v': ['Event', 'plone.app.event.dx.event']
              },
         ]
@@ -113,7 +113,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         collection = self.portal.col_without_date_criterion
         collection.query = [
             {'i': 'portal_type',
-             'o': 'plone.app.querystring.operation.selection.is',
+             'o': 'plone.app.querystring.operation.selection.any',
              'v': ['Event', 'plone.app.event.dx.event']
              },
         ]
@@ -133,7 +133,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         collection = self.portal.col_with_date_criterion
         collection.query = [
             {'i': 'portal_type',
-             'o': 'plone.app.querystring.operation.selection.is',
+             'o': 'plone.app.querystring.operation.selection.any',
              'v': ['Event', 'plone.app.event.dx.event']
              },
             {'i': 'start',
