@@ -10,7 +10,10 @@ New:
 
 Fixes:
 
-- *add item here*
+- Change the behaviors text getter to use ``output_relative_to`` with the
+  current context. This correctly transforms relative links. See:
+  https://github.com/plone/plone.app.textfield/pull/17
+  [thet]
 
 
 2.0.5 (2015-11-25)

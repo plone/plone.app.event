@@ -503,7 +503,7 @@ class EventAccessor(object):
         textvalue = getattr(self.context, 'text', None)
         if textvalue is None:
             return u''
-        return safe_unicode(textvalue.output)
+        return safe_unicode(textvalue.output_relative_to(self.context))
 
     @text.setter
     def text(self, value):
