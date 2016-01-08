@@ -4,10 +4,6 @@ Changelog
 2.0.6 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Change the behaviors text getter to use ``output_relative_to`` with the
