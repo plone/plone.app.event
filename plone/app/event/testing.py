@@ -32,11 +32,13 @@ def set_timezone(tz):
     reg = getUtility(IRegistry)
     current_tz = reg.get('plone.portal_timezone', None)
     reg['plone.portal_timezone'] = tz
-    return tz
+    return current_tz
 
 
 def set_env_timezone(tz):
-    current_tz = os.environ['TZ']
+    if tz is None:
+        return None
+    current_tz = os.environ.get('TZ', None)
     os.environ['TZ'] = tz
     return current_tz
 
