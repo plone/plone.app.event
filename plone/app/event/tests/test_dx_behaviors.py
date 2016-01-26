@@ -395,7 +395,10 @@ class TestDXEventUnittest(unittest.TestCase):
     """
 
     def setUp(self):
-        set_env_timezone(TEST_TIMEZONE)
+        self.orig_tz = set_env_timezone(TEST_TIMEZONE)
+
+    def tearDown(self):
+        set_env_timezone(self.orig_tz)
 
     def test_validate_invariants_ok(self):
         mock = MockEvent()

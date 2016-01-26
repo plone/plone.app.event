@@ -27,12 +27,18 @@ def set_browserlayer(request):
 
 def set_timezone(tz):
     # Set the portal timezone
+    if tz is None:
+        return None
     reg = getUtility(IRegistry)
+    current_tz = reg.get('plone.portal_timezone', None)
     reg['plone.portal_timezone'] = tz
+    return tz
 
 
 def set_env_timezone(tz):
+    current_tz = os.environ['TZ']
     os.environ['TZ'] = tz
+    return current_tz
 
 
 def os_zone():

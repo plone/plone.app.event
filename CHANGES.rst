@@ -10,7 +10,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Ensure that unittests reset the timezone information
+  [do3cc]
 
 
 2.0.6 (2016-01-08)
