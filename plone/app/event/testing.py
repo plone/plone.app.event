@@ -37,6 +37,7 @@ def set_timezone(tz):
 
 def set_env_timezone(tz):
     if tz is None:
+        os.environ.pop('TZ')
         return None
     current_tz = os.environ.get('TZ', None)
     os.environ['TZ'] = tz
