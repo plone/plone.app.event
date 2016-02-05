@@ -2,6 +2,7 @@
 """
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
+from datetime import datetime
 from datetime import timedelta
 from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
@@ -421,7 +422,10 @@ class EventBasic(object):
 
     def _prepare_dt_get(self, dt):
         # always get the date in event's timezone
-        return dt_to_zone(dt, self.context.timezone)
+        if self.timezone:
+            return dt_to_zone(dt, self.timezone)
+        else:
+            return dt
 
     def _prepare_dt_set(self, dt):
         # Dates are always set in UTC, saving the actual timezone in another
@@ -708,3 +712,19 @@ class EventAccessor(object):
     @text.setter
     def text(self, value):
         self.context.text = RichTextValue(raw=safe_unicode(value))
+
+    @property
+    def start(self):
+        start = IEventBasic(self.context).start
+        if self.whole_day:
+            start = dt_start_of_day(start)
+        return start
+
+    @property
+    def end(self):
+        end = IEventBasic(self.context).end
+        if self.open_end:
+            end = IEventBasic(self.context).start
+        if self.open_end or self.whole_day:
+            end = dt_end_of_day(end)
+        return end
