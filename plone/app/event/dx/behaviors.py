@@ -2,6 +2,7 @@
 """
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
+from datetime import datetime
 from datetime import timedelta
 from datetime import tzinfo
 from plone.app.dexterity.behaviors.metadata import ICategorization
@@ -708,3 +709,17 @@ class EventAccessor(object):
     @text.setter
     def text(self, value):
         self.context.text = RichTextValue(raw=safe_unicode(value))
+
+    @property
+    def start(self):
+        value = getattr(self.context, 'start', None)
+        if value is None:
+            return datetime.now()
+        return value
+
+    @property
+    def end(self):
+        value = getattr(self.context, 'end', None)
+        if value is None:
+            return datetime.now()
+        return value
