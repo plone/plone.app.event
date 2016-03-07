@@ -65,11 +65,10 @@
             <span
                 tal:condition="not:events"
                 tal:content="day/day"></span>
-            <a href=""
+            <a data-toggle="tooltip" data-placement="top" href=""
                 tal:condition="events"
                 tal:attributes="href python:view.date_events_url(day['date_string']);
-                                title day/events_string;"
-                
+                                title day/events_title;"
                 tal:content="day/day">31</a>
 
           </td>
