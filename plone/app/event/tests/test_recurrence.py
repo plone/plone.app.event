@@ -64,6 +64,12 @@ class TestTraversalDX(AbstractSampleDataEvents):
             self.occ_traverser_1.publishTraverse,
             self.request, '2000-01-01')
 
+        # Try to traverse to future occurrence
+        self.assertRaises(
+            AttributeError,
+            self.occ_traverser_1.publishTraverse,
+            self.request, '2030-01-01')
+
         # Traverse to existent occurrence
         item = self.occ_traverser_1.publishTraverse(self.request, '2013-05-07')
         self.assertTrue(IOccurrence.providedBy(item))

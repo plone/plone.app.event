@@ -10,6 +10,10 @@ New:
 
 Fixes:
 
+- When trying to access an occurrence in the future, do not
+  raise StopIteration.
+  [frapell]
+
 - Ensure that unittests reset the timezone information
   [do3cc]
 
