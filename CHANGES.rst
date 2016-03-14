@@ -10,6 +10,10 @@ New:
 
 Fixes:
 
+- When trying to access an occurrence in the future outside the range of indexed occurrences, do not raise ``StopIteration``.
+  Instead fall back to raise ``AttributeError``.
+  [frapell]
+
 - Ensure that unittests reset the timezone information
   [do3cc]
 
