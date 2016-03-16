@@ -1,5 +1,14 @@
 Changelog
 =========
+2.0.6 (2016-03-16)
+------------------
+
+Fixes:
+
+- Changed the color of the navigation icon in the Calendar portlet, from the 
+  default blue color of the <a> tag to the inherited grey color.
+  [janga1997]
+
 
 2.0.7 (unreleased)
 ------------------
