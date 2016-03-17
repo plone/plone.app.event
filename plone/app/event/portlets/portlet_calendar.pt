@@ -65,7 +65,7 @@
             <span
                 tal:condition="not:events"
                 tal:content="day/day"></span>
-            <a data-toggle="tooltip" data-placement="top" href=""
+            <a href=""
                 tal:condition="events"
                 tal:attributes="href python:view.date_events_url(day['date_string']);
                                 title day/events_title;"
