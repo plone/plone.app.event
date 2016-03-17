@@ -1,16 +1,6 @@
 Changelog
 =========
 
-
-2.0.6 (2016-03-16)
-------------------
-
-Fixes:
-
--Changed the color of the navigation in the calendar widget to grey(from blue) using inherit.
-  see https://github.com/plone/Products.CMFPlone/issues/1445
-  [janga1997]
-
 2.0.7 (unreleased)
 ------------------
 
