@@ -169,10 +169,6 @@ article.vevent a.event_ical img {
     margin: 0 -.5em;
 }
 
-.portletCalendar a.calendarNext,.portletCalendar a.calendarPrevious{
-    color:inherit;
-}
-
 .portletCalendar a, .portletCalendar a:focus,
 .portletCalendar a, .portletCalendar a:hover,
 .ploneCalendar a {
