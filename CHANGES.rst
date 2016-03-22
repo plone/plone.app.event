@@ -6,7 +6,7 @@ Changelog
 
 New:
 
-- *add item here*
+- Translation locales of plone.app.event to Russian [serge73]
 
 Fixes:
 
