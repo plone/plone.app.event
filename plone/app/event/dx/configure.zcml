@@ -31,30 +31,35 @@
     <adapter name="sync_uid" factory=".behaviors.sync_uid_indexer" />
 
     <plone:behavior
+        name="plone.eventbasic"
         title="Event Basic"
         description="Basic Event schema."
         provides=".behaviors.IEventBasic"
         />
 
     <plone:behavior
+        name="plone.eventrecurrence"
         title="Event Recurrence"
         description="Recurrence extension for Events."
         provides=".behaviors.IEventRecurrence"
         />
 
     <plone:behavior
+        name="plone.eventlocation"
         title="Event Location"
         description="Location extension for Events."
         provides=".behaviors.IEventLocation"
         />
 
     <plone:behavior
+        name="plone.eventattendees"
         title="Event Attendees"
         description="Attendees extension for Events."
         provides=".behaviors.IEventAttendees"
         />
 
     <plone:behavior
+        name="plone.eventcontact"
         title="Event Contact"
         description="Contact extension for Events."
         provides=".behaviors.IEventContact"

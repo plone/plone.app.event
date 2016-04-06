@@ -10,7 +10,8 @@ Incompatibilities:
 
 New:
 
-- *add item here*
+- Added short-names for behaviors.
+  [jensens]
 
 Fixes:
 
