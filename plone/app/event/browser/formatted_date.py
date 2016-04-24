@@ -21,6 +21,9 @@ class FormattedDateProvider(Explicit):
 
         """
         self.date_dict = dates_for_display(occ)
+        if self.date_dict is None:
+            # Don't break for potential Events without start/end.
+            return u""
         return self.template(self)
 
 

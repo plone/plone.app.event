@@ -15,7 +15,9 @@ New:
 
 Fixes:
 
-- *add item here*
+- Don't break ``base.dates_for_display`` and the ``formatted_date`` content provider, if event object has no start or end dates.
+  It might come from a potential event.
+  [thet]
 
 
 2.0.7 (2016-03-31)
