@@ -792,6 +792,10 @@ def dates_for_display(occurrence):
     else:
         acc = IEventAccessor(occurrence)
 
+    if acc.start is None or acc.end is None:
+        # Eventually optional start/end dates from a potentially Event.
+        return None
+
     # this needs to separate date and time as ulocalized_time does
     DT_start = DT(acc.start)
     DT_end = DT(acc.end)
