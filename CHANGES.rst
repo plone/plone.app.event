@@ -4,10 +4,6 @@ Changelog
 2.0.8 (unreleased)
 ------------------
 
-Incompatibilities:
-
-- *add item here*
-
 New:
 
 - Added short-names for behaviors.
