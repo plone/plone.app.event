@@ -177,7 +177,7 @@ Fixes:
   [fulv]
 
 - For event listings, view-cache the ``events`` method, which is directly used
-  in tempaltes and also caches collection results instead of the
+  in templates and also caches collection results instead of the
   ``_get_events`` method.
   [thet]
 
