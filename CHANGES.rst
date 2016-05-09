@@ -4,7 +4,8 @@ Changelog
 1.2.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update french translations.
+  [bsuttor]
 
 
 1.2.7 (2014-11-07)
