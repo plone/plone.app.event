@@ -23,6 +23,8 @@ Bug fixes:
 
 - Fixing a typo in dutch translations.
   [andreesg]
+- Update french translations.
+  [bsuttor]
 
 
 
