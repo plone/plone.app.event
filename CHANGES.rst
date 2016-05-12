@@ -4,7 +4,8 @@ Changelog
 1.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update french translations.
+  [bsuttor]
 
 
 1.1.5 (2015-09-08)
