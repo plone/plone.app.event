@@ -134,8 +134,12 @@ class IEventBasic(model.Schema, IDXEvent):
 
     @invariant
     def validate_start_end(data):
-        # data_postprocessing sets end=start if open_end
-        if data.start > data.end and not data.open_end:
+        if (
+            data.start
+            and data.end
+            and data.start > data.end
+            and not data.open_end
+        ):
             raise StartBeforeEnd(
                 _("error_end_must_be_after_start_date",
                   default=u"End date must be after start date.")
