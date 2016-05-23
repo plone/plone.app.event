@@ -313,9 +313,9 @@ class IEventContact(model.Schema):
         default=None
     )
     directives.widget(
-        'contact_url',
+        'event_url',
         TextFieldWidget,
-        klass=u'event_contact_url'
+        klass=u'event_url'
     )
 
 
