@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Use ``plone.autoform.directives`` for manipulating field widgets instead of overriding the default Fieldwidget adapters.
+  [thet]
 
 Bug fixes:
 

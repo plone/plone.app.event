@@ -1,14 +1,11 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import getFSVersionTuple
-from Products.CMFPlone.utils import safe_unicode
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import messageFactory as _
-from plone.app.event.base import DT
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
+from plone.app.event.base import DT
 from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import first_weekday
@@ -16,25 +13,25 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
-from plone.app.z3cform.interfaces import IPloneFormLayer
-from plone.autoform import directives as form
+from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import pydt
 from plone.event.utils import utc
-from plone.formwidget.recurrence.z3cform.widget import RecurrenceWidget
+from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import getFSVersionTuple
+from Products.CMFPlone.utils import safe_unicode
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
-from z3c.form.interfaces import IFieldWidget
-from z3c.form.util import getSpecification
-from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import adapter
-from zope.interface import Invalid
 from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
@@ -44,10 +41,10 @@ PLONE5 = getFSVersionTuple()[0] >= 5
 
 if PLONE5:
     # Plone 5
-    from plone.app.z3cform.widget import DatetimeWidget
+    from plone.app.z3cform.widget import DatetimeFieldWidget
 else:
     # Plone 4
-    from plone.app.widgets.dx import DatetimeWidget
+    from plone.app.widgets.dx import DatetimeFieldWidget
 
 
 def first_weekday_sun0():
@@ -74,6 +71,7 @@ def default_end(context):
 
 
 class IEventBasic(model.Schema, IDXEvent):
+
     """ Basic event schema.
     """
     start = schema.Datetime(
@@ -88,6 +86,11 @@ class IEventBasic(model.Schema, IDXEvent):
         required=True,
         defaultFactory=default_start
     )
+    directives.widget(
+        'start',
+        DatetimeFieldWidget,
+        default_timezone=default_timezone
+    )
 
     end = schema.Datetime(
         title=_(
@@ -100,6 +103,11 @@ class IEventBasic(model.Schema, IDXEvent):
         ),
         required=True,
         defaultFactory=default_end
+    )
+    directives.widget(
+        'end',
+        DatetimeFieldWidget,
+        default_timezone=default_timezone
     )
 
     whole_day = schema.Bool(
@@ -114,6 +122,10 @@ class IEventBasic(model.Schema, IDXEvent):
         required=False,
         default=False
     )
+    directives.widget(
+        'whole_day',
+        SingleCheckBoxFieldWidget
+    )
 
     open_end = schema.Bool(
         title=_(
@@ -127,10 +139,14 @@ class IEventBasic(model.Schema, IDXEvent):
         required=False,
         default=False
     )
+    directives.widget(
+        'open_end',
+        SingleCheckBoxFieldWidget
+    )
 
     # icalendar event uid
     sync_uid = schema.TextLine(required=False)
-    form.mode(sync_uid='hidden')
+    directives.mode(sync_uid='hidden')
 
     @invariant
     def validate_start_end(data):
@@ -146,23 +162,8 @@ class IEventBasic(model.Schema, IDXEvent):
             )
 
 
-@adapter(getSpecification(IEventBasic['start']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def StartDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.default_timezone = default_timezone
-    return widget
-
-
-@adapter(getSpecification(IEventBasic['end']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def EndDateFieldWidget(field, request):
-    widget = FieldWidget(field, DatetimeWidget(request))
-    widget.default_timezone = default_timezone
-    return widget
-
-
 class IEventRecurrence(model.Schema, IDXEventRecurrence):
+
     """ Recurring Event Schema.
     """
     recurrence = schema.Text(
@@ -177,23 +178,17 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
         required=False,
         default=None
     )
-
-
-@adapter(getSpecification(IEventRecurrence['recurrence']), IPloneFormLayer)
-@implementer(IFieldWidget)
-def RecurrenceFieldWidget(field, request):
-    # Please note: If you create a new behavior with superclasses IEventBasic
-    # and IRecurrence, then you have to reconfigure the dotted path value of
-    # the start_field parameter for the RecurrenceWidget to the new
-    # behavior name, like: IMyNewBehaviorName.start.
-    widget = FieldWidget(field, RecurrenceWidget(request))
-    widget.start_field = 'IEventBasic.start'
-    widget.first_day = first_weekday_sun0
-    widget.show_repeat_forever = False
-    return widget
+    directives.widget(
+        'recurrence',
+        RecurrenceFieldWidget,
+        start_field=u'IEventBasic.start',
+        first_day=first_weekday_sun0,
+        show_repeat_forever=False
+    )
 
 
 class IEventLocation(model.Schema):
+
     """ Event Location Schema.
     """
     location = schema.TextLine(
@@ -211,6 +206,7 @@ class IEventLocation(model.Schema):
 
 
 class IEventAttendees(model.Schema):
+
     """ Event Attendees Schema.
     """
     attendees = schema.Tuple(
@@ -227,10 +223,11 @@ class IEventAttendees(model.Schema):
         missing_value=(),
         default=(),
     )
-    form.widget(attendees=TextLinesFieldWidget)
+    directives.widget(attendees=TextLinesFieldWidget)
 
 
 class IEventContact(model.Schema):
+
     """ Event Contact Schema.
     """
     contact_name = schema.TextLine(
@@ -310,7 +307,7 @@ if not obj.sync_uid:
 """
 
 
-## Attribute indexer
+# Attribute indexer
 
 # Start indexer
 @indexer(IDXEvent)
@@ -368,6 +365,7 @@ def searchable_text_indexer(obj):
 @adapter(IDXEvent)
 @implementer(IEventAccessor)
 class EventAccessor(object):
+
     """Generic event accessor adapter implementation for Dexterity content
        objects.
     """
