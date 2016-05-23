@@ -444,6 +444,34 @@ class TestDXEventUnittest(unittest.TestCase):
         except:
             self.fail()
 
+    def test_validate_dont_validate_incomplete(self):
+        """Don't validate validate_start_end invariant, if start or end are
+        None.
+        """
+        mock = MockEvent()
+        mock.open_end = False
+
+        mock.start = datetime(2016, 5, 18)
+        mock.end = None
+        try:
+            IEventBasic.validateInvariants(mock)
+        except:
+            self.fail()
+
+        mock.start = None
+        mock.end = datetime(2016, 5, 18)
+        try:
+            IEventBasic.validateInvariants(mock)
+        except:
+            self.fail()
+
+        mock.start = None
+        mock.end = None
+        try:
+            IEventBasic.validateInvariants(mock)
+        except:
+            self.fail()
+
 
 class TestDXAnnotationStorageUpdate(unittest.TestCase):
     """ Unit tests for the Annotation Storage migration
