@@ -26,6 +26,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import getFSVersionTuple
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.browser.text import TextFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.component import adapter
@@ -89,7 +90,8 @@ class IEventBasic(model.Schema, IDXEvent):
     directives.widget(
         'start',
         DatetimeFieldWidget,
-        default_timezone=default_timezone
+        default_timezone=default_timezone,
+        klass=u'event_start'
     )
 
     end = schema.Datetime(
@@ -107,7 +109,8 @@ class IEventBasic(model.Schema, IDXEvent):
     directives.widget(
         'end',
         DatetimeFieldWidget,
-        default_timezone=default_timezone
+        default_timezone=default_timezone,
+        klass=u'event_end'
     )
 
     whole_day = schema.Bool(
@@ -124,7 +127,8 @@ class IEventBasic(model.Schema, IDXEvent):
     )
     directives.widget(
         'whole_day',
-        SingleCheckBoxFieldWidget
+        SingleCheckBoxFieldWidget,
+        klass=u'event_whole_day'
     )
 
     open_end = schema.Bool(
@@ -141,7 +145,8 @@ class IEventBasic(model.Schema, IDXEvent):
     )
     directives.widget(
         'open_end',
-        SingleCheckBoxFieldWidget
+        SingleCheckBoxFieldWidget,
+        klass=u'event_open_end'
     )
 
     # icalendar event uid
@@ -183,7 +188,8 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
         RecurrenceFieldWidget,
         start_field=u'IEventBasic.start',
         first_day=first_weekday_sun0,
-        show_repeat_forever=False
+        show_repeat_forever=False,
+        klass=u'event_recurrence'
     )
 
 
@@ -202,6 +208,11 @@ class IEventLocation(model.Schema):
         ),
         required=False,
         default=None
+    )
+    directives.widget(
+        'location',
+        TextFieldWidget,
+        klass=u'event_location'
     )
 
 
@@ -223,7 +234,11 @@ class IEventAttendees(model.Schema):
         missing_value=(),
         default=(),
     )
-    directives.widget(attendees=TextLinesFieldWidget)
+    directives.widget(
+        'attendees',
+        TextLinesFieldWidget,
+        klass=u'event_attendees'
+    )
 
 
 class IEventContact(model.Schema):
@@ -242,6 +257,11 @@ class IEventContact(model.Schema):
         required=False,
         default=None
     )
+    directives.widget(
+        'contact_name',
+        TextFieldWidget,
+        klass=u'event_contact_name'
+    )
 
     contact_email = schema.TextLine(
         title=_(
@@ -254,6 +274,11 @@ class IEventContact(model.Schema):
         ),
         required=False,
         default=None
+    )
+    directives.widget(
+        'contact_email',
+        TextFieldWidget,
+        klass=u'event_contact_email'
     )
 
     contact_phone = schema.TextLine(
@@ -268,6 +293,11 @@ class IEventContact(model.Schema):
         required=False,
         default=None
     )
+    directives.widget(
+        'contact_phone',
+        TextFieldWidget,
+        klass=u'event_contact_phone'
+    )
 
     event_url = schema.TextLine(
         title=_(
@@ -281,6 +311,11 @@ class IEventContact(model.Schema):
         ),
         required=False,
         default=None
+    )
+    directives.widget(
+        'contact_url',
+        TextFieldWidget,
+        klass=u'event_contact_url'
     )
 
 

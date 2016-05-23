@@ -10,6 +10,10 @@ Breaking changes:
 
 New features:
 
+- Configure custom css classes for all event behavior fields.
+  This makes it easier to use same selectors also for derived behaviors.
+  [thet]
+
 - Use ``plone.autoform.directives`` for manipulating field widgets instead of overriding the default Fieldwidget adapters.
   [thet]
 
