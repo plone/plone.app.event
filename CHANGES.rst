@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Remove Archetypes based JavaScript code.
+  [thet]
+
 - Don't validate the ``validate_start_end`` invariant, if start or end are ``None``.
   This can happen on non-required, default empty start or end fields during editing.
   [thet]

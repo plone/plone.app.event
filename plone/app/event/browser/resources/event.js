@@ -1,12 +1,12 @@
-/*jslint browser: true*/
-/*global $, jQuery, plone, require*/
+/* jslint browser: true */
+/* globals require */
 
 
 if(require === undefined){
   require = function(reqs, torun){
     'use strict';
     return torun(window.jQuery);
-  }
+  };
 }
 
 
@@ -16,16 +16,6 @@ require([
     'use strict';
 
     var end_start_delta = 1 / 24;  // Delta in days
-
-    function a_or_b(a, b) {
-        var ret;
-        if (a.length > 0) {
-            ret = a;
-        } else {
-            ret = b;
-        }
-        return ret;
-    }
 
     function getDateTime(datetimewidget) {
         var date, time, datetime;
@@ -50,16 +40,16 @@ require([
 
     function initDelta() {
         var start_datetime, end_datetime;
-        start_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate')));
-        end_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate')));
+        start_datetime = getDateTime($('#formfield-form-widgets-IEventBasic-start'));
+        end_datetime = getDateTime($('#formfield-form-widgets-IEventBasic-end'));
         // delta in days
         end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
     function updateEndDate() {
         var jq_start, jq_end, start_date, new_end_date;
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+        jq_start = $('#formfield-form-widgets-IEventBasic-start');
+        jq_end = $('#formfield-form-widgets-IEventBasic-end');
 
         start_date = getDateTime(jq_start);
         new_end_date = new Date(start_date);
@@ -71,8 +61,8 @@ require([
 
     function validateEndDate() {
         var jq_start, jq_end, start_datetime, end_datetime;
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+        jq_start = $('#formfield-form-widgets-IEventBasic-start');
+        jq_end = $('#formfield-form-widgets-IEventBasic-end');
 
         start_datetime = getDateTime(jq_start);
         end_datetime = getDateTime(jq_end);
@@ -141,24 +131,23 @@ require([
         var jq_whole_day, jq_time, jq_open_end, jq_end, jq_start;
 
         // WHOLE DAY INIT
-        jq_whole_day = a_or_b($('#formfield-form-widgets-IEventBasic-whole_day input'), $('form[name="edit_form"] input#wholeDay'));
-        jq_time = a_or_b($('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper'),
-                         $('#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper'));
+        jq_whole_day = $('#formfield-form-widgets-IEventBasic-whole_day input');
+        jq_time = $('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper');
         if (jq_whole_day.length > 0) {
             jq_whole_day.bind('change', function (e) { show_hide_widget(jq_time, e.target.checked, true); });
             show_hide_widget(jq_time, jq_whole_day.get(0).checked, false);
         }
 
         // OPEN END INIT
-        jq_open_end = a_or_b($('#formfield-form-widgets-IEventBasic-open_end input'), $('form[name="edit_form"] input#openEnd'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+        jq_open_end = $('#formfield-form-widgets-IEventBasic-open_end input');
+        jq_end = $('#formfield-form-widgets-IEventBasic-end');
         if (jq_open_end.length > 0) {
             jq_open_end.bind('change', function (e) { show_hide_widget(jq_end, e.target.checked, true); });
             show_hide_widget(jq_end, jq_open_end.get(0).checked, false);
         }
 
         // START/END SETTING/VALIDATION
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
+        jq_start = $('#formfield-form-widgets-IEventBasic-start');
         jq_start.each(function () {
             $(this).on('focus', '.picker__input', initDelta);
             $(this).on('change', '.picker__input', updateEndDate);
@@ -171,7 +160,7 @@ require([
         // EVENT LISTING CALENDAR POPUP
         event_listing_calendar_init($("#event_listing_calendar"));
 
-    };
+    }
 
     // mockup-core should trigger event once it initiallized all patterns (in
     // mockup-core) but it only sets body class once all patterns were
