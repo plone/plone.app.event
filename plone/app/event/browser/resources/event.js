@@ -15,13 +15,21 @@ require([
 ], function($){
     'use strict';
 
-    var end_start_delta = 1 / 24;  // Delta in days
+    var start_end_delta = 1 / 24;  // Delta in days
 
     function getDateTime(datetimewidget) {
-        var date, time, datetime;
+        var date, time, datetime, set_time;
         date = $('input[name="_submit"]:first', datetimewidget).prop('value');
+        if (! date) {
+          return;
+        }
         date = date.split("-");
-        time = $('input[name="_submit"]:last', datetimewidget).prop('value') || '00:00';
+        time = $('input[name="_submit"]:last', datetimewidget).prop('value');
+        if (! time) {
+          // can happen with optional start/end dates without default values.
+          set_time = true;
+          time = '00:00';
+        }
         time = time.split(":");
 
         // We can't just parse the ``date + 'T' + time`` string, because of
@@ -35,20 +43,33 @@ require([
             parseInt(time[0], 10),
             parseInt(time[1], 10)
         );
+        if (set_time) {
+          // we have a date but no time?! set it.
+          $('.pattern-pickadate-time', datetimewidget).pickatime('picker').set('select', datetime);
+        }
         return datetime;
     }
 
-    function initDelta(a, b) {
-        var start_datetime = getDateTime(a);
-        var end_datetime = getDateTime(b);
+    function initStartEndDelta(start_container, end_container) {
+        var start_datetime = getDateTime(start_container);
+        var end_datetime = getDateTime(end_container);
+
+        if (! start_datetime || ! end_datetime) {
+          return;
+        }
+
         // delta in days
-        end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
+        start_end_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
     function updateEndDate(start_container, end_container) {
         var start_date = getDateTime(start_container);
+        if (! start_date) {
+          return;
+        }
+
         var new_end_date = new Date(start_date);
-        new_end_date.setMinutes(start_date.getMinutes() + end_start_delta);
+        new_end_date.setMinutes(start_date.getMinutes() + start_end_delta);
 
         $('.pattern-pickadate-date', end_container).pickadate('picker').set('select', new_end_date);
         $('.pattern-pickadate-time', end_container).pickatime('picker').set('select', new_end_date);
@@ -57,6 +78,9 @@ require([
     function validateEndDate(start_container, end_container) {
         var start_datetime = getDateTime(start_container);
         var end_datetime = getDateTime(end_container);
+        if (! start_datetime || ! end_datetime) {
+          return;
+        }
 
         if (end_datetime < start_datetime) {
             start_container.addClass("error");
@@ -121,13 +145,13 @@ require([
         var $start_input         = $('form input.event_start');
         var $start_container     = $start_input.closest('div');
         var $pickadate_starttime = $('.pattern-pickadate-time-wrapper', $start_container);
-        
+
         var $end_input           = $('form input.event_end');
         var $end_container       = $end_input.closest('div');
         var $pickadate_endtime   = $('.pattern-pickadate-time-wrapper', $end_container);
-        
+
         var $whole_day_input     = $('form input.event_whole_day');
-        var $open_end_input      = $('form input.open_end_input');
+        var $open_end_input      = $('form input.event_open_end');
 
         // WHOLE DAY INIT
         if ($whole_day_input.length > 0) {
@@ -149,12 +173,12 @@ require([
 
         // START/END SETTING/VALIDATION
         $start_container.each(function () {
-            $(this).on('focus', '.picker__input', initDelta);
-            $(this).on('change', '.picker__input', updateEndDate);
+            $(this).on('focus', '.picker__input', function () { initStartEndDelta($start_container, $end_container); });
+            $(this).on('change', '.picker__input', function () { updateEndDate($start_container, $end_container); });
         });
         $end_container.each(function () {
-            $(this).on('focus', '.picker__input', initDelta);
-            $(this).on('change', '.picker__input', validateEndDate);
+            $(this).on('focus', '.picker__input', function () { initStartEndDelta($start_container, $end_container); });
+            $(this).on('change', '.picker__input', function () { validateEndDate($start_container, $end_container); });
         });
 
         // EVENT LISTING CALENDAR POPUP
@@ -171,5 +195,5 @@ require([
         initilize_event();
       }
     }, 100);
- 
+
 });

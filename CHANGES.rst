@@ -15,6 +15,9 @@ Breaking changes:
 
 New features:
 
+- Make JavaScript date/time update work with optional start/end dates.
+  [thet]
+
 - Make use of more generic selectors in JavaScript, so that JavaScript works also for derived classes.
   [thet]
 
