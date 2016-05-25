@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '2.0.10.dev0'
+version = '3.0.dev0'
 
 
 setup(
@@ -53,7 +53,7 @@ setup(
         'plone.app.registry',
         'plone.app.textfield',
         'plone.app.vocabularies >= 2.1.15.dev0',
-        'plone.app.z3cform',
+        'plone.app.z3cform>=2.0.1.dev0',
         'plone.autoform>=1.4',
         'plone.behavior',
         'plone.browserlayer',
