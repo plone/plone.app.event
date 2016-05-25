@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- Make use of more generic selectors in JavaScript, so that JavaScript works also for derived classes.
+  [thet]
+
 - Configure custom css classes for all event behavior fields.
   This makes it easier to use same selectors also for derived behaviors.
   [thet]

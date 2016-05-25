@@ -38,39 +38,30 @@ require([
         return datetime;
     }
 
-    function initDelta() {
-        var start_datetime, end_datetime;
-        start_datetime = getDateTime($('#formfield-form-widgets-IEventBasic-start'));
-        end_datetime = getDateTime($('#formfield-form-widgets-IEventBasic-end'));
+    function initDelta(a, b) {
+        var start_datetime = getDateTime(a);
+        var end_datetime = getDateTime(b);
         // delta in days
         end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
-    function updateEndDate() {
-        var jq_start, jq_end, start_date, new_end_date;
-        jq_start = $('#formfield-form-widgets-IEventBasic-start');
-        jq_end = $('#formfield-form-widgets-IEventBasic-end');
-
-        start_date = getDateTime(jq_start);
-        new_end_date = new Date(start_date);
+    function updateEndDate(start_container, end_container) {
+        var start_date = getDateTime(start_container);
+        var new_end_date = new Date(start_date);
         new_end_date.setMinutes(start_date.getMinutes() + end_start_delta);
 
-        $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
-        $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
+        $('.pattern-pickadate-date', end_container).pickadate('picker').set('select', new_end_date);
+        $('.pattern-pickadate-time', end_container).pickatime('picker').set('select', new_end_date);
     }
 
-    function validateEndDate() {
-        var jq_start, jq_end, start_datetime, end_datetime;
-        jq_start = $('#formfield-form-widgets-IEventBasic-start');
-        jq_end = $('#formfield-form-widgets-IEventBasic-end');
-
-        start_datetime = getDateTime(jq_start);
-        end_datetime = getDateTime(jq_end);
+    function validateEndDate(start_container, end_container) {
+        var start_datetime = getDateTime(start_container);
+        var end_datetime = getDateTime(end_container);
 
         if (end_datetime < start_datetime) {
-            jq_end.addClass("error");
+            start_container.addClass("error");
         } else {
-            jq_end.removeClass("error");
+            end_container.removeClass("error");
         }
     }
 
@@ -127,32 +118,41 @@ require([
     function initilize_event() {
 
         // EDIT FORM
-
-        var jq_whole_day, jq_time, jq_open_end, jq_end, jq_start;
+        var $start_input         = $('form input.event_start');
+        var $start_container     = $start_input.closest('div');
+        var $pickadate_starttime = $('.pattern-pickadate-time-wrapper', $start_container);
+        
+        var $end_input           = $('form input.event_end');
+        var $end_container       = $end_input.closest('div');
+        var $pickadate_endtime   = $('.pattern-pickadate-time-wrapper', $end_container);
+        
+        var $whole_day_input     = $('form input.event_whole_day');
+        var $open_end_input      = $('form input.open_end_input');
 
         // WHOLE DAY INIT
-        jq_whole_day = $('#formfield-form-widgets-IEventBasic-whole_day input');
-        jq_time = $('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper');
-        if (jq_whole_day.length > 0) {
-            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_time, e.target.checked, true); });
-            show_hide_widget(jq_time, jq_whole_day.get(0).checked, false);
+        if ($whole_day_input.length > 0) {
+            $whole_day_input.bind('change', function (e) {
+              show_hide_widget($pickadate_starttime, e.target.checked, true);
+              show_hide_widget($pickadate_endtime, e.target.checked, true);
+            });
+            show_hide_widget($pickadate_starttime, $whole_day_input.get(0).checked, false);
+            show_hide_widget($pickadate_endtime, $whole_day_input.get(0).checked, false);
         }
 
         // OPEN END INIT
-        jq_open_end = $('#formfield-form-widgets-IEventBasic-open_end input');
-        jq_end = $('#formfield-form-widgets-IEventBasic-end');
-        if (jq_open_end.length > 0) {
-            jq_open_end.bind('change', function (e) { show_hide_widget(jq_end, e.target.checked, true); });
-            show_hide_widget(jq_end, jq_open_end.get(0).checked, false);
+        if ($open_end_input.length > 0) {
+            $open_end_input.bind('change', function (e) {
+              show_hide_widget($end_container, e.target.checked, true);
+            });
+            show_hide_widget($end_container, $open_end_input.get(0).checked, false);
         }
 
         // START/END SETTING/VALIDATION
-        jq_start = $('#formfield-form-widgets-IEventBasic-start');
-        jq_start.each(function () {
+        $start_container.each(function () {
             $(this).on('focus', '.picker__input', initDelta);
             $(this).on('change', '.picker__input', updateEndDate);
         });
-        jq_end.each(function () {
+        $end_container.each(function () {
             $(this).on('focus', '.picker__input', initDelta);
             $(this).on('change', '.picker__input', validateEndDate);
         });
