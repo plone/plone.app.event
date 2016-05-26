@@ -58,17 +58,16 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'DTEND;TZID=Europe/Vienna;VALUE=DATE-TIME:20130505T110000',
             'DTSTAMP;VALUE=DATE-TIME:',
             'UID:',
+            'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'RDATE;TZID=Europe/Vienna:20130509T000000',
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
             'CATEGORIES:plone',
             'CATEGORIES:testing',
-            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, '
-            'http://plone',  # continuation of line above
+            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',  # noqa
             ' .org',  # line longer than max length spec by icalendar
             'CREATED;VALUE=DATE-TIME:',
             'LAST-MODIFIED;VALUE=DATE-TIME:',
             'LOCATION:Vienna',
-            'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'URL:http://nohost/plone/now',
             'END:VEVENT',
             'BEGIN:VTIMEZONE',
@@ -123,10 +122,10 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'DTEND;VALUE=DATE:20130426',
             'DTSTAMP;VALUE=DATE-TIME:',
             'UID:',
+            'RRULE:FREQ=DAILY;COUNT=3',
             'CREATED;VALUE=DATE-TIME:',
             'LAST-MODIFIED;VALUE=DATE-TIME:',
             'LOCATION:Vienna',
-            'RRULE:FREQ=DAILY;COUNT=3',
             'URL:http://nohost/plone/past',
             'END:VEVENT',
 
@@ -148,17 +147,16 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'DTEND;TZID=Europe/Vienna;VALUE=DATE-TIME:20130505T110000',
             'DTSTAMP;VALUE=DATE-TIME:',
             'UID:',
+            'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'RDATE;TZID=Europe/Vienna:20130509T000000',
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
             'CATEGORIES:plone',
             'CATEGORIES:testing',
-            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, '
-            'http://plone',  # continuation of line above
+            'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',  # noqa
             ' .org',
             'CREATED;VALUE=DATE-TIME:',
             'LAST-MODIFIED;VALUE=DATE-TIME:',
             'LOCATION:Vienna',
-            'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'URL:http://nohost/plone/now',
             'END:VEVENT',
 
