@@ -88,6 +88,7 @@ setup(
     extras_require={
         'dexterity': [],  # BBB, remove with next version
         'test': [
+            'icalendar >= 3.10',  # otherwise minor test failure
             'mock',
             'plone.app.contenttypes >= 1.2a3',
             'plone.app.robotframework',
