@@ -103,7 +103,7 @@
             <div itemprop="location" class="location"
                 tal:define="location python:view.get_location(data)"
                 tal:condition="location"
-                tal:content="structure location">location</div>
+                tal:content="location">location</div>
           </div>
 
           <p itemprop="description" class="description" tal:condition="data/description" tal:content="data/description" />

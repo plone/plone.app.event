@@ -60,7 +60,7 @@
     <tal:cond condition="python:'location' not in excludes">
     <tal:cond define="location view/get_location" condition="location">
       <dt i18n:translate="event_where">Where</dt>
-      <dd itemprop="location" class="location" tal:content="structure location">Location</dd>
+      <dd itemprop="location" class="location" tal:content="location">Location</dd>
     </tal:cond>
     </tal:cond>
 
