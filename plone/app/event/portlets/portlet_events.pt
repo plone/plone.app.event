@@ -44,7 +44,7 @@
           </span>
           <span class="location"
               tal:condition="item_location"> &mdash;
-            <tal:location content="structure item_location">Location</tal:location>
+            <tal:location content="item_location">Location</tal:location>
           </span>
         </span>
       </li>

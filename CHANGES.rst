@@ -31,6 +31,8 @@ New features:
 
 Bug fixes:
 
+- Fixed possible cross site scripting (XSS) attack in location field.  [maurits]
+
 - Remove Archetypes based JavaScript code.
   [thet]
 
