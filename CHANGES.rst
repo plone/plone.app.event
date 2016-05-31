@@ -1,18 +1,38 @@
 Changelog
 =========
 
-2.0.10 (unreleased)
--------------------
+3.0.0 (unreleased)
+------------------
 
 Breaking changes:
+
+.. note::
+    This release depends on ``plone.app.z3cform >= 2.0.1``, which is only available for Plone 5.1.
+    This is a backwards incompatible change, which satisfy a major version change for plone.app.event.
+    Consequently, Plone 4 compatibility code will be removed in this release.
 
 - *add item here*
 
 New features:
 
-- *add item here*
+- Make JavaScript date/time update work with optional start/end dates.
+  [thet]
+
+- Make use of more generic selectors in JavaScript, so that JavaScript works also for derived classes.
+  [thet]
+
+- Configure custom css classes for all event behavior fields.
+  This makes it easier to use same selectors also for derived behaviors.
+  Needs ``plone.app.z3cform >= 2.0.1``.
+  [thet]
+
+- Use ``plone.autoform.directives`` for manipulating field widgets instead of overriding the default Fieldwidget adapters.
+  [thet]
 
 Bug fixes:
+
+- Remove Archetypes based JavaScript code.
+  [thet]
 
 - Don't validate the ``validate_start_end`` invariant, if start or end are ``None``.
   This can happen on non-required, default empty start or end fields during editing.

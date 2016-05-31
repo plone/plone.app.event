@@ -1,12 +1,12 @@
-/*jslint browser: true*/
-/*global $, jQuery, plone, require*/
+/* jslint browser: true */
+/* globals require */
 
 
 if(require === undefined){
   require = function(reqs, torun){
     'use strict';
     return torun(window.jQuery);
-  }
+  };
 }
 
 
@@ -15,23 +15,21 @@ require([
 ], function($){
     'use strict';
 
-    var end_start_delta = 1 / 24;  // Delta in days
-
-    function a_or_b(a, b) {
-        var ret;
-        if (a.length > 0) {
-            ret = a;
-        } else {
-            ret = b;
-        }
-        return ret;
-    }
+    var start_end_delta = 1 / 24;  // Delta in days
 
     function getDateTime(datetimewidget) {
-        var date, time, datetime;
+        var date, time, datetime, set_time;
         date = $('input[name="_submit"]:first', datetimewidget).prop('value');
+        if (! date) {
+          return;
+        }
         date = date.split("-");
-        time = $('input[name="_submit"]:last', datetimewidget).prop('value') || '00:00';
+        time = $('input[name="_submit"]:last', datetimewidget).prop('value');
+        if (! time) {
+          // can happen with optional start/end dates without default values.
+          set_time = true;
+          time = '00:00';
+        }
         time = time.split(":");
 
         // We can't just parse the ``date + 'T' + time`` string, because of
@@ -45,42 +43,49 @@ require([
             parseInt(time[0], 10),
             parseInt(time[1], 10)
         );
+        if (set_time) {
+          // we have a date but no time?! set it.
+          $('.pattern-pickadate-time', datetimewidget).pickatime('picker').set('select', datetime);
+        }
         return datetime;
     }
 
-    function initDelta() {
-        var start_datetime, end_datetime;
-        start_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate')));
-        end_datetime = getDateTime(a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate')));
+    function initStartEndDelta(start_container, end_container) {
+        var start_datetime = getDateTime(start_container);
+        var end_datetime = getDateTime(end_container);
+
+        if (! start_datetime || ! end_datetime) {
+          return;
+        }
+
         // delta in days
-        end_start_delta = (end_datetime - start_datetime) / 1000 / 60;
+        start_end_delta = (end_datetime - start_datetime) / 1000 / 60;
     }
 
-    function updateEndDate() {
-        var jq_start, jq_end, start_date, new_end_date;
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
+    function updateEndDate(start_container, end_container) {
+        var start_date = getDateTime(start_container);
+        if (! start_date) {
+          return;
+        }
 
-        start_date = getDateTime(jq_start);
-        new_end_date = new Date(start_date);
-        new_end_date.setMinutes(start_date.getMinutes() + end_start_delta);
+        var new_end_date = new Date(start_date);
+        new_end_date.setMinutes(start_date.getMinutes() + start_end_delta);
 
-        $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
-        $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
+        $('.pattern-pickadate-date', end_container).pickadate('picker').set('select', new_end_date);
+        $('.pattern-pickadate-time', end_container).pickatime('picker').set('select', new_end_date);
     }
 
-    function validateEndDate() {
-        var jq_start, jq_end, start_datetime, end_datetime;
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
-
-        start_datetime = getDateTime(jq_start);
-        end_datetime = getDateTime(jq_end);
+    function validateEndDate(start_container, end_container) {
+        var start_datetime = getDateTime(start_container);
+        var end_datetime = getDateTime(end_container);
+        if (! start_datetime || ! end_datetime) {
+          return;
+        }
 
         if (end_datetime < start_datetime) {
-            jq_end.addClass("error");
+            start_container.addClass("error");
         } else {
-            jq_end.removeClass("error");
+            end_container.removeClass("error");
         }
     }
 
@@ -137,41 +142,49 @@ require([
     function initilize_event() {
 
         // EDIT FORM
+        var $start_input         = $('form input.event_start');
+        var $start_container     = $start_input.closest('div');
+        var $pickadate_starttime = $('.pattern-pickadate-time-wrapper', $start_container);
 
-        var jq_whole_day, jq_time, jq_open_end, jq_end, jq_start;
+        var $end_input           = $('form input.event_end');
+        var $end_container       = $end_input.closest('div');
+        var $pickadate_endtime   = $('.pattern-pickadate-time-wrapper', $end_container);
+
+        var $whole_day_input     = $('form input.event_whole_day');
+        var $open_end_input      = $('form input.event_open_end');
 
         // WHOLE DAY INIT
-        jq_whole_day = a_or_b($('#formfield-form-widgets-IEventBasic-whole_day input'), $('form[name="edit_form"] input#wholeDay'));
-        jq_time = a_or_b($('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper'),
-                         $('#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper'));
-        if (jq_whole_day.length > 0) {
-            jq_whole_day.bind('change', function (e) { show_hide_widget(jq_time, e.target.checked, true); });
-            show_hide_widget(jq_time, jq_whole_day.get(0).checked, false);
+        if ($whole_day_input.length > 0) {
+            $whole_day_input.bind('change', function (e) {
+              show_hide_widget($pickadate_starttime, e.target.checked, true);
+              show_hide_widget($pickadate_endtime, e.target.checked, true);
+            });
+            show_hide_widget($pickadate_starttime, $whole_day_input.get(0).checked, false);
+            show_hide_widget($pickadate_endtime, $whole_day_input.get(0).checked, false);
         }
 
         // OPEN END INIT
-        jq_open_end = a_or_b($('#formfield-form-widgets-IEventBasic-open_end input'), $('form[name="edit_form"] input#openEnd'));
-        jq_end = a_or_b($('#formfield-form-widgets-IEventBasic-end'), $('#archetypes-fieldname-endDate'));
-        if (jq_open_end.length > 0) {
-            jq_open_end.bind('change', function (e) { show_hide_widget(jq_end, e.target.checked, true); });
-            show_hide_widget(jq_end, jq_open_end.get(0).checked, false);
+        if ($open_end_input.length > 0) {
+            $open_end_input.bind('change', function (e) {
+              show_hide_widget($end_container, e.target.checked, true);
+            });
+            show_hide_widget($end_container, $open_end_input.get(0).checked, false);
         }
 
         // START/END SETTING/VALIDATION
-        jq_start = a_or_b($('#formfield-form-widgets-IEventBasic-start'), $('#archetypes-fieldname-startDate'));
-        jq_start.each(function () {
-            $(this).on('focus', '.picker__input', initDelta);
-            $(this).on('change', '.picker__input', updateEndDate);
+        $start_container.each(function () {
+            $(this).on('focus', '.picker__input', function () { initStartEndDelta($start_container, $end_container); });
+            $(this).on('change', '.picker__input', function () { updateEndDate($start_container, $end_container); });
         });
-        jq_end.each(function () {
-            $(this).on('focus', '.picker__input', initDelta);
-            $(this).on('change', '.picker__input', validateEndDate);
+        $end_container.each(function () {
+            $(this).on('focus', '.picker__input', function () { initStartEndDelta($start_container, $end_container); });
+            $(this).on('change', '.picker__input', function () { validateEndDate($start_container, $end_container); });
         });
 
         // EVENT LISTING CALENDAR POPUP
         event_listing_calendar_init($("#event_listing_calendar"));
 
-    };
+    }
 
     // mockup-core should trigger event once it initiallized all patterns (in
     // mockup-core) but it only sets body class once all patterns were
@@ -182,5 +195,5 @@ require([
         initilize_event();
       }
     }, 100);
- 
+
 });
