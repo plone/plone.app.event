@@ -14,6 +14,8 @@ New features:
 
 Bug fixes:
 
+- Fixed possible cross site scripting (XSS) attack in location field.  [maurits]
+
 - Don't validate the ``validate_start_end`` invariant, if start or end are ``None``.
   This can happen on non-required, default empty start or end fields during editing.
   [thet]
