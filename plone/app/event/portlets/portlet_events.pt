@@ -35,7 +35,7 @@
             <span class="location"
                 tal:define="location python:view.get_location(item)"
                 tal:condition="location"> &mdash;
-                <tal:location content="structure location">Location</tal:location>
+                <tal:location content="location">Location</tal:location>
             </span>
         </span>
     </dd>

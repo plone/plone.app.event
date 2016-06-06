@@ -11,6 +11,15 @@ Changelog
 1.1.5 (2015-09-08)
 ------------------
 
+Bug fixes:
+
+- Fixed possible cross site scripting (XSS) attack in location field.
+  If you had custom code to override the ``get_location`` view helper
+  method to return html, this no longer works.  For plain text it
+  still works fine, but the ``get_location`` method is gone in version
+  2.0, for simplicity.  Instead you can override the necessary
+  templates in your addons.  [maurits]
+
 - Ensure ``plone.formwidget.recurrence`` is ``<2.0dev``.
   [saily]
 
