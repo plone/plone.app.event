@@ -4,13 +4,6 @@ Changelog
 1.1.6 (unreleased)
 ------------------
 
-- Update french translations.
-  [bsuttor]
-
-
-1.1.5 (2015-09-08)
-------------------
-
 Bug fixes:
 
 - Fixed possible cross site scripting (XSS) attack in location field.
@@ -19,6 +12,15 @@ Bug fixes:
   still works fine, but the ``get_location`` method is gone in version
   2.0, for simplicity.  Instead you can override the necessary
   templates in your addons.  [maurits]
+
+- Update french translations.
+  [bsuttor]
+
+
+1.1.5 (2015-09-08)
+------------------
+
+Bug fixes:
 
 - Ensure ``plone.formwidget.recurrence`` is ``<2.0dev``.
   [saily]
