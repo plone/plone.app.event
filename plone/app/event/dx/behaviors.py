@@ -299,7 +299,7 @@ class IEventContact(model.Schema):
         klass=u'event_contact_phone'
     )
 
-    event_url = schema.TextLine(
+    event_url = schema.URI(
         title=_(
             u'label_event_url',
             default=u'Event URL'

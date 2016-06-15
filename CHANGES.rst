@@ -15,6 +15,9 @@ Breaking changes:
 
 New features:
 
+- Use ``schema.URI`` instead of ``schema.TextLine`` for ``event_url`` field.
+  [thet]
+
 - Make JavaScript date/time update work with optional start/end dates.
   [thet]
 
