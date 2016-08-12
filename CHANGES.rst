@@ -11,8 +11,6 @@ Breaking changes:
     This is a backwards incompatible change, which satisfy a major version change for plone.app.event.
     Consequently, Plone 4 compatibility code will be removed in this release.
 
-- *add item here*
-
 New features:
 
 - Use ``schema.URI`` instead of ``schema.TextLine`` for ``event_url`` field.
