@@ -347,6 +347,7 @@ class FakeZone(tzinfo):
     data_postprocessing event handler sets the correct one.
 
     """
+
     def utcoffset(self, dt):
         return timedelta(0)
 
@@ -366,6 +367,7 @@ class EventBasic(object):
     def start(self):
         start = getattr(self.context, 'start', None)
         return self._prepare_dt_get(start) if start else None
+
     @start.setter
     def start(self, value):
         self.context.start = self._prepare_dt_set(value)
@@ -374,6 +376,7 @@ class EventBasic(object):
     def end(self):
         end = getattr(self.context, 'end', None)
         return self._prepare_dt_get(end) if end else None
+
     @end.setter
     def end(self, value):
         self.context.end = self._prepare_dt_set(value)
@@ -381,6 +384,7 @@ class EventBasic(object):
     @property
     def timezone(self):
         return getattr(self.context, 'timezone', None)
+
     @timezone.setter
     def timezone(self, value):
         if self.timezone:
@@ -397,6 +401,7 @@ class EventBasic(object):
     @property
     def whole_day(self):
         return getattr(self.context, 'whole_day', None)
+
     @whole_day.setter
     def whole_day(self, value):
         self.context.whole_day = value
@@ -404,6 +409,7 @@ class EventBasic(object):
     @property
     def open_end(self):
         return getattr(self.context, 'open_end', None)
+
     @open_end.setter
     def open_end(self, value):
         self.context.open_end = value
@@ -411,6 +417,7 @@ class EventBasic(object):
     @property
     def sync_uid(self):
         return getattr(self.context, 'sync_uid', None)
+
     @sync_uid.setter
     def sync_uid(self, value):
         self.context.sync_uid = value
@@ -442,12 +449,13 @@ class EventRecurrence(object):
     @property
     def recurrence(self):
         return getattr(self.context, 'recurrence', None)
+
     @recurrence.setter
     def recurrence(self, value):
         self.context.recurrence = value
 
 
-## Event handlers
+# Event handlers
 
 def data_postprocessing(obj, event):
 
@@ -503,21 +511,22 @@ def data_postprocessing(obj, event):
 
     if not behavior.sync_uid:
         # sync_uid has to be set for icalendar data exchange.
-        uid = IUUID(obj)
-        # We don't want to fail when getRequest() returns None, e.g when
-        # creating an event during test layer setup time.
-        request = getRequest() or {}
-        domain = request.get('HTTP_HOST')
-        behavior.sync_uid = '%s%s' % (
-            uid,
-            domain and '@%s' % domain or ''
-        )
+        uid = IUUID(obj, None)
+        if uid:
+            # We don't want to fail when getRequest() returns None, e.g when
+            # creating an event during test layer setup time.
+            request = getRequest() or {}
+            domain = request.get('HTTP_HOST')
+            behavior.sync_uid = '%s%s' % (
+                uid,
+                domain and '@%s' % domain or ''
+            )
 
     # Reindex
     obj.reindexObject()
 
 
-## Attribute indexer
+# Attribute indexer
 
 # Start indexer
 @indexer(IDXEvent)
@@ -585,7 +594,7 @@ class EventAccessor(object):
     implements(IEventAccessor)
     adapts(IDXEvent)
     event_type = None  # If you use the accessor's create classmethod, override
-                       # this in your custom type.
+    # this in your custom type.
 
     # Unified create method via Accessor
     @classmethod
@@ -679,6 +688,7 @@ class EventAccessor(object):
     @property
     def title(self):
         return safe_unicode(getattr(self.context, 'title', None))
+
     @title.setter
     def title(self, value):
         setattr(self.context, 'title', safe_unicode(value))
@@ -686,6 +696,7 @@ class EventAccessor(object):
     @property
     def description(self):
         return safe_unicode(getattr(self.context, 'description', None))
+
     @description.setter
     def description(self, value):
         setattr(self.context, 'description', safe_unicode(value))
@@ -693,6 +704,7 @@ class EventAccessor(object):
     @property
     def last_modified(self):
         return utc(self.context.modification_date)
+
     @last_modified.setter
     def last_modified(self, value):
         tz = default_timezone(self.context, as_tzinfo=True)
@@ -705,6 +717,7 @@ class EventAccessor(object):
         if textvalue is None:
             return u''
         return safe_unicode(textvalue.output)
+
     @text.setter
     def text(self, value):
         self.context.text = RichTextValue(raw=safe_unicode(value))
