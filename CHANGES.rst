@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix bug when creating indexes on install. It was not detecting existing
+  indexes correctly.
+  [vangheem]
 
 
 2.0.10 (2016-06-06)
