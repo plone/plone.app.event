@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plone.app.event\n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
-"PO-Revision-Date: 2014-01-23 23:50+0800\n"
+"PO-Revision-Date: 2016-08-25 09:40+0800\n"
 "Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
 "Language-Team: Plone I18N <plone-i18n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "月曆方框"
 
 #: plone/app/event/bbb/browser/controlpanel.py:10
 msgid "Date and Time Settings"
-msgstr ""
+msgstr "時區與日期"
 
 #: plone/app/event/bbb/portlets/portlet_calendar.py:45
 #: plone/app/event/portlets/portlet_calendar.py:313
@@ -142,7 +142,7 @@ msgstr "起始或結束日期不正確。"
 #. Default: "Event"
 #: plone/app/event/browser/event_summary.pt:16
 msgid "event_event"
-msgstr ""
+msgstr "活動"
 
 #. Default: "Web"
 #: plone/app/event/browser/event_summary.pt:108
@@ -266,9 +266,8 @@ msgstr "設定活動的循環週期。"
 
 #. Default: "Date and Time related settings like timezone(s), etc."
 #: plone/app/event/bbb/browser/controlpanel.py:15
-#, fuzzy
 msgid "help_event_settings"
-msgstr "設定活動型別的相關資訊，例如時區等。"
+msgstr "日期設定的相關資訊，例如時區等。"
 
 #. Default: "Date and Time, when the event begins."
 #: plone/app/event/dx/behaviors.py:84
@@ -374,7 +373,7 @@ msgstr "新增 iCal"
 #. Default: "Date and Time Settings"
 #: plone/app/event/bbb/browser/controlpanel.py:14
 msgid "label_dateandtime_settings"
-msgstr ""
+msgstr "時區與日期"
 
 #. Default: "Email"
 #: plone/app/event/browser/event_listing.pt:127
@@ -484,7 +483,7 @@ msgstr "iCal 匯入設定已儲存。"
 #. Default: "There are ${results} more occurrences."
 #: plone/app/event/browser/event_summary.py:79
 msgid "msg_num_more_occurrences"
-msgstr ""
+msgstr "還有 ${results} 筆資料。"
 
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
