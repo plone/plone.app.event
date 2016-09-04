@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Fix format of tooltip in calendar portlet.
+  Fixes: https://github.com/plone/Products.CMFPlone/issues/1046
+  [fgrcon]
+
 - Fix bug when creating indexes on install. It was not detecting existing indexes correctly.
   [vangheem]
 
