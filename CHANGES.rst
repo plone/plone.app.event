@@ -10,8 +10,11 @@ Breaking changes:
 
 New features:
 
-- *add item here*
-
+- option to override thumb /icon behavior individually for portlet (suppress thumbs, thumb size)
+  https://plone/Products.CMFPlone#1734 [fgrcon]
+  applied https://github.com/plone/Products.CMFPlone/issues/1483
+  [fgrcon]
+  
 Bug fixes:
 
 - *add item here*

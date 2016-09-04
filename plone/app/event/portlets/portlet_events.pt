@@ -15,7 +15,7 @@
     </a>
   </header>
   <section class="portletContent">
-    <ul>
+    <ul tal:define="thumb_size view/thumb_size">
       <tal:events repeat="item view/events">
       <li class="portletItem"
           tal:define="oddrow repeat/item/odd;
@@ -27,12 +27,12 @@
           tal:attributes="class python:'portletItem odd' if oddrow else 'portletItem even'">
         <a href="#" class="tile"
             tal:attributes="href item_url;
-                            title item_descr">
-            <img class="image-icon"
-               tal:condition="item_hasimage"
-               tal:define="getIcon string:${item_url}/@@images/image/icon"
-               tal:attributes="href item_url;
-                               src  string:$getIcon">
+                            title item_descr"
+            tal:define="scale item/context/@@images|nothing;">
+          <span tal:condition="item_hasimage">
+              <img tal:define="img_tag python:scale.scale('image', scale=thumb_size).tag(css_class='pull-right image-'+thumb_size)" 
+                   tal:replace="structure img_tag" />
+          </span>
           <span tal:replace="item_title">Some Event</span>
         </a>
         <span class="portletItemDetails">
