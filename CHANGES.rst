@@ -16,6 +16,8 @@ Bug fixes:
 
 - *add item here*
 
+- Update Traditional Chinese Translations.
+  [l34marr]
 
 3.0 (2016-08-12)
 ----------------
