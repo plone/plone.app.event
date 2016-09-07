@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix bug when an event is in creation and has not yet uid.
+  [bsuttor]
 
 
 1.1.6 (2016-06-06)
