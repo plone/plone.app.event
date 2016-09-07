@@ -4,14 +4,6 @@ Changelog
 1.1.7 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix bug when an event is in creation and has not yet uid.
