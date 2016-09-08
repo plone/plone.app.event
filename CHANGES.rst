@@ -16,6 +16,9 @@ Bug fixes:
 
 - *add item here*
 
+- Move calendar portlet code to a mixin for easy reuse.
+  [rodfersou]
+
 - Update Traditional Chinese Translations.
   [l34marr]
 

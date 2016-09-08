@@ -1,9 +1,11 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+# -*- coding: utf-8 -*-
 from distutils.version import LooseVersion
 from plone.app.event.portlets.portlet_calendar import Assignment
 from plone.app.event.portlets.portlet_calendar import ICalendarPortlet
-from plone.app.event.portlets.portlet_calendar import Renderer as RendererBase
+from plone.app.layout.calendar import CalendarMixin
 from plone.app.portlets import PloneMessageFactory as _
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
 import pkg_resources
 
 
@@ -20,8 +22,11 @@ else:
     from plone.app.portlets.browser import z3cformhelper as base
 
 
-class Renderer(RendererBase):
+class Renderer(CalendarMixin, base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
+
+    def update(self):
+        self.setup()
 
 
 class AddForm(base.AddForm):
