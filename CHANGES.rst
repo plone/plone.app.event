@@ -4,8 +4,11 @@ Changelog
 3.0.1 (unreleased)
 ------------------
 
+Bug fixes:
+
 - Update Traditional Chinese Translations.
   [l34marr]
+
 
 3.0 (2016-08-12)
 ----------------
