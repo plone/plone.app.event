@@ -347,13 +347,19 @@ if not obj.sync_uid:
 # Start indexer
 @indexer(IDXEvent)
 def start_indexer(obj):
-    return IEventAccessor(obj).start
+    start = IEventAccessor(obj).start
+    if not start:
+        raise AttributeError
+    return start
 
 
 # End indexer
 @indexer(IDXEvent)
 def end_indexer(obj):
-    return IEventAccessor(obj).end
+    end = IEventAccessor(obj).end
+    if not end:
+        raise AttributeError
+    return end
 
 
 # Location indexer
@@ -371,7 +377,7 @@ def location_indexer(obj):
 def sync_uid_indexer(obj):
     event = IEventBasic(obj)
     if not event.sync_uid:
-        return None
+        raise AttributeError
     return event.sync_uid
 
 

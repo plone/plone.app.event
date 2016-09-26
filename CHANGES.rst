@@ -21,10 +21,14 @@ Bug fixes:
 - Fix bug when creating indexes on install. It was not detecting existing indexes correctly.
   [vangheem]
 
-- Fixing a typo in dutch translations.
-  [andreesg]
+- Do not index `sync_uid`, `start` and `end` fields if they are empty.
+  [bsuttor]
+
 - Update french translations.
   [bsuttor]
+
+- Fixing a typo in dutch translations.
+  [andreesg]
 
 
 
