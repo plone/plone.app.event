@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Do not index `sync_uid`, `start` and `end` fields if they are empty.
+  [bsuttor]
+
 - Fix bug when an event is in creation and has not yet uid.
   [bsuttor]
 

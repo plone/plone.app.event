@@ -533,7 +533,7 @@ def data_postprocessing(obj, event):
 def start_indexer(obj):
     event = IEventBasic(obj)
     if event.start is None:
-        return None
+        raise AttributeError
     return DT(event.start)
 
 
@@ -542,7 +542,7 @@ def start_indexer(obj):
 def end_indexer(obj):
     event = IEventBasic(obj)
     if event.end is None:
-        return None
+        raise AttributeError
     return DT(event.end)
 
 
@@ -561,7 +561,7 @@ def location_indexer(obj):
 def sync_uid_indexer(obj):
     event = IEventBasic(obj)
     if not event.sync_uid:
-        return None
+        raise AttributeError
     return event.sync_uid
 
 
