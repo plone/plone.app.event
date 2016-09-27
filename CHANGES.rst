@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Do not index `sync_uid`, `start` and `end` fields if they are empty.
+  [bsuttor]
 
 
 1.1.7 (2016-09-07)
