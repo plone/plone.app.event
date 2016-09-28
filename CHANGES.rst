@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fixing a typo in dutch translations.
+  [andreesg]
 
 
 3.0.1 (2016-09-16)
