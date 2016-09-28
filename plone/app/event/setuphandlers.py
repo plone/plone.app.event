@@ -45,14 +45,14 @@ def setup_catalog(context):
         recurdef = 'recurrence'
         until = ''
 
-    idxobj = catalog.Indexes
+    _catalog = catalog._catalog
     for name in idxs:
-        if name in idxobj:
-            if idxobj[name].meta_type == 'DateIndex':
+        if name in catalog.indexes():
+            if _catalog.getIndex(name).meta_type == 'DateIndex':
                 # delete old standard DateIndex
                 catalog.delIndex(name)
                 logger.info('Old catalog DateIndex %s deleted.' % name)
-        if name not in idxobj:
+        if name not in catalog.indexes():
             if name in date_idxs:
                 # create new DateRecurringIndex
                 catalog.addIndex(name, 'DateRecurringIndex', extra=extra())

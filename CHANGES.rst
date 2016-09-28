@@ -67,6 +67,10 @@ Bug fixes:
   This can happen on non-required, default empty start or end fields during editing.
   [thet]
 
+- Fix bug when creating indexes on install. It was not detecting existing
+  indexes correctly.
+  [vangheem]
+
 
 2.0.9 (2016-05-15)
 ------------------
