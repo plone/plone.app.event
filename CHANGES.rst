@@ -14,6 +14,12 @@ New features:
 
 Bug fixes:
 
+- Update french translations.
+  [bsuttor]
+
+- Do not index `sync_uid`, `start` and `end` fields if they are empty.
+  [bsuttor]
+
 - Fix bug when creating indexes on install. It was not detecting existing
   indexes correctly.
   [vangheem]
