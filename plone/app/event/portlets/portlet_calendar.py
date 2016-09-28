@@ -253,6 +253,7 @@ class Renderer(base.Renderer):
                 date_events = cal_dict[isodat]
 
             events_string = u""
+            events_title = u""
             if date_events:
                 for occ in date_events:
                     accessor = IEventAccessor(occ)
@@ -262,6 +263,7 @@ class Renderer(base.Renderer):
                     # TODO: make 24/12 hr format configurable
                     base = u'<a href="%s"><span class="title">%s</span>'\
                            u'%s%s%s</a>'
+                    events_title += accessor.title
                     events_string += base % (
                         accessor.url,
                         accessor.title,
@@ -280,6 +282,7 @@ class Renderer(base.Renderer):
                     dat.day == today.day,
                  'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
                  'events_string': events_string,
+                 'events_title': events_title,
                  'events': date_events})
         return caldata
 
