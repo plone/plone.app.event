@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Fix format of tooltip in calendar portlet.
+  Fixes: https://github.com/plone/Products.CMFPlone/issues/1046
+  [fgrcon]
+
 - Update french translations.
   [bsuttor]
 

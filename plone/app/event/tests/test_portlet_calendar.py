@@ -201,7 +201,7 @@ class RendererTest(unittest.TestCase):
         )
         r.update()
         rd = r.render()
-        self.assertEqual(rd.count('http://nohost/plone/e1'), 3)
+        self.assertEqual(rd.count('e1'), 3)
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
