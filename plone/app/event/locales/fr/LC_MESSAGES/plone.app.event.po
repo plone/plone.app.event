@@ -157,12 +157,12 @@ msgstr "Site Internet"
 #. Default: "What"
 #: plone/app/event/browser/event_summary.pt:24
 msgid "event_what"
-msgstr "Quoi"
+msgstr "Quoi ?"
 
 #. Default: "When"
 #: plone/app/event/browser/event_summary.pt:32
 msgid "event_when"
-msgstr "Quand"
+msgstr "Quand ?"
 
 #. Default: "${startdate} to ${enddate}"
 #: plone/app/event/browser/formatted_date.pt:27
@@ -186,7 +186,7 @@ msgstr "${date} à partir de ${starttime}"
 #. Default: "Where"
 #: plone/app/event/browser/event_summary.pt:73
 msgid "event_where"
-msgstr "Ou"
+msgstr "Où ?"
 
 #. Default: "${from} until ${until}."
 #: plone/app/event/browser/event_listing.py:279
