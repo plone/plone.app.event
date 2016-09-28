@@ -24,7 +24,6 @@
   <include package=".ical" />
   <include file="recurrence.zcml" />
   <include package=".upgrades" />
-  <include package=".bbb" zcml:condition="not-have plone-5" />
 
   <utility
       component=".vocabularies.SynchronizationStrategies"

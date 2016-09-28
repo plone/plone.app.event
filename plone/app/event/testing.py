@@ -1,4 +1,3 @@
-from Products.CMFPlone.utils import getFSVersionTuple
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
@@ -11,9 +10,6 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 
 import os
-
-
-PLONE5 = getFSVersionTuple()[0] >= 5
 
 
 def set_browserlayer(request):
@@ -80,8 +76,6 @@ class PAEventLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.event:default')
-        if not PLONE5:
-            self.applyProfile(portal, 'plone.app.event.bbb:default')
         set_timezone(tz='UTC')
 
     def tearDownZope(self, app):
@@ -118,8 +112,6 @@ class PAEventDXLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.contenttypes:default')
-        if not PLONE5:
-            self.applyProfile(portal, 'plone.app.event.bbb:default')
         self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 
