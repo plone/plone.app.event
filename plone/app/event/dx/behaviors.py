@@ -13,6 +13,7 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
+from plone.app.z3cform.widget import DatetimeFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.event.interfaces import IEventAccessor
@@ -23,7 +24,6 @@ from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import getFSVersionTuple
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.browser.text import TextFieldWidget
@@ -36,16 +36,6 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
-
-
-PLONE5 = getFSVersionTuple()[0] >= 5
-
-if PLONE5:
-    # Plone 5
-    from plone.app.z3cform.widget import DatetimeFieldWidget
-else:
-    # Plone 4
-    from plone.app.widgets.dx import DatetimeFieldWidget
 
 
 def first_weekday_sun0():

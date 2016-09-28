@@ -17,8 +17,4 @@ For Standalone installation follow the standard buildout procedure::
     $ ./bin/pip install -U zc.buildout setuptools pip
     $ ./bin/buildout
 
-For Plone 4.3 do::
-
-    $ ./bin/buildout -c buildout-43.cfg
-
 Note, both commands will install a test and development environment.

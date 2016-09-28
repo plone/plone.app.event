@@ -6,7 +6,8 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
+- Really remove Plone 4 compatibility code.
+  [thet]
 
 New features:
 

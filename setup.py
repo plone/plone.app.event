@@ -19,6 +19,7 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Plone",
+        "Framework :: Plone :: 5.1",
         "Programming Language :: Python :: 2.7",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
     ],
@@ -99,9 +100,6 @@ setup(
             'zExceptions',
             'zope.event',
         ],
-        'plone43': [
-            'plone.app.widgets [dexterity] >= 1.7.0',
-        ]
     },
     entry_points="""
     [z3c.autoinclude.plugin]
