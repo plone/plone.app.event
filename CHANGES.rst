@@ -4,14 +4,6 @@ Changelog
 1.1.8 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Do not index `sync_uid`, `start` and `end` fields if they are empty.
