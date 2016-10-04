@@ -9,10 +9,6 @@ Breaking changes:
 - Really remove Plone 4 compatibility code.
   [thet]
 
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix format of tooltip in calendar portlet.
