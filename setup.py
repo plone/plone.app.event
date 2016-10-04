@@ -4,7 +4,7 @@ from setuptools import find_packages
 import os
 
 
-version = '3.0.2'
+version = '3.0.3.dev0'
 
 
 setup(
