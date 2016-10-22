@@ -15,6 +15,8 @@ New features:
 Bug fixes:
 
 - *add item here*
+- Remove requirement of ``collective.elephantvocabulary`` which is no longer used.
+  [davisagli]
 
 
 3.0.2 (2016-10-05)

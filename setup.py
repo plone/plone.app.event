@@ -44,7 +44,6 @@ setup(
         'Products.ZCatalog',
         'Products.statusmessages',
         'Zope2',
-        'collective.elephantvocabulary',
         'icalendar > 3.0',
         'plone.app.contentlisting',
         'plone.app.dexterity',
