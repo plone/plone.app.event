@@ -4,17 +4,8 @@ Changelog
 3.0.3 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
-- *add item here*
 - Remove requirement of ``collective.elephantvocabulary`` which is no longer used.
   [davisagli]
 
