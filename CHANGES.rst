@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- add full danish translation
+  [tmog]
 
 Bug fixes:
 
