@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix views should show the next upcoming recurrence of event.
+  Fixes: https://github.com/plone/plone.app.event/issues/185
+  [allusa]
 
 
 3.0.3 (2016-11-17)
