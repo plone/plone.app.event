@@ -2,6 +2,7 @@ from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
+from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import guess_date_from
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
@@ -15,6 +16,9 @@ from plone.namedfile.scaling import ImageScaling
 from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
+
+import datetime
+
 
 try:
     from repoze.zope2.publishtraverse import DefaultPublishTraverse
@@ -54,12 +58,24 @@ class RecurrenceSupport(object):
         """
         event = IEventAccessor(self.context)
 
+        # We try to get IEventBasic start without including recurrence
+        event_start = getattr(self.context, 'start', None)
+        if not event_start:
+            event_start = event.start
+        elif getattr(event, 'whole_day', None):
+            event_start = dt_start_of_day(event_start)
+
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
         # event starts before range_start but ends afterwards.
-        duration = event.duration
+        if (getattr(event, 'whole_day', None) or
+            getattr(event, 'open_end', None)):
+            duration = datetime.timedelta(hours=23, minutes=59, seconds=59)
+        else:
+            event_end = getattr(self.context, 'end', None)
+            duration = event_end - event_start
 
-        starts = recurrence_sequence_ical(event.start,
+        starts = recurrence_sequence_ical(event_start,
                                           recrule=event.recurrence,
                                           from_=range_start, until=range_end,
                                           duration=duration)
@@ -68,7 +84,7 @@ class RecurrenceSupport(object):
         # but doing it for backwards compatibility as views/templates
         # still rely on acquisition-wrapped objects.
         def get_obj(start):
-            if pydt(event.start.replace(microsecond=0)) == start:
+            if pydt(event_start.replace(microsecond=0)) == start:
                 # If the occurrence date is the same as the event object, the
                 # occurrence is the event itself. return it as such.
                 # Dates from recurrence_sequence_ical are explicitly without

@@ -21,9 +21,11 @@ from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.testing.z2 import Browser
+from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserView
 import datetime
+import mock
 import pytz
 import transaction
 import unittest
@@ -189,6 +191,86 @@ class TestOccurrences(unittest.TestCase):
         # num_more_occurrences should return number of remaining occurrences
         self.assertEqual(
             view.num_more_occurrences, 1000 - view.max_occurrences)
+
+    def test_event_summary_occurrences_next_upcoming(self):
+        event = IEventAccessor(self.portal['daily'])
+
+        date = patched_now()
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # altogether 4 occurrences, start occurrence is included
+            self.assertEqual(4, len(view.next_occurrences))
+            self.assertEqual(event.start, date)
+            self.assertEqual(event.end, date + datetime.timedelta(hours=1))
+
+        IAnnotations(self.request).clear()  # clear cache
+        next_date = patched_now() + datetime.timedelta(hours=24)
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=next_date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # 3 occurrences remaining
+            self.assertEqual(3, len(view.next_occurrences))
+            self.assertEqual(event.start, next_date)
+            next_end_date = next_date + datetime.timedelta(hours=1)
+            self.assertEqual(event.end, next_end_date)
+
+        IAnnotations(self.request).clear()  # clear cache
+        next_date = patched_now() + datetime.timedelta(days=10)
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=next_date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # no occurrences remaining, show all original 4
+            self.assertEqual(4, len(view.next_occurrences))
+            self.assertEqual(event.start, date)
+            self.assertEqual(event.end, date + datetime.timedelta(hours=1))
+
+    def test_event_summary_occurrences_whole_day(self):
+        self.portal['daily'].whole_day = True
+
+        date = patched_now()
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # altogether 4 occurrences, start occurrence is included
+            self.assertEqual(4, len(view.next_occurrences))
+            for occurrence in view.next_occurrences:
+                event_occ = IEventAccessor(occurrence)
+                self.assertEqual(event_occ.start.hour, 0)
+                self.assertEqual(event_occ.end.hour, 23)
+                self.assertEqual(event_occ.start.day, event_occ.end.day)
+
+        IAnnotations(self.request).clear()  # clear cache
+        next_date = patched_now() + datetime.timedelta(hours=24)
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=next_date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # 3 occurrences remaining
+            self.assertEqual(3, len(view.next_occurrences))
+            for occurrence in view.next_occurrences:
+                event_occ = IEventAccessor(occurrence)
+                self.assertEqual(event_occ.start.hour, 0)
+                self.assertEqual(event_occ.end.hour, 23)
+                self.assertEqual(event_occ.start.day, event_occ.end.day)
+
+        IAnnotations(self.request).clear()  # clear cache
+        next_date = patched_now() + datetime.timedelta(days=10)
+        with mock.patch('plone.app.event.dx.behaviors.localized_now',
+                        return_value=next_date):
+            view = zope.component.getMultiAdapter(
+                (self.portal['daily'], self.request), name='event_summary')
+            # no occurrences remaining, show all original 4
+            self.assertEqual(4, len(view.next_occurrences))
+            for occurrence in view.next_occurrences:
+                event_occ = IEventAccessor(occurrence)
+                self.assertEqual(event_occ.start.hour, 0)
+                self.assertEqual(event_occ.end.hour, 23)
+                self.assertEqual(event_occ.start.day, event_occ.end.day)
 
 
 class MockEvent(SimpleItem):
