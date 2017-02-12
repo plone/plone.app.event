@@ -4,14 +4,6 @@ Changelog
 3.0.4 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix views should show the next upcoming recurrence of event.
