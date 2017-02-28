@@ -1,11 +1,12 @@
 # plone.app.event locales
 # Johannes Raggam <raggam-nl@adm.at>, 2011.
+# Kees Hink <kees@fourdigits.nl>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
 "PO-Revision-Date: 2013-11-14 16:00+0100\n"
-"Last-Translator: Kees Hink <kees@fourdigits.nl>\n"
+"Last-Translator: Jean-Paul Ladage<j.ladage@zestsoftware.nl>\n"
 "Language-Team: Plone Nederland <translators@plone.nl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -45,7 +46,7 @@ msgstr "Agenda"
 
 #: plone/app/event/bbb/browser/controlpanel.py:10
 msgid "Date and Time Settings"
-msgstr ""
+msgstr "Datum en tijd instellingen"
 
 #: plone/app/event/bbb/portlets/portlet_calendar.py:45
 #: plone/app/event/portlets/portlet_calendar.py:313
@@ -91,7 +92,7 @@ msgstr "Dit portlet geeft een lijst van toekomstige agenda-items."
 #: plone/app/event/portlets/portlet_calendar.py:44
 #: plone/app/event/portlets/portlet_events.py:44
 msgid "Workflow state"
-msgstr "Workflow-status"
+msgstr "Status"
 
 #. Default: "All events"
 #: plone/app/event/browser/event_listing.py:262
@@ -349,7 +350,7 @@ msgstr ""
 "Hoe te synchroniseren:\n"
 "1) \"Nieuwste houden\": Importeren als het geïmporteerde agenda-item bewerkt is na het bestaande.\n"
 "2) \"De mijne houden\": Bij conflicten, niets doen.\n"
-"3) \"De hunne houden\": Bij conflicten, het bestaande agenda-item bijwerken met het externe.\n"
+"3) \"Die van hen houden\": Bij conflicten, het bestaande agenda-item bijwerken met het externe.\n"
 "4) \"Niet synchroneren\": Niet synchroniseren, maar nieuwe agenda-items aanmaken, ook als ze al bestaan.\n"
 "    Maak een nieuw sync_uid aan voor elk."
 
@@ -417,7 +418,7 @@ msgstr "Plaats"
 #. Default: "Open End"
 #: plone/app/event/dx/behaviors.py:119
 msgid "label_event_open_end"
-msgstr "Geen einde"
+msgstr "Geen eind"
 
 #. Default: "Recurrence"
 #: plone/app/event/dx/behaviors.py:165
@@ -487,7 +488,7 @@ msgstr "Ical import-instellingen opgeslagen"
 #. Default: "There are ${results} more occurrences."
 #: plone/app/event/browser/event_summary.py:79
 msgid "msg_num_more_occurrences"
-msgstr "Er zijn nog ${resuls} andere momenten."
+msgstr "Er zijn nog ${results} andere momenten."
 
 #. Default: "Next Day"
 #: plone/app/event/browser/event_listing.pt:71
@@ -520,7 +521,7 @@ msgstr "Kies een map om naar agenda-items te zoeken. Deze wordt ook gebruikt om 
 #: plone/app/event/portlets/portlet_calendar.py:53
 #: plone/app/event/portlets/portlet_events.py:54
 msgid "portlet_label_search_base"
-msgstr "Uitgangspunt voor zoeken"
+msgstr "Startpunt voor zoeken"
 
 #. Default: "Previous Day"
 #: plone/app/event/browser/event_listing.pt:69
@@ -555,7 +556,7 @@ msgstr "Nieuwste houden"
 #. Default: "Keep theirs"
 #: plone/app/event/vocabularies.py:25
 msgid "sync_keep_theirs"
-msgstr "De hunne houden"
+msgstr "Die van hen houden"
 
 #. Default: "No Syncing"
 #: plone/app/event/vocabularies.py:26
@@ -601,7 +602,7 @@ msgstr "Vandaag"
 #. Default: "Todays events"
 #: plone/app/event/browser/event_listing.py:275
 msgid "todays_events"
-msgstr "Agenda-items vandaag"
+msgstr "Agenda-items van vandaag"
 
 #. Default: "Todays upcoming events"
 #: plone/app/event/browser/event_listing.py:271
