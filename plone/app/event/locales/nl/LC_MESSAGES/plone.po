@@ -21,7 +21,7 @@ msgstr ""
 #
 #. Default: "Event Listing"
 msgid "event_listing"
-msgstr "Agenda-lijst"
+msgstr "Agenda"
 
 #. Default: "Event"
 msgid "event_view"
