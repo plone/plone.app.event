@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
-"PO-Revision-Date: 2013-11-14 16:00+0100\n"
+"PO-Revision-Date: 2017-03-17 09:00+0100\n"
 "Last-Translator: Jean-Paul Ladage<j.ladage@zestsoftware.nl>\n"
 "Language-Team: Plone Nederland <translators@plone.nl>\n"
 "MIME-Version: 1.0\n"
@@ -255,7 +255,7 @@ msgstr "Einddatum en -tijd van het agenda-item"
 #. Default: "Location of the event."
 #: plone/app/event/dx/behaviors.py:200
 msgid "help_event_location"
-msgstr "Plaats van het agenda-item."
+msgstr "Locatie waar dit plaatsvind."
 
 #. Default: "This event is open ended."
 #: plone/app/event/dx/behaviors.py:123
@@ -286,7 +286,7 @@ msgstr "Internetadres met meer informatie over het agenda-item. Voeg http:// e v
 #. Default: "Event lasts whole day."
 #: plone/app/event/dx/behaviors.py:110
 msgid "help_event_whole_day"
-msgstr "Agenda-item duurt de hele dag."
+msgstr "Dit duurt de hele dag."
 
 #. Default: "First day in the Week."
 #: plone/app/event/bbb/interfaces.py:34
@@ -296,7 +296,7 @@ msgstr "Eerste dag van de week."
 #. Default: "Import Events from icalendar files."
 #: plone/app/event/profiles/default/actions.xml
 msgid "help_ical_import"
-msgstr "Importeer agenda-items van icalendar-bestanden."
+msgstr "Agenda-items importeren uit icalendar-bestanden."
 
 #. Default: "Click to disable the icalendar import feature on this context."
 #: plone/app/event/profiles/default/actions.xml
@@ -326,7 +326,7 @@ msgstr "Contentype voor Agenda-item"
 #. Default: "Icalendar resource file, if no URL is given."
 #: plone/app/event/ical/importer.py:247
 msgid "ical_import_file_desc"
-msgstr "ICalendar bestand als geen URL wordt opgegeven"
+msgstr "ICalendar-bestand met agenda items, indien u geen URL opgeeft."
 
 #. Default: "Icalendar File"
 #: plone/app/event/ical/importer.py:246
@@ -336,7 +336,7 @@ msgstr "Icalendar-bestand"
 #. Default: "${num} events imported from ${filename}"
 #: plone/app/event/ical/importer.py:354
 msgid "ical_import_imported"
-msgstr "${num} agenda-items geïmporteerd vanuit ${filename}"
+msgstr "${num} agenda-items geïmporteerd uit ${filename}"
 
 #. Default: "Please provide either a icalendar ics file or a URL to a file."
 #: plone/app/event/ical/importer.py:361
@@ -463,7 +463,7 @@ msgstr "Dag"
 #. Default: "Upcoming"
 #: plone/app/event/browser/event_listing.pt:27
 msgid "mode_future_link"
-msgstr "Toekomstig"
+msgstr "Agenda"
 
 #. Default: "Month"
 #: plone/app/event/browser/event_listing.pt:33
@@ -473,7 +473,7 @@ msgstr "Maand"
 #. Default: "Past"
 #: plone/app/event/browser/event_listing.pt:30
 msgid "mode_past_link"
-msgstr "Afgelopen"
+msgstr "Archief"
 
 #. Default: "Week"
 #: plone/app/event/browser/event_listing.pt:36
@@ -513,7 +513,6 @@ msgstr "Afgelopen agenda-items"
 #. Default: "Select search base Folder or Collection to search for events. The URL to to this item will also be used to link to in calendar searches. If empty, the whole site will be searched and the event listing view will be called on the site root."
 #: plone/app/event/portlets/portlet_calendar.py:54
 #: plone/app/event/portlets/portlet_events.py:55
-#, fuzzy
 msgid "portlet_help_search_base"
 msgstr "Kies een map om naar agenda-items te zoeken. Deze wordt ook gebruikt om naartoe te linken vanuit agenda-zoekacties. Als dit veld leeg is wordt de hele site doorzocht, en wordt de lijst van agenda-items wordt aangeroepen op het hoogste niveau in de site."
 
