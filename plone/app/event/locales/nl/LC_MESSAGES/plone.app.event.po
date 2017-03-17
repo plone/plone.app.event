@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2015-06-25 12:29+0000\n"
-"PO-Revision-Date: 2013-11-14 16:00+0100\n"
+"PO-Revision-Date: 2017-03-17 09:00+0100\n"
 "Last-Translator: Jean-Paul Ladage<j.ladage@zestsoftware.nl>\n"
 "Language-Team: Plone Nederland <translators@plone.nl>\n"
 "MIME-Version: 1.0\n"
@@ -255,7 +255,7 @@ msgstr "Einddatum en -tijd van het agenda-item"
 #. Default: "Location of the event."
 #: plone/app/event/dx/behaviors.py:200
 msgid "help_event_location"
-msgstr "Lokatie van het agenda-item."
+msgstr "Locatie van het agenda-item."
 
 #. Default: "This event is open ended."
 #: plone/app/event/dx/behaviors.py:123
