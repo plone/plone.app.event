@@ -3,8 +3,8 @@
 *.py?
 *.sw?
 *.wpr
-.*
-!.gitignore
+.installed.cfg
+.mr.developer.cfg
 bin/
 coverage/
 dev/
