@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import expand_events
 from plone.app.event.base import _prepare_range
@@ -17,9 +18,11 @@ from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
+from plone.registry.interfaces import IRegistry
 from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implementer
 from plone.app.querystring import queryparser
@@ -58,7 +61,22 @@ class IEventsPortlet(IPortletDataProvider):
         required=False,
         source=search_base_uid_source,
     )
+    ov_thumbsize = schema.TextLine(
+        title=_(u"Override thumb size "),
+        description=_(u"<br><ul><li> Enter a valid scale name"
+             u"(see 'Image Handling' control panel) to override"
+             u" e.g. icon, tile, thumb, mini, preview, ... )  </li>"
+             u"<li>leave empty to use default "
+             u"(see 'Site' control panel)</li></ul>"),
+        required=False,
+        default=u'')
 
+    no_thumbs = schema.Bool(
+        title=_(u"Suppress thumbs "),
+        description=_(
+            u"If enabled, the portlet will not show thumbs"),
+        required=True,
+        default=False)
 
 @implementer(IEventsPortlet)
 class Assignment(base.Assignment):
@@ -191,7 +209,25 @@ class Renderer(base.Renderer):
             IContentProvider, name='formatted_date'
         )
         return provider(event)
-
+    
+    def thumb_size(self):
+        ''' use  overrride value or read thumb_size from registry
+            image sizes must fit to value in allowed image sizes
+            none will suppress thumb!
+        '''
+        if getattr(self.data,'no_thumbs',False):
+            #individual setting overrides ...
+            return 'none'
+        thsize=getattr(self.data,'ov_thumbsize','')
+        if thsize > ' ':
+            return thsize
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(
+            ISiteSchema, prefix="plone", check=False)
+        if settings.no_thumbs_portlet:
+            return 'none' 
+        thumb_size_portlet = settings.thumb_size_portlet
+        return thumb_size_portlet
 
 class AddForm(base.AddForm):
     schema = IEventsPortlet
