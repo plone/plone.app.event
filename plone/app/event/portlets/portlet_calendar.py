@@ -279,7 +279,7 @@ class Renderer(base.Renderer):
                     dat.month == today.month and
                     dat.day == today.day,
                  'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
-                 'events_string': u' | '.join(events_string_list),
+                 'events_string': u'\n'.join(events_string_list),
                  'events': date_events})
         return caldata
 
