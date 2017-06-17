@@ -16,8 +16,10 @@ New features:
   [fgrcon]
   
 Bug fixes:
-
-- *add item here*
+- 
+- fixed css-classes for thumb scales ...
+  https://github.com/plone/Products.CMFPlone/issues/2077
+  [fgrcon]
 
 
 3.0.4 (2017-02-12)
