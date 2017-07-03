@@ -4,10 +4,6 @@ Changelog
 3.0.5 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - option to override thumb /icon behavior individually for portlet (suppress thumbs, thumb size)
@@ -16,7 +12,7 @@ New features:
   [fgrcon]
   
 Bug fixes:
-- 
+ 
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
