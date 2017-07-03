@@ -1,6 +1,22 @@
 Changelog
 =========
 
+3.0.6 (unreleased)
+------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
 3.0.5 (2017-07-03)
 ------------------
 
