@@ -139,19 +139,20 @@ require([
         }
     }
 
-    function initilize_event() {
+    function initilize_event(
+        $start_input,
+        $start_container,
+        $pickadate_starttime,
+        $end_input,
+        $end_container,
+        $pickadate_endtime,
+        $whole_day_input,
+        $open_end_input
+    ) {
 
-        // EDIT FORM
-        var $start_input         = $('form input.event_start');
-        var $start_container     = $start_input.closest('div');
-        var $pickadate_starttime = $('.pattern-pickadate-time-wrapper', $start_container);
-
-        var $end_input           = $('form input.event_end');
-        var $end_container       = $end_input.closest('div');
-        var $pickadate_endtime   = $('.pattern-pickadate-time-wrapper', $end_container);
-
-        var $whole_day_input     = $('form input.event_whole_day');
-        var $open_end_input      = $('form input.event_open_end');
+        if (!$pickadate_starttime.length || !$pickadate_endtime.length || !$whole_day_input.length) {
+            debugger;
+        }
 
         // WHOLE DAY INIT
         if ($whole_day_input.length > 0) {
@@ -186,14 +187,59 @@ require([
 
     }
 
-    // mockup-core should trigger event once it initiallized all patterns (in
-    // mockup-core) but it only sets body class once all patterns were
-    // initialized
+
+    function get_dom_element(sel) {
+        /* Try to get the DOM element from a selector and return it or return undefined.
+         * */
+        var $el = $(sel);
+        return $el.length ? $el : undefined;
+    }
+
+    // Initialize necessary DOM elements and wait until all are foumd.
+    var $start_input,
+        $start_container,
+        $pickadate_starttime,
+        $end_input,
+        $end_container,
+        $pickadate_endtime,
+        $whole_day_input,
+        $open_end_input;
+
     var interval = setInterval(function(){
-      if ($(document.body).hasClass('patterns-loaded')) {
-        clearInterval(interval);
-        initilize_event();
-      }
+        $start_input     = !$start_input && get_dom_element('form input.event_start');
+        $start_container = !$start_container && $start_input && $start_input.closest('div');
+        $pickadate_starttime = !$pickadate_starttime && $start_container && get_dom_element('.pattern-pickadate-time-wrapper', $start_container);
+
+        $end_input       = !$end_input && get_dom_element('form input.event_end');
+        $end_container   = !$end_container && $end_input && $end_input.closest('div');
+        $pickadate_endtime = !$pickadate_endtime && $end_container && $('.pattern-pickadate-time-wrapper', $end_container);
+
+        $whole_day_input = !$whole_day_input && get_dom_element('form input.event_whole_day');
+        $open_end_input  = !$open_end_input && get_dom_element('form input.event_open_end');
+
+        if (
+            $start_input &&
+            $start_container &&
+            $pickadate_starttime &&
+            $end_input &&
+            $end_container &&
+            $pickadate_endtime &&
+            $whole_day_input &&
+            $open_end_input
+        ) {
+            clearInterval(interval);
+            initilize_event(
+                $start_input,
+                $start_container,
+                $pickadate_starttime,
+                $end_input,
+                $end_container,
+                $pickadate_endtime,
+                $whole_day_input,
+                $open_end_input
+            );
+        }
+
     }, 100);
 
 });

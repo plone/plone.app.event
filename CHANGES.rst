@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- In the plone.app.event JavaScript initialization, explicitly wait until pickadate has been initialized and all DOM elements are found.
+  Fixes a problem, where the time part wasn't hidden on open end events.
+  [thet]
 
 
 3.0.5 (2017-07-03)
@@ -26,9 +28,9 @@ New features:
   https://plone/Products.CMFPlone#1734 [fgrcon]
   applied https://github.com/plone/Products.CMFPlone/issues/1483
   [fgrcon]
-  
+
 Bug fixes:
- 
+
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
