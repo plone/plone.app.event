@@ -14,8 +14,8 @@ New features:
 
 Bug fixes:
 
-- In the plone.app.event JavaScript initialization, explicitly wait until pickadate has been initialized and all DOM elements are found.
-  Fixes a problem, where the time part wasn't hidden on open end events.
+- Improve the JavaScript to wait for the PickADate pattern to be initialized.
+  Follow better JS practices.
   [thet]
 
 
