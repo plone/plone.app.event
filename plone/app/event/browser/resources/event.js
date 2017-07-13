@@ -1,18 +1,8 @@
 /* jslint browser: true */
 /* globals require */
 
+(function($) {
 
-if(require === undefined){
-  require = function(reqs, torun){
-    'use strict';
-    return torun(window.jQuery);
-  };
-}
-
-
-require([
-    'jquery'
-], function($){
     'use strict';
 
     var start_end_delta = 1 / 24;  // Delta in days
@@ -195,51 +185,54 @@ require([
         return $el.length ? $el : undefined;
     }
 
-    // Initialize necessary DOM elements and wait until all are foumd.
-    var $start_input,
-        $start_container,
-        $pickadate_starttime,
-        $end_input,
-        $end_container,
-        $pickadate_endtime,
-        $whole_day_input,
-        $open_end_input;
+   
+    $(document).ready(function() {
+        // Initialize necessary DOM elements and wait until all are foumd.
+        var $start_input,
+            $start_container,
+            $pickadate_starttime,
+            $end_input,
+            $end_container,
+            $pickadate_endtime,
+            $whole_day_input,
+            $open_end_input;
 
-    var interval = setInterval(function(){
-        $start_input     = !$start_input && get_dom_element('form input.event_start');
-        $start_container = !$start_container && $start_input && $start_input.closest('div');
-        $pickadate_starttime = !$pickadate_starttime && $start_container && get_dom_element('.pattern-pickadate-time-wrapper', $start_container);
+        var interval = setInterval(function(){
+            $start_input     = !$start_input && get_dom_element('form input.event_start');
+            $start_container = !$start_container && $start_input && $start_input.closest('div');
+            $pickadate_starttime = !$pickadate_starttime && $start_container && get_dom_element('.pattern-pickadate-time-wrapper', $start_container);
 
-        $end_input       = !$end_input && get_dom_element('form input.event_end');
-        $end_container   = !$end_container && $end_input && $end_input.closest('div');
-        $pickadate_endtime = !$pickadate_endtime && $end_container && $('.pattern-pickadate-time-wrapper', $end_container);
+            $end_input       = !$end_input && get_dom_element('form input.event_end');
+            $end_container   = !$end_container && $end_input && $end_input.closest('div');
+            $pickadate_endtime = !$pickadate_endtime && $end_container && $('.pattern-pickadate-time-wrapper', $end_container);
 
-        $whole_day_input = !$whole_day_input && get_dom_element('form input.event_whole_day');
-        $open_end_input  = !$open_end_input && get_dom_element('form input.event_open_end');
+            $whole_day_input = !$whole_day_input && get_dom_element('form input.event_whole_day');
+            $open_end_input  = !$open_end_input && get_dom_element('form input.event_open_end');
 
-        if (
-            $start_input &&
-            $start_container &&
-            $pickadate_starttime &&
-            $end_input &&
-            $end_container &&
-            $pickadate_endtime &&
-            $whole_day_input &&
-            $open_end_input
-        ) {
-            clearInterval(interval);
-            initilize_event(
-                $start_input,
-                $start_container,
-                $pickadate_starttime,
-                $end_input,
-                $end_container,
-                $pickadate_endtime,
-                $whole_day_input,
+            if (
+                $start_input &&
+                $start_container &&
+                $pickadate_starttime &&
+                $end_input &&
+                $end_container &&
+                $pickadate_endtime &&
+                $whole_day_input &&
                 $open_end_input
-            );
-        }
+            ) {
+                clearInterval(interval);
+                initilize_event(
+                    $start_input,
+                    $start_container,
+                    $pickadate_starttime,
+                    $end_input,
+                    $end_container,
+                    $pickadate_endtime,
+                    $whole_day_input,
+                    $open_end_input
+                );
+            }
 
-    }, 100);
+        }, 100);
+    }); 
 
-});
+}(jQuery));
