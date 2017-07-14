@@ -73,7 +73,7 @@
       }
 
       // delta in days
-      start_end_delta = (end_datetime - start_datetime) / 1000 / 60;
+      this.start_end_delta = (end_datetime - start_datetime) / 1000 / 60;
     },
 
     updateEndDate: function (start_container, end_container) {
@@ -83,7 +83,7 @@
       }
 
       var new_end_date = new Date(start_date);
-      new_end_date.setMinutes(start_date.getMinutes() + start_end_delta);
+      new_end_date.setMinutes(start_date.getMinutes() + this.start_end_delta);
 
       $('.pattern-pickadate-date', end_container)
         .pickadate('picker')
