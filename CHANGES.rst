@@ -18,6 +18,9 @@ Bug fixes:
   Follow better JS practices.
   [thet]
 
+- Remove broken floating layout of start, end, whole_day and open_end fields.
+  [thet]
+
 
 3.0.5 (2017-07-03)
 ------------------
