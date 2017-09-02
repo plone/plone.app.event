@@ -6,7 +6,11 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
+- #261 expand_events returns the event items passed in `events` even if they do
+  not fit into `start` and `end` (which are only used to limit the search for
+  occurrences).
+  Previously events got removed if they did not fit into the start-end-range although
+  the method is called `*expand*_events`.
 
 New features:
 

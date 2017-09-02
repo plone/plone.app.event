@@ -227,7 +227,7 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
         _allstarts = sorted(idx['start'])
         _allends = sorted(idx['end'])
         # assuming (start, end) pairs belong together
-        #assert(len(_allstarts) == len(_allends))
+        # assert(len(_allstarts) == len(_allends))
         _occ = itertools.izip(_allstarts, _allends)
         if start:
             _occ = [(s, e) for (s, e) in _occ if e >= _start]
@@ -278,13 +278,13 @@ def expand_events(events, ret_mode,
     :type sort_reverse: boolean
     """
     assert(ret_mode is not RET_MODE_BRAINS)
-
     exp_result = []
     for it in events:
         obj = hasattr(it, 'getObject') and it.getObject() or it
         if IEventRecurrence.providedBy(obj):
-            occurrences = [_obj_or_acc(occ, ret_mode) for occ in
-                           IRecurrenceSupport(obj).occurrences(start, end)]
+            occ_set = set(IRecurrenceSupport(obj).occurrences(start, end))
+            occ_set.add(obj)
+            occurrences = [_obj_or_acc(occ, ret_mode) for occ in occ_set]
         elif IEvent.providedBy(obj):
             occurrences = [_obj_or_acc(obj, ret_mode)]
         else:
