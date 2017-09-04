@@ -14,7 +14,12 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Improve the JavaScript to wait for the PickADate pattern to be initialized.
+  Follow better JS practices.
+  [thet]
+
+- Remove broken floating layout of start, end, whole_day and open_end fields.
+  [thet]
 
 
 3.0.5 (2017-07-03)
@@ -26,9 +31,9 @@ New features:
   https://plone/Products.CMFPlone#1734 [fgrcon]
   applied https://github.com/plone/Products.CMFPlone/issues/1483
   [fgrcon]
-  
+
 Bug fixes:
- 
+
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
