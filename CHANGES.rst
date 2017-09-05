@@ -4,14 +4,6 @@ Changelog
 3.0.6 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Improve the JavaScript to wait for the PickADate pattern to be initialized.
