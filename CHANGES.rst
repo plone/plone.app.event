@@ -23,6 +23,8 @@ Bug fixes:
 
 3.0.7 (2017-11-24)
 ------------------
+- iCal export: Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
+  [thet]
 
 Bug fixes:
 

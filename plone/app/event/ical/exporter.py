@@ -195,35 +195,65 @@ class ICalendarEventComponent(object):
 
     def __init__(self, context):
         self.context = context
-        self.event = IEventAccessor(context)
+        self.event = IEventAccessor(self.context)
+        self.ical = icalendar.Event()
 
-    def to_ical(self):
-        ical = icalendar.Event()
-        event = self.event
+    @property
+    def dtstamp(self):
+        # must be in uc
+        return utc(datetime.now())
 
-        # TODO: event.text
+    @property
+    def created(self):
+        # must be in uc
+        return utc(self.event.created)
 
-        # must be in utc
-        ical.add('dtstamp', utc(datetime.now()))
-        ical.add('created', utc(event.created))
-        ical.add('last-modified', utc(event.last_modified))
+    @property
+    def last_modified(self):
+        # must be in uc
+        return utc(self.event.last_modified)
 
-        if event.sync_uid:
+    @property
+    def uid(self):
+        if self.event.sync_uid:
             # Re-Use existing icalendar event UID
-            ical.add('uid', event.sync_uid)
-        else:
-            # Else, use plone.uuid
-            ical.add('uid', event.uid)
+            return self.event.sync_uid
+        # Else, use plone.uuid
+        return self.event.uid
 
-        ical.add('url', event.url)
+    @property
+    def url(self):
+        return self.event.url
 
-        ical.add('summary', event.title)
+    @property
+    def summary(self):
+        return self.event.title
 
-        if event.description:
-            ical.add('description', event.description)
+    @property
+    def description(self):
+        return self.event.description
 
-        if event.whole_day:
-            ical.add('dtstart', event.start.date())
+    @property
+    def dtstart(self):
+        if self.event.whole_day:
+            # RFC5545, 3.6.1
+            # For cases where a "VEVENT" calendar component
+            # specifies a "DTSTART" property with a DATE value type but no
+            # "DTEND" nor "DURATION" property, the event's duration is taken to
+            # be one day.
+            return self.event.start.date()
+
+        # Normal case + Open End case:
+        # RFC5545, 3.6.1
+        # For cases where a "VEVENT" calendar component
+        # specifies a "DTSTART" property with a DATE-TIME value type but no
+        # "DTEND" property, the event ends on the same calendar date and
+        # time of day specified by the "DTSTART" property.
+        return self.event.start
+
+    @property
+    def dtend(self):
+        if self.event.whole_day:
             # RFC5545, 3.6.1
             # For cases where a "VEVENT" calendar component
             # specifies a "DTSTART" property with a DATE value type but no
@@ -244,55 +274,69 @@ class ICalendarEventComponent(object):
             # -appointments-in-ics-files
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
-            ical.add('dtend', event.end.date() + timedelta(days=1))
-        elif event.open_end:
+            return self.event.end.date() + timedelta(days=1)
+
+        elif self.event.open_end:
             # RFC5545, 3.6.1
             # For cases where a "VEVENT" calendar component
             # specifies a "DTSTART" property with a DATE-TIME value type but no
             # "DTEND" property, the event ends on the same calendar date and
             # time of day specified by the "DTSTART" property.
-            ical.add('dtstart', event.start)
-        else:
-            ical.add('dtstart', event.start)
-            ical.add('dtend', event.end)
+            return None
 
-        if event.recurrence and not IOccurrence.providedBy(self.context):
-            for recdef in event.recurrence.split():
-                prop, val = recdef.split(':')
-                if prop == 'RRULE':
-                    ical.add(prop, icalendar.prop.vRecur.from_ical(val))
-                elif prop in ('EXDATE', 'RDATE'):
-                    factory = icalendar.prop.vDDDLists
+        return self.event.end
 
-                    # localize ex/rdate
-                    # TODO: should better already be localized by event object
-                    tzid = event.timezone
-                    if isinstance(tzid, tuple):
-                        tzid = tzid[0]
-                    # get list of datetime values from ical string
-                    try:
-                        dtlist = factory.from_ical(val, timezone=tzid)
-                    except ValueError:
-                        # TODO: caused by a bug in plone.formwidget.recurrence,
-                        # where the recurrencewidget or plone.event fails with
-                        # COUNT=1 and a extra RDATE.
-                        # TODO: REMOVE this workaround, once this failure is
-                        # fixed in recurrence widget.
-                        continue
-                    ical.add(prop, dtlist)
+    @property
+    def recurrence(self):
+        ret = []
+        if not self.event.recurrence or IOccurrence.providedBy(self.context):
+            return ret
 
-        if event.location:
-            ical.add('location', event.location)
+        for recdef in self.event.recurrence.split():
+            prop, val = recdef.split(':')
+            if prop == 'RRULE':
+                ret.append((prop, icalendar.prop.vRecur.from_ical(val)))
+            elif prop in ('EXDATE', 'RDATE'):
+                factory = icalendar.prop.vDDDLists
 
+                # localize ex/rdate
+                # TODO: should better already be localized by event object
+                tzid = self.event.timezone
+                if isinstance(tzid, tuple):
+                    tzid = tzid[0]
+                # get list of datetime values from ical string
+                try:
+                    dtlist = factory.from_ical(val, timezone=tzid)
+                except ValueError:
+                    # TODO: caused by a bug in plone.formwidget.recurrence,
+                    # where the recurrencewidget or plone.event fails with
+                    # COUNT=1 and a extra RDATE.
+                    # TODO: REMOVE this workaround, once this failure is
+                    # fixed in recurrence widget.
+                    continue
+                ret.append((prop, dtlist))
+
+        return ret
+
+    @property
+    def location(self):
+        return self.event.location
+
+    @property
+    def attendee(self):
         # TODO: revisit and implement attendee export according to RFC
-        if event.attendees:
-            for attendee in event.attendees:
-                att = icalendar.prop.vCalAddress(attendee)
-                att.params['cn'] = icalendar.prop.vText(attendee)
-                att.params['ROLE'] = icalendar.prop.vText('REQ-PARTICIPANT')
-                ical.add('attendee', att)
+        ret = []
+        for attendee in self.event.attendees or []:
+            att = icalendar.prop.vCalAddress(attendee)
+            att.params['cn'] = icalendar.prop.vText(attendee)
+            att.params['ROLE'] = icalendar.prop.vText('REQ-PARTICIPANT')
+            ret.append(att)
+        return ret
 
+    @property
+    def contact(self):
         cn = []
+        event = self.event
         if event.contact_name:
             cn.append(event.contact_name)
         if event.contact_phone:
@@ -301,14 +345,44 @@ class ICalendarEventComponent(object):
             cn.append(event.contact_email)
         if event.event_url:
             cn.append(event.event_url)
-        if cn:
-            ical.add('contact', u', '.join(cn))
 
-        if event.subjects:
-            for subject in event.subjects:
-                ical.add('categories', subject)
+        return u', '.join(cn)
 
-        return ical
+    @property
+    def categories(self):
+        return self.event.subjects or []
+
+    def ical_add(self, prop, val, multiple=True):
+        if not val:
+            return
+        if (multiple and not isinstance(val, (list, tuple))) or not multiple:
+            val = [val]
+        for _val in val:
+            self.ical.add(prop, _val)
+
+    def to_ical(self):
+        # TODO: event.text
+
+        ical_add = self.ical_add
+        ical_add('dtstamp', self.dtstamp)
+        ical_add('created', self.created)
+        ical_add('last-modified', self.last_modified)
+        ical_add('uid', self.uid)
+        ical_add('url', self.url)
+        ical_add('summary', self.summary)
+        ical_add('description', self.description)
+        ical_add('dtstart', self.dtstart)
+        ical_add('dtend', self.dtend)
+
+        for key, val in self.recurrence:
+            ical_add(key, val, multiple=False)
+
+        ical_add('location', self.location)
+        ical_add('attendee', self.attendee)
+        ical_add('contact', self.contact)
+        ical_add('categories', self.categories)
+
+        return self.ical
 
 
 class EventsICal(BrowserView):
