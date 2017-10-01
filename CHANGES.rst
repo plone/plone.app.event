@@ -23,6 +23,9 @@ Bug fixes:
 
 3.0.7 (2017-11-24)
 ------------------
+- iCal export: Support property parameters.
+  [thet]
+
 - iCal export: Add ``geo`` for (lat, lng) geolocation coordinates.
   This method is not implemented and can be used by addons to provide that feature.
   [thet]

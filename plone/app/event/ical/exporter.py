@@ -201,37 +201,37 @@ class ICalendarEventComponent(object):
     @property
     def dtstamp(self):
         # must be in uc
-        return utc(datetime.now())
+        return {'value': utc(datetime.now())}
 
     @property
     def created(self):
         # must be in uc
-        return utc(self.event.created)
+        return {'value': utc(self.event.created)}
 
     @property
     def last_modified(self):
         # must be in uc
-        return utc(self.event.last_modified)
+        return {'value': utc(self.event.last_modified)}
 
     @property
     def uid(self):
         if self.event.sync_uid:
             # Re-Use existing icalendar event UID
-            return self.event.sync_uid
+            return {'value': self.event.sync_uid}
         # Else, use plone.uuid
-        return self.event.uid
+        return {'value': self.event.uid}
 
     @property
     def url(self):
-        return self.event.url
+        return {'value': self.event.url}
 
     @property
     def summary(self):
-        return self.event.title
+        return {'value': self.event.title}
 
     @property
     def description(self):
-        return self.event.description
+        return {'value': self.event.description}
 
     @property
     def dtstart(self):
@@ -241,7 +241,7 @@ class ICalendarEventComponent(object):
             # specifies a "DTSTART" property with a DATE value type but no
             # "DTEND" nor "DURATION" property, the event's duration is taken to
             # be one day.
-            return self.event.start.date()
+            return {'value': self.event.start.date()}
 
         # Normal case + Open End case:
         # RFC5545, 3.6.1
@@ -249,7 +249,7 @@ class ICalendarEventComponent(object):
         # specifies a "DTSTART" property with a DATE-TIME value type but no
         # "DTEND" property, the event ends on the same calendar date and
         # time of day specified by the "DTSTART" property.
-        return self.event.start
+        return {'value': self.event.start}
 
     @property
     def dtend(self):
@@ -274,7 +274,7 @@ class ICalendarEventComponent(object):
             # -appointments-in-ics-files
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
-            return self.event.end.date() + timedelta(days=1)
+            return {'value': self.event.end.date() + timedelta(days=1)}
 
         elif self.event.open_end:
             # RFC5545, 3.6.1
@@ -284,18 +284,22 @@ class ICalendarEventComponent(object):
             # time of day specified by the "DTSTART" property.
             return None
 
-        return self.event.end
+        return {'value': self.event.end}
 
     @property
     def recurrence(self):
-        ret = []
         if not self.event.recurrence or IOccurrence.providedBy(self.context):
-            return ret
+            return None
 
+        ret = []
         for recdef in self.event.recurrence.split():
             prop, val = recdef.split(':')
             if prop == 'RRULE':
-                ret.append((prop, icalendar.prop.vRecur.from_ical(val)))
+                ret.append({
+                    'property': prop,
+                    'value': icalendar.prop.vRecur.from_ical(val)
+                })
+
             elif prop in ('EXDATE', 'RDATE'):
                 factory = icalendar.prop.vDDDLists
 
@@ -314,13 +318,16 @@ class ICalendarEventComponent(object):
                     # TODO: REMOVE this workaround, once this failure is
                     # fixed in recurrence widget.
                     continue
-                ret.append((prop, dtlist))
+                ret.append({
+                    'property': prop,
+                    'value': dtlist
+                })
 
         return ret
 
     @property
     def location(self):
-        return self.event.location
+        return {'value': self.event.location}
 
     @property
     def attendee(self):
@@ -331,7 +338,7 @@ class ICalendarEventComponent(object):
             att.params['cn'] = icalendar.prop.vText(attendee)
             att.params['ROLE'] = icalendar.prop.vText('REQ-PARTICIPANT')
             ret.append(att)
-        return ret
+        return {'value': ret}
 
     @property
     def contact(self):
@@ -346,11 +353,11 @@ class ICalendarEventComponent(object):
         if event.event_url:
             cn.append(event.event_url)
 
-        return u', '.join(cn)
+        return {'value': u', '.join(cn)}
 
     @property
     def categories(self):
-        return self.event.subjects or []
+        return {'value': self.event.subjects} or None
 
     @property
     def geo(self):
@@ -358,13 +365,19 @@ class ICalendarEventComponent(object):
         """
         return
 
-    def ical_add(self, prop, val, multiple=True):
+    def ical_add(self, prop, val):
         if not val:
             return
-        if (multiple and not isinstance(val, (list, tuple))) or not multiple:
+
+        if not isinstance(val, list):
             val = [val]
+
         for _val in val:
-            self.ical.add(prop, _val)
+            assert(isinstance(_val, dict))
+            prop = _val.get('property', prop)
+            value = _val['value']
+            params = _val.get('parameters', None)
+            self.ical.add(prop, value, params)
 
     def to_ical(self):
         # TODO: event.text
@@ -379,15 +392,12 @@ class ICalendarEventComponent(object):
         ical_add('description', self.description)
         ical_add('dtstart', self.dtstart)
         ical_add('dtend', self.dtend)
-
-        for key, val in self.recurrence:
-            ical_add(key, val, multiple=False)
-
+        ical_add(None, self.recurrence)  # property key set via val
         ical_add('location', self.location)
         ical_add('attendee', self.attendee)
         ical_add('contact', self.contact)
         ical_add('categories', self.categories)
-        ical_add('geo', self.geo, multiple=False)
+        ical_add('geo', self.geo)
 
         return self.ical
 
