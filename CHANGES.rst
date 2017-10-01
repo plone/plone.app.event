@@ -23,6 +23,10 @@ Bug fixes:
 
 3.0.7 (2017-11-24)
 ------------------
+- iCal export: Add ``geo`` for (lat, lng) geolocation coordinates.
+  This method is not implemented and can be used by addons to provide that feature.
+  [thet]
+
 - iCal export: Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
   [thet]
 

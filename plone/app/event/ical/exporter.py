@@ -352,6 +352,12 @@ class ICalendarEventComponent(object):
     def categories(self):
         return self.event.subjects or []
 
+    @property
+    def geo(self):
+        """Not implemented.
+        """
+        return
+
     def ical_add(self, prop, val, multiple=True):
         if not val:
             return
@@ -381,6 +387,7 @@ class ICalendarEventComponent(object):
         ical_add('attendee', self.attendee)
         ical_add('contact', self.contact)
         ical_add('categories', self.categories)
+        ical_add('geo', self.geo, multiple=False)
 
         return self.ical
 
