@@ -357,7 +357,10 @@ class ICalendarEventComponent(object):
 
     @property
     def categories(self):
-        return {'value': self.event.subjects} or None
+        ret = []
+        for cat in self.event.subjects or []:
+            ret.append({'value': cat})
+        return ret or None
 
     @property
     def geo(self):
