@@ -31,6 +31,11 @@ Bug fixes:
   [thet]
 
 - iCal export: Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
+- iCal export:
+  - More response headers.
+  - Support property parameters.
+  - Add ``geo`` for (lat, lng) geolocation coordinates. This method is not implemented and can be used by addons to provide that feature.
+  - Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
   [thet]
 
 Bug fixes:

@@ -377,7 +377,6 @@ class ICalendarEventComponent(object):
 
         for _val in val:
             assert(isinstance(_val, dict))
-            prop = _val.get('property', prop)
             value = _val['value']
             if not value:
                 continue
@@ -417,10 +416,13 @@ class EventsICal(BrowserView):
         return cal.to_ical()
 
     def __call__(self):
-        name = '%s.ics' % self.context.getId()
-        self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        self.request.RESPONSE.setHeader(
+        ical = self.get_ical_string()
+        name = '{0}.ics'.format(self.context.getId())
+        self.request.response.setHeader('Content-Type', 'text/calendar')
+        self.request.response.setHeader(
             'Content-Disposition',
-            'attachment; filename="%s"' % name
+            'attachment; filename="{0}"'.format(name)
         )
-        self.request.RESPONSE.write(self.get_ical_string())
+        self.request.response.setHeader('Content-Length', len(ical))
+        self.request.response.setHeader('Pragma', 'no-cache')
+        self.request.response.write(ical)
