@@ -379,6 +379,9 @@ class ICalendarEventComponent(object):
             assert(isinstance(_val, dict))
             prop = _val.get('property', prop)
             value = _val['value']
+            if not value:
+                continue
+            prop = _val.get('property', prop)
             params = _val.get('parameters', None)
             self.ical.add(prop, value, params)
 
