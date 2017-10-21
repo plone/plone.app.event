@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fixed check for events iterable in Zope 4. [davisagli]
 
 
 3.0.6 (2017-09-05)
