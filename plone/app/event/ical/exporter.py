@@ -43,7 +43,7 @@ def construct_icalendar(context, events):
         cal.add('x-wr-timezone', cal_tz)
 
     tzmap = {}
-    if not getattr(events, '__getslice__', False):  # LazyMap doesn't have __iter__  # noqa
+    if not getattr(events, '__getitem__', False):
         events = [events]
     for event in events:
         if ICatalogBrain.providedBy(event) or\
