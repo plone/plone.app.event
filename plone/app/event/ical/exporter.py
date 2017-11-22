@@ -6,6 +6,7 @@ from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event.base import RET_MODE_BRAINS
 from plone.app.event.base import default_timezone
 from plone.app.event.base import get_events
+from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IICalendar
 from plone.event.interfaces import IICalendarEventComponent
@@ -49,6 +50,9 @@ def construct_icalendar(context, events):
         if ICatalogBrain.providedBy(event) or\
                 IContentListingObject.providedBy(event):
             event = event.getObject()
+        if not (IEvent.providedBy(event) or IOccurrence.providedBy(event)):
+            # Must be an event.
+            continue
         acc = IEventAccessor(event)
         tz = acc.timezone
         # TODO: the standard wants each recurrence to have a valid timezone

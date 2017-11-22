@@ -39,6 +39,7 @@ Bug fixes:
   - Support property parameters.
   - Add ``geo`` for (lat, lng) geolocation coordinates. This method is not implemented and can be used by addons to provide that feature.
   - Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
+  - Check, if event is really an event before ical-exporting. Fixes a problem when a collection mixes event and non-event like result objects.
   [thet]
 
 Bug fixes:

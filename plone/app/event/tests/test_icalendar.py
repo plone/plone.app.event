@@ -234,6 +234,27 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
 
+    def test_collection_all_ical(self):
+        """Test basic icalendar export from Collections, which returns not only
+        events.
+        """
+        headers, output, request = make_fake_response(self.request)
+        self.portal.collection.query = [
+            {'i': 'portal_type',
+             'o': 'plone.app.querystring.operation.selection.any',
+             'v': ['Event', 'plone.app.event.dx.event', 'Page']
+             },
+        ]
+        view = getMultiAdapter(
+            (self.portal.collection, request),
+            name='ics_view'
+        )
+        view()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        icalstr = ''.join(output)
+        self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
+
 
 class TestIcalImportDX(unittest.TestCase):
     layer = PAEventDX_FUNCTIONAL_TESTING
