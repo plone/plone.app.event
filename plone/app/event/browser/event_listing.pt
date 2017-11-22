@@ -106,7 +106,7 @@
             </li>
 
             <li>
-              <a class="event_ical"
+              <a class="event_ical" rel="nofollow"
                   tal:define="portal_url context/@@plone_portal_state/portal_url;"
                   tal:attributes="href string:${data/url}/ics_view"
                   title="Download this event in iCal format"

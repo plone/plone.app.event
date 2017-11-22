@@ -31,6 +31,9 @@ Bug fixes:
   [thet]
 
 - iCal export: Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
+- Add ``rel="nofollow"`` to ical export links for robots to not download them.
+  [thet]
+
 - iCal export:
   - More response headers.
   - Support property parameters.

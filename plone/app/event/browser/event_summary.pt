@@ -120,7 +120,7 @@
         <strong i18n:translate="heading_add_to_calendar">Add event to calendar</strong>
         <tal:span tal:define="here_url context/@@plone_context_state/object_url;
                         portal_url context/@@plone_portal_state/portal_url;">
-          <a href="#"
+          <a href="#" rel="nofollow"
              tal:attributes="href string:$here_url/ics_view"
              title="Download this event in iCal format"
              i18n:attributes="title title_add_to_ical;">
