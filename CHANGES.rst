@@ -23,6 +23,9 @@ Bug fixes:
 - Update french translations.
   [bsuttor]
 
+- Accessing Plone/event/2017-11-29 on an event w/o recurrences no longer
+  raises a StopIteration error [fRiSi]
+
 
 1.2.7 (2014-11-07)
 ------------------
