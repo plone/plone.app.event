@@ -48,11 +48,24 @@ class TestTraversalDX(AbstractSampleDataEvents):
     def traverser(self):
         return OccTravDX(self.now_event, self.request)
 
+    @property
+    def traverser_future(self):
+        # event without rrule
+        return OccTravDX(self.future_event, self.request)
+
     def test_no_occurrence(self):
         self.assertRaises(
             AttributeError,
             self.traverser.publishTraverse,
             self.request, 'foo')
+
+    def test_nonexisting_occurrence(self):
+        '''test traversing an occurrence on an event w/o recurrences
+        '''
+        self.assertRaises(
+            AttributeError,
+            self.traverser_future.publishTraverse,
+            self.request, '2017-11-29')
 
     def test_default_views(self):
         view = self.traverser.publishTraverse(self.request, 'event_view')
@@ -113,6 +126,11 @@ class TestTraversalAT(TestTraversalDX):
     @property
     def traverser(self):
         return OccTravAT(self.now_event, self.request)
+
+    @property
+    def traverser_future(self):
+        # event without rrule
+        return OccTravAT(self.future_event, self.request)
 
 
 class TestOccurrences(unittest.TestCase):
