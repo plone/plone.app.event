@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Accessing Plone/event/2017-11-29 on an event w/o recurrences no longer
+  raises a StopIteration error [fRiSi]
 
 
 1.1.8 (2016-10-03)

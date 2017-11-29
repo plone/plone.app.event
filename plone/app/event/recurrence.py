@@ -111,10 +111,14 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         dateobj = guess_date_from(name, context)
         if dateobj:
             occs = IRecurrenceSupport(context).occurrences(range_start=dateobj)
-            occurrence = occs.next()
-            occ_acc = IEventAccessor(occurrence)
-            if is_same_day(dateobj, occ_acc.start):
-                return occurrence
+            try:
+                occurrence = occs.next()
+                occ_acc = IEventAccessor(occurrence)
+                if is_same_day(dateobj, occ_acc.start):
+                    return occurrence
+            except StopIteration:
+                # if no occurrences are defined, use fallbackTraverse
+                pass
         return self.fallbackTraverse(request, name)
 
     def fallbackTraverse(self, request, name):
