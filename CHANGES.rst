@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.10 (unreleased)
+1.1.10 (2017-12-01)
 -------------------
 
 - 1.1.9 was a brown bag release, this should be working.
