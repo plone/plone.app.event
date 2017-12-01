@@ -1,16 +1,14 @@
 Changelog
 =========
 
+1.1.10 (unreleased)
+-------------------
+
+- 1.1.9 was a brown bag release, this should be working.
+  [gforcada]
+
 1.1.9 (2017-12-01)
 ------------------
-
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
 
 Bug fixes:
 
