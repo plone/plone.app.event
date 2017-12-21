@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_site
 
@@ -9,6 +10,8 @@ def get_calendar_url(context, search_base):
     calendar_url = None
     if search_base:
         portal = find_ploneroot(context)
+        if isinstance(search_base, unicode):
+            search_base = search_base.encode('utf8')
         calendar_url = portal.unrestrictedTraverse(
             search_base.lstrip('/')  # start relative, first slash is omitted
         ).absolute_url()
