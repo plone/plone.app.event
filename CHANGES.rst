@@ -4,7 +4,11 @@ Changelog
 1.1.11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+- Fix portlet get_calendar_url with unicode search_base.
+  [bsuttor]
+
 
 
 1.1.10 (2017-12-01)
