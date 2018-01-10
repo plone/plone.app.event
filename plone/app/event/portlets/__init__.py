@@ -1,5 +1,5 @@
 from plone.app.event.base import find_ploneroot
-from plone.app.event.base import find_site
+from plone.app.event.base import find_navroot
 
 
 def get_calendar_url(context, search_base):
@@ -14,7 +14,7 @@ def get_calendar_url(context, search_base):
             search_base.lstrip('/')  # start relative, first slash is omitted
         ).absolute_url()
     else:
-        site_url = find_site(context, as_url=True)
+        site_url = find_navroot(context, as_url=True)
         calendar_url = '%s/event_listing' % site_url
 
     return calendar_url
