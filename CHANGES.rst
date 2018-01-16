@@ -4,17 +4,9 @@ Changelog
 3.0.8 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
-- *add item here*
+- fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
 
 
 3.0.7 (2017-11-24)

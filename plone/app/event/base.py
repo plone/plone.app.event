@@ -1,4 +1,5 @@
 import itertools
+
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
@@ -12,18 +13,19 @@ from datetime import datetime
 from datetime import timedelta
 from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ISO_DATE_FORMAT
+from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import default_timezone as fallback_default_timezone
+from plone.event.utils import dt2int
 from plone.event.utils import is_date
 from plone.event.utils import is_datetime
 from plone.event.utils import is_same_day
 from plone.event.utils import is_same_time
 from plone.event.utils import pydt
-from plone.event.utils import dt2int
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
@@ -991,6 +993,10 @@ def find_site(context, as_url=False):
 
 def find_ploneroot(context, as_url=False):
     return find_context(context, iface=IPloneSiteRoot, as_url=as_url)
+
+
+def find_navroot(context, as_url=False):
+    return find_context(context, iface=INavigationRoot, as_url=as_url)
 
 
 def find_event_listing(context, as_url=False):
