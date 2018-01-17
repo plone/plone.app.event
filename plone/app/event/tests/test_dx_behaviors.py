@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from datetime import timedelta
 from OFS.SimpleItem import SimpleItem
-from datetime import datetime, timedelta
 from plone.app.event import base
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.event.dx.behaviors import default_end
+from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.behaviors import IEventBasic
 from plone.app.event.dx.behaviors import IEventRecurrence
 from plone.app.event.dx.behaviors import StartBeforeEnd
-from plone.app.event.dx.behaviors import default_end
-from plone.app.event.dx.behaviors import default_start
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
-from plone.app.event.upgrades.upgrades import upgrade_attribute_storage
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.tests.base_setup import patched_now
+from plone.app.event.upgrades.upgrades import upgrade_attribute_storage
+from plone.app.testing import setRoles
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
@@ -28,6 +29,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.testing.z2 import Browser
+from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
 
 import mock
@@ -250,7 +252,6 @@ class TestEventAccessor(unittest.TestCase):
         self.assertEqual(acc.end, e1.end)
 
     def test_event_accessor_whole_day__open_end(self):
-
         at = pytz.timezone("Europe/Vienna")
 
         start = at.localize(datetime(2012, 10, 19, 0, 30))
@@ -285,6 +286,34 @@ class TestEventAccessor(unittest.TestCase):
         self.assertEqual(e1.end, end)
         self.assertEqual(acc.start, start_start)
         self.assertEqual(acc.end, end_end)
+
+    def test_event_accessor__sync_uid(self):
+        self.request.set('HTTP_HOST', 'nohost')
+
+        e1 = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            title='event1'
+        )
+        acc = IEventAccessor(e1)
+
+        # setting no sync uid will automatically generate one
+        self.assertTrue(acc.sync_uid, IUUID(e1) + '@nohost')
+        # it's not stored on the object though
+        self.assertEqual(e1.sync_uid, None)
+        # but it's indexed
+        result = self.portal.portal_catalog(sync_uid=IUUID(e1) + '@nohost')
+        self.assertEqual(len(result), 1)
+
+        # Setting the sync_uid
+        acc.sync_uid = 'okay'
+        e1.reindexObject()
+        self.assertEqual(acc.sync_uid, 'okay')
+        # Now, it's also stored on the object itself
+        self.assertEqual(e1.sync_uid, 'okay')
+        # and indexed
+        result = self.portal.portal_catalog(sync_uid='okay')
+        self.assertEqual(len(result), 1)
 
 
 class TestDXIntegration(unittest.TestCase):

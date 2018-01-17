@@ -43,6 +43,9 @@ New features:
 
 Bug fixes:
 
+- iCalendar import: Fix usage of ``sync_uid``, which wasn't correctly implemented since plone.app.event 2.0.
+  [thet]
+
 - Raise ``AttributeError`` when attempting to index an empty location attribute value.
   [thet]
 
