@@ -358,10 +358,10 @@ def end_indexer(obj):
 @indexer(IDXEvent)
 def location_indexer(obj):
     location_adapter = IEventLocation(obj, None)
-    if location_adapter:
-        return location_adapter.location
-
-    raise AttributeError
+    location = getattr(location_adapter, 'location', None)
+    if not location:
+        raise AttributeError
+    return location
 
 
 # icalendar event UID indexer

@@ -15,14 +15,13 @@ New features:
 
 Bug fixes:
 
-- fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
+- *add item here*
 
 - Fix portlet get_calendar_url with unicode search_base.
   [bsuttor]
 
+New features:
 
-3.0.7 (2017-11-24)
-------------------
 - iCal export: Support property parameters.
   [thet]
 
@@ -41,6 +40,17 @@ Bug fixes:
   - Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
   - Check, if event is really an event before ical-exporting. Fixes a problem when a collection mixes event and non-event like result objects.
   [thet]
+
+Bug fixes:
+
+- Raise ``AttributeError`` when attempting to index an empty location attribute value.
+  [thet]
+
+- fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
+
+
+3.0.7 (2017-11-24)
+------------------
 
 Bug fixes:
 
