@@ -4,9 +4,21 @@ Changelog
 3.0.8 (unreleased)
 ------------------
 
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- add full danish translation
+  [tmog]
+
 Bug fixes:
 
 - fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
+
+- Fix portlet get_calendar_url with unicode search_base.
+  [bsuttor]
 
 
 3.0.7 (2017-11-24)
