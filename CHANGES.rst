@@ -10,27 +10,7 @@ Breaking changes:
 
 New features:
 
-- add full danish translation
-  [tmog]
-
-Bug fixes:
-
-- *add item here*
-
-- Fix portlet get_calendar_url with unicode search_base.
-  [bsuttor]
-
-New features:
-
-- iCal export: Support property parameters.
-  [thet]
-
-- iCal export: Add ``geo`` for (lat, lng) geolocation coordinates.
-  This method is not implemented and can be used by addons to provide that feature.
-  [thet]
-
-- iCal export: Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
-- Add ``rel="nofollow"`` to ical export links for robots to not download them.
+- When setting start and end via the IEventAccessor, convert it to a Python datetime with timezone information.
   [thet]
 
 - iCal export:
@@ -39,7 +19,11 @@ New features:
   - Add ``geo`` for (lat, lng) geolocation coordinates. This method is not implemented and can be used by addons to provide that feature.
   - Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
   - Check, if event is really an event before ical-exporting. Fixes a problem when a collection mixes event and non-event like result objects.
+  - Add ``rel="nofollow"`` to ical export links for robots to not download them.
   [thet]
+
+- add full danish translation
+  [tmog]
 
 Bug fixes:
 
@@ -48,6 +32,9 @@ Bug fixes:
 
 - Raise ``AttributeError`` when attempting to index an empty location attribute value.
   [thet]
+
+- Fix portlet get_calendar_url with unicode search_base.
+  [bsuttor]
 
 - fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
 

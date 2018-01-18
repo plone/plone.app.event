@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from plone.app.event import base
 from plone.app.event.base import get_events
@@ -24,6 +25,7 @@ from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
+from plone.event import utils
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
@@ -252,6 +254,9 @@ class TestEventAccessor(unittest.TestCase):
         self.assertEqual(acc.end, e1.end)
 
     def test_event_accessor_whole_day__open_end(self):
+        """Also ensures, that accessor method is called for getting start/end
+        instead of a custom __getattr__ version.
+        """
         at = pytz.timezone("Europe/Vienna")
 
         start = at.localize(datetime(2012, 10, 19, 0, 30))
@@ -314,6 +319,37 @@ class TestEventAccessor(unittest.TestCase):
         # and indexed
         result = self.portal.portal_catalog(sync_uid='okay')
         self.assertEqual(len(result), 1)
+
+    def test_event_accessor__start_end(self):
+        e1 = createContentInContainer(
+            self.portal,
+            'plone.app.event.dx.event',
+            title='event1'
+        )
+
+        dt = datetime(2161, 1, 1)  # United Federation of Planets
+        DT = DateTime('2161/01/01 00:00:00 UTC')
+
+        acc = IEventAccessor(e1)
+
+        # Setting a timezone-naive datetime should convert it to UTC
+        acc.start = dt
+        self.assertEqual(acc.start, utils.utc(dt))
+        self.assertEqual(e1.start, utils.utc(dt))
+        # Setting a DateTime should convert it to datetime
+        acc.start = DT
+        self.assertEqual(acc.start, utils.utc(dt))
+        self.assertEqual(e1.start, utils.utc(dt))
+
+        # Same goes for acc.end
+        # Setting a timezone-naive datetime should convert it to UTC
+        acc.end = dt
+        self.assertEqual(acc.end, utils.utc(dt))
+        self.assertEqual(e1.end, utils.utc(dt))
+        # Setting a DateTime should convert it to datetime
+        acc.end = DT
+        self.assertEqual(acc.end, utils.utc(dt))
+        self.assertEqual(e1.end, utils.utc(dt))
 
 
 class TestDXIntegration(unittest.TestCase):

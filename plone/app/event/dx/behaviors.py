@@ -419,13 +419,17 @@ class EventAccessor(object):
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
-        if name in ['title', 'description', 'last_modified', 'text']:
-            # custom setters for these attributes
+        try:
+            # see, if attribute is available.
+            object.__getattribute__(self, name)
+            # if so, set the value
             object.__setattr__(self, name, value)
-        if name in bm:  # set the attributes on behaviors
-            behavior = bm[name](self.context, None)
-            if behavior:
-                setattr(behavior, name, safe_unicode(value))
+        except AttributeError:
+            # if not, get the attribute from the behavior map, if available
+            if name in bm:
+                behavior = bm[name](self.context, None)
+                if behavior:
+                    setattr(behavior, name, safe_unicode(value))
 
     def __delattr__(self, name):
         bm = self._behavior_map
@@ -475,7 +479,8 @@ class EventAccessor(object):
 
     @start.setter
     def start(self, value):
-        return setattr(self, 'start', pydt(value))
+        value = pydt(value)
+        self._behavior_map['start'](self.context).start = value
 
     @property
     def end(self):
@@ -492,7 +497,8 @@ class EventAccessor(object):
 
     @end.setter
     def end(self, value):
-        return setattr(self, 'end', pydt(value))
+        value = pydt(value)
+        self._behavior_map['end'](self.context).end = value
 
     @property
     def timezone(self):
@@ -530,7 +536,7 @@ class EventAccessor(object):
 
     @title.setter
     def title(self, value):
-        setattr(self.context, 'title', safe_unicode(value))
+        self.context.title = safe_unicode(value)
 
     @property
     def description(self):
@@ -538,7 +544,7 @@ class EventAccessor(object):
 
     @description.setter
     def description(self, value):
-        setattr(self.context, 'description', safe_unicode(value))
+        self.context.description = safe_unicode(value)
 
     @property
     def last_modified(self):
@@ -548,7 +554,7 @@ class EventAccessor(object):
     def last_modified(self, value):
         tz = default_timezone(self.context, as_tzinfo=True)
         mod = DT(pydt(value, missing_zone=tz))
-        setattr(self.context, 'modification_date', mod)
+        self.context.modification_date = mod
 
     @property
     def text(self):
