@@ -56,7 +56,7 @@ def make_fake_response(request):
         def write(self, msg):
             output.append(msg)
 
-    request.RESPONSE = Response()
+    request.response = Response()
     return headers, output, request
 
 
