@@ -32,6 +32,7 @@ from z3c.form.browser.text import TextFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.component import adapter
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Invalid
@@ -319,21 +320,6 @@ alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
 
 
-"""
-if not obj.sync_uid:
-    # sync_uid has to be set for icalendar data exchange.
-    uid = IUUID(obj)
-    # We don't want to fail when getRequest() returns None, e.g when
-    # creating an event during test layer setup time.
-    request = getRequest() or {}
-    domain = request.get('HTTP_HOST')
-    obj.sync_uid = '%s%s' % (
-        uid,
-        '@%s' % domain if domain else ''
-    )
-"""
-
-
 # Attribute indexer
 
 # Start indexer
@@ -358,19 +344,19 @@ def end_indexer(obj):
 @indexer(IDXEvent)
 def location_indexer(obj):
     location_adapter = IEventLocation(obj, None)
-    if location_adapter:
-        return location_adapter.location
-
-    raise AttributeError
+    location = getattr(location_adapter, 'location', None)
+    if not location:
+        raise AttributeError
+    return location
 
 
 # icalendar event UID indexer
 @indexer(IDXEvent)
 def sync_uid_indexer(obj):
-    event = IEventBasic(obj)
-    if not event.sync_uid:
+    sync_uid = IEventAccessor(obj).sync_uid
+    if not sync_uid:
         raise AttributeError
-    return event.sync_uid
+    return sync_uid
 
 
 # Body text indexing
@@ -433,13 +419,17 @@ class EventAccessor(object):
 
     def __setattr__(self, name, value):
         bm = self._behavior_map
-        if name in ['title', 'description', 'last_modified', 'text']:
-            # custom setters for these attributes
+        try:
+            # see, if attribute is available.
+            object.__getattribute__(self, name)
+            # if so, set the value
             object.__setattr__(self, name, value)
-        if name in bm:  # set the attributes on behaviors
-            behavior = bm[name](self.context, None)
-            if behavior:
-                setattr(behavior, name, safe_unicode(value))
+        except AttributeError:
+            # if not, get the attribute from the behavior map, if available
+            if name in bm:
+                behavior = bm[name](self.context, None)
+                if behavior:
+                    setattr(behavior, name, safe_unicode(value))
 
     def __delattr__(self, name):
         bm = self._behavior_map
@@ -489,7 +479,8 @@ class EventAccessor(object):
 
     @start.setter
     def start(self, value):
-        return setattr(self, 'start', value)
+        value = pydt(value)
+        self._behavior_map['start'](self.context).start = value
 
     @property
     def end(self):
@@ -506,7 +497,8 @@ class EventAccessor(object):
 
     @end.setter
     def end(self, value):
-        return setattr(self, 'end', value)
+        value = pydt(value)
+        self._behavior_map['end'](self.context).end = value
 
     @property
     def timezone(self):
@@ -523,7 +515,20 @@ class EventAccessor(object):
             tz_end = tz.zone
         return tz_start if tz_start == tz_end else (tz_start, tz_end)
 
-    # rw properties not in behaviors (yet) # TODO revisit
+    @property
+    def sync_uid(self):
+        # Return externally set sync_uid or Plone's UUID + @domain.
+        sync_uid = getattr(self.context, 'sync_uid', None)
+        if not sync_uid:
+            # Return internal sync_uid
+            request = getRequest() or {}
+            domain = request.get('HTTP_HOST', None)
+            domain = '@' + domain if domain else ''
+            sync_uid = self.uid + domain if self.uid else None
+        return sync_uid
+
+    # rw properties not in behaviors.
+    # TODO: revisit, deprecate.
 
     @property
     def title(self):
@@ -531,7 +536,7 @@ class EventAccessor(object):
 
     @title.setter
     def title(self, value):
-        setattr(self.context, 'title', safe_unicode(value))
+        self.context.title = safe_unicode(value)
 
     @property
     def description(self):
@@ -539,7 +544,7 @@ class EventAccessor(object):
 
     @description.setter
     def description(self, value):
-        setattr(self.context, 'description', safe_unicode(value))
+        self.context.description = safe_unicode(value)
 
     @property
     def last_modified(self):
@@ -549,7 +554,7 @@ class EventAccessor(object):
     def last_modified(self, value):
         tz = default_timezone(self.context, as_tzinfo=True)
         mod = DT(pydt(value, missing_zone=tz))
-        setattr(self.context, 'modification_date', mod)
+        self.context.modification_date = mod
 
     @property
     def text(self):

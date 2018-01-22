@@ -10,15 +10,33 @@ Breaking changes:
 
 New features:
 
+- When setting start and end via the IEventAccessor, convert it to a Python datetime with timezone information.
+  [thet]
+
+- iCal export:
+  - More response headers.
+  - Support property parameters.
+  - Add ``geo`` for (lat, lng) geolocation coordinates. This method is not implemented and can be used by addons to provide that feature.
+  - Factor-out all event components from ``ICalendarEventComponent.to_ical`` method into separate properties, so that individual properties can be easier overloaded in subclasses.
+  - Check, if event is really an event before ical-exporting. Fixes a problem when a collection mixes event and non-event like result objects.
+  - Add ``rel="nofollow"`` to ical export links for robots to not download them.
+  [thet]
+
 - add full danish translation
   [tmog]
 
 Bug fixes:
 
-- fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
+- iCalendar import: Fix usage of ``sync_uid``, which wasn't correctly implemented since plone.app.event 2.0.
+  [thet]
+
+- Raise ``AttributeError`` when attempting to index an empty location attribute value.
+  [thet]
 
 - Fix portlet get_calendar_url with unicode search_base.
   [bsuttor]
+
+- fallback search base URL for calendar/event portlets to NavigationRoot [petschki]
 
 
 3.0.7 (2017-11-24)
