@@ -27,6 +27,9 @@ New features:
 
 Bug fixes:
 
+- Add Python 2 / 3 compatibility.
+  [pbauer]
+
 - iCalendar import: Fix usage of ``sync_uid``, which wasn't correctly implemented since plone.app.event 2.0.
   [thet]
 

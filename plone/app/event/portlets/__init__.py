@@ -3,6 +3,9 @@ from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_navroot
 
 
+import six
+
+
 def get_calendar_url(context, search_base):
     # search_base is always from the portal_root object. We won't include
     # the path from the portal root object, so we traverse to the calendar
@@ -10,7 +13,7 @@ def get_calendar_url(context, search_base):
     calendar_url = None
     if search_base:
         portal = find_ploneroot(context)
-        if isinstance(search_base, unicode):
+        if isinstance(search_base, six.text_type):
             search_base = search_base.encode('utf8')
         search_base = '/'.join(search_base.split('/')[2:])
         calendar_url = portal.unrestrictedTraverse(

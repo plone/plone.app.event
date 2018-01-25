@@ -31,7 +31,8 @@ import datetime
 import icalendar
 import random
 import transaction
-import urllib2
+
+from six.moves import urllib
 
 
 def ical_import(container, ics_resource, event_type,
@@ -323,7 +324,7 @@ class IcalendarImportSettingsForm(form.Form):
                 ical_resource = ical_file.data
                 ical_import_from = ical_file.filename
             else:
-                ical_resource = urllib2.urlopen(ical_url).read()
+                ical_resource = urllib.request.urlopen(ical_url).read()
                 ical_import_from = ical_url
 
             import_metadata = ical_import(

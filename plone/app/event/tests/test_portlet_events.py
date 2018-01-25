@@ -75,7 +75,7 @@ class PortletTest(unittest.TestCase):
 
         self.assertEqual(len(mapping), 1)
         self.assertTrue(
-            isinstance(mapping.values()[0], portlet_events.Assignment)
+            isinstance(list(mapping.values())[0], portlet_events.Assignment)
         )
 
     def testInvokeEditView(self):

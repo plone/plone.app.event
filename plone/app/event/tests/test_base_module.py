@@ -40,6 +40,7 @@ from zope.interface import directlyProvides
 
 
 import pytz
+import six
 import unittest
 
 
@@ -320,10 +321,10 @@ class TestBaseModule(unittest.TestCase):
         # locale specific
         # TODO: test better.
         self.assertTrue(isinstance(date_spelled['wkday'], int))
-        self.assertTrue(isinstance(date_spelled['month_name'], basestring))
-        self.assertTrue(isinstance(date_spelled['month_abbr'], basestring))
-        self.assertTrue(isinstance(date_spelled['wkday_name'], basestring))
-        self.assertTrue(isinstance(date_spelled['wkday_abbr'], basestring))
+        self.assertTrue(isinstance(date_spelled['month_name'], six.string_types))
+        self.assertTrue(isinstance(date_spelled['month_abbr'], six.string_types))
+        self.assertTrue(isinstance(date_spelled['wkday_name'], six.string_types))
+        self.assertTrue(isinstance(date_spelled['wkday_abbr'], six.string_types))
 
 
 class TimezoneTest(unittest.TestCase):
