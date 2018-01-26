@@ -74,7 +74,7 @@ class PortletTest(unittest.TestCase):
 
         self.assertEqual(len(mapping), 1)
         self.assertTrue(
-            isinstance(mapping.values()[0], portlet_calendar.Assignment)
+            isinstance(list(mapping.values())[0], portlet_calendar.Assignment)
         )
 
     def testRenderer(self):

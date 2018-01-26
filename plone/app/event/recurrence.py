@@ -114,7 +114,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         if dateobj:
             occs = IRecurrenceSupport(context).occurrences(range_start=dateobj)
             try:
-                occurrence = occs.next()
+                occurrence = next(occs)
                 occ_acc = IEventAccessor(occurrence)
                 if is_same_day(dateobj, occ_acc.start):
                     return occurrence

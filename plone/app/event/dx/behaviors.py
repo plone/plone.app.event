@@ -461,7 +461,7 @@ class EventAccessor(object):
         adapter = IRecurrenceSupport(self.context)
         occs = adapter.occurrences(range_start=localized_now())
         try:
-            return occs.next()
+            return next(occs)
         except StopIteration:
             # No more future occurrences: passed event
             return IEventBasic(self.context)

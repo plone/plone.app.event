@@ -1,4 +1,3 @@
-import itertools
 
 from Acquisition import aq_inner
 from Acquisition import aq_parent
@@ -35,6 +34,7 @@ from zope.component.interfaces import ISite
 
 
 import pytz
+import six
 
 
 DEFAULT_END_DELTA = 1  # hours
@@ -221,8 +221,8 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
         _allstarts = sorted(idx['start'])
         _allends = sorted(idx['end'])
         # assuming (start, end) pairs belong together
-        #assert(len(_allstarts) == len(_allends))
-        _occ = itertools.izip(_allstarts, _allends)
+        # assert(len(_allstarts) == len(_allends))
+        _occ = six.moves.zip(_allstarts, _allends)
         if start:
             _occ = [(s, e) for (s, e) in _occ if e >= _start]
         if end:
