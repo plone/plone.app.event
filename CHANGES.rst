@@ -29,6 +29,8 @@ Bug fixes:
 
 - Add Python 2 / 3 compatibility.
   [pbauer]
+- Language independence for fields: `start`, `end`, `whole_day`, `open_end`
+  [agitator]
 
 - iCalendar import: Fix usage of ``sync_uid``, which wasn't correctly implemented since plone.app.event 2.0.
   [thet]
