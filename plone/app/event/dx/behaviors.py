@@ -39,6 +39,7 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
 
 
 def first_weekday_sun0():
@@ -318,6 +319,13 @@ alsoProvides(IEventRecurrence, IFormFieldProvider)
 alsoProvides(IEventLocation, IFormFieldProvider)
 alsoProvides(IEventAttendees, IFormFieldProvider)
 alsoProvides(IEventContact, IFormFieldProvider)
+
+
+# Language independent fields
+alsoProvides(IEventBasic['start'], ILanguageIndependentField)
+alsoProvides(IEventBasic['end'], ILanguageIndependentField)
+alsoProvides(IEventBasic['whole_day'], ILanguageIndependentField)
+alsoProvides(IEventBasic['open_end'], ILanguageIndependentField)
 
 
 # Attribute indexer
