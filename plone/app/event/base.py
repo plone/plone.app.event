@@ -283,7 +283,9 @@ def expand_events(events, ret_mode,
         obj = hasattr(it, 'getObject') and it.getObject() or it
         if IEventRecurrence.providedBy(obj):
             occ_set = set(IRecurrenceSupport(obj).occurrences(start, end))
-            occ_set.add(obj)
+            if start is not None:
+                if IEventAccessor(obj).start >= start:
+                    occ_set.add(obj)
             occurrences = [_obj_or_acc(occ, ret_mode) for occ in occ_set]
         elif IEvent.providedBy(obj):
             occurrences = [_obj_or_acc(obj, ret_mode)]

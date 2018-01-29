@@ -11,6 +11,7 @@ Breaking changes:
   occurrences).
   Previously events got removed if they did not fit into the start-end-range although
   the method is called `*expand*_events`.
+  [fRiSi]
 
 New features:
 
