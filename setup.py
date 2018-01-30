@@ -20,8 +20,8 @@ setup(
         "Development Status :: 4 - Beta",
         "Framework :: Plone",
         "Framework :: Plone :: 5.1",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Programming Language :: Python :: 2.7",
-        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
     ],
     keywords='plone event',
     author='Plone Foundation',
