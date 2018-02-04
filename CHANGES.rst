@@ -4,10 +4,6 @@ Changelog
 3.0.8 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - When setting start and end via the IEventAccessor, convert it to a Python datetime with timezone information.
