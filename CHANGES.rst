@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix future_events French translation.
+  [vincentfretin]
 
 
 3.1 (2018-02-04)
