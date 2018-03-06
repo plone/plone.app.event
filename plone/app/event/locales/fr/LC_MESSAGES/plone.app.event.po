@@ -222,7 +222,7 @@ msgstr "Visitez le site Internet"
 #. Default: "Future events"
 #: plone/app/event/browser/event_listing.py:230
 msgid "future_events"
-msgstr "Événements futur"
+msgstr "Prochains événements"
 
 #. Default: "Add event to calendar"
 #: plone/app/event/browser/event_summary.pt:97
