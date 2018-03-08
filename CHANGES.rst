@@ -10,14 +10,6 @@ Changelog
 1.1.12 (2018-03-07)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix future_events French translation.
