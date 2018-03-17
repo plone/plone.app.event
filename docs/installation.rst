@@ -58,4 +58,4 @@ Configuration
 
   Don't forget to set the portal timezone!
 
-After installation, please set your timezone in the @@event-settings controlpanel. Otherwise time calculations are based on UTC and likely wrong for your timezone. Also set the first weekday setting for correct display of the first weekday in calendar views.
+After installation, please set your timezone in the plone date and time controlpanel (@@dateandtime-controlpanel). Otherwise time calculations are based on UTC and likely wrong for your timezone. Also set the first weekday setting for correct display of the first weekday in calendar views.
