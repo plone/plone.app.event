@@ -1,7 +1,7 @@
 from Acquisition import aq_parent
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
-from plone.app.event import messageFactory as _
+from plone.app.event import _
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport

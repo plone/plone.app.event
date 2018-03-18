@@ -6,7 +6,8 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
+- Use plone i18n domain.
+  [gforcada]
 
 New features:
 
@@ -16,7 +17,6 @@ Bug fixes:
 
 - Fix future_events French translation.
   [vincentfretin]
-
 
 3.1 (2018-02-04)
 ----------------
