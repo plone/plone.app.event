@@ -3,7 +3,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       tal:omit-tag="">
 <section class="portlet portletEvents"
-    i18n:domain="plone.app.event">
+    i18n:domain="plone">
 
   <header class="portletHeader">
     <a href="" class="tile"

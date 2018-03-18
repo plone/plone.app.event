@@ -13,7 +13,7 @@ from plone.app.event.portlets import get_calendar_url
 from plone.app.event.portlets.portlet_calendar import (
     ICollection, search_base_uid_source
 )
-from plone.app.portlets import PloneMessageFactory as _
+from plone.app.event import _
 from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
 from plone.memoize.compress import xhtml_compress

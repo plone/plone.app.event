@@ -11,7 +11,7 @@ from plone.app.event.base import localized_today
 from plone.app.event.base import start_end_query
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.portlets import get_calendar_url
-from plone.app.portlets import PloneMessageFactory as _
+from plone.app.event import _
 from plone.app.portlets.portlets import base
 from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject

@@ -1,7 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="plone.app.event">
+    i18n_domain="plone">
 
     <include package="plone.dexterity" />
     <include package="plone.app.dexterity" /><!-- To initialize DublinCore behaviors -->

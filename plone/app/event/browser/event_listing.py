@@ -3,7 +3,7 @@ from Products.Five.browser import BrowserView
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
-from plone.app.event import messageFactory as _
+from plone.app.event import _
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import _prepare_range

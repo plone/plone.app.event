@@ -1,7 +1,7 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 from plone.app.dexterity.behaviors.metadata import ICategorization
-from plone.app.event import messageFactory as _
+from plone.app.event import _
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone

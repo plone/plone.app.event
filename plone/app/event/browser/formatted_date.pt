@@ -3,7 +3,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       tal:omit-tag=""
-      i18n:domain="plone.app.event">
+      i18n:domain="plone">
 <body tal:omit-tag="" tal:define="date_dict view/date_dict;
                                   whole_day date_dict/whole_day;
                                   open_end date_dict/open_end">

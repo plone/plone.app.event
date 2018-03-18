@@ -1,4 +1,4 @@
-from plone.app.event import messageFactory as _
+from plone.app.event import _
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.interfaces import IICalendarImportEnabled
