@@ -6,8 +6,6 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone">
 
-  <i18n:registerTranslations directory="locales" />
-
   <!-- external dependencies -->
   <include package="plone.browserlayer" />
   <include package="plone.event" />
