@@ -41,6 +41,8 @@ from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
 
+import six
+
 
 def first_weekday_sun0():
     return wkday_to_mon1(first_weekday())
@@ -376,9 +378,11 @@ def searchable_text_indexer(obj):
     text += u'%s\n' % acc.description
     textvalue = acc.text
     transforms = getToolByName(obj, 'portal_transforms')
+    if six.PY2:
+        textvalue = textvalue.encode('utf8')
     body_plain = transforms.convertTo(
         'text/plain',
-        textvalue.encode('utf8'),
+        textvalue,
         mimetype='text/html',
     ).getData().strip()
     if isinstance(body_plain, str):
