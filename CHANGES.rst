@@ -15,6 +15,9 @@ New features:
 
 Bug fixes:
 
+- Python 3 compatibility.
+  [pbauer]
+
 - Fix future_events French translation.
   [vincentfretin]
 
