@@ -15,6 +15,9 @@ New features:
 
 Bug fixes:
 
+- Fix icalendar export for folderish events which are containers with a ``__getitem__`` method.
+  [thet]
+
 - Python 3 compatibility.
   [pbauer]
 
