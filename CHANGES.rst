@@ -6,6 +6,10 @@ Changelog
 
 Breaking changes:
 
+- Introduce ``spell_date`` and deprecate ``date_speller`` in ``plone.app.event.base``.
+  spell_date does only optionally accept an context where date_speller the context was required.
+  [thet]
+
 - Use plone i18n domain.
   [gforcada]
 

@@ -1,15 +1,11 @@
 
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import safe_callable
 from calendar import monthrange
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.layout.navigation.interfaces import INavigationRoot
@@ -27,11 +23,15 @@ from plone.event.utils import is_same_time
 from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFPlone.utils import safe_callable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
-
+from zope.deprecation import deprecate
 
 import pytz
 import six
@@ -847,12 +847,20 @@ def dates_for_display(occurrence):
     )
 
 
+@deprecate('date_speller is no longer supported, use spell_date instead.')
 def date_speller(context, dt):
-    """Return a dictionary with localized and readably formatted date parts.
+    return spell_date(dt, context)
+
+
+def spell_date(dt, translation_context=None):
+    """Return a dictionary with localized and readable formatted date parts.
 
     """
+    if not translation_context:
+        translation_context = getSite()
+
     dt = DT(dt)
-    util = getToolByName(context, 'translation_service')
+    util = getToolByName(translation_context, 'translation_service')
     dom = 'plonelocales'
 
     def zero_pad(num):
@@ -865,22 +873,22 @@ def date_speller(context, dt):
         month2=zero_pad(dt.month()),
         month_name=util.translate(
             util.month_msgid(dt.month()),
-            domain=dom, context=context
+            domain=dom, context=translation_context
         ),
         month_abbr=util.translate(
             util.month_msgid(dt.month(), 'a'),
-            domain=dom, context=context
+            domain=dom, context=translation_context
         ),
 
         week=dt.week(),
         wkday=dt.dow(),
         wkday_name=util.translate(
             util.day_msgid(dt.dow()),
-            domain=dom, context=context
+            domain=dom, context=translation_context
         ),
         wkday_abbr=util.translate(
             util.day_msgid(dt.dow(), 's'),
-            domain=dom, context=context
+            domain=dom, context=translation_context
         ),
 
         day=dt.day(),
