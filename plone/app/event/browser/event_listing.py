@@ -7,7 +7,7 @@ from plone.app.event import _
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import _prepare_range
-from plone.app.event.base import date_speller
+from plone.app.event.base import spell_date
 from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
@@ -246,13 +246,13 @@ class EventListing(BrowserView):
         return provider(occ)
 
     def date_speller(self, date):
-        return date_speller(self.context, date)
+        return spell_date(date, self.context)
 
     @property
     def header_string(self):
         start, end = self._start_end
-        start_dict = date_speller(self.context, start) if start else None
-        end_dict = date_speller(self.context, end) if end else None
+        start_dict = spell_date(start, self.context) if start else None
+        end_dict = spell_date(end, self.context) if end else None
 
         mode = self.mode
         main_msgid = None

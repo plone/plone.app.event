@@ -1,32 +1,32 @@
-from DateTime import DateTime
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
-from plone.app.event.base import DEFAULT_END_DELTA
-from plone.app.event.base import DT
-from plone.app.event.base import RET_MODE_ACCESSORS
-from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import construct_calendar
 from plone.app.event.base import dates_for_display
-from plone.app.event.base import date_speller
 from plone.app.event.base import default_end
+from plone.app.event.base import DEFAULT_END_DELTA
 from plone.app.event.base import default_start
 from plone.app.event.base import default_timezone
+from plone.app.event.base import DT
 from plone.app.event.base import find_context
 from plone.app.event.base import find_event_listing
 from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_site
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event.base import spell_date
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -37,7 +37,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
-
 
 import pytz
 import six
@@ -302,9 +301,9 @@ class TestBaseModule(unittest.TestCase):
             end.hour == 23 and end.minute == 59 and end.second == 59
         )
 
-    def test_date_speller(self):
+    def test_spell_date(self):
         DT = DateTime(2015, 6, 6, 1, 2, 3)
-        date_spelled = date_speller(self.portal, DT)
+        date_spelled = spell_date(DT, self.portal)
         self.assertEqual(date_spelled['year'], 2015)
         self.assertEqual(date_spelled['month'], 6)
         self.assertEqual(date_spelled['month2'], '06')

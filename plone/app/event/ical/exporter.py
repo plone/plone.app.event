@@ -165,7 +165,7 @@ def calendar_from_event(context):
     context.
     """
     context = aq_inner(context)
-    return construct_icalendar(context, context)
+    return construct_icalendar(context, [context])
 
 
 @implementer(IICalendar)

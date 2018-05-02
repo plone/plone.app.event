@@ -6,6 +6,10 @@ Changelog
 
 Breaking changes:
 
+- Introduce ``spell_date`` and deprecate ``date_speller`` in ``plone.app.event.base``.
+  spell_date does only optionally accept an context where date_speller the context was required.
+  [thet]
+
 - Use plone i18n domain.
   [gforcada]
 
@@ -14,6 +18,9 @@ New features:
 - *add item here*
 
 Bug fixes:
+
+- Fix icalendar export for folderish events which are containers with a ``__getitem__`` method.
+  [thet]
 
 - Python 3 compatibility.
   [pbauer]
