@@ -16,7 +16,7 @@
     float: right;
     clear: right; /* if there are more right-floating elements, clear them, so
                    * they are displayed among each other */
-    margin 1em 0 1em 1em;
+    margin: 1em 0 1em 1em;
 }
 
 /* event listing styles */
