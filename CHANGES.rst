@@ -19,6 +19,9 @@ New features:
 
 Bug fixes:
 
+- Fix CSS syntax error in event.css  
+  [robbuh]
+
 - Fix icalendar export for folderish events which are containers with a ``__getitem__`` method.
   [thet]
 
