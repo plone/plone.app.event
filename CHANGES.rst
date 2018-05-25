@@ -19,7 +19,11 @@ New features:
 
 Bug fixes:
 
-- Fix CSS syntax error in event.css  
+- Remove obsolete event_icon.png and corresponding css rule.
+  Fixes: #283.
+  [thet]
+
+- Fix CSS syntax error in event.css
   [robbuh]
 
 - Fix icalendar export for folderish events which are containers with a ``__getitem__`` method.
