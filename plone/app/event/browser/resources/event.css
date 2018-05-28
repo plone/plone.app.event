@@ -1,17 +1,3 @@
-/* content type icons */
-/* let this be set by plonetheme.sunburst in the future and make use of the
- * contenttypes-sprite. */
-/*.icons-on .contenttype-event,*/
-.icons-on .contenttype-plone-app-event-dx-event {
-    background: url("event_icon.png") no-repeat scroll 0 4px transparent;
-}
-/*.icons-on .contenttype-event,*/
-.icons-on .contenttype-plone-app-event-dx-event {
-    line-height: 2em;
-    display: inline-block;
-    *display: block;
-    padding-left: 20px !important;
-}
 .event.summary {
     float: right;
     clear: right; /* if there are more right-floating elements, clear them, so
