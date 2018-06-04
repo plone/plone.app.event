@@ -13,10 +13,6 @@ Breaking changes:
 - Use plone i18n domain.
   [gforcada]
 
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Remove obsolete event_icon.png and corresponding css rule.
