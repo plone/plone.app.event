@@ -6,7 +6,9 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
+- Leadimage Viewlet for Event now uses ILeadImageMarker.
+  (you will need to use plone.app.contenttypes >= 1.4.12)
+  [iham]
 
 New features:
 
