@@ -49,8 +49,9 @@ class TestEventsListingPortal(AbstractSampleDataEvents):
         headers, output, request = make_fake_response(self.request)
         view = self._listing_view(name='@@event_listing_ical')
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
         self.assertTrue('Long Event' in icalstr)
 

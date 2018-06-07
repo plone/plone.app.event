@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Make sure to include the 'Content-Length' header for ical exports
+  [frapell]
+
 - Update plone.app.event resources. Requires plonetheme.barceloneta >= 1.9.
   [agitator]
 
