@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Make sure to include the 'Content-Length' header for ical exports
+  [frapell]
 
 
 2.0.13 (2017-05-16)
