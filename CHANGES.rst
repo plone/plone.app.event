@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- Update plone.app.event resources. Requires plonetheme.barceloneta >= 1.8.2
+- Update plone.app.event resources. Requires plonetheme.barceloneta >= 1.9.
   [agitator]
 
 
