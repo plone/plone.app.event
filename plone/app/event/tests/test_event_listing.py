@@ -52,8 +52,8 @@ class TestEventsListingPortal(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
-        icalstr = ''.join(output)
-        self.assertTrue('Long Event' in icalstr)
+        icalstr = b''.join(output)
+        self.assertTrue(b'Long Event' in icalstr)
 
 
 class TestEventsListingCollection(TestEventsListingPortal):

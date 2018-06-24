@@ -14,6 +14,7 @@ from zope.component import getMultiAdapter
 
 import os
 import pytz
+import six
 import unittest
 
 
@@ -45,6 +46,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 4)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
 
         self.checkOrder(
@@ -96,6 +99,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 4)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
         self.assertTrue('Now Event' in icalstr)
         self.assertTrue('RRULE' not in icalstr)
@@ -107,6 +112,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 4)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
 
         # No occurrences in export. Otherwise count would be 8.
@@ -201,6 +208,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
         # No occurrences in export. Otherwise count would be 8.
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
@@ -220,6 +229,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 2)
         self.assertTrue('Past Event' in icalstr)
@@ -237,6 +248,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 4)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
 
@@ -259,6 +272,8 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 4)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
+        if six.PY3:
+            output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
 
