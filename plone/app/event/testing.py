@@ -6,6 +6,7 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.registry.interfaces import IRegistry
 from plone.testing import z2
+from plone.testing import zope
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
@@ -68,7 +69,7 @@ class PAEventLayer(PloneSandboxLayer):
         self.ostz = os_zone()
 
         # Install products that use an old-style initialize() function
-        z2.installProduct(app, 'Products.DateRecurringIndex')
+        zope.installProduct(app, 'Products.DateRecurringIndex')
 
         # Load ZCML
         import plone.app.event
@@ -80,7 +81,7 @@ class PAEventLayer(PloneSandboxLayer):
 
     def tearDownZope(self, app):
         # Uninstall old-style Products
-        z2.uninstallProduct(app, 'Products.DateRecurringIndex')
+        zope.uninstallProduct(app, 'Products.DateRecurringIndex')
 
         # reset OS TZ
         if self.ostz:
@@ -114,6 +115,7 @@ class PAEventDXLayer(PloneSandboxLayer):
         self.applyProfile(portal, 'plone.app.contenttypes:default')
         self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
+
 
 PAEventDX_FIXTURE = PAEventDXLayer()
 PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
