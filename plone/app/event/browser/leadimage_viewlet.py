@@ -1,5 +1,5 @@
 from Acquisition import aq_parent
-from plone.app.contenttypes.behaviors.leadimage import ILeadImage
+from plone.app.contenttypes.behaviors.leadimage import ILeadImageMarker
 from plone.app.layout.viewlets import ViewletBase
 
 
@@ -9,5 +9,5 @@ class LeadImageViewlet(ViewletBase):
     """
     def update(self):
         parent = aq_parent(self.context)
-        self.available = ILeadImage.providedBy(parent) and\
+        self.available = ILeadImageMarker.providedBy(parent) and\
             True if getattr(parent, 'image', False) else False
