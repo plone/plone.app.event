@@ -1,31 +1,31 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.event.base import expand_events
+from plone.app.event import _
 from plone.app.event.base import _prepare_range
-from plone.app.event.base import start_end_query
-from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import localized_now
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import start_end_query
 from plone.app.event.portlets import get_calendar_url
-from plone.app.event.portlets.portlet_calendar import (
-    ICollection, search_base_uid_source
-)
-from plone.app.event import _
+from plone.app.event.portlets.portlet_calendar import ICollection
+from plone.app.event.portlets.portlet_calendar import search_base_uid_source
 from plone.app.portlets.portlets import base
+from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implementer
-from plone.app.querystring import queryparser
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -84,7 +84,6 @@ class IEventsPortlet(IPortletDataProvider):
 class Assignment(base.Assignment):
 
     # reduce upgrade pain
-    search_base = None
     thumb_scale = None
     no_thumbs = False
 
@@ -105,9 +104,8 @@ class Assignment(base.Assignment):
         # attribute, which is probably because it has an old
         # 'search_base' attribute that needs to be converted.
         path = self.search_base
-        portal = getToolByName(self, 'portal_url').getPortalObject()
         try:
-            search_base = portal.unrestrictedTraverse(path.lstrip('/'))
+            search_base = getSite().unrestrictedTraverse(path.lstrip('/'))
         except (AttributeError, KeyError, TypeError, NotFound):
             return
         return search_base.UID()
@@ -117,38 +115,23 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
 
     _template = ViewPageTemplateFile('portlet_events.pt')
-
     _search_base = None
 
     @property
     def search_base(self):
-        if not self._search_base:
+        if not self._search_base and self.data.search_base_uid:
             self._search_base = uuidToObject(self.data.search_base_uid)
-        # aq_inner, because somehow search_base gets wrapped by the renderer
-        return aq_inner(self._search_base)
+        return aq_inner(self._search_base) if self._search_base else None
 
     @property
     def search_base_path(self):
-        search_base = self.search_base
-        if search_base is not None:
-            search_base = '/'.join(search_base.getPhysicalPath())
-        return search_base
+        return '/'.join(self.search_base.getPhysicalPath()) if self.search_base else None  # noqa
 
-    def __init__(self, *args):
-        base.Renderer.__init__(self, *args)
-
+    def update(self):
         context = aq_inner(self.context)
-
         calendar_url = get_calendar_url(context, self.search_base_path)
-
         self.next_url = '%s?mode=future' % calendar_url
         self.prev_url = '%s?mode=past' % calendar_url
-
-        portal_state = getMultiAdapter(
-            (self.context, self.request),
-            name='plone_portal_state'
-        )
-        self.portal = portal_state.portal()
 
     def render(self):
         return xhtml_compress(self._template())
@@ -168,11 +151,10 @@ class Renderer(base.Renderer):
 
         events = []
         query.update(self.request.get('contentFilter', {}))
-        search_base = self.search_base
-        if ICollection and ICollection.providedBy(search_base):
+        if ICollection and ICollection.providedBy(self.search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
-                search_base, search_base.query,
+                self.search_base, self.search_base.query,
                 sort_on='start', sort_order=None
             )
 
@@ -186,9 +168,9 @@ class Renderer(base.Renderer):
             if 'end' in query:
                 end = query['end']
 
-            start, end = _prepare_range(search_base, start, end)
+            start, end = _prepare_range(self.search_base, start, end)
             query.update(start_end_query(start, end))
-            events = search_base.results(
+            events = self.search_base.results(
                 batch=False, brains=True, custom_query=query,
                 limit=data.count
             )
@@ -199,9 +181,8 @@ class Renderer(base.Renderer):
             )
             events = events[:data.count]  # limit expanded
         else:
-            search_base_path = self.search_base_path
-            if search_base_path:
-                query['path'] = {'query': search_base_path}
+            if self.search_base_path:
+                query['path'] = {'query': self.search_base_path}
             events = get_events(
                 context, start=localized_now(context),
                 ret_mode=RET_MODE_ACCESSORS,
@@ -245,7 +226,7 @@ class AddForm(base.AddForm):
     def create(self, data):
         return Assignment(count=data.get('count', 5),
                           state=data.get('state', None),
-                          search_base_uid=data.get('search_base_uid', 5))
+                          search_base_uid=data.get('search_base_uid', None))
 
 
 class EditForm(base.EditForm):

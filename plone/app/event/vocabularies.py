@@ -1,5 +1,6 @@
-from plone.app.event import base
+# -*- coding: utf-8 -*-
 from plone.app.event import _
+from plone.app.event import base
 from zope.interface import provider
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm

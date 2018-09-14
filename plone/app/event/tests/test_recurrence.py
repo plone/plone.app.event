@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from mock import Mock
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import get_events
@@ -13,7 +14,8 @@ from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -24,9 +26,11 @@ from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserView
+
 import datetime
 import mock
 import pytz
+import six
 import transaction
 import unittest
 import zope.component
@@ -102,7 +106,9 @@ class TestTraversalDX(AbstractSampleDataEvents):
         )
         url = '/'.join([self.now_event.absolute_url(), '2013-05-07'])
         browser.open(url)
-        title = self.now_event.title.encode('ascii')
+        title = self.now_event.title
+        if six.PY2:
+            title = title.encode('ascii')
         self.assertTrue(title in browser.contents)
 
     def test_traverse_occurrence_imagescaling(self):

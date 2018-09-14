@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.base import localized_today
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import make_fake_response
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import patched_now as PN
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 
 import mock
 
@@ -52,8 +53,8 @@ class TestEventsListingPortal(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
         self.assertTrue('Content-Length' in headers)
-        icalstr = ''.join(output)
-        self.assertTrue('Long Event' in icalstr)
+        icalstr = b''.join(output)
+        self.assertTrue(b'Long Event' in icalstr)
 
 
 class TestEventsListingCollection(TestEventsListingPortal):

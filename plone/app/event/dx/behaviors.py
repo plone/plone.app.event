@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 from plone.app.dexterity.behaviors.metadata import ICategorization
@@ -13,6 +14,7 @@ from plone.app.event.base import localized_now
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
+from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
 from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.widget import DatetimeFieldWidget
 from plone.autoform import directives
@@ -39,7 +41,6 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
-from plone.app.multilingual.dx.interfaces import ILanguageIndependentField
 
 import six
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
@@ -115,6 +116,7 @@ class PAEventDXLayer(PloneSandboxLayer):
         self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 
+
 PAEventDX_FIXTURE = PAEventDXLayer()
 PAEventDX_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PAEventDX_FIXTURE,),
@@ -124,5 +126,9 @@ PAEventDX_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PAEventDX_FIXTURE,),
     name="PAEventDX:Functional")
 PAEventDX_ROBOT_TESTING = FunctionalTesting(
-    bases=(PAEventDX_FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, z2.ZSERVER_FIXTURE),
+    bases=(
+        PAEventDX_FIXTURE,
+        AUTOLOGIN_LIBRARY_FIXTURE,
+        z2.ZSERVER_FIXTURE,
+    ),
     name="plone.app.event.dx:Robot")

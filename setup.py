@@ -1,5 +1,6 @@
-from setuptools import setup
+# -*- coding: utf-8 -*-
 from setuptools import find_packages
+from setuptools import setup
 
 import os
 
@@ -7,15 +8,18 @@ import os
 version = '3.2.0.dev0'
 
 
+long_description = ('\n\n'.join([
+    open("README.rst").read(),
+    open(os.path.join('docs', 'installation.rst')).read(),
+    open("CHANGES.rst").read(),
+]))
+
+
 setup(
     name='plone.app.event',
     version=version,
     description="The Plone calendar framework",
-    long_description="%s%s%s" % (
-        open("README.rst").read() + "\n",
-        open(os.path.join('docs', 'installation.rst')).read() + "\n",
-        open("CHANGES.rst").read(),
-    ),
+    long_description=long_description,
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Plone",

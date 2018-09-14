@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from Acquisition import Explicit
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.event.base import dates_for_display
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class FormattedDateProvider(Explicit):

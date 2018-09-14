@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
 from plone.app.event import _
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
 

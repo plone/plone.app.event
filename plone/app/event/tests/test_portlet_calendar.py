@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
-from Products.CMFCore.utils import getToolByName
-from Products.GenericSetup.utils import _getDottedName
 from calendar import monthrange
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.base import localized_today
 from plone.app.event.portlets import portlet_calendar
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.portlets.interfaces import IPortletAssignment
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.utils import _getDottedName
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import setHooks
@@ -195,12 +195,12 @@ class RendererTest(unittest.TestCase):
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
-        portlet = self.renderer(assignment=portlet_calendar.Assignment())
-        portlet.update()
-        html = portlet.render()
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
+        html = r.render()
 
         # Now let's add a new event on the first day of the current month
-        year, month = portlet.year_month_display()
+        year, month = r.year_month_display()
         day = monthrange(year, month)[1]  # (wkday, days)
 
         tz = pytz.timezone(TZNAME)
@@ -212,10 +212,10 @@ class RendererTest(unittest.TestCase):
         )
 
         # Try to render the calendar portlet again, it must be different Now
-        portlet = self.renderer(assignment=portlet_calendar.Assignment())
-        portlet.update()
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
         self.assertNotEqual(
-            html, portlet.render(), "Cache key wasn't invalidated"
+            html, r.render(), "Cache key wasn't invalidated"
         )
 
     def test_event_nonascii(self):
@@ -229,21 +229,21 @@ class RendererTest(unittest.TestCase):
             self.portal, PTYPE, title=title, start=start, end=end,
             location=u'München')
         self.wft.doActionFor(e1, 'publish')
-        portlet = self.renderer(assignment=portlet_calendar.Assignment())
-        portlet.update()
-        self.assertTrue(title in portlet.render())
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
+        self.assertTrue(title in r.render())
 
     def test_prev_next_query(self):
-        portlet = self.renderer(assignment=portlet_calendar.Assignment())
-        portlet.update()
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
 
-        year, month = portlet.year_month_display()
+        year, month = r.year_month_display()
         prev_expected = '?month={1}&year={0}'.format(
-            *portlet.get_previous_month(year, month))
+            *r.get_previous_month(year, month))
         next_expected = '?month={1}&year={0}'.format(
-            *portlet.get_next_month(year, month))
-        self.assertEqual(next_expected, portlet.next_query)
-        self.assertEqual(prev_expected, portlet.prev_query)
+            *r.get_next_month(year, month))
+        self.assertEqual(next_expected, r.next_query)
+        self.assertEqual(prev_expected, r.prev_query)
 
     def test_invalid_request(self):
         self.request.form['month'] = [3, 4]

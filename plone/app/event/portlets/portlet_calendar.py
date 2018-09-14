@@ -1,30 +1,34 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event import _
 from plone.app.event.base import _prepare_range
+from plone.app.event.base import construct_calendar
 from plone.app.event.base import expand_events
 from plone.app.event.base import first_weekday
-from plone.app.event.base import get_events, construct_calendar
+from plone.app.event.base import get_events
 from plone.app.event.base import localized_today
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import start_end_query
 from plone.app.event.base import wkday_to_mon1
 from plone.app.event.portlets import get_calendar_url
-from plone.app.event import _
 from plone.app.portlets.portlets import base
 from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.event.interfaces import IEventAccessor
 from plone.portlets.interfaces import IPortletDataProvider
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 from zope import schema
 from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
+
 import calendar
 import json
+
 
 try:
     from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
@@ -77,7 +81,6 @@ class Assignment(base.Assignment):
 
     # reduce upgrade pain
     state = None
-    search_base = None
 
     def __init__(self, state=None, search_base_uid=None):
         self.state = state
@@ -88,9 +91,8 @@ class Assignment(base.Assignment):
         # attribute, which is probably because it has an old
         # 'search_base' attribute that needs to be converted.
         path = self.search_base
-        portal = getToolByName(self, 'portal_url').getPortalObject()
         try:
-            search_base = portal.unrestrictedTraverse(path.lstrip('/'))
+            search_base = getSite().unrestrictedTraverse(path.lstrip('/'))
         except (AttributeError, KeyError, TypeError, NotFound):
             return
         return search_base.UID()
@@ -99,22 +101,17 @@ class Assignment(base.Assignment):
 
 class Renderer(base.Renderer):
     render = ViewPageTemplateFile('portlet_calendar.pt')
-
     _search_base = None
 
     @property
     def search_base(self):
-        if not self._search_base:
+        if not self._search_base and self.data.search_base_uid:
             self._search_base = uuidToObject(self.data.search_base_uid)
-        # aq_inner, because somehow search_base gets wrapped by the renderer
-        return aq_inner(self._search_base)
+        return aq_inner(self._search_base) if self._search_base else None
 
     @property
     def search_base_path(self):
-        search_base = self.search_base
-        if search_base is not None:
-            search_base = '/'.join(search_base.getPhysicalPath())
-        return search_base
+        return '/'.join(self.search_base.getPhysicalPath()) if self.search_base else None  # noqa
 
     def update(self):
         context = aq_inner(self.context)
@@ -208,11 +205,10 @@ class Renderer(base.Renderer):
 
         events = []
         query.update(self.request.get('contentFilter', {}))
-        search_base = self.search_base
-        if ICollection and ICollection.providedBy(search_base):
+        if ICollection and ICollection.providedBy(self.search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
-                search_base, search_base.query,
+                self.search_base, self.search_base.query,
                 sort_on='start', sort_order=None
             )
 
@@ -222,9 +218,9 @@ class Renderer(base.Renderer):
             if 'end' in query and query['end'] < end:
                 end = query['end']
 
-            start, end = _prepare_range(search_base, start, end)
+            start, end = _prepare_range(self.search_base, start, end)
             query.update(start_end_query(start, end))
-            events = search_base.results(
+            events = self.search_base.results(
                 batch=False, brains=True, custom_query=query
             )
             events = expand_events(
@@ -233,9 +229,8 @@ class Renderer(base.Renderer):
                 sort='start', sort_reverse=False
             )
         else:
-            search_base_path = self.search_base_path
-            if search_base_path:
-                query['path'] = {'query': search_base_path}
+            if self.search_base_path:
+                query['path'] = {'query': self.search_base_path}
             events = get_events(context, start=start, end=end,
                                 ret_mode=RET_MODE_OBJECTS,
                                 expand=True, **query)
@@ -305,8 +300,10 @@ class AddForm(base.AddForm):
     description = _(u"This portlet displays events in a calendar.")
 
     def create(self, data):
-        return Assignment(state=data.get('state', None),
-                          search_base_uid=data.get('search_base_uid', None))
+        return Assignment(
+            state=data.get('state', None),
+            search_base_uid=data.get('search_base_uid', None)
+        )
 
 
 class EditForm(base.EditForm):

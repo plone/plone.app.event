@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event import _
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
@@ -14,6 +15,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from six.moves import urllib
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
@@ -30,9 +32,8 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 import icalendar
 import random
+import six
 import transaction
-
-from six.moves import urllib
 
 
 def ical_import(container, ics_resource, event_type,
@@ -74,7 +75,10 @@ def ical_import(container, ics_resource, event_type,
         ret = ''
         for item in val:
             ret = '%s,' % ret if ret else ret  # insert linebreak
-            ret = '%s%s' % (ret, item.to_ical())
+            ical_val = item.to_ical()
+            if six.PY3 and isinstance(ical_val, six.binary_type):
+                ical_val = ical_val.decode('utf8')
+            ret = '%s%s' % (ret, ical_val)
         return '%s:%s' % (prop, ret) if ret else None
 
     count = 0
@@ -124,7 +128,11 @@ def ical_import(container, ics_resource, event_type,
         url = _get_prop('URL', item)
 
         rrule = _get_prop('RRULE', item)
-        rrule = 'RRULE:%s' % rrule.to_ical() if rrule else ''
+        rrule = rrule.to_ical() if rrule else ''
+        if rrule:
+            if six.PY3 and isinstance(rrule, six.binary_type):
+                rrule = rrule.decode('utf8')
+            rrule = 'RRULE:%s' % rrule
         rdates = _from_list(item, 'RDATE')
         exdates = _from_list(item, 'EXDATE')
         rrule = '\n'.join([it for it in [rrule, rdates, exdates] if it])

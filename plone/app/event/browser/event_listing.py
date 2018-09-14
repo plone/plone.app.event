@@ -1,25 +1,27 @@
-from Products.CMFPlone.PloneBatch import Batch
-from Products.Five.browser import BrowserView
+# -*- coding: utf-8 -*-
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
 from plone.app.event import _
-from plone.app.event.base import RET_MODE_ACCESSORS
-from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.base import _prepare_range
-from plone.app.event.base import spell_date
 from plone.app.event.base import expand_events
 from plone.app.event.base import get_events
 from plone.app.event.base import guess_date_from
 from plone.app.event.base import localized_now
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
+from plone.app.event.base import spell_date
 from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import start_end_query
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.querystring import queryparser
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.PloneBatch import Batch
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
+
 
 try:
     from Products.CMFPlone.defaultpage import get_default_page

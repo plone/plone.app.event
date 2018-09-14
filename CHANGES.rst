@@ -16,6 +16,9 @@ New features:
 
 Bug fixes:
 
+- Python 3 compatibility.
+  [pbauer]
+
 - Make sure to include the 'Content-Length' header for ical exports
   [frapell]
 

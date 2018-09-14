@@ -1,15 +1,14 @@
-from Products.CMFCore.utils import getToolByName
-from Products.GenericSetup.utils import _getDottedName
-from datetime import datetime
+# -*- coding: utf-8 -*-
 from datetime import timedelta
+from plone.app.event.base import localized_now
 from plone.app.event.portlets import portlet_events
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.dexterity.utils import createContentInContainer
 from plone.portlets.interfaces import IPortletAssignment
@@ -17,6 +16,8 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.utils import _getDottedName
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -26,6 +27,7 @@ from zope.interface import alsoProvides
 
 import pytz
 import unittest
+
 
 TZNAME = 'Australia/Brisbane'
 PTYPE = 'plone.app.event.dx.event'
@@ -150,8 +152,7 @@ class RendererTest(unittest.TestCase):
         )
 
     def test_portlet_event_renderer__get_events(self):
-        tz = pytz.timezone(TZNAME)
-        start = tz.localize(datetime.now())
+        start = localized_now()
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
@@ -164,34 +165,38 @@ class RendererTest(unittest.TestCase):
             self.portal.eventfolder, PTYPE,
             id='e2', title='e2', start=start, end=end)
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
-        self.assertEqual(0, len(portlet.events))
+        r.update()
+        self.assertEqual(0, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
-        self.assertEqual(1, len(portlet.events))
+        r.update()
+        self.assertEqual(1, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
-        self.assertEqual(2, len(portlet.events))
+        r.update()
+        self.assertEqual(2, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEqual(2, len(portlet.events))
+        r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        r.update()
+        self.assertEqual(2, len(r.events))
 
         # No search base gives calendar urls with event_listing part
-        self.assertTrue('event_listing' in portlet.render())
+        self.assertTrue('event_listing' in r.render())
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base_uid=self.portal.eventfolder.UID()))
-        self.assertEqual(1, len(portlet.events))
+        r.update()
+        self.assertEqual(1, len(r.events))
 
         # A given search base gives calendar urls without event_listing part
-        self.assertTrue('event_listing' not in portlet.render())
+        self.assertTrue('event_listing' not in r.render())
 
     def test_portlet_event_renderer__recurring(self):
-        tz = pytz.timezone(TZNAME)
-        start = tz.localize(datetime.now()) + timedelta(days=1)
+        start = localized_now() + timedelta(days=1)
 
         e1 = createContentInContainer(
             self.portal, PTYPE, id='e1', title='Event 1', start=start,
@@ -205,6 +210,7 @@ class RendererTest(unittest.TestCase):
         r = self.renderer(
             assignment=portlet_events.Assignment(count=5,
                                                  state=('published',)))
+        r.update()
         events = r.events
         self.assertEqual(5, len(events))
         self.assertTrue('Event 2' not in [x.title for x in events])
@@ -222,6 +228,7 @@ class RendererTest(unittest.TestCase):
 
     def test_portlet_event_renderer__listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        r.update()
         rd = r.render()
         self.assertTrue('?mode=future' in rd)
         self.assertTrue('?mode=past' in rd)
