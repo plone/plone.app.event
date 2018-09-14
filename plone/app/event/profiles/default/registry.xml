@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<registry>
+
+  <records prefix="plone.resources/plone-app-event"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++plone.app.event/event.js</value>
+  </records>
+  <records prefix="plone.bundles/plone-legacy"
+            interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="resources" purge="false">
+      <element>plone-app-event</element>
+    </value>
+    <value key="last_compilation"></value>
+  </records>
+
+</registry>

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-\ (unreleased)
+3.2.0 (unreleased)
 --------------
 
 Breaking changes:
@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Update plone.app.event resources. Requires plonetheme.barceloneta >= 1.9.
+  [agitator]
 
 
 3.1.1 (2018-06-04)
