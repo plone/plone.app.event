@@ -327,6 +327,5 @@ class EventsICal(BrowserView):
             'Content-Disposition',
             'attachment; filename="%s"' % name
         )
-        self.request.response.setHeader('Pragma', 'no-cache')
         self.request.response.setHeader('Content-Length', len(ical))
         self.request.response.write(ical)
