@@ -1,15 +1,13 @@
-from Products.CMFCore.utils import getToolByName
-from Products.GenericSetup.utils import _getDottedName
-from datetime import datetime
 from datetime import timedelta
+from plone.app.event.base import localized_now
 from plone.app.event.portlets import portlet_events
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.portlets.storage import PortletAssignmentMapping
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.dexterity.utils import createContentInContainer
 from plone.portlets.interfaces import IPortletAssignment
@@ -17,6 +15,8 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.utils import _getDottedName
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -26,6 +26,7 @@ from zope.interface import alsoProvides
 
 import pytz
 import unittest
+
 
 TZNAME = 'Australia/Brisbane'
 PTYPE = 'plone.app.event.dx.event'
@@ -150,8 +151,7 @@ class RendererTest(unittest.TestCase):
         )
 
     def test_portlet_event_renderer__get_events(self):
-        tz = pytz.timezone(TZNAME)
-        start = tz.localize(datetime.now())
+        start = localized_now()
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
@@ -195,8 +195,7 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('event_listing' not in r.render())
 
     def test_portlet_event_renderer__recurring(self):
-        tz = pytz.timezone(TZNAME)
-        start = tz.localize(datetime.now()) + timedelta(days=1)
+        start = localized_now() + timedelta(days=1)
 
         e1 = createContentInContainer(
             self.portal, PTYPE, id='e1', title='Event 1', start=start,
