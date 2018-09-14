@@ -10,11 +10,14 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Remove ``Pragma: no-cache`` header for icalendar exports.
+  The ``Pragma`` header is HTTP 1.0 and the caching strategy on icalendar exports should better be defined by integrators.
+  [thet]
 
 Bug fixes:
 
-- *add item here*
+- Make sure to include the 'Content-Length' header for ical exports
+  [frapell]
 
 
 2.0.13 (2017-05-16)
