@@ -1,5 +1,6 @@
-from Products.CMFCore.utils import getToolByName
+# -*- coding: utf-8 -*-
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from Products.CMFCore.utils import getToolByName
 
 import unittest
 

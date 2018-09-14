@@ -1,7 +1,6 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
-from Products.CMFPlone.utils import safe_unicode
-from Products.Five.browser import BrowserView
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import guess_date_from
 from plone.event.interfaces import IEventAccessor
@@ -13,6 +12,8 @@ from plone.event.utils import is_same_day
 from plone.event.utils import pydt
 from plone.namedfile.interfaces import IImageScaleTraversable
 from plone.namedfile.scaling import ImageScaling
+from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
 from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest

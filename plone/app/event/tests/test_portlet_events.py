@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import timedelta
 from plone.app.event.base import localized_now
 from plone.app.event.portlets import portlet_events

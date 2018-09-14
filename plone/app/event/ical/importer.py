@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event import _
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
@@ -14,6 +15,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from six.moves import urllib
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
@@ -32,8 +34,6 @@ import icalendar
 import random
 import six
 import transaction
-
-from six.moves import urllib
 
 
 def ical_import(container, ics_resource, event_type,

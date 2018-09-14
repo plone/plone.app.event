@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.base import localized_today
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import make_fake_response
-from plone.app.event.tests.base_setup import AbstractSampleDataEvents
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import patched_now as PN
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 
 import mock
 

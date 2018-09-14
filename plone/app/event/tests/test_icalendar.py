@@ -3,12 +3,12 @@ from datetime import datetime
 from plone.app.event import base
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
 from plone.app.event.ical.importer import ical_import
-from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
-from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import make_fake_response
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
+from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.event.interfaces import IEventAccessor
 from zope.component import getMultiAdapter
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from mock import Mock
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import get_events
@@ -13,7 +14,8 @@ from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
 from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID, TEST_USER_PASSWORD
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor

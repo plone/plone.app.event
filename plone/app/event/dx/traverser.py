@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.recurrence import OccurrenceTraverser as DefaultTraverser
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.dexterity.browser.traversal import DexterityPublishTraverse

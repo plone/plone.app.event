@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from plone.app.event.base import find_ploneroot
 from plone.app.event.base import find_navroot
+from plone.app.event.base import find_ploneroot
 
 import six
 

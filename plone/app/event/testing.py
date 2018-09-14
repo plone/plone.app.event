@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting

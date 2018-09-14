@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from plone.app.event import _
