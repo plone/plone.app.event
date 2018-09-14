@@ -164,30 +164,35 @@ class RendererTest(unittest.TestCase):
             self.portal.eventfolder, PTYPE,
             id='e2', title='e2', start=start, end=end)
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
-        self.assertEqual(0, len(portlet.events))
+        r.update()
+        self.assertEqual(0, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', )))
-        self.assertEqual(1, len(portlet.events))
+        r.update()
+        self.assertEqual(1, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('published', 'private',)))
-        self.assertEqual(2, len(portlet.events))
+        r.update()
+        self.assertEqual(2, len(r.events))
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(count=5))
-        self.assertEqual(2, len(portlet.events))
+        r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        r.update()
+        self.assertEqual(2, len(r.events))
 
         # No search base gives calendar urls with event_listing part
-        self.assertTrue('event_listing' in portlet.render())
+        self.assertTrue('event_listing' in r.render())
 
-        portlet = self.renderer(assignment=portlet_events.Assignment(
+        r = self.renderer(assignment=portlet_events.Assignment(
             count=5, search_base_uid=self.portal.eventfolder.UID()))
-        self.assertEqual(1, len(portlet.events))
+        r.update()
+        self.assertEqual(1, len(r.events))
 
         # A given search base gives calendar urls without event_listing part
-        self.assertTrue('event_listing' not in portlet.render())
+        self.assertTrue('event_listing' not in r.render())
 
     def test_portlet_event_renderer__recurring(self):
         tz = pytz.timezone(TZNAME)
@@ -205,6 +210,7 @@ class RendererTest(unittest.TestCase):
         r = self.renderer(
             assignment=portlet_events.Assignment(count=5,
                                                  state=('published',)))
+        r.update()
         events = r.events
         self.assertEqual(5, len(events))
         self.assertTrue('Event 2' not in [x.title for x in events])
@@ -222,6 +228,7 @@ class RendererTest(unittest.TestCase):
 
     def test_portlet_event_renderer__listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
+        r.update()
         rd = r.render()
         self.assertTrue('?mode=future' in rd)
         self.assertTrue('?mode=past' in rd)
