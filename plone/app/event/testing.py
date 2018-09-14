@@ -6,7 +6,6 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.registry.interfaces import IRegistry
 from plone.testing import z2
-from plone.testing import zope
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
@@ -69,7 +68,7 @@ class PAEventLayer(PloneSandboxLayer):
         self.ostz = os_zone()
 
         # Install products that use an old-style initialize() function
-        zope.installProduct(app, 'Products.DateRecurringIndex')
+        z2.installProduct(app, 'Products.DateRecurringIndex')
 
         # Load ZCML
         import plone.app.event
@@ -81,7 +80,7 @@ class PAEventLayer(PloneSandboxLayer):
 
     def tearDownZope(self, app):
         # Uninstall old-style Products
-        zope.uninstallProduct(app, 'Products.DateRecurringIndex')
+        z2.uninstallProduct(app, 'Products.DateRecurringIndex')
 
         # reset OS TZ
         if self.ostz:
@@ -129,6 +128,6 @@ PAEventDX_ROBOT_TESTING = FunctionalTesting(
     bases=(
         PAEventDX_FIXTURE,
         AUTOLOGIN_LIBRARY_FIXTURE,
-        zope.WSGI_SERVER_FIXTURE,
+        z2.ZSERVER_FIXTURE,
     ),
     name="plone.app.event.dx:Robot")
