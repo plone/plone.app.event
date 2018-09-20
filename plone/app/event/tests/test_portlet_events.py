@@ -157,13 +157,13 @@ class RendererTest(unittest.TestCase):
 
         e1 = createContentInContainer(
             self.portal, PTYPE,
-            id='e1', title='e1', start=start, end=end)
+            id='e1', title=u'e1', start=start, end=end)
         self.portal.portal_workflow.doActionFor(e1, 'publish')
 
         self.portal.invokeFactory('Folder', 'eventfolder')
         createContentInContainer(
             self.portal.eventfolder, PTYPE,
-            id='e2', title='e2', start=start, end=end)
+            id='e2', title=u'e2', start=start, end=end)
 
         r = self.renderer(assignment=portlet_events.Assignment(
             count=5, state=('draft',)))
@@ -199,10 +199,10 @@ class RendererTest(unittest.TestCase):
         start = localized_now() + timedelta(days=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, id='e1', title='Event 1', start=start,
+            self.portal, PTYPE, id='e1', title=u'Event 1', start=start,
             recurrence='RRULE:FREQ=WEEKLY;COUNT=10')
         createContentInContainer(
-            self.portal, PTYPE, id='e1', title='Event 1', start=start,
+            self.portal, PTYPE, id='e1', title=u'Event 1', start=start,
             recurrence='RRULE:FREQ=DAILY;COUNT=3')
 
         self.portal.portal_workflow.doActionFor(e1, 'publish')

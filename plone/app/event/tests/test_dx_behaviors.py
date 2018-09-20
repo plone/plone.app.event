@@ -73,7 +73,7 @@ class TestDXAddEdit(unittest.TestCase):
         self.portal.invokeFactory(
             'plone.app.event.dx.event',
             'event1',
-            title="event1",
+            title=u"event1",
         )
 
         TRY 2:
@@ -81,7 +81,7 @@ class TestDXAddEdit(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            'event1'
+            u'event1'
         )
 
         TRY 3:
@@ -237,7 +237,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1',
+            title=u'event1',
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -268,7 +268,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1',
+            title=u'event1',
             start=start,
             end=end
         )
@@ -298,7 +298,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1'
+            title=u'event1'
         )
         acc = IEventAccessor(e1)
 
@@ -324,7 +324,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1'
+            title=u'event1'
         )
 
         dt = datetime(2161, 1, 1)  # United Federation of Planets
@@ -384,7 +384,7 @@ class TestDXIntegration(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1',
+            title=u'event1',
             start=start,
             end=end
         )
@@ -403,7 +403,7 @@ class TestDXIntegration(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'plone.app.event.dx.event',
-            title='event1',
+            title=u'event1',
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -562,7 +562,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'Event',
-            title='event1',
+            title=u'event1',
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -610,7 +610,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             'Event',
-            title='event1',
+            title=u'event1',
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
