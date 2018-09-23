@@ -4,10 +4,6 @@ Changelog
 3.2.0 (unreleased)
 --------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Remove ``Pragma: no-cache`` header for icalendar exports.
