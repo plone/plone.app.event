@@ -14,7 +14,10 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- iCalendar categories are exepected as a comma separated string, not as multiple entries.
+  See https://www.kanzaki.com/docs/ical/categories.html
+  Needs fixed iCalendar >4.0.2
+  [jensens]
 
 
 3.2.0 (2018-09-23)

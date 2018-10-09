@@ -49,7 +49,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         if six.PY3:
             output = [i.decode('utf8') for i in output]
         icalstr = ''.join(output)
-
         self.checkOrder(
             icalstr,
             'BEGIN:VCALENDAR',
@@ -65,8 +64,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'RDATE;TZID=Europe/Vienna:20130509T000000',
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
-            'CATEGORIES:plone',
-            'CATEGORIES:testing',
+            'CATEGORIES:plone,testing',
             'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',  # noqa
             ' .org',  # line longer than max length spec by icalendar
             'CREATED;VALUE=DATE-TIME:',
@@ -118,7 +116,6 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
 
         # No occurrences in export. Otherwise count would be 8.
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
-
         self.checkOrder(
             icalstr,
             'BEGIN:VCALENDAR',
@@ -160,8 +157,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             'RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1',
             'RDATE;TZID=Europe/Vienna:20130509T000000',
             'EXDATE;TZID=Europe/Vienna:20130506T000000,20140404T000000',
-            'CATEGORIES:plone',
-            'CATEGORIES:testing',
+            'CATEGORIES:plone,testing',
             'CONTACT:Auto Testdriver\\, +123456789\\, testdriver@plone.org\\, http://plone',  # noqa
             ' .org',
             'CREATED;VALUE=DATE-TIME:',
