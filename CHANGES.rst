@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fixed searchable text indexer to avoid breaking when there is no text.
+  [davisagli]
 
 
 3.2.0 (2018-09-23)
