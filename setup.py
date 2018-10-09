@@ -51,7 +51,7 @@ setup(
         'Products.ZCatalog',
         'Products.statusmessages',
         'Zope2',
-        'icalendar > 4.0.2',
+        'icalendar',  # >4.0.2
         'plone.app.contentlisting',
         'plone.app.dexterity',
         'plone.app.layout',
