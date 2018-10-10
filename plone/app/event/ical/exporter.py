@@ -360,8 +360,9 @@ class ICalendarEventComponent(object):
     def categories(self):
         ret = []
         for cat in self.event.subjects or []:
-            ret.append({'value': cat})
-        return ret or None
+            ret.append(cat)
+        if ret:
+            return {'value': ret}
 
     @property
     def geo(self):
