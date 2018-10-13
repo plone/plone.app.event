@@ -14,6 +14,8 @@ New features:
 
 Bug fixes:
 
+- Fixed searchable text indexer to avoid breaking when there is no text.
+  [davisagli]
 - iCalendar categories are exepected as a comma separated string, not as multiple entries.
   See https://www.kanzaki.com/docs/ical/categories.html
   Needs fixed iCalendar >4.0.2

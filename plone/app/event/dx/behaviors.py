@@ -378,6 +378,8 @@ def searchable_text_indexer(obj):
     text += u'%s\n' % acc.title
     text += u'%s\n' % acc.description
     textvalue = acc.text
+    if textvalue is None:
+        raise AttributeError
     transforms = getToolByName(obj, 'portal_transforms')
     if six.PY2:
         textvalue = textvalue.encode('utf8')
