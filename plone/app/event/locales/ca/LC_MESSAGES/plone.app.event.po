@@ -22,11 +22,11 @@ msgstr "Esdeveniments dels propers 7 dies"
 
 #: plone/app/event/portlets/portlet_calendar.py:217
 msgid "Add Calendar Portlet"
-msgstr "Afegeix portlets de Calendari"
+msgstr "Afegeix portlets de calendari"
 
 #: plone/app/event/portlets/portlet_events.py:130
 msgid "Add Events Portlet"
-msgstr "Afegeix un portlet d'esdeveniment"
+msgstr "Afegeix un portlet d'esdeveniments"
 
 #: plone/app/event/browser/event_summary.pt:40
 msgid "All dates"
@@ -34,7 +34,7 @@ msgstr "Totes les dates"
 
 #: plone/app/event/interfaces.py:36
 msgid "Available timezones"
-msgstr "Zones horaries disponibles"
+msgstr "Zones horàries disponibles"
 
 #: plone/app/event/portlets/portlet_calendar.py:59
 msgid "Calendar"
@@ -75,7 +75,7 @@ msgstr "Nombre d'elements a mostrar"
 
 #: plone/app/event/interfaces.py:25
 msgid "Portal default timezone"
-msgstr "Zona Horaria per defecte del lloc"
+msgstr "Zona Horària per defecte del lloc"
 
 #: plone/app/event/portlets/portlet_calendar.py:218
 msgid "This portlet displays events in a calendar."
@@ -246,7 +246,7 @@ msgstr ""
 #. Default: "List of attendees."
 #: plone/app/event/at/content.py:199 plone/app/event/dx/behaviors.py:235
 msgid "help_event_attendees"
-msgstr "Lista d'assistens"
+msgstr "Llista d'assistents"
 
 #. Default: "Email address to contact about this event."
 #: plone/app/event/at/content.py:236 plone/app/event/dx/behaviors.py:267
@@ -447,12 +447,12 @@ msgstr "Telèfon de contacte"
 #. Default: "Event Ends"
 #: plone/app/event/at/content.py:83 plone/app/event/dx/behaviors.py:84
 msgid "label_event_end"
-msgstr "L'event finalitza"
+msgstr "L'esdeveniment finalitza"
 
 #. Default: "Location"
 #: plone/app/event/at/content.py:178 plone/app/event/dx/behaviors.py:215
 msgid "label_event_location"
-msgstr "Ubicació de l'event"
+msgstr "Ubicació de l'esdeveniment"
 
 #. Default: "Open End"
 #: plone/app/event/at/content.py:120 plone/app/event/dx/behaviors.py:108
@@ -472,7 +472,7 @@ msgstr "Configuració de l'esdeveniment"
 #. Default: "Event Starts"
 #: plone/app/event/at/content.py:61 plone/app/event/dx/behaviors.py:72
 msgid "label_event_start"
-msgstr "L'event comença"
+msgstr "L'esdeveniment comença"
 
 #. Default: "Timezone"
 #: plone/app/event/at/content.py:140 plone/app/event/dx/behaviors.py:121
@@ -521,7 +521,7 @@ msgstr "Mes"
 #. Default: "Past"
 #: plone/app/event/browser/event_listing.pt:30
 msgid "mode_past_link"
-msgstr "Pasat"
+msgstr "Passat"
 
 #. Default: "Week"
 #: plone/app/event/browser/event_listing.pt:36
@@ -558,7 +558,7 @@ msgstr "Esdeveniments passats"
 #: plone/app/event/portlets/portlet_events.py:43
 msgid "portlet_help_search_base"
 msgstr ""
-"Selecciona la carpeta on cerca els esdeveniments. Aquesta carpeta es farà "
+"Selecciona la carpeta on cercar els esdeveniments. Aquesta carpeta es farà "
 "servir per enllaçar en les cerques del calendari. Si no s'especifica, es "
 "cercaran a tot el lloc i la llista serà cridada des de l'arrel."
 
@@ -586,7 +586,7 @@ msgstr "Setmana anterior"
 #. Default: "Event details"
 #: plone/app/event/browser/event_summary.pt:12
 msgid "summary_event_details"
-msgstr "Detalls de l'event"
+msgstr "Detalls de l'esdeveniment"
 
 #. Default: "Keep mine"
 #: plone/app/event/vocabularies.py:141
@@ -657,7 +657,7 @@ msgstr "Esdeveniments d'avui"
 #. Default: "Todays upcoming events"
 #: plone/app/event/browser/event_listing.py:233
 msgid "todays_upcoming_events"
-msgstr "Propoers esdeveniments d'avui"
+msgstr "Propers esdeveniments d'avui"
 
 #~ msgid "Go to the original Event."
 #~ msgstr "Anar a l'esdeveniment original"
@@ -666,4 +666,4 @@ msgstr "Propoers esdeveniments d'avui"
 #~ msgstr "Més aparicions d'aquest esdeveniments:"
 
 #~ msgid "This event is part of a recurring Event."
-#~ msgstr "aquest esdeveniment es part d'un esdeveniment periòdic"
+#~ msgstr "Aquest esdeveniment es part d'un esdeveniment periòdic"
