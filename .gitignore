@@ -24,3 +24,4 @@ pip-selfcheck.json
 var/
 !.gitattributes
 !.gitignore
+!.gitkeep
