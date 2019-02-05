@@ -4,3 +4,6 @@ recursive-include plone *
 global-include *.mo
 global-exclude *pyc *~
 prune devsrc
+include pyproject.toml
+recursive-exclude news *
+exclude news
