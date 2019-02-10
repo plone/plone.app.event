@@ -1,0 +1,1 @@
+- Add title in view definition, to allow translations. [cekk]
