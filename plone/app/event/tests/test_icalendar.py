@@ -289,8 +289,9 @@ class TestIcalImportDX(unittest.TestCase):
         impfolder = self.portal.impfolder1
 
         directory = os.path.dirname(__file__)
-        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
-        res = ical_import(impfolder, icsfile, self.event_type)
+        with open(os.path.join(directory, 'icaltest.ics'), 'rb') as icsfile:
+            icsdata = icsfile.read()
+        res = ical_import(impfolder, icsdata, self.event_type)
 
         self.assertEqual(res['count'], 5)
         self.assertEqual(len(impfolder.contentIds()), 5)
@@ -403,15 +404,17 @@ class TestIcalImportDX(unittest.TestCase):
         impfolder = self.portal.impfolder2
 
         directory = os.path.dirname(__file__)
-        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+        with open(os.path.join(directory, 'icaltest.ics'), 'rb') as icsfile:
+            icsdata = icsfile.read()
 
-        res = ical_import(impfolder, icsfile, self.event_type)
+        res = ical_import(impfolder, icsdata, self.event_type)
+
         self.assertEqual(res['count'], 5)
 
         e11 = impfolder['e1']
         suid1 = IEventAccessor(e11).sync_uid
 
-        res = ical_import(impfolder, icsfile, self.event_type,
+        res = ical_import(impfolder, icsdata, self.event_type,
                           sync_strategy=base.SYNC_NONE)
         self.assertEqual(res['count'], 5)
 
@@ -428,16 +431,17 @@ class TestIcalImportDX(unittest.TestCase):
         impfolder = self.portal.impfolder3
 
         directory = os.path.dirname(__file__)
-        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
+        with open(os.path.join(directory, 'icaltest.ics'), 'rb') as icsfile:
+            icsdata = icsfile.read()
 
-        res = ical_import(impfolder, icsfile, self.event_type)
+        res = ical_import(impfolder, icsdata, self.event_type)
         self.assertEqual(res['count'], 5)
 
         e1a = IEventAccessor(impfolder.e1)
         mod1 = e1a.last_modified
         suid1 = e1a.sync_uid
 
-        res = ical_import(impfolder, icsfile, self.event_type,
+        res = ical_import(impfolder, icsdata, self.event_type,
                           sync_strategy=base.SYNC_KEEP_MINE)
         self.assertEqual(res['count'], 0)
         e1a = IEventAccessor(impfolder.e1)
@@ -457,10 +461,13 @@ class TestIcalImportDX(unittest.TestCase):
         impfolder = self.portal.impfolder4
 
         directory = os.path.dirname(__file__)
-        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
-        icsfile2 = open(os.path.join(directory, 'icaltest2.ics'), 'rb').read()
+        with open(os.path.join(directory, 'icaltest.ics'), 'rb') as icsfile:
+            icsdata1 = icsfile.read()
 
-        res = ical_import(impfolder, icsfile, self.event_type)
+        with open(os.path.join(directory, 'icaltest2.ics'), 'rb') as icsfile:
+            icsdata2 = icsfile.read()
+
+        res = ical_import(impfolder, icsdata1, self.event_type)
         self.assertEqual(res['count'], 5)
 
         e1a = IEventAccessor(impfolder.e1)
@@ -471,7 +478,7 @@ class TestIcalImportDX(unittest.TestCase):
         start1 = e1a.start
         end1 = e1a.end
 
-        res = ical_import(impfolder, icsfile2, self.event_type,
+        res = ical_import(impfolder, icsdata2, self.event_type,
                           sync_strategy=base.SYNC_KEEP_NEWER)
         self.assertEqual(res['count'], 4)
         e1a = IEventAccessor(impfolder.e1)
@@ -499,10 +506,14 @@ class TestIcalImportDX(unittest.TestCase):
         impfolder = self.portal.impfolder5
 
         directory = os.path.dirname(__file__)
-        icsfile = open(os.path.join(directory, 'icaltest.ics'), 'rb').read()
-        icsfile2 = open(os.path.join(directory, 'icaltest2.ics'), 'rb').read()
 
-        res = ical_import(impfolder, icsfile, self.event_type)
+        with open(os.path.join(directory, 'icaltest.ics'), 'rb') as icsfile:
+            icsdata1 = icsfile.read()
+
+        with open(os.path.join(directory, 'icaltest2.ics'), 'rb') as icsfile:
+            icsdata2 = icsfile.read()
+
+        res = ical_import(impfolder, icsdata1, self.event_type)
         self.assertEqual(res['count'], 5)
 
         e1a = IEventAccessor(impfolder.e1)
@@ -520,7 +531,7 @@ class TestIcalImportDX(unittest.TestCase):
         start21 = e2a.start
         end21 = e2a.end
 
-        res = ical_import(impfolder, icsfile2, self.event_type,
+        res = ical_import(impfolder, icsdata2, self.event_type,
                           sync_strategy=base.SYNC_KEEP_THEIRS)
         self.assertEqual(res['count'], 5)
 
