@@ -19,6 +19,8 @@
         template="event_listing.pt"
         permission="zope2.View"
         layer="..interfaces.IBrowserLayer"
+        menu="plone_displayviews"
+        title="Event listing"
         />
     <browser:page
         for="*"
@@ -27,6 +29,8 @@
         template="event_listing.pt"
         permission="zope2.View"
         layer="..interfaces.IBrowserLayer"
+        menu="plone_displayviews"
+        title="Event listing"
         />
     <browser:page
         for="*"
