@@ -8,6 +8,20 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.2 (2019-03-03)
+------------------
+
+New features:
+
+
+- - Add title in view definition, to allow translations. [cekk] (#298)
+
+
+Bug fixes:
+
+
+- Close files in tests (#300)
+
 
 3.2.1 (2018-10-30)
 ------------------
