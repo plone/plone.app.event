@@ -382,16 +382,16 @@ def searchable_text_indexer(obj):
         raise AttributeError
     transforms = getToolByName(obj, 'portal_transforms')
     if six.PY2:
-        textvalue = textvalue.encode('utf8')
+        textvalue = textvalue.encode('utf8', 'replace')
     body_plain = transforms.convertTo(
         'text/plain',
         textvalue,
         mimetype='text/html',
     ).getData().strip()
-    if isinstance(body_plain, str):
-        body_plain = body_plain.decode('utf-8')
-    text += body_plain
-    return text.strip().encode('utf-8')
+    text += safe_unicode(body_plain)
+    if six.PY2:
+        text = text.strip().encode('utf-8')
+    return text
 
 
 # Object adapters
