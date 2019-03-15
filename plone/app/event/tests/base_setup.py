@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
-from Products.CMFCore.utils import getToolByName
 
 import pytz
 import unittest
@@ -121,6 +122,11 @@ EXDATE:20130506T000000,20140404T000000""",
             container=self.portal,
             id='future',
             title=u'Future Event',
+            text=RichTextValue(
+                u'Überraschung! Du kannst nach mir suchen',
+                'text/plain',
+                'text/html',
+            ),
             start=future,
             end=future + duration,
             location=u'Graz')
