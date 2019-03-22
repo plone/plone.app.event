@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.3 (2019-03-21)
+------------------
+
+Bug fixes:
+
+
+- fix SearchableText indexer for Python 3
+  [petschki] (#302)
+
+
 3.2.2 (2019-03-03)
 ------------------
 
