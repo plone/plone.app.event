@@ -306,7 +306,7 @@ def _obj_or_acc(obj, ret_mode):
         return IEventAccessor(obj)
 
 
-def _get_compare_attr(obj, attr):
+def _get_compare_attr(obj, attr, fallback_attr='start'):
     """Return an compare attribute, supporting AT, DX and IEventAccessor
     objects.
     """
@@ -315,6 +315,10 @@ def _get_compare_attr(obj, attr):
         val = val()
     if isinstance(val, DateTime):
         val = pydt(val)
+    if not val and fallback_attr is not None:
+        # Try to get a fallback attribute - e.g. ``start``.
+        # Useful for events w/out end date.
+        val = _get_compare_attr(obj, fallback_attr, fallback_attr=None)
     return val
 
 

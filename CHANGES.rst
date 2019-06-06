@@ -13,6 +13,9 @@ Changelog
 
 Bug fixes:
 
+- When sorting expanded events, do not fail if there is no ``end`` attribute set.
+  [thet]
+
 
 - fix SearchableText indexer for Python 3
   [petschki] (#302)
