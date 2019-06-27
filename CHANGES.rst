@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.4 (2019-06-27)
+------------------
+
+Bug fixes:
+
+
+- Add regression-test for allowed_attributes. See https://github.com/zopefoundation/Zope/issues/397
+  [pbauer] (#306)
+
+
 3.2.3 (2019-03-21)
 ------------------
 
