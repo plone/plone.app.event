@@ -176,13 +176,15 @@ class EventListing(BrowserView):
         events = self.events(ret_mode=RET_MODE_OBJECTS, expand=False,
                              batch=False)
         cal = construct_icalendar(self.context, events)
+        ical = cal.to_ical()
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
+        self.request.RESPONSE.setHeader('Content-Length', len(ical))
         self.request.RESPONSE.setHeader(
             'Content-Disposition',
             'attachment; filename="%s"' % name
         )
-        self.request.RESPONSE.write(cal.to_ical())
+        self.request.RESPONSE.write(ical)
 
     @property
     def ical_url(self):

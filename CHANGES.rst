@@ -14,6 +14,9 @@ Changelog
 
 Bug fixes:
 
+- Fix missing Content-Length header when exporting iCal
+  [laulaz]
+
 - Fix developement buildout
   [laulaz]
 
