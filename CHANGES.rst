@@ -9,6 +9,15 @@ Changelog
 .. towncrier release notes start
 
 
+1.1.13 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix developement buildout
+  [laulaz]
+
+
 1.1.12 (2018-03-07)
 -------------------
 
