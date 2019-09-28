@@ -9,6 +9,7 @@
   <!-- external dependencies -->
   <include package="plone.browserlayer" />
   <include package="plone.event" />
+  <include package="plone.resource" />
   <include package="plone.formwidget.recurrence" />
   <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
