@@ -279,12 +279,16 @@ class Renderer(base.Renderer):
         return caldata
 
     def nav_pattern_options(self, year, month):
+        val = self.hash
+        if isinstance(val, bytes):
+            val = val.decode("utf-8")
+
         return json.dumps({
             'url': '%s/@@render-portlet?portlethash=%s&year=%s&month=%s' % (
                 getSite().absolute_url(),
-                self.hash,
+                val,
                 year, month),
-            'target': '#portletwrapper-%s > *' % self.hash
+            'target': '#portletwrapper-%s > *' % val
         })
 
     @property
