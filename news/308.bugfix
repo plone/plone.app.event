@@ -1,1 +1,0 @@
-Fix Python2 vs. Python3 text and bytes handling in the calendar portlet.

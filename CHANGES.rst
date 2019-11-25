@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.6 (2019-11-25)
+------------------
+
+Bug fixes:
+
+
+- Fix Python2 vs. Python3 text and bytes handling in the calendar portlet. (#308)
+
+
 3.2.5 (2019-10-12)
 ------------------
 
