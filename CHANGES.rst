@@ -8,6 +8,14 @@ Changelog
 
 .. towncrier release notes start
 
+1.1.13 (2020-03-08)
+-------------------
+
+Bug fixes:
+
+
+- Fixed Spanish translations.  [Corina Riba] (#0)
+
 
 1.1.12 (2018-03-07)
 -------------------
