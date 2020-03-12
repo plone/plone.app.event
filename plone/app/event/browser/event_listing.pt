@@ -43,12 +43,15 @@
 
     <tal:items repeat="data batch">
 
-      <article itemscope itemtype="http://data-vocabulary.org/Event" class="vevent tileItem"
+      <article itemscope itemtype="https://schema.org/Event" class="vevent tileItem"
           tal:define="startf python:view.date_speller(data.start)">
 
         <ul class="hiddenStructure">
           <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">end</li>
           <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
+          <li  class="location" itemscope itemprop="location" itemtype="http://schema.org/Place">
+            <span itemprop="address" tal:content="data/location" >location</span>
+          </li>          
         </ul>
 
         <div class="cal_date">
@@ -59,7 +62,7 @@
 
         <div class="cal_info clearfix">
           <h2 class="tileHeadline"><a href="" itemprop="url" class="url" tal:attributes="href data/url">
-            <span itemprop="summary" class="summary" tal:content="data/title">Title</span>
+            <span itemprop="name" class="summary" tal:content="data/title">Title</span>
           </a></h2>
           <div class="documentByLine">
             <tal:date tal:replace="structure python:view.formatted_date(data)"/>
