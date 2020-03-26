@@ -25,6 +25,7 @@ setup(
         "Framework :: Plone",
         "Framework :: Plone :: 5.1",
         "Framework :: Plone :: 5.2",
+        "Framework :: Plone :: Core",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.6",
