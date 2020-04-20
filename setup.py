@@ -5,7 +5,7 @@ from setuptools import setup
 import os
 
 
-version = '3.2.7'
+version = '3.2.8.dev0'
 
 
 long_description = ('\n\n'.join([
