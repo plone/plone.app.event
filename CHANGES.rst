@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.7 (2020-04-20)
+------------------
+
+Bug fixes:
+
+
+- Change markup for structured data schemas from ``data-vocabulary.org`` to ``schema.org``.
+  Because google supports only schema.org - based definitions
+  [1letter] (#312)
+
+
 3.2.6 (2019-11-25)
 ------------------
 
