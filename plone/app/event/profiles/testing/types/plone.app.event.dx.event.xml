@@ -28,16 +28,16 @@
 
   <!-- Enabled behaviors -->
   <property name="behaviors">
-    <element value="plone.app.event.dx.behaviors.IEventBasic"/>
-    <element value="plone.app.event.dx.behaviors.IEventRecurrence"/>
-    <element value="plone.app.event.dx.behaviors.IEventLocation"/>
-    <element value="plone.app.event.dx.behaviors.IEventAttendees"/>
-    <element value="plone.app.event.dx.behaviors.IEventContact"/>
-    <element value="plone.app.contenttypes.behaviors.richtext.IRichText"/>
-    <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
-    <element value="plone.app.content.interfaces.INameFromTitle"/>
-    <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
-    <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
+    <element value="plone.eventbasic"/>
+    <element value="plone.eventrecurrence"/>
+    <element value="plone.eventlocation"/>
+    <element value="plone.eventattendees"/>
+    <element value="plone.eventcontact"/>
+    <element value="plone.richtext"/>
+    <element value="plone.dublincore"/>
+    <element value="plone.namefromtitle"/>
+    <element value="plone.allowdiscussion"/>
+    <element value="plone.excludefromnavigation"/>
   </property>
 
   <!-- View and aliases -->
