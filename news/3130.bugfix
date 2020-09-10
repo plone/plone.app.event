@@ -1,0 +1,2 @@
+Replaced deprecated ``plone.testing.z2`` imports with ``plone.testing.zope``, where possible.
+[maurits]
