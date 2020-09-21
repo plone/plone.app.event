@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.9 (2020-09-21)
+------------------
+
+Bug fixes:
+
+
+- Replaced deprecated ``plone.testing.z2`` imports with ``plone.testing.zope``, where possible.
+  [maurits] (#3130)
+
+
 3.2.8 (2020-09-07)
 ------------------
 
