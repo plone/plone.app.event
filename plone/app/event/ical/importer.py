@@ -26,6 +26,7 @@ from zope.event import notify
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.interface import Invalid
 from zope.interface import noLongerProvides
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -223,6 +224,16 @@ def ical_import(container, ics_resource, event_type,
     return {'count': count}
 
 
+def no_file_protocol_url(value):
+    """Validator for ical_url: we do not want file:// urls.
+
+    This opens up security issues.
+    """
+    if value and value.startswith("file://"):
+        raise Invalid(_(u"URLs with file:// are not allowed."))
+    return True
+
+
 class IIcalendarImportSettings(Interface):
 
     event_type = schema.Choice(
@@ -240,6 +251,7 @@ class IIcalendarImportSettings(Interface):
         description=_(
             'ical_import_url_desc',
             default=u"URL to an external icalendar resource file."),
+        constraint=no_file_protocol_url,
         required=False
     )
 
