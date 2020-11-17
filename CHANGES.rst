@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.10 (2020-11-17)
+-------------------
+
+Bug fixes:
+
+
+- Give validation error in ical importer when a ``file://`` URL is used.
+  This could be a line of attack for a hacker.
+  [maurits] (#3209)
+
+
 3.2.9 (2020-09-21)
 ------------------
 

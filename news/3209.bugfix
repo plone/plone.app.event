@@ -1,3 +1,0 @@
-Give validation error in ical importer when a ``file://`` URL is used.
-This could be a line of attack for a hacker.
-[maurits]
