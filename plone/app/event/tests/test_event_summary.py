@@ -108,7 +108,7 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
 
         output = view()
 
-        self.assertTrue('Now Event' in output)  # Title not shown by def.
+        self.assertTrue('Now Event' not in output)  # Title not shown by def.
         self.assertTrue('2013-05-05' in output)
         self.assertTrue('All dates' not in output)
         self.assertTrue('2013-05-07' not in output)
