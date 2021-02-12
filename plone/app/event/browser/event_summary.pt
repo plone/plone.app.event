@@ -7,149 +7,160 @@
       tal:omit-tag="">
 
   <div class="card event-summary">
-    <div class="card-body pb-1 row row-cols-1 row-cols-sm-2 row-cols-md-3"
+    <div class="card-body pb-1 row"
          tal:define="portal_url context/@@plone_portal_state/portal_url;
                      data python:view.data;
                      excludes view/excludes;
                      icons python:context.restrictedTraverse('@@iconresolver')">
 
-      <div class="col mb-3" condition="python:'date' not in excludes">
-        <div class="d-flex">
+      <div class="col-md-6">
+
+        <div class="mb-3 d-flex">
           <div class="meta-icon">
             <tal:icon replace="structure python:icons.tag('calendar')" />
           </div>
           <div>
             <strong class="meta-label" i18n:translate="event_when">When</strong>
-            <p class="card-text">
+            <p class="card-text h4">
               <span tal:define="start_tzname data/timezone;
                                 start_utcdelta python:data.start.tzinfo.utcoffset(data.start);
                                 start_utcoffset python:(start_utcdelta.days*86400+start_utcdelta.seconds)*100/60/60;
                                 start_utcoffset python:int(start_utcoffset)">
                 <tal:date replace="structure python:view.formatted_date(context)" />
-                <span class="timezone"
-                      tal:condition="start_tzname">
+                <span class="timezone text-muted"
+                      tal:condition="start_tzname"><br />
                   (<tal:tzname replace="start_tzname">timezone name</tal:tzname> / UTC<tal:tzoffset replace="start_utcoffset" />)
                 </span>
               </span>
             </p>
           </div>
         </div>
-      </div>
 
-      <tal:cond condition="python:'occurrences' not in excludes">
-      <div class="col mb-3"
-           tal:define="next_occs view/next_occurrences;
-                       all_occs view/num_more_occurrences"
-            tal:condition="python:len(next_occs) > 1 or all_occs > 1">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('calendar')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="">
-              All dates
-            </strong>
-            <p class="card-text">
-              <span tal:repeat="occ next_occs">
-                <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
-                <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
-                  <strong tal:omit-tag="not: this_is_occ">
-                    <tal:date replace="structure python:view.formatted_date(occ)"/>
-                  </strong>
-                </a>
-                </tal:def>
-              </span>
-              <span tal:condition="view/num_more_occurrences">
-                <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing"
-                    tal:content="view/more_occurrences_text">
-                  There are 12 more occurrences.
-                </a>
-              </span>
-            </p>
+        <tal:cond condition="python:'occurrences' not in excludes">
+        <div class="mb-3"
+             tal:define="next_occs view/next_occurrences;
+                         all_occs view/num_more_occurrences"
+              tal:condition="python:len(next_occs) > 1 or all_occs > 1">
+          <div class="d-flex">
+            <div class="meta-icon">
+              <tal:icon replace="structure python:icons.tag('calendar-week')" />
+            </div>
+            <div>
+              <strong class="meta-label" i18n:translate="">
+                All dates
+              </strong>
+              <p class="card-text">
+                <span tal:repeat="occ next_occs">
+                  <tal:def define="this_is_occ python: occ.absolute_url() == context.absolute_url()">
+                  <a tal:attributes="href occ/absolute_url" tal:omit-tag="this_is_occ">
+                    <strong tal:omit-tag="not: this_is_occ">
+                      <tal:date replace="structure python:view.formatted_date(occ)"/>
+                    </strong>
+                  </a>
+                  </tal:def>
+                  <br />
+                </span>
+                <span tal:condition="view/num_more_occurrences">
+                  <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing"
+                      tal:content="view/more_occurrences_text">
+                    There are 12 more occurrences.
+                  </a>
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      </tal:cond>
+        </tal:cond>
 
-      <div class="col mb-3" tal:condition="python: data.location and 'location' not in excludes">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('geo-alt')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="event_where">Where</strong>
-            <p class="card-text" itemprop="location" tal:content="data/location">Location</p>
-          </div>
-        </div>
       </div>
 
-      <tal:cond condition="python:'contact' not in excludes">
+      <div class="col-md-6">
 
-      <div class="col mb-3" tal:define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('person')" />
+        <div class="row row-cols-1 row-cols-xl-2">
+
+          <div class="col mb-3" tal:condition="python: data.location and 'location' not in excludes">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('geo-alt')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="event_where">Where</strong>
+                <p class="card-text" itemprop="location" tal:content="data/location">Location</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <strong class="meta-label" i18n:translate="contact_name">Contact Name</strong>
-            <p class="card-text" tal:condition="mail"><a class="email stretched-link" tal:attributes="href string:mailto:${mail}" tal:content="name">Mail</a></p>
-            <p class="card-text" tal:condition="not:mail" tal:content="name">Name</p>
+
+          <tal:cond condition="python:'contact' not in excludes">
+
+          <div class="col mb-3" tal:define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('person')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="contact_name">Contact Name</strong>
+                <p class="card-text" tal:condition="mail"><a class="email" tal:attributes="href string:mailto:${mail}" tal:content="name">Mail</a></p>
+                <p class="card-text" tal:condition="not:mail" tal:content="name">Name</p>
+              </div>
+            </div>
           </div>
+
+          <div class="col mb-3" tal:condition="data/contact_phone">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('phone')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="contact_phone">Contact Phone</strong>
+                <p class="card-text"><a href="tel:${data/contact_phone}" title="" i18n:attributes="title contact_phone" tal:content="data/contact_phone">Contact Phone</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col mb-3" tal:condition="data/attendees|nothing">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('people')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="contact_attendees">Attendees</strong>
+                <p class="card-text">
+                  <tal:attendees tal:repeat="item data/attendees"><span class="text-no-wrap" tal:content="item">Attendee</span><span tal:condition="not:repeat/item/end">, </span></tal:attendees>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          </tal:cond>
+
+          <div class="col mb-3" tal:condition="python: data.event_url and 'event_url' not in excludes">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('laptop')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="event_url">Web</strong>
+                <p class="card-text"><a href="" tal:attributes="href data/event_url" i18n:translate="external_website">Visit external website</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col mb-3" tal:condition="python:'ical' not in excludes">
+            <div class="d-flex">
+              <div class="meta-icon">
+                <tal:icon replace="structure python:icons.tag('calendar-plus')" />
+              </div>
+              <div>
+                <strong class="meta-label" i18n:translate="heading_add_to_calendar">Add event to calendar</strong>
+                <p class="card-text" tal:define="here_url context/@@plone_context_state/object_url">
+                  <a href="#" rel="nofollow" tal:attributes="href string:$here_url/ics_view" title="Download this event in iCal format" i18n:attributes="title title_add_to_ical;">iCal</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </div>
 
-      <div class="col mb-3" tal:condition="data/contact_phone">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('phone')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="contact_phone">Contact Phone</strong>
-            <p class="card-text"><a href="tel:${data/contact_phone}" title="" i18n:attributes="title contact_phone" tal:content="data/contact_phone">Contact Phone</a></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col mb-3" tal:condition="data/attendees|nothing">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('people')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="contact_attendees">Attendees</strong>
-            <p class="card-text">
-              <tal:attendees tal:repeat="item data/attendees"><span class="text-no-wrap" tal:content="item">Attendee</span><span tal:condition="not:repeat/item/end">, </span></tal:attendees>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      </tal:cond>
-
-      <div class="col mb-3" tal:condition="python: data.event_url and 'event_url' not in excludes">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('laptop')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="event_url">Web</strong>
-            <p class="card-text"><a href="" class="stretched-link" tal:attributes="href data/event_url" i18n:translate="external_website">Visit external website</a></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col mb-3" tal:condition="python:'ical' not in excludes">
-        <div class="d-flex">
-          <div class="meta-icon">
-            <tal:icon replace="structure python:icons.tag('calendar-plus')" />
-          </div>
-          <div>
-            <strong class="meta-label" i18n:translate="heading_add_to_calendar">Add event to calendar</strong>
-            <p class="card-text" tal:define="here_url context/@@plone_context_state/object_url">
-              <a href="#" rel="nofollow" class="stretched-link" tal:attributes="href string:$here_url/ics_view" title="Download this event in iCal format" i18n:attributes="title title_add_to_ical;">iCal</a>
-            </p>
-          </div>
-        </div>
       </div>
 
     </div>
