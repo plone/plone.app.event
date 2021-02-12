@@ -112,17 +112,11 @@ class PAEventDXLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         self.ostz = os_zone()
-        # Load ZCML
-        import plone.app.contenttypes
-        self.loadZCML(package=plone.app.contenttypes,
-                      context=configurationContext)
-
         import plone.app.event.dx
         self.loadZCML(package=plone.app.event.dx,
                       context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        self.applyProfile(portal, 'plone.app.contenttypes:default')
         self.applyProfile(portal, 'plone.app.event:testing')
         set_timezone(tz='UTC')
 

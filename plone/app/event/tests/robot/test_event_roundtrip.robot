@@ -8,6 +8,9 @@ Library  Remote  ${PLONE_URL}/RobotRemote
 Test Setup  Open test browser
 Test Teardown  Close all browsers
 
+Variables  plone/app/event/tests/robot/variables.py
+
+
 *** Variables ***
 
 
@@ -16,6 +19,7 @@ Test Teardown  Close all browsers
 Scenario: Create and view an event
   Given a site owner
     and an event add form
+  Debug
   When I select a date in calendar overlay
   Then it should be filled in the form
 
@@ -67,12 +71,12 @@ I select a date in calendar overlay
   Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-date")]
   Wait until page contains  Sat
 # For Javascript: Month 1 = February.
-  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  1
-  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] select.picker__select--year  2014
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker__day')][contains(text(), "10")]
+  Select from list by label  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  ${EVENT_START_MONTHNAME}
+  Select from list by label  css=div[data-fieldname="form.widgets.IEventBasic.start"] select.picker__select--year  ${EVENT_START_YEAR}
+  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker__day')][contains(text(), "${EVENT_START_DAY}")]
 # Select Times
   Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-time")]
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker--time')]//li[contains(@class, 'picker__list-item')][contains(text(), "10:00 a.m.")]
+  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker--time')]//li[contains(@class, 'picker__list-item')][contains(text(), "${EVENT_START_HOUR}:00")]
 
 
 I click on Recurrence Add
@@ -80,7 +84,7 @@ I click on Recurrence Add
   Wait until page contains  Repeat
 
 I select weekly repeat
-  Select From List  css=#rirtemplate  weekly
+  Select From List by label  css=#rirtemplate  weekly
 
 I fill ${NUM} occurrences
   Input text  name=rirangebyoccurrencesvalue  ${NUM}
@@ -102,16 +106,16 @@ I open the event listing
 # Then
 
 it should be filled in the form
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-time  10:00 a.m.
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-time  11:00 a.m.
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-date  ${EVENT_START_MONTHNAME} ${EVENT_START_DAY}, ${EVENT_START_YEAR}
+  Textfield Should Contain  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-time  ${EVENT_START_HOUR}:00
+  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date  ${EVENT_END_MONTHNAME} ${EVENT_END_DAY}, ${EVENT_END_YEAR}
+  Textfield Should Contain  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-time  ${EVENT_END_HOUR}:00
 
 I should see the recurrence overlay
   Page Should Contain  Recurrence
   Page Should Contain  Selected dates
-  Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
-  Xpath Should Match X Times  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
+  Page Should Contain Element  //div[contains(@class, 'occurrence') and contains(@class, 'start')]  1
+  Page Should Contain Element  //div[contains(@class, 'occurrence') and contains(@class, 'rrule')]  6
 
 I should see the recurrence overlay in weeekly repeat mode
   Page Should Contain  Repeats every
@@ -130,10 +134,10 @@ the overlay should be closed
 # http://stackoverflow.com/questions/1604471/how-can-i-find-an-element-by-css-class-with-xpath
 
 I should see ${NUM} occurrences in the overlay
-  Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
+  Page Should Contain Element  //div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
 
 I should see ${NUM} occurrences in the form
-  Xpath Should Match X Times  //div[contains(concat(' ', normalize-space(@class), ' '), ' ridisplay ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
+  Page Should Contain Element  //div[contains(concat(' ', normalize-space(@class), ' '), ' ridisplay ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' rioccurrences ')]/div[contains(@class, 'occurrence')]  ${NUM}
 
 I should see the event detail view
   Page Should Contain  Testevent
@@ -158,4 +162,4 @@ I should see the occurrence detail view
   Page Should Contain  iCal
 
 I should see the event listing view
-  Xpath Should Match X Times  //article[@class="vevent"]  3
+  Page Should Contain Element  //article[@class="vevent"]  3
