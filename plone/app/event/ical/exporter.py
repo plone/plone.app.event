@@ -268,11 +268,9 @@ class ICalendarEventComponent(object):
             # before midnight. Using the RFC5545 preferred method for
             # plone.app.event seems not appropriate, since we would have to fix
             # the date to end a day before for displaying.
-            # For exporting, we let whole_day events end on the next day at
-            # midnight.
+            # For exporting, we let whole_day events end on the next day at 0:00.
             # See:
-            # http://stackoverflow.com/questions/1716237/single-day-all-day
-            # -appointments-in-ics-files
+            # http://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
             return {'value': self.event.end.date() + timedelta(days=1)}
