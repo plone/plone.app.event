@@ -52,27 +52,27 @@ a site owner
 an event add form
   Go to  ${PLONE_URL}/++add++Event
   Wait until page contains  Add Event
-  Input text  name=form.widgets.IDublinCore.title  Testevent
-  Input text  id=form-widgets-IDublinCore-description  Test description
-  Input text  id=form-widgets-IEventLocation-location  Test location
-  Input text  id=form-widgets-IEventAttendees-attendees  Test attendee
-  Input text  id=form-widgets-IEventContact-contact_name  Test name
-  Input text  id=form-widgets-IEventContact-contact_email  test@email.com
-  Input text  id=form-widgets-IEventContact-contact_phone  +1234567890
-  Input text  id=form-widgets-IEventContact-event_url  http://test.url
+  Input text  name=form.widgets.title  Testevent
+  Input text  id=form-widgets-description  Test description
+  Input text  id=form-widgets-location  Test location
+  Input text  id=form-widgets-attendees  Test attendee
+  Input text  id=form-widgets-contact_name  Test name
+  Input text  id=form-widgets-contact_email  test@email.com
+  Input text  id=form-widgets-contact_phone  +1234567890
+  Input text  id=form-widgets-event_url  http://test.url
 
 # When
 
 I select a date in calendar overlay
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-date")]
+  Click Element  xpath=//div[@data-fieldname="form.widgets.start"]//input[contains(@class,"pattern-pickadate-date")]
   Wait until page contains  Sat
 # For Javascript: Month 1 = February.
-  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] .picker__select--month  1
-  Select from list  css=div[data-fieldname="form.widgets.IEventBasic.start"] select.picker__select--year  2014
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker__day')][contains(text(), "10")]
+  Select from list  css=div[data-fieldname="form.widgets.start"] .picker__select--month  1
+  Select from list  css=div[data-fieldname="form.widgets.start"] select.picker__select--year  2014
+  Click Element  xpath=//div[@data-fieldname="form.widgets.start"]//div[contains(@class, 'picker__day')][contains(text(), "10")]
 # Select Times
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//input[contains(@class,"pattern-pickadate-time")]
-  Click Element  xpath=//div[@data-fieldname="form.widgets.IEventBasic.start"]//div[contains(@class, 'picker--time')]//li[contains(@class, 'picker__list-item')][contains(text(), "10:00 a.m.")]
+  Click Element  xpath=//div[@data-fieldname="form.widgets.start"]//input[contains(@class,"pattern-pickadate-time")]
+  Click Element  xpath=//div[@data-fieldname="form.widgets.start"]//div[contains(@class, 'picker--time')]//li[contains(@class, 'picker__list-item')][contains(text(), "10:00 a.m.")]
 
 
 I click on Recurrence Add
@@ -102,10 +102,10 @@ I open the event listing
 # Then
 
 it should be filled in the form
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-start input.pattern-pickadate-time  10:00 a.m.
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-date  February 10, 2014
-  Textfield Value Should Be  css=#formfield-form-widgets-IEventBasic-end input.pattern-pickadate-time  11:00 a.m.
+  Textfield Value Should Be  css=#formfield-form-widgets-start input.pattern-pickadate-date  February 10, 2014
+  Textfield Value Should Be  css=#formfield-form-widgets-start input.pattern-pickadate-time  10:00 a.m.
+  Textfield Value Should Be  css=#formfield-form-widgets-end input.pattern-pickadate-date  February 10, 2014
+  Textfield Value Should Be  css=#formfield-form-widgets-end input.pattern-pickadate-time  11:00 a.m.
 
 I should see the recurrence overlay
   Page Should Contain  Recurrence

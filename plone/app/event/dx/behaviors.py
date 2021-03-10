@@ -183,7 +183,7 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
     directives.widget(
         'recurrence',
         RecurrenceFieldWidget,
-        start_field=u'IEventBasic.start',
+        start_field=u'start',
         first_day=first_weekday_sun0,
         show_repeat_forever=False,
         klass=u'event_recurrence'

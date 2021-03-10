@@ -104,14 +104,14 @@ class TestDXAddEdit(unittest.TestCase):
         ))
 
         self.browser.getControl(
-            name='form.widgets.IDublinCore.title'
+            name='form.widgets.title'
         ).value = "TestEvent"
 
         # TODO: these values are simply not set in the pat-pickadate pattern.
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = '2014-03-30'
+            name='form.widgets.start').value = '2014-03-30'
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = '2014-03-31'
+            name='form.widgets.end').value = '2014-03-31'
 
         self.browser.getControl('Save').click()
 
@@ -151,7 +151,7 @@ class TestDXAddEdit(unittest.TestCase):
         testevent = self.portal.testevent
         request = self.request
         request.form = {
-            'form.widgets.IEventBasic.start': ('2014', '2', '2', '10', '10')
+            'form.widgets.start': ('2014', '2', '2', '10', '10')
         }
         edit = DefaultEditForm(testevent, request)
         edit.update()
@@ -166,14 +166,14 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open(self.portal.absolute_url())
         self.browser.getLink('plone.app.event.dx.event').click()
         self.browser.getControl(
-            name='form.widgets.IDublinCore.title'
+            name='form.widgets.title'
         ).value = "TestEvent"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-30 03:51"
+            name='form.widgets.start').value = "2014-03-30 03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-30 04:51"
+            name='form.widgets.end').value = "2014-03-30 04:51"
 
         self.browser.getControl('Save').click()
 
@@ -190,10 +190,10 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open('%s/@@edit' % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-31 03:51"
+            name='form.widgets.start').value = "2014-03-31 03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-31 04:51"
+            name='form.widgets.end').value = "2014-03-31 04:51"
 
         self.browser.getControl('Save').click()
 
@@ -218,7 +218,7 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open('%s/@@edit' % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.whole_day:list').value = True
+            name='form.widgets.whole_day:list').value = True
 
         self.browser.getControl('Save').click()
 
