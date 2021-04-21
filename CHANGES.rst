@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a1 (2021-04-20)
+--------------------
+
+Breaking changes:
+
+
+- Update for Plone 6 with Bootstrap markup
+  NavBar in Upcoming/Past/iCal Navigation
+  [1letter] (#326)
+
+
 3.2.10 (2020-11-17)
 -------------------
 
