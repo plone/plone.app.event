@@ -100,7 +100,7 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
 
     @mock.patch('plone.app.event.base.localized_now', new=PN)
     def test_event_summary__recurring_excludes(self):
-        """Test if some specific content is included here.
+        """Test if some specific content is excluded here.
         """
         view = self.portal.now.restrictedTraverse('@@event_summary')
         ex = view.excludes
