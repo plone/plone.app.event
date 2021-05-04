@@ -16,11 +16,12 @@
                      start_utcoffset python:int(start_utcoffset);
                      excludes view/excludes;
                      next_occs view/next_occurrences;
-                     all_occs view/num_more_occurrences;
+                     has_occs view/has_occurrences;
+                     num_more_occs view/num_more_occurrences;
                      icons python:context.restrictedTraverse('@@iconresolver')">
 
       <div class="row">
-        <div class="col">
+        <div class="col event-when">
           <div class="mb-3 d-flex">
             <div class="meta-icon">
               <tal:icon replace="structure python:icons.tag('calendar', tag_class='icon-inline')" />
@@ -41,17 +42,15 @@
         </div>
       </div>
 
-      <div class="row ${python:len(next_occs) > 1 and 'row-cols-1 row-cols-md-2' or ''}">
-
-        <tal:cond condition="python:'occurrences' not in excludes and all_occs">
-        <div class="col">
-          <div class="mb-3"
-                tal:condition="python:len(next_occs) > 1 or all_occs > 1">
+      <div class="row ${python:has_occs and 'row-cols-1 row-cols-md-2' or ''}">
+        <tal:cond condition="python:'occurrences' not in excludes and has_occs">
+        <div class="col event-occurences">
+          <div class="mb-3">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('calendar-week', tag_class='icon-inline')" />
               </div>
-              <div>
+              <div class="event-all-dates">
                 <strong class="meta-label" i18n:translate="">
                   All dates
                 </strong>
@@ -66,7 +65,7 @@
                     </tal:def>
                     <br />
                   </span>
-                  <span tal:condition="view/num_more_occurrences">
+                  <span tal:condition="num_more_occs">
                     <a tal:attributes="href string:${view/event_context/absolute_url}/@@event_listing"
                         tal:content="view/more_occurrences_text">
                       There are 12 more occurrences.
@@ -81,7 +80,7 @@
 
         <div class="row col ${python:len(next_occs) > 1 and 'row-cols-1 row-cols-md-1' or 'row-cols-1 row-cols-md-2'}">
 
-          <div class="col mb-3" tal:condition="python: data.location and 'location' not in excludes">
+          <div class="col event-location mb-3" tal:condition="python: data.location and 'location' not in excludes">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('geo-alt', tag_class='icon-inline')" />
@@ -95,7 +94,7 @@
 
           <tal:cond condition="python:'contact' not in excludes">
 
-          <div class="col mb-3" tal:define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
+          <div class="col event-contact mb-3" tal:define="mail data/contact_email; name data/contact_name;" tal:condition="python:name or mail">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('person', tag_class='icon-inline')" />
@@ -108,7 +107,7 @@
             </div>
           </div>
 
-          <div class="col mb-3" tal:condition="data/contact_phone">
+          <div class="col event-phone mb-3" tal:condition="data/contact_phone">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('phone', tag_class='icon-inline')" />
@@ -120,7 +119,7 @@
             </div>
           </div>
 
-          <div class="col mb-3" tal:condition="data/attendees|nothing">
+          <div class="col event-attendees mb-3" tal:condition="data/attendees|nothing">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('people', tag_class='icon-inline')" />
@@ -136,7 +135,7 @@
 
           </tal:cond>
 
-          <div class="col mb-3" tal:condition="python: data.event_url and 'event_url' not in excludes">
+          <div class="col event-url mb-3" tal:condition="python: data.event_url and 'event_url' not in excludes">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('laptop', tag_class='icon-inline')" />
@@ -148,7 +147,7 @@
             </div>
           </div>
 
-          <div class="col mb-3" tal:condition="python:'ical' not in excludes">
+          <div class="col event-add-ical mb-3" tal:condition="python:'ical' not in excludes">
             <div class="d-flex">
               <div class="meta-icon">
                 <tal:icon replace="structure python:icons.tag('calendar-plus', tag_class='icon-inline')" />

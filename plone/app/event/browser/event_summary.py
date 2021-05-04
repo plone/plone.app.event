@@ -84,3 +84,10 @@ class EventSummaryView(BrowserView):
             mapping={u"results": self.num_more_occurrences}
         )
         return self.context.translate(msgid)
+
+    @property
+    @view.memoize
+    def has_occurrences(self):
+        occs = [o for o in self.next_occurrences if IOccurrence.providedBy(o)]
+        return len(occs)
+        
