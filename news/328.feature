@@ -1,2 +1,0 @@
-Restructure event summary
-[agitator]

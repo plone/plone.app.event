@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a2 (2021-05-11)
+--------------------
+
+New features:
+
+
+- Restructure event summary
+  [agitator] (#328)
+
+
 4.0.0a1 (2021-04-20)
 --------------------
 
