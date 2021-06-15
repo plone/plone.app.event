@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a3 (2021-06-14)
+--------------------
+
+Bug fixes:
+
+
+- Fix #330 traversal problem in the portlet_events template when an object in a folder is called "image"
+  [sneridagh] (#330)
+
+
 4.0.0a2 (2021-05-11)
 --------------------
 
