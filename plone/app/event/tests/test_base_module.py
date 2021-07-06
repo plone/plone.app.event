@@ -12,6 +12,7 @@ from plone.app.event.base import DEFAULT_END_DELTA
 from plone.app.event.base import default_start
 from plone.app.event.base import default_timezone
 from plone.app.event.base import DT
+from plone.app.event.base import expand_events
 from plone.app.event.base import find_context
 from plone.app.event.base import find_event_listing
 from plone.app.event.base import find_ploneroot
@@ -555,7 +556,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
               object - such doesn't exist).
 
             - The event object's start and end dates are the very first
-              occurrence. Every other occurence is not stored anywhere but
+              occurrence. Every other occurrence is not stored anywhere but
               created on the fly from a recurrence rule.
 
             - Sorting on start sorts on the very first occurrence - this is
@@ -746,6 +747,55 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
                                   ret_mode=RET_MODE_ACCESSORS))
         expect = self.occ[1:2] + self.occ[6:8]  # includes ongoing long event
         self.assertEqual(res, expect, self.diff(res, expect))
+
+    def test_expand_future_event(self):
+        """make sure expand_events does not remove event objects (that need not be expanded)
+        """
+        # create event happening next year (today + 365 days)
+        next_year = self.event_factory(
+            container=self.portal,
+            content_id='next-year',
+            title=u'Next year',
+            start=self.tomorrow + timedelta(365),
+            end=self.tomorrow + timedelta(365) + self.duration,
+            location=u"Dornbirn",
+            recurrence='RRULE:FREQ=DAILY;COUNT=4',
+        )
+        next_year.reindexObject()
+
+
+        ev = (u'Next year', '2014-05-06 10:00:00', '2014-05-06 11:00:00')  # original event
+        rec1 = (u'Next year', '2014-05-07 10:00:00', '2014-05-07 11:00:00')  # first recurrence
+        rec2 = (u'Next year', '2014-05-08 10:00:00', '2014-05-08 11:00:00')  # second recurrence
+        rec3 = (u'Next year', '2014-05-09 10:00:00', '2014-05-09 11:00:00')  # third recurrence
+        rec4 = (u'Next year', '2014-05-10 10:00:00', '2014-05-10 11:00:00')  # fourth recurrence
+
+
+        # expand_events from today+200 until today+300
+        res = self.fmt(expand_events(
+            [next_year],
+            RET_MODE_ACCESSORS,
+            start=self.now + timedelta(200),
+            end=self.now + timedelta(300),
+            sort="start"))
+
+        # event is included in result even though it starts after the the `end` param of expand_events
+        # this is to make expand_events only use start/end to expand occurrences, not limit events given in the list
+        # usecase: catalog search for future events (end >= now), and also show occurrences
+        # (limited to timeframe between start/end for the returned events,
+        # but to not exclude the events returned by the search)
+        expect = [ev]
+        self.assertEqual(res, expect, self.diff(res, expect))
+
+        # when the event does not happen after the search timespan, expand won't add original event
+        res = self.fmt(get_events(
+            self.portal,
+            expand=True,
+            start=self.now + timedelta(365+2),
+            end=self.now + timedelta(365+3),
+            ret_mode=RET_MODE_ACCESSORS))
+        expect = [rec1, rec2]
+        self.assertEqual(res, expect)
 
     # expand=False: events
 
