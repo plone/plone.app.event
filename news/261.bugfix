@@ -1,0 +1,2 @@
+make expand_events return items after start/end limit (fixes https://github.com/plone/plone.app.event/issues/261)
+[fRiSi]
