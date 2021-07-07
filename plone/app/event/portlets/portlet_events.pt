@@ -23,7 +23,7 @@
                       item_descr    item/description;
                       item_title    item/title;
                       item_location item/location;
-                      item_hasimage item/context/image|nothing"
+                      item_hasimage python:getattr(item.context.aq_base, 'image', None)"
           tal:attributes="class python:'portletItem odd' if oddrow else 'portletItem even'">
         <a href="#" class="tile"
             tal:attributes="href item_url;
