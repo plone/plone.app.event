@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.11 (2021-07-07)
+-------------------
+
+Bug fixes:
+
+
+- Fix #330 traversal problem in the portlet_events template when an object in a folder is called "image" (backport from master)
+  [sneridagh] (#330)
+- Fix events portlet error when rendering with thumbnails suppressed [alecpm] (#332)
+
+
 3.2.10 (2020-11-17)
 -------------------
 

@@ -1,2 +1,0 @@
-Fix #330 traversal problem in the portlet_events template when an object in a folder is called "image" (backport from master)
-[sneridagh]
