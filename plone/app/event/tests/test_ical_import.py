@@ -73,3 +73,20 @@ class TestICALImportSettings(unittest.TestCase):
         self.assertIn(
             'URL to an external icalendar resource file',
             self.browser.contents)
+
+    def test_constraint(self):
+        self.portal.invokeFactory("Folder", "f1")
+        f1 = self.portal["f1"]
+        f1_url = f1.absolute_url()
+        transaction.commit()
+
+        # Enable ical import.
+        self.browser.open(f1_url + "/ical_import_settings/enable")
+        self.browser.getControl("Confirm action").click()
+
+        # Set it to a file url.
+        self.browser.open(f1_url + "/ical_import_settings")
+        self.assertIn("URL to an external icalendar resource file", self.browser.contents)
+        self.browser.getControl(name="form.widgets.ical_url").value = "file:///tmp/test.ical"
+        self.browser.getControl(name="form.buttons.save").click()
+        self.assertIn("URLs with file: are not allowed.", self.browser.contents)
