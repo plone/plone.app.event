@@ -229,8 +229,8 @@ def no_file_protocol_url(value):
 
     This opens up security issues.
     """
-    if value and value.startswith("file://"):
-        raise Invalid(_(u"URLs with file:// are not allowed."))
+    if value and value.startswith("file:"):
+        raise Invalid(_(u"URLs with file: are not allowed."))
     return True
 
 
