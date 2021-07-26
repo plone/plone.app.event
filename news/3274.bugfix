@@ -1,4 +1,0 @@
-Do not allow ``file:`` protocol in ical url.
-Previously, only ``file://`` was disallowed, but this left room for relative paths.
-Taken over from `PloneHotfix20210518 <https://plone.org/security/hotfix/20210518/server-side-request-forgery-via-event-ical-url>`_.
-[maurits]

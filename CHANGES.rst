@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.12 (2021-07-26)
+-------------------
+
+Bug fixes:
+
+
+- Do not allow ``file:`` protocol in ical url.
+  Previously, only ``file://`` was disallowed, but this left room for relative paths.
+  Taken over from `PloneHotfix20210518 <https://plone.org/security/hotfix/20210518/server-side-request-forgery-via-event-ical-url>`_.
+  [maurits] (#3274)
+
+
 3.2.11 (2021-07-07)
 -------------------
 
