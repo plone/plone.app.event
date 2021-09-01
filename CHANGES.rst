@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.13 (2021-09-01)
+-------------------
+
+Bug fixes:
+
+
+- make expand_events return items after start/end limit (fixes https://github.com/plone/plone.app.event/issues/261)
+  [fRiSi] (#261)
+
+
 3.2.12 (2021-07-26)
 -------------------
 
