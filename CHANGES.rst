@@ -8,6 +8,20 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a6 (2021-10-16)
+--------------------
+
+Bug fixes:
+
+
+- Fix test for icalendar with missing VALUE for date (not date-time) of DTSTART/DTEND.
+
+  If multiple value types are allowed for a component, the value type can only be omitted if it is the default type.
+  The default type for DTSTART/DTEND is DATE-TIME.
+  See RFC5545 3.2.20, 3.8.2.2 and 3.8.2.3.
+  [thet] (#343)
+
+
 4.0.0a5 (2021-09-01)
 --------------------
 
