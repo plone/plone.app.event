@@ -69,7 +69,7 @@
               <article
                   itemscope
                   itemtype="https://schema.org/Event"
-                  class="vevent tileItem"
+                  class="vevent tileItem d-flex align-items-start mb-3"
                   tal:define="startf python:view.date_speller(data.start)">
 
                 <ul class="hiddenStructure">
@@ -92,16 +92,19 @@
                   </li>
                 </ul>
 
-                <div class="cal_date">
-                  <span
-                      class="cal_month"
-                      tal:content="string:${startf/month_name}">Oct.</span>
-                  <span
-                      class="cal_day"
-                      tal:content="string:${startf/day}">15</span>
-                  <span
-                      class="cal_wkday"
-                      tal:content="python:startf['wkday_name']">Tue</span>
+                <div class="cal_date card me-3 flex-shrink-0 text-center">
+                  <div
+                      class="cal_month card-header p-2"
+                      tal:content="string:${startf/month_name}">Oct.
+                  </div>
+                  <div class="card-body d-flex flex-column p-2">
+                    <h3
+                        class="cal_day card-title fs-1 m-0"
+                        tal:content="string:${startf/day}">15</h3>
+                    <span
+                        class="cal_wkday card-text"
+                        tal:content="python:startf['wkday_name']">Tue</span>
+                  </div>
                 </div>
 
                 <div class="cal_info clearfix">
