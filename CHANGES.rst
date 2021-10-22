@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a7 (2021-10-22)
+--------------------
+
+Bug fixes:
+
+
+- Bring back date card for event listing.
+  [petschki] (#345)
+
+
 4.0.0a6 (2021-10-16)
 --------------------
 
