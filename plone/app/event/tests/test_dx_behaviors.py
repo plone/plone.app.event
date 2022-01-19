@@ -170,10 +170,10 @@ class TestDXAddEdit(unittest.TestCase):
         ).value = "TestEvent"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-30 03:51"
+            name='form.widgets.IEventBasic.start').value = "2014-03-30T03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-30 04:51"
+            name='form.widgets.IEventBasic.end').value = "2014-03-30T04:51"
 
         self.browser.getControl('Save').click()
 
@@ -190,10 +190,10 @@ class TestDXAddEdit(unittest.TestCase):
         self.browser.open('%s/@@edit' % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-31 03:51"
+            name='form.widgets.IEventBasic.start').value = "2014-03-31T03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-31 04:51"
+            name='form.widgets.IEventBasic.end').value = "2014-03-31T04:51"
 
         self.browser.getControl('Save').click()
 
