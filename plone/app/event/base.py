@@ -281,10 +281,9 @@ def expand_events(events, ret_mode, start=None, end=None, sort=None, sort_revers
     for it in events:
         obj = it.getObject() if getattr(it, "getObject", False) else it
         if IEventRecurrence.providedBy(obj):
-
             occ_list = list(IRecurrenceSupport(obj).occurrences(start, end))
             # add original event (to make expand_events not remove one item of the original list)
-            if (start or end) and (IEventAccessor(obj).start >= (end or start)):
+            if (start or end) and (obj.start >= (end or start)):
                 if obj not in occ_list:
                     occ_list.append(obj)
             occurrences = [_obj_or_acc(occ, ret_mode) for occ in occ_list]
