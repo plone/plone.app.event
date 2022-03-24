@@ -107,7 +107,12 @@ class IEventBasic(model.Schema, IDXEvent):
         'end',
         DatetimeFieldWidget,
         default_timezone=default_timezone,
-        klass=u'event_end'
+        klass=u'event_end',
+        pattern_options={
+            "behavior": "styled",
+            "after": "input.event_end",
+            "offset-days": "0.125",
+        },
     )
 
     whole_day = schema.Bool(
