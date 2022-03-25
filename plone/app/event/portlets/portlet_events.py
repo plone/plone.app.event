@@ -14,6 +14,7 @@ from plone.app.portlets.portlets import base
 from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
 from plone.base.interfaces.controlpanel import ISiteSchema
+from plone.memoize import ram
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.registry.interfaces import IRegistry
@@ -25,6 +26,46 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.contentprovider.interfaces import IContentProvider
 from zope.interface import implementer
+
+
+def _render_events_cachekey(method, self):
+    # XXX: Since the events portlet shows the upcoming events, I will simply get
+    # the most recently modified event using the same logic, and return its uuid
+    # and last modified date as key. If there is a change, then the most expensive
+    # computation can be performed
+
+    site = getSite()
+    pc = site.portal_catalog
+
+    query = {}
+    data = self.data
+    if data.state:
+        query['review_state'] = data.state
+
+    query.update(self.request.get('contentFilter', {}))
+    if ICollection and ICollection.providedBy(self.search_base):
+        # Whatever sorting is defined, we're overriding it.
+        query = queryparser.parseFormquery(
+            self.search_base, self.search_base.query,
+            sort_on='start', sort_order=None
+        )
+    else:
+        if self.search_base_path:
+            query['path'] = {'query': self.search_base_path}
+
+    query['portal_type'] = 'Event'
+    query['sort_on'] = 'start'
+    query['sort_order'] = 'asc'
+    query['sort_limit'] = data.count
+
+    events = pc(**query)
+    uuid = ""
+    modified = 0
+    for event in events:
+        uuid += event.UID
+        modified += event.modified.asdatetime().timestamp()
+
+    return (uuid, modified)
 
 
 class IEventsPortlet(IPortletDataProvider):
@@ -145,6 +186,7 @@ class Renderer(base.Renderer):
         return self.data.count > 0 and len(self.events)
 
     @property
+    @ram.cache(_render_events_cachekey)
     def events(self):
         context = aq_inner(self.context)
         data = self.data
