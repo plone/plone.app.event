@@ -38,6 +38,7 @@
     <element value="plone.namefromtitle"/>
     <element value="plone.allowdiscussion"/>
     <element value="plone.excludefromnavigation"/>
+    <element value="plone.textindexer"/>
   </property>
 
   <!-- View and aliases -->
