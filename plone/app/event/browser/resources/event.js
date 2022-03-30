@@ -28,6 +28,34 @@ function set_date(el, datevalue) {
   }
 }
 
+function open_end_toggle(event_edit__open_end, event_edit__end) {
+  if (event_edit__open_end.checked) {
+    $(event_edit__end.closest(".field")).hide();
+  } else {
+    $(event_edit__end.closest(".field")).show();
+  }
+}
+
+function whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end) {
+  start_val = event_edit__start.value;
+  end_val = event_edit__end.value;
+  if (event_edit__whole_day.checked) {
+    event_edit__start.type = "date";
+    event_edit__end.type = "date";
+  } else {
+    event_edit__start.type = "datetime-local";
+    event_edit__end.type = "datetime-local";
+  }
+  // set start/end values with current hours when switching back to
+  // datetime-local
+  if(start_val.indexOf("T") == -1) {
+    start_val = `${start_val}T${(new Date()).getHours()}:00`;
+    end_val = `${end_val}T${(new Date()).getHours() + 1}:00`;
+  }
+  set_date(event_edit__start, start_val);
+  set_date(event_edit__end, end_val);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 
   var event_edit__open_end = document.querySelector("input[name='form.widgets.IEventBasic.open_end:list'], input[name='form.widgets.IEventBasicNonRequired.open_end:list']"); // prettier-ignore
@@ -54,34 +82,18 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   if (event_edit__open_end) {
-    event_edit__open_end.addEventListener("input", function () {
-      if (event_edit__open_end.checked) {
-        $(event_edit__end.closest(".field")).hide();
-      } else {
-        $(event_edit__end.closest(".field")).show();
-      }
+    open_end_toggle(event_edit__open_end, event_edit__end);
+    event_edit__open_end.addEventListener("input", function() {
+      open_end_toggle(event_edit__open_end, event_edit__end);
     });
   }
 
   if (event_edit__whole_day) {
-    event_edit__whole_day.addEventListener("input", function () {
-      start_val = event_edit__start.value;
-      end_val = event_edit__end.value;
-      if (event_edit__whole_day.checked) {
-        event_edit__start.type = "date";
-        event_edit__end.type = "date";
-      } else {
-        event_edit__start.type = "datetime-local";
-        event_edit__end.type = "datetime-local";
-      }
-      // set start/end values with current hours when switching back to
-      // datetime-local
-      if(start_val.indexOf("T") == -1) {
-        start_val = `${start_val}T${(new Date()).getHours()}:00`;
-        end_val = `${end_val}T${(new Date()).getHours() + 1}:00`;
-      }
-      set_date(event_edit__start, start_val);
-      set_date(event_edit__end, end_val);
+    // on load
+    whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end);
+    // on change
+    event_edit__whole_day.addEventListener("input", function(e) {
+      whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end);
     });
   }
 });
