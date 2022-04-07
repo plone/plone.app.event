@@ -27,7 +27,6 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.browser.text import TextFieldWidget
@@ -41,8 +40,6 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
-
-import six
 
 
 def first_weekday_sun0():
@@ -373,30 +370,6 @@ def sync_uid_indexer(obj):
     if not sync_uid:
         raise AttributeError
     return sync_uid
-
-
-# Body text indexing
-@indexer(IDXEvent)
-def searchable_text_indexer(obj):
-    acc = IEventAccessor(obj)
-    text = u''
-    text += u'%s\n' % acc.title
-    text += u'%s\n' % acc.description
-    textvalue = acc.text
-    if textvalue is None:
-        raise AttributeError
-    transforms = getToolByName(obj, 'portal_transforms')
-    if six.PY2:
-        textvalue = textvalue.encode('utf8', 'replace')
-    body_plain = transforms.convertTo(
-        'text/plain',
-        textvalue,
-        mimetype='text/html',
-    ).getData().strip()
-    text += safe_unicode(body_plain)
-    if six.PY2:
-        text = text.strip().encode('utf-8')
-    return text
 
 
 # Object adapters
