@@ -8,6 +8,26 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a8 (2022-04-07)
+--------------------
+
+New features:
+
+
+- Use patternlib `pat-datetime-picker` for datetime fields
+  in combination with its `after` option
+  [petschki] (#346)
+- PLIP 2780: textindexer, use here.
+  [zworkb] (#2780)
+
+
+Bug fixes:
+
+
+- remove `plone-legacy` bundle and update eventedit script.
+  [petschki, thet] (#350)
+
+
 4.0.0a7 (2021-10-22)
 --------------------
 
