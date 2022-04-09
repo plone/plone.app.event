@@ -1,0 +1,2 @@
+Wrap JavaScript a immediately invoked function to not expose the functions in global namespace.
+[thet]
