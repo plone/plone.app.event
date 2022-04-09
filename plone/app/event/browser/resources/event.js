@@ -1,5 +1,4 @@
 (function () {
-
   function is_valid_date(date) {
     // https://stackoverflow.com/a/1353711/1337474
     return date instanceof Date && !isNaN(date);
@@ -38,7 +37,11 @@
     }
   }
 
-  function whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end) {
+  function whole_day_toggle(
+    event_edit__whole_day,
+    event_edit__start,
+    event_edit__end
+  ) {
     start_val = event_edit__start.value;
     end_val = event_edit__end.value;
     if (event_edit__whole_day.checked) {
@@ -50,16 +53,15 @@
     }
     // set start/end values with current hours when switching back to
     // datetime-local
-    if(start_val.indexOf("T") == -1) {
-      start_val = `${start_val}T${(new Date()).getHours()}:00`;
-      end_val = `${end_val}T${(new Date()).getHours() + 1}:00`;
+    if (start_val.indexOf("T") == -1) {
+      start_val = `${start_val}T${new Date().getHours()}:00`;
+      end_val = `${end_val}T${new Date().getHours() + 1}:00`;
     }
     set_date(event_edit__start, start_val);
     set_date(event_edit__end, end_val);
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
-
+  document.addEventListener("DOMContentLoaded", function () {
     var event_edit__open_end = document.querySelector("input[name='form.widgets.IEventBasic.open_end:list']"); // prettier-ignore
     var event_edit__whole_day = document.querySelector("input[name='form.widgets.IEventBasic.whole_day:list']"); // prettier-ignore
     var event_edit__start = document.querySelector("[name='form.widgets.IEventBasic.start']"); // prettier-ignore
@@ -85,19 +87,26 @@
 
     if (event_edit__open_end) {
       open_end_toggle(event_edit__open_end, event_edit__end);
-      event_edit__open_end.addEventListener("input", function() {
+      event_edit__open_end.addEventListener("input", function () {
         open_end_toggle(event_edit__open_end, event_edit__end);
       });
     }
 
     if (event_edit__whole_day) {
       // on load
-      whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end);
+      whole_day_toggle(
+        event_edit__whole_day,
+        event_edit__start,
+        event_edit__end
+      );
       // on change
-      event_edit__whole_day.addEventListener("input", function(e) {
-        whole_day_toggle(event_edit__whole_day, event_edit__start, event_edit__end);
+      event_edit__whole_day.addEventListener("input", function (e) {
+        whole_day_toggle(
+          event_edit__whole_day,
+          event_edit__start,
+          event_edit__end
+        );
       });
     }
   });
-
 })();
