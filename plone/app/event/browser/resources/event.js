@@ -60,10 +60,10 @@
 
   document.addEventListener("DOMContentLoaded", function() {
 
-    var event_edit__open_end = document.querySelector("input[name='form.widgets.IEventBasic.open_end:list'], input[name='form.widgets.IEventBasicNonRequired.open_end:list']"); // prettier-ignore
-    var event_edit__whole_day = document.querySelector("input[name='form.widgets.IEventBasic.whole_day:list'], input[name='form.widgets.IEventBasicNonRequired.whole_day:list']"); // prettier-ignore
-    var event_edit__start = document.querySelector("[name='form.widgets.IEventBasic.start'], [name='form.widgets.IEventBasicNonRequired.start']"); // prettier-ignore
-    var event_edit__end = document.querySelector("[name='form.widgets.IEventBasic.end'], [name='form.widgets.IEventBasicNonRequired.end']"); // prettier-ignore
+    var event_edit__open_end = document.querySelector("input[name='form.widgets.IEventBasic.open_end:list']"); // prettier-ignore
+    var event_edit__whole_day = document.querySelector("input[name='form.widgets.IEventBasic.whole_day:list']"); // prettier-ignore
+    var event_edit__start = document.querySelector("[name='form.widgets.IEventBasic.start']"); // prettier-ignore
+    var event_edit__end = document.querySelector("[name='form.widgets.IEventBasic.end']"); // prettier-ignore
 
     var start_val;
     var end_val;
