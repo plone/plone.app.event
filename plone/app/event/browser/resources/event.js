@@ -1,19 +1,39 @@
 (function () {
+  function zero_pad(val, len) {
+    val = val.toString();
+    len = len || 2;
+    while (val.length < len) {
+      val = "0" + val;
+    }
+    return val;
+  }
+
+  function datetime_local_iso(date) {
+    // Return the current date/time as timezone naive ISO string.
+    return (
+      zero_pad(date.getFullYear()) +
+      "-" +
+      zero_pad(date.getMonth() + 1) +
+      "-" +
+      zero_pad(date.getDate()) +
+      "T" +
+      zero_pad(date.getHours()) +
+      ":" +
+      zero_pad(date.getMinutes())
+    );
+  }
+
   function is_valid_date(date) {
     // https://stackoverflow.com/a/1353711/1337474
     return date instanceof Date && !isNaN(date);
   }
 
-  function tzaware_date(date) {
-    tzoffset = -date.getTimezoneOffset() * 60 * 1000;
-    date.setTime(date.getTime() + tzoffset);
-    return date;
-  }
-
   function add_hours(date, hours) {
     // https://stackoverflow.com/a/1050782/1337474
+    hours = hours || 1;
     date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-    return date;
+    var iso = datetime_local_iso(date);
+    return new Date(iso);
   }
 
   function set_date(el, datevalue) {
@@ -21,11 +41,11 @@
     if (!is_valid_date(date)) {
       return;
     }
-    isostring = tzaware_date(date).toISOString();
+    isostring = datetime_local_iso(date);
     if (el.type === "date") {
       el.value = isostring.split("T")[0];
     } else if (el.type === "datetime-local") {
-      el.value = isostring.split(".")[0];
+      el.value = isostring;
     }
   }
 
@@ -51,12 +71,6 @@
       event_edit__start.type = "datetime-local";
       event_edit__end.type = "datetime-local";
     }
-    // set start/end values with current hours when switching back to
-    // datetime-local
-    if (start_val.indexOf("T") == -1) {
-      start_val = `${start_val}T${new Date().getHours()}:00`;
-      end_val = `${end_val}T${new Date().getHours() + 1}:00`;
-    }
     set_date(event_edit__start, start_val);
     set_date(event_edit__end, end_val);
   }
@@ -79,8 +93,7 @@
         if (!is_valid_date(_end) || _end < _start) {
           _end = _start;
           _end = add_hours(_end, 1);
-          end_val = _end.toISOString();
-          set_date(event_edit__end, end_val);
+          set_date(event_edit__end, _end);
         }
       });
     }
