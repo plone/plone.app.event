@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from calendar import monthrange
@@ -77,7 +76,7 @@ def get_events(
     expand=False,
     sort="start",
     sort_reverse=False,
-    **kw
+    **kw,
 ):
     """Return all events as catalog brains, possibly within a given
     timeframe.
@@ -237,9 +236,9 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
             continue
         if sort == "start":
             # first start can be before filter window if end is in window
-            _first = min([s for (s, e) in _occ])
+            _first = min(s for (s, e) in _occ)
         elif sort == "end":
-            _first = min([e for (s, e) in _occ])
+            _first = min(e for (s, e) in _occ)
         items.append((_first, brain))  # key on next start/end
 
     # sort brains by next start, discard sort key
@@ -922,7 +921,7 @@ def default_end(context=None):
 # TODO: Better fits to CMFPlone. (Taken from CMFPlone's new syndication tool)
 
 
-class AnnotationAdapter(object):
+class AnnotationAdapter:
     """Abstract Base Class for an annotation storage.
 
     If the annotation wasn't set, it won't be created until the first attempt
@@ -991,7 +990,7 @@ def find_context(context, viewname=None, iface=None, as_url=False, append_view=T
     if as_url:
         url = ret.absolute_url()
         if viewname and append_view and ret.defaultView() != viewname:
-            url = "%s/%s" % (url, viewname)
+            url = f"{url}/{viewname}"
         return url
     return ret
 

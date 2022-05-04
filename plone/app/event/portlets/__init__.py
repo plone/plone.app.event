@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.base import find_navroot
 from plone.app.event.base import find_ploneroot
 
@@ -12,7 +11,7 @@ def get_calendar_url(context, search_base):
     calendar_url = None
     if search_base:
         portal = find_ploneroot(context)
-        if six.PY2 and isinstance(search_base, six.text_type):
+        if six.PY2 and isinstance(search_base, str):
             search_base = search_base.encode("utf8")
         search_base = "/".join(search_base.split("/")[2:])
         calendar_url = portal.unrestrictedTraverse(

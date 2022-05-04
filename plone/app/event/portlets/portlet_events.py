@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from plone.app.event import _
@@ -31,49 +30,49 @@ from zope.interface import implementer
 class IEventsPortlet(IPortletDataProvider):
 
     count = schema.Int(
-        title=_(u"Number of items to display"),
-        description=_(u"How many items to list."),
+        title=_("Number of items to display"),
+        description=_("How many items to list."),
         required=True,
         default=5,
         min=1,
     )
 
     state = schema.Tuple(
-        title=_(u"Workflow state"),
-        description=_(u"Items in which workflow state to show."),
+        title=_("Workflow state"),
+        description=_("Items in which workflow state to show."),
         default=None,
         required=False,
         value_type=schema.Choice(vocabulary="plone.app.vocabularies.WorkflowStates"),
     )
 
     search_base_uid = schema.Choice(
-        title=_(u"portlet_label_search_base", default=u"Search base"),
+        title=_("portlet_label_search_base", default="Search base"),
         description=_(
-            u"portlet_help_search_base",
-            default=u"Select search base Folder or Collection to search for "
-            u"events. The URL to to this item will also be used to "
-            u"link to in calendar searches. If empty, the whole site "
-            u"will be searched and the event listing view will be "
-            u"called on the site root.",
+            "portlet_help_search_base",
+            default="Select search base Folder or Collection to search for "
+            "events. The URL to to this item will also be used to "
+            "link to in calendar searches. If empty, the whole site "
+            "will be searched and the event listing view will be "
+            "called on the site root.",
         ),
         required=False,
         source=search_base_uid_source,
     )
     thumb_scale = schema.TextLine(
-        title=_(u"Override thumb scale"),
+        title=_("Override thumb scale"),
         description=_(
-            u"Enter a valid scale name"
-            u" (see 'Image Handling' control panel) to override"
-            u" (e.g. icon, tile, thumb, mini, preview, ... )."
-            u" Leave empty to use default (see 'Site' control panel)."
+            "Enter a valid scale name"
+            " (see 'Image Handling' control panel) to override"
+            " (e.g. icon, tile, thumb, mini, preview, ... )."
+            " Leave empty to use default (see 'Site' control panel)."
         ),
         required=False,
-        default=u"",
+        default="",
     )
 
     no_thumbs = schema.Bool(
-        title=_(u"Suppress thumbs"),
-        description=_(u"If enabled, the portlet will not show thumbs."),
+        title=_("Suppress thumbs"),
+        description=_("If enabled, the portlet will not show thumbs."),
         required=False,
         default=False,
     )
@@ -102,7 +101,7 @@ class Assignment(base.Assignment):
 
     @property
     def title(self):
-        return _(u"Events")
+        return _("Events")
 
     def _uid(self):
         # This is only called if the instance doesn't have a search_base_uid
@@ -233,8 +232,8 @@ class Renderer(base.Renderer):
 
 class AddForm(base.AddForm):
     schema = IEventsPortlet
-    label = _(u"Add Events Portlet")
-    description = _(u"This portlet lists upcoming Events.")
+    label = _("Add Events Portlet")
+    description = _("This portlet lists upcoming Events.")
 
     def create(self, data):
         return Assignment(
@@ -246,5 +245,5 @@ class AddForm(base.AddForm):
 
 class EditForm(base.EditForm):
     schema = IEventsPortlet
-    label = _(u"Edit Events Portlet")
-    description = _(u"This portlet lists upcoming Events.")
+    label = _("Edit Events Portlet")
+    description = _("This portlet lists upcoming Events.")

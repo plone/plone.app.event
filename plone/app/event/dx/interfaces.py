@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventRecurrence
 

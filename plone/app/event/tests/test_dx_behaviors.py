@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timedelta
 from DateTime import DateTime
@@ -31,9 +30,9 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
 from plone.uuid.interfaces import IUUID
+from unittest import mock
 from zope.annotation.interfaces import IAnnotations
 
-import mock
 import pytz
 import unittest
 import zope.interface
@@ -256,7 +255,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "plone.app.event.dx.event",
-            title=u"event1",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -287,7 +286,7 @@ class TestEventAccessor(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "plone.app.event.dx.event",
-            title=u"event1",
+            title="event1",
             start=start,
             end=end,
         )
@@ -315,7 +314,7 @@ class TestEventAccessor(unittest.TestCase):
         self.request.set("HTTP_HOST", "nohost")
 
         e1 = createContentInContainer(
-            self.portal, "plone.app.event.dx.event", title=u"event1"
+            self.portal, "plone.app.event.dx.event", title="event1"
         )
         acc = IEventAccessor(e1)
 
@@ -339,7 +338,7 @@ class TestEventAccessor(unittest.TestCase):
 
     def test_event_accessor__start_end(self):
         e1 = createContentInContainer(
-            self.portal, "plone.app.event.dx.event", title=u"event1"
+            self.portal, "plone.app.event.dx.event", title="event1"
         )
 
         dt = datetime(2161, 1, 1)  # United Federation of Planets
@@ -399,7 +398,7 @@ class TestDXIntegration(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "plone.app.event.dx.event",
-            title=u"event1",
+            title="event1",
             start=start,
             end=end,
         )
@@ -416,7 +415,7 @@ class TestDXIntegration(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "plone.app.event.dx.event",
-            title=u"event1",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -555,13 +554,13 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
 
     layer = PAEventDX_INTEGRATION_TESTING
 
-    location = u"Köln"
-    attendees = (u"Peter", u"Søren", u"Madeleine")
-    contact_email = u"person@email.com"
-    contact_name = u"Peter Parker"
-    contact_phone = u"555 123 456"
-    event_url = u"http://my.event.url"
-    text = u"<p>Cathedral Sprint in Köln</p>"
+    location = "Köln"
+    attendees = ("Peter", "Søren", "Madeleine")
+    contact_email = "person@email.com"
+    contact_name = "Peter Parker"
+    contact_phone = "555 123 456"
+    event_url = "http://my.event.url"
+    text = "<p>Cathedral Sprint in Köln</p>"
 
     def setUp(self):
         self.portal = self.layer["portal"]
@@ -574,7 +573,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "Event",
-            title=u"event1",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -623,7 +622,7 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         e1 = createContentInContainer(
             self.portal,
             "Event",
-            title=u"event1",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -631,25 +630,25 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         # Fill the field values into the annotation storage
         ann = IAnnotations(e1)
         ann["plone.app.event.dx.behaviors.IEventLocation.location"] = (
-            self.location + u"X"
+            self.location + "X"
         )
         ann[
             "plone.app.event.dx.behaviors.IEventAttendees.attendees"
-        ] = self.attendees + (u"Paula",)
+        ] = self.attendees + ("Paula",)
         ann["plone.app.event.dx.behaviors.IEventContact.contact_email"] = (
-            self.contact_email + u"X"
+            self.contact_email + "X"
         )
         ann["plone.app.event.dx.behaviors.IEventContact.contact_name"] = (
-            self.contact_name + u"X"
+            self.contact_name + "X"
         )
         ann["plone.app.event.dx.behaviors.IEventContact.contact_phone"] = (
-            self.contact_phone + u"X"
+            self.contact_phone + "X"
         )
         ann["plone.app.event.dx.behaviors.IEventContact.event_url"] = (
-            self.event_url + u"X"
+            self.event_url + "X"
         )
         ann["plone.app.event.dx.behaviors.IEventSummary.text"] = RichTextValue(
-            raw=self.text + u"X"
+            raw=self.text + "X"
         )
 
         # Add values into the fields in the new way

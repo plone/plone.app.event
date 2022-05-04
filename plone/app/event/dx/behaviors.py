@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 from plone.app.dexterity.behaviors.metadata import ICategorization
@@ -47,7 +46,7 @@ def first_weekday_sun0():
 
 
 class StartBeforeEnd(Invalid):
-    __doc__ = _("error_invalid_date", default=u"Invalid start or end date")
+    __doc__ = _("error_invalid_date", default="Invalid start or end date")
 
 
 @provider(IContextAwareDefaultFactory)
@@ -67,9 +66,9 @@ class IEventBasic(model.Schema, IDXEvent):
     """Basic event schema."""
 
     start = schema.Datetime(
-        title=_(u"label_event_start", default=u"Event Starts"),
+        title=_("label_event_start", default="Event Starts"),
         description=_(
-            u"help_event_start", default=u"Date and Time, when the event begins."
+            "help_event_start", default="Date and Time, when the event begins."
         ),
         required=True,
         defaultFactory=default_start,
@@ -78,14 +77,12 @@ class IEventBasic(model.Schema, IDXEvent):
         "start",
         DatetimeFieldWidget,
         default_timezone=default_timezone,
-        klass=u"event_start",
+        klass="event_start",
     )
 
     end = schema.Datetime(
-        title=_(u"label_event_end", default=u"Event Ends"),
-        description=_(
-            u"help_event_end", default=u"Date and Time, when the event ends."
-        ),
+        title=_("label_event_end", default="Event Ends"),
+        description=_("help_event_end", default="Date and Time, when the event ends."),
         required=True,
         defaultFactory=default_end,
     )
@@ -93,7 +90,7 @@ class IEventBasic(model.Schema, IDXEvent):
         "end",
         DatetimeFieldWidget,
         default_timezone=default_timezone,
-        klass=u"event_end",
+        klass="event_end",
         pattern_options={
             "behavior": "styled",
             "after": "input.event_end",
@@ -102,20 +99,20 @@ class IEventBasic(model.Schema, IDXEvent):
     )
 
     whole_day = schema.Bool(
-        title=_(u"label_event_whole_day", default=u"Whole Day"),
-        description=_(u"help_event_whole_day", default=u"Event lasts whole day."),
+        title=_("label_event_whole_day", default="Whole Day"),
+        description=_("help_event_whole_day", default="Event lasts whole day."),
         required=False,
         default=False,
     )
-    directives.widget("whole_day", SingleCheckBoxFieldWidget, klass=u"event_whole_day")
+    directives.widget("whole_day", SingleCheckBoxFieldWidget, klass="event_whole_day")
 
     open_end = schema.Bool(
-        title=_(u"label_event_open_end", default=u"Open End"),
-        description=_(u"help_event_open_end", default=u"This event is open ended."),
+        title=_("label_event_open_end", default="Open End"),
+        description=_("help_event_open_end", default="This event is open ended."),
         required=False,
         default=False,
     )
-    directives.widget("open_end", SingleCheckBoxFieldWidget, klass=u"event_open_end")
+    directives.widget("open_end", SingleCheckBoxFieldWidget, klass="event_open_end")
 
     # icalendar event uid
     sync_uid = schema.TextLine(required=False)
@@ -127,7 +124,7 @@ class IEventBasic(model.Schema, IDXEvent):
             raise StartBeforeEnd(
                 _(
                     "error_end_must_be_after_start_date",
-                    default=u"End date must be after start date.",
+                    default="End date must be after start date.",
                 )
             )
 
@@ -137,9 +134,9 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
     """Recurring Event Schema."""
 
     recurrence = schema.Text(
-        title=_(u"label_event_recurrence", default=u"Recurrence"),
+        title=_("label_event_recurrence", default="Recurrence"),
         description=_(
-            u"help_event_recurrence", default=u"Define the event recurrence rule."
+            "help_event_recurrence", default="Define the event recurrence rule."
         ),
         required=False,
         default=None,
@@ -147,10 +144,10 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
     directives.widget(
         "recurrence",
         RecurrenceFieldWidget,
-        start_field=u"IEventBasic.start",
+        start_field="IEventBasic.start",
         first_day=first_weekday_sun0,
         show_repeat_forever=False,
-        klass=u"event_recurrence",
+        klass="event_recurrence",
     )
 
 
@@ -159,12 +156,12 @@ class IEventLocation(model.Schema):
     """Event Location Schema."""
 
     location = schema.TextLine(
-        title=_(u"label_event_location", default=u"Location"),
-        description=_(u"help_event_location", default=u"Location of the event."),
+        title=_("label_event_location", default="Location"),
+        description=_("help_event_location", default="Location of the event."),
         required=False,
         default=None,
     )
-    directives.widget("location", TextFieldWidget, klass=u"event_location")
+    directives.widget("location", TextFieldWidget, klass="event_location")
 
 
 class IEventAttendees(model.Schema):
@@ -172,14 +169,14 @@ class IEventAttendees(model.Schema):
     """Event Attendees Schema."""
 
     attendees = schema.Tuple(
-        title=_(u"label_event_attendees", default=u"Attendees"),
-        description=_(u"help_event_attendees", default=u"List of attendees."),
+        title=_("label_event_attendees", default="Attendees"),
+        description=_("help_event_attendees", default="List of attendees."),
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
         default=(),
     )
-    directives.widget("attendees", TextLinesFieldWidget, klass=u"event_attendees")
+    directives.widget("attendees", TextLinesFieldWidget, klass="event_attendees")
 
 
 class IEventContact(model.Schema):
@@ -187,49 +184,49 @@ class IEventContact(model.Schema):
     """Event Contact Schema."""
 
     contact_name = schema.TextLine(
-        title=_(u"label_event_contact_name", default=u"Contact Name"),
+        title=_("label_event_contact_name", default="Contact Name"),
         description=_(
-            u"help_event_contact_name",
-            default=u"Name of a person to contact about this event.",
+            "help_event_contact_name",
+            default="Name of a person to contact about this event.",
         ),
         required=False,
         default=None,
     )
-    directives.widget("contact_name", TextFieldWidget, klass=u"event_contact_name")
+    directives.widget("contact_name", TextFieldWidget, klass="event_contact_name")
 
     contact_email = schema.TextLine(
-        title=_(u"label_event_contact_email", default=u"Contact E-mail"),
+        title=_("label_event_contact_email", default="Contact E-mail"),
         description=_(
-            u"help_event_contact_email",
-            default=u"Email address to contact about this event.",
+            "help_event_contact_email",
+            default="Email address to contact about this event.",
         ),
         required=False,
         default=None,
     )
-    directives.widget("contact_email", TextFieldWidget, klass=u"event_contact_email")
+    directives.widget("contact_email", TextFieldWidget, klass="event_contact_email")
 
     contact_phone = schema.TextLine(
-        title=_(u"label_event_contact_phone", default=u"Contact Phone"),
+        title=_("label_event_contact_phone", default="Contact Phone"),
         description=_(
-            u"help_event_contact_phone",
-            default=u"Phone number to contact about this event.",
+            "help_event_contact_phone",
+            default="Phone number to contact about this event.",
         ),
         required=False,
         default=None,
     )
-    directives.widget("contact_phone", TextFieldWidget, klass=u"event_contact_phone")
+    directives.widget("contact_phone", TextFieldWidget, klass="event_contact_phone")
 
     event_url = schema.URI(
-        title=_(u"label_event_url", default=u"Event URL"),
+        title=_("label_event_url", default="Event URL"),
         description=_(
-            u"help_event_url",
-            default=u"Web address with more info about the event. "
-            u"Add http:// for external links.",
+            "help_event_url",
+            default="Web address with more info about the event. "
+            "Add http:// for external links.",
         ),
         required=False,
         default=None,
     )
-    directives.widget("event_url", TextFieldWidget, klass=u"event_url")
+    directives.widget("event_url", TextFieldWidget, klass="event_url")
 
 
 # Mark these interfaces as form field providers
@@ -291,7 +288,7 @@ def sync_uid_indexer(obj):
 
 @adapter(IDXEvent)
 @implementer(IEventAccessor)
-class EventAccessor(object):
+class EventAccessor:
 
     """Generic event accessor adapter implementation for Dexterity content
     objects.
@@ -468,7 +465,7 @@ class EventAccessor(object):
     def text(self):
         textvalue = getattr(self.context, "text", None)
         if textvalue is None:
-            return u""
+            return ""
         return safe_unicode(textvalue.output_relative_to(self.context))
 
     @text.setter

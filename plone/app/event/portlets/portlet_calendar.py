@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
 from plone.app.event import _
@@ -53,22 +52,22 @@ class ICalendarPortlet(IPortletDataProvider):
     """A portlet displaying a calendar"""
 
     state = schema.Tuple(
-        title=_(u"Workflow state"),
-        description=_(u"Items in which workflow state to show."),
+        title=_("Workflow state"),
+        description=_("Items in which workflow state to show."),
         default=None,
         required=False,
         value_type=schema.Choice(vocabulary="plone.app.vocabularies.WorkflowStates"),
     )
 
     search_base_uid = schema.Choice(
-        title=_(u"portlet_label_search_base", default=u"Search base"),
+        title=_("portlet_label_search_base", default="Search base"),
         description=_(
-            u"portlet_help_search_base",
-            default=u"Select search base Folder or Collection to search for "
-            u"events. The URL to to this item will also be used to "
-            u"link to in calendar searches. If empty, the whole site "
-            u"will be searched and the event listing view will be "
-            u"called on the site root.",
+            "portlet_help_search_base",
+            default="Select search base Folder or Collection to search for "
+            "events. The URL to to this item will also be used to "
+            "link to in calendar searches. If empty, the whole site "
+            "will be searched and the event listing view will be "
+            "called on the site root.",
         ),
         required=False,
         source=search_base_uid_source,
@@ -77,7 +76,7 @@ class ICalendarPortlet(IPortletDataProvider):
 
 @implementer(ICalendarPortlet)
 class Assignment(base.Assignment):
-    title = _(u"Calendar")
+    title = _("Calendar")
 
     # reduce upgrade pain
     state = None
@@ -129,8 +128,8 @@ class Renderer(base.Renderer):
         self.next_year, self.next_month = next_year, next_month = self.get_next_month(
             year, month
         )
-        self.prev_query = "?month=%s&year=%s" % (prev_month, prev_year)
-        self.next_query = "?month=%s&year=%s" % (next_month, next_year)
+        self.prev_query = f"?month={prev_month}&year={prev_year}"
+        self.next_query = f"?month={next_month}&year={next_year}"
 
         self.cal = calendar.Calendar(first_weekday())
         self._ts = getToolByName(context, "translation_service")
@@ -188,7 +187,7 @@ class Renderer(base.Renderer):
         return (year, month)
 
     def date_events_url(self, date):
-        return "%s?mode=day&date=%s" % (self.calendar_url, date)
+        return f"{self.calendar_url}?mode=day&date={date}"
 
     @property
     def cal_data(self):
@@ -245,7 +244,7 @@ class Renderer(base.Renderer):
                 end=end,
                 ret_mode=RET_MODE_OBJECTS,
                 expand=True,
-                **query
+                **query,
             )
 
         cal_dict = construct_calendar(events, start=start, end=end)
@@ -269,11 +268,11 @@ class Renderer(base.Renderer):
                     time = accessor.start.time().strftime("%H:%M")
                     # TODO: make 24/12 hr format configurable
                     events_string_list.append(
-                        u"{0}{1}{2}{3}".format(
+                        "{}{}{}{}".format(
                             accessor.title,
-                            u" {0}".format(time) if not whole_day else u"",
-                            u", " if not whole_day and location else u"",
-                            u" {0}".format(location) if location else u"",
+                            f" {time}" if not whole_day else "",
+                            ", " if not whole_day and location else "",
+                            f" {location}" if location else "",
                         )
                     )
 
@@ -286,8 +285,8 @@ class Renderer(base.Renderer):
                     "today": dat.year == today.year
                     and dat.month == today.month
                     and dat.day == today.day,
-                    "date_string": u"%s-%s-%s" % (dat.year, dat.month, dat.day),
-                    "events_string": u" | ".join(events_string_list),
+                    "date_string": f"{dat.year}-{dat.month}-{dat.day}",
+                    "events_string": " | ".join(events_string_list),
                     "events": date_events,
                 }
             )
@@ -315,8 +314,8 @@ class Renderer(base.Renderer):
 
 class AddForm(base.AddForm):
     schema = ICalendarPortlet
-    label = _(u"Add Calendar Portlet")
-    description = _(u"This portlet displays events in a calendar.")
+    label = _("Add Calendar Portlet")
+    description = _("This portlet displays events in a calendar.")
 
     def create(self, data):
         return Assignment(
@@ -327,5 +326,5 @@ class AddForm(base.AddForm):
 
 class EditForm(base.EditForm):
     schema = ICalendarPortlet
-    label = _(u"Edit Calendar Portlet")
-    description = _(u"This portlet displays events in a calendar.")
+    label = _("Edit Calendar Portlet")
+    description = _("This portlet displays events in a calendar.")

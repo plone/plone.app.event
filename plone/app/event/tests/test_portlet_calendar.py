@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from calendar import monthrange
 from datetime import datetime
 from datetime import timedelta
@@ -128,11 +127,11 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=u"e1", start=start, end=end
+            self.portal, PTYPE, title="e1", start=start, end=end
         )
         self.portal.invokeFactory("Folder", "eventfolder")
         createContentInContainer(
-            self.portal.eventfolder, PTYPE, title=u"e2", start=start, end=end
+            self.portal.eventfolder, PTYPE, title="e2", start=start, end=end
         )
         self.portal.portal_workflow.doActionFor(e1, "publish")
 
@@ -188,7 +187,7 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(days=2)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=u"e1", start=start, end=end
+            self.portal, PTYPE, title="e1", start=start, end=end
         )
         self.portal.portal_workflow.doActionFor(e1, "publish")
 
@@ -211,7 +210,7 @@ class RendererTest(unittest.TestCase):
         start = tz.localize(datetime(year, month, day, 23, 0, 0))
         end = tz.localize(datetime(year, month, day, 23, 30, 0))
         # Event starts at 23:00 and ends at 23:30
-        createContentInContainer(self.portal, PTYPE, title=u"e1", start=start, end=end)
+        createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
 
         # Try to render the calendar portlet again, it must be different Now
         r = self.renderer(assignment=portlet_calendar.Assignment())
@@ -220,13 +219,13 @@ class RendererTest(unittest.TestCase):
 
     def test_event_nonascii(self):
         # test issue with non-ascii event title and location
-        title = u"Plön€¢önf München 2012"
+        title = "Plön€¢önf München 2012"
 
         tz = pytz.timezone(TZNAME)
         start = tz.localize(datetime.now())
         end = start + timedelta(hours=1)
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=title, start=start, end=end, location=u"München"
+            self.portal, PTYPE, title=title, start=start, end=end, location="München"
         )
         self.wft.doActionFor(e1, "publish")
         r = self.renderer(assignment=portlet_calendar.Assignment())

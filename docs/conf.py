@@ -1,7 +1,7 @@
 # sphinx configuration
 
-project = u"plone.app.event"
-copyright = u"2012, Plone Foundation"
+project = "plone.app.event"
+copyright = "2012, Plone Foundation"
 
 extensions = [
     "sphinx.ext.doctest",

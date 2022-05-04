@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import timedelta
 from plone.app.event.base import localized_now
 from plone.app.event.portlets import portlet_events
@@ -151,13 +150,13 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, id="e1", title=u"e1", start=start, end=end
+            self.portal, PTYPE, id="e1", title="e1", start=start, end=end
         )
         self.portal.portal_workflow.doActionFor(e1, "publish")
 
         self.portal.invokeFactory("Folder", "eventfolder")
         createContentInContainer(
-            self.portal.eventfolder, PTYPE, id="e2", title=u"e2", start=start, end=end
+            self.portal.eventfolder, PTYPE, id="e2", title="e2", start=start, end=end
         )
 
         r = self.renderer(
@@ -209,7 +208,7 @@ class RendererTest(unittest.TestCase):
             self.portal,
             PTYPE,
             id="e1",
-            title=u"Event 1",
+            title="Event 1",
             start=start,
             recurrence="RRULE:FREQ=WEEKLY;COUNT=10",
         )
@@ -217,7 +216,7 @@ class RendererTest(unittest.TestCase):
             self.portal,
             PTYPE,
             id="e1",
-            title=u"Event 1",
+            title="Event 1",
             start=start,
             recurrence="RRULE:FREQ=DAILY;COUNT=3",
         )

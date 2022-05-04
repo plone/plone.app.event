@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import dt_start_of_day
@@ -29,7 +28,7 @@ except ImportError:
 
 @adapter(IEventRecurrence)
 @implementer(IRecurrenceSupport)
-class RecurrenceSupport(object):
+class RecurrenceSupport:
     """IRecurrenceSupport Adapter."""
 
     def __init__(self, context):
@@ -124,7 +123,7 @@ class OccurrenceTraverser(DefaultPublishTraverse):
         return self.fallbackTraverse(request, name)
 
     def fallbackTraverse(self, request, name):
-        return super(OccurrenceTraverser, self).publishTraverse(request, name)
+        return super().publishTraverse(request, name)
 
 
 @implementer(IOccurrence)
@@ -142,7 +141,7 @@ class Occurrence(SimpleItem):
 
 @adapter(IOccurrence)
 @implementer(IEventAccessor)
-class EventOccurrenceAccessor(object):
+class EventOccurrenceAccessor:
     """Generic event accessor adapter implementation for Occurrence objects."""
 
     def __init__(self, context):

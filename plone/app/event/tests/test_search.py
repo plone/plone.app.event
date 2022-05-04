@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
-
-import mock
+from unittest import mock
 
 
 class FunctionalTestSearchEvent(AbstractSampleDataEvents):
@@ -11,5 +9,5 @@ class FunctionalTestSearchEvent(AbstractSampleDataEvents):
 
     @mock.patch("plone.app.event.base.localized_now", new=PN)
     def test_searchabletext(self):
-        results = self.portal.portal_catalog(SearchableText=u"Überraschung")
+        results = self.portal.portal_catalog(SearchableText="Überraschung")
         self.assertTrue(len(results) == 1)

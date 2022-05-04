@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 from Acquisition import Explicit
 from plone.app.event.base import dates_for_display
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class FormattedDateProvider(Explicit):
-    template = ViewPageTemplateFile(u"formatted_date.pt")
+    template = ViewPageTemplateFile("formatted_date.pt")
 
     def __init__(self, context, request, view):
         self.__parent__ = view
@@ -24,9 +23,9 @@ class FormattedDateProvider(Explicit):
         self.date_dict = dates_for_display(occ)
         if self.date_dict is None:
             # Don't break for potential Events without start/end.
-            return u""
+            return ""
         return self.template(self)
 
 
 class FormattedStartDateProvider(FormattedDateProvider):
-    template = ViewPageTemplateFile(u"formatted_start_date.pt")
+    template = ViewPageTemplateFile("formatted_start_date.pt")

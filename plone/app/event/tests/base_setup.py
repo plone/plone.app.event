@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.dx import behaviors
@@ -82,10 +81,10 @@ class AbstractSampleDataEvents(unittest.TestCase):
         self.past_event = factory(
             container=self.portal,
             id="past",
-            title=u"Past Event",
+            title="Past Event",
             start=past,
             end=past + duration,
-            location=u"Vienna",
+            location="Vienna",
             whole_day=True,
             recurrence="RRULE:FREQ=DAILY;COUNT=3",
         )
@@ -96,10 +95,10 @@ class AbstractSampleDataEvents(unittest.TestCase):
         self.now_event = factory(
             container=self.portal,
             id="now",
-            title=u"Now Event",
+            title="Now Event",
             start=now,
             end=now + duration,
-            location=u"Vienna",
+            location="Vienna",
             recurrence="""RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1
 RDATE:20130509T000000
 EXDATE:20130506T000000,20140404T000000""",
@@ -118,35 +117,35 @@ EXDATE:20130506T000000,20140404T000000""",
         self.future_event = factory(
             container=self.portal,
             id="future",
-            title=u"Future Event",
+            title="Future Event",
             text=RichTextValue(
-                u"Überraschung! Du kannst nach mir suchen",
+                "Überraschung! Du kannst nach mir suchen",
                 "text/plain",
                 "text/html",
             ),
             start=future,
             end=future + duration,
-            location=u"Graz",
+            location="Graz",
         )
         workflow.doActionFor(self.future_event, "publish")
         self.future_event.reindexObject()
 
-        self.portal.invokeFactory("Folder", "sub", title=u"sub")
+        self.portal.invokeFactory("Folder", "sub", title="sub")
         self.long_event = factory(
             container=self.portal.sub,
             id="long",
-            title=u"Long Event",
+            title="Long Event",
             start=past,
             end=far,
-            location=u"Schaftal",
+            location="Schaftal",
         )
         workflow.doActionFor(self.long_event, "publish")
         self.long_event.reindexObject()
 
         # plone.app.contenttypes ICollection type
-        self.portal.invokeFactory("Collection", "collection", title=u"Col")
+        self.portal.invokeFactory("Collection", "collection", title="Col")
         collection = self.portal.collection
-        collection.sort_on = u"start"
+        collection.sort_on = "start"
         collection.reverse_sort = True
         collection.query = [
             {

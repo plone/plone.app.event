@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.ical.importer import IcalendarImportSettingsFormView
 from plone.app.event.interfaces import IICalendarImportEnabled
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING

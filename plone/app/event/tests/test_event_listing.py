@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.base import localized_today
 from plone.app.event.testing import make_fake_response
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
-
-import mock
+from unittest import mock
 
 
 class TestEventsListingPortal(AbstractSampleDataEvents):
@@ -69,7 +67,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         environment with newly calculated results.
         """
         # plone.app.contenttypes ICollection type
-        self.portal.invokeFactory("Collection", "col_test", title=u"Col")
+        self.portal.invokeFactory("Collection", "col_test", title="Col")
         collection = self.portal.col_test
         collection.query = [
             {
@@ -108,7 +106,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         """
         # plone.app.contenttypes ICollection type
         self.portal.invokeFactory(
-            "Collection", "col_without_date_criterion", title=u"Col"
+            "Collection", "col_without_date_criterion", title="Col"
         )
         collection = self.portal.col_without_date_criterion
         collection.query = [
@@ -129,7 +127,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         end search criterias.
         """
         # plone.app.contenttypes ICollection type
-        self.portal.invokeFactory("Collection", "col_with_date_criterion", title=u"Col")
+        self.portal.invokeFactory("Collection", "col_with_date_criterion", title="Col")
         collection = self.portal.col_with_date_criterion
         collection.query = [
             {

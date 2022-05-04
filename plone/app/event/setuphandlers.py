@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
@@ -11,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 @implementer(INonInstallable)
-class HiddenProfiles(object):
+class HiddenProfiles:
     def getNonInstallableProfiles(self):
         """Prevents profiles, which should not be user-installable from showing
         up in the profile list when creating a Plone site.
@@ -20,7 +19,7 @@ class HiddenProfiles(object):
         example type.
         """
         return [
-            u"plone.app.event:testing",
+            "plone.app.event:testing",
         ]
 
 
@@ -43,7 +42,7 @@ def setup_catalog(context):
     field_idxs = ["sync_uid"]
     idxs = date_idxs + field_idxs
 
-    class extra(object):
+    class extra:
         recurdef = "recurrence"
         until = ""
 

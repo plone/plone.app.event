@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event import _
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
@@ -75,10 +74,10 @@ def ical_import(
         for item in val:
             ret = "%s," % ret if ret else ret  # insert linebreak
             ical_val = item.to_ical()
-            if six.PY3 and isinstance(ical_val, six.binary_type):
+            if six.PY3 and isinstance(ical_val, bytes):
                 ical_val = ical_val.decode("utf8")
-            ret = "%s%s" % (ret, ical_val)
-        return "%s:%s" % (prop, ret) if ret else None
+            ret = f"{ret}{ical_val}"
+        return f"{prop}:{ret}" if ret else None
 
     count = 0
     for item in events:
@@ -129,7 +128,7 @@ def ical_import(
         rrule = _get_prop("RRULE", item)
         rrule = rrule.to_ical() if rrule else ""
         if rrule:
-            if six.PY3 and isinstance(rrule, six.binary_type):
+            if six.PY3 and isinstance(rrule, bytes):
                 rrule = rrule.decode("utf8")
             rrule = "RRULE:%s" % rrule
         rdates = _from_list(item, "RDATE")
@@ -143,7 +142,7 @@ def ical_import(
         contact = _get_prop("CONTACT", item)
         categories = item.get("CATEGORIES", ())
         if getattr(categories, "__iter__", False):
-            categories = tuple([safe_unicode(it) for it in categories])
+            categories = tuple(safe_unicode(it) for it in categories)
 
         ext_modified = utc(_get_prop("LAST-MODIFIED", item))
 
@@ -228,47 +227,47 @@ def no_file_protocol_url(value):
     This opens up security issues.
     """
     if value and value.startswith("file:"):
-        raise Invalid(_(u"URLs with file: are not allowed."))
+        raise Invalid(_("URLs with file: are not allowed."))
     return True
 
 
 class IIcalendarImportSettings(Interface):
 
     event_type = schema.Choice(
-        title=_("ical_import_event_type_title", default=u"Event Type"),
+        title=_("ical_import_event_type_title", default="Event Type"),
         description=_(
             "ical_import_event_type_desc",
-            default=u"Content type of the event, which is created when "
-            u"importing icalendar resources.",
+            default="Content type of the event, which is created when "
+            "importing icalendar resources.",
         ),
         vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes",
         required=True,
     )
 
     ical_url = schema.URI(
-        title=_("ical_import_url_title", default=u"Icalendar URL"),
+        title=_("ical_import_url_title", default="Icalendar URL"),
         description=_(
             "ical_import_url_desc",
-            default=u"URL to an external icalendar resource file.",
+            default="URL to an external icalendar resource file.",
         ),
         constraint=no_file_protocol_url,
         required=False,
     )
 
     ical_file = NamedFile(
-        title=_("ical_import_file_title", default=u"Icalendar File"),
+        title=_("ical_import_file_title", default="Icalendar File"),
         description=_(
             "ical_import_file_desc",
-            default=u"Icalendar resource file, if no URL is given.",
+            default="Icalendar resource file, if no URL is given.",
         ),
         required=False,
     )
 
     sync_strategy = schema.Choice(
-        title=_("ical_import_sync_strategy_title", default=u"Synchronization Strategy"),
+        title=_("ical_import_sync_strategy_title", default="Synchronization Strategy"),
         description=_(
             "ical_import_sync_strategy_desc",
-            default=u"""Defines how to synchronize:
+            default="""Defines how to synchronize:
 1) "Keep newer": Import, if the imported event is modified after the existing
    one.
 2) "Keep mine": On conflicts, just do nothing.
@@ -309,7 +308,7 @@ class IcalendarImportSettingsForm(form.Form):
         settings.event_type = data["event_type"]
         settings.sync_strategy = data["sync_strategy"]
 
-    @button.buttonAndHandler(u"Save")
+    @button.buttonAndHandler("Save")
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
@@ -318,12 +317,12 @@ class IcalendarImportSettingsForm(form.Form):
         self.save_data(data)
 
         IStatusMessage(self.request).addStatusMessage(
-            _("msg_ical_import_settings_saved", default=u"Ical import settings saved."),
+            _("msg_ical_import_settings_saved", default="Ical import settings saved."),
             "info",
         )
         self.request.response.redirect(self.context.absolute_url())
 
-    @button.buttonAndHandler(u"Save and Import")
+    @button.buttonAndHandler("Save and Import")
     def handleSaveImport(self, action):
         data, errors = self.extractData()
         if errors:
@@ -358,7 +357,7 @@ class IcalendarImportSettingsForm(form.Form):
             IStatusMessage(self.request).addStatusMessage(
                 _(
                     "ical_import_imported",
-                    default=u"${num} events imported from ${filename}",
+                    default="${num} events imported from ${filename}",
                     mapping={"num": count, "filename": ical_import_from},
                 ),
                 "info",
@@ -368,15 +367,15 @@ class IcalendarImportSettingsForm(form.Form):
             IStatusMessage(self.request).addStatusMessage(
                 _(
                     "ical_import_no_ics",
-                    default=u"Please provide either a icalendar ics file or a "
-                    u"URL to a file.",
+                    default="Please provide either a icalendar ics file or a "
+                    "URL to a file.",
                 ),
                 "error",
             )
 
         self.request.response.redirect(self.context.absolute_url())
 
-    @button.buttonAndHandler(u"Cancel")
+    @button.buttonAndHandler("Cancel")
     def handleCancel(self, action):
         self.request.response.redirect(self.context.absolute_url())
 

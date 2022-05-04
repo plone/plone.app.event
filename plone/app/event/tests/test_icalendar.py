@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from plone.app.event import base
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
@@ -45,8 +44,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         self.checkOrder(
             icalstr,
@@ -97,8 +95,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         self.assertTrue("Now Event" in icalstr)
         self.assertTrue("RRULE" not in icalstr)
@@ -110,8 +107,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
 
         # No occurrences in export. Otherwise count would be 8.
@@ -199,8 +195,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         # No occurrences in export. Otherwise count would be 8.
         self.assertEqual(icalstr.count("BEGIN:VEVENT"), 4)
@@ -218,8 +213,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         self.assertEqual(icalstr.count("BEGIN:VEVENT"), 2)
         self.assertTrue("Past Event" in icalstr)
@@ -233,8 +227,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         self.assertEqual(icalstr.count("BEGIN:VEVENT"), 4)
 
@@ -255,8 +248,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         self.assertEqual(len(headers), 3)
         self.assertEqual(headers["Content-Type"], "text/calendar")
         self.assertTrue("Content-Length" in headers)
-        if six.PY3:
-            output = [i.decode("utf8") for i in output]
+        output = [i.decode("utf8") for i in output]
         icalstr = "".join(output)
         self.assertEqual(icalstr.count("BEGIN:VEVENT"), 4)
 
@@ -298,7 +290,7 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(e1.open_end, False)
         self.assertEqual(
             e1.sync_uid,
-            u"48f1a7ad64e847568d860cd092344970",
+            "48f1a7ad64e847568d860cd092344970",
         )
 
         e2 = IEventAccessor(impfolder.e2)
@@ -306,8 +298,8 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(e2.end, utc.localize(datetime(1996, 4, 1, 2, 0)))
         self.assertEqual(
             e2.recurrence,
-            u"RRULE:FREQ=DAILY;COUNT=100\nEXDATE:19960402T010000Z,"
-            u"19960403T010000Z,19960404T010000Z",
+            "RRULE:FREQ=DAILY;COUNT=100\nEXDATE:19960402T010000Z,"
+            "19960403T010000Z,19960404T010000Z",
         )
 
         e3 = IEventAccessor(impfolder.e3)
@@ -315,9 +307,9 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertEqual(e3.end, at.localize(datetime(2012, 3, 27, 18, 0)))
         self.assertEqual(
             e3.recurrence,
-            u"RRULE:FREQ=WEEKLY;UNTIL=20120703T080000Z;BYDAY=TU\n"
-            u"EXDATE:20120529T100000,20120403T100000,20120410T100000,"
-            u"20120501T100000,20120417T100000",
+            "RRULE:FREQ=WEEKLY;UNTIL=20120703T080000Z;BYDAY=TU\n"
+            "EXDATE:20120529T100000,20120403T100000,20120410T100000,"
+            "20120501T100000,20120417T100000",
         )
 
         e4 = IEventAccessor(impfolder.e4)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
@@ -41,7 +40,7 @@ except ImportError:
 
 class EventListing(BrowserView):
     def __init__(self, context, request):
-        super(EventListing, self).__init__(context, request)
+        super().__init__(context, request)
 
         self.now = now = localized_now(context)
 
@@ -146,7 +145,7 @@ class EventListing(BrowserView):
             sort_reverse=sort_reverse,
             ret_mode=ret_mode,
             expand=expand,
-            **kw
+            **kw,
         )
 
     @view.memoize
@@ -224,7 +223,7 @@ class EventListing(BrowserView):
             ]
         )
         qstr = "?%s" % qstr if qstr else ""
-        return "%s/@@event_listing_ical%s" % (self.context.absolute_url(), qstr)
+        return f"{self.context.absolute_url()}/@@event_listing_ical{qstr}"
 
     # COLLECTION daterange start/end determination
     def _expand_events_start_end(self, start, end):
@@ -272,25 +271,25 @@ class EventListing(BrowserView):
         main_msgid = None
         sub_msgid = None
         if mode == "all":
-            main_msgid = _(u"all_events", default=u"All events")
+            main_msgid = _("all_events", default="All events")
 
         elif mode == "past":
-            main_msgid = _(u"past_events", default=u"Past events")
+            main_msgid = _("past_events", default="Past events")
 
         elif mode == "future":
-            main_msgid = _(u"future_events", default=u"Future events")
+            main_msgid = _("future_events", default="Future events")
 
         elif mode == "now":
-            main_msgid = _(u"todays_upcoming_events", default=u"Todays upcoming events")
+            main_msgid = _("todays_upcoming_events", default="Todays upcoming events")
 
         elif mode == "today":
-            main_msgid = _(u"todays_events", default=u"Todays events")
+            main_msgid = _("todays_events", default="Todays events")
 
         elif mode == "7days":
-            main_msgid = _(u"7days_events", default=u"Events in next 7 days.")
+            main_msgid = _("7days_events", default="Events in next 7 days.")
             sub_msgid = _(
-                u"events_from_until",
-                default=u"${from} until ${until}.",
+                "events_from_until",
+                default="${from} until ${until}.",
                 mapping={
                     "from": "%s, %s. %s %s"
                     % (
@@ -311,8 +310,8 @@ class EventListing(BrowserView):
 
         elif mode == "day":
             main_msgid = _(
-                u"events_on_day",
-                default=u"Events on ${day}",
+                "events_on_day",
+                default="Events on ${day}",
                 mapping={
                     "day": "%s, %s. %s %s"
                     % (
@@ -326,13 +325,13 @@ class EventListing(BrowserView):
 
         elif mode == "week":
             main_msgid = _(
-                u"events_in_week",
-                default=u"Events in week ${weeknumber}",
+                "events_in_week",
+                default="Events in week ${weeknumber}",
                 mapping={"weeknumber": start.isocalendar()[1]},
             )
             sub_msgid = _(
-                u"events_from_until",
-                default=u"${from} until ${until}.",
+                "events_from_until",
+                default="${from} until ${until}.",
                 mapping={
                     "from": "%s, %s. %s %s"
                     % (
@@ -353,8 +352,8 @@ class EventListing(BrowserView):
 
         elif mode == "month":
             main_msgid = _(
-                u"events_in_month",
-                default=u"Events in ${month} ${year}",
+                "events_in_month",
+                default="Events in ${month} ${year}",
                 mapping={
                     "month": start_dict["month_name"],
                     "year": start.year,
@@ -369,7 +368,7 @@ class EventListing(BrowserView):
 
     # MODE URLs
     def _date_nav_url(self, mode, datestr=""):
-        return "%s?mode=%s%s" % (
+        return "{}?mode={}{}".format(
             self.request.getURL(),
             mode,
             "&date=%s" % datestr if datestr else "",
@@ -467,5 +466,5 @@ class EventEventListing(EventListing):
     """
 
     def __init__(self, context, request):
-        super(EventEventListing, self).__init__(context, request)
+        super().__init__(context, request)
         self.uid = IUUID(self.context)

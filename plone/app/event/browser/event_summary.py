@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_parent
 from plone.app.event import _
 from plone.event.interfaces import IEventAccessor
@@ -78,9 +77,9 @@ class EventSummaryView(BrowserView):
     @property
     def more_occurrences_text(self):
         msgid = _(
-            u"msg_num_more_occurrences",
-            default=u"There are ${results} more occurrences.",
-            mapping={u"results": self.num_more_occurrences},
+            "msg_num_more_occurrences",
+            default="There are ${results} more occurrences.",
+            mapping={"results": self.num_more_occurrences},
         )
         return self.context.translate(msgid)
 

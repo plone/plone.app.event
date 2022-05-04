@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.interfaces import IBrowserLayer
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
@@ -61,7 +60,7 @@ def make_fake_response(request):
     headers = {}
     output = []
 
-    class Response(object):
+    class Response:
         def setHeader(self, header, value):
             headers[header] = value
 

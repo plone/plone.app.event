@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from mock import Mock
 from OFS.SimpleItem import SimpleItem
 from plone.app.event.base import get_events
 from plone.app.event.base import RET_MODE_ACCESSORS
@@ -22,12 +20,13 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from unittest import mock
+from unittest.mock import Mock
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserView
 
 import datetime
-import mock
 import pytz
 import six
 import transaction
@@ -109,9 +108,7 @@ class TestTraversalDX(AbstractSampleDataEvents):
     def test_traverse_occurrence(self):
         transaction.commit()
         browser = Browser(self.app)
-        browser.addHeader(
-            "Authorization", "Basic %s:%s" % (TEST_USER_ID, TEST_USER_PASSWORD)
-        )
+        browser.addHeader("Authorization", f"Basic {TEST_USER_ID}:{TEST_USER_PASSWORD}")
         url = "/".join([self.now_event.absolute_url(), "2013-05-07"])
         browser.open(url)
         title = self.now_event.title
@@ -146,20 +143,20 @@ class TestOccurrences(unittest.TestCase):
             self.portal,
             "plone.app.event.dx.event",
             id="daily",
-            title=u"Daily Event",
+            title="Daily Event",
             start=now,
             end=now + datetime.timedelta(hours=1),
-            location=u"Vienna",
+            location="Vienna",
             recurrence="RRULE:FREQ=DAILY;COUNT=4",
         )
         self.interval = createContentInContainer(
             self.portal,
             "plone.app.event.dx.event",
             id="interval",
-            title=u"Interval Event",
+            title="Interval Event",
             start=yesterday,
             end=yesterday + datetime.timedelta(hours=1),
-            location=u"Halle",
+            location="Halle",
             recurrence="RRULE:FREQ=DAILY;INTERVAL=2;COUNT=5",
         )
 
@@ -183,8 +180,8 @@ class TestOccurrences(unittest.TestCase):
             self.portal,
             "plone.app.event.dx.event",
             id="many",
-            title=u"Interval Event",
-            location=u"Brisbane",
+            title="Interval Event",
+            location="Brisbane",
             recurrence="RRULE:FREQ=DAILY;COUNT=1000",
         )
 

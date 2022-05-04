@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -337,10 +336,10 @@ class TestBaseModule(unittest.TestCase):
         # locale specific
         # TODO: test better.
         self.assertTrue(isinstance(date_spelled["wkday"], int))
-        self.assertTrue(isinstance(date_spelled["month_name"], six.string_types))
-        self.assertTrue(isinstance(date_spelled["month_abbr"], six.string_types))
-        self.assertTrue(isinstance(date_spelled["wkday_name"], six.string_types))
-        self.assertTrue(isinstance(date_spelled["wkday_abbr"], six.string_types))
+        self.assertTrue(isinstance(date_spelled["month_name"], str))
+        self.assertTrue(isinstance(date_spelled["month_abbr"], str))
+        self.assertTrue(isinstance(date_spelled["wkday_name"], str))
+        self.assertTrue(isinstance(date_spelled["wkday_abbr"], str))
 
 
 class TimezoneTest(unittest.TestCase):
@@ -489,11 +488,11 @@ class TestGetEventsDX(AbstractSampleDataEvents):
 
         # Test sort_on
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="start")
-        self.assertEqual([it.title for it in res][2:], [u"Now Event", u"Future Event"])
+        self.assertEqual([it.title for it in res][2:], ["Now Event", "Future Event"])
         res = get_events(self.portal, ret_mode=RET_MODE_ACCESSORS, sort="end")
         self.assertEqual(
             [it.title for it in res],
-            [u"Past Event", u"Now Event", u"Future Event", u"Long Event"],
+            ["Past Event", "Now Event", "Future Event", "Long Event"],
         )
 
         # Test expansion
@@ -573,21 +572,21 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         factory(
             container=self.portal,
             content_id="past_recur",
-            title=u"Past Event recurring",
+            title="Past Event recurring",
             start=self.past,
             end=self.past + self.duration,
-            location=u"Dornbirn",
+            location="Dornbirn",
             recurrence="RRULE:FREQ=WEEKLY;COUNT=4",
         )
 
         tomorrow = factory(
             container=self.portal,
             content_id="tomorrow",
-            title=u"Tomorrow event",
+            title="Tomorrow event",
             start=self.tomorrow,
             end=self.tomorrow + self.duration,
             open_end=True,
-            location=u"Dornbirn",
+            location="Dornbirn",
         )
         tomorrow.reindexObject()
 
@@ -667,38 +666,38 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         factory(
             container=self.portal,
             content_id="past_recur",
-            title=u"Past Recur",
+            title="Past Recur",
             start=self.past + self.duration,
             end=self.past + self.duration + self.duration,
-            location=u"Dornbirn",
+            location="Dornbirn",
             recurrence="RRULE:FREQ=WEEKLY;COUNT=4",
         )
 
         tomorrow = factory(
             container=self.portal,
             content_id="tomorrow",
-            title=u"Tomorrow event",
+            title="Tomorrow event",
             start=self.tomorrow,
             end=self.tomorrow + self.duration,
             open_end=True,
-            location=u"Dornbirn",
+            location="Dornbirn",
         )
         tomorrow.reindexObject()
 
         self.occ = [
-            (u"Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
-            (u"Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
-            (u"Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
-            (u"Past Event", "2013-04-26 00:00:00", "2013-04-26 23:59:59"),
-            (u"Past Event", "2013-04-27 00:00:00", "2013-04-27 23:59:59"),
-            (u"Past Recur", "2013-05-02 11:00:00", "2013-05-02 12:00:00"),
-            (u"Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
-            (u"Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
-            (u"Now Event", "2013-05-07 10:00:00", "2013-05-07 11:00:00"),
-            (u"Now Event", "2013-05-09 10:00:00", "2013-05-09 11:00:00"),
-            (u"Past Recur", "2013-05-09 11:00:00", "2013-05-09 12:00:00"),
-            (u"Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
-            (u"Past Recur", "2013-05-16 11:00:00", "2013-05-16 12:00:00"),
+            ("Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
+            ("Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
+            ("Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
+            ("Past Event", "2013-04-26 00:00:00", "2013-04-26 23:59:59"),
+            ("Past Event", "2013-04-27 00:00:00", "2013-04-27 23:59:59"),
+            ("Past Recur", "2013-05-02 11:00:00", "2013-05-02 12:00:00"),
+            ("Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
+            ("Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
+            ("Now Event", "2013-05-07 10:00:00", "2013-05-07 11:00:00"),
+            ("Now Event", "2013-05-09 10:00:00", "2013-05-09 11:00:00"),
+            ("Past Recur", "2013-05-09 11:00:00", "2013-05-09 12:00:00"),
+            ("Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
+            ("Past Recur", "2013-05-16 11:00:00", "2013-05-16 12:00:00"),
         ]
 
     def diff(self, list1, list2):
@@ -763,36 +762,36 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
         next_year = self.event_factory(
             container=self.portal,
             content_id="next-year",
-            title=u"Next year",
+            title="Next year",
             start=self.tomorrow + timedelta(365),
             end=self.tomorrow + timedelta(365) + self.duration,
-            location=u"Dornbirn",
+            location="Dornbirn",
             recurrence="RRULE:FREQ=DAILY;COUNT=4",
         )
         next_year.reindexObject()
 
         ev = (
-            u"Next year",
+            "Next year",
             "2014-05-06 10:00:00",
             "2014-05-06 11:00:00",
         )  # original event
         rec1 = (
-            u"Next year",
+            "Next year",
             "2014-05-07 10:00:00",
             "2014-05-07 11:00:00",
         )  # first recurrence
         rec2 = (
-            u"Next year",
+            "Next year",
             "2014-05-08 10:00:00",
             "2014-05-08 11:00:00",
         )  # second recurrence
         rec3 = (
-            u"Next year",
+            "Next year",
             "2014-05-09 10:00:00",
             "2014-05-09 11:00:00",
         )  # third recurrence
         rec4 = (
-            u"Next year",
+            "Next year",
             "2014-05-10 10:00:00",
             "2014-05-10 11:00:00",
         )  # fourth recurrence
@@ -837,12 +836,12 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             get_events(self.portal, expand=False, ret_mode=RET_MODE_ACCESSORS)
         )
         expect = [
-            (u"Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
-            (u"Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
-            (u"Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
-            (u"Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
-            (u"Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
-            (u"Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
+            ("Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
+            ("Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
+            ("Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
+            ("Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
+            ("Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
+            ("Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
         ]
         self.assertEqual(res, expect, self.diff(res, expect))
 
@@ -860,13 +859,13 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             )
         )
         expect = [
-            (u"Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
-            (u"Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
-            (u"Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
+            ("Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
+            ("Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
+            ("Tomorrow event", "2013-05-06 10:00:00", "2013-05-06 23:59:59"),
             # Past Recur next occurrence: '2013-05-09 11:00:00'
             # Past Recur brain.start: '2013-04-25 11:00:00'
-            (u"Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
-            (u"Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
+            ("Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
+            ("Future Event", "2013-05-15 10:00:00", "2013-05-15 11:00:00"),
         ]
         self.assertEqual(res, expect, self.diff(res, expect))
 
@@ -890,10 +889,10 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             )
         )
         expect = [
-            (u"Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
-            (u"Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
-            (u"Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
-            (u"Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
+            ("Past Event", "2013-04-25 00:00:00", "2013-04-25 23:59:59"),
+            ("Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
+            ("Past Recur", "2013-04-25 11:00:00", "2013-04-25 12:00:00"),
+            ("Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
         ]
         self.assertEqual(res, expect, self.diff(res, expect))
 
@@ -921,8 +920,8 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             )
         )
         expect = [
-            (u"Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
-            (u"Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
+            ("Long Event", "2013-04-25 10:00:00", "2013-06-04 10:00:00"),
+            ("Now Event", "2013-05-05 10:00:00", "2013-05-05 11:00:00"),
         ]
         self.assertEqual(res, expect, self.diff(res, expect))
 
@@ -959,11 +958,11 @@ class TestDatesForDisplay(unittest.TestCase):
         self.assertEqual(
             dates_for_display(event),
             {
-                "start_date": u"Oct 12, 2000",
-                "start_time": u"06:00 AM",
+                "start_date": "Oct 12, 2000",
+                "start_time": "06:00 AM",
                 "start_iso": "2000-10-12T06:00:00+02:00",
-                "end_date": u"Oct 12, 2000",
-                "end_time": u"06:00 PM",
+                "end_date": "Oct 12, 2000",
+                "end_time": "06:00 PM",
                 "end_iso": "2000-10-12T18:00:00+02:00",
                 "same_day": True,
                 "same_time": False,
@@ -985,10 +984,10 @@ class TestDatesForDisplay(unittest.TestCase):
         self.assertEqual(
             dates_for_display(event),
             {
-                "start_date": u"Oct 12, 2000",
+                "start_date": "Oct 12, 2000",
                 "start_time": None,
                 "start_iso": "2000-10-12",
-                "end_date": u"Oct 12, 2000",
+                "end_date": "Oct 12, 2000",
                 "end_time": None,
                 "end_iso": "2000-10-12",
                 "same_day": True,
@@ -1011,10 +1010,10 @@ class TestDatesForDisplay(unittest.TestCase):
         self.assertEqual(
             dates_for_display(event),
             {
-                "start_date": u"Oct 12, 2000",
+                "start_date": "Oct 12, 2000",
                 "start_time": None,
                 "start_iso": "2000-10-12",
-                "end_date": u"Oct 13, 2000",
+                "end_date": "Oct 13, 2000",
                 "end_time": None,
                 "end_iso": "2000-10-13",
                 "same_day": False,

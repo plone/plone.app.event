@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
@@ -48,19 +47,19 @@ def upgrade_attribute_storage(context):
     query = {}
     query["object_provides"] = IDXEvent.__identifier__
     results = catalog(**query)
-    log.info("There are {0} in total, stating migration...".format(len(results)))
+    log.info(f"There are {len(results)} in total, stating migration...")
     for result in results:
         try:
             event = result.getObject()
         except:
             log.warning(
                 "Not possible to fetch event object from catalog result for "
-                "item: {0}.".format(result.getPath())
+                "item: {}.".format(result.getPath())
             )
             continue
         if not IAnnotatable.providedBy(event):
             log.warning(
-                "The event at {0} does provide annotation capabilities, "
+                "The event at {} does provide annotation capabilities, "
                 "skipping.".format(event.absolute_url())
             )
             continue
@@ -68,7 +67,7 @@ def upgrade_attribute_storage(context):
         did_work = False
         for behavior in BEHAVIOR_LIST:
             for name in behavior.names():
-                fullname = "{0}.{1}".format(behavior.__identifier__, name)
+                fullname = f"{behavior.__identifier__}.{name}"
                 oldvalue = annotations.get(fullname, None)
                 # Only write the old value if there is no new value yet
                 if oldvalue and not getattr(event, name, None):
@@ -84,7 +83,7 @@ def upgrade_attribute_storage(context):
             did_work = True
         if did_work:
             notify(ObjectModifiedEvent(event))
-        log.debug("Handled event at {0}".format(event.absolute_url()))
+        log.debug(f"Handled event at {event.absolute_url()}")
 
 
 def remove_event_listing_settings(context):

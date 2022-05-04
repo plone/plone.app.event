@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from datetime import datetime
 from datetime import timedelta
@@ -192,7 +191,7 @@ def calendar_from_collection(context):
 
 
 @implementer(IICalendarEventComponent)
-class ICalendarEventComponent(object):
+class ICalendarEventComponent:
     """Returns an icalendar object of the event."""
 
     def __init__(self, context):
@@ -345,7 +344,7 @@ class ICalendarEventComponent(object):
         if event.event_url:
             cn.append(event.event_url)
 
-        return {"value": u", ".join(cn)}
+        return {"value": ", ".join(cn)}
 
     @property
     def categories(self):
@@ -408,10 +407,10 @@ class EventsICal(BrowserView):
 
     def __call__(self):
         ical = self.get_ical_string()
-        name = "{0}.ics".format(self.context.getId())
+        name = f"{self.context.getId()}.ics"
         self.request.response.setHeader("Content-Type", "text/calendar")
         self.request.response.setHeader(
-            "Content-Disposition", 'attachment; filename="{0}"'.format(name)
+            "Content-Disposition", f'attachment; filename="{name}"'
         )
         self.request.response.setHeader("Content-Length", len(ical))
         self.request.response.write(ical)

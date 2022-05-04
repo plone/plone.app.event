@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from Products.Five.browser import BrowserView
