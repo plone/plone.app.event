@@ -5,7 +5,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class FormattedDateProvider(Explicit):
-    template = ViewPageTemplateFile(u'formatted_date.pt')
+    template = ViewPageTemplateFile(u"formatted_date.pt")
 
     def __init__(self, context, request, view):
         self.__parent__ = view
@@ -29,4 +29,4 @@ class FormattedDateProvider(Explicit):
 
 
 class FormattedStartDateProvider(FormattedDateProvider):
-    template = ViewPageTemplateFile(u'formatted_start_date.pt')
+    template = ViewPageTemplateFile(u"formatted_start_date.pt")

@@ -9,7 +9,7 @@ import mock
 class FunctionalTestSearchEvent(AbstractSampleDataEvents):
     layer = PAEventDX_FUNCTIONAL_TESTING
 
-    @mock.patch('plone.app.event.base.localized_now', new=PN)
+    @mock.patch("plone.app.event.base.localized_now", new=PN)
     def test_searchabletext(self):
-        results = self.portal.portal_catalog(SearchableText=u'Überraschung')
+        results = self.portal.portal_catalog(SearchableText=u"Überraschung")
         self.assertTrue(len(results) == 1)

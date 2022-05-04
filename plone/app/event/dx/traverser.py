@@ -15,5 +15,6 @@ class OccurrenceTraverser(DefaultTraverser):
     """
 
     def fallbackTraverse(self, request, name):
-        return DexterityPublishTraverse(
-            self.context, request).publishTraverse(request, name)
+        return DexterityPublishTraverse(self.context, request).publishTraverse(
+            request, name
+        )

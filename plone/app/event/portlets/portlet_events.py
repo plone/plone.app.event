@@ -31,8 +31,8 @@ from zope.interface import implementer
 class IEventsPortlet(IPortletDataProvider):
 
     count = schema.Int(
-        title=_(u'Number of items to display'),
-        description=_(u'How many items to list.'),
+        title=_(u"Number of items to display"),
+        description=_(u"How many items to list."),
         required=True,
         default=5,
         min=1,
@@ -43,20 +43,18 @@ class IEventsPortlet(IPortletDataProvider):
         description=_(u"Items in which workflow state to show."),
         default=None,
         required=False,
-        value_type=schema.Choice(
-            vocabulary="plone.app.vocabularies.WorkflowStates"
-        )
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.WorkflowStates"),
     )
 
     search_base_uid = schema.Choice(
-        title=_(u'portlet_label_search_base', default=u'Search base'),
+        title=_(u"portlet_label_search_base", default=u"Search base"),
         description=_(
-            u'portlet_help_search_base',
-            default=u'Select search base Folder or Collection to search for '
-                    u'events. The URL to to this item will also be used to '
-                    u'link to in calendar searches. If empty, the whole site '
-                    u'will be searched and the event listing view will be '
-                    u'called on the site root.'
+            u"portlet_help_search_base",
+            default=u"Select search base Folder or Collection to search for "
+            u"events. The URL to to this item will also be used to "
+            u"link to in calendar searches. If empty, the whole site "
+            u"will be searched and the event listing view will be "
+            u"called on the site root.",
         ),
         required=False,
         source=search_base_uid_source,
@@ -70,14 +68,15 @@ class IEventsPortlet(IPortletDataProvider):
             u" Leave empty to use default (see 'Site' control panel)."
         ),
         required=False,
-        default=u'')
+        default=u"",
+    )
 
     no_thumbs = schema.Bool(
         title=_(u"Suppress thumbs"),
-        description=_(
-            u"If enabled, the portlet will not show thumbs."),
+        description=_(u"If enabled, the portlet will not show thumbs."),
         required=False,
-        default=False)
+        default=False,
+    )
 
 
 @implementer(IEventsPortlet)
@@ -87,8 +86,14 @@ class Assignment(base.Assignment):
     thumb_scale = None
     no_thumbs = False
 
-    def __init__(self, count=5, state=None, search_base_uid=None,
-                 thumb_scale=None, no_thumbs=False):
+    def __init__(
+        self,
+        count=5,
+        state=None,
+        search_base_uid=None,
+        thumb_scale=None,
+        no_thumbs=False,
+    ):
         self.count = count
         self.state = state
         self.search_base_uid = search_base_uid
@@ -105,16 +110,17 @@ class Assignment(base.Assignment):
         # 'search_base' attribute that needs to be converted.
         path = self.search_base
         try:
-            search_base = getSite().unrestrictedTraverse(path.lstrip('/'))
+            search_base = getSite().unrestrictedTraverse(path.lstrip("/"))
         except (AttributeError, KeyError, TypeError, NotFound):
             return
         return search_base.UID()
+
     search_base_uid = ComputedAttribute(_uid, 1)
 
 
 class Renderer(base.Renderer):
 
-    _template = ViewPageTemplateFile('portlet_events.pt')
+    _template = ViewPageTemplateFile("portlet_events.pt")
     _search_base = None
 
     @property
@@ -125,13 +131,15 @@ class Renderer(base.Renderer):
 
     @property
     def search_base_path(self):
-        return '/'.join(self.search_base.getPhysicalPath()) if self.search_base else None  # noqa
+        return (
+            "/".join(self.search_base.getPhysicalPath()) if self.search_base else None
+        )  # noqa
 
     def update(self):
         context = aq_inner(self.context)
         calendar_url = get_calendar_url(context, self.search_base_path)
-        self.next_url = '%s?mode=future' % calendar_url
-        self.prev_url = '%s?mode=past' % calendar_url
+        self.next_url = "%s?mode=future" % calendar_url
+        self.prev_url = "%s?mode=past" % calendar_url
 
     def render(self):
         return xhtml_compress(self._template())
@@ -147,54 +155,60 @@ class Renderer(base.Renderer):
 
         query = {}
         if data.state:
-            query['review_state'] = data.state
+            query["review_state"] = data.state
 
         events = []
-        query.update(self.request.get('contentFilter', {}))
+        query.update(self.request.get("contentFilter", {}))
         if ICollection and ICollection.providedBy(self.search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
-                self.search_base, self.search_base.query,
-                sort_on='start', sort_order=None
+                self.search_base,
+                self.search_base.query,
+                sort_on="start",
+                sort_order=None,
             )
 
             start = None
-            if 'start' in query:
-                start = query['start']
+            if "start" in query:
+                start = query["start"]
             else:
                 start = localized_now(context)
 
             end = None
-            if 'end' in query:
-                end = query['end']
+            if "end" in query:
+                end = query["end"]
 
             start, end = _prepare_range(self.search_base, start, end)
             query.update(start_end_query(start, end))
             events = self.search_base.results(
-                batch=False, brains=True, custom_query=query,
-                limit=data.count
+                batch=False, brains=True, custom_query=query, limit=data.count
             )
             events = expand_events(
-                events, ret_mode=RET_MODE_ACCESSORS,
-                start=start, end=end,
-                sort='start', sort_reverse=False
+                events,
+                ret_mode=RET_MODE_ACCESSORS,
+                start=start,
+                end=end,
+                sort="start",
+                sort_reverse=False,
             )
-            events = events[:data.count]  # limit expanded
+            events = events[: data.count]  # limit expanded
         else:
             if self.search_base_path:
-                query['path'] = {'query': self.search_base_path}
+                query["path"] = {"query": self.search_base_path}
             events = get_events(
-                context, start=localized_now(context),
+                context,
+                start=localized_now(context),
                 ret_mode=RET_MODE_ACCESSORS,
-                expand=True, limit=data.count, **query
+                expand=True,
+                limit=data.count,
+                **query
             )
 
         return events
 
     def formatted_date(self, event):
         provider = getMultiAdapter(
-            (self.context, self.request, self),
-            IContentProvider, name='formatted_date'
+            (self.context, self.request, self), IContentProvider, name="formatted_date"
         )
         return provider(event)
 
@@ -203,15 +217,14 @@ class Renderer(base.Renderer):
         Image sizes must fit to value in allowed image sizes.
         None will suppress thumb.
         """
-        if getattr(self.data, 'no_thumbs', False):
+        if getattr(self.data, "no_thumbs", False):
             # Individual setting overrides ...
             return None
-        thsize = getattr(self.data, 'thumb_scale', None)
+        thsize = getattr(self.data, "thumb_scale", None)
         if thsize:
             return thsize
         registry = getUtility(IRegistry)
-        settings = registry.forInterface(
-            ISiteSchema, prefix="plone", check=False)
+        settings = registry.forInterface(ISiteSchema, prefix="plone", check=False)
         if settings.no_thumbs_portlet:
             return None
         thumb_scale_portlet = settings.thumb_scale_portlet
@@ -224,9 +237,11 @@ class AddForm(base.AddForm):
     description = _(u"This portlet lists upcoming Events.")
 
     def create(self, data):
-        return Assignment(count=data.get('count', 5),
-                          state=data.get('state', None),
-                          search_base_uid=data.get('search_base_uid', None))
+        return Assignment(
+            count=data.get("count", 5),
+            state=data.get("state", None),
+            search_base_uid=data.get("search_base_uid", None),
+        )
 
 
 class EditForm(base.EditForm):

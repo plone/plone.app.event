@@ -30,8 +30,7 @@ except ImportError:
 @adapter(IEventRecurrence)
 @implementer(IRecurrenceSupport)
 class RecurrenceSupport(object):
-    """IRecurrenceSupport Adapter.
-    """
+    """IRecurrenceSupport Adapter."""
 
     def __init__(self, context):
         self.context = context
@@ -60,26 +59,28 @@ class RecurrenceSupport(object):
         event = IEventAccessor(self.context)
 
         # We try to get IEventBasic start without including recurrence
-        event_start = getattr(self.context, 'start', None)
+        event_start = getattr(self.context, "start", None)
         if not event_start:
             event_start = event.start
-        elif getattr(event, 'whole_day', None):
+        elif getattr(event, "whole_day", None):
             event_start = dt_start_of_day(event_start)
 
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
         # event starts before range_start but ends afterwards.
-        if (getattr(event, 'whole_day', None) or
-            getattr(event, 'open_end', None)):
+        if getattr(event, "whole_day", None) or getattr(event, "open_end", None):
             duration = datetime.timedelta(hours=23, minutes=59, seconds=59)
         else:
-            event_end = getattr(self.context, 'end', None)
+            event_end = getattr(self.context, "end", None)
             duration = event_end - event_start
 
-        starts = recurrence_sequence_ical(event_start,
-                                          recrule=event.recurrence,
-                                          from_=range_start, until=range_end,
-                                          duration=duration)
+        starts = recurrence_sequence_ical(
+            event_start,
+            recrule=event.recurrence,
+            from_=range_start,
+            until=range_end,
+            duration=duration,
+        )
 
         # XXX potentially occurrence won't need to be wrapped anymore
         # but doing it for backwards compatibility as views/templates
@@ -93,9 +94,8 @@ class RecurrenceSupport(object):
                 # remove it for a valid comparison.
                 return self.context
             return Occurrence(
-                id=str(start.date()),
-                start=start,
-                end=start + duration).__of__(self.context)
+                id=str(start.date()), start=start, end=start + duration
+            ).__of__(self.context)
 
         for start in starts:
             yield get_obj(start)
@@ -137,20 +137,19 @@ class Occurrence(SimpleItem):
         self.id = id
         self.start = start
         self.end = end
-        self.portal_type = 'Occurrence'
+        self.portal_type = "Occurrence"
 
 
 @adapter(IOccurrence)
 @implementer(IEventAccessor)
 class EventOccurrenceAccessor(object):
-    """Generic event accessor adapter implementation for Occurrence objects.
-    """
+    """Generic event accessor adapter implementation for Occurrence objects."""
 
     def __init__(self, context):
-        object.__setattr__(self, 'context', context)
+        object.__setattr__(self, "context", context)
 
-        own_attr = ['start', 'end', 'url']
-        object.__setattr__(self, '_own_attr', own_attr)
+        own_attr = ["start", "end", "url"]
+        object.__setattr__(self, "_own_attr", own_attr)
 
     def _get_context(self, name):
         # TODO: save parent context on self, so it must not be called every
@@ -183,6 +182,7 @@ class ImageScalingViewFactory(BrowserView):
     """Factory for ImageScaling view for Occurrences.
     Delegates to parent @@images view.
     """
+
     def __new__(cls, context, request):
         parent = aq_parent(context)
         if IImageScaleTraversable.providedBy(parent):

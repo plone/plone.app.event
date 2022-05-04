@@ -37,19 +37,18 @@ def construct_icalendar(context, events):
                    calendar.
     """
     cal = icalendar.Calendar()
-    cal.add('prodid', PRODID)
-    cal.add('version', VERSION)
+    cal.add("prodid", PRODID)
+    cal.add("version", VERSION)
 
     cal_tz = default_timezone(context)
     if cal_tz:
-        cal.add('x-wr-timezone', cal_tz)
+        cal.add("x-wr-timezone", cal_tz)
 
     tzmap = {}
-    if not getattr(events, '__getitem__', False):
+    if not getattr(events, "__getitem__", False):
         events = [events]
     for event in events:
-        if ICatalogBrain.providedBy(event) or\
-                IContentListingObject.providedBy(event):
+        if ICatalogBrain.providedBy(event) or IContentListingObject.providedBy(event):
             event = event.getObject()
         if not (IEvent.providedBy(event) or IOccurrence.providedBy(event)):
             # Must be an event.
@@ -59,7 +58,7 @@ def construct_icalendar(context, events):
         # TODO: the standard wants each recurrence to have a valid timezone
         # definition. sounds decent, but not realizable.
         if not acc.whole_day:  # whole day events are exported as dates without
-                               # timezone information
+            # timezone information
             if isinstance(tz, tuple):
                 tz_start, tz_end = tz
             else:
@@ -70,20 +69,20 @@ def construct_icalendar(context, events):
 
     for (tzid, transitions) in tzmap.items():
         cal_tz = icalendar.Timezone()
-        cal_tz.add('tzid', tzid)
-        cal_tz.add('x-lic-location', tzid)
+        cal_tz.add("tzid", tzid)
+        cal_tz.add("x-lic-location", tzid)
 
         for (transition, tzinfo) in transitions.items():
 
-            if tzinfo['dst']:
+            if tzinfo["dst"]:
                 cal_tz_sub = icalendar.TimezoneDaylight()
             else:
                 cal_tz_sub = icalendar.TimezoneStandard()
 
-            cal_tz_sub.add('tzname', tzinfo['name'])
-            cal_tz_sub.add('dtstart', transition)
-            cal_tz_sub.add('tzoffsetfrom', tzinfo['tzoffsetfrom'])
-            cal_tz_sub.add('tzoffsetto', tzinfo['tzoffsetto'])
+            cal_tz_sub.add("tzname", tzinfo["name"])
+            cal_tz_sub.add("dtstart", transition)
+            cal_tz_sub.add("tzoffsetfrom", tzinfo["tzoffsetfrom"])
+            cal_tz_sub.add("tzoffsetto", tzinfo["tzoffsetto"])
             # TODO: add rrule
             # tzi.add('rrule',
             #         {'freq': 'yearly', 'bymonth': 10, 'byday': '-1su'})
@@ -111,12 +110,12 @@ def add_to_zones_map(tzmap, tzid, dt):
     :rtype: dictionary
     """
 
-    if tzid.lower() == 'utc' or not is_datetime(dt):
+    if tzid.lower() == "utc" or not is_datetime(dt):
         # no need to define UTC nor timezones for date objects.
         return tzmap
     null = datetime(1, 1, 1)
     tz = pytz.timezone(tzid)
-    transitions = getattr(tz, '_utc_transition_times', None)
+    transitions = getattr(tz, "_utc_transition_times", None)
     if not transitions:
         return tzmap  # we need transition definitions
     dtzl = tzdel(utc(dt))
@@ -128,8 +127,7 @@ def add_to_zones_map(tzmap, tzid, dt):
     #     datetime, which wouldn't create a match within the max-function. this
     #     way we get the maximum transition time which is smaller than the
     #     given datetime.
-    transition = max(transitions,
-                     key=lambda item: item if item <= dtzl else null)
+    transition = max(transitions, key=lambda item: item if item <= dtzl else null)
 
     # get previous transition to calculate tzoffsetfrom
     idx = transitions.index(transition)
@@ -142,6 +140,7 @@ def add_to_zones_map(tzmap, tzid, dt):
             # (dt at beginning of all transitions, see above.)
             return null
         return pytz.utc.localize(dt).astimezone(tz)  # naive to utc + localize
+
     transition = localize(tz, transition)
     dtstart = tzdel(transition)  # timezone dtstart must be in local time
     prev_transition = localize(tz, prev_transition)
@@ -151,10 +150,10 @@ def add_to_zones_map(tzmap, tzid, dt):
     if dtstart in tzmap[tzid]:
         return tzmap  # already there
     tzmap[tzid][dtstart] = {
-        'dst': transition.dst() > timedelta(0),
-        'name': transition.tzname(),
-        'tzoffsetfrom': prev_transition.utcoffset(),
-        'tzoffsetto': transition.utcoffset(),
+        "dst": transition.dst() > timedelta(0),
+        "name": transition.tzname(),
+        "tzoffsetfrom": prev_transition.utcoffset(),
+        "tzoffsetto": transition.utcoffset(),
         # TODO: recurrence rule
     }
     return tzmap
@@ -175,9 +174,8 @@ def calendar_from_container(context):
     Containerish context like a Folder.
     """
     context = aq_inner(context)
-    path = '/'.join(context.getPhysicalPath())
-    result = get_events(context, ret_mode=RET_MODE_BRAINS,
-                        expand=False, path=path)
+    path = "/".join(context.getPhysicalPath())
+    result = get_events(context, ret_mode=RET_MODE_BRAINS, expand=False, path=path)
     return construct_icalendar(context, result)
 
 
@@ -189,14 +187,13 @@ def calendar_from_collection(context):
     context = aq_inner(context)
     # The keyword argument brains=False was added to plone.app.contenttypes
     # after 1.0
-    result = context.results(batch=False, sort_on='start')
+    result = context.results(batch=False, sort_on="start")
     return construct_icalendar(context, result)
 
 
 @implementer(IICalendarEventComponent)
 class ICalendarEventComponent(object):
-    """Returns an icalendar object of the event.
-    """
+    """Returns an icalendar object of the event."""
 
     def __init__(self, context):
         self.context = context
@@ -206,33 +203,33 @@ class ICalendarEventComponent(object):
     @property
     def dtstamp(self):
         # must be in uc
-        return {'value': utc(datetime.now())}
+        return {"value": utc(datetime.now())}
 
     @property
     def created(self):
         # must be in uc
-        return {'value': utc(self.event.created)}
+        return {"value": utc(self.event.created)}
 
     @property
     def last_modified(self):
         # must be in uc
-        return {'value': utc(self.event.last_modified)}
+        return {"value": utc(self.event.last_modified)}
 
     @property
     def uid(self):
-        return {'value': self.event.sync_uid}
+        return {"value": self.event.sync_uid}
 
     @property
     def url(self):
-        return {'value': self.event.url}
+        return {"value": self.event.url}
 
     @property
     def summary(self):
-        return {'value': self.event.title}
+        return {"value": self.event.title}
 
     @property
     def description(self):
-        return {'value': self.event.description}
+        return {"value": self.event.description}
 
     @property
     def dtstart(self):
@@ -242,7 +239,7 @@ class ICalendarEventComponent(object):
             # specifies a "DTSTART" property with a DATE value type but no
             # "DTEND" nor "DURATION" property, the event's duration is taken to
             # be one day.
-            return {'value': self.event.start.date()}
+            return {"value": self.event.start.date()}
 
         # Normal case + Open End case:
         # RFC5545, 3.6.1
@@ -250,7 +247,7 @@ class ICalendarEventComponent(object):
         # specifies a "DTSTART" property with a DATE-TIME value type but no
         # "DTEND" property, the event ends on the same calendar date and
         # time of day specified by the "DTSTART" property.
-        return {'value': self.event.start}
+        return {"value": self.event.start}
 
     @property
     def dtend(self):
@@ -273,7 +270,7 @@ class ICalendarEventComponent(object):
             # http://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
             # http://icalevents.com/1778-all-day-events-adding-a-day-or-not/
             # http://www.innerjoin.org/iCalendar/all-day-events.html
-            return {'value': self.event.end.date() + timedelta(days=1)}
+            return {"value": self.event.end.date() + timedelta(days=1)}
 
         elif self.event.open_end:
             # RFC5545, 3.6.1
@@ -283,7 +280,7 @@ class ICalendarEventComponent(object):
             # time of day specified by the "DTSTART" property.
             return None
 
-        return {'value': self.event.end}
+        return {"value": self.event.end}
 
     @property
     def recurrence(self):
@@ -292,14 +289,13 @@ class ICalendarEventComponent(object):
 
         ret = []
         for recdef in self.event.recurrence.split():
-            prop, val = recdef.split(':')
-            if prop == 'RRULE':
-                ret.append({
-                    'property': prop,
-                    'value': icalendar.prop.vRecur.from_ical(val)
-                })
+            prop, val = recdef.split(":")
+            if prop == "RRULE":
+                ret.append(
+                    {"property": prop, "value": icalendar.prop.vRecur.from_ical(val)}
+                )
 
-            elif prop in ('EXDATE', 'RDATE'):
+            elif prop in ("EXDATE", "RDATE"):
                 factory = icalendar.prop.vDDDLists
 
                 # localize ex/rdate
@@ -317,16 +313,13 @@ class ICalendarEventComponent(object):
                     # TODO: REMOVE this workaround, once this failure is
                     # fixed in recurrence widget.
                     continue
-                ret.append({
-                    'property': prop,
-                    'value': dtlist
-                })
+                ret.append({"property": prop, "value": dtlist})
 
         return ret
 
     @property
     def location(self):
-        return {'value': self.event.location}
+        return {"value": self.event.location}
 
     @property
     def attendee(self):
@@ -334,10 +327,10 @@ class ICalendarEventComponent(object):
         ret = []
         for attendee in self.event.attendees or []:
             att = icalendar.prop.vCalAddress(attendee)
-            att.params['cn'] = icalendar.prop.vText(attendee)
-            att.params['ROLE'] = icalendar.prop.vText('REQ-PARTICIPANT')
+            att.params["cn"] = icalendar.prop.vText(attendee)
+            att.params["ROLE"] = icalendar.prop.vText("REQ-PARTICIPANT")
             ret.append(att)
-        return {'value': ret}
+        return {"value": ret}
 
     @property
     def contact(self):
@@ -352,7 +345,7 @@ class ICalendarEventComponent(object):
         if event.event_url:
             cn.append(event.event_url)
 
-        return {'value': u', '.join(cn)}
+        return {"value": u", ".join(cn)}
 
     @property
     def categories(self):
@@ -360,12 +353,11 @@ class ICalendarEventComponent(object):
         for cat in self.event.subjects or []:
             ret.append(cat)
         if ret:
-            return {'value': ret}
+            return {"value": ret}
 
     @property
     def geo(self):
-        """Not implemented.
-        """
+        """Not implemented."""
         return
 
     def ical_add(self, prop, val):
@@ -376,40 +368,39 @@ class ICalendarEventComponent(object):
             val = [val]
 
         for _val in val:
-            assert(isinstance(_val, dict))
-            value = _val['value']
+            assert isinstance(_val, dict)
+            value = _val["value"]
             if not value:
                 continue
-            prop = _val.get('property', prop)
-            params = _val.get('parameters', None)
+            prop = _val.get("property", prop)
+            params = _val.get("parameters", None)
             self.ical.add(prop, value, params)
 
     def to_ical(self):
         # TODO: event.text
 
         ical_add = self.ical_add
-        ical_add('dtstamp', self.dtstamp)
-        ical_add('created', self.created)
-        ical_add('last-modified', self.last_modified)
-        ical_add('uid', self.uid)
-        ical_add('url', self.url)
-        ical_add('summary', self.summary)
-        ical_add('description', self.description)
-        ical_add('dtstart', self.dtstart)
-        ical_add('dtend', self.dtend)
+        ical_add("dtstamp", self.dtstamp)
+        ical_add("created", self.created)
+        ical_add("last-modified", self.last_modified)
+        ical_add("uid", self.uid)
+        ical_add("url", self.url)
+        ical_add("summary", self.summary)
+        ical_add("description", self.description)
+        ical_add("dtstart", self.dtstart)
+        ical_add("dtend", self.dtend)
         ical_add(None, self.recurrence)  # property key set via val
-        ical_add('location', self.location)
-        ical_add('attendee', self.attendee)
-        ical_add('contact', self.contact)
-        ical_add('categories', self.categories)
-        ical_add('geo', self.geo)
+        ical_add("location", self.location)
+        ical_add("attendee", self.attendee)
+        ical_add("contact", self.contact)
+        ical_add("categories", self.categories)
+        ical_add("geo", self.geo)
 
         return self.ical
 
 
 class EventsICal(BrowserView):
-    """Returns events in iCal format.
-    """
+    """Returns events in iCal format."""
 
     def get_ical_string(self):
         cal = IICalendar(self.context)
@@ -417,11 +408,10 @@ class EventsICal(BrowserView):
 
     def __call__(self):
         ical = self.get_ical_string()
-        name = '{0}.ics'.format(self.context.getId())
-        self.request.response.setHeader('Content-Type', 'text/calendar')
+        name = "{0}.ics".format(self.context.getId())
+        self.request.response.setHeader("Content-Type", "text/calendar")
         self.request.response.setHeader(
-            'Content-Disposition',
-            'attachment; filename="{0}"'.format(name)
+            "Content-Disposition", 'attachment; filename="{0}"'.format(name)
         )
-        self.request.response.setHeader('Content-Length', len(ical))
+        self.request.response.setHeader("Content-Length", len(ical))
         self.request.response.write(ical)

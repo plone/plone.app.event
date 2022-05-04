@@ -13,13 +13,13 @@ def get_calendar_url(context, search_base):
     if search_base:
         portal = find_ploneroot(context)
         if six.PY2 and isinstance(search_base, six.text_type):
-            search_base = search_base.encode('utf8')
-        search_base = '/'.join(search_base.split('/')[2:])
+            search_base = search_base.encode("utf8")
+        search_base = "/".join(search_base.split("/")[2:])
         calendar_url = portal.unrestrictedTraverse(
-            search_base.lstrip('/')  # start relative, first slash is omitted
+            search_base.lstrip("/")  # start relative, first slash is omitted
         ).absolute_url()
     else:
         site_url = find_navroot(context, as_url=True)
-        calendar_url = '%s/event_listing' % site_url
+        calendar_url = "%s/event_listing" % site_url
 
     return calendar_url

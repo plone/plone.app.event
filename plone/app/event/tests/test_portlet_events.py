@@ -29,34 +29,36 @@ import pytz
 import unittest
 
 
-TZNAME = 'Australia/Brisbane'
-PTYPE = 'plone.app.event.dx.event'
+TZNAME = "Australia/Brisbane"
+PTYPE = "plone.app.event.dx.event"
 
 
 class PortletTest(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
 
     def setUp(self):
-        portal = self.layer['portal']
+        portal = self.layer["portal"]
         self.portal = portal
-        self.request = self.layer['request']
+        self.request = self.layer["request"]
         alsoProvides(self.request, IPloneFormLayer)
-        setRoles(portal, TEST_USER_ID, ['Manager'])
+        setRoles(portal, TEST_USER_ID, ["Manager"])
         setHooks()
         setSite(portal)
 
     def testPortletTypeRegistered(self):
-        portlet = getUtility(IPortletType, name='portlets.Events')
-        self.assertEqual(portlet.addview, 'portlets.Events')
+        portlet = getUtility(IPortletType, name="portlets.Events")
+        self.assertEqual(portlet.addview, "portlets.Events")
 
     def testRegisteredInterfaces(self):
-        portlet = getUtility(IPortletType, name='portlets.Events')
+        portlet = getUtility(IPortletType, name="portlets.Events")
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
         self.assertEqual(
-            ['plone.app.portlets.interfaces.IColumn',
-             'plone.app.portlets.interfaces.IDashboard'],
-            registered_interfaces
+            [
+                "plone.app.portlets.interfaces.IColumn",
+                "plone.app.portlets.interfaces.IDashboard",
+            ],
+            registered_interfaces,
         )
 
     def testInterfaces(self):
@@ -65,13 +67,11 @@ class PortletTest(unittest.TestCase):
         self.assertTrue(IPortletDataProvider.providedBy(portlet.data))
 
     def testInvokeAddview(self):
-        portlet = getUtility(IPortletType, name='portlets.Events')
-        mapping = self.portal.restrictedTraverse(
-            '++contextportlets++plone.leftcolumn'
-        )
+        portlet = getUtility(IPortletType, name="portlets.Events")
+        mapping = self.portal.restrictedTraverse("++contextportlets++plone.leftcolumn")
         for m in mapping.keys():
             del mapping[m]
-        addview = mapping.restrictedTraverse('+/' + portlet.addview)
+        addview = mapping.restrictedTraverse("+/" + portlet.addview)
 
         addview.createAndAdd(data={})
 
@@ -83,37 +83,32 @@ class PortletTest(unittest.TestCase):
     def testInvokeEditView(self):
         mapping = PortletAssignmentMapping()
 
-        mapping['foo'] = portlet_events.Assignment(count=5)
-        editview = getMultiAdapter((mapping['foo'], self.request), name='edit')
+        mapping["foo"] = portlet_events.Assignment(count=5)
+        editview = getMultiAdapter((mapping["foo"], self.request), name="edit")
         self.assertTrue(isinstance(editview, portlet_events.EditForm))
 
     def testRenderer(self):
         context = self.portal
-        view = context.restrictedTraverse('@@plone')
+        view = context.restrictedTraverse("@@plone")
         manager = getUtility(
-            IPortletManager, name='plone.leftcolumn', context=self.portal
+            IPortletManager, name="plone.leftcolumn", context=self.portal
         )
         assignment = portlet_events.Assignment(count=5)
 
         renderer = getMultiAdapter(
-            (context, self.request, view, manager, assignment),
-            IPortletRenderer
+            (context, self.request, view, manager, assignment), IPortletRenderer
         )
         self.assertTrue(isinstance(renderer, portlet_events.Renderer))
 
     def test_disable_dasboard_breaks_event_portlet(self):
         # Bug #8230: disabling the dashboard breaks the event portlet
         self.portal.manage_permission(
-            'Portlets: Manage own portlets',
-            roles=['Manager'],
-            acquire=0
+            "Portlets: Manage own portlets", roles=["Manager"], acquire=0
         )
 
-        portlet = getUtility(IPortletType, name='portlets.Events')
-        mapping = self.portal.restrictedTraverse(
-            '++contextportlets++plone.leftcolumn'
-        )
-        addview = mapping.restrictedTraverse('+/' + portlet.addview)
+        portlet = getUtility(IPortletType, name="portlets.Events")
+        mapping = self.portal.restrictedTraverse("++contextportlets++plone.leftcolumn")
+        addview = mapping.restrictedTraverse("+/" + portlet.addview)
 
         try:
             addview.createAndAdd(data={})
@@ -125,30 +120,30 @@ class RendererTest(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
-        portal = self.layer['portal']
+        portal = self.layer["portal"]
         self.portal = portal
-        self.request = self.layer['request']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.request = self.layer["request"]
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
         wftool = getToolByName(self.portal, "portal_workflow")
         wftool.setDefaultChain("simple_publication_workflow")
         set_env_timezone(TZNAME)
         set_timezone(TZNAME)
 
-    def renderer(self, context=None, request=None, view=None, manager=None,
-                 assignment=None):
+    def renderer(
+        self, context=None, request=None, view=None, manager=None, assignment=None
+    ):
         context = context or self.portal
         request = request or self.request
-        view = view or context.restrictedTraverse('@@plone')
+        view = view or context.restrictedTraverse("@@plone")
         manager = manager or getUtility(
-            IPortletManager, name='plone.leftcolumn', context=self.portal
+            IPortletManager, name="plone.leftcolumn", context=self.portal
         )
         assignment = assignment or portlet_events.Assignment(
-            template='portlet_recent', macro='portlet'
+            template="portlet_recent", macro="portlet"
         )
 
         return getMultiAdapter(
-            (context, request, view, manager, assignment),
-            IPortletRenderer
+            (context, request, view, manager, assignment), IPortletRenderer
         )
 
     def test_portlet_event_renderer__get_events(self):
@@ -156,27 +151,36 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE,
-            id='e1', title=u'e1', start=start, end=end)
-        self.portal.portal_workflow.doActionFor(e1, 'publish')
+            self.portal, PTYPE, id="e1", title=u"e1", start=start, end=end
+        )
+        self.portal.portal_workflow.doActionFor(e1, "publish")
 
-        self.portal.invokeFactory('Folder', 'eventfolder')
+        self.portal.invokeFactory("Folder", "eventfolder")
         createContentInContainer(
-            self.portal.eventfolder, PTYPE,
-            id='e2', title=u'e2', start=start, end=end)
+            self.portal.eventfolder, PTYPE, id="e2", title=u"e2", start=start, end=end
+        )
 
-        r = self.renderer(assignment=portlet_events.Assignment(
-            count=5, state=('draft',)))
+        r = self.renderer(
+            assignment=portlet_events.Assignment(count=5, state=("draft",))
+        )
         r.update()
         self.assertEqual(0, len(r.events))
 
-        r = self.renderer(assignment=portlet_events.Assignment(
-            count=5, state=('published', )))
+        r = self.renderer(
+            assignment=portlet_events.Assignment(count=5, state=("published",))
+        )
         r.update()
         self.assertEqual(1, len(r.events))
 
-        r = self.renderer(assignment=portlet_events.Assignment(
-            count=5, state=('published', 'private',)))
+        r = self.renderer(
+            assignment=portlet_events.Assignment(
+                count=5,
+                state=(
+                    "published",
+                    "private",
+                ),
+            )
+        )
         r.update()
         self.assertEqual(2, len(r.events))
 
@@ -185,35 +189,48 @@ class RendererTest(unittest.TestCase):
         self.assertEqual(2, len(r.events))
 
         # No search base gives calendar urls with event_listing part
-        self.assertTrue('event_listing' in r.render())
+        self.assertTrue("event_listing" in r.render())
 
-        r = self.renderer(assignment=portlet_events.Assignment(
-            count=5, search_base_uid=self.portal.eventfolder.UID()))
+        r = self.renderer(
+            assignment=portlet_events.Assignment(
+                count=5, search_base_uid=self.portal.eventfolder.UID()
+            )
+        )
         r.update()
         self.assertEqual(1, len(r.events))
 
         # A given search base gives calendar urls without event_listing part
-        self.assertTrue('event_listing' not in r.render())
+        self.assertTrue("event_listing" not in r.render())
 
     def test_portlet_event_renderer__recurring(self):
         start = localized_now() + timedelta(days=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, id='e1', title=u'Event 1', start=start,
-            recurrence='RRULE:FREQ=WEEKLY;COUNT=10')
+            self.portal,
+            PTYPE,
+            id="e1",
+            title=u"Event 1",
+            start=start,
+            recurrence="RRULE:FREQ=WEEKLY;COUNT=10",
+        )
         createContentInContainer(
-            self.portal, PTYPE, id='e1', title=u'Event 1', start=start,
-            recurrence='RRULE:FREQ=DAILY;COUNT=3')
+            self.portal,
+            PTYPE,
+            id="e1",
+            title=u"Event 1",
+            start=start,
+            recurrence="RRULE:FREQ=DAILY;COUNT=3",
+        )
 
-        self.portal.portal_workflow.doActionFor(e1, 'publish')
+        self.portal.portal_workflow.doActionFor(e1, "publish")
 
         r = self.renderer(
-            assignment=portlet_events.Assignment(count=5,
-                                                 state=('published',)))
+            assignment=portlet_events.Assignment(count=5, state=("published",))
+        )
         r.update()
         events = r.events
         self.assertEqual(5, len(events))
-        self.assertTrue('Event 2' not in [x.title for x in events])
+        self.assertTrue("Event 2" not in [x.title for x in events])
 
         rd = r.render()
         occ1dt = start + timedelta(days=7)
@@ -222,13 +239,14 @@ class RendererTest(unittest.TestCase):
         self.assertTrue('http://nohost/plone/e1"' in rd)
         # Occurrences should link to the Occurrence.
         self.assertTrue(
-            'http://nohost/plone/e1/%s-%02d-%02d' %
-            (occ1dt.year, occ1dt.month, occ1dt.day) in rd
+            "http://nohost/plone/e1/%s-%02d-%02d"
+            % (occ1dt.year, occ1dt.month, occ1dt.day)
+            in rd
         )
 
     def test_portlet_event_renderer__listing_link(self):
         r = self.renderer(assignment=portlet_events.Assignment(count=5))
         r.update()
         rd = r.render()
-        self.assertTrue('?mode=future' in rd)
-        self.assertTrue('?mode=past' in rd)
+        self.assertTrue("?mode=future" in rd)
+        self.assertTrue("?mode=past" in rd)

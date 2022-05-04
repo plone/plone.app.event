@@ -27,33 +27,35 @@ import pytz
 import unittest
 
 
-TZNAME = 'Europe/Vienna'
-PTYPE = 'plone.app.event.dx.event'
+TZNAME = "Europe/Vienna"
+PTYPE = "plone.app.event.dx.event"
 
 
 class PortletTest(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
 
     def setUp(self):
-        portal = self.layer['portal']
+        portal = self.layer["portal"]
         self.portal = portal
-        self.request = self.layer['request']
-        setRoles(portal, TEST_USER_ID, ['Manager'])
+        self.request = self.layer["request"]
+        setRoles(portal, TEST_USER_ID, ["Manager"])
         setHooks()
         setSite(portal)
 
     def testPortletTypeRegistered(self):
-        portlet = getUtility(IPortletType, name='portlets.Calendar')
-        self.assertEqual(portlet.addview, 'portlets.Calendar')
+        portlet = getUtility(IPortletType, name="portlets.Calendar")
+        self.assertEqual(portlet.addview, "portlets.Calendar")
 
     def testRegisteredInterfaces(self):
-        portlet = getUtility(IPortletType, name='portlets.Calendar')
+        portlet = getUtility(IPortletType, name="portlets.Calendar")
         registered_interfaces = [_getDottedName(i) for i in portlet.for_]
         registered_interfaces.sort()
-        self.assertEqual([
-            'plone.app.portlets.interfaces.IColumn',
-            'plone.app.portlets.interfaces.IDashboard'],
-            registered_interfaces
+        self.assertEqual(
+            [
+                "plone.app.portlets.interfaces.IColumn",
+                "plone.app.portlets.interfaces.IDashboard",
+            ],
+            registered_interfaces,
         )
 
     def testInterfaces(self):
@@ -62,13 +64,11 @@ class PortletTest(unittest.TestCase):
         self.assertTrue(IPortletDataProvider.providedBy(portlet.data))
 
     def testInvokeAddview(self):
-        portlet = getUtility(IPortletType, name='portlets.Calendar')
-        mapping = self.portal.restrictedTraverse(
-            '++contextportlets++plone.leftcolumn'
-        )
+        portlet = getUtility(IPortletType, name="portlets.Calendar")
+        mapping = self.portal.restrictedTraverse("++contextportlets++plone.leftcolumn")
         for m in mapping.keys():
             del mapping[m]
-        addview = mapping.restrictedTraverse('+/' + portlet.addview)
+        addview = mapping.restrictedTraverse("+/" + portlet.addview)
 
         addview.createAndAdd(data={})
 
@@ -79,17 +79,14 @@ class PortletTest(unittest.TestCase):
 
     def testRenderer(self):
         context = self.portal
-        view = context.restrictedTraverse('@@plone')
+        view = context.restrictedTraverse("@@plone")
         manager = getUtility(
-            IPortletManager,
-            name='plone.rightcolumn',
-            context=self.portal
+            IPortletManager, name="plone.rightcolumn", context=self.portal
         )
         assignment = portlet_calendar.Assignment()
 
         renderer = getMultiAdapter(
-            (context, self.request, view, manager, assignment),
-            IPortletRenderer
+            (context, self.request, view, manager, assignment), IPortletRenderer
         )
         self.assertTrue(isinstance(renderer, portlet_calendar.Renderer))
 
@@ -98,27 +95,26 @@ class RendererTest(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
-        portal = self.layer['portal']
+        portal = self.layer["portal"]
         self.portal = portal
-        self.request = self.layer['request']
-        self.wft = getToolByName(self.portal, 'portal_workflow')
+        self.request = self.layer["request"]
+        self.wft = getToolByName(self.portal, "portal_workflow")
         self.wft.setDefaultChain("simple_publication_workflow")
-        setRoles(portal, TEST_USER_ID, ['Manager'])
+        setRoles(portal, TEST_USER_ID, ["Manager"])
         setHooks()
         setSite(portal)
 
         set_env_timezone(TZNAME)
         set_timezone(TZNAME)
 
-    def renderer(self, context=None, request=None, view=None, manager=None,
-                 assignment=None):
+    def renderer(
+        self, context=None, request=None, view=None, manager=None, assignment=None
+    ):
         context = context or self.portal
         request = request or self.request
-        view = view or context.restrictedTraverse('@@plone')
+        view = view or context.restrictedTraverse("@@plone")
         manager = manager or getUtility(
-            IPortletManager,
-            name='plone.rightcolumn',
-            context=self.portal
+            IPortletManager, name="plone.rightcolumn", context=self.portal
         )
         assignment = assignment or portlet_calendar.Assignment()
 
@@ -132,49 +128,58 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(hours=1)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=u'e1', start=start, end=end)
-        self.portal.invokeFactory('Folder', 'eventfolder')
+            self.portal, PTYPE, title=u"e1", start=start, end=end
+        )
+        self.portal.invokeFactory("Folder", "eventfolder")
         createContentInContainer(
-            self.portal.eventfolder, PTYPE, title=u'e2', start=start, end=end)
-        self.portal.portal_workflow.doActionFor(e1, 'publish')
+            self.portal.eventfolder, PTYPE, title=u"e2", start=start, end=end
+        )
+        self.portal.portal_workflow.doActionFor(e1, "publish")
 
-        r = self.renderer(assignment=portlet_calendar.Assignment(
-            state=('draft',)))
+        r = self.renderer(assignment=portlet_calendar.Assignment(state=("draft",)))
         r.update()
         rd = r.render()
-        self.assertTrue('e1' not in rd and 'e2' not in rd)
+        self.assertTrue("e1" not in rd and "e2" not in rd)
 
-        r = self.renderer(assignment=portlet_calendar.Assignment(
-            state=('published', )))
+        r = self.renderer(assignment=portlet_calendar.Assignment(state=("published",)))
         r.update()
         rd = r.render()
-        self.assertTrue('e1' in rd and 'e2' not in rd)
+        self.assertTrue("e1" in rd and "e2" not in rd)
 
-        r = self.renderer(assignment=portlet_calendar.Assignment(
-            state=('published', 'private',)))
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                state=(
+                    "published",
+                    "private",
+                )
+            )
+        )
         r.update()
         rd = r.render()
-        self.assertTrue('e1' in rd and 'e2' in rd)
+        self.assertTrue("e1" in rd and "e2" in rd)
 
         r = self.renderer(assignment=portlet_calendar.Assignment())
         r.update()
         rd = r.render()
-        self.assertTrue('e1' in rd and 'e2' in rd)
+        self.assertTrue("e1" in rd and "e2" in rd)
 
         # No search base gives calendar urls with event_listing part
-        self.assertTrue('event_listing?mode=day' in rd)
+        self.assertTrue("event_listing?mode=day" in rd)
 
-        r = self.renderer(assignment=portlet_calendar.Assignment(
-            search_base_uid=self.portal.eventfolder.UID()))
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                search_base_uid=self.portal.eventfolder.UID()
+            )
+        )
         r.update()
         rd = r.render()
-        self.assertTrue('e1' not in rd and 'e2' in rd)
+        self.assertTrue("e1" not in rd and "e2" in rd)
 
         # A given search base gives calendar urls without event_listing part
-        self.assertTrue('event_listing?mode=day' not in rd)
+        self.assertTrue("event_listing?mode=day" not in rd)
 
         # link to calendar view in rendering
-        self.assertTrue('?mode=day&amp;date=' in rd)
+        self.assertTrue("?mode=day&amp;date=" in rd)
 
     def test_long_event(self):
         tz = pytz.timezone(TZNAME)
@@ -183,15 +188,14 @@ class RendererTest(unittest.TestCase):
         end = start + timedelta(days=2)
 
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=u'e1', start=start, end=end)
-        self.portal.portal_workflow.doActionFor(e1, 'publish')
-
-        r = self.renderer(
-            assignment=portlet_calendar.Assignment(state=('published', ))
+            self.portal, PTYPE, title=u"e1", start=start, end=end
         )
+        self.portal.portal_workflow.doActionFor(e1, "publish")
+
+        r = self.renderer(assignment=portlet_calendar.Assignment(state=("published",)))
         r.update()
         rd = r.render()
-        self.assertEqual(rd.count('e1'), 3)
+        self.assertEqual(rd.count("e1"), 3)
 
     def test_event_created_last_day_of_month_invalidate_cache(self):
         # First render the calendar portlet when there's no events
@@ -207,28 +211,24 @@ class RendererTest(unittest.TestCase):
         start = tz.localize(datetime(year, month, day, 23, 0, 0))
         end = tz.localize(datetime(year, month, day, 23, 30, 0))
         # Event starts at 23:00 and ends at 23:30
-        createContentInContainer(
-            self.portal, PTYPE, title=u'e1', start=start, end=end
-        )
+        createContentInContainer(self.portal, PTYPE, title=u"e1", start=start, end=end)
 
         # Try to render the calendar portlet again, it must be different Now
         r = self.renderer(assignment=portlet_calendar.Assignment())
         r.update()
-        self.assertNotEqual(
-            html, r.render(), "Cache key wasn't invalidated"
-        )
+        self.assertNotEqual(html, r.render(), "Cache key wasn't invalidated")
 
     def test_event_nonascii(self):
         # test issue with non-ascii event title and location
-        title = u'Plön€¢önf München 2012'
+        title = u"Plön€¢önf München 2012"
 
         tz = pytz.timezone(TZNAME)
         start = tz.localize(datetime.now())
         end = start + timedelta(hours=1)
         e1 = createContentInContainer(
-            self.portal, PTYPE, title=title, start=start, end=end,
-            location=u'München')
-        self.wft.doActionFor(e1, 'publish')
+            self.portal, PTYPE, title=title, start=start, end=end, location=u"München"
+        )
+        self.wft.doActionFor(e1, "publish")
         r = self.renderer(assignment=portlet_calendar.Assignment())
         r.update()
         self.assertTrue(title in r.render())
@@ -238,16 +238,14 @@ class RendererTest(unittest.TestCase):
         r.update()
 
         year, month = r.year_month_display()
-        prev_expected = '?month={1}&year={0}'.format(
-            *r.get_previous_month(year, month))
-        next_expected = '?month={1}&year={0}'.format(
-            *r.get_next_month(year, month))
+        prev_expected = "?month={1}&year={0}".format(*r.get_previous_month(year, month))
+        next_expected = "?month={1}&year={0}".format(*r.get_next_month(year, month))
         self.assertEqual(next_expected, r.next_query)
         self.assertEqual(prev_expected, r.prev_query)
 
     def test_invalid_request(self):
-        self.request.form['month'] = [3, 4]
-        self.request.form['year'] = [2011]
+        self.request.form["month"] = [3, 4]
+        self.request.form["year"] = [2011]
         r = self.renderer()
         r.update()
         today = localized_today(self.portal)

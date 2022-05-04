@@ -5,7 +5,6 @@ from Products.Five.browser import BrowserView
 
 
 class EventView(BrowserView):
-
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -15,5 +14,5 @@ class EventView(BrowserView):
         if IOccurrence.providedBy(self.context):
             # The transient Occurrence objects cannot be edited. disable the
             # edit border for them.
-            self.request.set('disable_border', True)
+            self.request.set("disable_border", True)
         return self.index()  # render me.

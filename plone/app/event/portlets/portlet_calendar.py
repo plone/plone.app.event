@@ -35,42 +35,40 @@ try:
         ISyndicatableCollection as ICollection,
     )  # noqa
     from plone.app.contenttypes.interfaces import IFolder
-    search_base_uid_source = CatalogSource(object_provides={
-        'query': [
-            ICollection.__identifier__,
-            IFolder.__identifier__
-        ],
-        'operator': 'or'
-    })
+
+    search_base_uid_source = CatalogSource(
+        object_provides={
+            "query": [ICollection.__identifier__, IFolder.__identifier__],
+            "operator": "or",
+        }
+    )
 except ImportError:
     search_base_uid_source = CatalogSource(is_folderish=True)
     ICollection = None
 
-PLMF = MessageFactory('plonelocales')
+PLMF = MessageFactory("plonelocales")
 
 
 class ICalendarPortlet(IPortletDataProvider):
-    """A portlet displaying a calendar
-    """
+    """A portlet displaying a calendar"""
 
     state = schema.Tuple(
         title=_(u"Workflow state"),
         description=_(u"Items in which workflow state to show."),
         default=None,
         required=False,
-        value_type=schema.Choice(
-            vocabulary="plone.app.vocabularies.WorkflowStates")
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.WorkflowStates"),
     )
 
     search_base_uid = schema.Choice(
-        title=_(u'portlet_label_search_base', default=u'Search base'),
+        title=_(u"portlet_label_search_base", default=u"Search base"),
         description=_(
-            u'portlet_help_search_base',
-            default=u'Select search base Folder or Collection to search for '
-                    u'events. The URL to to this item will also be used to '
-                    u'link to in calendar searches. If empty, the whole site '
-                    u'will be searched and the event listing view will be '
-                    u'called on the site root.'
+            u"portlet_help_search_base",
+            default=u"Select search base Folder or Collection to search for "
+            u"events. The URL to to this item will also be used to "
+            u"link to in calendar searches. If empty, the whole site "
+            u"will be searched and the event listing view will be "
+            u"called on the site root.",
         ),
         required=False,
         source=search_base_uid_source,
@@ -79,7 +77,7 @@ class ICalendarPortlet(IPortletDataProvider):
 
 @implementer(ICalendarPortlet)
 class Assignment(base.Assignment):
-    title = _(u'Calendar')
+    title = _(u"Calendar")
 
     # reduce upgrade pain
     state = None
@@ -94,15 +92,16 @@ class Assignment(base.Assignment):
         # 'search_base' attribute that needs to be converted.
         path = self.search_base
         try:
-            search_base = getSite().unrestrictedTraverse(path.lstrip('/'))
+            search_base = getSite().unrestrictedTraverse(path.lstrip("/"))
         except (AttributeError, KeyError, TypeError, NotFound):
             return
         return search_base.UID()
+
     search_base_uid = ComputedAttribute(_uid, 1)
 
 
 class Renderer(base.Renderer):
-    render = ViewPageTemplateFile('portlet_calendar.pt')
+    render = ViewPageTemplateFile("portlet_calendar.pt")
     _search_base = None
 
     @property
@@ -113,7 +112,9 @@ class Renderer(base.Renderer):
 
     @property
     def search_base_path(self):
-        return '/'.join(self.search_base.getPhysicalPath()) if self.search_base else None  # noqa
+        return (
+            "/".join(self.search_base.getPhysicalPath()) if self.search_base else None
+        )  # noqa
 
     def update(self):
         context = aq_inner(self.context)
@@ -121,39 +122,40 @@ class Renderer(base.Renderer):
         self.calendar_url = get_calendar_url(context, self.search_base_path)
 
         self.year, self.month = year, month = self.year_month_display()
-        self.prev_year, self.prev_month = prev_year, prev_month = (
-            self.get_previous_month(year, month))
-        self.next_year, self.next_month = next_year, next_month = (
-            self.get_next_month(year, month))
-        self.prev_query = '?month=%s&year=%s' % (prev_month, prev_year)
-        self.next_query = '?month=%s&year=%s' % (next_month, next_year)
+        self.prev_year, self.prev_month = (
+            prev_year,
+            prev_month,
+        ) = self.get_previous_month(year, month)
+        self.next_year, self.next_month = next_year, next_month = self.get_next_month(
+            year, month
+        )
+        self.prev_query = "?month=%s&year=%s" % (prev_month, prev_year)
+        self.next_query = "?month=%s&year=%s" % (next_month, next_year)
 
         self.cal = calendar.Calendar(first_weekday())
-        self._ts = getToolByName(context, 'translation_service')
+        self._ts = getToolByName(context, "translation_service")
         self.month_name = PLMF(
-            self._ts.month_msgid(month),
-            default=self._ts.month_english(month)
+            self._ts.month_msgid(month), default=self._ts.month_english(month)
         )
 
         # strftime %w interprets 0 as Sunday unlike the calendar.
-        strftime_wkdays = [
-            wkday_to_mon1(day) for day in self.cal.iterweekdays()
-        ]
+        strftime_wkdays = [wkday_to_mon1(day) for day in self.cal.iterweekdays()]
         self.weekdays = [
-            PLMF(self._ts.day_msgid(day, format='s'),
-                 default=self._ts.weekday_english(day, format='a'))
+            PLMF(
+                self._ts.day_msgid(day, format="s"),
+                default=self._ts.weekday_english(day, format="a"),
+            )
             for day in strftime_wkdays
         ]
 
     def year_month_display(self):
-        """ Return the year and month to display in the calendar.
-        """
+        """Return the year and month to display in the calendar."""
         context = aq_inner(self.context)
         request = self.request
 
         # Try to get year and month from request
-        year = request.get('year', None)
-        month = request.get('month', None)
+        year = request.get("year", None)
+        month = request.get("month", None)
 
         # Or use current date
         today = localized_today(context)
@@ -186,12 +188,11 @@ class Renderer(base.Renderer):
         return (year, month)
 
     def date_events_url(self, date):
-        return '%s?mode=day&date=%s' % (self.calendar_url, date)
+        return "%s?mode=day&date=%s" % (self.calendar_url, date)
 
     @property
     def cal_data(self):
-        """Calendar iterator over weeks and days of the month to display.
-        """
+        """Calendar iterator over weeks and days of the month to display."""
         context = aq_inner(self.context)
         today = localized_today(context)
         year, month = self.year_month_display()
@@ -203,22 +204,24 @@ class Renderer(base.Renderer):
         data = self.data
         query = {}
         if data.state:
-            query['review_state'] = data.state
+            query["review_state"] = data.state
 
         events = []
-        query.update(self.request.get('contentFilter', {}))
+        query.update(self.request.get("contentFilter", {}))
         if ICollection and ICollection.providedBy(self.search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
-                self.search_base, self.search_base.query,
-                sort_on='start', sort_order=None
+                self.search_base,
+                self.search_base.query,
+                sort_on="start",
+                sort_order=None,
             )
 
             # restrict start/end with those from query, if given.
-            if 'start' in query and query['start'] > start:
-                start = query['start']
-            if 'end' in query and query['end'] < end:
-                end = query['end']
+            if "start" in query and query["start"] > start:
+                start = query["start"]
+            if "end" in query and query["end"] < end:
+                end = query["end"]
 
             start, end = _prepare_range(self.search_base, start, end)
             query.update(start_end_query(start, end))
@@ -226,16 +229,24 @@ class Renderer(base.Renderer):
                 batch=False, brains=True, custom_query=query
             )
             events = expand_events(
-                events, ret_mode=RET_MODE_OBJECTS,
-                start=start, end=end,
-                sort='start', sort_reverse=False
+                events,
+                ret_mode=RET_MODE_OBJECTS,
+                start=start,
+                end=end,
+                sort="start",
+                sort_reverse=False,
             )
         else:
             if self.search_base_path:
-                query['path'] = {'query': self.search_base_path}
-            events = get_events(context, start=start, end=end,
-                                ret_mode=RET_MODE_OBJECTS,
-                                expand=True, **query)
+                query["path"] = {"query": self.search_base_path}
+            events = get_events(
+                context,
+                start=start,
+                end=end,
+                ret_mode=RET_MODE_OBJECTS,
+                expand=True,
+                **query
+            )
 
         cal_dict = construct_calendar(events, start=start, end=end)
 
@@ -255,29 +266,31 @@ class Renderer(base.Renderer):
                     accessor = IEventAccessor(occ)
                     location = accessor.location
                     whole_day = accessor.whole_day
-                    time = accessor.start.time().strftime('%H:%M')
+                    time = accessor.start.time().strftime("%H:%M")
                     # TODO: make 24/12 hr format configurable
                     events_string_list.append(
-                        u'{0}{1}{2}{3}'.format(
+                        u"{0}{1}{2}{3}".format(
                             accessor.title,
-                            u' {0}'.format(time) if not whole_day else u'',
-                            u', ' if not whole_day and location else u'',
-                            u' {0}'.format(location) if location else u''
+                            u" {0}".format(time) if not whole_day else u"",
+                            u", " if not whole_day and location else u"",
+                            u" {0}".format(location) if location else u"",
                         )
                     )
 
             caldata[-1].append(
-                {'date': dat,
-                 'day': dat.day,
-                 'prev_month': dat.month < month,
-                 'next_month': dat.month > month,
-                 'today':
-                    dat.year == today.year and
-                    dat.month == today.month and
-                    dat.day == today.day,
-                 'date_string': u"%s-%s-%s" % (dat.year, dat.month, dat.day),
-                 'events_string': u' | '.join(events_string_list),
-                 'events': date_events})
+                {
+                    "date": dat,
+                    "day": dat.day,
+                    "prev_month": dat.month < month,
+                    "next_month": dat.month > month,
+                    "today": dat.year == today.year
+                    and dat.month == today.month
+                    and dat.day == today.day,
+                    "date_string": u"%s-%s-%s" % (dat.year, dat.month, dat.day),
+                    "events_string": u" | ".join(events_string_list),
+                    "events": date_events,
+                }
+            )
         return caldata
 
     def nav_pattern_options(self, year, month):
@@ -285,19 +298,19 @@ class Renderer(base.Renderer):
         if isinstance(val, bytes):
             val = val.decode("utf-8")
 
-        return json.dumps({
-            'url': '%s/@@render-portlet?portlethash=%s&year=%s&month=%s' % (
-                getSite().absolute_url(),
-                val,
-                year, month),
-            'target': '#portletwrapper-%s > *' % val
-        })
+        return json.dumps(
+            {
+                "url": "%s/@@render-portlet?portlethash=%s&year=%s&month=%s"
+                % (getSite().absolute_url(), val, year, month),
+                "target": "#portletwrapper-%s > *" % val,
+            }
+        )
 
     @property
     def hash(self):
         return self.request.form.get(
-            'portlethash',
-            getattr(self, '__portlet_metadata__', {}).get('hash', ''))
+            "portlethash", getattr(self, "__portlet_metadata__", {}).get("hash", "")
+        )
 
 
 class AddForm(base.AddForm):
@@ -307,8 +320,8 @@ class AddForm(base.AddForm):
 
     def create(self, data):
         return Assignment(
-            state=data.get('state', None),
-            search_base_uid=data.get('search_base_uid', None)
+            state=data.get("state", None),
+            search_base_uid=data.get("search_base_uid", None),
         )
 
 
