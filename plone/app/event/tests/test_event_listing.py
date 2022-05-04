@@ -83,7 +83,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         """Don't limit the results."""
         collection = self._collection_batching_base()
         view = collection.restrictedTraverse("@@event_listing")
-        self.assertEqual(len(view.events(batch=True)), 8)
+        self.assertEqual(view.events(batch=True).length, 8)
 
     def test_collection_batching__reduce_by_collection_setting(self):
         """Limit the results by setting item_count on the collection."""
@@ -91,14 +91,14 @@ class TestEventsListingCollection(TestEventsListingPortal):
         view = collection.restrictedTraverse("@@event_listing")
         collection.item_count = 4
         view = collection.restrictedTraverse("@@event_listing")
-        self.assertEqual(len(view.events(batch=True)), 4)
+        self.assertEqual(view.events(batch=True).length, 4)
 
     def test_collection_batching__reduce_by_request_parameter(self):
         """Limit the results by using a request parameter."""
         collection = self._collection_batching_base()
         self.request.form.update({"b_size": 2})
         view = collection.restrictedTraverse("@@event_listing")
-        self.assertEqual(len(view.events(batch=True)), 2)
+        self.assertEqual(view.events(batch=True).length, 2)
 
     def test_date_filtering(self):
         """Test if date filters are available on Collections without start or
