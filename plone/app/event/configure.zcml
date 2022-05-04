@@ -34,7 +34,7 @@
       directory="profiles/default"
       title="plone.app.event"
       description="plone.app.event framework registration."
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="plone.base.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
@@ -43,7 +43,7 @@
       title="plone.app.event testing"
       directory="profiles/testing"
       description="Testing profile for plone.app.event"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="plone.base.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
@@ -58,6 +58,6 @@
   <utility
       factory=".setuphandlers.HiddenProfiles"
       name="plone.app.event"
-      provides="Products.CMFPlone.interfaces.INonInstallable" />
+      provides="plone.base.interfaces.INonInstallable" />
 
 </configure>

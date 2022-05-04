@@ -9,6 +9,9 @@ from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.layout.navigation.root import getNavigationRootObject
+from plone.base.i18nl10n import ulocalized_time as orig_ulocalized_time
+from plone.base.interfaces.siteroot import IPloneSiteRoot
+from plone.base.utils import safe_callable
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
@@ -23,9 +26,6 @@ from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import safe_callable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite

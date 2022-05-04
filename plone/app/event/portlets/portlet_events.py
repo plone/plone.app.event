@@ -8,15 +8,15 @@ from plone.app.event.base import localized_now
 from plone.app.event.base import RET_MODE_ACCESSORS
 from plone.app.event.base import start_end_query
 from plone.app.event.portlets import get_calendar_url
-from plone.app.event.portlets.portlet_calendar import ICollection
+from plone.app.event.portlets.portlet_calendar import ISyndicatableCollection
 from plone.app.event.portlets.portlet_calendar import search_base_uid_source
 from plone.app.portlets.portlets import base
 from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
+from plone.base.interfaces.controlpanel import ISiteSchema
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 from zope import schema
@@ -158,7 +158,7 @@ class Renderer(base.Renderer):
 
         events = []
         query.update(self.request.get("contentFilter", {}))
-        if ICollection and ICollection.providedBy(self.search_base):
+        if ISyndicatableCollection.providedBy(self.search_base):
             # Whatever sorting is defined, we're overriding it.
             query = queryparser.parseFormquery(
                 self.search_base,

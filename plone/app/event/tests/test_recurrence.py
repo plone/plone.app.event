@@ -20,6 +20,7 @@ from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.testing.zope import Browser
 from unittest import mock
 from unittest.mock import Mock
 from zope.annotation.interfaces import IAnnotations
@@ -31,14 +32,6 @@ import pytz
 import transaction
 import unittest
 import zope.component
-
-
-try:
-    # plone.testing 7+
-    from plone.testing.zope import Browser
-except ImportError:
-    # plone.testing 6-
-    from plone.testing.z2 import Browser
 
 
 TZNAME = "Europe/Vienna"

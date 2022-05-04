@@ -29,6 +29,7 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.testing.zope import Browser
 from plone.uuid.interfaces import IUUID
 from unittest import mock
 from zope.annotation.interfaces import IAnnotations
@@ -36,14 +37,6 @@ from zope.annotation.interfaces import IAnnotations
 import pytz
 import unittest
 import zope.interface
-
-
-try:
-    # plone.testing 7+
-    from plone.testing.zope import Browser
-except ImportError:
-    # plone.testing 6-
-    from plone.testing.z2 import Browser
 
 
 TEST_TIMEZONE = "Europe/Vienna"

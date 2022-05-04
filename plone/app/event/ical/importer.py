@@ -2,6 +2,7 @@ from plone.app.event import _
 from plone.app.event import base
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.interfaces import IICalendarImportEnabled
+from plone.base.utils import safe_text
 from plone.event.interfaces import IEventAccessor
 from plone.event.utils import date_to_datetime
 from plone.event.utils import is_date
@@ -11,7 +12,6 @@ from plone.folder.interfaces import IFolder
 from plone.namedfile.field import NamedFile
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
@@ -50,7 +50,7 @@ def ical_import(
     def _get_prop(prop, item, default=None):
         ret = default
         if prop in item:
-            ret = safe_unicode(item.decoded(prop))
+            ret = safe_text(item.decoded(prop))
         return ret
 
     def _from_list(ical, prop):
@@ -141,7 +141,7 @@ def ical_import(
         contact = _get_prop("CONTACT", item)
         categories = item.get("CATEGORIES", ())
         if getattr(categories, "__iter__", False):
-            categories = tuple(safe_unicode(it) for it in categories)
+            categories = tuple(safe_text(it) for it in categories)
 
         ext_modified = utc(_get_prop("LAST-MODIFIED", item))
 

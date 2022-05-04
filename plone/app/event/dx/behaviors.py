@@ -18,6 +18,7 @@ from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.widget import DatetimeFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.base.utils import safe_text
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IRecurrenceSupport
 from plone.event.utils import pydt
@@ -26,7 +27,6 @@ from plone.formwidget.recurrence.z3cform.widget import RecurrenceFieldWidget
 from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
-from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.browser.text import TextFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -319,7 +319,7 @@ class EventAccessor:
         if name in bm:  # adapt object with behavior and return the attribute
             behavior = bm[name](self.context, None)
             if behavior:
-                return safe_unicode(getattr(behavior, name, None))
+                return safe_text(getattr(behavior, name, None))
         return None
 
     def __setattr__(self, name, value):
@@ -334,7 +334,7 @@ class EventAccessor:
             if name in bm:
                 behavior = bm[name](self.context, None)
                 if behavior:
-                    setattr(behavior, name, safe_unicode(value))
+                    setattr(behavior, name, safe_text(value))
 
     def __delattr__(self, name):
         bm = self._behavior_map
@@ -351,7 +351,7 @@ class EventAccessor:
 
     @property
     def url(self):
-        return safe_unicode(self.context.absolute_url())
+        return safe_text(self.context.absolute_url())
 
     @property
     def created(self):
@@ -437,19 +437,19 @@ class EventAccessor:
 
     @property
     def title(self):
-        return safe_unicode(getattr(self.context, "title", None))
+        return safe_text(getattr(self.context, "title", None))
 
     @title.setter
     def title(self, value):
-        self.context.title = safe_unicode(value)
+        self.context.title = safe_text(value)
 
     @property
     def description(self):
-        return safe_unicode(getattr(self.context, "description", None))
+        return safe_text(getattr(self.context, "description", None))
 
     @description.setter
     def description(self, value):
-        self.context.description = safe_unicode(value)
+        self.context.description = safe_text(value)
 
     @property
     def last_modified(self):
@@ -466,8 +466,8 @@ class EventAccessor:
         textvalue = getattr(self.context, "text", None)
         if textvalue is None:
             return ""
-        return safe_unicode(textvalue.output_relative_to(self.context))
+        return safe_text(textvalue.output_relative_to(self.context))
 
     @text.setter
     def text(self, value):
-        self.context.text = RichTextValue(raw=safe_unicode(value))
+        self.context.text = RichTextValue(raw=safe_text(value))

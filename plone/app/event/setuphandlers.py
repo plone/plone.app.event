@@ -1,5 +1,5 @@
+from plone.base.interfaces import INonInstallable
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import INonInstallable
 from Products.ZCatalog.Catalog import CatalogError
 from zope.interface import implementer
 

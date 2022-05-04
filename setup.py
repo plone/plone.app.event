@@ -43,16 +43,9 @@ setup(
     zip_safe=False,
     install_requires=[
         "setuptools",
-        # -*- Extra requirements: -*-
-        "Acquisition",
-        "DateTime",
-        "Products.CMFCore",
-        "Products.CMFPlone",
+        "plone.base",
         "Products.DateRecurringIndex",
-        "Products.GenericSetup",
-        "Products.ZCatalog",
         "Products.statusmessages",
-        "Zope2",
         "icalendar",  # >4.0.2
         "plone.app.contentlisting",
         "plone.app.dexterity",
@@ -80,34 +73,14 @@ setup(
         "plone.uuid",
         "plone.z3cform",
         "pytz",
-        "transaction",
         "z3c.form >= 3.2.1.dev0",
-        "zope.annotation",
-        "zope.component",
-        "zope.container",
-        "zope.contentprovider",
-        "zope.event",
         "zope.globalrequest",
-        "zope.i18n",
-        "zope.i18nmessageid",
-        "zope.interface",
-        "zope.lifecycleevent",
-        "zope.publisher",
-        "zope.schema",
     ],
     extras_require={
-        "dexterity": [],  # BBB, remove with next version
         "test": [
-            "icalendar >= 3.10",  # otherwise minor test failure
-            "mock",
-            "plone.app.contenttypes >= 1.2a3",
             "plone.app.robotframework",
             "plone.app.testing [robot]",
-            "plone.testing",
             "robotsuite",
-            "transaction",
-            "zExceptions",
-            "zope.event",
         ],
     },
     entry_points="""

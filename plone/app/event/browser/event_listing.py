@@ -1,6 +1,7 @@
 from calendar import monthrange
 from datetime import date
 from datetime import timedelta
+from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
 from plone.app.event import _
 from plone.app.event.base import _prepare_range
 from plone.app.event.base import expand_events
@@ -14,28 +15,13 @@ from plone.app.event.base import start_end_from_mode
 from plone.app.event.base import start_end_query
 from plone.app.event.ical.exporter import construct_icalendar
 from plone.app.querystring import queryparser
+from plone.base.batch import Batch
+from plone.base.defaultpage import get_default_page
 from plone.memoize import view
 from plone.uuid.interfaces import IUUID
-from Products.CMFPlone.PloneBatch import Batch
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.contentprovider.interfaces import IContentProvider
-
-
-try:
-    from Products.CMFPlone.defaultpage import get_default_page
-except ImportError:
-    # Plone 4
-    from plone.app.layout.navigation.defaultpage import (
-        getDefaultPage as get_default_page,
-    )  # noqa
-
-try:
-    from plone.app.contenttypes.behaviors.collection import (
-        ISyndicatableCollection as ICollection,
-    )  # noqa
-except ImportError:
-    ICollection = None
 
 
 class EventListing(BrowserView):
@@ -49,15 +35,17 @@ class EventListing(BrowserView):
         self.default_context = context[default] if default else context
 
         self.is_collection = False
-        if ICollection:
-            self.is_collection = ICollection.providedBy(self.default_context)
+        if ISyndicatableCollection:
+            self.is_collection = ISyndicatableCollection.providedBy(
+                self.default_context
+            )
 
         # Request parameter
         req = self.request.form
 
         b_size = int(req.get("b_size", 0))
         if not b_size and self.is_collection:
-            collection_behavior = ICollection(self.default_context)
+            collection_behavior = ISyndicatableCollection(self.default_context)
             b_size = getattr(collection_behavior, "item_count", 0)
         self.b_size = b_size or 10
         self.b_start = int(req.get("b_start", 0))
