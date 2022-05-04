@@ -28,7 +28,6 @@ from zope.publisher.interfaces.browser import IBrowserView
 
 import datetime
 import pytz
-import six
 import transaction
 import unittest
 import zope.component
@@ -112,8 +111,6 @@ class TestTraversalDX(AbstractSampleDataEvents):
         url = "/".join([self.now_event.absolute_url(), "2013-05-07"])
         browser.open(url)
         title = self.now_event.title
-        if six.PY2:
-            title = title.encode("ascii")
         self.assertTrue(title in browser.contents)
 
     def test_traverse_occurrence_imagescaling(self):

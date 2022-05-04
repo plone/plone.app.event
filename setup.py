@@ -80,7 +80,6 @@ setup(
         "plone.uuid",
         "plone.z3cform",
         "pytz",
-        "six",
         "transaction",
         "z3c.form >= 3.2.1.dev0",
         "zope.annotation",

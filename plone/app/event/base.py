@@ -33,7 +33,6 @@ from zope.component.interfaces import ISite
 from zope.deprecation import deprecate
 
 import pytz
-import six
 
 
 DEFAULT_END_DELTA = 1  # hours
@@ -227,7 +226,7 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
         _allends = sorted(idx["end"])
         # assuming (start, end) pairs belong together
         # assert(len(_allstarts) == len(_allends))
-        _occ = six.moves.zip(_allstarts, _allends)
+        _occ = zip(_allstarts, _allends)
         if start:
             _occ = [(s, e) for (s, e) in _occ if e >= _start]
         if end:

@@ -13,7 +13,6 @@ from zope.component import getMultiAdapter
 
 import os
 import pytz
-import six
 import unittest
 
 

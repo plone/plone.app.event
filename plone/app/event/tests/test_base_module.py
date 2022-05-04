@@ -40,7 +40,6 @@ from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
 
 import pytz
-import six
 import unittest
 
 

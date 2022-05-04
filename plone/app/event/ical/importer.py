@@ -14,7 +14,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from six.moves import urllib
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
@@ -32,8 +31,8 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 import icalendar
 import random
-import six
 import transaction
+import urllib
 
 
 def ical_import(
@@ -74,7 +73,7 @@ def ical_import(
         for item in val:
             ret = "%s," % ret if ret else ret  # insert linebreak
             ical_val = item.to_ical()
-            if six.PY3 and isinstance(ical_val, bytes):
+            if isinstance(ical_val, bytes):
                 ical_val = ical_val.decode("utf8")
             ret = f"{ret}{ical_val}"
         return f"{prop}:{ret}" if ret else None
@@ -128,7 +127,7 @@ def ical_import(
         rrule = _get_prop("RRULE", item)
         rrule = rrule.to_ical() if rrule else ""
         if rrule:
-            if six.PY3 and isinstance(rrule, bytes):
+            if isinstance(rrule, bytes):
                 rrule = rrule.decode("utf8")
             rrule = "RRULE:%s" % rrule
         rdates = _from_list(item, "RDATE")
