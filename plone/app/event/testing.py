@@ -11,16 +11,17 @@ from zope.interface import alsoProvides
 
 import os
 
+
 try:
     # plone.testing 7+, Plone 5.2+
-    from plone.testing.zope import WSGI_SERVER_FIXTURE
     from plone.testing.zope import installProduct
     from plone.testing.zope import uninstallProduct
+    from plone.testing.zope import WSGI_SERVER_FIXTURE
 except ImportError:
     # plone.testing 6-, Plone 5.1
-    from plone.testing.z2 import ZSERVER_FIXTURE as WSGI_SERVER_FIXTURE
     from plone.testing.z2 import installProduct
     from plone.testing.z2 import uninstallProduct
+    from plone.testing.z2 import ZSERVER_FIXTURE as WSGI_SERVER_FIXTURE
 
 
 def set_browserlayer(request):

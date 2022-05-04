@@ -183,8 +183,8 @@ class TestBaseModule(unittest.TestCase):
         )
 
     def test__start_end_from_mode(self):
-        from plone.app.event.base import start_end_from_mode
         from plone.app.event.base import dt_end_of_day
+        from plone.app.event.base import start_end_from_mode
 
         # ALL
         #

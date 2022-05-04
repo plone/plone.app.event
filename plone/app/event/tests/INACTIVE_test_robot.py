@@ -1,11 +1,11 @@
 # -*- conding: utf-8 -*-
-import os
-import robotsuite
-import unittest
-
 from plone.app.event.testing import PAEventDX_ROBOT_TESTING
 from plone.app.testing import ROBOT_TEST_LEVEL
 from plone.testing import layered
+
+import os
+import robotsuite
+import unittest
 
 
 def test_suite():

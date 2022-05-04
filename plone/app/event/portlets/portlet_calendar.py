@@ -31,7 +31,9 @@ import json
 
 
 try:
-    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
+    from plone.app.contenttypes.behaviors.collection import (
+        ISyndicatableCollection as ICollection,
+    )  # noqa
     from plone.app.contenttypes.interfaces import IFolder
     search_base_uid_source = CatalogSource(object_provides={
         'query': [

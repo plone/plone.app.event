@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-from Products.CMFCore.utils import getToolByName
-from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.behaviors import IEventAttendees
 from plone.app.event.dx.behaviors import IEventContact
 from plone.app.event.dx.behaviors import IEventLocation
+from plone.app.event.dx.interfaces import IDXEvent
 from plone.dexterity.interfaces import IDexterityFTI
+from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
-from zope.event import notify
 from zope.component import queryUtility
 from zope.component.hooks import getSite
+from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import logging
+
+
 log = logging.getLogger(__name__)
 
 BEHAVIOR_LIST = [

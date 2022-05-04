@@ -27,10 +27,14 @@ try:
     from Products.CMFPlone.defaultpage import get_default_page
 except ImportError:
     # Plone 4
-    from plone.app.layout.navigation.defaultpage import getDefaultPage as get_default_page  # noqa
+    from plone.app.layout.navigation.defaultpage import (
+        getDefaultPage as get_default_page,
+    )  # noqa
 
 try:
-    from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection as ICollection  # noqa
+    from plone.app.contenttypes.behaviors.collection import (
+        ISyndicatableCollection as ICollection,
+    )  # noqa
 except ImportError:
     ICollection = None
 

@@ -15,4 +15,6 @@ master_doc = 'index'
 language = 'en'
 
 from pkg_resources import get_distribution
+
+
 version = release = get_distribution(project).version

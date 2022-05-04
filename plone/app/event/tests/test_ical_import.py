@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from plone.app.event.interfaces import IICalendarImportEnabled
 from plone.app.event.ical.importer import IcalendarImportSettingsFormView
+from plone.app.event.interfaces import IICalendarImportEnabled
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import SITE_OWNER_NAME
@@ -9,6 +9,7 @@ from plone.app.testing import TEST_USER_ID
 
 import transaction
 import unittest
+
 
 try:
     # plone.testing 7+
