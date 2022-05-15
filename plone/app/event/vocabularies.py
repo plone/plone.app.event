@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.event import _
 from plone.app.event import base
 from zope.interface import provider
@@ -21,10 +20,10 @@ def SynchronizationStrategies(context):
                       sync_uid.
     """
     items = [
-        (_('sync_keep_newer', default="Keep newer"), base.SYNC_KEEP_NEWER),
-        (_('sync_keep_mine', default="Keep mine"), base.SYNC_KEEP_MINE),
-        (_('sync_keep_theirs', default="Keep theirs"), base.SYNC_KEEP_THEIRS),
-        (_('sync_none', default="No Syncing"), base.SYNC_NONE),
+        (_("sync_keep_newer", default="Keep newer"), base.SYNC_KEEP_NEWER),
+        (_("sync_keep_mine", default="Keep mine"), base.SYNC_KEEP_MINE),
+        (_("sync_keep_theirs", default="Keep theirs"), base.SYNC_KEEP_THEIRS),
+        (_("sync_none", default="No Syncing"), base.SYNC_NONE),
     ]
     items = [SimpleTerm(title=i[0], value=i[1]) for i in items]
     return SimpleVocabulary(items)

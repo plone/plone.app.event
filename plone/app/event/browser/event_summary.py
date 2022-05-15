@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_parent
 from plone.app.event import _
 from plone.event.interfaces import IEventAccessor
@@ -13,13 +12,14 @@ from zope.contentprovider.interfaces import IContentProvider
 
 
 class EventSummaryView(BrowserView):
-
     def __init__(self, context, request):
         self.context = context
         self.request = request
         self.data = IEventAccessor(context)
         self.max_occurrences = 6
-        self.excludes = ['title', ]
+        self.excludes = [
+            "title",
+        ]
 
     @property
     def is_occurrence(self):
@@ -33,8 +33,7 @@ class EventSummaryView(BrowserView):
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(
-            (self.context, self.request, self),
-            IContentProvider, name='formatted_date'
+            (self.context, self.request, self), IContentProvider, name="formatted_date"
         )
         return provider(occ)
 
@@ -50,8 +49,7 @@ class EventSummaryView(BrowserView):
         occurrences = []
         adapter = IRecurrenceSupport(self.event_context, None)
         if adapter:
-            for cnt, occ in enumerate(adapter.occurrences(
-                    range_start=self.data.start)):
+            for cnt, occ in enumerate(adapter.occurrences(range_start=self.data.start)):
                 if cnt == self.max_occurrences:
                     break
                 occurrences.append(occ)
@@ -67,21 +65,21 @@ class EventSummaryView(BrowserView):
         if not uid:
             # Might be an occurrence
             return 0
-        catalog = getToolByName(self.event_context, 'portal_catalog')
+        catalog = getToolByName(self.event_context, "portal_catalog")
         brains = catalog(UID=uid)
         if len(brains) == 0:
             return 0
         brain = brains[0]  # assuming, that current context is in the catalog
         idx = catalog.getIndexDataForRID(brain.getRID())
-        num = len(idx['start']) - len(self.next_occurrences)
+        num = len(idx["start"]) - len(self.next_occurrences)
         return num if num > 0 else 0
 
     @property
     def more_occurrences_text(self):
         msgid = _(
-            u"msg_num_more_occurrences",
-            default=u"There are ${results} more occurrences.",
-            mapping={u"results": self.num_more_occurrences}
+            "msg_num_more_occurrences",
+            default="There are ${results} more occurrences.",
+            mapping={"results": self.num_more_occurrences},
         )
         return self.context.translate(msgid)
 
@@ -90,4 +88,3 @@ class EventSummaryView(BrowserView):
     def has_occurrences(self):
         occs = [o for o in self.next_occurrences if IOccurrence.providedBy(o)]
         return len(occs)
-        

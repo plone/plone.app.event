@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timedelta
 from DateTime import DateTime
@@ -30,46 +29,44 @@ from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IOccurrence
 from plone.event.interfaces import IRecurrenceSupport
+from plone.testing.zope import Browser
 from plone.uuid.interfaces import IUUID
+from unittest import mock
 from zope.annotation.interfaces import IAnnotations
 
-import mock
 import pytz
 import unittest
 import zope.interface
-
-try:
-    # plone.testing 7+
-    from plone.testing.zope import Browser
-except ImportError:
-    # plone.testing 6-
-    from plone.testing.z2 import Browser
 
 
 TEST_TIMEZONE = "Europe/Vienna"
 
 
 class MockEvent(SimpleItem):
-    """ Mock event"""
+    """Mock event"""
 
 
 class TestDXAddEdit(unittest.TestCase):
     layer = PAEventDX_FUNCTIONAL_TESTING
 
     def setUp(self):
-        app = self.layer['app']
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        app = self.layer["app"]
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
         self.browser = Browser(app)
         self.browser.handleErrors = False
         self.browser.addHeader(
-            'Authorization',
-            'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,)
+            "Authorization",
+            "Basic %s:%s"
+            % (
+                SITE_OWNER_NAME,
+                SITE_OWNER_PASSWORD,
+            ),
         )
 
-    @mock.patch('plone.app.event.base.localized_now', new=patched_now)
+    @mock.patch("plone.app.event.base.localized_now", new=patched_now)
     def test_defaults(self):
         """Test, if defaults are set correctly.
 
@@ -98,27 +95,30 @@ class TestDXAddEdit(unittest.TestCase):
         form.add(e1)
         """
 
-        self.browser.open('{}/{}'.format(
-            self.portal.absolute_url(),
-            '++add++plone.app.event.dx.event'
-        ))
+        self.browser.open(
+            "{}/{}".format(
+                self.portal.absolute_url(), "++add++plone.app.event.dx.event"
+            )
+        )
 
         self.browser.getControl(
-            name='form.widgets.IDublinCore.title'
+            name="form.widgets.IDublinCore.title"
         ).value = "TestEvent"
 
         # TODO: these values are simply not set in the pat-pickadate pattern.
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = '2014-03-30'
+            name="form.widgets.IEventBasic.start"
+        ).value = "2014-03-30"
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = '2014-03-31'
+            name="form.widgets.IEventBasic.end"
+        ).value = "2014-03-31"
 
-        self.browser.getControl('Save').click()
+        self.browser.getControl("Save").click()
 
         # CHECK VALUES
         #
         # TODO: fix all defaults
-        event = self.portal['testevent']
+        event = self.portal["testevent"]
         # self.assertEqual(
         #     event.start,
         #     patched_now()
@@ -164,86 +164,91 @@ class TestDXAddEdit(unittest.TestCase):
         # ADD
         #
         self.browser.open(self.portal.absolute_url())
-        self.browser.getLink('plone.app.event.dx.event').click()
+        self.browser.getLink("plone.app.event.dx.event").click()
         self.browser.getControl(
-            name='form.widgets.IDublinCore.title'
+            name="form.widgets.IDublinCore.title"
         ).value = "TestEvent"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-30T03:51"
+            name="form.widgets.IEventBasic.start"
+        ).value = "2014-03-30T03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-30T04:51"
+            name="form.widgets.IEventBasic.end"
+        ).value = "2014-03-30T04:51"
 
-        self.browser.getControl('Save').click()
+        self.browser.getControl("Save").click()
 
         # CHECK VALUES
         #
-        self.assertTrue(self.browser.url.endswith('testevent/view'))
-        self.assertTrue('TestEvent' in self.browser.contents)
-        self.assertTrue('2014-03-30' in self.browser.contents)
+        self.assertTrue(self.browser.url.endswith("testevent/view"))
+        self.assertTrue("TestEvent" in self.browser.contents)
+        self.assertTrue("2014-03-30" in self.browser.contents)
 
         #
         # EDIT
         #
         testevent = self.portal.testevent
-        self.browser.open('%s/@@edit' % testevent.absolute_url())
+        self.browser.open("%s/@@edit" % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.start').value = "2014-03-31T03:51"
+            name="form.widgets.IEventBasic.start"
+        ).value = "2014-03-31T03:51"
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.end').value = "2014-03-31T04:51"
+            name="form.widgets.IEventBasic.end"
+        ).value = "2014-03-31T04:51"
 
-        self.browser.getControl('Save').click()
+        self.browser.getControl("Save").click()
 
         #
         # EDIT AGAIN
         #
         testevent = self.portal.testevent
-        self.browser.open('%s/@@edit' % testevent.absolute_url())
+        self.browser.open("%s/@@edit" % testevent.absolute_url())
 
-        self.browser.getControl('Save').click()
+        self.browser.getControl("Save").click()
 
         # CHECK DATES/TIMES, MUST NOT HAVE CHANGED
         #
-        self.assertTrue('2014-03-31' in self.browser.contents)
-        self.assertTrue('03:51' in self.browser.contents)
-        self.assertTrue('04:51' in self.browser.contents)
+        self.assertTrue("2014-03-31" in self.browser.contents)
+        self.assertTrue("03:51" in self.browser.contents)
+        self.assertTrue("04:51" in self.browser.contents)
 
         #
         # EDIT and set whole_day setting
         #
         testevent = self.portal.testevent
-        self.browser.open('%s/@@edit' % testevent.absolute_url())
+        self.browser.open("%s/@@edit" % testevent.absolute_url())
 
         self.browser.getControl(
-            name='form.widgets.IEventBasic.whole_day:list').value = True
+            name="form.widgets.IEventBasic.whole_day:list"
+        ).value = True
 
-        self.browser.getControl('Save').click()
+        self.browser.getControl("Save").click()
 
         # CHECK DATES/TIMES, IF THEY ADAPTED ACCORDING TO WHOLE DAY
         #
-        self.assertTrue('2014-03-31' in self.browser.contents)
-        self.assertTrue('0:00' in self.browser.contents)
-        self.assertTrue('23:59' in self.browser.contents)
+        self.assertTrue("2014-03-31" in self.browser.contents)
+        self.assertTrue("0:00" in self.browser.contents)
+        self.assertTrue("23:59" in self.browser.contents)
 
 
 class TestEventAccessor(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
         set_browserlayer(self.request)
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
     def test_event_accessor(self):
         tz = pytz.timezone("Europe/Vienna")
         e1 = createContentInContainer(
             self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1',
+            "plone.app.event.dx.event",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
@@ -273,10 +278,10 @@ class TestEventAccessor(unittest.TestCase):
 
         e1 = createContentInContainer(
             self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1',
+            "plone.app.event.dx.event",
+            title="event1",
             start=start,
-            end=end
+            end=end,
         )
         acc = IEventAccessor(e1)
 
@@ -299,42 +304,38 @@ class TestEventAccessor(unittest.TestCase):
         self.assertEqual(acc.end, end_end)
 
     def test_event_accessor__sync_uid(self):
-        self.request.set('HTTP_HOST', 'nohost')
+        self.request.set("HTTP_HOST", "nohost")
 
         e1 = createContentInContainer(
-            self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1'
+            self.portal, "plone.app.event.dx.event", title="event1"
         )
         acc = IEventAccessor(e1)
 
         # setting no sync uid will automatically generate one
-        self.assertTrue(acc.sync_uid, IUUID(e1) + '@nohost')
+        self.assertTrue(acc.sync_uid, IUUID(e1) + "@nohost")
         # it's not stored on the object though
         self.assertEqual(e1.sync_uid, None)
         # but it's indexed
-        result = self.portal.portal_catalog(sync_uid=IUUID(e1) + '@nohost')
+        result = self.portal.portal_catalog(sync_uid=IUUID(e1) + "@nohost")
         self.assertEqual(len(result), 1)
 
         # Setting the sync_uid
-        acc.sync_uid = 'okay'
+        acc.sync_uid = "okay"
         e1.reindexObject()
-        self.assertEqual(acc.sync_uid, 'okay')
+        self.assertEqual(acc.sync_uid, "okay")
         # Now, it's also stored on the object itself
-        self.assertEqual(e1.sync_uid, 'okay')
+        self.assertEqual(e1.sync_uid, "okay")
         # and indexed
-        result = self.portal.portal_catalog(sync_uid='okay')
+        result = self.portal.portal_catalog(sync_uid="okay")
         self.assertEqual(len(result), 1)
 
     def test_event_accessor__start_end(self):
         e1 = createContentInContainer(
-            self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1'
+            self.portal, "plone.app.event.dx.event", title="event1"
         )
 
         dt = datetime(2161, 1, 1)  # United Federation of Planets
-        DT = DateTime('2161/01/01 00:00:00 UTC')
+        DT = DateTime("2161/01/01 00:00:00 UTC")
 
         acc = IEventAccessor(e1)
 
@@ -362,10 +363,10 @@ class TestDXIntegration(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
         set_browserlayer(self.request)
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
         self.tz = pytz.timezone(TEST_TIMEZONE)
 
     def test_start_defaults(self):
@@ -389,15 +390,13 @@ class TestDXIntegration(unittest.TestCase):
         end = tz.localize(datetime(2011, 11, 11, 12, 0))
         e1 = createContentInContainer(
             self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1',
+            "plone.app.event.dx.event",
+            title="event1",
             start=start,
-            end=end
+            end=end,
         )
 
-        result = self.portal.portal_catalog(
-            path='/'.join(e1.getPhysicalPath())
-        )
+        result = self.portal.portal_catalog(path="/".join(e1.getPhysicalPath()))
         self.assertEqual(1, len(result))
 
         # The start and end datetime's are indexed as Python datetimes
@@ -408,15 +407,15 @@ class TestDXIntegration(unittest.TestCase):
         tz = pytz.timezone("Europe/Vienna")
         e1 = createContentInContainer(
             self.portal,
-            'plone.app.event.dx.event',
-            title=u'event1',
+            "plone.app.event.dx.event",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
 
         # When editing via behaviors, the attributes should also be available
         # on the context itself.
-        IEventRecurrence(e1).recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        IEventRecurrence(e1).recurrence = "RRULE:FREQ=DAILY;COUNT=4"
         self.assertTrue(e1.recurrence == IEventRecurrence(e1).recurrence)
 
         e1.reindexObject()
@@ -430,7 +429,7 @@ class TestDXIntegration(unittest.TestCase):
             self.portal,
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             ret_mode=base.RET_MODE_OBJECTS,
-            expand=True
+            expand=True,
         )
         self.assertEqual(len(result), 4)
 
@@ -440,15 +439,15 @@ class TestDXEventRecurrence(unittest.TestCase):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def test_recurrence(self):
-        tz = pytz.timezone('Europe/Vienna')
+        tz = pytz.timezone("Europe/Vienna")
         duration = timedelta(days=4)
         mock = MockEvent()
         mock.start = tz.localize(datetime(2011, 11, 11, 11, 0))
         mock.end = mock.start + duration
-        mock.recurrence = 'RRULE:FREQ=DAILY;COUNT=4'
+        mock.recurrence = "RRULE:FREQ=DAILY;COUNT=4"
         zope.interface.alsoProvides(
-            mock, IEvent, IEventBasic, IEventRecurrence,
-            IDXEvent, IDXEventRecurrence)
+            mock, IEvent, IEventBasic, IEventRecurrence, IDXEvent, IDXEventRecurrence
+        )
         result = IRecurrenceSupport(mock).occurrences()
         result = list(result)  # cast generator to list
 
@@ -462,8 +461,7 @@ class TestDXEventRecurrence(unittest.TestCase):
 
 
 class TestDXEventUnittest(unittest.TestCase):
-    """ Unit test for Dexterity event behaviors.
-    """
+    """Unit test for Dexterity event behaviors."""
 
     def setUp(self):
         self.orig_tz = set_env_timezone(TEST_TIMEZONE)
@@ -545,50 +543,51 @@ class TestDXEventUnittest(unittest.TestCase):
 
 
 class TestDXAnnotationStorageUpdate(unittest.TestCase):
-    """ Unit tests for the Annotation Storage migration
-    """
+    """Unit tests for the Annotation Storage migration"""
+
     layer = PAEventDX_INTEGRATION_TESTING
 
-    location = u"Köln"
-    attendees = (u'Peter', u'Søren', u'Madeleine')
-    contact_email = u'person@email.com'
-    contact_name = u'Peter Parker'
-    contact_phone = u'555 123 456'
-    event_url = u'http://my.event.url'
-    text = u'<p>Cathedral Sprint in Köln</p>'
+    location = "Köln"
+    attendees = ("Peter", "Søren", "Madeleine")
+    contact_email = "person@email.com"
+    contact_name = "Peter Parker"
+    contact_phone = "555 123 456"
+    event_url = "http://my.event.url"
+    text = "<p>Cathedral Sprint in Köln</p>"
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
         set_browserlayer(self.request)
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
     def test_migrate_fields(self):
-        tz = pytz.timezone('Europe/Berlin')
+        tz = pytz.timezone("Europe/Berlin")
         e1 = createContentInContainer(
             self.portal,
-            'Event',
-            title=u'event1',
+            "Event",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
 
         # Fill the field values into the annotation storage
         ann = IAnnotations(e1)
-        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
-            self.location
-        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
-            self.attendees
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
-            self.contact_email
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
-            self.contact_name
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
-            self.contact_phone
-        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
-            self.event_url
-        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
-            RichTextValue(raw=self.text)
+        ann["plone.app.event.dx.behaviors.IEventLocation.location"] = self.location
+        ann["plone.app.event.dx.behaviors.IEventAttendees.attendees"] = self.attendees
+        ann[
+            "plone.app.event.dx.behaviors.IEventContact.contact_email"
+        ] = self.contact_email
+        ann[
+            "plone.app.event.dx.behaviors.IEventContact.contact_name"
+        ] = self.contact_name
+        ann[
+            "plone.app.event.dx.behaviors.IEventContact.contact_phone"
+        ] = self.contact_phone
+        ann["plone.app.event.dx.behaviors.IEventContact.event_url"] = self.event_url
+        ann["plone.app.event.dx.behaviors.IEventSummary.text"] = RichTextValue(
+            raw=self.text
+        )
 
         # All behavior-related fields are not set yet
         self.assertEqual(e1.location, None)
@@ -612,31 +611,38 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         self.assertEqual(e1.text.raw, self.text)
 
     def test_no_overwrite(self):
-        tz = pytz.timezone('Europe/Berlin')
+        tz = pytz.timezone("Europe/Berlin")
         e1 = createContentInContainer(
             self.portal,
-            'Event',
-            title=u'event1',
+            "Event",
+            title="event1",
             start=tz.localize(datetime(2011, 11, 11, 11, 0)),
             end=tz.localize(datetime(2011, 11, 11, 12, 0)),
         )
 
         # Fill the field values into the annotation storage
         ann = IAnnotations(e1)
-        ann['plone.app.event.dx.behaviors.IEventLocation.location'] = \
-            self.location + u'X'
-        ann['plone.app.event.dx.behaviors.IEventAttendees.attendees'] = \
-            self.attendees + (u'Paula',)
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_email'] = \
-            self.contact_email + u'X'
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_name'] = \
-            self.contact_name + u'X'
-        ann['plone.app.event.dx.behaviors.IEventContact.contact_phone'] = \
-            self.contact_phone + u'X'
-        ann['plone.app.event.dx.behaviors.IEventContact.event_url'] = \
-            self.event_url + u'X'
-        ann['plone.app.event.dx.behaviors.IEventSummary.text'] = \
-            RichTextValue(raw=self.text + u'X')
+        ann["plone.app.event.dx.behaviors.IEventLocation.location"] = (
+            self.location + "X"
+        )
+        ann[
+            "plone.app.event.dx.behaviors.IEventAttendees.attendees"
+        ] = self.attendees + ("Paula",)
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_email"] = (
+            self.contact_email + "X"
+        )
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_name"] = (
+            self.contact_name + "X"
+        )
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_phone"] = (
+            self.contact_phone + "X"
+        )
+        ann["plone.app.event.dx.behaviors.IEventContact.event_url"] = (
+            self.event_url + "X"
+        )
+        ann["plone.app.event.dx.behaviors.IEventSummary.text"] = RichTextValue(
+            raw=self.text + "X"
+        )
 
         # Add values into the fields in the new way
         e1.location = self.location

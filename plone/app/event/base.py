@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from calendar import monthrange
@@ -10,6 +9,9 @@ from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.layout.navigation.root import getNavigationRootObject
+from plone.base.i18nl10n import ulocalized_time as orig_ulocalized_time
+from plone.base.interfaces.siteroot import IPloneSiteRoot
+from plone.base.utils import safe_callable
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from plone.event.interfaces import IEventRecurrence
@@ -24,9 +26,6 @@ from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.i18nl10n import ulocalized_time as orig_ulocalized_time
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import safe_callable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
@@ -34,11 +33,10 @@ from zope.component.interfaces import ISite
 from zope.deprecation import deprecate
 
 import pytz
-import six
 
 
 DEFAULT_END_DELTA = 1  # hours
-FALLBACK_TIMEZONE = 'UTC'
+FALLBACK_TIMEZONE = "UTC"
 
 # Sync strategies
 SYNC_NONE = 0
@@ -58,18 +56,27 @@ RET_MODE_ACCESSORS = 3
 # TODO: do we need this at all or shouldn't we just fail with ambiguous
 #       timezones?
 replacement_zones = {
-    'CET': 'Europe/Vienna',    # Central European Time
-    'MET': 'Europe/Vienna',    # Middle European Time
-    'EET': 'Europe/Helsinki',  # East European Time
-    'WET': 'Europe/Lisbon',    # West European Time
+    "CET": "Europe/Vienna",  # Central European Time
+    "MET": "Europe/Vienna",  # Middle European Time
+    "EET": "Europe/Helsinki",  # East European Time
+    "WET": "Europe/Lisbon",  # West European Time
 }
 
 
 # RETRIEVE EVENTS
 
-def get_events(context, start=None, end=None, limit=None,
-               ret_mode=RET_MODE_BRAINS, expand=False,
-               sort='start', sort_reverse=False, **kw):
+
+def get_events(
+    context,
+    start=None,
+    end=None,
+    limit=None,
+    ret_mode=RET_MODE_BRAINS,
+    expand=False,
+    sort="start",
+    sort_reverse=False,
+    **kw,
+):
     """Return all events as catalog brains, possibly within a given
     timeframe.
 
@@ -115,40 +122,38 @@ def get_events(context, start=None, end=None, limit=None,
     start, end = _prepare_range(context, start, end)
 
     query = {}
-    query['object_provides'] = IEvent.__identifier__
+    query["object_provides"] = IEvent.__identifier__
 
     query.update(start_end_query(start, end))
 
-    if 'path' not in kw:
+    if "path" not in kw:
         # limit to the current navigation root, usually (not always) site
         portal = getSite()
         navroot = getNavigationRootObject(context, portal)
-        query['path'] = '/'.join(navroot.getPhysicalPath())
+        query["path"] = "/".join(navroot.getPhysicalPath())
     else:
-        query['path'] = kw['path']
+        query["path"] = kw["path"]
 
     # Sorting
     # In expand mode we sort after calculation of recurrences again. But we
     # need to leave this sorting here in place, since no sort definition could
     # lead to arbitrary results when limiting with sort_limit.
-    query['sort_on'] = sort
+    query["sort_on"] = sort
     if sort_reverse:
-        query['sort_order'] = 'reverse'
+        query["sort_order"] = "reverse"
 
     # cannot limit before resorting or expansion, see below
 
     query.update(kw)
 
-    cat = getToolByName(context, 'portal_catalog')
+    cat = getToolByName(context, "portal_catalog")
     result = cat(**query)
 
     # unfiltered catalog results are already sorted correctly on brain.start
     # filtering on start/end requires a resort, see docstring below and
     # p.a.event.tests.test_base_module.TestGetEventsDX.test_get_event_sort
-    if sort in ('start', 'end'):
-        result = filter_and_resort(context, result,
-                                   start, end,
-                                   sort, sort_reverse)
+    if sort in ("start", "end"):
+        result = filter_and_resort(context, result, start, end, sort, sort_reverse)
 
         # Limiting a start/end-sorted result set is possible here
         # and provides an important optimization BEFORE costly expansion
@@ -159,8 +164,7 @@ def get_events(context, start=None, end=None, limit=None,
         if expand is False:
             result = [_obj_or_acc(it.getObject(), ret_mode) for it in result]
         else:
-            result = expand_events(result, ret_mode, start, end, sort,
-                                   sort_reverse)
+            result = expand_events(result, ret_mode, start, end, sort, sort_reverse)
 
     # Limiting a non-start-sorted result set can only happen here
     if limit:
@@ -212,28 +216,28 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
     """
     _start = dt2int(start)  # index contains longint sets
     _end = dt2int(end)
-    catalog = getToolByName(context, 'portal_catalog')
+    catalog = getToolByName(context, "portal_catalog")
     items = []  # (start:int, occurrence:brain) pairs
     for brain in brains:
         # brain.start metadata reflects first occurrence.
         # instead, get all occurrence start/end from raw index
         idx = catalog.getIndexDataForRID(brain.getRID())
-        _allstarts = sorted(idx['start'])
-        _allends = sorted(idx['end'])
+        _allstarts = sorted(idx["start"])
+        _allends = sorted(idx["end"])
         # assuming (start, end) pairs belong together
         # assert(len(_allstarts) == len(_allends))
-        _occ = six.moves.zip(_allstarts, _allends)
+        _occ = zip(_allstarts, _allends)
         if start:
             _occ = [(s, e) for (s, e) in _occ if e >= _start]
         if end:
             _occ = [(s, e) for (s, e) in _occ if s <= _end]
         if not _occ:
             continue
-        if sort == 'start':
+        if sort == "start":
             # first start can be before filter window if end is in window
-            _first = min([s for (s, e) in _occ])
-        elif sort == 'end':
-            _first = min([e for (s, e) in _occ])
+            _first = min(s for (s, e) in _occ)
+        elif sort == "end":
+            _first = min(e for (s, e) in _occ)
         items.append((_first, brain))  # key on next start/end
 
     # sort brains by next start, discard sort key
@@ -243,9 +247,7 @@ def filter_and_resort(context, brains, start, end, sort, sort_reverse):
     return data
 
 
-def expand_events(events, ret_mode,
-                  start=None, end=None,
-                  sort=None, sort_reverse=None):
+def expand_events(events, ret_mode, start=None, end=None, sort=None, sort_reverse=None):
     """Expand to the recurrence occurrences of a given set of events.
 
     :param events: IEvent based objects or IEventAccessor object wrapper.
@@ -273,11 +275,11 @@ def expand_events(events, ret_mode,
     :param sort_reverse: Change the order of the sorting.
     :type sort_reverse: boolean
     """
-    assert(ret_mode is not RET_MODE_BRAINS)
+    assert ret_mode is not RET_MODE_BRAINS
 
     exp_result = []
     for it in events:
-        obj = it.getObject() if getattr(it, 'getObject', False) else it
+        obj = it.getObject() if getattr(it, "getObject", False) else it
         if IEventRecurrence.providedBy(obj):
 
             occ_list = list(IRecurrenceSupport(obj).occurrences(start, end))
@@ -304,7 +306,7 @@ def _obj_or_acc(obj, ret_mode):
     ret_mode. ret_mode 2 returns objects, ret_mode 3 returns IEventAccessor
     object wrapper. ret_mode 1 is not supported.
     """
-    assert(ret_mode is not RET_MODE_BRAINS)
+    assert ret_mode is not RET_MODE_BRAINS
     if ret_mode == RET_MODE_OBJECTS:
         return obj
     elif ret_mode == RET_MODE_ACCESSORS:
@@ -412,21 +414,21 @@ def _prepare_range(context, start, end):
 
 
 def start_end_query(start, end):
-    """Make a catalog query out of start and end dates.
-    """
+    """Make a catalog query out of start and end dates."""
     query = {}
     if start:
         # All events from start date ongoing:
         # The minimum end date of events is the date from which we search.
-        query['end'] = {'query': start, 'range': 'min'}
+        query["end"] = {"query": start, "range": "min"}
     if end:
         # All events until end date:
         # The maximum start date must be the date until we search.
-        query['start'] = {'query': end, 'range': 'max'}
+        query["start"] = {"query": end, "range": "max"}
     return query
 
 
 # TIMEZONE HANDLING
+
 
 def default_timezone(context=None, as_tzinfo=False):
     """Return the timezone from the portal or user.
@@ -445,15 +447,15 @@ def default_timezone(context=None, as_tzinfo=False):
     if not context:
         context = getSite()
 
-    membership = getToolByName(context, 'portal_membership', None)
+    membership = getToolByName(context, "portal_membership", None)
     if membership and not membership.isAnonymousUser():  # user not logged in
         member = membership.getAuthenticatedMember()
-        member_timezone = member.getProperty('timezone', None)
+        member_timezone = member.getProperty("timezone", None)
         if member_timezone:
             info = pytz.timezone(member_timezone)
             return info if as_tzinfo else info.zone
 
-    reg_key = 'plone.portal_timezone'
+    reg_key = "plone.portal_timezone"
     registry = getUtility(IRegistry)
     portal_timezone = registry.get(reg_key, None)
 
@@ -503,6 +505,7 @@ def localized_today(context=None):
 
 # DATETIME HELPERS
 
+
 def first_weekday():
     """Returns the number of the first Weekday in a Week, as defined in
     the registry. 0 is Monday, 6 is Sunday, as expected by Python's datetime.
@@ -513,7 +516,7 @@ def first_weekday():
     :rtype: integer
 
     """
-    reg_key = 'plone.first_weekday'
+    reg_key = "plone.first_weekday"
     registry = getUtility(IRegistry)
     first_wd = registry.get(reg_key, None)
 
@@ -582,23 +585,19 @@ def DT(dt, exact=False):
                 DT.hour(),
                 DT.minute(),
                 int(DT.second()),
-                DT.timezone()
+                DT.timezone(),
             )
         return ret
 
     tz = default_timezone(getSite())
     ret = None
     if is_datetime(dt):
-        zone_id = getattr(dt.tzinfo, 'zone', tz)
+        zone_id = getattr(dt.tzinfo, "zone", tz)
         tz = validated_timezone(zone_id, tz)
         second = dt.second
         if exact:
             second += dt.microsecond / 1000000.0
-        ret = DateTime(
-            dt.year, dt.month, dt.day,
-            dt.hour, dt.minute, second,
-            tz
-        )
+        ret = DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, second, tz)
     elif is_date(dt):
         ret = DateTime(dt.year, dt.month, dt.day, 0, 0, 0, tz)
     elif isinstance(dt, DateTime):
@@ -699,33 +698,33 @@ def start_end_from_mode(mode, dt=None, context=None):
     now = localized_now(context)
     start = end = None
 
-    if mode == 'all':
+    if mode == "all":
         start = None
         end = None
 
-    elif mode == 'past':
+    elif mode == "past":
         start = None
         end = now
 
-    elif mode == 'future':
+    elif mode == "future":
         start = now
         end = None
 
-    elif mode == 'now':
+    elif mode == "now":
         start = now
         end = dt_end_of_day(now)
 
-    elif mode == '7days':
+    elif mode == "7days":
         start = now
         end = dt_end_of_day(now + timedelta(days=6))
 
-    elif mode == 'day' or mode == 'today':
+    elif mode == "day" or mode == "today":
         if not dt:
             dt = now  # show today
         start = dt_start_of_day(dt)
         end = dt_end_of_day(dt)
 
-    elif mode == 'week':
+    elif mode == "week":
         if not dt:
             dt = now  # show this week
         wkd = dt.weekday()
@@ -739,7 +738,7 @@ def start_end_from_mode(mode, dt=None, context=None):
         start = dt_start_of_day(dt - timedelta(days=delta))
         end = dt_end_of_day(start + timedelta(days=6))
 
-    elif mode == 'month':
+    elif mode == "month":
         if not dt:
             dt = now  # show this month
         year = dt.year
@@ -753,8 +752,9 @@ def start_end_from_mode(mode, dt=None, context=None):
 
 # DISPLAY HELPERS
 
+
 def dates_for_display(occurrence):
-    """ Return a dictionary containing pre-calculated information for building
+    """Return a dictionary containing pre-calculated information for building
     <start>-<end> date strings.
 
     Keys are:
@@ -828,22 +828,18 @@ def dates_for_display(occurrence):
     if acc.open_end:
         end_time = None
 
-    start_iso = acc.whole_day and acc.start.date().isoformat()\
-        or acc.start.isoformat()
-    end_iso = acc.whole_day and acc.end.date().isoformat()\
-        or acc.end.isoformat()
+    start_iso = acc.whole_day and acc.start.date().isoformat() or acc.start.isoformat()
+    end_iso = acc.whole_day and acc.end.date().isoformat() or acc.end.isoformat()
 
     return dict(
         # Start
         start_date=start_date,
         start_time=start_time,
         start_iso=start_iso,
-
         # End
         end_date=end_date,
         end_time=end_time,
         end_iso=end_iso,
-
         # Meta
         same_day=same_day,
         same_time=same_time,
@@ -852,61 +848,49 @@ def dates_for_display(occurrence):
     )
 
 
-@deprecate('date_speller is no longer supported, use spell_date instead.')
+@deprecate("date_speller is no longer supported, use spell_date instead.")
 def date_speller(context, dt):
     return spell_date(dt, context)
 
 
 def spell_date(dt, translation_context=None):
-    """Return a dictionary with localized and readable formatted date parts.
-
-    """
+    """Return a dictionary with localized and readable formatted date parts."""
     if not translation_context:
         translation_context = getSite()
 
     dt = DT(dt)
-    util = getToolByName(translation_context, 'translation_service')
-    dom = 'plonelocales'
+    util = getToolByName(translation_context, "translation_service")
+    dom = "plonelocales"
 
     def zero_pad(num):
-        return '%02d' % num
+        return "%02d" % num
 
     date_dict = dict(
         year=dt.year(),
-
         month=dt.month(),
         month2=zero_pad(dt.month()),
         month_name=util.translate(
-            util.month_msgid(dt.month()),
-            domain=dom, context=translation_context
+            util.month_msgid(dt.month()), domain=dom, context=translation_context
         ),
         month_abbr=util.translate(
-            util.month_msgid(dt.month(), 'a'),
-            domain=dom, context=translation_context
+            util.month_msgid(dt.month(), "a"), domain=dom, context=translation_context
         ),
-
         week=dt.week(),
         wkday=dt.dow(),
         wkday_name=util.translate(
-            util.day_msgid(dt.dow()),
-            domain=dom, context=translation_context
+            util.day_msgid(dt.dow()), domain=dom, context=translation_context
         ),
         wkday_abbr=util.translate(
-            util.day_msgid(dt.dow(), 's'),
-            domain=dom, context=translation_context
+            util.day_msgid(dt.dow(), "s"), domain=dom, context=translation_context
         ),
-
         day=dt.day(),
         day2=zero_pad(dt.day()),
-
         hour=dt.hour(),
         hour2=zero_pad(dt.hour()),
-
         minute=dt.minute(),
         minute2=zero_pad(dt.minute()),
-
         second=dt.second(),
-        second2=zero_pad(dt.second())
+        second2=zero_pad(dt.second()),
     )
     return date_dict
 
@@ -935,7 +919,8 @@ def default_end(context=None):
 # General utils
 # TODO: Better fits to CMFPlone. (Taken from CMFPlone's new syndication tool)
 
-class AnnotationAdapter(object):
+
+class AnnotationAdapter:
     """Abstract Base Class for an annotation storage.
 
     If the annotation wasn't set, it won't be created until the first attempt
@@ -943,6 +928,7 @@ class AnnotationAdapter(object):
     So, the context doesn't get polluted with annotations by accident.
 
     """
+
     ANNOTATION_KEY = None
 
     def __init__(self, context):
@@ -951,7 +937,7 @@ class AnnotationAdapter(object):
         self._data = annotations.get(self.ANNOTATION_KEY, None)
 
     def __setattr__(self, name, value):
-        if name in ('context', '_data', 'ANNOTATION_KEY'):
+        if name in ("context", "_data", "ANNOTATION_KEY"):
             self.__dict__[name] = value
         else:
             if self._data is None:
@@ -964,8 +950,7 @@ class AnnotationAdapter(object):
         return self._data.get(name, None) if self._data else None
 
 
-def find_context(context, viewname=None, iface=None,
-                 as_url=False, append_view=True):
+def find_context(context, viewname=None, iface=None, as_url=False, append_view=True):
     """Find the next context with a given view name or interface, up in the
     content tree, starting from the given context. This might not be the
     IPloneSiteRoot, but another subsite.
@@ -984,18 +969,27 @@ def find_context(context, viewname=None, iface=None,
     """
     context = aq_inner(context)
     ret = None
-    if viewname and context.defaultView() == viewname\
-       or iface and iface.providedBy(context)\
-       or IPloneSiteRoot.providedBy(context):
+    if (
+        viewname
+        and context.defaultView() == viewname
+        or iface
+        and iface.providedBy(context)
+        or IPloneSiteRoot.providedBy(context)
+    ):
         # Search for viewname or interface but stop at IPloneSiteRoot
         ret = context
     else:
-        ret = find_context(aq_parent(context), viewname=viewname, iface=iface,
-                           as_url=False, append_view=False)
+        ret = find_context(
+            aq_parent(context),
+            viewname=viewname,
+            iface=iface,
+            as_url=False,
+            append_view=False,
+        )
     if as_url:
         url = ret.absolute_url()
         if viewname and append_view and ret.defaultView() != viewname:
-            url = '%s/%s' % (url, viewname)
+            url = f"{url}/{viewname}"
         return url
     return ret
 
@@ -1013,8 +1007,9 @@ def find_navroot(context, as_url=False):
 
 
 def find_event_listing(context, as_url=False):
-    return find_context(context, viewname='event_listing', iface=ISite,
-                        as_url=as_url, append_view=True)
+    return find_context(
+        context, viewname="event_listing", iface=ISite, as_url=as_url, append_view=True
+    )
 
 
 # Workaround for buggy strftime with timezone handling in DateTime.

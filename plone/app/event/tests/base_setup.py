@@ -1,25 +1,23 @@
-# -*- coding: utf-8 -*-
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from datetime import timedelta
 from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.app.textfield.value import RichTextValue
 from plone.dexterity.utils import createContentInContainer
+from Products.CMFCore.utils import getToolByName
 
 import pytz
 import unittest
 
 
-TEST_TIMEZONE = 'Europe/Vienna'
+TEST_TIMEZONE = "Europe/Vienna"
 
 
 def patched_now(context=None):
-    """Patch localized_now to allow stable results in tests.
-    """
+    """Patch localized_now to allow stable results in tests."""
     if not context:
         context = None
     tzinfo = pytz.timezone(TEST_TIMEZONE)
@@ -30,7 +28,7 @@ def patched_now(context=None):
 
 # Patch EventAccessor for IDXEvent to set the correct testing portal type.
 # For custom accessor in addons you would rather do that in an adapter.
-behaviors.EventAccessor.event_type = 'plone.app.event.dx.event'
+behaviors.EventAccessor.event_type = "plone.app.event.dx.event"
 
 
 class AbstractSampleDataEvents(unittest.TestCase):
@@ -38,11 +36,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
 
     def event_factory(self, container, **kwargs):
         # Return the IEventAccessor.create event factory.
-        return createContentInContainer(
-            container,
-            'plone.app.event.dx.event',
-            **kwargs
-        )
+        return createContentInContainer(container, "plone.app.event.dx.event", **kwargs)
 
     def make_dates(self):
         tz = pytz.timezone(TEST_TIMEZONE)
@@ -72,87 +66,92 @@ class AbstractSampleDataEvents(unittest.TestCase):
         'Future Event: 2013-05-15T10:00:00+02:00 - 2013-05-15T11:00:00+02:00'
 
         """
-        self.portal = self.layer['portal']
-        self.app = self.layer['app']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.app = self.layer["app"]
+        self.request = self.layer["request"]
         set_browserlayer(self.request)
         set_timezone(TEST_TIMEZONE)
 
         now, past, future, far, duration = self.make_dates()
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        workflow = getToolByName(self.portal, 'portal_workflow')
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
+        workflow = getToolByName(self.portal, "portal_workflow")
         workflow.setDefaultChain("simple_publication_workflow")
 
         factory = self.event_factory
         self.past_event = factory(
             container=self.portal,
-            id='past',
-            title=u'Past Event',
+            id="past",
+            title="Past Event",
             start=past,
             end=past + duration,
-            location=u"Vienna",
+            location="Vienna",
             whole_day=True,
-            recurrence='RRULE:FREQ=DAILY;COUNT=3')
-        workflow.doActionFor(self.past_event, 'publish')
+            recurrence="RRULE:FREQ=DAILY;COUNT=3",
+        )
+        workflow.doActionFor(self.past_event, "publish")
         # adjust start and end according to whole_day and open_end
         self.past_event.reindexObject()
 
         self.now_event = factory(
             container=self.portal,
-            id='now',
-            title=u'Now Event',
+            id="now",
+            title="Now Event",
             start=now,
             end=now + duration,
-            location=u"Vienna",
+            location="Vienna",
             recurrence="""RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1
 RDATE:20130509T000000
 EXDATE:20130506T000000,20140404T000000""",
-            contact_name='Auto Testdriver',
-            contact_email='testdriver@plone.org',
-            contact_phone='+123456789',
-            event_url='http://plone.org',
-            subject=('plone', 'testing'))  # change to subjects, once this is
+            contact_name="Auto Testdriver",
+            contact_email="testdriver@plone.org",
+            contact_phone="+123456789",
+            event_url="http://plone.org",
+            subject=("plone", "testing"),
+        )  # change to subjects, once this is
         # fixed:
         # https://github.com/plone/plone.dexterity/pull/18
         # https://github.com/plone/plone.app.dexterity/issues/118
-        workflow.doActionFor(self.now_event, 'publish')
+        workflow.doActionFor(self.now_event, "publish")
         self.now_event.reindexObject()
 
         self.future_event = factory(
             container=self.portal,
-            id='future',
-            title=u'Future Event',
+            id="future",
+            title="Future Event",
             text=RichTextValue(
-                u'Überraschung! Du kannst nach mir suchen',
-                'text/plain',
-                'text/html',
+                "Überraschung! Du kannst nach mir suchen",
+                "text/plain",
+                "text/html",
             ),
             start=future,
             end=future + duration,
-            location=u'Graz')
-        workflow.doActionFor(self.future_event, 'publish')
+            location="Graz",
+        )
+        workflow.doActionFor(self.future_event, "publish")
         self.future_event.reindexObject()
 
-        self.portal.invokeFactory('Folder', 'sub', title=u'sub')
+        self.portal.invokeFactory("Folder", "sub", title="sub")
         self.long_event = factory(
             container=self.portal.sub,
-            id='long',
-            title=u'Long Event',
+            id="long",
+            title="Long Event",
             start=past,
             end=far,
-            location=u'Schaftal')
-        workflow.doActionFor(self.long_event, 'publish')
+            location="Schaftal",
+        )
+        workflow.doActionFor(self.long_event, "publish")
         self.long_event.reindexObject()
 
         # plone.app.contenttypes ICollection type
-        self.portal.invokeFactory('Collection', 'collection', title=u'Col')
+        self.portal.invokeFactory("Collection", "collection", title="Col")
         collection = self.portal.collection
-        collection.sort_on = u'start'
+        collection.sort_on = "start"
         collection.reverse_sort = True
         collection.query = [
-            {'i': 'portal_type',
-             'o': 'plone.app.querystring.operation.selection.any',
-             'v': ['Event', 'plone.app.event.dx.event']
-             },
+            {
+                "i": "portal_type",
+                "o": "plone.app.querystring.operation.selection.any",
+                "v": ["Event", "plone.app.event.dx.event"],
+            },
         ]
         collection.reindexObject()
