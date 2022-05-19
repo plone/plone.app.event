@@ -1,3 +1,4 @@
+
 (function () {
   function zero_pad(val, len) {
     val = val.toString();
@@ -51,9 +52,9 @@
 
   function open_end_toggle(event_edit__open_end, event_edit__end) {
     if (event_edit__open_end.checked) {
-      $(event_edit__end.closest(".field")).hide();
+      event_edit__end.closest(".field").style.display = "none";
     } else {
-      $(event_edit__end.closest(".field")).show();
+      event_edit__end.closest(".field").style.display = "block";
     }
   }
 
