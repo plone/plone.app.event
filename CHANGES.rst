@@ -8,6 +8,29 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0a9 (2022-05-24)
+--------------------
+
+Breaking changes:
+
+
+- Code Style, pyupgrade, remove six, use plone.base, some overhaul.
+  [jensens] (#356)
+
+
+Bug fixes:
+
+
+- Remove project-specific code from selectors in the event JavaScript.
+  [thet] (355-2)
+- Do frontend date widget calculation with datetime-native dates to simplify code better universal support. (355-3)
+- Wrap JavaScript a immediately invoked function to not expose the functions in global namespace.
+  [thet] (#355)
+- Remove jQuery from event edit JS.
+  [petschki] (#358)
+- Removed z3c.autoinclude.plugin entrypoint. [maurits] (#3188)
+
+
 4.0.0a8 (2022-04-07)
 --------------------
 
