@@ -114,7 +114,7 @@
               </div>
               <div>
                 <strong class="meta-label" i18n:translate="contact_phone">Contact Phone</strong>
-                <p class="card-text"><a href="tel:${data/contact_phone}" title="" i18n:attributes="title contact_phone" tal:content="data/contact_phone">Contact Phone</a></p>
+                <p class="card-text"><a href="tel:${data/contact_phone}" title="Contact Phone" i18n:attributes="title contact_phone" tal:content="data/contact_phone">Contact Phone</a></p>
               </div>
             </div>
           </div>
