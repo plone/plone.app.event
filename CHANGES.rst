@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0b1 (2022-07-19)
+--------------------
+
+Bug fixes:
+
+
+- Fix default i18n msgid values
+  [erral] (#359)
+
+
 4.0.0a9 (2022-05-24)
 --------------------
 
