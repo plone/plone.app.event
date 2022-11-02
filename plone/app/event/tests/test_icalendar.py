@@ -31,6 +31,11 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
     def checkOrder(self, text, *order):
         for item in order:
             position = text.find(item)
+            if position == -1:
+                # ;VALUE=DATE-TIME is the default so it is optional.
+                # icalendar will remove it in a future release.
+                # See https://github.com/collective/icalendar/pull/450
+                position = text.find(item.replace(";VALUE=DATE-TIME", ""))
             self.assertTrue(
                 position >= 0, 'menu item "%s" missing or out of order' % item
             )
