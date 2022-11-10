@@ -1,2 +1,0 @@
-Fixed tests to work with icalendar 5.0.2, where ``;VALUE=DATE-TIME`` is not included because it is already the default.
-[maurits]

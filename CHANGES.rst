@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0 (2022-11-11)
+------------------
+
+Bug fixes:
+
+
+- Fixed tests to work with icalendar 5.0.2, where ``;VALUE=DATE-TIME`` is not included because it is already the default.
+  [maurits] (#450)
+
+
 4.0.0b1 (2022-07-19)
 --------------------
 
