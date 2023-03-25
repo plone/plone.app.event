@@ -1,0 +1,2 @@
+Fix `expand_events` doubling the first occurrence with the original event
+[petschki]
