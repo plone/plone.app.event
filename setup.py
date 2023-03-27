@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = "4.0.1.dev0"
+version = "5.0.0.dev0"
 
 
 long_description = "\n\n".join(
@@ -51,7 +51,6 @@ setup(
         "plone.app.contentlisting",
         "plone.app.dexterity",
         "plone.app.layout",
-        "plone.app.multilingual",
         "plone.app.portlets >= 2.5.1",
         "plone.app.querystring",
         "plone.app.registry",
