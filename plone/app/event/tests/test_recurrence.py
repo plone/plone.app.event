@@ -289,7 +289,6 @@ class MockEvent(SimpleItem):
 
 
 class TestRecurrenceSupport(unittest.TestCase):
-
     layer = PAEvent_INTEGRATION_TESTING
 
     def setUp(self):

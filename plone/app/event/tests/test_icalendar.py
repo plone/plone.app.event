@@ -87,7 +87,7 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         )
 
     def test_event_occurrence_ical(self):
-        """A event occurrence should not conain recurrence definitions from
+        """A event occurrence should not contain recurrence definitions from
         it's parent.
         """
         headers, output, request = make_fake_response(self.request)

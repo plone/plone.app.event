@@ -99,7 +99,6 @@ PAEvent_INTEGRATION_TESTING = IntegrationTesting(
 
 
 class PAEventDXLayer(PloneSandboxLayer):
-
     defaultBases = (PAEvent_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):

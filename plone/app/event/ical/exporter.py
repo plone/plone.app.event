@@ -66,13 +66,12 @@ def construct_icalendar(context, events):
             tzmap = add_to_zones_map(tzmap, tz_end, acc.end)
         cal.add_component(IICalendarEventComponent(event).to_ical())
 
-    for (tzid, transitions) in tzmap.items():
+    for tzid, transitions in tzmap.items():
         cal_tz = icalendar.Timezone()
         cal_tz.add("tzid", tzid)
         cal_tz.add("x-lic-location", tzid)
 
-        for (transition, tzinfo) in transitions.items():
-
+        for transition, tzinfo in transitions.items():
             if tzinfo["dst"]:
                 cal_tz_sub = icalendar.TimezoneDaylight()
             else:

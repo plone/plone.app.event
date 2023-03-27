@@ -251,7 +251,7 @@ Bug fixes:
 
 - Fixed searchable text indexer to avoid breaking when there is no text.
   [davisagli]
-- iCalendar categories are exepected as a comma separated string, not as multiple entries.
+- iCalendar categories are expected as a comma separated string, not as multiple entries.
   See https://www.kanzaki.com/docs/ical/categories.html
   Needs fixed iCalendar >4.0.2
   [jensens]
@@ -751,7 +751,7 @@ Fixes:
   addons (specifically ``collective.venue``) to override it and return a html
   link to a location object instead. Instead of this hack, which also only
   works for the location use case, override the necessary templates in your
-  addons. In case of doubt, simplicity outweight extensibility options.
+  addons. In case of doubt, simplicity outweigh extensibility options.
   [thet]
 
 - Change ``adapts`` and ``implements`` to their decorator equivalents
@@ -1109,7 +1109,7 @@ Fixes:
 
 - For ical exports, remove X-WR-CALNAME, X-WR-CALID and X-WR-CALDESC.
   X-WR-CALNAME caused Outlook to create a new calendar on every import. These
-  properties are not neccessary and not specified by RFC5545 anyways.
+  properties are not necessary and not specified by RFC5545 anyways.
   Fixes #109, closes #132.
   [tomgross, thet]
 
@@ -1218,14 +1218,14 @@ Fixes:
   installations.
   [thet]
 
-- Remove the behaviors plone.app.relationfield.behavior.IRelatedItems adn
+- Remove the behaviors plone.app.relationfield.behavior.IRelatedItems and
   plone.app.versioningbehavior.behaviors.IVersionable from the Dexterity
   example type. We don't depend on these packages and won't introduce an
   explicit dependency on it.
   [thet]
 
 - In portlet calendar and events, don't use the search_base directly to
-  constuct calendar urls. The search base always starts from the Plone site
+  construct calendar urls. The search base always starts from the Plone site
   root, which led to wrong urls in Lineage subsites.
   [thet]
 
@@ -1270,7 +1270,7 @@ Fixes:
   [jensens]
 
 - Remove event and calendar portlet assignments on plone.rightcolumn.
-  Integrators should do assignments themselfes, as they are likely different
+  Integrators should do assignments themselves, as they are likely different
   from the standard assignment.
   [thet]
 
@@ -1321,10 +1321,10 @@ Fixes:
   [thet]
 
 - Remove dependency on "persistent" to not use that one over the ZODB bundled
-  package. "persistent" will become available as seperate package with ZODB 4.
+  package. "persistent" will become available as separate package with ZODB 4.
   [thet]
 
-- Declare mimimum dependency on plone.event 1.0rc1.
+- Declare minimum dependency on plone.event 1.0rc1.
   [thet]
 
 - Buildout infrastructure update.
@@ -1414,7 +1414,7 @@ Please note, the next release will have all deprections removed.
 - Fix compact event edit form layouts and don't float the recurrence widget.
   [thet]
 
-- Change default listing mode in event_listing and replace "All" with seperate
+- Change default listing mode in event_listing and replace "All" with separate
   "Future" and "Past" buttons.
   [thet]
 
@@ -1475,7 +1475,7 @@ Please note, the next release will have all deprections removed.
 
 - Let EventAccessor for Archetypes based content type return it's values from
   property accessors instead properties directly. This let's return the correct
-  value when an property get's overridden by archetypes.schemaextender.
+  value when an property gets overridden by archetypes.schemaextender.
   [thet]
 
 - Deprecate upgrade_step_2 to plone.app.event beta 2, which is likely not
@@ -1498,7 +1498,7 @@ Please note, the next release will have all deprections removed.
   Move related cmf_edit tests from Products.CMFPlone to plone.app.event.
   [thet]
 
-- Add Event profile definition for ATEvent completly in order to remove it from
+- Add Event profile definition for ATEvent completely in order to remove it from
   Products.CMFPlone. ATEvent is installed by ATContentTypes automatically as
   part of upcoming plone.app.contenttypes merge.
   [thet]
@@ -1593,7 +1593,7 @@ Please note, the next release will have all deprections removed.
   mode to 'day' if a date was passed.
   [thet]
 
-- Backport from plone.app.portlets: Don't fail on invalid (ambigous) date
+- Backport from plone.app.portlets: Don't fail on invalid (ambiguous) date
   information in request (Commit a322676 on plone.app.portlets).
   [tomgross]
 
@@ -1720,7 +1720,7 @@ Please note, the next release will have all deprections removed.
 
   - date_speller to format a date in a readable manner,
 
-  - start_end_from_mode to return start and end date accordin to a mode string
+  - start_end_from_mode to return start and end date according to a mode string
     (today, past, future, etc.),
 
   - dt_start_of_day and dt_end_of_day to set a date to the start of the day

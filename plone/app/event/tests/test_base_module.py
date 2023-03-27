@@ -453,7 +453,6 @@ class TestGetEventsDX(AbstractSampleDataEvents):
     layer = PAEventDX_INTEGRATION_TESTING
 
     def test_get_events(self):
-
         # whole range
         res = get_events(self.portal)
         self.assertEqual(len(res), 4)
@@ -618,7 +617,7 @@ class TestGetEventsDX(AbstractSampleDataEvents):
         # Test with range
         #
 
-        # Completly outside range and start, end given as datetime
+        # Completely outside range and start, end given as datetime
         cal = construct_calendar(
             res, start=datetime(2000, 1, 1, 10, 0), end=datetime(2000, 1, 2, 10, 0)
         )
@@ -784,16 +783,6 @@ class TestGetEventsOptimizations(AbstractSampleDataEvents):
             "2014-05-08 10:00:00",
             "2014-05-08 11:00:00",
         )  # second recurrence
-        rec3 = (
-            "Next year",
-            "2014-05-09 10:00:00",
-            "2014-05-09 11:00:00",
-        )  # third recurrence
-        rec4 = (
-            "Next year",
-            "2014-05-10 10:00:00",
-            "2014-05-10 11:00:00",
-        )  # fourth recurrence
 
         # expand_events from today+200 until today+300
         res = self.fmt(

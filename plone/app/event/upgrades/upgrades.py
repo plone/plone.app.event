@@ -51,7 +51,7 @@ def upgrade_attribute_storage(context):
     for result in results:
         try:
             event = result.getObject()
-        except:
+        except Exception:
             log.warning(
                 "Not possible to fetch event object from catalog result for "
                 "item: {}.".format(result.getPath())

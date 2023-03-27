@@ -1,19 +1,21 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    >
 
-    <adapter factory="..ical.exporter.calendar_from_container"
-        provides="plone.event.interfaces.IICalendar"
-        for="plone.dexterity.interfaces.IDexterityContainer"
-        />
+  <adapter
+      factory="..ical.exporter.calendar_from_container"
+      provides="plone.event.interfaces.IICalendar"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      />
 
-    <browser:page
-        for="plone.dexterity.interfaces.IDexterityContainer"
-        name="ics_view"
-        class="..ical.exporter.EventsICal"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ics_view"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      class="..ical.exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
 </configure>

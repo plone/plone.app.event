@@ -12,7 +12,6 @@ import unittest
 
 
 class TestICALImportSettings(unittest.TestCase):
-
     layer = PAEventDX_FUNCTIONAL_TESTING
 
     def setUp(self):

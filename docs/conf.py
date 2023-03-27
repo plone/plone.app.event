@@ -14,7 +14,7 @@ master_doc = "index"
 
 language = "en"
 
-from pkg_resources import get_distribution
+from pkg_resources import get_distribution  # noqa: E402
 
 
 version = release = get_distribution(project).version

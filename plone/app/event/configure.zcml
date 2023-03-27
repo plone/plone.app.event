@@ -4,7 +4,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="plone">
+    i18n_domain="plone"
+    >
 
   <!-- external dependencies -->
   <include package="plone.browserlayer" />
@@ -25,39 +26,41 @@
   <include package=".upgrades" />
 
   <utility
-      component=".vocabularies.SynchronizationStrategies"
       name="plone.app.event.SynchronizationStrategies"
+      component=".vocabularies.SynchronizationStrategies"
       />
 
   <genericsetup:registerProfile
       name="default"
-      directory="profiles/default"
       title="plone.app.event"
       description="plone.app.event framework registration."
-      for="plone.base.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      directory="profiles/default"
       />
 
   <genericsetup:registerProfile
       name="testing"
       title="plone.app.event testing"
-      directory="profiles/testing"
       description="Testing profile for plone.app.event"
-      for="plone.base.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      directory="profiles/testing"
       />
 
   <genericsetup:importStep
       name="plone.app.event-catalog"
-      handler="plone.app.event.setuphandlers.setup_catalog"
       title="plone.app.event catalog setup"
-      description="registers indices and metadata columns for plone.app.event">
+      description="registers indices and metadata columns for plone.app.event"
+      handler="plone.app.event.setuphandlers.setup_catalog"
+      >
     <depends name="plone.app.registry" />
   </genericsetup:importStep>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"
+      provides="plone.base.interfaces.INonInstallable"
       name="plone.app.event"
-      provides="plone.base.interfaces.INonInstallable" />
+      />
 
 </configure>

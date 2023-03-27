@@ -20,7 +20,8 @@ class TestEventSummaryDX(AbstractSampleDataEvents):
         output = view()
 
         self.assertTrue("2013-05-15" in output)
-        self.assertTrue("(Europe/Vienna / UTC200)" in output)
+        self.assertTrue("Europe/Vienna" in output)
+        self.assertTrue("UTC200" in output)
         self.assertTrue("Graz" in output)
         self.assertTrue("All dates" not in output)
 

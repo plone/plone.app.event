@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
-<object
-    name="portal_controlpanel"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="plone"
-    purge="False">
+<?xml version="1.0" encoding="utf-8"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="portal_controlpanel"
+        purge="False"
+        i18n:domain="plone"
+>
 
-    <!-- Hide old calendar calendar settings if there -->
-    <configlet
-        title="Calendar"
-        action_id="CalendarSettings"
-        visible="False"
-        />
+  <!-- Hide old calendar calendar settings if there -->
+  <configlet action_id="CalendarSettings"
+             title="Calendar"
+             visible="False"
+  />
 
 </object>
