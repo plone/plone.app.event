@@ -1,0 +1,2 @@
+Breaking dependency cleanup: Move declaration of language independence of on IEventBasic fields to plone.app.multilingual.
+[jensens]
