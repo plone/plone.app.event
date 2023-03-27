@@ -63,7 +63,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
         """Base preparation for batching tests below.
 
         The event_listing view caches it's results on the request, so the
-        batching tests below need to be in seperate test methods to get a fresh
+        batching tests below need to be in separate test methods to get a fresh
         environment with newly calculated results.
         """
         # plone.app.contenttypes ICollection type
@@ -102,7 +102,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
 
     def test_date_filtering(self):
         """Test if date filters are available on Collections without start or
-        end search criterias.
+        end search criteria.
         """
         # plone.app.contenttypes ICollection type
         self.portal.invokeFactory(
@@ -124,7 +124,7 @@ class TestEventsListingCollection(TestEventsListingPortal):
 
     def test_no_date_filtering(self):
         """Test if date filters are not available on Collections with start or
-        end search criterias.
+        end search criteria.
         """
         # plone.app.contenttypes ICollection type
         self.portal.invokeFactory("Collection", "col_with_date_criterion", title="Col")

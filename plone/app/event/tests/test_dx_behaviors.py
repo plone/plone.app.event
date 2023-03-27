@@ -435,7 +435,6 @@ class TestDXIntegration(unittest.TestCase):
 
 
 class TestDXEventRecurrence(unittest.TestCase):
-
     layer = PAEventDX_INTEGRATION_TESTING
 
     def test_recurrence(self):
@@ -476,7 +475,7 @@ class TestDXEventUnittest(unittest.TestCase):
 
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
     def test_validate_invariants_fail(self):
@@ -499,7 +498,7 @@ class TestDXEventUnittest(unittest.TestCase):
 
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
     def test_validate_invariants_openend(self):
@@ -510,7 +509,7 @@ class TestDXEventUnittest(unittest.TestCase):
 
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
     def test_validate_dont_validate_incomplete(self):
@@ -524,21 +523,21 @@ class TestDXEventUnittest(unittest.TestCase):
         mock.end = None
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
         mock.start = None
         mock.end = datetime(2016, 5, 18)
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
         mock.start = None
         mock.end = None
         try:
             IEventBasic.validateInvariants(mock)
-        except:
+        except Exception:
             self.fail()
 
 

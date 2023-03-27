@@ -1,134 +1,151 @@
-<html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xml:lang="en"
-    xmlns:tal="http://xml.zope.org/namespaces/tal"
-    xmlns:metal="http://xml.zope.org/namespaces/metal"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    lang="en"
-    metal:use-macro="context/main_template/macros/master"
-    i18n:domain="plone">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      xml:lang="en"
+      i18n:domain="plone"
+>
   <body>
 
-    <metal:custom_title
-        fill-slot="content-title"
-        tal:define="header view/header_string">
+    <metal:custom_title fill-slot="content-title"
+                        tal:define="
+                          header view/header_string;
+                        "
+    >
       <h1 class="documentFirstHeading">
-        <span
-            tal:replace="header/main"
-            tal:condition="header/main" />
+        <span tal:condition="header/main"
+              tal:replace="header/main"
+        ></span>
       </h1>
-      <nav tal:define="mode request/mode|string:future; show_filter view/show_filter">
+      <nav tal:define="
+             mode request/mode|string:future;
+             show_filter view/show_filter;
+           ">
         <ul class="mode_selector nav justify-content-end">
           <tal:cond condition="show_filter">
-            <li
-                class="nav-item"
-                tal:condition="python:mode=='past'">
-              <a
-                  class="mode_future nav-link"
-                  href=""
-                  tal:attributes="href view/mode_future_url"
-                  i18n:translate="mode_future_link">Upcoming</a>
+            <li class="nav-item"
+                tal:condition="python:mode=='past'"
+            >
+              <a class="mode_future nav-link"
+                 href=""
+                 tal:attributes="
+                   href view/mode_future_url;
+                 "
+                 i18n:translate="mode_future_link"
+              >Upcoming</a>
             </li>
-            <li
-                class="nav-item"
-                tal:condition="python:mode=='future'">
-              <a
-                  class="mode_past nav-link"
-                  href=""
-                  tal:attributes="href view/mode_past_url"
-                  i18n:translate="mode_past_link">Past</a>
+            <li class="nav-item"
+                tal:condition="python:mode=='future'"
+            >
+              <a class="mode_past nav-link"
+                 href=""
+                 tal:attributes="
+                   href view/mode_past_url;
+                 "
+                 i18n:translate="mode_past_link"
+              >Past</a>
             </li>
           </tal:cond>
           <li class="nav-item">
-            <a
-                class="mode_ical nav-link"
-                href=""
-                tal:attributes="href view/ical_url"
-                title="Download this event in iCal format"
-                i18n:attributes="title title_add_to_ical;">
+            <a class="mode_ical nav-link"
+               href=""
+               title="Download this event in iCal format"
+               tal:attributes="
+                 href view/ical_url;
+               "
+               i18n:attributes="title title_add_to_ical;"
+            >
               <span i18n:translate="label_add_to_ical">iCal</span>
             </a>
 
           </li>
         </ul>
       </nav>
-      <h2
+      <h2 tal:condition="header/sub"
           tal:content="header/sub"
-          tal:condition="header/sub" />
+      ></h2>
     </metal:custom_title>
 
     <metal:content-core fill-slot="content-core">
       <metal:block define-macro="content-core">
-        <tal:def define="batch view/events;
-                 toLocalizedTime nocall: context/@@plone/toLocalizedTime;">
+        <tal:def define="
+                   batch view/events;
+                   toLocalizedTime nocall: context/@@plone/toLocalizedTime;
+                 ">
 
           <section>
 
             <tal:items repeat="data batch">
 
-              <article
-                  itemscope
-                  itemtype="https://schema.org/Event"
-                  class="vevent tileItem d-flex align-items-start mb-3"
-                  tal:define="startf python:view.date_speller(data.start)">
+              <article class="vevent tileItem d-flex align-items-start mb-3"
+                       itemscope
+                       itemtype="https://schema.org/Event"
+                       tal:define="
+                         startf python:view.date_speller(data.start);
+                       "
+              >
 
                 <ul class="hiddenStructure">
-                  <li
+                  <li class="dtstart"
                       itemprop="startDate"
-                      class="dtstart"
-                      tal:content="data/start/isoformat">end</li>
-                  <li
+                      tal:content="data/start/isoformat"
+                  >end</li>
+                  <li class="dtend"
                       itemprop="endDate"
-                      class="dtend"
-                      tal:content="data/end/isoformat">end</li>
-                  <li
-                      class="location"
-                      itemscope
+                      tal:content="data/end/isoformat"
+                  >end</li>
+                  <li class="location"
                       itemprop="location"
-                      itemtype="http://schema.org/Place">
-                    <span
-                        itemprop="address"
-                        tal:content="data/location">location</span>
+                      itemscope
+                      itemtype="http://schema.org/Place"
+                  >
+                    <span itemprop="address"
+                          tal:content="data/location"
+                    >location</span>
                   </li>
                 </ul>
 
                 <div class="cal_date card me-3 flex-shrink-0 text-center">
-                  <div
-                      class="cal_month card-header p-2"
-                      tal:content="string:${startf/month_name}">Oct.
+                  <div class="cal_month card-header p-2"
+                       tal:content="string:${startf/month_name}"
+                  >Oct.
                   </div>
                   <div class="card-body d-flex flex-column p-2">
-                    <h3
-                        class="cal_day card-title fs-1 m-0"
-                        tal:content="string:${startf/day}">15</h3>
-                    <span
-                        class="cal_wkday card-text"
-                        tal:content="python:startf['wkday_name']">Tue</span>
+                    <h3 class="cal_day card-title fs-1 m-0"
+                        tal:content="string:${startf/day}"
+                    >15</h3>
+                    <span class="cal_wkday card-text"
+                          tal:content="python:startf['wkday_name']"
+                    >Tue</span>
                   </div>
                 </div>
 
                 <div class="cal_info clearfix">
                   <h2 class="tileHeadline">
-                    <a
-                        href=""
-                        itemprop="url"
-                        class="url"
-                        tal:attributes="href data/url">
-                      <span
-                          itemprop="name"
-                          class="summary"
-                          tal:content="data/title">Title</span>
+                    <a class="url"
+                       href=""
+                       itemprop="url"
+                       tal:attributes="
+                         href data/url;
+                       "
+                    >
+                      <span class="summary"
+                            itemprop="name"
+                            tal:content="data/title"
+                      >Title</span>
                     </a>
                   </h2>
                   <div class="documentByLine">
                     <tal:date tal:replace="structure python:view.formatted_date(data)" />
                   </div>
 
-                  <p
-                      itemprop="description"
-                      class="description"
-                      tal:condition="data/description"
-                      tal:content="data/description" />
+                  <p class="description"
+                     itemprop="description"
+                     tal:condition="data/description"
+                     tal:content="data/description"
+                  ></p>
 
 
                 </div>
@@ -139,7 +156,7 @@
 
           </section>
 
-          <div metal:use-macro="context/batch_macros/macros/navigation" />
+          <div metal:use-macro="context/batch_macros/macros/navigation"></div>
 
         </tal:def>
       </metal:block>

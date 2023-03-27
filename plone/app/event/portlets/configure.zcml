@@ -1,26 +1,28 @@
-<configure xmlns="http://namespaces.zope.org/zope"
+<configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="plone">
+    i18n_domain="plone"
+    >
 
-    <plone:portlet
-        name="portlets.Calendar"
-        interface=".portlet_calendar.ICalendarPortlet"
-        assignment=".portlet_calendar.Assignment"
-        renderer=".portlet_calendar.Renderer"
-        addview=".portlet_calendar.AddForm"
-        editview=".portlet_calendar.EditForm"
-        zcml:condition="have plone-5"
-        />
+  <plone:portlet
+      name="portlets.Calendar"
+      interface=".portlet_calendar.ICalendarPortlet"
+      assignment=".portlet_calendar.Assignment"
+      renderer=".portlet_calendar.Renderer"
+      addview=".portlet_calendar.AddForm"
+      editview=".portlet_calendar.EditForm"
+      zcml:condition="have plone-5"
+      />
 
-    <plone:portlet
-        name="portlets.Events"
-        interface=".portlet_events.IEventsPortlet"
-        assignment=".portlet_events.Assignment"
-        renderer=".portlet_events.Renderer"
-        addview=".portlet_events.AddForm"
-        editview=".portlet_events.EditForm"
-        zcml:condition="have plone-5"
-        />
+  <plone:portlet
+      name="portlets.Events"
+      interface=".portlet_events.IEventsPortlet"
+      assignment=".portlet_events.Assignment"
+      renderer=".portlet_events.Renderer"
+      addview=".portlet_events.AddForm"
+      editview=".portlet_events.EditForm"
+      zcml:condition="have plone-5"
+      />
 
 </configure>

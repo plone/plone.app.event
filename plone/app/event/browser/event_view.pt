@@ -1,37 +1,65 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="plone">
-<body>
+      xml:lang="en"
+      i18n:domain="plone"
+>
+  <body>
 
-<metal:content-core fill-slot="content-core">
-<metal:block define-macro="content-core">
-<tal:def tal:define="data nocall:view/data">
+    <metal:content-core fill-slot="content-core">
+      <metal:block define-macro="content-core">
+        <tal:def tal:define="
+                   data nocall:view/data;
+                 ">
 
-  <div class="event clearfix" itemscope itemtype="https://schema.org/Event">
+          <div class="event clearfix"
+               itemscope
+               itemtype="https://schema.org/Event"
+          >
 
-    <ul class="hiddenStructure">
-      <li><a itemprop="url" class="url" href="" tal:attributes="href data/url" tal:content="data/url">url</a></li>
-      <li itemprop="name" class="summary" tal:content="data/title">title</li>
-      <li itemprop="startDate" class="dtstart" tal:content="data/start/isoformat">start</li>
-      <li itemprop="endDate" class="dtend" tal:content="data/end/isoformat">end</li>
-      <li itemprop="description" class="description" tal:content="data/description">description</li>
-    </ul>
+            <ul class="hiddenStructure">
+              <li><a class="url"
+                   href=""
+                   itemprop="url"
+                   tal:content="data/url"
+                   tal:attributes="
+                     href data/url;
+                   "
+                >url</a></li>
+              <li class="summary"
+                  itemprop="name"
+                  tal:content="data/title"
+              >title</li>
+              <li class="dtstart"
+                  itemprop="startDate"
+                  tal:content="data/start/isoformat"
+              >start</li>
+              <li class="dtend"
+                  itemprop="endDate"
+                  tal:content="data/end/isoformat"
+              >end</li>
+              <li class="description"
+                  itemprop="description"
+                  tal:content="data/description"
+              >description</li>
+            </ul>
 
-    <tal:eventsummary replace="structure context/@@event_summary"/>
+            <tal:eventsummary replace="structure context/@@event_summary" />
 
-    <div id="parent-fieldname-text" tal:condition="data/text">
-      <tal:text content="structure data/text" />
-    </div>
+            <div id="parent-fieldname-text"
+                 tal:condition="data/text"
+            >
+              <tal:text content="structure data/text" />
+            </div>
 
-  </div>
+          </div>
 
-</tal:def>
-</metal:block>
-</metal:content-core>
+        </tal:def>
+      </metal:block>
+    </metal:content-core>
 
-</body>
+  </body>
 </html>

@@ -1,114 +1,112 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="plone">
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="plone"
+    >
 
-    <adapter
-        for="plone.event.interfaces.IEvent"
-        factory=".exporter.ICalendarEventComponent"
-        />
+  <adapter
+      factory=".exporter.ICalendarEventComponent"
+      for="plone.event.interfaces.IEvent"
+      />
 
-    <adapter
-        for="plone.event.interfaces.IOccurrence"
-        factory=".exporter.ICalendarEventComponent"
-        />
+  <adapter
+      factory=".exporter.ICalendarEventComponent"
+      for="plone.event.interfaces.IOccurrence"
+      />
 
-    <adapter
-        for="plone.event.interfaces.IEvent"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_event"
-        />
+  <adapter
+      factory=".exporter.calendar_from_event"
+      provides="plone.event.interfaces.IICalendar"
+      for="plone.event.interfaces.IEvent"
+      />
 
-    <adapter
-        for="plone.event.interfaces.IOccurrence"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_event"
-        />
+  <adapter
+      factory=".exporter.calendar_from_event"
+      provides="plone.event.interfaces.IICalendar"
+      for="plone.event.interfaces.IOccurrence"
+      />
 
-    <adapter
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_container"
-        />
+  <adapter
+      factory=".exporter.calendar_from_container"
+      provides="plone.event.interfaces.IICalendar"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      />
 
-    <adapter
-        for="plone.folder.interfaces.IFolder"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_container"
-        />
+  <adapter
+      factory=".exporter.calendar_from_container"
+      provides="plone.event.interfaces.IICalendar"
+      for="plone.folder.interfaces.IFolder"
+      />
 
-    <adapter
-        for="plone.app.contenttypes.interfaces.ICollection"
-        provides="plone.event.interfaces.IICalendar"
-        factory=".exporter.calendar_from_collection"
-        zcml:condition="installed plone.app.contenttypes"
-        />
+  <adapter
+      factory=".exporter.calendar_from_collection"
+      provides="plone.event.interfaces.IICalendar"
+      for="plone.app.contenttypes.interfaces.ICollection"
+      zcml:condition="installed plone.app.contenttypes"
+      />
 
-    <!-- ICal Browser Views -->
-    <browser:page
-        for="plone.event.interfaces.IEvent"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <!-- ICal Browser Views -->
+  <browser:page
+      name="ics_view"
+      for="plone.event.interfaces.IEvent"
+      class=".exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        for="plone.event.interfaces.IOccurrence"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ics_view"
+      for="plone.event.interfaces.IOccurrence"
+      class=".exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ics_view"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      class=".exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        for="plone.folder.interfaces.IFolder"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ics_view"
+      for="plone.folder.interfaces.IFolder"
+      class=".exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        for="plone.app.contenttypes.interfaces.ICollection"
-        name="ics_view"
-        class=".exporter.EventsICal"
-        permission="zope2.View"
-        zcml:condition="installed plone.app.contenttypes"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ics_view"
+      for="plone.app.contenttypes.interfaces.ICollection"
+      class=".exporter.EventsICal"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      zcml:condition="installed plone.app.contenttypes"
+      />
 
-    <!-- Ical import -->
-    <adapter factory=".importer.IcalendarImportSettings"/>
+  <!-- Ical import -->
+  <adapter factory=".importer.IcalendarImportSettings" />
 
-    <browser:page
-        for="plone.folder.interfaces.IFolder"
-        name="ical_import_settings"
-        class=".importer.IcalendarImportSettingsFormView"
-        allowed_attributes="enable
-                            disable"
-        permission="plone.app.event.ImportIcal"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ical_import_settings"
+      for="plone.folder.interfaces.IFolder"
+      class=".importer.IcalendarImportSettingsFormView"
+      allowed_attributes="enable                             disable"
+      permission="plone.app.event.ImportIcal"
+      layer="..interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        for="*"
-        name="ical_import_tool"
-        class=".importer.IcalendarImportTool"
-        allowed_attributes="enabled
-                            available
-                            available_disabled"
-        permission="zope2.View"
-        layer="..interfaces.IBrowserLayer"
-        />
+  <browser:page
+      name="ical_import_tool"
+      for="*"
+      class=".importer.IcalendarImportTool"
+      allowed_attributes="enabled                             available                             available_disabled"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      />
 
 </configure>

@@ -282,7 +282,7 @@ var QUnit = {
 	},
 	
 	/**
-	 * Specify the number of expected assertions to gurantee that failed test (no assertions are run at all) don't slip through.
+	 * Specify the number of expected assertions to guarantee that failed test (no assertions are run at all) don't slip through.
 	 */
 	expect: function(asserts) {
 		config.current.expected = asserts;
@@ -310,7 +310,7 @@ var QUnit = {
 	 * Checks that the first two arguments are equal, with an optional message.
 	 * Prints out both actual and expected values.
 	 *
-	 * Prefered to ok( actual == expected, message )
+	 * Preferred to ok( actual == expected, message )
 	 *
 	 * @example equal( format("Received {0} bytes.", 2), "Received 2 bytes." );
 	 *
@@ -429,7 +429,7 @@ var config = {
 	blocking: true
 };
 
-// Load paramaters
+// Load parameters
 (function() {
 	var location = window.location || { search: "", protocol: "file:" },
 		GETParams = location.search.slice(1).split('&');
@@ -945,7 +945,7 @@ QUnit.equiv = function () {
         // for string, boolean, number and null
         function useStrictEquality(b, a) {
             if (b instanceof a.constructor || a instanceof b.constructor) {
-                // to catch short annotaion VS 'new' annotation of a declaration
+                // to catch short annotation VS 'new' annotation of a declaration
                 // e.g. var i = 1;
                 //      var j = new Number(1);
                 return a == b;
@@ -972,7 +972,7 @@ QUnit.equiv = function () {
             "regexp": function (b, a) {
                 return QUnit.objectType(b) === "regexp" &&
                     a.source === b.source && // the regex itself
-                    a.global === b.global && // and its modifers (gmi) ...
+                    a.global === b.global && // and its modifiers (gmi) ...
                     a.ignoreCase === b.ignoreCase &&
                     a.multiline === b.multiline;
             },
@@ -1020,7 +1020,7 @@ QUnit.equiv = function () {
 
             "object": function (b, a) {
                 var i, j, loop;
-                var eq = true; // unless we can proove it
+                var eq = true; // unless we can prove it
                 var aProperties = [], bProperties = []; // collection of strings
 
                 // comparing constructors is more strict than using instanceof

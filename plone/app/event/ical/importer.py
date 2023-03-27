@@ -100,7 +100,7 @@ def ical_import(
                 # RFC5545 doesn't define clearly, if all day events should have
                 # a end date one day after the start day at 0:00.
                 # Internally, we handle all day events with start=0:00,
-                # end=:23:59:59, so we substract one day here.
+                # end=:23:59:59, so we subtract one day here.
                 end = end - datetime.timedelta(days=1)
             start = base.dt_start_of_day(date_to_datetime(start))
             end = base.dt_end_of_day(date_to_datetime(end))
@@ -231,7 +231,6 @@ def no_file_protocol_url(value):
 
 
 class IIcalendarImportSettings(Interface):
-
     event_type = schema.Choice(
         title=_("ical_import_event_type_title", default="Event Type"),
         description=_(
@@ -335,7 +334,6 @@ class IcalendarImportSettingsForm(form.Form):
         sync_strategy = data["sync_strategy"]
 
         if ical_file or ical_url:
-
             if ical_file:
                 # File upload is not saved in settings
                 ical_resource = ical_file.data

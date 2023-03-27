@@ -1,17 +1,29 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
       lang="en"
+      xml:lang="en"
       tal:omit-tag=""
-      i18n:domain="plone">
-<body tal:omit-tag="" tal:define="date_dict view/date_dict">
+      i18n:domain="plone"
+>
+  <body tal:define="
+          date_dict view/date_dict;
+        "
+        tal:omit-tag=""
+  >
 
-  <span tal:replace="date_dict/start_date" />
-  <tal:notwholeday condition="not:date_dict/whole_day">
-    <abbr class="dtstart" tal:attributes="title date_dict/start_iso">
-      <span class="explain" tal:content="date_dict/start_time">Start Time</span>
-    </abbr>
-  </tal:notwholeday>
+    <span tal:replace="date_dict/start_date"></span>
+    <tal:notwholeday condition="not:date_dict/whole_day">
+      <abbr class="dtstart"
+            tal:attributes="
+              title date_dict/start_iso;
+            "
+      >
+        <span class="explain"
+              tal:content="date_dict/start_time"
+        >Start Time</span>
+      </abbr>
+    </tal:notwholeday>
 
-</body>
+  </body>
 </html>

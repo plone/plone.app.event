@@ -28,7 +28,6 @@ from zope.interface import implementer
 
 
 class IEventsPortlet(IPortletDataProvider):
-
     count = schema.Int(
         title=_("Number of items to display"),
         description=_("How many items to list."),
@@ -80,7 +79,6 @@ class IEventsPortlet(IPortletDataProvider):
 
 @implementer(IEventsPortlet)
 class Assignment(base.Assignment):
-
     # reduce upgrade pain
     thumb_scale = None
     no_thumbs = False
@@ -118,7 +116,6 @@ class Assignment(base.Assignment):
 
 
 class Renderer(base.Renderer):
-
     _template = ViewPageTemplateFile("portlet_events.pt")
     _search_base = None
 
@@ -200,7 +197,7 @@ class Renderer(base.Renderer):
                 ret_mode=RET_MODE_ACCESSORS,
                 expand=True,
                 limit=data.count,
-                **query
+                **query,
             )
 
         return events

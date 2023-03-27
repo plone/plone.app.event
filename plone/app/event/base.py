@@ -375,7 +375,7 @@ def construct_calendar(events, start=None, end=None):
 
             # avoid long loops
             if start and end_date < start:
-                break  # if the date is completly outside the range
+                break  # if the date is completely outside the range
             if start and next_start_date < start:
                 continue  # if start_date is outside but end reaches into range
             if end and next_start_date > end:
@@ -566,7 +566,7 @@ def DT(dt, exact=False):
 
     :param dt: Python datetime, Python date, Zope DateTime instance or string.
     :param exact: If True, the resolution goes down to microseconds. If False,
-                  the resolution are seconds. Defaul is False.
+                  the resolution are seconds. Default is False.
     :type exact: Boolean
     :returns: Zope DateTime
     :rtype: Zope DateTime
@@ -612,7 +612,7 @@ def guess_date_from(datestr, context=None):
     """Returns a timezone aware date object if an arbitrary ASCII string is
     formatted in an ISO date format, otherwise None is returned.
 
-    Used for traversing and Occurence ids.
+    Used for traversing and Occurrence ids.
 
     :param datestr: Date string in an ISO format.
     :type datestr: string
@@ -964,7 +964,7 @@ def find_context(context, viewname=None, iface=None, as_url=False, append_view=T
                         as_url, append the viewname to the url, if the context
                         hasn't configured it as defaultView. Otherwise ignore
                         this parameter.
-    :returns: A context with the given view name, inteface or ISite root.
+    :returns: A context with the given view name, interface or ISite root.
     """
     context = aq_inner(context)
     ret = None
@@ -1014,7 +1014,7 @@ def find_event_listing(context, as_url=False):
 # Workaround for buggy strftime with timezone handling in DateTime.
 # See: https://github.com/plone/plone.app.event/pull/47
 # TODO: should land in CMFPlone or fixed in DateTime.
-_strftime = lambda v, fmt: pydt(v).strftime(fmt)
+_strftime = lambda v, fmt: pydt(v).strftime(fmt)  # noqa: E731
 
 
 class PatchedDateTime(DateTime):

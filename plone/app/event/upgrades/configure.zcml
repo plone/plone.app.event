@@ -1,31 +1,32 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    >
 
   <genericsetup:upgradeStep
-      source="12"
-      destination="13"
       title="New IRichText behavior"
       description="Enable the new IRichText instead of the IEventSummary behavior."
       profile="plone.app.event:default"
+      source="12"
+      destination="13"
       handler=".upgrades.enable_richtext_behavior"
       />
 
   <genericsetup:upgradeStep
-      source="12"
-      destination="13"
       title="Attribute storage"
       description="Migrate fields from annotation storage to attribute storage."
       profile="plone.app.event:default"
+      source="12"
+      destination="13"
       handler=".upgrades.upgrade_attribute_storage"
       />
 
   <genericsetup:upgradeStep
-      source="14"
-      destination="15"
       title="Remove object-action event_listing_settings"
       description=""
       profile="plone.app.event:default"
+      source="14"
+      destination="15"
       handler=".upgrades.remove_event_listing_settings"
       />
 

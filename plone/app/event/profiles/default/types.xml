@@ -1,6 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<object name="portal_types" meta_type="Plone Types Tool">
-  <object name="Plone Site" meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="Folder"     meta_type="Dexterity FTI"/>
-  <object name="Collection" meta_type="Dexterity FTI"/>
+<?xml version="1.0" encoding="utf-8"?>
+<object meta_type="Plone Types Tool"
+        name="portal_types"
+>
+  <object meta_type="Factory-based Type Information with dynamic views"
+          name="Plone Site"
+  />
+  <object meta_type="Dexterity FTI"
+          name="Folder"
+  />
+  <object meta_type="Dexterity FTI"
+          name="Collection"
+  />
 </object>

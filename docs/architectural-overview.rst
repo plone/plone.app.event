@@ -6,11 +6,11 @@ Design goals
 
 The development of plone.app.event was done with following design goals in mind:
 
-  [a] Encapsulation and independence: All event related code should reside in a seperate package (splitted into other packages, where appropriate). Plone should be least dependend on plone.app.event. Best would be that one can deinstall this feature completly.
+  [a] Encapsulation and independence: All event related code should reside in a separate package (split into other packages, where appropriate). Plone should be least depend on plone.app.event. Best would be that one can deinstall this feature completely.
 
   [b] Dexterity support: plone.app.event should provide Dexterity behaviors, which can be used in Dexterity type.
 
-  [c] Standards compliancy: the iCalendar / `RFC5545 <http://tools.ietf.org/html/rfc5545>`_ standard is wonderful flexible, so plone.app.event should provide support for it by allowing ical exports. This is also available for the current ATContentType based implementation, but plone.app.event aims to improve it. A future goal is to support CalDAV also.
+  [c] Standards compliance: the iCalendar / `RFC5545 <http://tools.ietf.org/html/rfc5545>`_ standard is wonderful flexible, so plone.app.event should provide support for it by allowing ical exports. This is also available for the current ATContentType based implementation, but plone.app.event aims to improve it. A future goal is to support CalDAV also.
 
   [d] Recurring events support based on the RFC5545 standard.
 
@@ -20,7 +20,7 @@ The development of plone.app.event was done with following design goals in mind:
 
   [g] Timezone support.
 
-Encapsulation and independence: plone.app.event provides the Dexterity behaviors.  The calendar and event portlets were moved from plone.app.portlets into plone.app.event, where they belong semantically - thus improving encapsulation and independence and reducing interwoven dependencies.  The calendar portlet was completly refactored. The functionality of the CalendarTool (portal_calendar) was reimplenented. Important settings from the calendar-controlpanel are now available in the event configlet. Since the calendar portlet was the only consumer of the CalendarTool, the CalendarTool, the calendar controlpanel and the dependency to Products.CMFCalendar can be dropped. The new plone.app.widgets package implements z3cform based widgets, so the old datetime widget can be dropped. Python-dateutil provides recurrence calculations based on the RFC5545 standard - plone.formwidget.recurrence provides a awidget for recurrence and Products.DateRecurringIndex an appropriate index as a drop-in replacement for Zope's DateIndex. The iCalendar package was improved and is now used for plone.app.event to provide icalendar serialization. The timezone support is based on the pytz package. Plone now haves a portal timezone, User timezones and every event can define another timezone, if wished. User timezones are planned. Whole day events get their starttime set to 0:00 and endtime set to 23:59:59 - thats should be feasable in most cases (excluding any scientific events...).
+Encapsulation and independence: plone.app.event provides the Dexterity behaviors.  The calendar and event portlets were moved from plone.app.portlets into plone.app.event, where they belong semantically - thus improving encapsulation and independence and reducing interwoven dependencies.  The calendar portlet was completely refactored. The functionality of the CalendarTool (portal_calendar) was reimplenented. Important settings from the calendar-controlpanel are now available in the event configlet. Since the calendar portlet was the only consumer of the CalendarTool, the CalendarTool, the calendar controlpanel and the dependency to Products.CMFCalendar can be dropped. The new plone.app.widgets package implements z3cform based widgets, so the old datetime widget can be dropped. Python-dateutil provides recurrence calculations based on the RFC5545 standard - plone.formwidget.recurrence provides a awidget for recurrence and Products.DateRecurringIndex an appropriate index as a drop-in replacement for Zope's DateIndex. The iCalendar package was improved and is now used for plone.app.event to provide icalendar serialization. The timezone support is based on the pytz package. Plone now haves a portal timezone, User timezones and every event can define another timezone, if wished. User timezones are planned. Whole day events get their starttime set to 0:00 and endtime set to 23:59:59 - that's should be feasible in most cases (excluding any scientific events...).
 
 
 Packages
@@ -36,7 +36,7 @@ The "dx" submodule provides Dexterity behaviors (some granular ones). Like in th
 
 Both subpackages are only loaded, if the neccassary features are installed.
 
-plone.app.event does not depend on CMFCalendar and the portal_calendar tool any more. Plone core's only consumer of this package was the calendar portlet anyways, which was completly rewritten.
+plone.app.event does not depend on CMFCalendar and the portal_calendar tool any more. Plone core's only consumer of this package was the calendar portlet anyways, which was completely rewritten.
 
 base.py provides some basic event related functionality. Many of them need a context in order to get the correct timezone.
 
@@ -72,7 +72,7 @@ Products.DateRecurringIndex
 
 Github: https://github.com/collective/Products.DateRecurringIndex
 
-A drop-in replacement for Zope's DateIndex with support for recurring events.  Each recurrence get's an index entry.
+A drop-in replacement for Zope's DateIndex with support for recurring events.  Each recurrence gets an index entry.
 
 
 icalendar

@@ -24,7 +24,6 @@ from zope.component.hooks import setHooks
 from zope.component.hooks import setSite
 from zope.interface import alsoProvides
 
-import pytz
 import unittest
 
 

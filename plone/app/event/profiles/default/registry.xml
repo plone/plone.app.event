@@ -1,11 +1,13 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <registry>
 
-  <records prefix="plone.bundles/eventedit" interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+  <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
+           prefix="plone.bundles/eventedit"
+  >
     <value key="enabled">True</value>
     <value key="expression">python: member is not None</value>
     <value key="jscompilation">++plone++plone.app.event/event.js</value>
-    <value key="csscompilation"></value>
+    <value key="csscompilation" />
     <value key="load_async">False</value>
     <value key="load_defer">False</value>
   </records>
