@@ -60,3 +60,5 @@ Zope = [
   'Products.CMFDynamicViewFTI', 'zope.deprecation',
 ]
 python-dateutil = ['dateutil']
+ExtensionClass = ['ComputedAttribute']
+ignore-packages = ['Products.DateRecurringIndex']
