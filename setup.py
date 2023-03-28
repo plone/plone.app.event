@@ -46,9 +46,18 @@ setup(
     install_requires=[
         "setuptools",
         "plone.base",
+        "ExtensionClass",
         "Products.DateRecurringIndex",
         "Products.statusmessages",
         "icalendar",  # >4.0.2
+        "Products.GenericSetup",
+        "Products.ZCatalog",
+        "persistent",
+        "plone.app.contenttypes",
+        "plone.app.uuid",
+        "plone.resource",
+        "zope.annotation",
+        "zope.contentprovider",
         "plone.app.contentlisting",
         "plone.app.dexterity",
         "plone.app.layout",
@@ -81,6 +90,7 @@ setup(
         "test": [
             "plone.app.robotframework",
             "plone.app.testing [robot]",
+            "plone.testing",
             "robotsuite",
         ],
     },
