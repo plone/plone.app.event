@@ -1,2 +1,2 @@
-Fix `open_end` Event Occurrence display.
-[petschki]
+Fix date display for recurring `open_end` events and multi day `whole_day` events by correcting duration.
+[ksuess, petschki]
