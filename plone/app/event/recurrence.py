@@ -61,8 +61,10 @@ class RecurrenceSupport:
         # We get event ends by adding a duration to the start. This way, we
         # prevent that the start and end lists are of different size if an
         # event starts before range_start but ends afterwards.
-        if getattr(event, "whole_day", None) or getattr(event, "open_end", None):
+        if getattr(event, "open_end", None):
             event_end = dt_end_of_day(event_start)
+        elif getattr(event, "whole_day", None):
+            event_end = dt_end_of_day(getattr(self.context, "end", None))
         else:
             event_end = getattr(self.context, "end", None)
 
