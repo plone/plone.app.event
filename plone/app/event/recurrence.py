@@ -1,5 +1,6 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
+from plone.app.event.base import dt_end_of_day
 from plone.app.event.base import dt_start_of_day
 from plone.app.event.base import guess_date_from
 from plone.base.utils import safe_text
@@ -17,8 +18,6 @@ from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from ZPublisher.BaseRequest import DefaultPublishTraverse
-
-import datetime
 
 
 @adapter(IEventRecurrence)
@@ -63,10 +62,11 @@ class RecurrenceSupport:
         # prevent that the start and end lists are of different size if an
         # event starts before range_start but ends afterwards.
         if getattr(event, "whole_day", None) or getattr(event, "open_end", None):
-            duration = datetime.timedelta(hours=23, minutes=59, seconds=59)
+            event_end = dt_end_of_day(event_start)
         else:
             event_end = getattr(self.context, "end", None)
-            duration = event_end - event_start
+
+        duration = event_end - event_start
 
         starts = recurrence_sequence_ical(
             event_start,
