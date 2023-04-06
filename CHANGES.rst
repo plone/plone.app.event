@@ -8,6 +8,32 @@ Changelog
 
 .. towncrier release notes start
 
+5.0.0 (2023-04-06)
+------------------
+
+Breaking changes:
+
+
+- Breaking dependency cleanup: Move declaration of language independence of on IEventBasic fields to plone.app.multilingual.
+  [jensens] (367-pam)
+
+
+Bug fixes:
+
+
+- Fix `expand_events` doubling the first occurrence with the original event
+  [petschki] (#348)
+- Fix date display for recurring `open_end` events and multi day `whole_day` events by correcting duration.
+  [ksuess, petschki] (#362)
+
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs] (e380661b)
+
+
 4.0.0 (2022-11-11)
 ------------------
 
