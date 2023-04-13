@@ -3,3 +3,4 @@
 [meta]
 template = "default"
 commit-id = "0b0246aa"
+dependencies_ignores = ["plone.app.layout"]
