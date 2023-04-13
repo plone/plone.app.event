@@ -12,7 +12,7 @@ It provides
 - event views 
 - and a lot more.
 
-It is part of Plone and does not need additional installation steps.
+It is part of the `CMS Plone <https://plone.org>`_ and does not need additional installation steps.
 
 Source Code
 ===========
