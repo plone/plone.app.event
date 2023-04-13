@@ -7,10 +7,10 @@ from datetime import timedelta
 from DateTime import DateTime
 from persistent.dict import PersistentDict
 from plone.app.event.interfaces import ISO_DATE_FORMAT
-from plone.app.layout.navigation.interfaces import INavigationRoot
-from plone.app.layout.navigation.root import getNavigationRootObject
 from plone.base.i18nl10n import ulocalized_time as orig_ulocalized_time
+from plone.base.interfaces import INavigationRoot
 from plone.base.interfaces.siteroot import IPloneSiteRoot
+from plone.base.navigationroot import get_navigation_root_object
 from plone.base.utils import safe_callable
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -129,7 +129,7 @@ def get_events(
     if "path" not in kw:
         # limit to the current navigation root, usually (not always) site
         portal = getSite()
-        navroot = getNavigationRootObject(context, portal)
+        navroot = get_navigation_root_object(context, portal)
         query["path"] = "/".join(navroot.getPhysicalPath())
     else:
         query["path"] = kw["path"]
