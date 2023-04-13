@@ -2,7 +2,15 @@ plone.app.event
 ===============
 
 ``plone.app.event`` is the calendaring framework for Plone. 
-It provides Dexterity behaviors, Timezone support, RFC5545 icalendar export, Recurrence support, event views and a lot more.
+
+It provides 
+
+- Dexterity behaviors, 
+- timezone support, 
+- RFC5545 icalendar export, 
+- recurrence support, 
+- event views 
+- and a lot more.
 
 It is part of Plone and does not need additional installation steps.
 
