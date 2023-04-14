@@ -2,5 +2,7 @@
 # https://github.com/plone/meta/tree/master/config/default
 [meta]
 template = "default"
-commit-id = "0b0246aa"
-dependencies_ignores = ["plone.app.layout"]
+commit-id = "6a7a0f1c"
+
+[dependencies]
+ignores = "['plone.app.layout', 'Products.DateRecurringIndex']"

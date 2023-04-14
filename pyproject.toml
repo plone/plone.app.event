@@ -81,4 +81,4 @@ Zope = [
   'Products.CMFCore', 'Products.CMFDynamicViewFTI',
 ]
 python-dateutil = ['dateutil']
-ignore-packages = ["plone.app.layout"]
+ignore-packages = ['plone.app.layout', 'Products.DateRecurringIndex']
