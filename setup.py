@@ -48,6 +48,7 @@ setup(
         "plone.base",
         "Products.statusmessages",
         "icalendar",  # >4.0.2
+        "Products.DateRecurringIndex",
         "Products.ZCatalog",
         "plone.app.contenttypes",
         "plone.app.uuid",
