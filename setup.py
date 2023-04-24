@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = "5.0.0.dev0"
+version = "5.0.2.dev0"
 
 
 long_description = "\n\n".join(
@@ -46,21 +46,15 @@ setup(
     install_requires=[
         "setuptools",
         "plone.base",
-        "ExtensionClass",
-        "Products.DateRecurringIndex",
         "Products.statusmessages",
         "icalendar",  # >4.0.2
-        "Products.GenericSetup",
+        "Products.DateRecurringIndex",
         "Products.ZCatalog",
-        "persistent",
         "plone.app.contenttypes",
         "plone.app.uuid",
         "plone.resource",
-        "zope.annotation",
-        "zope.contentprovider",
         "plone.app.contentlisting",
         "plone.app.dexterity",
-        "plone.app.layout",
         "plone.app.portlets >= 2.5.1",
         "plone.app.querystring",
         "plone.app.registry",
@@ -78,7 +72,6 @@ setup(
         "plone.memoize",
         "plone.namedfile",
         "plone.portlets",
-        "plone.registry",
         "plone.supermodel",
         "plone.uuid",
         "plone.z3cform",

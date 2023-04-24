@@ -1,20 +1,22 @@
 plone.app.event
 ===============
 
-Plone.app.event is the calendaring framework for Plone. It provides Dexterity behaviors and an Archetypes type, Timezone support, RFC5545 icalendar export, Recurrence support, event views and a lot more.
+``plone.app.event`` is the calendaring framework for Plone. 
 
-For a Dexterity event type using plone.app.event, use plone.app.contenttypes 1.1 or newer.
+It provides 
 
-The complete documentation can be found on: https://ploneappevent.readthedocs.org
+- Dexterity behaviors, 
+- timezone support, 
+- RFC5545 icalendar export, 
+- recurrence support, 
+- event views 
+- and a lot more.
 
+It is part of the `CMS Plone <https://plone.org>`_ and does not need additional installation steps.
 
-Installation
-------------
+Source Code
+===========
 
-For Standalone installation follow the standard buildout procedure::
+Contributors please read the document `Contributing to Plone <https://6.docs.plone.org/contributing/index.html>`_
 
-    $ virtualenv .
-    $ ./bin/pip install -U zc.buildout setuptools pip
-    $ ./bin/buildout
-
-Note, both commands will install a test and development environment.
+Sources are at the `Plone code repository hosted at Github <https://github.com/plone/plone.dapp.event>`_.
