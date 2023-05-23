@@ -43,7 +43,7 @@ def _render_events_cachekey(method, self):
         query['review_state'] = data.state
 
     query.update(self.request.get('contentFilter', {}))
-    if ICollection and ICollection.providedBy(self.search_base):
+    if ISyndicatableCollection and ISyndicatableCollection.providedBy(self.search_base):
         # Whatever sorting is defined, we're overriding it.
         query = queryparser.parseFormquery(
             self.search_base, self.search_base.query,
