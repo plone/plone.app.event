@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.15 (2023-05-23)
+-------------------
+
+Bug fixes:
+
+
+- Fix conflicts with `require` definition -> move JS into singleton.
+  [petschki] (#376)
+
 
 2.0.14 (2018-09-28)
 -------------------
