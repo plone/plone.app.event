@@ -41,7 +41,7 @@ setup(
     packages=find_packages(),
     namespace_packages=["plone", "plone.app"],
     include_package_data=True,
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     zip_safe=False,
     install_requires=[
         "setuptools",
