@@ -50,6 +50,7 @@ setup(
         "icalendar",  # >4.0.2
         "Products.DateRecurringIndex",
         "Products.ZCatalog",
+        "Products.GenericSetup",
         "plone.app.contenttypes",
         "plone.app.uuid",
         "plone.resource",
@@ -74,10 +75,9 @@ setup(
         "plone.portlets",
         "plone.supermodel",
         "plone.uuid",
-        "plone.z3cform",
         "pytz",
         "z3c.form >= 3.2.1",
-        "zope.globalrequest",
+        "Zope",
     ],
     extras_require={
         "test": [
