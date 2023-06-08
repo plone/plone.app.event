@@ -1,7 +1,6 @@
+from pathlib import Path
 from setuptools import find_packages
 from setuptools import setup
-
-import os
 
 
 version = "5.0.2.dev0"
@@ -9,9 +8,9 @@ version = "5.0.2.dev0"
 
 long_description = "\n\n".join(
     [
-        open("README.rst").read(),
-        open(os.path.join("docs", "installation.rst")).read(),
-        open("CHANGES.rst").read(),
+        Path("README.rst").read_text(),
+        (Path(".") / "docs" / "installation.rst").read_text(),
+        Path("CHANGES.rst").read_text(),
     ]
 )
 
@@ -21,6 +20,7 @@ setup(
     version=version,
     description="The Plone calendar framework",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
@@ -41,7 +41,7 @@ setup(
     packages=find_packages(),
     namespace_packages=["plone", "plone.app"],
     include_package_data=True,
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     zip_safe=False,
     install_requires=[
         "setuptools",
@@ -50,6 +50,7 @@ setup(
         "icalendar",  # >4.0.2
         "Products.DateRecurringIndex",
         "Products.ZCatalog",
+        "Products.GenericSetup",
         "plone.app.contenttypes",
         "plone.app.uuid",
         "plone.resource",
@@ -74,10 +75,9 @@ setup(
         "plone.portlets",
         "plone.supermodel",
         "plone.uuid",
-        "plone.z3cform",
         "pytz",
         "z3c.form >= 3.2.1",
-        "zope.globalrequest",
+        "Zope",
     ],
     extras_require={
         "test": [

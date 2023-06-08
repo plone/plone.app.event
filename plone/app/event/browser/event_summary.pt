@@ -41,6 +41,7 @@
                 </span>
                 <span class="timezone text-muted small"
                       tal:condition="start_tzname"
+                      i18n:ignore="True"
                 >
                   (<tal:tzname replace="start_tzname">timezone name</tal:tzname>
                   / UTC<tal:tzoffset replace="start_utcoffset" />)
@@ -239,6 +240,7 @@
                        href string:$here_url/ics_view;
                      "
                      i18n:attributes="title title_add_to_ical;"
+                     i18n:translate=""
                   >iCal</a>
                 </p>
               </div>
