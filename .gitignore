@@ -24,6 +24,7 @@ eggs/
 .eggs/
 etc/
 .installed.cfg
+include/
 lib/
 lib64
 .mr.developer.cfg
