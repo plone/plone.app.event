@@ -14,10 +14,12 @@ from plone.app.portlets.portlets import base
 from plone.app.querystring import queryparser
 from plone.app.uuid.utils import uuidToObject
 from plone.base.interfaces.controlpanel import ISiteSchema
+from plone.event.interfaces import IEvent
 from plone.memoize import ram
 from plone.memoize.compress import xhtml_compress
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 from zope import schema
@@ -29,41 +31,44 @@ from zope.interface import implementer
 
 
 def _render_events_cachekey(method, self):
-    # XXX: Since the events portlet shows the upcoming events, I will simply get
-    # the most recently modified event using the same logic, and return its uuid
-    # and last modified date as key. If there is a change, then the most expensive
-    # computation can be performed
+    # Since the events portlet shows the upcoming events, we simply get the
+    # most recently modified event and return its uuid and last modified date
+    # as key. If there is a change, then the most expensive computation can be
+    # performed.
 
-    site = getSite()
-    pc = site.portal_catalog
+    cat = getToolByName(getSite(), "portal_catalog")
 
     query = {}
     data = self.data
     if data.state:
-        query['review_state'] = data.state
+        query["review_state"] = data.state
 
-    query.update(self.request.get('contentFilter', {}))
+    query.update(self.request.get("contentFilter", {}))
     if ISyndicatableCollection and ISyndicatableCollection.providedBy(self.search_base):
         # Whatever sorting is defined, we're overriding it.
         query = queryparser.parseFormquery(
-            self.search_base, self.search_base.query,
-            sort_on='start', sort_order=None
+            self.search_base, self.search_base.query, sort_on="start", sort_order=None
         )
     else:
         if self.search_base_path:
-            query['path'] = {'query': self.search_base_path}
+            query["path"] = {"query": self.search_base_path}
 
-    query['portal_type'] = 'Event'
-    query['sort_on'] = 'start'
-    query['sort_order'] = 'asc'
-    query['sort_limit'] = data.count
+    # Any object with an IEvent interface.
+    query["object_provides"] = IEvent.__identifier__
+    # Only upcoming events.
+    query.update(start_end_query(start=localized_now(), end=None))
+    # Sort on last modified.
+    query["sort_on"] = "modified"
+    # We only need the most recent modified event.
+    query["sort_order"] = "reverse"
+    query["sort_limit"] = 1
 
-    events = pc(**query)
+    events = cat(**query)
     uuid = ""
     modified = 0
-    for event in events:
-        uuid += event.UID
-        modified += event.modified.asdatetime().timestamp()
+    if events:
+        uuid += events[0].UID
+        modified += events[0].modified.asdatetime().timestamp()
 
     return (uuid, modified)
 
