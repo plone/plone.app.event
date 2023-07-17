@@ -298,10 +298,12 @@ class EventsICal(BrowserView):
         return cal.to_ical()
 
     def __call__(self):
+        ical = self.get_ical_string()
         name = '%s.ics' % self.context.getId()
         self.request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         self.request.RESPONSE.setHeader(
             'Content-Disposition',
             'attachment; filename="%s"' % name
         )
-        self.request.RESPONSE.write(self.get_ical_string())
+        self.request.RESPONSE.setHeader('Content-Length', len(ical))
+        self.request.RESPONSE.write(ical)

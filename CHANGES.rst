@@ -17,6 +17,18 @@ Bug fixes:
 - Fixed Spanish translations.  [Corina Riba] (#0)
 
 
+1.1.13 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix missing Content-Length header when exporting iCal
+  [laulaz]
+
+- Fix developement buildout
+  [laulaz]
+
+
 1.1.12 (2018-03-07)
 -------------------
 

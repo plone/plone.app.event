@@ -52,8 +52,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter((self.now_event, request), name='ics_view')
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
 
         self.checkOrder(
@@ -103,8 +104,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         )
         view = getMultiAdapter((occ, request), name='ics_view')
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
         self.assertTrue('Now Event' in icalstr)
         self.assertTrue('RRULE' not in icalstr)
@@ -113,8 +115,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         headers, output, request = make_fake_response(self.request)
         view = getMultiAdapter((self.portal, request), name='ics_view')
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
 
         # No occurrences in export. Otherwise count would be 8.
@@ -207,8 +210,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         )
         view.mode = 'all'
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
         # No occurrences in export. Otherwise count would be 8.
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
@@ -225,8 +229,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
         view.mode = 'day'
         view._date = '2013-04-27'
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 2)
         self.assertTrue('Past Event' in icalstr)
@@ -241,8 +246,9 @@ class ICalendarExportTestDX(AbstractSampleDataEvents):
             name='ics_view'
         )
         view()
-        self.assertEqual(len(headers), 2)
+        self.assertEqual(len(headers), 3)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.assertTrue('Content-Length' in headers)
         icalstr = ''.join(output)
         self.assertEqual(icalstr.count('BEGIN:VEVENT'), 4)
 
