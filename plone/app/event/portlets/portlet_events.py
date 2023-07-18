@@ -36,12 +36,15 @@ def _render_events_cachekey(method, self):
     # as key. If there is a change, then the most expensive computation can be
     # performed.
 
-    cat = getToolByName(getSite(), "portal_catalog")
+    site = getSite()
+    cat = getToolByName(site, "portal_catalog")
 
     query = {}
     data = self.data
     if data.state:
         query["review_state"] = data.state
+
+    start = localized_now(site)
 
     query.update(self.request.get("contentFilter", {}))
     if ISyndicatableCollection and ISyndicatableCollection.providedBy(self.search_base):
@@ -49,26 +52,26 @@ def _render_events_cachekey(method, self):
         query = queryparser.parseFormquery(
             self.search_base, self.search_base.query, sort_on="start", sort_order=None
         )
-    else:
-        if self.search_base_path:
-            query["path"] = {"query": self.search_base_path}
+        if "start" in query:
+            start = query["start"]
+    elif self.search_base_path:
+        query["path"] = {"query": self.search_base_path}
 
     # Any object with an IEvent interface.
     query["object_provides"] = IEvent.__identifier__
     # Only upcoming events.
-    query.update(start_end_query(start=localized_now(), end=None))
-    # Sort on last modified.
-    query["sort_on"] = "modified"
-    # We only need the most recent modified event.
-    query["sort_order"] = "reverse"
-    query["sort_limit"] = 1
+    query.update(start_end_query(start=start, end=None))
+    # We want to get the next data.count events, just as the portlet would.
+    query["sort_on"] = "start"
+    query["sort_order"] = "asc"
+    query["sort_limit"] = data.count
 
     events = cat(**query)
     uuid = ""
     modified = 0
-    if events:
-        uuid += events[0].UID
-        modified += events[0].modified.asdatetime().timestamp()
+    for event in events:
+        uuid += event.UID
+        modified += event.modified.asdatetime().timestamp()
 
     return (uuid, modified)
 
