@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.0 (2023-07-22)
+------------------
+
+New features:
+
+
+- Cache the events from the 'Upcoming Events' portlet
+  [frapell] (#351)
+
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs] (5ed054fb)
+
+
 5.0.1 (2023-04-15)
 ------------------
 
