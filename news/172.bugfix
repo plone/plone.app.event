@@ -1,0 +1,1 @@
+Fixed editable install with pip by moving code to ``src/plone``.  [maurits]

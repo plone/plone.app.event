@@ -1,7 +1,7 @@
 include *.rst
 include LICENSE.GPL
 recursive-include docs *
-recursive-include plone *
+recursive-include src *
 global-include *.mo
 global-exclude *pyc *~
 prune devsrc
