@@ -181,9 +181,27 @@ class RendererTest(unittest.TestCase):
         self.assertTrue("?mode=day&amp;date=" in rd)
 
     def test_long_event(self):
+        """Test a long event.
+
+        An event happening on three days, should have an indication on all
+        three days.  That is the main thing we test here.
+
+        But the test may fail on the first day of the month.
+        See https://github.com/plone/plone.app.event/issues/334
+        When generating the portlet on the first day of the month, it seems
+        depending on time zones we might get the previous month.  This would
+        mean our event is not (fully) visible.  So we force showing the
+        calendar of the month that we want.  This test is not about whether
+        the correct month is shown at one minute past midnight.
+
+        Previously we created an event on the first day.  But depending on
+        the day of the week that the new month starts, this may also influence
+        what is visible: we may see Friday 1st and Saturday 2nd, but not
+        Sunday 3rd.  So now we pick a day in the middle of the month.
+        """
         tz = pytz.timezone(TZNAME)
         actual = tz.localize(datetime.now())
-        start = tz.localize(datetime(actual.year, actual.month, 1))
+        start = tz.localize(datetime(actual.year, actual.month, 15))
         end = start + timedelta(days=2)
 
         e1 = createContentInContainer(
@@ -191,6 +209,8 @@ class RendererTest(unittest.TestCase):
         )
         self.portal.portal_workflow.doActionFor(e1, "publish")
 
+        self.request["year"] = actual.year
+        self.request["month"] = actual.month
         r = self.renderer(assignment=portlet_calendar.Assignment(state=("published",)))
         r.update()
         rd = r.render()
