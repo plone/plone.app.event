@@ -1,0 +1,5 @@
+Require setuptools 68.2 or higher for building the package.
+When built with setuptools 68.1, you could not import the package, at least not an editable package.
+Note that you can still *install* this package with older setuptools versions.
+See `Plone meta issue 172 <https://github.com/plone/meta/issues/172>`_ for details.
+[maurits]
