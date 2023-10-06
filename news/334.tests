@@ -1,3 +1,0 @@
-Fix test_long_event when run around midnight of the first day of the month.
-Fixes `issue 334 <https://github.com/plone/plone.app.event/issues/334>`_.
-[maurits]

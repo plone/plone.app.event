@@ -8,6 +8,27 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.1 (2023-10-07)
+------------------
+
+Internal:
+
+
+- Require setuptools 68.2 or higher for building the package.
+  When built with setuptools 68.1, you could not import the package, at least not an editable package.
+  Note that you can still *install* this package with older setuptools versions.
+  See `Plone meta issue 172 <https://github.com/plone/meta/issues/172>`_ for details.
+  [maurits] (#172)
+
+
+Tests
+
+
+- Fix test_long_event when run around midnight of the first day of the month.
+  Fixes `issue 334 <https://github.com/plone/plone.app.event/issues/334>`_.
+  [maurits] (#334)
+
+
 5.1.0 (2023-07-22)
 ------------------
 
