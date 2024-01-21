@@ -885,7 +885,7 @@ Fixes:
   [thet]
 
 - Remove the ``plone.app.event.EventTypes`` vocabulary, which relied on
-  temporaily creating types. It's used for importing ical files. It should be
+  temporarily creating types. It's used for importing ical files. It should be
   possible to figure out, which types might suitable for creating events from
   ical VEVENT entries.
   [thet]
@@ -1172,7 +1172,7 @@ Fixes:
   [thet]
 
 - Remove "ploneintegration" from setuptools extra section and GenericSetup
-  profile. PLEASE UPDATE YOUR INSTALLTIONS, to use Archetypes or Dexterity
+  profile. PLEASE UPDATE YOUR INSTALLATIONS, to use Archetypes or Dexterity
   instead and to use plone.app.portlets 2.5a1! This change makes it easier for
   Plone to integrate plone.app.event.
   [thet]
