@@ -21,7 +21,7 @@ plone.app.event - a calendar framework for Plone
 
     It was developed with these goals in mind:
 
-    - Encapsulation and independence: All event related code should reside in a single package. Relevant, re-usable functionality is split to separate packages.  Plone's dependencies on calendar related code should be reduced to a minimum. plone.app.event should be able to be deinstalled from Plone.
+    - Encapsulation and independence: All event related code should reside in a single package. Relevant, reusable functionality is split to separate packages.  Plone's dependencies on calendar related code should be reduced to a minimum. plone.app.event should be able to be deinstalled from Plone.
 
     - Dexterity and Archetypes support: plone.app.event should provide Dexterity behaviors, which can be used in Dexterity types and an ATEvent content type (factored out from ATContentTypes). For a Dexterity event type, use plone.app.contenttypes 1.1 or newer.
 
