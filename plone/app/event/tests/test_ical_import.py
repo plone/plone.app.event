@@ -85,8 +85,8 @@ class TestICALImportSettings(unittest.TestCase):
         self.assertIn(
             "URL to an external icalendar resource file", self.browser.contents
         )
-        self.browser.getControl(
-            name="form.widgets.ical_url"
-        ).value = "file:///tmp/test.ical"
+        self.browser.getControl(name="form.widgets.ical_url").value = (
+            "file:///tmp/test.ical"
+        )
         self.browser.getControl(name="form.buttons.save").click()
         self.assertIn("URLs with file: are not allowed.", self.browser.contents)
