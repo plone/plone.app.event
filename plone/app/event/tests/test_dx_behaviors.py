@@ -101,17 +101,17 @@ class TestDXAddEdit(unittest.TestCase):
             )
         )
 
-        self.browser.getControl(
-            name="form.widgets.IDublinCore.title"
-        ).value = "TestEvent"
+        self.browser.getControl(name="form.widgets.IDublinCore.title").value = (
+            "TestEvent"
+        )
 
         # TODO: these values are simply not set in the pat-pickadate pattern.
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.start"
-        ).value = "2014-03-30"
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.end"
-        ).value = "2014-03-31"
+        self.browser.getControl(name="form.widgets.IEventBasic.start").value = (
+            "2014-03-30"
+        )
+        self.browser.getControl(name="form.widgets.IEventBasic.end").value = (
+            "2014-03-31"
+        )
 
         self.browser.getControl("Save").click()
 
@@ -165,17 +165,17 @@ class TestDXAddEdit(unittest.TestCase):
         #
         self.browser.open(self.portal.absolute_url())
         self.browser.getLink("plone.app.event.dx.event").click()
-        self.browser.getControl(
-            name="form.widgets.IDublinCore.title"
-        ).value = "TestEvent"
+        self.browser.getControl(name="form.widgets.IDublinCore.title").value = (
+            "TestEvent"
+        )
 
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.start"
-        ).value = "2014-03-30T03:51"
+        self.browser.getControl(name="form.widgets.IEventBasic.start").value = (
+            "2014-03-30T03:51"
+        )
 
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.end"
-        ).value = "2014-03-30T04:51"
+        self.browser.getControl(name="form.widgets.IEventBasic.end").value = (
+            "2014-03-30T04:51"
+        )
 
         self.browser.getControl("Save").click()
 
@@ -191,13 +191,13 @@ class TestDXAddEdit(unittest.TestCase):
         testevent = self.portal.testevent
         self.browser.open("%s/@@edit" % testevent.absolute_url())
 
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.start"
-        ).value = "2014-03-31T03:51"
+        self.browser.getControl(name="form.widgets.IEventBasic.start").value = (
+            "2014-03-31T03:51"
+        )
 
-        self.browser.getControl(
-            name="form.widgets.IEventBasic.end"
-        ).value = "2014-03-31T04:51"
+        self.browser.getControl(name="form.widgets.IEventBasic.end").value = (
+            "2014-03-31T04:51"
+        )
 
         self.browser.getControl("Save").click()
 
@@ -574,15 +574,15 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         ann = IAnnotations(e1)
         ann["plone.app.event.dx.behaviors.IEventLocation.location"] = self.location
         ann["plone.app.event.dx.behaviors.IEventAttendees.attendees"] = self.attendees
-        ann[
-            "plone.app.event.dx.behaviors.IEventContact.contact_email"
-        ] = self.contact_email
-        ann[
-            "plone.app.event.dx.behaviors.IEventContact.contact_name"
-        ] = self.contact_name
-        ann[
-            "plone.app.event.dx.behaviors.IEventContact.contact_phone"
-        ] = self.contact_phone
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_email"] = (
+            self.contact_email
+        )
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_name"] = (
+            self.contact_name
+        )
+        ann["plone.app.event.dx.behaviors.IEventContact.contact_phone"] = (
+            self.contact_phone
+        )
         ann["plone.app.event.dx.behaviors.IEventContact.event_url"] = self.event_url
         ann["plone.app.event.dx.behaviors.IEventSummary.text"] = RichTextValue(
             raw=self.text
@@ -624,9 +624,9 @@ class TestDXAnnotationStorageUpdate(unittest.TestCase):
         ann["plone.app.event.dx.behaviors.IEventLocation.location"] = (
             self.location + "X"
         )
-        ann[
-            "plone.app.event.dx.behaviors.IEventAttendees.attendees"
-        ] = self.attendees + ("Paula",)
+        ann["plone.app.event.dx.behaviors.IEventAttendees.attendees"] = (
+            self.attendees + ("Paula",)
+        )
         ann["plone.app.event.dx.behaviors.IEventContact.contact_email"] = (
             self.contact_email + "X"
         )

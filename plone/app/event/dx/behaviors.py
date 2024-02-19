@@ -1,5 +1,6 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
+
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import _
 from plone.app.event.base import default_end as default_end_dt
@@ -61,7 +62,6 @@ def default_end(context):
 
 
 class IEventBasic(model.Schema, IDXEvent):
-
     """Basic event schema."""
 
     start = schema.Datetime(
@@ -129,7 +129,6 @@ class IEventBasic(model.Schema, IDXEvent):
 
 
 class IEventRecurrence(model.Schema, IDXEventRecurrence):
-
     """Recurring Event Schema."""
 
     recurrence = schema.Text(
@@ -151,7 +150,6 @@ class IEventRecurrence(model.Schema, IDXEventRecurrence):
 
 
 class IEventLocation(model.Schema):
-
     """Event Location Schema."""
 
     location = schema.TextLine(
@@ -164,7 +162,6 @@ class IEventLocation(model.Schema):
 
 
 class IEventAttendees(model.Schema):
-
     """Event Attendees Schema."""
 
     attendees = schema.Tuple(
@@ -179,7 +176,6 @@ class IEventAttendees(model.Schema):
 
 
 class IEventContact(model.Schema):
-
     """Event Contact Schema."""
 
     contact_name = schema.TextLine(
@@ -282,7 +278,6 @@ def sync_uid_indexer(obj):
 @adapter(IDXEvent)
 @implementer(IEventAccessor)
 class EventAccessor:
-
     """Generic event accessor adapter implementation for Dexterity content
     objects.
     """
