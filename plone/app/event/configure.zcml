@@ -12,7 +12,6 @@
   <include package="plone.event" />
   <include package="plone.resource" />
   <include package="plone.formwidget.recurrence" />
-  <include package="plone.app.portlets" />
   <include package="plone.app.registry" />
   <include package="plone.app.z3cform" />
 
@@ -20,11 +19,16 @@
   <include file="permissions.zcml" />
   <include package=".dx" />
   <include package=".browser" />
-  <include package=".portlets" />
   <include package=".ical" />
   <include file="recurrence.zcml" />
   <include package=".upgrades" />
 
+  <configure zcml:condition="not-have disable-classic-ui">
+    <configure zcml:condition="installed plone.app.portlets">
+      <include package="plone.app.portlets" />
+      <include package=".portlets" />
+    </configure>
+  </configure>
   <utility
       name="plone.app.event.SynchronizationStrategies"
       component=".vocabularies.SynchronizationStrategies"
