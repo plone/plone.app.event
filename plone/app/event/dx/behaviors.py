@@ -1,7 +1,6 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 
-from plone import api
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import _
 from plone.app.event.base import default_end as default_end_dt
@@ -40,6 +39,7 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from zope.component.hooks import getSite
 
 
 def first_weekday_sun0():
@@ -345,8 +345,10 @@ class EventAccessor:
         with ram cache: portal/testtermin
         without ram cache: http://site.local/testevent
         """
-        portal_url = api.portal.get().absolute_url()
-        portal_path = list(api.portal.get().getPhysicalPath())
+
+        portal = getSite()
+        portal_url = portal.absolute_url()
+        portal_path = list(portal.getPhysicalPath())
         event_path = list(self.context.getPhysicalPath())
         path_without_portal = ""
         if len(portal_path) > 0:
