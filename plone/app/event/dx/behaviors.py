@@ -1,6 +1,7 @@
 """Behaviors to enable calendarish event extension to dexterity content types.
 """
 
+from plone import api
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import _
 from plone.app.event.base import default_end as default_end_dt
@@ -339,7 +340,21 @@ class EventAccessor:
 
     @property
     def url(self):
-        return safe_text(self.context.absolute_url())
+        """calculate the path, is required as long the ram.cache is activ in portlets renderer
+        the return value of self.context.absolute_url() differs
+        with ram cache: portal/testtermin
+        without ram cache: http://site.local/testevent
+        """
+        portal_url = api.portal.get().absolute_url()
+        portal_path = list(api.portal.get().getPhysicalPath())
+        event_path = list(self.context.getPhysicalPath())
+        path_without_portal = ""
+        if len(portal_path) > 0:
+            path_without_portal = "/".join(event_path[len(portal_path) :])
+
+        url = f"{portal_url}/{path_without_portal}"
+
+        return safe_text(url)
 
     @property
     def created(self):
