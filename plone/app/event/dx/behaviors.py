@@ -340,7 +340,7 @@ class EventAccessor:
 
     @property
     def url(self):
-        """calculate the path, is required as long the ram.cache is activ in portlets renderer
+        """calculate the path, is required as long the ram.cache is active in portlets renderer
         the return value of self.context.absolute_url() differs
         with ram cache: portal/testtermin
         without ram cache: http://site.local/testevent
