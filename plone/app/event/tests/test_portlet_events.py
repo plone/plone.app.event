@@ -7,7 +7,6 @@ from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
-from plone.app.event.tests.base_setup import patched_now as PN
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -21,7 +20,6 @@ from plone.portlets.interfaces import IPortletType
 from plone.testing.zope import Browser
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
-from unittest import mock
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -259,8 +257,6 @@ class FunctionalTestCachedPortletEvents(AbstractSampleDataEvents):
     layer = PAEventDX_FUNCTIONAL_TESTING
 
     def setUp(self):
-        from dateutil.relativedelta import relativedelta
-
         super().setUp()
 
         # a event in the future is needed, show in the portlet
