@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
@@ -45,8 +46,9 @@ class AbstractSampleDataEvents(unittest.TestCase):
         past = self.past = tz.normalize(now - timedelta(days=10))
         future = self.future = tz.normalize(now + timedelta(days=10))
         far = self.far = tz.normalize(now + timedelta(days=30))
+        scifi = self.scifi = tz.normalize(now + relativedelta(years=50))
         duration = self.duration = timedelta(hours=1)
-        return (now, past, future, far, duration)
+        return (now, past, future, far, duration, scifi)
 
     def setUp(self):
         """Construct sample contents.
@@ -72,7 +74,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         set_browserlayer(self.request)
         set_timezone(TEST_TIMEZONE)
 
-        now, past, future, far, duration = self.make_dates()
+        now, past, future, far, duration, scifi = self.make_dates()
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
         workflow = getToolByName(self.portal, "portal_workflow")
         workflow.setDefaultChain("simple_publication_workflow")
