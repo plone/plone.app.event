@@ -1,6 +1,5 @@
 from datetime import datetime
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 from plone.app.event.dx import behaviors
 from plone.app.event.testing import set_browserlayer
 from plone.app.event.testing import set_timezone
@@ -46,7 +45,7 @@ class AbstractSampleDataEvents(unittest.TestCase):
         past = self.past = tz.normalize(now - timedelta(days=10))
         future = self.future = tz.normalize(now + timedelta(days=10))
         far = self.far = tz.normalize(now + timedelta(days=30))
-        scifi = self.scifi = tz.normalize(now + relativedelta(years=50))
+        scifi = self.scifi = tz.normalize(now + 50 * timedelta(days=365))
         duration = self.duration = timedelta(hours=1)
         return (now, past, future, far, duration, scifi)
 
