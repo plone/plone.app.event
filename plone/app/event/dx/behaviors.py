@@ -32,6 +32,7 @@ from z3c.form.browser.text import TextFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.component import adapter
+from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import implementer
@@ -39,7 +40,6 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
-from zope.component.hooks import getSite
 
 
 def first_weekday_sun0():
