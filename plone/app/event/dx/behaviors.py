@@ -339,7 +339,12 @@ class EventAccessor:
 
     @property
     def url(self):
-        return safe_text(self.context.absolute_url())
+        """need to lookup globalrequest in order to calculate
+        correct URL during cached lookup (eg. in event portlet renderer)
+        """
+        request = getRequest()
+        absolute_url = request.physicalPathToURL(self.context.getPhysicalPath())
+        return absolute_url
 
     @property
     def created(self):

@@ -2,9 +2,11 @@ from datetime import timedelta
 from plone.app.event.base import localized_now
 from plone.app.event.portlets import portlet_events
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
+from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
+from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.portlets.storage import PortletAssignmentMapping
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -15,6 +17,7 @@ from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRenderer
 from plone.portlets.interfaces import IPortletType
+from plone.testing.zope import Browser
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from zExceptions import Unauthorized
@@ -248,3 +251,65 @@ class RendererTest(unittest.TestCase):
         rd = r.render()
         self.assertTrue("?mode=future" in rd)
         self.assertTrue("?mode=past" in rd)
+
+
+class FunctionalTestCachedPortletEvents(AbstractSampleDataEvents):
+    layer = PAEventDX_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super().setUp()
+
+        # a event in the future is needed, show in the portlet
+
+        self.scifi_event = self.event_factory(
+            container=self.portal.sub,
+            id="scifi_event",
+            title="Long Event in the future",
+            start=self.scifi,
+            location="My Home",
+        )
+        workflow = getToolByName(self.portal, "portal_workflow")
+        workflow.setDefaultChain("simple_publication_workflow")
+        workflow.doActionFor(self.scifi_event, "publish")
+        self.scifi_event.reindexObject()
+
+    def anonymous_browser(self):
+        """Browser of anonymous user"""
+        import transaction
+
+        transaction.commit()
+        browser = Browser(self.layer["app"])
+        browser.handleErrors = False
+        return browser
+
+    def test_event_portlet_links(self):
+        from io import StringIO
+        from lxml import etree
+
+        # first request, events not in ram cache
+        browser = self.anonymous_browser()
+        browser.open(f"{self.portal.absolute_url()}")
+        tree = etree.parse(StringIO(browser.contents), etree.HTMLParser())
+        result = tree.xpath("//li[contains(@class,'portletItem even')]/a/@href")
+
+        self.assertEqual(
+            result[0],
+            "http://nohost/plone/sub/scifi_event",
+            "URL of Event is wrong",
+        )
+
+        # second request, events are in ram cache
+        browser = self.anonymous_browser()
+        browser.open(f"{self.portal.absolute_url()}")
+        tree = etree.parse(StringIO(browser.contents), etree.HTMLParser())
+        result = tree.xpath("//li[contains(@class,'portletItem even')]/a/@href")
+
+        self.assertEqual(
+            result[0],
+            "http://nohost/plone/sub/scifi_event",
+            "URL of Event, calculate from ram cache, is wrong",
+        )
+
+    def tearDown(self):
+        if "scifi_event" in self.portal.sub.keys():
+            del self.portal.sub["scifi_event"]

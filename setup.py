@@ -85,6 +85,7 @@ setup(
             "plone.app.testing [robot]",
             "plone.testing",
             "robotsuite",
+            "lxml",
         ],
     },
 )
