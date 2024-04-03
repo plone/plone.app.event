@@ -32,7 +32,6 @@ from z3c.form.browser.text import TextFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.component import adapter
-from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import implementer
@@ -340,23 +339,12 @@ class EventAccessor:
 
     @property
     def url(self):
-        """calculate the path, is required as long the ram.cache is active in portlets renderer
-        the return value of self.context.absolute_url() differs
-        with ram cache: portal/testtermin
-        without ram cache: http://site.local/testevent
+        """need to lookup globalrequest in order to calculate
+        correct URL during cached lookup (eg. in event portlet renderer)
         """
-
-        portal = getSite()
-        portal_url = portal.absolute_url()
-        portal_path = list(portal.getPhysicalPath())
-        event_path = list(self.context.getPhysicalPath())
-        path_without_portal = ""
-        if len(portal_path) > 0:
-            path_without_portal = "/".join(event_path[len(portal_path) :])
-
-        url = f"{portal_url}/{path_without_portal}"
-
-        return safe_text(url)
+        request = getRequest()
+        absolute_url = request.physicalPathToURL(self.context.getPhysicalPath())
+        return absolute_url
 
     @property
     def created(self):
