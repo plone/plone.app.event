@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.2 (2024-04-16)
+------------------
+
+Bug fixes:
+
+
+- Fix calculation of eventaccessor urls @1letter (#387)
+
+
 5.1.1 (2023-10-07)
 ------------------
 
