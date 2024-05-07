@@ -502,5 +502,5 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertTrue(end21 < end22)
 
     def test_add_to_zones_map(self):
-        tzmap = add_to_zones_map({}, 'Africa/Abidjan', datetime(2013, 1, 1, 0, 0))
-        self.assertTrue('Africa/Abidjan' in tzmap)
+        tzmap = add_to_zones_map({}, "Africa/Abidjan", datetime(2013, 1, 1, 0, 0))
+        self.assertTrue("Africa/Abidjan" in tzmap)
