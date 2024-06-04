@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.3 (2024-05-30)
+------------------
+
+Bug fixes:
+
+
+- Conditionally load the zcml for our portlets.
+  [maurits] (#3923)
+
+
 5.1.2 (2024-04-16)
 ------------------
 
