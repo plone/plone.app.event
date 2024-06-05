@@ -111,7 +111,6 @@ def add_to_zones_map(tzmap, tzid, dt):
     if tzid.lower() == "utc" or not is_datetime(dt):
         # no need to define UTC nor timezones for date objects.
         return tzmap
-    null = datetime(1, 1, 1)
     tz = pytz.timezone(tzid)
     transitions = getattr(tz, "_utc_transition_times", None)
     if not transitions:
@@ -125,7 +124,7 @@ def add_to_zones_map(tzmap, tzid, dt):
     #     datetime, which wouldn't create a match within the max-function. this
     #     way we get the maximum transition time which is smaller than the
     #     given datetime.
-    transition = max(transitions, key=lambda item: item if item <= dtzl else null)
+    transition = max(transitions, key=lambda item: item if item <= dtzl else dt.min)
 
     # get previous transition to calculate tzoffsetfrom
     idx = transitions.index(transition)
@@ -133,10 +132,10 @@ def add_to_zones_map(tzmap, tzid, dt):
     prev_transition = transitions[prev_idx]
 
     def localize(tz, dt):
-        if dt is null:
+        if dt is datetime.min:
             # dummy time, edge case
-            # (dt at beginning of all transitions, see above.)
-            return null
+            # (dt at beginning of all transitions)
+            return dt.min
         return pytz.utc.localize(dt).astimezone(tz)  # naive to utc + localize
 
     transition = localize(tz, transition)
