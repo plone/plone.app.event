@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.4 (2024-06-07)
+------------------
+
+Bug fixes:
+
+
+- Don't error out on 'Africa/Abidjan' timezone [gyst] (#393)
+
+
 5.1.3 (2024-05-30)
 ------------------
 
