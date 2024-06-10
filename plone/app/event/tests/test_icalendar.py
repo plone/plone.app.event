@@ -1,6 +1,7 @@
 from datetime import datetime
 from plone.app.event import base
 from plone.app.event.dx.traverser import OccurrenceTraverser as OccTravDX
+from plone.app.event.ical.exporter import add_to_zones_map
 from plone.app.event.ical.importer import ical_import
 from plone.app.event.testing import make_fake_response
 from plone.app.event.testing import PAEventDX_FUNCTIONAL_TESTING
@@ -499,3 +500,7 @@ class TestIcalImportDX(unittest.TestCase):
         self.assertNotEqual(desc21, desc22)
         self.assertTrue(start21 < start22)
         self.assertTrue(end21 < end22)
+
+    def test_add_to_zones_map(self):
+        tzmap = add_to_zones_map({}, "Africa/Abidjan", datetime(2013, 1, 1, 0, 0))
+        self.assertTrue("Africa/Abidjan" in tzmap)
