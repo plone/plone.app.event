@@ -1,6 +1,8 @@
 from calendar import monthrange
 from datetime import date
+from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
 from plone.app.event import _
 from plone.app.event.base import _prepare_range
@@ -238,7 +240,20 @@ class EventListing(BrowserView):
             r = end.get("range")
             if r == "min":
                 se["start"] = q
+        se = self.convert_values_to_datetime(se)
         return se["start"], se["end"]
+    
+    def convert_values_to_datetime(self, se):
+        # needed to make the comparisons possible between dates in the expand_events method 
+        for key, time in se.items():
+            if isinstance(time, DateTime):
+                se[key] = time.asdatetime()
+            if isinstance(time, str):
+                tz = self.now.tzinfo
+                naive_time = datetime.fromisoformat(time)
+                aware_time=  naive_time.replace(tzinfo=tz)
+                se[key] = aware_time
+        return se
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(
