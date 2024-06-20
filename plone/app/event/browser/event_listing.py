@@ -68,20 +68,30 @@ class EventListing(BrowserView):
             ).isoformat()
 
         if self.mode is None:
-            self.mode = "day" if self._date else "future"
+            if self._date:
+                self.mode = "day"
+            elif self.is_start_or_end_in_query():
+                self.mode = "all"
+            else:
+                self.mode = "future"
 
         self.uid = None  # Used to get all occurrences from a single event. Overrides all other settings  # noqa
 
-    @property
-    def show_filter(self):
-        ret = True
+    def is_start_or_end_in_query(self): 
         if self.is_collection:
             ctx = self.default_context
             query = queryparser.parseFormquery(ctx, ctx.query)
             if "start" in query or "end" in query:
-                # Don't show the date filter, if a date is given in the
-                # collection's query
-                ret = False
+                return True
+        return False
+
+    @property
+    def show_filter(self):
+        ret = True
+        if self.is_start_or_end_in_query():
+            # Don't show the date filter, if a date is given in the
+            # collection's query
+            ret = False
         return ret
 
     @property
@@ -152,12 +162,14 @@ class EventListing(BrowserView):
                 ctx, ctx.query, sort_on=sort_on, sort_order=sort_order
             )
             custom_query = self.request.get("contentFilter", {})
-            if "start" not in query or "end" not in query:
-                # ... else don't show the navigation bar
+            # only use custom end or start dates, if none are used by the collection
+            if "start" not in query and "end" not in query:
                 start, end = self._start_end
                 start, end = _prepare_range(ctx, start, end)
                 custom_query.update(start_end_query(start, end))
-            res = ctx.results(batch=False, brains=True, custom_query=custom_query)
+                res = ctx.results(batch=False, brains=True, custom_query=custom_query)
+            else:
+                res = ctx.results(batch=False, brains=True)
             if expand:
                 # get start and end values from the query to ensure limited
                 # listing for occurrences
