@@ -269,3 +269,91 @@ class RendererTest(unittest.TestCase):
         r.update()
         today = localized_today(self.portal)
         self.assertEqual(r.year_month_display(), (today.year, today.month))
+
+    def test_with_collection_as_source(self):
+        """When selecting a Collection as source, the events in that collection
+        are used to build the calendar
+        """
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(hours=1)
+
+        e1 = createContentInContainer(
+            self.portal, PTYPE, title="e1", start=start, end=end
+        )
+        self.portal.invokeFactory("Folder", "eventfolder")
+        createContentInContainer(
+            self.portal.eventfolder, PTYPE, title="e2", start=start, end=end
+        )
+        self.portal.portal_workflow.doActionFor(e1, "publish")
+
+        self.portal.invokeFactory(
+            "Collection",
+            "eventcollection",
+            query=[
+                {
+                    "i": "portal_type",
+                    "o": "plone.app.querystring.operation.selection.any",
+                    "v": ["Event"],
+                },
+                {
+                    "i": "end",
+                    "o": "plone.app.querystring.operation.date.afterToday",
+                    "v": "",
+                },
+            ],
+        )
+        self.portal
+
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                state=("draft",), search_base_uid=self.portal.eventcollection.UID()
+            )
+        )
+        r.update()
+        rd = r.render()
+        self.assertTrue("e1" not in rd and "e2" not in rd)
+
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                state=("published",), search_base_uid=self.portal.eventcollection.UID()
+            )
+        )
+        r.update()
+        rd = r.render()
+        self.assertTrue("e1" in rd and "e2" not in rd)
+
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                state=(
+                    "published",
+                    "private",
+                )
+            )
+        )
+        r.update()
+        rd = r.render()
+        self.assertTrue("e1" in rd and "e2" in rd)
+
+        r = self.renderer(assignment=portlet_calendar.Assignment())
+        r.update()
+        rd = r.render()
+        self.assertTrue("e1" in rd and "e2" in rd)
+
+        # No search base gives calendar urls with event_listing part
+        self.assertTrue("event_listing?mode=day" in rd)
+
+        r = self.renderer(
+            assignment=portlet_calendar.Assignment(
+                search_base_uid=self.portal.eventfolder.UID()
+            )
+        )
+        r.update()
+        rd = r.render()
+        self.assertTrue("e1" not in rd and "e2" in rd)
+
+        # A given search base gives calendar urls without event_listing part
+        self.assertTrue("event_listing?mode=day" not in rd)
+
+        # link to calendar view in rendering
+        self.assertTrue("?mode=day&amp;date=" in rd)
