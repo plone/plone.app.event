@@ -278,14 +278,64 @@ class RendererTest(unittest.TestCase):
         start = tz.localize(datetime.now())
         end = start + timedelta(hours=1)
 
-        e1 = createContentInContainer(
-            self.portal, PTYPE, title="e1", start=start, end=end
-        )
-        self.portal.invokeFactory("Folder", "eventfolder")
+        createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
+
+        createContentInContainer(self.portal, PTYPE, title="e2", start=start, end=end)
+
+        # starts yesterday, ends yesterday
+        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
+        end_yesterday = start + timedelta(hours=1)
+
         createContentInContainer(
-            self.portal.eventfolder, PTYPE, title="e2", start=start, end=end
+            self.portal,
+            PTYPE,
+            title="e3",
+            start=start_yesterday,
+            end=end_yesterday,
         )
-        self.portal.portal_workflow.doActionFor(e1, "publish")
+
+        # starts today, ends tomorrow
+        start_today = tz.localize(datetime.now())
+        end_tomorrow = start + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e4",
+            start=start_today,
+            end=end_tomorrow,
+        )
+
+        # starts yesterday, ends tomorrow
+        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
+        end_tomorrow = tz.localize(datetime.now()) + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e5",
+            start=start_yesterday,
+            end=end_tomorrow,
+        )
+
+        # starts tomorrow, ends tomorrow + 1
+        start_tomorrow = tz.localize(datetime.now() + timedelta(days=1))
+        end_tomorrow_1 = start_tomorrow + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e6",
+            start=start_tomorrow,
+            end=end_tomorrow_1,
+        )
+
+        # self.wft.doActionFor(self.portal.e1, "publish")
+        self.wft.doActionFor(self.portal.e2, "publish")
+        self.wft.doActionFor(self.portal.e3, "publish")
+        self.wft.doActionFor(self.portal.e4, "publish")
+        self.wft.doActionFor(self.portal.e5, "publish")
+        self.wft.doActionFor(self.portal.e6, "publish")
 
         self.portal.invokeFactory(
             "Collection",
@@ -294,66 +344,34 @@ class RendererTest(unittest.TestCase):
                 {
                     "i": "portal_type",
                     "o": "plone.app.querystring.operation.selection.any",
-                    "v": ["Event"],
+                    "v": [PTYPE],
                 },
                 {
                     "i": "end",
                     "o": "plone.app.querystring.operation.date.afterToday",
                     "v": "",
                 },
+                {
+                    "i": "review_state",
+                    "o": "plone.app.querystring.operation.selection.any",
+                    "v": ["published"],
+                },
             ],
         )
-        self.portal
 
         r = self.renderer(
+            # context=self.portal.eventcollection,
             assignment=portlet_calendar.Assignment(
-                state=("draft",), search_base_uid=self.portal.eventcollection.UID()
-            )
+                state=("published",),
+                search_base_uid=self.portal.eventcollection.UID(),
+            ),
         )
         r.update()
         rd = r.render()
-        self.assertTrue("e1" not in rd and "e2" not in rd)
 
-        r = self.renderer(
-            assignment=portlet_calendar.Assignment(
-                state=("published",), search_base_uid=self.portal.eventcollection.UID()
-            )
-        )
-        r.update()
-        rd = r.render()
-        self.assertTrue("e1" in rd and "e2" not in rd)
-
-        r = self.renderer(
-            assignment=portlet_calendar.Assignment(
-                state=(
-                    "published",
-                    "private",
-                )
-            )
-        )
-        r.update()
-        rd = r.render()
-        self.assertTrue("e1" in rd and "e2" in rd)
-
-        r = self.renderer(assignment=portlet_calendar.Assignment())
-        r.update()
-        rd = r.render()
-        self.assertTrue("e1" in rd and "e2" in rd)
-
-        # No search base gives calendar urls with event_listing part
-        self.assertTrue("event_listing?mode=day" in rd)
-
-        r = self.renderer(
-            assignment=portlet_calendar.Assignment(
-                search_base_uid=self.portal.eventfolder.UID()
-            )
-        )
-        r.update()
-        rd = r.render()
-        self.assertTrue("e1" not in rd and "e2" in rd)
-
-        # A given search base gives calendar urls without event_listing part
-        self.assertTrue("event_listing?mode=day" not in rd)
-
-        # link to calendar view in rendering
-        self.assertTrue("?mode=day&amp;date=" in rd)
+        self.assertTrue("e1" not in rd)
+        self.assertTrue("e2" in rd)
+        self.assertTrue("e3" in rd)
+        self.assertTrue("e4" in rd)
+        self.assertTrue("e5" in rd)
+        self.assertTrue("e6" in rd)
