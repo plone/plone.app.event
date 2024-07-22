@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
-from DateTime import DateTime
 from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
 from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event import _
@@ -29,7 +28,6 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
 
 import calendar
-import datetime
 import json
 
 
@@ -217,9 +215,7 @@ class Renderer(base.Renderer):
             # except the start and the end, which should be
             # taken from the current calendar start and end
             start, end = _prepare_range(self.search_base, start, end)
-            query.update(
-                start_end_query(DateTime(start.isoformat()), DateTime(end.isoformat()))
-            )
+            query.update(start_end_query(start, end))
             events = self.search_base.results(
                 batch=False, brains=True, custom_query=query
             )
