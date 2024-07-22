@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from ComputedAttribute import ComputedAttribute
+from DateTime import DateTime
 from plone.app.contenttypes.behaviors.collection import ISyndicatableCollection
 from plone.app.contenttypes.interfaces import IFolder
 from plone.app.event import _
@@ -26,7 +27,6 @@ from zope import schema
 from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
-from DateTime import DateTime
 
 import calendar
 import datetime
