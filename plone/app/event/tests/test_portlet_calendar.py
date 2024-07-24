@@ -269,3 +269,109 @@ class RendererTest(unittest.TestCase):
         r.update()
         today = localized_today(self.portal)
         self.assertEqual(r.year_month_display(), (today.year, today.month))
+
+    def test_with_collection_as_source(self):
+        """When selecting a Collection as source, the events in that collection
+        are used to build the calendar
+        """
+        tz = pytz.timezone(TZNAME)
+        start = tz.localize(datetime.now())
+        end = start + timedelta(hours=1)
+
+        createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
+
+        createContentInContainer(self.portal, PTYPE, title="e2", start=start, end=end)
+
+        # starts yesterday, ends yesterday
+        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
+        end_yesterday = start + timedelta(hours=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e3",
+            start=start_yesterday,
+            end=end_yesterday,
+        )
+
+        # starts today, ends tomorrow
+        start_today = tz.localize(datetime.now())
+        end_tomorrow = start + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e4",
+            start=start_today,
+            end=end_tomorrow,
+        )
+
+        # starts yesterday, ends tomorrow
+        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
+        end_tomorrow = tz.localize(datetime.now()) + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e5",
+            start=start_yesterday,
+            end=end_tomorrow,
+        )
+
+        # starts tomorrow, ends tomorrow + 1
+        start_tomorrow = tz.localize(datetime.now() + timedelta(days=1))
+        end_tomorrow_1 = start_tomorrow + timedelta(days=1)
+
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e6",
+            start=start_tomorrow,
+            end=end_tomorrow_1,
+        )
+
+        # self.wft.doActionFor(self.portal.e1, "publish")
+        self.wft.doActionFor(self.portal.e2, "publish")
+        self.wft.doActionFor(self.portal.e3, "publish")
+        self.wft.doActionFor(self.portal.e4, "publish")
+        self.wft.doActionFor(self.portal.e5, "publish")
+        self.wft.doActionFor(self.portal.e6, "publish")
+
+        self.portal.invokeFactory(
+            "Collection",
+            "eventcollection",
+            query=[
+                {
+                    "i": "portal_type",
+                    "o": "plone.app.querystring.operation.selection.any",
+                    "v": [PTYPE],
+                },
+                {
+                    "i": "end",
+                    "o": "plone.app.querystring.operation.date.afterToday",
+                    "v": "",
+                },
+                {
+                    "i": "review_state",
+                    "o": "plone.app.querystring.operation.selection.any",
+                    "v": ["published"],
+                },
+            ],
+        )
+
+        r = self.renderer(
+            # context=self.portal.eventcollection,
+            assignment=portlet_calendar.Assignment(
+                state=("published",),
+                search_base_uid=self.portal.eventcollection.UID(),
+            ),
+        )
+        r.update()
+        rd = r.render()
+
+        self.assertTrue("e1" not in rd)
+        self.assertTrue("e2" in rd)
+        self.assertTrue("e3" in rd)
+        self.assertTrue("e4" in rd)
+        self.assertTrue("e5" in rd)
+        self.assertTrue("e6" in rd)

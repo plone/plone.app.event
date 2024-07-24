@@ -211,12 +211,9 @@ class Renderer(base.Renderer):
                 sort_order=None,
             )
 
-            # restrict start/end with those from query, if given.
-            if "start" in query and query["start"] > start:
-                start = query["start"]
-            if "end" in query and query["end"] < end:
-                end = query["end"]
-
+            # When having a collection as context, we should use the configured query
+            # except the start and the end, which should be
+            # taken from the current calendar start and end
             start, end = _prepare_range(self.search_base, start, end)
             query.update(start_end_query(start, end))
             events = self.search_base.results(
