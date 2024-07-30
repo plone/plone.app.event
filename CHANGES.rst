@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.5 (2024-07-30)
+------------------
+
+Bug fixes:
+
+
+- Fix calendar portlet to work when selected item is a Collection [erral] (#399)
+
+
 5.1.4 (2024-06-07)
 ------------------
 
