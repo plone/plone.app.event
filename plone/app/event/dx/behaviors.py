@@ -16,8 +16,6 @@ from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
 from plone.app.z3cform.widgets.datetime import DatetimeFieldWidget
-from plone.app.z3cform.widgets.text import TextFieldWidget
-from plone.app.z3cform.widgets.text import TextLinesFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.base.utils import safe_text
@@ -39,6 +37,23 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+try:
+    # Import fails for Plone < 6.1
+    # version pin of plone.app.z3cform is set to plone.app.z3cform==4.3.2
+    # TextLinesFieldWidget is introduced in plone.app.z3cform==4.4.0
+    from plone.app.z3cform.widgets.text import TextFieldWidget
+except ImportError:
+    from z3c.form.browser.text import TextFieldWidget
+
+try:
+    # Import fails for Plone < 6.1
+    # version pin of plone.app.z3cform is set to plone.app.z3cform==4.3.2
+    # TextLinesFieldWidget is introduced in plone.app.z3cform==4.4.0
+    from z3c.form.browser.textlines import TextLinesFieldWidget
+except ImportError:
+    from z3c.form.browser.textlines import TextLinesFieldWidget
 
 
 def first_weekday_sun0():
