@@ -15,7 +15,9 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
-from plone.app.z3cform.widget import DatetimeFieldWidget
+from plone.app.z3cform.widgets.datetime import DatetimeFieldWidget
+from plone.app.z3cform.widgets.text import TextFieldWidget
+from plone.app.z3cform.widgets.text import TextLinesFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.base.utils import safe_text
@@ -28,8 +30,6 @@ from plone.indexer import indexer
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
-from z3c.form.browser.text import TextFieldWidget
-from z3c.form.browser.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.component import adapter
 from zope.globalrequest import getRequest
