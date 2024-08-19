@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from plone.app.event.base import localized_today
 from plone.app.event.testing import make_fake_response
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
@@ -151,3 +152,26 @@ class TestEventsListingCollection(TestEventsListingPortal):
             "mode_day",
         ]:
             self.assertTrue(_class not in out)
+
+    @mock.patch("plone.app.event.browser.event_listing.localized_now", new=PN)
+    @mock.patch("plone.app.event.base.localized_now", new=PN)
+    def test_end_date_filtering(self):
+        """Test date conversion between collection query and 'expand_events'
+        filtering.
+        """
+        # plone.app.contenttypes ICollection type
+        self.portal.invokeFactory("Collection", "col_with_date_criterion", title="Col")
+        collection = self.portal.col_with_date_criterion
+        collection.query = [
+            {
+                "i": "portal_type",
+                "o": "plone.app.querystring.operation.selection.any",
+                "v": ["Event", "plone.app.event.dx.event"],
+            },
+            {
+                "i": "end",
+                "o": "plone.app.querystring.operation.date.largerThan",
+                "v": DateTime(PN()),
+            },
+        ]
+        self.assertIs(len(self.portal.col_with_date_criterion.results()), 3)
