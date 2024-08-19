@@ -51,7 +51,7 @@ try:
     # Import fails for Plone < 6.1
     # version pin of plone.app.z3cform is set to plone.app.z3cform==4.3.2
     # TextLinesFieldWidget is introduced in plone.app.z3cform==4.4.0
-    from z3c.form.browser.textlines import TextLinesFieldWidget
+    from plone.app.z3cform.widgets.textlines import TextLinesFieldWidget
 except ImportError:
     from z3c.form.browser.textlines import TextLinesFieldWidget
 
