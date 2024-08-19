@@ -174,4 +174,8 @@ class TestEventsListingCollection(TestEventsListingPortal):
                 "v": DateTime(PN()),
             },
         ]
+
+        view = self.portal.col_with_date_criterion.restrictedTraverse("@@event_listing")
+        view()
+
         self.assertIs(len(self.portal.col_with_date_criterion.results()), 3)
