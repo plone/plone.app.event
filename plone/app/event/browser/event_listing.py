@@ -222,6 +222,13 @@ class EventListing(BrowserView):
         # XXX: This actually fits most needs, but not all. Maybe someone
         # wants to come up with some edgecases!
         se = dict(start=None, end=None)
+
+        def safe_dt(val):
+            # convert value from DateTime to datetime
+            if hasattr(val, "asdatetime"):
+                return val.asdatetime()
+            return val
+
         if start:
             q = start.get("query")
             r = start.get("range")
@@ -238,7 +245,7 @@ class EventListing(BrowserView):
             r = end.get("range")
             if r == "min":
                 se["start"] = q
-        return se["start"], se["end"]
+        return safe_dt(se["start"]), safe_dt(se["end"])
 
     def formatted_date(self, occ):
         provider = getMultiAdapter(

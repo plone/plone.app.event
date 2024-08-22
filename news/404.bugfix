@@ -1,0 +1,2 @@
+Fix date conversion between collection query and ``expand_events`` filtering.
+[petschki]
