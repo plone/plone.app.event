@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.6 (2024-08-22)
+------------------
+
+Bug fixes:
+
+
+- use widgets for behavior fields from `plone.app.z3cform` to make the formfields BS5 ready [1letter] (#396)
+- Fix date conversion between collection query and ``expand_events`` filtering.
+  [petschki] (#404)
+
+
 5.1.5 (2024-07-30)
 ------------------
 
