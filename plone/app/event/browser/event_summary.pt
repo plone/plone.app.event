@@ -140,7 +140,7 @@
                   <p class="card-text"
                      tal:condition="mail"
                   ><a class="email"
-                       tal:content="name"
+                       tal:content="python: name if name is not None else mail"
                        tal:attributes="
                          href string:mailto:${mail};
                        "
