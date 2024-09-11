@@ -1,13 +1,13 @@
 *** Settings ***
 
-Resource  plone/app/robotframework/browser.robot
+Resource    plone/app/robotframework/browser.robot
 
-Library  Remote  ${PLONE_URL}/RobotRemote
+Library    Remote    ${PLONE_URL}/RobotRemote
 
-Test Setup  Run Keywords  Plone test setup
-Test Teardown  Run keywords  Plone test teardown
+Test Setup    Run Keywords    Plone test setup
+Test Teardown    Run keywords    Plone test teardown
 
-Variables  plone/app/event/tests/robot/variables.py
+Variables    variables.py
 
 
 *** Test cases ***
@@ -68,23 +68,16 @@ I select a date in calendar overlay
     # reason 2: shadow root (user-agent) can't access via css or xpath selectors
     #
     # temporarily solution: set value via javascript
-
-    # Type Text    //input[@id="form-widgets-IEventBasic-start"]    ${EVENT_START_MONTH}${EVENT_START_DAY}${EVENT_START_YEAR}    delay=50ms    clear=No
-    # Keyboard Key    press    Tab
-    # Type Text    //input[@id="form-widgets-IEventBasic-start"]    ${EVENT_START_HOUR_12}00${EVENT_START_HOUR_MERIDIEM}    delay=50ms    clear=No
-
     Evaluate JavaScript    //input[@id="form-widgets-IEventBasic-start"]
- ...    (element, arg) => {
- ...        element.value = arg
- ...        return
+ ...    (el, arg) => {
+ ...        el.setAttribute("value", arg)
  ...    }
  ...    all_elements=False
  ...    arg=${EVENT_START_ISO}
 
-    Evaluate JavaScript    //input[@id="form-widgets-IEventBasic-end"]
- ...    (element, arg) => {
- ...        element.value = arg
- ...        return
+    Evaluate JavaScript    ${None}
+ ...    (el,arg) => {
+ ...        el.setAttribute("value", arg)
  ...    }
  ...    all_elements=False
  ...    arg=${EVENT_END_ISO}
@@ -116,8 +109,8 @@ I open the event listing
 # Then
 
 it should be filled in the form
-    Get Property    //input[@id="form-widgets-IEventBasic-start"]    value    should be    ${EVENT_START_ISO}
-    Get Property    //input[@id="form-widgets-IEventBasic-end"]    value    should be    ${EVENT_END_ISO}
+    Get Attribute   //input[@id="form-widgets-IEventBasic-start"]    value    should be    ${EVENT_START_ISO}
+    Get Attribute   //input[@id="form-widgets-IEventBasic-end"]    value    should be    ${EVENT_END_ISO}
 
 I should see the recurrence overlay
     Get Text    //div[contains(@class,"modal-wrapper")]//form/div[@class="rioccurrencesactions"]/div/h6/strong    should be    Selected dates
