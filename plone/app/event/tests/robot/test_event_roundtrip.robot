@@ -75,7 +75,7 @@ I select a date in calendar overlay
  ...    all_elements=False
  ...    arg=${EVENT_START_ISO}
 
-    Evaluate JavaScript    ${None}
+    Evaluate JavaScript    //input[@id="form-widgets-IEventBasic-end"]
  ...    (el,arg) => {
  ...        el.setAttribute("value", arg)
  ...    }
