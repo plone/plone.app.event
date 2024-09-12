@@ -67,4 +67,11 @@
       name="plone.app.event"
       />
 
+
+  <adapter
+      factory=".adapters.OcurrenceContentListingObject"
+      for="plone.event.interfaces.IOcurrence"
+      zcml:condition="installed plone.app.contentlisting"
+      />
+
 </configure>
