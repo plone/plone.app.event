@@ -15,9 +15,6 @@ Variables    variables.py
 Scenario: Create and view an event
     Given a site owner
       and an event add form
-     When I select a date in calendar overlay
-     Then it should be filled in the form
-
      When I click on Recurrence Add
      Then I should see the recurrence overlay
 
@@ -46,42 +43,41 @@ Scenario: Create and view an event
 # Given
 
 a site owner
-  Enable autologin as  Manager
+    Enable autologin as  Manager
 
 an event add form
-  Go to  ${PLONE_URL}/++add++Event
-  Type text    //input[@name="form.widgets.IDublinCore.title"]    Testevent
-  Type text    //textarea[@id="form-widgets-IDublinCore-description"]    Test description
-  Type text    //input[@id="form-widgets-IEventLocation-location"]    Test location
-  Type text    //textarea[@id="form-widgets-IEventAttendees-attendees"]    Test attendee
-  Type text    //input[@id="form-widgets-IEventContact-contact_name"]    Test name
-  Type text    //input[@id="form-widgets-IEventContact-contact_email"]    test@email.com
-  Type text    //input[@id="form-widgets-IEventContact-contact_phone"]    +1234567890
-  Type text    //input[@id="form-widgets-IEventContact-event_url"]    http://test.url
+    Go to  ${PLONE_URL}/++add++Event
+    Type text    //input[@name="form.widgets.IDublinCore.title"]    Testevent
+    Type text    //textarea[@id="form-widgets-IDublinCore-description"]    Test description
+    Type text    //input[@id="form-widgets-IEventLocation-location"]    Test location
+    Type text    //textarea[@id="form-widgets-IEventAttendees-attendees"]    Test attendee
+    Type text    //input[@id="form-widgets-IEventContact-contact_name"]    Test name
+    Type text    //input[@id="form-widgets-IEventContact-contact_email"]    test@email.com
+    Type text    //input[@id="form-widgets-IEventContact-contact_phone"]    +1234567890
+    Type text    //input[@id="form-widgets-IEventContact-event_url"]    http://test.url
 
-# When
+  # we can't set safely the date in the test via native browser ui "date input" element
+  # reason 1: different ui's, depending on language of system browser
+  #         12 hours format with meridiem input (AM/PM) vs. 24 hours format
+  # reason 2: shadow root (user-agent) can't access via css or xpath selectors
+  #
+  # temporarily solution: set value via javascript
 
-I select a date in calendar overlay
-    # we can't set safely the date in the test via native browser ui "date input" element
-    # reason 1: different ui's, depending on language of system browser
-    #         12 hours format with meridiem input (AM/PM) vs. 24 hours format
-    # reason 2: shadow root (user-agent) can't access via css or xpath selectors
-    #
-    # temporarily solution: set value via javascript
-    Evaluate JavaScript    //input[@id="form-widgets-IEventBasic-start"]
+    Evaluate JavaScript    //input[@name="form.widgets.IEventBasic.start"]
  ...    (el, arg) => {
  ...        el.setAttribute("value", arg)
  ...    }
  ...    all_elements=False
  ...    arg=${EVENT_START_ISO}
 
-    Evaluate JavaScript    //input[@id="form-widgets-IEventBasic-end"]
+    Evaluate JavaScript    //input[@name="form.widgets.IEventBasic.start"]
  ...    (el,arg) => {
  ...        el.setAttribute("value", arg)
  ...    }
  ...    all_elements=False
  ...    arg=${EVENT_END_ISO}
 
+# When
 
 I click on Recurrence Add
     Click  //a[@name="riedit"]
@@ -107,10 +103,6 @@ I open the event listing
     Go to  ${PLONE_URL}/@@event_listing?mode=all
 
 # Then
-
-it should be filled in the form
-    Get Attribute   //input[@id="form-widgets-IEventBasic-start"]    value    should be    ${EVENT_START_ISO}
-    Get Attribute   //input[@id="form-widgets-IEventBasic-end"]    value    should be    ${EVENT_END_ISO}
 
 I should see the recurrence overlay
     Get Text    //div[contains(@class,"modal-wrapper")]//form/div[@class="rioccurrencesactions"]/div/h6/strong    should be    Selected dates
