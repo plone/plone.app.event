@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.7 (2024-09-24)
+------------------
+
+Bug fixes:
+
+
+- If the name is None, display the mail. Otherwise, a person icon with no useful info is displayed.
+  [yurj] (#407)
+
+
 5.1.6 (2024-08-22)
 ------------------
 
