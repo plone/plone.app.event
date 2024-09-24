@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "5.1.7"
+version = "5.1.8.dev0"
 
 
 long_description = "\n\n".join(
