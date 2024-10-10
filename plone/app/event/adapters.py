@@ -15,7 +15,7 @@ class OccurrenceContentListingObject(RealContentListingObject):
             raise AttributeError(name)
         obj = self.getObject()
         # we need to override the behavior of RealContentListingObject
-        # because Ocurrence objects rely on acquisition to show their title
+        # because Occurrence objects rely on acquisition to show their title
         # and other attributes
         if hasattr(obj, name):
             return getattr(obj, name)
