@@ -370,8 +370,6 @@ class TestRecurrenceContentListingSupport(unittest.TestCase):
 
         now = patched_now()
 
-        yesterday = now - datetime.timedelta(days=1)
-
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
         self.daily = createContentInContainer(
             self.portal,
