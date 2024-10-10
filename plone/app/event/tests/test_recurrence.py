@@ -1,6 +1,8 @@
 from OFS.SimpleItem import SimpleItem
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event.base import get_events
-from plone.app.event.base import RET_MODE_ACCESSORS, RET_MODE_OBJECTS
+from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.dx.traverser import OccurrenceTraverser
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -11,7 +13,6 @@ from plone.app.event.testing import set_env_timezone
 from plone.app.event.testing import set_timezone
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now
-from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_PASSWORD

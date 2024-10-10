@@ -69,7 +69,7 @@
 
 
   <adapter
-      factory=".adapters.OcurrenceContentListingObject"
+      factory=".adapters.OccurrenceContentListingObject"
       for="plone.event.interfaces.IOccurrence"
       zcml:condition="installed plone.app.contentlisting"
       />
