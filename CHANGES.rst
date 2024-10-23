@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+5.1.8 (2024-10-23)
+------------------
+
+New features:
+
+
+- Update robot framework tests to use `robotframework-browser` (`playwright` integration on robotframework).
+  [1letter] (#408)
+
+
 5.1.7 (2024-09-24)
 ------------------
 
