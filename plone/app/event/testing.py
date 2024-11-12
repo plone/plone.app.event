@@ -1,5 +1,5 @@
 from plone.app.event.interfaces import IBrowserLayer
-from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
+from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -123,7 +123,7 @@ PAEventDX_FUNCTIONAL_TESTING = FunctionalTesting(
 PAEventDX_ROBOT_TESTING = FunctionalTesting(
     bases=(
         PAEventDX_FIXTURE,
-        AUTOLOGIN_LIBRARY_FIXTURE,
+        REMOTE_LIBRARY_BUNDLE_FIXTURE,
         WSGI_SERVER_FIXTURE,
     ),
     name="plone.app.event.dx:Robot",
