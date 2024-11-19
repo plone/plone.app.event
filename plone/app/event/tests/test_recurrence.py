@@ -1,6 +1,8 @@
 from OFS.SimpleItem import SimpleItem
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.event.base import get_events
 from plone.app.event.base import RET_MODE_ACCESSORS
+from plone.app.event.base import RET_MODE_OBJECTS
 from plone.app.event.dx.traverser import OccurrenceTraverser
 from plone.app.event.recurrence import Occurrence
 from plone.app.event.testing import PAEvent_INTEGRATION_TESTING
@@ -352,3 +354,55 @@ class TestRecurrenceSupport(unittest.TestCase):
 
         # Subsequent ones are IOccurrence objects
         self.assertTrue(IOccurrence.providedBy(result[1]))
+
+
+class TestRecurrenceContentListingSupport(unittest.TestCase):
+    """test that content listing objects are correctly serialized in plone.app.contentlisting objects"""
+
+    layer = PAEventDX_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
+
+        set_browserlayer(self.request)
+        set_env_timezone(TZNAME)
+        set_timezone(TZNAME)
+
+        now = patched_now()
+
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
+        self.daily = createContentInContainer(
+            self.portal,
+            "plone.app.event.dx.event",
+            id="daily",
+            title="Daily Event",
+            start=now,
+            end=now + datetime.timedelta(hours=1),
+            location="Vienna",
+            recurrence="RRULE:FREQ=DAILY;COUNT=4",
+        )
+
+    def test_recurrence_objects_adapted_to_content_listing_objects(self):
+        res = get_events(self.portal, ret_mode=RET_MODE_OBJECTS, expand=True)
+
+        self.assertEqual(len(res), 4)
+
+        first_item = res[0]
+        second_item = res[1]
+
+        first_content_listing_object = IContentListingObject(first_item)
+        second_content_listing_object = IContentListingObject(second_item)
+
+        self.assertEqual(first_content_listing_object.Title(), first_item.Title())
+        self.assertEqual(second_content_listing_object.Title(), second_item.Title())
+
+        self.assertEqual(first_content_listing_object.start, first_item.start)
+        self.assertEqual(second_content_listing_object.start, second_item.start)
+
+        self.assertEqual(first_content_listing_object.end, first_item.end)
+        self.assertEqual(second_content_listing_object.end, second_item.end)
+
+        self.assertTrue(
+            first_content_listing_object.start < second_content_listing_object.start
+        )
