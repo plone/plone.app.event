@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+5.2.0 (2024-11-25)
+------------------
+
+New features:
+
+
+- Provide an IContentListingObject adapter
+  [erral] (#410)
+
+
+Bug fixes:
+
+
+- fix import of TextLinesFieldWidget, correctness the rendering of EventAttendees TextLinesFieldWidget
+  [1letter] (#414)
+
+
 5.1.8 (2024-10-23)
 ------------------
 
