@@ -15,7 +15,6 @@ from plone.app.event.base import wkday_to_mon1
 from plone.app.event.dx.interfaces import IDXEvent
 from plone.app.event.dx.interfaces import IDXEventRecurrence
 from plone.app.textfield.value import RichTextValue
-from plone.app.z3cform.widgets.datetime import DatetimeFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.base.utils import safe_text
@@ -89,7 +88,6 @@ class IEventBasic(model.Schema, IDXEvent):
     )
     directives.widget(
         "start",
-        DatetimeFieldWidget,
         default_timezone=default_timezone,
         klass="event_start",
     )
@@ -102,7 +100,6 @@ class IEventBasic(model.Schema, IDXEvent):
     )
     directives.widget(
         "end",
-        DatetimeFieldWidget,
         default_timezone=default_timezone,
         klass="event_end",
         pattern_options={
