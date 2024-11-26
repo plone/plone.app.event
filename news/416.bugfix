@@ -1,0 +1,9 @@
+Add old Plone 5 classes to the portlet template
+
+Add Plone 5 classes portletHeader and portletContent to the portlet template to
+improve compatibility with Plone 5 styles.
+This can help when migrating styles from Plone 5 to Plone 6.
+
+Note: This targets only portlets yet. There is probably much more to do to
+improve the Plone 5 to 6 upgrade experience.
+[thet]

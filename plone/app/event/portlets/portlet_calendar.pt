@@ -13,7 +13,7 @@
        "
   >
 
-    <div class="card-header text-center">
+    <div class="card-header portletHeader text-center">
       <a class="calendarPrevious pat-contentloader"
          href="#"
          rel="nofollow"
@@ -64,7 +64,7 @@
       >&raquo;</a>
     </div>
 
-    <div class="card-body table-responsive">
+    <div class="card-body portletContent table-responsive">
       <table class="table table-sm table-borderless mb-0"
              summary="Calendar"
              i18n:attributes="summary summary_calendar"
