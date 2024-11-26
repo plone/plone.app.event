@@ -23,10 +23,30 @@
       menu="plone_displayviews"
       title="Event listing"
       />
+    <browser:page
+      name="event_listing"
+      for="plone.app.contenttypes.interfaces.ICollection"
+      class=".event_listing.CollectionEventListing"
+      template="event_listing.pt"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      menu="plone_displayviews"
+      title="Event listing"
+      />
+    <browser:page
+      name="event_listing"
+      for="plone.app.contenttypes.interfaces.IFolder"
+      class=".event_listing.FolderEventListing"
+      template="event_listing.pt"
+      permission="zope2.View"
+      layer="..interfaces.IBrowserLayer"
+      menu="plone_displayviews"
+      title="Event listing"
+      />
   <browser:page
       name="event_listing"
       for="*"
-      class=".event_listing.EventListing"
+      class=".event_listing.BaseEventListing"
       template="event_listing.pt"
       permission="zope2.View"
       layer="..interfaces.IBrowserLayer"
