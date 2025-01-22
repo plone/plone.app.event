@@ -5,7 +5,7 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from DateTime import DateTime
-from persistent.dict import PersistentDict
+from persistent.mapping import PersistentMapping
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.base.i18nl10n import ulocalized_time as orig_ulocalized_time
 from plone.base.interfaces import INavigationRoot
@@ -940,7 +940,7 @@ class AnnotationAdapter:
             self.__dict__[name] = value
         else:
             if self._data is None:
-                self._data = PersistentDict()
+                self._data = PersistentMapping()
                 annotations = IAnnotations(self.context)
                 annotations[self.ANNOTATION_KEY] = self._data
             self._data[name] = value
