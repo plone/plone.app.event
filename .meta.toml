@@ -7,7 +7,7 @@ commit-id = "6e36bcc4"
 
 [pyproject]
 dependencies_ignores = "['plone.app.layout', 'Products.DateRecurringIndex']"
-codespell_ignores = "discreet,assertin"
+codespell_ignores = "discreet,assertin,thet"
 
 [flake8]
 extra_lines = """
