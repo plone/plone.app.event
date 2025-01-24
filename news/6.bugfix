@@ -1,5 +1,0 @@
-Support ``icalendar`` 6 by forcing it to use its ``pytz`` timezone implementation.
-The new ``zoneinfo`` support in ``icalendar`` 6 does not work for us yet, giving indexing problems.
-So we call ``icalendar.use_pytz`` at startup.
-If this fails, we must be using an older version where ``pytz`` is the only option anyway, so we ignore this.
-[maurits]

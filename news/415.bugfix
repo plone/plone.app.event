@@ -1,6 +1,0 @@
-Relax DateTime widget definition.
-
-For the start and end fields, do not explicitly define the DateTimeFieldWidget.
-This allows for easier customization when a different widget needs to be used
-for any DateTime field.
-[thet]

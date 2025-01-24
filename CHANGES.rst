@@ -8,6 +8,26 @@ Changelog
 
 .. towncrier release notes start
 
+5.2.1 (2025-01-24)
+------------------
+
+Bug fixes:
+
+
+- Support ``icalendar`` 6 by forcing it to use its ``pytz`` timezone implementation.
+  The new ``zoneinfo`` support in ``icalendar`` 6 does not work for us yet, giving indexing problems.
+  So we call ``icalendar.use_pytz`` at startup.
+  If this fails, we must be using an older version where ``pytz`` is the only option anyway, so we ignore this.
+  [maurits] (#6)
+- Relax DateTime widget definition.
+
+  For the start and end fields, do not explicitly define the DateTimeFieldWidget.
+  This allows for easier customization when a different widget needs to be used
+  for any DateTime field.
+  [thet] (#415)
+- Fix DeprecationWarnings. [maurits] (#4090)
+
+
 5.2.0 (2024-11-25)
 ------------------
 
