@@ -1,5 +1,4 @@
-"""Behaviors to enable calendarish event extension to dexterity content types.
-"""
+"""Behaviors to enable calendarish event extension to dexterity content types."""
 
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import _

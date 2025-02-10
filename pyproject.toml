@@ -1,5 +1,5 @@
 # Generated from:
-# https://github.com/plone/meta/tree/main/config/default
+# https://github.com/plone/meta/tree/main/src/plone/meta/default
 # See the inline comments on how to expand/tweak this configuration file
 [build-system]
 requires = ["setuptools>=68.2"]
@@ -71,7 +71,7 @@ target-version = ["py38"]
 ##
 
 [tool.codespell]
-ignore-words-list = "discreet,assertin,thet"
+ignore-words-list = "discreet,assertin,thet,discreet,assertin,thet"
 skip = "*.po,"
 ##
 # Add extra configuration options in .meta.toml:
@@ -119,6 +119,7 @@ Zope = [
   'Products.CMFCore', 'Products.CMFDynamicViewFTI',
 ]
 python-dateutil = ['dateutil']
+pytest-plone = ['pytest', 'zope.pytestlayer', 'plone.testing', 'plone.app.testing']
 ignore-packages = ['plone.app.layout', 'Products.DateRecurringIndex']
 
 ##
@@ -134,19 +135,26 @@ ignore-packages = ['plone.app.layout', 'Products.DateRecurringIndex']
 [tool.check-manifest]
 ignore = [
     ".editorconfig",
+    ".flake8",
     ".meta.toml",
     ".pre-commit-config.yaml",
-    "tox.ini",
-    ".flake8",
+    "dependabot.yml",
     "mx.ini",
+    "tox.ini",
 
 ]
+
 ##
 # Add extra configuration options in .meta.toml:
 #  [pyproject]
 #  check_manifest_ignores = """
 #      "*.map.js",
 #      "*.pyc",
+#  """
+#  check_manifest_extra_lines = """
+#  ignore-bad-ideas = [
+#      "some/test/file/PKG-INFO",
+#  ]
 #  """
 ##
 
