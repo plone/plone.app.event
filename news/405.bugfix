@@ -1,0 +1,1 @@
+Fix query for when start/end dates are set on collections and refactor event_listing. [ThibautBorn]
