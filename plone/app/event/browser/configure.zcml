@@ -13,6 +13,7 @@
       />
 
   <!-- Event listing -->
+  <include package="plone.app.contentmenu" />
   <browser:page
       name="event_listing"
       for="plone.event.interfaces.IEvent"
