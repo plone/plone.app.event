@@ -51,6 +51,7 @@ setup(
         "Products.DateRecurringIndex",
         "Products.ZCatalog",
         "Products.GenericSetup",
+        "plone.app.contentmenu",
         "plone.app.contenttypes",
         "plone.app.uuid",
         "plone.resource",
