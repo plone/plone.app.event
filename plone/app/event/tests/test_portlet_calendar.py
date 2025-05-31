@@ -275,16 +275,31 @@ class RendererTest(unittest.TestCase):
         # the end of a month where the tomorrow dates are already out of the
         # range of the current calendar month.
         start = start.replace(day=15)
+
         end = start + timedelta(hours=1)
+        start_yesterday = start - timedelta(days=1)
+        end_yesterday = start_yesterday + timedelta(hours=1)
+        start_tomorrow = start + timedelta(days=1)
+        end_tomorrow = end + timedelta(days=1)
+        end_tomorrow_1 = end_tomorrow + timedelta(days=1)
 
-        createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
-
-        createContentInContainer(self.portal, PTYPE, title="e2", start=start, end=end)
-
-        # starts yesterday, ends yesterday
-        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
-        end_yesterday = start + timedelta(hours=1)
-
+        # Starts today, ends today
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e1",
+            start=start,
+            end=end,
+        )
+        # 2nd starts today, ends today
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e2",
+            start=start,
+            end=end,
+        )
+        # Starts yesterday, ends yesterday
         createContentInContainer(
             self.portal,
             PTYPE,
@@ -292,23 +307,15 @@ class RendererTest(unittest.TestCase):
             start=start_yesterday,
             end=end_yesterday,
         )
-
-        # starts today, ends tomorrow
-        start_today = tz.localize(datetime.now())
-        end_tomorrow = start + timedelta(days=1)
-
+        # Starts today, ends tomorrow
         createContentInContainer(
             self.portal,
             PTYPE,
             title="e4",
-            start=start_today,
+            start=start,
             end=end_tomorrow,
         )
-
         # starts yesterday, ends tomorrow
-        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
-        end_tomorrow = tz.localize(datetime.now()) + timedelta(days=1)
-
         createContentInContainer(
             self.portal,
             PTYPE,
@@ -316,11 +323,7 @@ class RendererTest(unittest.TestCase):
             start=start_yesterday,
             end=end_tomorrow,
         )
-
         # starts tomorrow, ends tomorrow + 1
-        start_tomorrow = tz.localize(datetime.now() + timedelta(days=1))
-        end_tomorrow_1 = start_tomorrow + timedelta(days=1)
-
         createContentInContainer(
             self.portal,
             PTYPE,
