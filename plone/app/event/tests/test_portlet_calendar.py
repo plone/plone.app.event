@@ -19,8 +19,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component.hooks import setHooks
-from zope.component.hooks import setSite
 
 import pytz
 import unittest
@@ -38,8 +36,6 @@ class PortletTest(unittest.TestCase):
         self.portal = portal
         self.request = self.layer["request"]
         setRoles(portal, TEST_USER_ID, ["Manager"])
-        setHooks()
-        setSite(portal)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name="portlets.Calendar")
@@ -100,8 +96,6 @@ class RendererTest(unittest.TestCase):
         self.wft = getToolByName(self.portal, "portal_workflow")
         self.wft.setDefaultChain("simple_publication_workflow")
         setRoles(portal, TEST_USER_ID, ["Manager"])
-        setHooks()
-        setSite(portal)
 
         set_env_timezone(TZNAME)
         set_timezone(TZNAME)
