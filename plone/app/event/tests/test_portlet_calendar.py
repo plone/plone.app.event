@@ -275,7 +275,12 @@ class RendererTest(unittest.TestCase):
         are used to build the calendar
         """
         tz = pytz.timezone(TZNAME)
+
         start = tz.localize(datetime.now())
+        # Set roughly in the mid of the month to avoid issues when testing at
+        # the end of a month where the tomorrow dates are already out of the
+        # range of the current calendar month.
+        start = start.replace(day=15)
         end = start + timedelta(hours=1)
 
         createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
@@ -348,8 +353,14 @@ class RendererTest(unittest.TestCase):
                 },
                 {
                     "i": "end",
-                    "o": "plone.app.querystring.operation.date.afterToday",
-                    "v": "",
+                    # Normally you wouldn't restrict the dates in a calendar to
+                    # allow browsing historical dates too.
+                    # And if, you'd probably want to show future events with
+                    # "end after today". But here we want reproducible results
+                    # and not hit by end-of-month boundary effects, where
+                    # tomorrow is already in another month.
+                    "o": "plone.app.querystring.operation.date.largerThan",
+                    "v": start.date().isoformat(),
                 },
                 {
                     "i": "review_state",
