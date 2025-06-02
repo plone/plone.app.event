@@ -23,8 +23,6 @@ from Products.GenericSetup.utils import _getDottedName
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component.hooks import setHooks
-from zope.component.hooks import setSite
 from zope.interface import alsoProvides
 
 import unittest
@@ -43,8 +41,6 @@ class PortletTest(unittest.TestCase):
         self.request = self.layer["request"]
         alsoProvides(self.request, IPloneFormLayer)
         setRoles(portal, TEST_USER_ID, ["Manager"])
-        setHooks()
-        setSite(portal)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name="portlets.Events")

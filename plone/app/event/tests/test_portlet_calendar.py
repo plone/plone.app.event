@@ -19,8 +19,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import _getDottedName
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component.hooks import setHooks
-from zope.component.hooks import setSite
 
 import pytz
 import unittest
@@ -38,8 +36,6 @@ class PortletTest(unittest.TestCase):
         self.portal = portal
         self.request = self.layer["request"]
         setRoles(portal, TEST_USER_ID, ["Manager"])
-        setHooks()
-        setSite(portal)
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name="portlets.Calendar")
@@ -100,8 +96,6 @@ class RendererTest(unittest.TestCase):
         self.wft = getToolByName(self.portal, "portal_workflow")
         self.wft.setDefaultChain("simple_publication_workflow")
         setRoles(portal, TEST_USER_ID, ["Manager"])
-        setHooks()
-        setSite(portal)
 
         set_env_timezone(TZNAME)
         set_timezone(TZNAME)
@@ -275,17 +269,39 @@ class RendererTest(unittest.TestCase):
         are used to build the calendar
         """
         tz = pytz.timezone(TZNAME)
+
         start = tz.localize(datetime.now())
+        # Testing at the start or end of the month is prone to a month
+        # rollover condition, which will cause a test failure. This is not
+        # a bug in plone.app.event, but merely a test condition failure.
+        # To avoid this issue, set the start date to roughly in the middle
+        # of the month.
+        start = start.replace(day=15)
+
         end = start + timedelta(hours=1)
+        start_yesterday = start - timedelta(days=1)
+        end_yesterday = start_yesterday + timedelta(hours=1)
+        start_tomorrow = start + timedelta(days=1)
+        end_tomorrow = end + timedelta(days=1)
+        end_tomorrow_1 = end_tomorrow + timedelta(days=1)
 
-        createContentInContainer(self.portal, PTYPE, title="e1", start=start, end=end)
-
-        createContentInContainer(self.portal, PTYPE, title="e2", start=start, end=end)
-
-        # starts yesterday, ends yesterday
-        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
-        end_yesterday = start + timedelta(hours=1)
-
+        # Starts today, ends today
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e1",
+            start=start,
+            end=end,
+        )
+        # 2nd starts today, ends today
+        createContentInContainer(
+            self.portal,
+            PTYPE,
+            title="e2",
+            start=start,
+            end=end,
+        )
+        # Starts yesterday, ends yesterday
         createContentInContainer(
             self.portal,
             PTYPE,
@@ -293,23 +309,15 @@ class RendererTest(unittest.TestCase):
             start=start_yesterday,
             end=end_yesterday,
         )
-
-        # starts today, ends tomorrow
-        start_today = tz.localize(datetime.now())
-        end_tomorrow = start + timedelta(days=1)
-
+        # Starts today, ends tomorrow
         createContentInContainer(
             self.portal,
             PTYPE,
             title="e4",
-            start=start_today,
+            start=start,
             end=end_tomorrow,
         )
-
         # starts yesterday, ends tomorrow
-        start_yesterday = tz.localize(datetime.now() - timedelta(days=1))
-        end_tomorrow = tz.localize(datetime.now()) + timedelta(days=1)
-
         createContentInContainer(
             self.portal,
             PTYPE,
@@ -317,11 +325,7 @@ class RendererTest(unittest.TestCase):
             start=start_yesterday,
             end=end_tomorrow,
         )
-
         # starts tomorrow, ends tomorrow + 1
-        start_tomorrow = tz.localize(datetime.now() + timedelta(days=1))
-        end_tomorrow_1 = start_tomorrow + timedelta(days=1)
-
         createContentInContainer(
             self.portal,
             PTYPE,
@@ -348,8 +352,14 @@ class RendererTest(unittest.TestCase):
                 },
                 {
                     "i": "end",
-                    "o": "plone.app.querystring.operation.date.afterToday",
-                    "v": "",
+                    # Normally you wouldn't restrict the dates in a calendar to
+                    # allow browsing historical dates too.
+                    # And if, you'd probably want to show future events with
+                    # "end after today". But here we want reproducible results
+                    # and not hit by end-of-month boundary effects, where
+                    # tomorrow is already in another month.
+                    "o": "plone.app.querystring.operation.date.largerThan",
+                    "v": start.date().isoformat(),
                 },
                 {
                     "i": "review_state",
