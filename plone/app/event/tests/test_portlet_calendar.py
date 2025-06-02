@@ -271,9 +271,11 @@ class RendererTest(unittest.TestCase):
         tz = pytz.timezone(TZNAME)
 
         start = tz.localize(datetime.now())
-        # Set roughly in the mid of the month to avoid issues when testing at
-        # the end of a month where the tomorrow dates are already out of the
-        # range of the current calendar month.
+        # Testing at the start or end of the month is prone to a month
+        # rollover condition, which will cause a test failure. This is not
+        # a bug in plone.app.event, but merely a test condition failure.
+        # To avoid this issue, set the start date to roughly in the middle
+        # of the month.
         start = start.replace(day=15)
 
         end = start + timedelta(hours=1)
