@@ -8,6 +8,26 @@ Changelog
 
 .. towncrier release notes start
 
+5.2.2 (2025-06-05)
+------------------
+
+Bug fixes:
+
+
+- Fix import problem for plone_displayview by explicitly depending on plone.app.contentmenu.
+  [thet]
+
+
+Tests:
+
+
+- Stabilize tests.
+
+  At the end of a month the calendar test was failing due to some dates reaching
+  into the next month and not being rendered anymore in the current month.
+  This is now stabilized. [thet]
+
+
 5.2.1 (2025-01-24)
 ------------------
 
