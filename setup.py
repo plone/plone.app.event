@@ -1,9 +1,8 @@
 from pathlib import Path
-from setuptools import find_packages
 from setuptools import setup
 
 
-version = "5.2.4.dev0"
+version = "6.0.0.dev0"
 
 
 long_description = "\n\n".join(
@@ -24,12 +23,10 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
-        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Core",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
@@ -38,11 +35,8 @@ setup(
     author_email="plone-developers@lists.sourceforge.net",
     url="https://github.com/plone/plone.app.event",
     license="GPL version 2",
-    packages=find_packages("src"),
-    package_dir={"": "src"},
-    namespace_packages=["plone", "plone.app"],
     include_package_data=True,
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     zip_safe=False,
     install_requires=[
         "setuptools",

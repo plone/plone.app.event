@@ -3,7 +3,10 @@
 # See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "2.0.1.dev0"
+commit-id = "2.2.3.dev0"
+
+[tox]
+test_matrix = {"6.2" = ["*"]}
 
 [pyproject]
 dependencies_ignores = "['plone.app.layout', 'Products.DateRecurringIndex']"
@@ -12,5 +15,5 @@ codespell_ignores = "discreet,assertin,thet"
 [flake8]
 extra_lines = """
 per-file-ignores =
-    plone/app/event/ical/__init__.py:F401
+    src/plone/app/event/ical/__init__.py:F401
 """
