@@ -80,7 +80,7 @@ an event add form
 # When
 
 I click on Recurrence Add
-    Click  //a[@name="riedit"]
+    Click  //*[@name="riedit"]
 
 I select weekly repeat
     Select Options By  //div[contains(@class,"modal-wrapper")]//select[@id="rirtemplate"]    value    weekly
