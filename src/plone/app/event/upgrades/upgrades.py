@@ -13,7 +13,6 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 import logging
 
-
 log = logging.getLogger(__name__)
 
 BEHAVIOR_LIST = [

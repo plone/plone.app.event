@@ -30,7 +30,6 @@ from zope.interface import implementer
 import calendar
 import json
 
-
 search_base_uid_source = CatalogSource(
     object_provides={
         "query": [ISyndicatableCollection.__identifier__, IFolder.__identifier__],

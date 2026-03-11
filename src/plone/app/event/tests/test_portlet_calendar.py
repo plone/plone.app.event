@@ -23,7 +23,6 @@ from zope.component import getUtility
 import pytz
 import unittest
 
-
 TZNAME = "Europe/Vienna"
 PTYPE = "plone.app.event.dx.event"
 

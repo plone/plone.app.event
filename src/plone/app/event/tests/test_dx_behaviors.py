@@ -38,7 +38,6 @@ import pytz
 import unittest
 import zope.interface
 
-
 TEST_TIMEZONE = "Europe/Vienna"
 
 

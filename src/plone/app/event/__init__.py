@@ -4,7 +4,6 @@ from zope.i18nmessageid import MessageFactory
 import icalendar
 import logging
 
-
 logger = logging.getLogger(__name__)
 packageName = __name__
 _ = MessageFactory("plone")

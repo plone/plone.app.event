@@ -1,7 +1,6 @@
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
-
 ISO_DATE_FORMAT = "%Y-%m-%d"
 
 
