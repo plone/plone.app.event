@@ -20,7 +20,6 @@ from zope.publisher.browser import BrowserView
 import icalendar
 import pytz
 
-
 PRODID = "-//Plone.org//NONSGML plone.app.event//EN"
 VERSION = "2.0"
 

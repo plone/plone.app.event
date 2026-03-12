@@ -34,7 +34,6 @@ from zope.deprecation import deprecate
 
 import pytz
 
-
 DEFAULT_END_DELTA = 1  # hours
 FALLBACK_TIMEZONE = "UTC"
 

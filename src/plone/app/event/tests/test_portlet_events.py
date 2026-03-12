@@ -27,7 +27,6 @@ from zope.interface import alsoProvides
 
 import unittest
 
-
 TZNAME = "Australia/Brisbane"
 PTYPE = "plone.app.event.dx.event"
 

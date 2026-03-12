@@ -36,7 +36,6 @@ from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
-
 try:
     # Import fails for Plone < 6.1
     # version pin of plone.app.z3cform is set to plone.app.z3cform==4.3.2
