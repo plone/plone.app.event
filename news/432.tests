@@ -1,1 +1,0 @@
-Fix robot test selector for recurrence widget to work with both ``<a>`` and ``<button>`` elements.

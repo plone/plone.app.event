@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+6.0.0a2 (2026-03-16)
+--------------------
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs]
+
+
+Tests:
+
+
+- Fix robot test selector for recurrence widget to work with both ``<a>`` and ``<button>`` elements. (#432)
+
+
 6.0.0a1 (2025-11-19)
 --------------------
 
