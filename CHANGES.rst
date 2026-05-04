@@ -1660,7 +1660,7 @@ Please note, the next release will have all deprections removed.
   present and thus support image fields on plone.app.event based types.
   [thet]
 
-- Change the AT validation code to an subsciption adapter. This allows reliable
+- Change the AT validation code to an subscription adapter. This allows reliable
   validation for types derived from ATEvent, which wasn't the case with the
   post_validate method.
   [thet]
