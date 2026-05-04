@@ -41,7 +41,6 @@ setup(
     python_requires=">=3.10",
     zip_safe=False,
     install_requires=[
-        "setuptools",
         "plone.base",
         "Products.statusmessages",
         "icalendar",  # >4.0.2
