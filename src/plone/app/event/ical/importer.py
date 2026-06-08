@@ -1,5 +1,7 @@
+from html import unescape
 from plone.app.event import _
 from plone.app.event import base
+from plone.app.event.base import _normal_url_validator
 from plone.app.event.base import AnnotationAdapter
 from plone.app.event.interfaces import IICalendarImportEnabled
 from plone.base.utils import safe_text
@@ -14,6 +16,7 @@ from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from urllib.parse import urlsplit
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
@@ -30,16 +33,41 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 import datetime
 import icalendar
+import logging
+import os
 import random
+import requests
 import transaction
-import urllib
+
+logger = logging.getLogger(__name__)
+# Try downloading at most this amount of bytes:
+MAXIMUM_ICAL_IMPORT_SIZE_BYTES = int(
+    os.getenv("MAXIMUM_ICAL_IMPORT_SIZE_BYTES", 100000)
+)
+# Allow importing at most one year of weekly events.
+MAXIMUM_ICAL_IMPORT_EVENTS = int(os.getenv("MAXIMUM_ICAL_IMPORT_EVENTS", 53))
+
+
+class TooManyEventsToImport(ValueError):
+    """Too many events to import."""
+
+    def __init__(self, count, limit):
+        super().__init__(count, limit)
+        self.count = count
+        self.limit = limit
+
+    def __str__(self):
+        return f"Too many events to import: {self.count} > {self.limit}"
 
 
 def ical_import(
-    container, ics_resource, event_type, sync_strategy=base.SYNC_KEEP_NEWER
+    container, ics_resource, event_type, sync_strategy=base.SYNC_KEEP_NEWER, limit=0
 ):
     cal = icalendar.Calendar.from_ical(ics_resource)
     events = cal.walk("VEVENT")
+    if limit > 0 and len(events) > limit:
+        # Even a fairly small file could generate thousands of events.
+        raise TooManyEventsToImport(len(events), limit)
 
     cat = getToolByName(container, "portal_catalog")
     container_path = "/".join(container.getPhysicalPath())
@@ -190,6 +218,8 @@ def ical_import(
         event.whole_day = whole_day
         event.open_end = open_end
         event.location = location
+        # Check that we have a safe url.
+        _normal_url_validator(url)
         event.event_url = url
         event.recurrence = rrule
         event.attendees = attendees
@@ -201,9 +231,16 @@ def ical_import(
             event.sync_uid = sync_uid
         notify(ObjectModifiedEvent(content))
 
-        # Use commits instead of savepoints to avoid "FileStorageError:
-        # description too long" on large imports.
-        transaction.get().commit()  # Commit before rename
+        # For a while we had this:
+        #   Use commits instead of savepoints to avoid "FileStorageError:
+        #   description too long" on large imports.
+        #   transaction.get().commit()  # Commit before rename
+        # But currently I don't see a large transaction note when importing.
+        # I just see '/Plone/folder/ical_import_settings/__call__ by admin',
+        # followed by 'by Zope' for each new commit if we really use commits.
+        # Also, we have a limit on the number of events to import.
+        # So savepoints are better now.
+        transaction.savepoint()
 
         if new_content_id and new_content_id in container:
             # Rename with new id from title, if processForm didn't do it.
@@ -224,10 +261,98 @@ def no_file_protocol_url(value):
     """Validator for ical_url: we do not want file:// urls.
 
     This opens up security issues.
+    There are actually more possible problems, so we take over some logic
+    from Products.isurlinportal.
+    This does mean the 'no_file_protocol_url' function name no longer
+    completely fits the code, but let's stick with it.
     """
-    if value and value.startswith("file:"):
-        raise Invalid(_("URLs with file: are not allowed."))
+    if not value:
+        # nothing to validate
+        return True
+    # lowercase for easier checking
+    url = value.lower()
+
+    # The normal url validator already does some basic checks.
+    _normal_url_validator(url)
+
+    # We want to go further than that.
+    domain = urlsplit(url).netloc
+
+    # We don't want to be used as a port checker.
+    if ":" in domain:
+        raise Invalid(_("URL not accepted"))
+
+    # We don't want to allow an external visitor to indirectly request
+    # content from localhost, or similar, like backend.
+    if "." not in domain:
+        raise Invalid(_("URL not accepted"))
+    if "host.docker.internal" in domain:
+        raise Invalid(_("URL not accepted"))
+
+    # Only proper domain names, not IP addresses.
+    # We don't want to allow access to private IP addresses.  We could
+    # explicitly check the defined ranges, but really it should be fine
+    # to only allow proper domain names.
+    try:
+        [int(part) for part in domain.split(".")]
+    except ValueError:
+        # At least one part is not an integer.
+        pass
+    else:
+        # All parts are integers.
+        raise Invalid(_("URL not accepted"))
+
+    # Someone may be doing tricks with escaped html code.
+    unescaped_url = unescape(url)
+    if unescaped_url != url:
+        # Check the unescaped url, then continue checking the current url.
+        no_file_protocol_url(unescaped_url)
+
     return True
+
+
+def download_ical(url, limit=MAXIMUM_ICAL_IMPORT_SIZE_BYTES):
+    """Download an ical from a url.
+
+    The url is trusted: you should have already validated this with the
+    no_file_protocol_url function.
+
+    We add a timeout and limit the maximum data we read, to avoid requesting
+    a 2 GB file.
+
+    This function may raise exceptions from the requests library, or raise its
+    own ValueErrors.  The caller should catch and handle this, if wanted.
+
+    For testing, you could create a 10 MB file: `truncate -s 10M 10m.txt`.
+    Then run `python -m http.server [optional port]` to serve it.
+
+    For testing if streaming connections are handled correctly, just upload
+    a file to Plone (possibly in a separate instance) and use its download
+    url.  You can edit `plone.namedfile.utils/__init__.py` function
+    `filestream_range_iterator`  and add some logging or a `time.sleep`
+    in its `read` method.
+    """
+    if limit <= 0:
+        raise ValueError("You must pass a limit for the number of bytes.")
+    # Don't allow redirects.  Otherwise that could circumvent our url validator.
+    # A connect and read timeout of slightly more than 3 seconds is recommended.
+    # See https://docs.python-requests.org/en/latest/user/advanced/#timeouts
+    response = requests.get(url, stream=True, allow_redirects=False, timeout=3.5)
+    response.raise_for_status()
+
+    # Check the content length header, if it exists.
+    length = response.headers.get("Content-Length")
+    if length and int(length) > limit:
+        raise ValueError("Content-Length header too large")
+
+    # Try to read at most until limit plus 1 bytes.  We may get less, which
+    # is fine.  If we get more than the limit, then we refuse: we don't want
+    # to load a multi Gigabyte file.  Note that internally this may very
+    # well use multiple chunked requests.
+    for chunk in response.iter_content(limit + 1):
+        if len(chunk) > limit:
+            raise ValueError("Downloaded too much content.")
+    return chunk
 
 
 class IIcalendarImportSettings(Interface):
@@ -339,15 +464,61 @@ class IcalendarImportSettingsForm(form.Form):
                 ical_resource = ical_file.data
                 ical_import_from = ical_file.filename
             else:
-                ical_resource = urllib.request.urlopen(ical_url).read()
                 ical_import_from = ical_url
+                try:
+                    ical_resource = download_ical(ical_url)
+                except Exception:
+                    logger.exception("Failed downloading ical url %s", ical_url)
+                    IStatusMessage(self.request).addStatusMessage(
+                        _(
+                            "ical_import_download_error",
+                            default=(
+                                "Failed downloading Icalendar URL. "
+                                "Probably a timeout or too large."
+                            ),
+                        ),
+                        "error",
+                    )
+                    self.request.response.redirect(self.context.absolute_url())
+                    return
 
-            import_metadata = ical_import(
-                self.context,
-                ics_resource=ical_resource,
-                event_type=event_type,
-                sync_strategy=sync_strategy,
-            )
+            try:
+                import_metadata = ical_import(
+                    self.context,
+                    ics_resource=ical_resource,
+                    event_type=event_type,
+                    sync_strategy=sync_strategy,
+                    limit=MAXIMUM_ICAL_IMPORT_EVENTS,
+                )
+            except TooManyEventsToImport:
+                logger.exception(
+                    "Refused to import ical with too many events: %s", ical_import_from
+                )
+                IStatusMessage(self.request).addStatusMessage(
+                    _(
+                        "ical_import_too_many_events",
+                        default=("Refused to import icalendar with too many events."),
+                    ),
+                    "error",
+                )
+                self.request.response.redirect(self.context.absolute_url())
+                return
+            except Invalid:
+                logger.exception(
+                    "Validation error when importing ical: %s", ical_import_from
+                )
+                IStatusMessage(self.request).addStatusMessage(
+                    _(
+                        "ical_import_event_validation",
+                        default=(
+                            "Validation error when importing ical. "
+                            "Probably wrong event url."
+                        ),
+                    ),
+                    "error",
+                )
+                self.request.response.redirect(self.context.absolute_url())
+                return
 
             count = import_metadata["count"]
 

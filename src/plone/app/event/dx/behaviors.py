@@ -2,6 +2,7 @@
 
 from plone.app.dexterity.behaviors.metadata import ICategorization
 from plone.app.event import _
+from plone.app.event.base import _normal_url_validator
 from plone.app.event.base import default_end as default_end_dt
 from plone.app.event.base import default_start as default_start_dt
 from plone.app.event.base import default_timezone
@@ -229,6 +230,7 @@ class IEventContact(model.Schema):
             default="Web address with more info about the event. "
             "Add http:// for external links.",
         ),
+        constraint=_normal_url_validator,
         required=False,
         default=None,
     )
