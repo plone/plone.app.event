@@ -38,6 +38,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.interfaces import ISite
 from zope.interface import directlyProvides
+from zope.interface import Invalid
 
 import pytz
 import unittest
@@ -339,6 +340,33 @@ class TestBaseModule(unittest.TestCase):
         self.assertTrue(isinstance(date_spelled["month_abbr"], str))
         self.assertTrue(isinstance(date_spelled["wkday_name"], str))
         self.assertTrue(isinstance(date_spelled["wkday_abbr"], str))
+
+    def test_normal_url_validator(self):
+        from plone.app.event.base import _normal_url_validator as validator
+
+        self.assertTrue(validator("http://example.com"))
+        self.assertTrue(validator("https://example.com"))
+
+        # No file url
+        with self.assertRaises(Invalid):
+            validator("file:///tmp/test.ical")
+        # A different spelling should not catch us off guard
+        with self.assertRaises(Invalid):
+            validator("File:///tmp/test.ical")
+        with self.assertRaises(Invalid):
+            validator("FILE:///tmp/test.ical")
+        with self.assertRaises(Invalid):
+            validator("jaVascript:alert(3)")
+        with self.assertRaises(Invalid):
+            validator("javascript%3Aalert(3)")
+        with self.assertRaises(Invalid):
+            validator(
+                "data:text/html%3bbase64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K"
+            )
+        with self.assertRaises(Invalid):
+            validator("mailto:someone@example.org")
+        with self.assertRaises(Invalid):
+            validator("ftp//ftp.example.com")
 
 
 class TimezoneTest(unittest.TestCase):
