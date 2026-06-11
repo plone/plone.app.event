@@ -1037,10 +1037,21 @@ def _normal_url_validator(value):
     At least no javascript url, file url, etc.
     See also the 'no_file_protocol_url' function in
     plone.app.event.ical.importer, which needs to be stricter than this one.
+
+    This function either returns True, or raises Invalid.
+
+    We only return True if the value is good to be used unchanged.
+    For example if the value might be fine but there is a space in front:
+    we raise Invalid.
     """
     if not value:
         # nothing to validate
         return True
+    if value != value.strip():
+        raise Invalid(_("URL not accepted"))
+    if len(value.splitlines()) > 1:
+        raise Invalid(_("URL not accepted"))
+
     # lowercase for easier checking
     url = value.lower()
     parsed = urlsplit(url)

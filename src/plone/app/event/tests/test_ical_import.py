@@ -183,6 +183,12 @@ class TestICALImportSettings(unittest.TestCase):
             validator("mailto:someone@example.org")
         with self.assertRaises(Invalid):
             validator("ftp//ftp.example.com")
+        with self.assertRaises(Invalid):
+            validator("https://example.\ncom")
+        with self.assertRaises(Invalid):
+            validator(" https://example.com")
+        with self.assertRaises(Invalid):
+            validator("https://example.com ")
 
     def test_download_ical(self):
         from plone.app.event.ical.importer import download_ical

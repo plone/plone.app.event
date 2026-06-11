@@ -368,6 +368,14 @@ class TestBaseModule(unittest.TestCase):
         with self.assertRaises(Invalid):
             validator("ftp//ftp.example.com")
 
+        # proper http/https, but other problems
+        with self.assertRaises(Invalid):
+            validator("https://example.\ncom")
+        with self.assertRaises(Invalid):
+            validator(" https://example.com")
+        with self.assertRaises(Invalid):
+            validator("https://example.com ")
+
 
 class TimezoneTest(unittest.TestCase):
     layer = PAEvent_INTEGRATION_TESTING
