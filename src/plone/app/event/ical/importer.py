@@ -42,10 +42,10 @@ import transaction
 logger = logging.getLogger(__name__)
 # Try downloading at most this amount of bytes:
 MAXIMUM_ICAL_IMPORT_SIZE_BYTES = int(
-    os.getenv("MAXIMUM_ICAL_IMPORT_SIZE_BYTES", 100000)
+    os.getenv("MAXIMUM_ICAL_IMPORT_SIZE_BYTES", 500000)
 )
 # Allow importing at most one year of weekly events.
-MAXIMUM_ICAL_IMPORT_EVENTS = int(os.getenv("MAXIMUM_ICAL_IMPORT_EVENTS", 53))
+MAXIMUM_ICAL_IMPORT_EVENTS = int(os.getenv("MAXIMUM_ICAL_IMPORT_EVENTS", 366))
 
 
 class TooManyEventsToImport(ValueError):
