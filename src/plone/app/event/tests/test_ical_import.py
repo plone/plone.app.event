@@ -202,7 +202,7 @@ class TestICALImportSettings(unittest.TestCase):
                 download_ical("some.url", limit=10)
         with mock.patch(
             "plone.app.event.ical.importer.requests.get",
-            return_value=MockResponse("X" * 100001),
+            return_value=MockResponse("X" * 500001),
         ):
             with self.assertRaises(ValueError):
                 download_ical("some.url")
