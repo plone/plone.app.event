@@ -12,7 +12,6 @@ from Products.CMFCore.utils import getToolByName
 import pytz
 import unittest
 
-
 TEST_TIMEZONE = "Europe/Vienna"
 
 

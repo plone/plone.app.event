@@ -39,7 +39,6 @@ import random
 import requests
 import transaction
 
-
 logger = logging.getLogger(__name__)
 # Try downloading at most this amount of bytes:
 MAXIMUM_ICAL_IMPORT_SIZE_BYTES = int(

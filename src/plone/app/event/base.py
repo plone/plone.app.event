@@ -38,7 +38,6 @@ from zope.interface import Invalid
 
 import pytz
 
-
 DEFAULT_END_DELTA = 1  # hours
 FALLBACK_TIMEZONE = "UTC"
 

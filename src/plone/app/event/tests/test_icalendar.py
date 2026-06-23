@@ -16,7 +16,6 @@ import os
 import pytz
 import unittest
 
-
 # TODO:
 # * test all event properties
 # * enforce correct order: EXDATE and RDATE directly after RRULE

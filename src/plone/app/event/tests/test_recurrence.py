@@ -35,7 +35,6 @@ import transaction
 import unittest
 import zope.component
 
-
 TZNAME = "Europe/Vienna"
 
 
