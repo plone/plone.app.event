@@ -8,6 +8,25 @@ Changelog
 
 .. towncrier release notes start
 
+5.2.4 (2026-06-23)
+------------------
+
+Bug fixes:
+
+
+- Security: harden the icalendar import to prevent denial of service and stored XSS.
+
+  - Be more strict in which urls we accept.
+  - Check for timeout and limit the number of bytes.
+    Get this limit from environment variable ``MAXIMUM_ICAL_IMPORT_SIZE_BYTES``, default 500000.
+  - Add limit to how many events can be imported via ical.
+    Get this limit from environment variable ``MAXIMUM_ICAL_IMPORT_EVENTS``, default 366.
+  - Use transaction savepoints instead of a commit per event.
+  - Check that event urls (via import or normal edit) are valid, for example no ``javascript`` urls.
+
+  [maurits]
+
+
 5.2.3 (2025-09-11)
 ------------------
 
