@@ -43,6 +43,7 @@ setup(
     install_requires=[
         "plone.base",
         "Products.statusmessages",
+        "requests",
         "icalendar",  # >4.0.2
         "Products.DateRecurringIndex",
         "Products.ZCatalog",

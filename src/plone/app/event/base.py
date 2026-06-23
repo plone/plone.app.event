@@ -5,7 +5,9 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from DateTime import DateTime
+from html import unescape
 from persistent.mapping import PersistentMapping
+from plone.app.event import _
 from plone.app.event.interfaces import ISO_DATE_FORMAT
 from plone.base.i18nl10n import ulocalized_time as orig_ulocalized_time
 from plone.base.interfaces import INavigationRoot
@@ -26,11 +28,13 @@ from plone.event.utils import pydt
 from plone.event.utils import validated_timezone
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from urllib.parse import urlsplit
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
 from zope.deprecation import deprecate
+from zope.interface import Invalid
 
 import pytz
 
@@ -1025,3 +1029,51 @@ def ulocalized_time(time, *args, **kwargs):
     """Corrects for DateTime bugs doing wrong thing with timezones"""
     wrapped_time = PatchedDateTime(time)
     return orig_ulocalized_time(wrapped_time, *args, **kwargs)
+
+
+def _normal_url_validator(value):
+    """Validate that this is a 'normal' url.
+
+    At least no javascript url, file url, etc.
+    See also the 'no_file_protocol_url' function in
+    plone.app.event.ical.importer, which needs to be stricter than this one.
+
+    This function either returns True, or raises Invalid.
+
+    We only return True if the value is good to be used unchanged.
+    For example if the value might be fine but there is a space in front:
+    we raise Invalid.
+    """
+    if not value:
+        # nothing to validate
+        return True
+    if value != value.strip():
+        raise Invalid(_("URL not accepted"))
+    if len(value.splitlines()) > 1:
+        raise Invalid(_("URL not accepted"))
+
+    # lowercase for easier checking
+    url = value.lower()
+    parsed = urlsplit(url)
+    scheme = parsed.scheme
+    domain = parsed.netloc
+    if not scheme:
+        # We don't support relative urls, and we don't need to support
+        # //example.org
+        raise Invalid(_("URL not accepted"))
+    if scheme not in ("https", "http"):
+        raise Invalid(_("URL not accepted"))
+
+    if not domain:
+        # Example: https:example.org
+        # When we redirect to this, some browsers fail,
+        # others happily go to example.org.
+        raise Invalid(_("URL not accepted"))
+
+    # Someone may be doing tricks with escaped html code.
+    unescaped_url = unescape(url)
+    if unescaped_url != url:
+        # Check the unescaped url, then continue checking the current url.
+        _normal_url_validator(unescaped_url)
+
+    return True
