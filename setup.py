@@ -1,7 +1,7 @@
 from pathlib import Path
 from setuptools import setup
 
-version = "6.0.1"
+version = "6.0.2.dev0"
 
 
 long_description = "\n\n".join(
