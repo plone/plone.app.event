@@ -4,7 +4,91 @@
 [build-system]
 requires = ["setuptools>=68.2,<83", "wheel"]
 
+# START-MARKER-MANUAL-CONFIG
+# Anything from here until END-MARKER-MANUAL-CONFIG
+# will be kept by plone.meta
 
+[project]
+name = "plone.app.event"
+version = "6.0.2.dev0"
+description = "The Plone calendar framework"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Plone",
+    "Framework :: Plone :: 6.2",
+    "Framework :: Plone :: Core",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+license = "GPL-2.0-only"
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Plone Foundation",email = "plone-developers@lists.sourceforge.net"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "plone-developers@lists.sourceforge.net"},
+]
+dependencies = [
+    "Products.DateRecurringIndex",
+    "Products.GenericSetup",
+    "Products.ZCatalog",
+    "Products.statusmessages",
+    "Zope",
+    "icalendar",
+    "plone.app.contentlisting",
+    "plone.app.contentmenu",
+    "plone.app.contenttypes",
+    "plone.app.dexterity",
+    "plone.app.portlets >= 2.5.1",
+    "plone.app.querystring",
+    "plone.app.registry",
+    "plone.app.textfield",
+    "plone.app.uuid",
+    "plone.app.vocabularies >= 2.1.15",
+    "plone.app.z3cform>=2.0.1",
+    "plone.autoform>=1.4",
+    "plone.base",
+    "plone.behavior",
+    "plone.browserlayer",
+    "plone.dexterity",
+    "plone.event>=1.0",
+    "plone.folder",
+    "plone.formwidget.recurrence [z3cform] >= 1.2.4",
+    "plone.indexer",
+    "plone.memoize",
+    "plone.namedfile",
+    "plone.portlets",
+    "plone.resource",
+    "plone.supermodel",
+    "plone.uuid",
+    "pytz",
+    "requests",
+    "z3c.form >= 3.2.1",
+]
+keywords = ["plone", "event"]
+
+[project.optional-dependencies]
+test = [
+    "lxml",
+    "plone.app.robotframework",
+    "plone.app.testing [robot]",
+    "plone.testing",
+    "robotsuite",
+]
+
+[project.urls]
+Source = "https://github.com/plone/plone.app.event"
+Issues = "https://github.com/plone/Products.CMFPlone/issues"
+Changelog = "https://github.com/plone/plone.app.event/blob/master/CHANGES.rst"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+# END-MARKER-MANUAL-CONFIG
 
 [tool.towncrier]
 directory = "news/"
