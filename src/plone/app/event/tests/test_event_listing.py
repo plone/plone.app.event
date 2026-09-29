@@ -1,10 +1,34 @@
 from DateTime import DateTime
 from plone.app.event.base import localized_today
+from plone.app.event.browser.event_listing import EventListing
 from plone.app.event.testing import make_fake_response
 from plone.app.event.testing import PAEventDX_INTEGRATION_TESTING
 from plone.app.event.tests.base_setup import AbstractSampleDataEvents
 from plone.app.event.tests.base_setup import patched_now as PN
 from unittest import mock
+from unittest import TestCase
+
+
+class TestExpandEventsStartEnd(TestCase):
+    """_expand_events_start_end() only works with its arguments, so it can
+    be tested without any Plone site in place.
+    """
+
+    def test_minmax_range_is_sorted_regardless_of_query_order(self):
+        # A Collection date criterion using the "minmax" range operator
+        # stores its two bounds as given by the user, which are not
+        # necessarily in ascending order. The values returned here are
+        # later used as the effective start/end of the listing, so they
+        # must come back sorted no matter how they were stored.
+        start, end = EventListing._expand_events_start_end(
+            None, {"query": [20, 10], "range": "minmax"}, None
+        )
+        self.assertEqual((start, end), (10, 20))
+
+        start, end = EventListing._expand_events_start_end(
+            None, {"query": [10, 20], "range": "minmax"}, None
+        )
+        self.assertEqual((start, end), (10, 20))
 
 
 class TestEventsListingPortal(AbstractSampleDataEvents):

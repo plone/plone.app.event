@@ -1,0 +1,2 @@
+Fix ``EventListing._expand_events_start_end`` for Collections using a date criterion with the ``minmax`` range operator: the query bounds were never actually sorted, since ``list(q).sort()`` sorts a throwaway copy and discards the result, so a criterion stored with its upper bound first produced a reversed start/end pair.
+[afonsojanu]
