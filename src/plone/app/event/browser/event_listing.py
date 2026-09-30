@@ -237,7 +237,7 @@ class EventListing(BrowserView):
             elif r == "max":
                 se["end"] = q
             elif r in ("minmax", "min:max"):
-                list(q).sort()
+                q = sorted(q)
                 se["start"] = q[0]
                 se["end"] = q[1]
         if end:
