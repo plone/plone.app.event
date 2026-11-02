@@ -187,7 +187,7 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         today = localized_today(context)
         year, month = self.year_month_display()
-        monthdates = [dat for dat in self.cal.itermonthdates(year, month)]
+        monthdates = [*self.cal.itermonthdates(year, month)]
 
         start = monthdates[0]
         end = monthdates[-1]
