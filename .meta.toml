@@ -3,10 +3,10 @@
 # See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "2.8.1.dev0"
+commit-id = "2.13.1"
 
 [tox]
-test_matrix = {"6.2" = ["*"]}
+test_matrix = {"6.3" = ["*"], "6.2" = ["*"]}
 
 [pyproject]
 dependencies_ignores = "['plone.app.layout', 'Products.DateRecurringIndex']"
